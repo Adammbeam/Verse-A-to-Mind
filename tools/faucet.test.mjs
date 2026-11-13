@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createPool, stake, allocate, claim, balances, audit, leaderboard, MIN_STAKE, MAX_NODES } from '../void-live-deploy/lib/treasury.js';
+import { createPool, stake, allocate, claim, balances, audit, leaderboard, MIN_STAKE, MAX_NODES } from '../void-live-deploy/lib/faucet.js';
 
 test('createPool: valid', () => {
   const p = createPool('rewards', 100);
