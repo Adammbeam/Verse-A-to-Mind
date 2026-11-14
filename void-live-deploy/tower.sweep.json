@@ -1,8 +1,8 @@
 {
  "about": "The sweep for the smallest sites of all (tools/easiest-sites.mjs --small): each run reads the next slice of the Tranco top million from cursor, one plain GET of each home page, and keeps the ones with at most 5 controls and 20000 bytes that are real pages. smallest is the 500 smallest found so far, fewest controls first, then the fewer bytes.",
  "source": "https://tranco-list.eu/top-1m.csv.zip",
- "cursor": 800000,
- "swept": 780101,
+ "cursor": 840000,
+ "swept": 819014,
  "lap": 0,
  "at": "2026-11-14",
  "smallest": [
@@ -340,6 +340,15 @@
    "plain": false
   },
   {
+   "rank": 800054,
+   "host": "mcd999new.com",
+   "controls": 0,
+   "bytes": 10478,
+   "words": 6,
+   "title": "MCD999 เว็บตรงอันดับ 1 สำหรับการเล่นสล็อต PG ที่ดีที่สุด",
+   "plain": false
+  },
+  {
    "rank": 141,
    "host": "skybridge.click",
    "controls": 0,
@@ -373,6 +382,51 @@
    "bytes": 15207,
    "words": 8,
    "title": "Акції та знижки ✔️ Pokupon - Маркетплейс послуг",
+   "plain": false
+  },
+  {
+   "rank": 800038,
+   "host": "mc818.vip",
+   "controls": 0,
+   "bytes": 16536,
+   "words": 11,
+   "title": "MC777 Platform Hiburan Indonesia | 100% Hadiah Eksklusif untuk Member Baru",
+   "plain": false
+  },
+  {
+   "rank": 800037,
+   "host": "mc777apk.com",
+   "controls": 0,
+   "bytes": 16536,
+   "words": 11,
+   "title": "MC777 Platform Hiburan Indonesia | 100% Hadiah Eksklusif untuk Member Baru",
+   "plain": false
+  },
+  {
+   "rank": 800031,
+   "host": "mc282.com",
+   "controls": 0,
+   "bytes": 16536,
+   "words": 11,
+   "title": "MC777 Platform Hiburan Indonesia | 100% Hadiah Eksklusif untuk Member Baru",
+   "plain": false
+  },
+  {
+   "rank": 800030,
+   "host": "mc239.com",
+   "controls": 0,
+   "bytes": 16536,
+   "words": 11,
+   "title": "MC777 Platform Hiburan Indonesia | 100% Hadiah Eksklusif untuk Member Baru",
+   "plain": false
+  },
+  {
+   "rank": 800029,
+   "host": "mc187.com",
+   "controls": 0,
+   "bytes": 16536,
+   "words": 11,
+   "title": "MC777 Platform Hiburan Indonesia | 100% Hadiah Eksklusif untuk Member Baru",
    "plain": false
   },
   {
@@ -547,6 +601,15 @@
    "plain": false
   },
   {
+   "rank": 800044,
+   "host": "mcau-dw.online",
+   "controls": 3,
+   "bytes": 13555,
+   "words": 11,
+   "title": "Macaudewa Situs Judi Slot Online Tepercaya dan Terbaik di Tahun 2023",
+   "plain": false
+  },
+  {
    "rank": 401,
    "host": "live-video.net",
    "controls": 4,
@@ -580,6 +643,15 @@
    "bytes": 2252,
    "words": 10,
    "title": "维沃移动通信有限公司",
+   "plain": false
+  },
+  {
+   "rank": 800001,
+   "host": "mbm.group",
+   "controls": 5,
+   "bytes": 9015,
+   "words": 188,
+   "title": "MBM Group | Apparel Manufacturing &amp; Sustainability",
    "plain": false
   },
   {
