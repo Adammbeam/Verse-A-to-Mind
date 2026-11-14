@@ -54,7 +54,9 @@ export const codeOf = (d) => { const x = dataOf({ title: d.t, kind: d.k, body: d
 /** the text a person copies or saves: readable, then the code. Pure. */
 export function shareText(d) {
   const x = dataOf({ title: d.t, kind: d.k, body: d.b, sources: d.src, n: d.n });
-  return [x.t, x.k, '', x.b, x.src.length ? '\nSources:\n' + x.src.map((s, i) => '[' + (i + 1) + '] ' + s.t + (s.u ? ' ' + s.u : '')).join('\n') : '', '\nVerse card from a-to-mind.com' + (x.n ? ' \u00b7 v' + x.n : ''), codeOf(x)].filter((l, i) => i !== 2 || l !== undefined).join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  // cap the body so a dense card (many asks, many inbox items) exports as one compact block, not a stretched strip
+  const body = x.b.length > 600 ? x.b.slice(0, 597).replace(/\s+\S*$/, '') + '…' : x.b;
+  return [x.t, x.k, '', body, x.src.length ? '\nSources:\n' + x.src.map((s, i) => '[' + (i + 1) + '] ' + s.t + (s.u ? ' ' + s.u : '')).join('\n') : '', '\nVerse card from a-to-mind.com' + (x.n ? ' \u00b7 v' + x.n : ''), codeOf(x)].filter((l, i) => i !== 2 || l !== undefined).join('\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 /** a link that reopens the card on the site: the short code rides in the #fragment, so it never reaches a server log. Pure. */
 export const linkOf = (d, origin = 'https://a-to-mind.com') => origin.replace(/\/+$/, '') + '/#vc=' + codeOf(d).slice(MARK.length);
@@ -114,7 +116,10 @@ export function readCard(el) {
 }
 /** what the card's picture is drawn from: the frame's own numbers (el._vcard, set by keep) and the card's text. */
 export function imageData(el, d) {
-  const c = el._vcard || {}, text = d.b || '';
+  const c = el._vcard || {}, raw = d.b || '';
+  // cap the body for the picture so a dense card (many asks, many inbox items) stays a standard card shape
+  // instead of stretching into a tall strip; the full text still rides in the code line and the saved text
+  const text = raw.length > 240 ? raw.slice(0, 237).replace(/\s+\S*$/, '') + '…' : raw;
   return { art: el._vcForge || ((el.querySelector(':scope > .vc-art > .vc-seal') || {}).src || ''), nouns: c.nouns, title: d.t, text, typeLine: d.k, kind: d.k, cost: c.cost, rarity: c.rarity, hue: c.hue, chapter: c.chapter, key: c.key || d.t, name: c.name, adds: c.adds, fetched: !!c.fetched, power: c.power, toughness: c.toughness, income: c.income, number: c.number, tested: c.tested, season: c.season, glyph: c.isSkill, painting: !!el._vcForge, poster: !!el.dataset.poster, sub: (el.querySelector(':scope > .sub:not([hidden])') || {}).textContent || '',
     // the self card draws its own shape (lib/card-image.js selfLayout): its words, the family bars, each block's heading and first lines; other cards: none
     self: el.classList && el.classList.contains('vc-self') ? selfImage(el) : undefined };
