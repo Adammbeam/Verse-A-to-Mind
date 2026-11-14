@@ -3,8 +3,8 @@
   "readable": {
    "speed": {
     "verdict": "worse",
-    "verse": 115,
-    "best": 52
+    "verse": 382,
+    "best": 65
    },
    "reliability": {
     "verdict": "equal",
@@ -26,9 +26,9 @@
     "verse": 0,
     "best": 0
    },
-   "at": "2026-11-14T13:36:20.668Z",
+   "at": "2026-11-14T22:18:32.652Z",
    "weight": {
-    "verse": 1885,
+    "verse": 1884,
     "rival": 2313
    },
    "checklist": {
@@ -49,9 +49,9 @@
   },
   "tracks": {
    "speed": {
-    "verdict": "worse",
-    "verse": 100,
-    "best": 80
+    "verdict": "better",
+    "verse": 93,
+    "best": 96
    },
    "reliability": {
     "verdict": "equal",
@@ -73,9 +73,9 @@
     "verse": 0,
     "best": 0
    },
-   "at": "2026-11-14T13:36:46.637Z",
+   "at": "2026-11-14T22:18:58.688Z",
    "weight": {
-    "verse": 1885,
+    "verse": 1884,
     "rival": 1233
    },
    "checklist": {
@@ -97,8 +97,8 @@
   "letters": {
    "speed": {
     "verdict": "better",
-    "verse": 110,
-    "best": 226
+    "verse": 85,
+    "best": 434
    },
    "reliability": {
     "verdict": "equal",
@@ -120,9 +120,9 @@
     "verse": 0,
     "best": 0
    },
-   "at": "2026-11-14T13:37:13.199Z",
+   "at": "2026-11-14T22:19:25.422Z",
    "weight": {
-    "verse": 1886,
+    "verse": 1876,
     "rival": 1501
    },
    "checklist": {
@@ -152,8 +152,8 @@
   "scores": {
    "speed": {
     "verdict": "better",
-    "verse": 120,
-    "best": 341
+    "verse": 91,
+    "best": 525
    },
    "reliability": {
     "verdict": "equal",
@@ -175,7 +175,7 @@
     "verse": 0,
     "best": 0
    },
-   "at": "2026-11-14T13:37:54.972Z",
+   "at": "2026-11-14T22:20:07.206Z",
    "weight": {
     "verse": 1878,
     "rival": 20995
@@ -204,8 +204,8 @@
   "units": {
    "speed": {
     "verdict": "better",
-    "verse": 112,
-    "best": 550
+    "verse": 124,
+    "best": 825
    },
    "reliability": {
     "verdict": "equal",
@@ -227,10 +227,10 @@
     "verse": 0,
     "best": 0
    },
-   "at": "2026-11-14T13:38:23.794Z",
+   "at": "2026-11-14T22:20:38.608Z",
    "weight": {
     "verse": 1879,
-    "rival": 5594
+    "rival": 5595
    },
    "checklist": {
     "rows": [
@@ -251,8 +251,8 @@
   "patterns": {
    "speed": {
     "verdict": "better",
-    "verse": 109,
-    "best": 362
+    "verse": 154,
+    "best": 428
    },
    "reliability": {
     "verdict": "equal",
@@ -274,10 +274,10 @@
     "verse": 0,
     "best": 0
    },
-   "at": "2026-11-14T13:38:52.547Z",
+   "at": "2026-11-14T22:21:07.748Z",
    "weight": {
-    "verse": 1867,
-    "rival": 7709
+    "verse": 1878,
+    "rival": 7708
    },
    "checklist": {
     "rows": [
@@ -315,9 +315,9 @@
   },
   "schedules": {
    "speed": {
-    "verdict": "worse",
-    "verse": 104,
-    "best": 80
+    "verdict": "better",
+    "verse": 86,
+    "best": 94
    },
    "reliability": {
     "verdict": "equal",
@@ -339,10 +339,10 @@
     "verse": 0,
     "best": 0
    },
-   "at": "2026-11-14T13:39:16.777Z",
+   "at": "2026-11-14T22:21:32.287Z",
    "weight": {
-    "verse": 1880,
-    "rival": 6370
+    "verse": 1867,
+    "rival": 6431
    },
    "checklist": {
     "rows": [
@@ -363,8 +363,8 @@
   "meanings": {
    "speed": {
     "verdict": "better",
-    "verse": 116,
-    "best": 291
+    "verse": 140,
+    "best": 284
    },
    "reliability": {
     "verdict": "equal",
@@ -386,10 +386,10 @@
     "verse": 0,
     "best": 0
    },
-   "at": "2026-11-14T13:39:42.173Z",
+   "at": "2026-11-14T22:21:57.988Z",
    "weight": {
-    "verse": 1881,
-    "rival": 31526
+    "verse": 1869,
+    "rival": 31529
    },
    "checklist": {
     "rows": [
@@ -415,8 +415,8 @@
   "qr": {
    "speed": {
     "verdict": "better",
-    "verse": 100,
-    "best": 449
+    "verse": 357,
+    "best": 533
    },
    "reliability": {
     "verdict": "equal",
@@ -438,10 +438,10 @@
     "verse": 0,
     "best": 0
    },
-   "at": "2026-11-14T13:40:12.049Z",
+   "at": "2026-11-14T22:22:28.530Z",
    "weight": {
-    "verse": 1866,
-    "rival": 89329
+    "verse": 1877,
+    "rival": 89220
    },
    "checklist": {
     "rows": [
@@ -475,8 +475,8 @@
   "text-diff": {
    "speed": {
     "verdict": "better",
-    "verse": 100,
-    "best": 475
+    "verse": 103,
+    "best": 735
    },
    "reliability": {
     "verdict": "equal",
@@ -498,10 +498,10 @@
     "verse": 0,
     "best": 0
    },
-   "at": "2026-11-14T13:40:38.564Z",
+   "at": "2026-11-14T22:22:56.134Z",
    "weight": {
-    "verse": 1871,
-    "rival": 36577
+    "verse": 1882,
+    "rival": 36591
    },
    "checklist": {
     "rows": [
@@ -535,8 +535,8 @@
   "songs": {
    "speed": {
     "verdict": "better",
-    "verse": 133,
-    "best": 590
+    "verse": 114,
+    "best": 623
    },
    "reliability": {
     "verdict": "equal",
@@ -558,10 +558,10 @@
     "verse": 0,
     "best": 0
    },
-   "at": "2026-11-14T13:41:06.662Z",
+   "at": "2026-11-14T22:23:25.086Z",
    "weight": {
-    "verse": 1867,
-    "rival": 45573
+    "verse": 1865,
+    "rival": 45543
    },
    "checklist": {
     "rows": [
@@ -587,8 +587,8 @@
   "clips": {
    "speed": {
     "verdict": "better",
-    "verse": 110,
-    "best": 460
+    "verse": 262,
+    "best": 530
    },
    "reliability": {
     "verdict": "equal",
@@ -610,10 +610,10 @@
     "verse": 0,
     "best": 0
    },
-   "at": "2026-11-14T13:41:33.839Z",
+   "at": "2026-11-14T22:23:52.697Z",
    "weight": {
-    "verse": 1876,
-    "rival": 71617
+    "verse": 1867,
+    "rival": 71718
    },
    "checklist": {
     "rows": [
