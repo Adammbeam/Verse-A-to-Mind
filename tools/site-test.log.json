@@ -1,29 +1,5 @@
 [
  {
-  "at": "2026-11-05T10:29:49Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 13,
-   "of": 15,
-   "medianMs": 3103,
-   "failed": [
-    {
-     "ask": "convert 5 miles to kilometers",
-     "why": [
-      "slow 8019 ms"
-     ]
-    },
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 15104 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 13/15"
- },
- {
   "at": "2026-11-05T10:58:05Z",
   "kind": "visitor",
   "visitor": {
@@ -7517,6 +7493,24 @@
      "ask": "what's the weather in Lakeland FL",
      "why": [
       "slow 12238 ms"
+     ]
+    }
+   ]
+  },
+  "note": "visitor pass 14/15"
+ },
+ {
+  "at": "2026-11-14T19:28:21Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 14,
+   "of": 15,
+   "medianMs": 792,
+   "failed": [
+    {
+     "ask": "what can you do",
+     "why": [
+      "slow 9660 ms"
      ]
     }
    ]
