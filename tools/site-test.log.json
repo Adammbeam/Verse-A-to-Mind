@@ -1,67 +1,5 @@
 [
  {
-  "at": "2026-11-05T13:23:33Z",
-  "passed": 85,
-  "of": 90,
-  "ms": 281,
-  "kind": "file",
-  "key": "closer on the figure | only \"waking up\" appeared, never the answer",
-  "failed": [
-   {
-    "ask": "play voidquest",
-    "why": "fps 3 < 5"
-   },
-   {
-    "ask": "play chess",
-    "why": "fps 2 < 5"
-   },
-   {
-    "ask": "closer on the figure",
-    "why": "only \"waking up\" appeared, never the answer"
-   },
-   {
-    "ask": "send it away",
-    "why": "only \"waking up\" appeared, never the answer"
-   },
-   {
-    "ask": "fly around",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   }
-  ],
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 2317,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 17758 ms"
-     ]
-    }
-   ]
-  },
-  "note": "fix: \"closer on the figure\" only \"waking up\" appeared, never the answer"
- },
- {
-  "at": "2026-11-05T13:36:28Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 3262,
-   "failed": [
-    {
-     "ask": "capital of France",
-     "why": [
-      "nothing useful"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-05T14:03:44Z",
   "kind": "visitor",
   "visitor": {
@@ -7448,5 +7386,48 @@
    "failed": []
   },
   "note": "fix: \"is unwrap risky in rust\" refused: don't know this yet; console: Failed to load resource: the server responded with a status of 404 ()"
+ },
+ {
+  "at": "2026-11-15T02:22:01Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 784,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-15T02:35:49Z",
+  "passed": 122,
+  "of": 126,
+  "ms": 349,
+  "kind": "grow",
+  "failed": [
+   {
+    "ask": "decision matrix for whether to move to Berlin",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "bridge these inputs",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   },
+   {
+    "ask": "next system slice for the client onboarding",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   },
+   {
+    "ask": "handoff pack for my SaaS idea",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 784,
+   "failed": []
+  },
+  "note": "new ground passed, kept as a regression case: \"jump stack\" (skill:jump-stack)"
  }
 ]

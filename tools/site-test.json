@@ -402,6 +402,9 @@
     },
     {
       "ask": "cross the bus"
+    },
+    {
+      "ask": "jump stack"
     }
   ],
   "candidates": [],

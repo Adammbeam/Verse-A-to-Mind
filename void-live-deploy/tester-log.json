@@ -1,15 +1,48 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 123,
+ "cases": 124,
  "runsTotal": 300,
  "kinds": {
-  "file": 37,
   "visitor": 222,
-  "grow": 37,
+  "file": 36,
+  "grow": 38,
   "tighten": 2,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-15T02:35:49Z",
+   "passed": 122,
+   "of": 126,
+   "kind": "grow",
+   "ms": 349,
+   "note": "new ground passed, kept as a regression case: \"jump stack\" (skill:jump-stack)",
+   "failed": [
+    {
+     "ask": "decision matrix for whether to move to Berlin",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "bridge these inputs",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "next system slice for the client onboarding",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "handoff pack for my SaaS idea",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-15T02:22:01Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-15T02:09:42Z",
    "passed": 122,
@@ -177,20 +210,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-13T23:33:37Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-13T23:04:19Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -256,23 +275,23 @@
   },
   {
    "from": "2026-11-01",
-   "runs": 118,
-   "passed": 3356,
-   "of": 4066,
+   "runs": 117,
+   "passed": 3369,
+   "of": 4081,
    "broken": 5,
    "brokenOf": 525,
    "brokenPassed": 61,
-   "ms": 391
+   "ms": 393
   },
   {
    "from": "2026-11-08",
-   "runs": 182,
-   "passed": 3032,
-   "of": 4121,
+   "runs": 183,
+   "passed": 3056,
+   "of": 4142,
    "broken": 9,
    "brokenOf": 966,
    "brokenPassed": 74,
-   "ms": 388
+   "ms": 384
   }
  ],
  "seen": {
@@ -698,6 +717,9 @@
   "skill:delivery-board": "2026-11-14T07:11:25Z",
   "skill:gap-glide": "2026-11-15T02:09:42Z",
   "skill:glyph-verse": "2026-11-15T02:09:42Z",
-  "skill:incident-pack": "2026-11-15T02:09:42Z"
+  "skill:incident-pack": "2026-11-15T02:09:42Z",
+  "skill:jump-stack": "2026-11-15T02:35:49Z",
+  "skill:nine-grid": "2026-11-15T02:35:49Z",
+  "skill:null-waves": "2026-11-15T02:35:49Z"
  }
 }
