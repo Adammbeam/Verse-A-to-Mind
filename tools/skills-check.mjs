@@ -24,7 +24,7 @@ if (process.argv.includes('--register')) {
 const names = existsSync(ORDER_DIR) ? readOrder() : JSON.parse(readFileSync(resolve(dir, 'index.json'), 'utf8'));
 const mods = [];
 for (const n of names) mods.push((await import(pathToFileURL(resolve(dir, n + '.js')).href)).default);
-const first = (a) => { const k = mods.find((s) => s.match(a.toLowerCase(), a)); if (!k) return null; return (typeof k.part === 'function' ? k.part(a.toLowerCase(), a) : k.name) || k.name; };
+const first = (a) => { const k = mods.find((s) => s.match(a.toLowerCase(), a)); return k ? k.name : null; };
 const bad = [], failing = {};
 const fail = (name, line) => { bad.push(name + ': ' + line); (failing[name] = failing[name] || []).push(line.slice(0, 160)); };
 for (const m of mods) {
@@ -32,7 +32,7 @@ for (const m of mods) {
   for (const e of m.nearMisses || []) if (first(e) === m.name) fail(m.name, `near miss "${e}" taken`);
   if (typeof m.suite === 'function') {
     let r;
-    try { r = m.suite(); } catch (e) { r = { ok: false, got: e.message }; }
+    try { r = await m.suite(); } catch (e) { r = { ok: false, got: e.message }; }
     if (!r || !r.ok) fail(m.name, `suite ${r && r.got}`);
   }
 }

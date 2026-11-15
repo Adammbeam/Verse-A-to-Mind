@@ -76,10 +76,7 @@ async function run(text, api) {
 export default {
   name: 'connect-pack',
   examples: [
-    'connect pack for client onboarding',
-    'what existing tools for invoice reminders',
-    'reuse tools for the support ticket router',
-    'prefer existing tools for weekly status reports'
+    'connect pack for client onboarding'
   ],
   nearMisses: ['connect the dots', 'pack a suitcase', 'existing inventory'],
   match(lower, text) { return isConnectPack(text || lower); },
