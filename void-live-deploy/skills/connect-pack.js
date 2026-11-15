@@ -7,9 +7,8 @@
  */
 export function isConnectPack(text) {
   const t = String(text || '').trim().replace(/[?!.]+$/, '');
-  return /^(?:connect|reuse|existing)\s+(?:pack|tools|map)\b/i.test(t)
-    || /^what\s+(?:existing|platform)\s+tools\s+(?:for|to)\b/i.test(t)
-    || /^prefer\s+existing\s+tools\s+for\b/i.test(t);
+  return /^(?:connect)\s+(?:pack|tools|map)\b/i.test(t)
+    || /^what\s+(?:platform)\s+tools\s+(?:for|to)\b/i.test(t);
 }
 
 /** the process named after for/of/to, not a "map" or "to" sitting inside another word. */
