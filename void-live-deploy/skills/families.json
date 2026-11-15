@@ -11,7 +11,7 @@
   "not_here": "how often people use a skill is never counted by Verse: no usage, no popular or unused, nothing sent (no behaviour tracking). A last-used day is kept only in a person's own browser (lib/skill-use.js), shown on the family-health card, and never leaves the device"
  },
  "smoke_at": "2026-11-15",
- "bench_at": "2026-11-12",
+ "bench_at": "2026-11-15",
  "totals": {
   "experiment": 0,
   "tested": 1,
@@ -1381,12 +1381,12 @@
      "why": "a self-test, 8 browser-suite mentions, 20 real asks in the benchmark",
      "failing": [
       "days until july 4",
-      "how many days until january 1st",
-      "days until the 1st of march"
+      "countdown to chirstmas",
+      "how many days until january 1st"
      ],
      "last_tested": "2026-11-15",
      "last_tested_by": "the daily smoke test",
-     "success_rate": 0.8
+     "success_rate": 0.75
     },
     {
      "name": "event-countdown",
@@ -1487,9 +1487,12 @@
      "name": "date-calc",
      "tier": "proven",
      "why": "a self-test, 14 real asks in the benchmark",
+     "failing": [
+      "what date is next friday"
+     ],
      "last_tested": "2026-11-15",
      "last_tested_by": "the daily smoke test",
-     "success_rate": 1
+     "success_rate": 0.929
     },
     {
      "name": "date-grid",
@@ -1573,9 +1576,12 @@
      "name": "convert",
      "tier": "proven",
      "why": "a self-test, 9 browser-suite mentions, 5 real asks in the benchmark",
+     "failing": [
+      "keep 5 miles to km as a card"
+     ],
      "last_tested": "2026-11-15",
      "last_tested_by": "the daily smoke test",
-     "success_rate": 1,
+     "success_rate": 0.8,
      "streak": 27
     },
     {
@@ -1637,7 +1643,7 @@
      "failing": [
       "calculate a 20% tip on 45",
       "what is a 20% tip on 45",
-      "18% tip on 64 dollars"
+      "split 120 between 4 people"
      ],
      "last_tested": "2026-11-15",
      "last_tested_by": "the daily smoke test",
