@@ -569,6 +569,16 @@
    "listed": 5,
    "defectsBefore": 5,
    "defectsAfter": 0
+  },
+  {
+   "at": "2026-11-15T22:04:50.961Z",
+   "run": 77,
+   "measured": 30,
+   "clean": 23,
+   "fixed": 4,
+   "listed": 3,
+   "defectsBefore": 7,
+   "defectsAfter": 0
   }
  ],
  "pages": {
@@ -6582,7 +6592,7 @@
    "state": "clean"
   },
   "/lab/f217-audible-synapse-forager/": {
-   "at": "2026-11-11T07:59:25.977Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6595,7 +6605,7 @@
    "state": "clean"
   },
   "/treasury/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -6609,7 +6619,7 @@
    "why": "no rule fixes it (a layout shift of 0.474 that no rule fixes: listed for a builder)"
   },
   "/cheat-codes/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6622,7 +6632,7 @@
    "state": "clean"
   },
   "/fix/make-data-error/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6635,7 +6645,7 @@
    "state": "clean"
   },
   "/fix/make-rate-limit-error/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6648,7 +6658,7 @@
    "state": "clean"
   },
   "/fix/n8n-google-credential-401/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6661,7 +6671,7 @@
    "state": "clean"
   },
   "/fix/zapier-throttled-429/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6674,7 +6684,7 @@
    "state": "clean"
   },
   "/fix/power-automate-429-rate-limit-exceeded/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6687,7 +6697,7 @@
    "state": "clean"
   },
   "/fix/github-actions-resource-not-accessible-by-integration/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6714,7 +6724,7 @@
    "why": "no rule fixes it (a layout shift of 0.195 that no rule fixes: listed for a builder)"
   },
   "/jobs/europe/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6727,7 +6737,7 @@
    "state": "clean"
   },
   "/jobs/alerts/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6740,7 +6750,7 @@
    "state": "clean"
   },
   "/flights/map/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6753,7 +6763,7 @@
    "state": "clean"
   },
   "/flights/routes/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6766,7 +6776,7 @@
    "state": "clean"
   },
   "/flights/co2/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6792,7 +6802,7 @@
    "state": "clean"
   },
   "/films/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6818,31 +6828,20 @@
    "state": "clean"
   },
   "/lab/f231-taste-oracle/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
-    "defects": 2,
-    "contrast": 0,
-    "targets": 2,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0.068,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.072,
+    "cls": 0,
     "overflow": 0
    },
-   "rules": 2,
-   "moved": 0.148
+   "state": "clean"
   },
   "/lab/f243-sealed-genome-webrtc-dom-arena/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6855,14 +6854,14 @@
    "state": "clean"
   },
   "/lab/f286-webrtc-sealed-rnn-orientation-shared-arena/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.028,
+    "cls": 0.021,
     "overflow": 0
    },
    "state": "clean"
@@ -6882,7 +6881,7 @@
    "why": "the defects did not go down (11 -> 11)"
   },
   "/lab/f189-sealed-mlp-dom-agents/": {
-   "at": "2026-11-09T01:06:50.730Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9486,20 +9485,21 @@
    "moved": 0.001
   },
   "/lab/f630-time-card/": {
-   "at": "2026-11-11T07:59:25.977Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
-    "defects": 0,
+    "defects": 1,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0,
+    "cls": 0.113,
     "overflow": 0
    },
-   "state": "clean"
+   "state": "listed",
+   "why": "no rule fixes it (a layout shift of 0.113 that no rule fixes: listed for a builder)"
   },
   "/lab/f633-raffle-name-draw/": {
-   "at": "2026-11-11T07:59:25.977Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9512,7 +9512,7 @@
    "state": "clean"
   },
   "/lab/f634-scoreboard/": {
-   "at": "2026-11-11T07:59:25.977Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -10924,28 +10924,18 @@
    "state": "clean"
   },
   "/lab/f751-local-message-encryptor/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-15T22:04:50.961Z",
    "before": {
-    "defects": 3,
-    "contrast": 1,
-    "targets": 2,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
-    "defects": 0,
+    "defects": 1,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0,
+    "cls": 0.141,
     "overflow": 0
    },
-   "rules": 2,
-   "moved": 0.175
+   "state": "listed",
+   "why": "no rule fixes it (a layout shift of 0.141 that no rule fixes: listed for a builder)"
   },
   "/lab/f651-image-ascii-art/": {
    "at": "2026-11-15T20:02:56.819Z",
@@ -10970,6 +10960,142 @@
    },
    "rules": 1,
    "moved": 0.039
+  },
+  "/lab/f670-barcode-spatial-inventory/": {
+   "at": "2026-11-15T22:04:50.961Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f658-spatial-seating-chart/": {
+   "at": "2026-11-15T22:04:50.961Z",
+   "before": {
+    "defects": 1,
+    "contrast": 1,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "rules": 1,
+   "moved": 0.001
+  },
+  "/lab/f663-chore-rota-spatial/": {
+   "at": "2026-11-15T22:04:50.961Z",
+   "before": {
+    "defects": 2,
+    "contrast": 2,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "rules": 2,
+   "moved": 0.004
+  },
+  "/lab/f724-genetic-lsystem-spatial-note-grower/": {
+   "at": "2026-11-15T22:04:50.961Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f637-morse-code/": {
+   "at": "2026-11-15T22:04:50.961Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f301-sonar-bat-cartographer/": {
+   "at": "2026-11-15T22:04:50.961Z",
+   "before": {
+    "defects": 1,
+    "contrast": 0,
+    "targets": 1,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.006,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.006,
+    "overflow": 0
+   },
+   "rules": 1,
+   "moved": 0.069
+  },
+  "/lab/f627-paint-estimator/": {
+   "at": "2026-11-15T22:04:50.961Z",
+   "before": {
+    "defects": 3,
+    "contrast": 0,
+    "targets": 2,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.116,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "rules": 1,
+   "moved": 0.113,
+   "why": "(a layout shift of 0.116 that no rule fixes: listed for a builder)"
   }
  }
 }
