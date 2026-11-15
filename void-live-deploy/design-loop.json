@@ -549,6 +549,16 @@
    "listed": 4,
    "defectsBefore": 12,
    "defectsAfter": 6
+  },
+  {
+   "at": "2026-11-15T17:54:25.267Z",
+   "run": 75,
+   "measured": 30,
+   "clean": 26,
+   "fixed": 1,
+   "listed": 3,
+   "defectsBefore": 2,
+   "defectsAfter": 0
   }
  ],
  "pages": {
@@ -5681,7 +5691,7 @@
    "why": "the defects did not go down (1 -> 1)"
   },
   "/podcast/": {
-   "at": "2026-11-11T01:21:22.059Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -5919,7 +5929,7 @@
    "state": "clean"
   },
   "/lab/f504-webgpu-stable-fluids-mlp-advection-mind/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 4,
     "contrast": 0,
@@ -5933,14 +5943,14 @@
    "why": "the defects did not go down (4 -> 4)"
   },
   "/lab/150-local-interval-not-measure/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.003,
+    "cls": 0,
     "overflow": 0
    },
    "state": "clean"
@@ -5972,7 +5982,7 @@
    "state": "clean"
   },
   "/lab/f201-webgpu-multiagent-sealed-genome-competition/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -5986,7 +5996,20 @@
    "why": "no rule fixes it (a layout shift of 0.312 that no rule fixes: listed for a builder)"
   },
   "/lab/f507-webrtc-rnn-spatial-dom-auction-mind/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.06,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f247-webgpu-causal-token-swarm-mind/": {
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -5998,21 +6021,8 @@
    },
    "state": "clean"
   },
-  "/lab/f247-webgpu-causal-token-swarm-mind/": {
-   "at": "2026-11-11T07:04:43.189Z",
-   "before": {
-    "defects": 0,
-    "contrast": 0,
-    "targets": 0,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0.003,
-    "overflow": 0
-   },
-   "state": "clean"
-  },
   "/lab/f429-webgpu-causal-token-swarm-mind/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6025,7 +6035,7 @@
    "state": "clean"
   },
   "/security/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6038,7 +6048,7 @@
    "state": "clean"
   },
   "/lab/144-local-weak-not-attest/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6051,7 +6061,7 @@
    "state": "clean"
   },
   "/contribute/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6064,20 +6074,20 @@
    "state": "clean"
   },
   "/lab/145-local-gaze-not-command/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.001,
+    "cls": 0,
     "overflow": 0
    },
    "state": "clean"
   },
   "/lab/f309-webxr-gaze-rnn-idb-orb-field/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6090,7 +6100,7 @@
    "state": "clean"
   },
   "/lab/f236-scene-blocker/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6103,7 +6113,7 @@
    "state": "clean"
   },
   "/fix/zapier-401-unauthorized/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6116,7 +6126,7 @@
    "state": "clean"
   },
   "/fix/zapier-403-forbidden/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6129,7 +6139,7 @@
    "state": "clean"
   },
   "/members/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -6143,7 +6153,7 @@
    "why": "no rule fixes it (a layout shift of 0.14 that no rule fixes: listed for a builder)"
   },
   "/fix/n8n-econnrefused-http-request/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6156,7 +6166,7 @@
    "state": "clean"
   },
   "/fix/n8n-json-parameter-needs-valid-json/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6169,7 +6179,7 @@
    "state": "clean"
   },
   "/fix/zapier-422-unprocessable-entity/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6182,7 +6192,7 @@
    "state": "clean"
   },
   "/fix/github-actions-npm-ci-lockfile-out-of-sync/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6195,7 +6205,7 @@
    "state": "clean"
   },
   "/fix/power-automate-invalid-template-expression/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6208,7 +6218,7 @@
    "state": "clean"
   },
   "/fix/power-automate-connection-needs-fixing/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6221,7 +6231,7 @@
    "state": "clean"
   },
   "/fix/github-actions-permission-denied-publickey/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6273,28 +6283,17 @@
    "state": "clean"
   },
   "/agent/": {
-   "at": "2026-11-11T07:59:25.977Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
-    "defects": 1,
-    "contrast": 0,
-    "targets": 1,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0.007,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.007,
+    "cls": 0.015,
     "overflow": 0
    },
-   "rules": 1,
-   "moved": 0
+   "state": "clean"
   },
   "/kanban/teams/": {
    "at": "2026-11-11T07:59:25.977Z",
@@ -6310,7 +6309,7 @@
    "state": "clean"
   },
   "/lab/f317-webxr-hand-rd-dom-field/": {
-   "at": "2026-11-11T07:59:25.977Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9411,7 +9410,7 @@
    "state": "clean"
   },
   "/lab/f646-habit-tracker/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 2,
     "contrast": 2,
@@ -9431,32 +9430,21 @@
     "cls": 0,
     "overflow": 0
    },
-   "rules": 1,
+   "rules": 2,
    "moved": 0.002
   },
   "/lab/f621-signature-pad/": {
-   "at": "2026-11-11T07:04:43.189Z",
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
-    "defects": 2,
-    "contrast": 1,
-    "targets": 1,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0.008,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.008,
+    "cls": 0,
     "overflow": 0
    },
-   "rules": 2,
-   "moved": 0.002
+   "state": "clean"
   },
   "/track-times/": {
    "at": "2026-11-11T07:59:25.977Z",
@@ -10826,6 +10814,45 @@
   },
   "/lab/f759-webgpu-device-motion-trajectory-logger/": {
    "at": "2026-11-15T17:32:54.203Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f752-local-ssh-key-generator/": {
+   "at": "2026-11-15T17:54:25.267Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f721-webxr-hand-decision-tree-spatial-notes/": {
+   "at": "2026-11-15T17:54:25.267Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 8
+   },
+   "state": "clean"
+  },
+  "/lab/f683-inertial-particle-filter-spatial-mind/": {
+   "at": "2026-11-15T17:54:25.267Z",
    "before": {
     "defects": 0,
     "contrast": 0,
