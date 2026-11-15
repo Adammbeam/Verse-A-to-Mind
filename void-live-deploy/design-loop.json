@@ -579,6 +579,16 @@
    "listed": 3,
    "defectsBefore": 7,
    "defectsAfter": 0
+  },
+  {
+   "at": "2026-11-15T23:27:19.659Z",
+   "run": 78,
+   "measured": 30,
+   "clean": 18,
+   "fixed": 6,
+   "listed": 6,
+   "defectsBefore": 13,
+   "defectsAfter": 1
   }
  ],
  "pages": {
@@ -6710,7 +6720,7 @@
    "state": "clean"
   },
   "/under-the-hood/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -6867,18 +6877,18 @@
    "state": "clean"
   },
   "/lab/f198-orientation-mlp-dom-gravity-swarm/": {
-   "at": "2026-11-09T06:31:09.094Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
-    "defects": 11,
-    "contrast": 5,
+    "defects": 14,
+    "contrast": 8,
     "targets": 6,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.011,
-    "overflow": 0
+    "cls": 0.006,
+    "overflow": 2
    },
    "state": "listed",
-   "why": "the defects did not go down (11 -> 11)"
+   "why": "the defects did not go down (14 -> 14)"
   },
   "/lab/f189-sealed-mlp-dom-agents/": {
    "at": "2026-11-15T22:04:50.961Z",
@@ -6894,18 +6904,8 @@
    "state": "clean"
   },
   "/lab/f616-loan-mortgage-payment/": {
-   "at": "2026-11-09T06:31:09.094Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
-    "defects": 2,
-    "contrast": 2,
-    "targets": 0,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0,
-    "overflow": 31
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
@@ -6914,11 +6914,10 @@
     "cls": 0,
     "overflow": 31
    },
-   "rules": 2,
-   "moved": 0.004
+   "state": "clean"
   },
   "/first-automation-setup/": {
-   "at": "2026-11-09T06:31:09.094Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6931,7 +6930,7 @@
    "state": "clean"
   },
   "/keep-it-running/": {
-   "at": "2026-11-09T06:31:09.094Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6944,7 +6943,7 @@
    "state": "clean"
   },
   "/fix/make-connection-error/": {
-   "at": "2026-11-09T06:31:09.094Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6957,7 +6956,7 @@
    "state": "clean"
   },
   "/fix/zapier-zap-turned-off-or-held/": {
-   "at": "2026-11-09T06:31:09.094Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6970,7 +6969,7 @@
    "state": "clean"
   },
   "/fix/n8n-webhook-404-not-registered/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6983,7 +6982,7 @@
    "state": "clean"
   },
   "/random/coin/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -6997,7 +6996,7 @@
    "why": "no rule fixes it (a layout shift of 0.147 that no rule fixes: listed for a builder)"
   },
   "/books/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7010,7 +7009,7 @@
    "state": "clean"
   },
   "/generators/forum/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7023,7 +7022,7 @@
    "state": "clean"
   },
   "/jobs/salary/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7036,7 +7035,7 @@
    "state": "clean"
   },
   "/jobs/regions/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7049,7 +7048,7 @@
    "state": "clean"
   },
   "/password/strength/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7062,7 +7061,7 @@
    "state": "clean"
   },
   "/flights/airports/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7075,7 +7074,7 @@
    "state": "clean"
   },
   "/flights/distance/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7088,7 +7087,7 @@
    "state": "clean"
   },
   "/scoreboard/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -7102,20 +7101,21 @@
    "why": "no rule fixes it (a layout shift of 0.339 that no rule fixes: listed for a builder)"
   },
   "/lab/f626-flooring-tile-estimator/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
-    "defects": 0,
+    "defects": 1,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0,
+    "cls": 0.165,
     "overflow": 0
    },
-   "state": "clean"
+   "state": "listed",
+   "why": "no rule fixes it (a layout shift of 0.165 that no rule fixes: listed for a builder)"
   },
   "/lab/f613-tip-calculator/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7128,7 +7128,7 @@
    "state": "clean"
   },
   "/jobs/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11073,14 +11073,112 @@
    "moved": 0.069
   },
   "/lab/f627-paint-estimator/": {
-   "at": "2026-11-15T22:04:50.961Z",
+   "at": "2026-11-15T23:27:19.659Z",
    "before": {
-    "defects": 3,
+    "defects": 0,
     "contrast": 0,
-    "targets": 2,
+    "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.116,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f736-teleprompter/": {
+   "at": "2026-11-15T23:27:19.659Z",
+   "before": {
+    "defects": 4,
+    "contrast": 0,
+    "targets": 4,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.092,
+    "overflow": 0
+   },
+   "rules": 4,
+   "moved": 0.062
+  },
+  "/lab/f753-local-business-card-maker/": {
+   "at": "2026-11-15T23:27:19.659Z",
+   "before": {
+    "defects": 2,
+    "contrast": 2,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "rules": 2,
+   "moved": 0.004
+  },
+  "/lab/f654-tip-calculator-suggest-spatial/": {
+   "at": "2026-11-15T23:27:19.659Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f699-meeting-cost-calculator/": {
+   "at": "2026-11-15T23:27:19.659Z",
+   "before": {
+    "defects": 2,
+    "contrast": 2,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "rules": 2,
+   "moved": 0.004
+  },
+  "/lab/f718-subscription-tracker/": {
+   "at": "2026-11-15T23:27:19.659Z",
+   "before": {
+    "defects": 1,
+    "contrast": 1,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
     "overflow": 0
    },
    "state": "fixed",
@@ -11094,8 +11192,83 @@
     "overflow": 0
    },
    "rules": 1,
-   "moved": 0.113,
-   "why": "(a layout shift of 0.116 that no rule fixes: listed for a builder)"
+   "moved": 0.003
+  },
+  "/lab/f757-sleep-cycle-calculator/": {
+   "at": "2026-11-15T23:27:19.659Z",
+   "before": {
+    "defects": 2,
+    "contrast": 0,
+    "targets": 2,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.027,
+    "overflow": 0
+   },
+   "rules": 2,
+   "moved": 0.141
+  },
+  "/lab/f661-label-name-tag-sheet/": {
+   "at": "2026-11-15T23:27:19.659Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 355
+   },
+   "state": "clean"
+  },
+  "/arcade/": {
+   "at": "2026-11-15T23:27:19.659Z",
+   "before": {
+    "defects": 2,
+    "contrast": 0,
+    "targets": 1,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.38,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 1,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.38,
+    "overflow": 0
+   },
+   "rules": 1,
+   "moved": 0,
+   "why": "(a layout shift of 0.38 that no rule fixes: listed for a builder)"
+  },
+  "/lab/f748-debt-snowball-planner/": {
+   "at": "2026-11-15T23:27:19.659Z",
+   "before": {
+    "defects": 6,
+    "contrast": 3,
+    "targets": 3,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "listed",
+   "why": "it added a layout shift"
   }
  }
 }
