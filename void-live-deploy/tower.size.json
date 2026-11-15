@@ -5992,6 +5992,20 @@
    "weight": 1639103,
    "at": "2026-10-30"
   },
+  "gamevn.vip": {
+   "bytes": 4530,
+   "controls": 3,
+   "scripts": 1,
+   "styles": 1,
+   "nodes": 16,
+   "routes": 2,
+   "htmlControls": 2,
+   "counted": "rendered",
+   "text": 200,
+   "shell": "none",
+   "weight": 7690,
+   "at": "2026-11-15"
+  },
   "gcmap.com": {
    "refused": true,
    "at": "2026-10-29"
