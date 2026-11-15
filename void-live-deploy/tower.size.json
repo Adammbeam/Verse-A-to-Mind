@@ -5626,7 +5626,7 @@
    "shell": "none",
    "text": 7,
    "weight": 8,
-   "at": "2026-11-14"
+   "at": "2026-11-15"
   },
   "flagcounter.com": {
    "bytes": 150690,
@@ -6907,7 +6907,7 @@
    "shell": "none",
    "text": 13,
    "weight": 14,
-   "at": "2026-11-14"
+   "at": "2026-11-15"
   },
   "icloud.com": {
    "bytes": 3791879,
@@ -8326,6 +8326,20 @@
    "shell": "none",
    "weight": 406583,
    "at": "2026-10-30"
+  },
+  "mbm.group": {
+   "bytes": 524983,
+   "controls": 29,
+   "scripts": 3,
+   "styles": 3,
+   "nodes": 57,
+   "routes": 2,
+   "htmlControls": 5,
+   "counted": "rendered",
+   "text": 3055,
+   "shell": "none",
+   "weight": 532553,
+   "at": "2026-11-15"
   },
   "mc187.com": {
    "bytes": 4175045,
@@ -10007,7 +10021,7 @@
    "shell": "none",
    "text": 37,
    "weight": 70,
-   "at": "2026-11-14"
+   "at": "2026-11-15"
   },
   "proton.me": {
    "bytes": 835896,
@@ -14859,6 +14873,20 @@
    "weight": 1235788,
    "at": "2026-10-29",
    "counted": "unrendered"
+  },
+  "xarteta.shop": {
+   "bytes": 360917,
+   "controls": 5,
+   "scripts": 6,
+   "styles": 5,
+   "nodes": 75,
+   "routes": 0,
+   "htmlControls": 5,
+   "counted": "rendered",
+   "text": 286,
+   "shell": "none",
+   "weight": 373667,
+   "at": "2026-11-15"
   },
   "xbot.com.vn": {
    "bytes": 570461,
