@@ -1,23 +1,5 @@
 [
  {
-  "at": "2026-11-05T14:53:51Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1024,
-   "failed": [
-    {
-     "ask": "what time is it",
-     "why": [
-      "slow 27808 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-05T15:25:07Z",
   "kind": "visitor",
   "visitor": {
@@ -7409,6 +7391,24 @@
      "ask": "what time is it",
      "why": [
       "slow 10087 ms"
+     ]
+    }
+   ]
+  },
+  "note": "visitor pass 14/15"
+ },
+ {
+  "at": "2026-11-15T11:28:19Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 14,
+   "of": 15,
+   "medianMs": 512,
+   "failed": [
+    {
+     "ask": "what can you do",
+     "why": [
+      "slow 8223 ms"
      ]
     }
    ]
