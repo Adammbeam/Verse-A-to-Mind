@@ -3,13 +3,20 @@
  "cases": 123,
  "runsTotal": 300,
  "kinds": {
-  "grow": 38,
-  "visitor": 222,
+  "visitor": 223,
   "file": 36,
+  "grow": 37,
   "tighten": 2,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-15T01:19:09Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 14/15"
+  },
   {
    "at": "2026-11-15T00:38:21Z",
    "passed": 0,
@@ -165,48 +172,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-13T22:01:05Z",
-   "passed": 116,
-   "of": 124,
-   "kind": "file",
-   "ms": 360,
-   "note": "quality upgrade: weakest answer was \"dyslexia friendly font\" (25 chars)",
-   "failed": [
-    {
-     "ask": "film meatdata for ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "who is the auhtor of dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "how do i magnetize this?",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "lift summary for client onboarding",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "next system slice for the client onboarding",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "handoff pack for my SaaS idea",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "weekly update for the onboarding flow",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "is the invoice automation delivery ready",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    }
-   ]
   }
  ],
  "weekly": [
@@ -272,9 +237,9 @@
   },
   {
    "from": "2026-11-01",
-   "runs": 118,
-   "passed": 3347,
-   "of": 4050,
+   "runs": 117,
+   "passed": 3260,
+   "of": 3961,
    "broken": 5,
    "brokenOf": 525,
    "brokenPassed": 61,
@@ -282,7 +247,7 @@
   },
   {
    "from": "2026-11-08",
-   "runs": 182,
+   "runs": 183,
    "passed": 3006,
    "of": 4100,
    "broken": 9,
