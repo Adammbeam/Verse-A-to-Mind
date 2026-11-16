@@ -1315,6 +1315,20 @@
    "weight": 709287,
    "at": "2026-10-30"
   },
+  "businessesusa.com": {
+   "bytes": 1351631,
+   "controls": 74,
+   "scripts": 6,
+   "styles": 1,
+   "nodes": 39,
+   "routes": 19,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 3205,
+   "shell": "none",
+   "weight": 1373521,
+   "at": "2026-11-16"
+  },
   "businessnamegenerator.com": {
    "bytes": 567587,
    "controls": 77,
@@ -1916,6 +1930,20 @@
    "shell": "none",
    "weight": 379704,
    "at": "2026-10-30"
+  },
+  "chatjimmy.ai": {
+   "bytes": 3895236,
+   "controls": 13,
+   "scripts": 20,
+   "styles": 1,
+   "nodes": 37,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 169,
+   "shell": "none",
+   "weight": 3935606,
+   "at": "2026-11-16"
   },
   "checkeremail.com": {
    "bytes": 865257,
