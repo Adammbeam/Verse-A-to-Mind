@@ -589,6 +589,16 @@
    "listed": 6,
    "defectsBefore": 13,
    "defectsAfter": 1
+  },
+  {
+   "at": "2026-11-16T01:31:29.199Z",
+   "run": 79,
+   "measured": 30,
+   "clean": 24,
+   "fixed": 2,
+   "listed": 4,
+   "defectsBefore": 5,
+   "defectsAfter": 0
   }
  ],
  "pages": {
@@ -7141,7 +7151,7 @@
    "state": "clean"
   },
   "/flights/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7154,33 +7164,33 @@
    "state": "clean"
   },
   "/lab/f193-webrtc-indexeddb-sealed-genome-swarm/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.021,
-    "overflow": 3
+    "cls": 0.001,
+    "overflow": 0
    },
    "state": "clean"
   },
   "/lab/f615-packing-list-maker/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0,
+    "cls": 0.032,
     "overflow": 0
    },
    "state": "clean"
   },
   "/generators/story/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -7194,7 +7204,7 @@
    "why": "no rule fixes it (a layout shift of 0.101 that no rule fixes: listed for a builder)"
   },
   "/pdf/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7207,33 +7217,33 @@
    "state": "clean"
   },
   "/autopilot/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.057,
-    "overflow": 13
+    "cls": 0.054,
+    "overflow": 0
    },
    "state": "clean"
   },
   "/lab/f612-bill-splitter/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.053,
+    "cls": 0,
     "overflow": 0
    },
    "state": "clean"
   },
   "/fix/audit/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7259,21 +7269,20 @@
    "state": "clean"
   },
   "/lab/f235-forge-duel/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
-    "defects": 1,
+    "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.601,
+    "cls": 0,
     "overflow": 0
    },
-   "state": "listed",
-   "why": "no rule fixes it (a layout shift of 0.601 that no rule fixes: listed for a builder)"
+   "state": "clean"
   },
   "/video/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -7287,7 +7296,7 @@
    "why": "no rule fixes it (a layout shift of 0.259 that no rule fixes: listed for a builder)"
   },
   "/lab/mind-map/": {
-   "at": "2026-11-11T19:27:57.737Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7300,7 +7309,7 @@
    "state": "clean"
   },
   "/generators/chat/": {
-   "at": "2026-11-11T19:27:57.737Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7313,7 +7322,7 @@
    "state": "clean"
   },
   "/fix/one-time/": {
-   "at": "2026-11-11T19:27:57.737Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7326,7 +7335,7 @@
    "state": "clean"
   },
   "/creed/": {
-   "at": "2026-11-11T19:27:57.737Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9551,42 +9560,21 @@
    "state": "clean"
   },
   "/lab/f635-teleprompter/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
-    "defects": 7,
-    "contrast": 4,
-    "targets": 3,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0.002,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.011,
+    "cls": 0,
     "overflow": 0
    },
-   "rules": 7,
-   "moved": 0.132
+   "state": "clean"
   },
   "/lab/f641-subscription-tracker/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
-    "defects": 1,
-    "contrast": 1,
-    "targets": 0,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
@@ -9595,11 +9583,10 @@
     "cls": 0,
     "overflow": 0
    },
-   "rules": 1,
-   "moved": 0.003
+   "state": "clean"
   },
   "/lab/f632-seating-chart/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9612,7 +9599,7 @@
    "state": "clean"
   },
   "/lab/f643-receipt-to-expense/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9625,18 +9612,8 @@
    "state": "clean"
   },
   "/lab/f638-meme-maker/": {
-   "at": "2026-11-11T17:20:25.711Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
-    "defects": 3,
-    "contrast": 0,
-    "targets": 3,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
@@ -9645,22 +9622,11 @@
     "cls": 0.01,
     "overflow": 0
    },
-   "rules": 3,
-   "moved": 0.14
+   "state": "clean"
   },
   "/lab/f629-trip-fuel-cost/": {
-   "at": "2026-11-11T19:27:57.737Z",
+   "at": "2026-11-16T01:31:29.199Z",
    "before": {
-    "defects": 1,
-    "contrast": 1,
-    "targets": 0,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
@@ -9669,8 +9635,7 @@
     "cls": 0,
     "overflow": 0
    },
-   "rules": 1,
-   "moved": 0
+   "state": "clean"
   },
   "/self/": {
    "at": "2026-11-13T00:38:35.644Z",
@@ -11269,6 +11234,160 @@
    },
    "state": "listed",
    "why": "it added a layout shift"
+  },
+  "/lab/f684-devicemotion-step-counter/": {
+   "at": "2026-11-16T01:31:29.199Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f671-spatial-packing-list/": {
+   "at": "2026-11-16T01:31:29.199Z",
+   "before": {
+    "defects": 1,
+    "contrast": 1,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "rules": 1,
+   "moved": 0.001
+  },
+  "/lab/f730-bill-splitter/": {
+   "at": "2026-11-16T01:31:29.199Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.009,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f652-bill-splitter/": {
+   "at": "2026-11-16T01:31:29.199Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f679-bill-splitter/": {
+   "at": "2026-11-16T01:31:29.199Z",
+   "before": {
+    "defects": 2,
+    "contrast": 2,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.082,
+    "overflow": 0
+   },
+   "state": "listed",
+   "why": "the defects did not go down (2 -> 2)"
+  },
+  "/lab/f749-chore-rota-generator/": {
+   "at": "2026-11-16T01:31:29.199Z",
+   "before": {
+    "defects": 4,
+    "contrast": 2,
+    "targets": 2,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "listed",
+   "why": "it added a layout shift"
+  },
+  "/lab/f718-spatial-room-material-estimator/": {
+   "at": "2026-11-16T01:31:29.199Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f731-tip-calculator/": {
+   "at": "2026-11-16T01:31:29.199Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.026,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f667-spatial-room-layout-planner/": {
+   "at": "2026-11-16T01:31:29.199Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f754-local-camera-contrast-palette-maker/": {
+   "at": "2026-11-16T01:31:29.199Z",
+   "before": {
+    "defects": 4,
+    "contrast": 4,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "rules": 4,
+   "moved": 0.007
   }
  }
 }
