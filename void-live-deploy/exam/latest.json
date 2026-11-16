@@ -1,14 +1,21 @@
 {
-  "at": "2026-11-15T16:57:31.953Z",
+  "at": "2026-11-16T14:55:25.130Z",
   "against": "live",
-  "week": "2026-W46",
+  "week": "2026-W47",
   "scale": 2,
   "domains": {
     "videos": {
-      "score": 96.9,
+      "score": 96.1,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "play a video about cooking pasta",
+          "failed": [
+            "topic"
+          ],
+          "score": 85.7
+        },
         {
           "ask": "play the trailer",
           "failed": [
@@ -34,10 +41,17 @@
       }
     },
     "podcasts": {
-      "score": 96.8,
+      "score": 94.4,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "play the latest episode of the ted radio hour",
+          "failed": [
+            "episode"
+          ],
+          "score": 85.7
+        },
         {
           "ask": "play the episode before that",
           "failed": [
@@ -48,11 +62,13 @@
         {
           "ask": "pon el último episodio de radiolab",
           "failed": [
+            "answered",
             "skill",
+            "fast",
             "audio",
             "episode"
           ],
-          "score": 57.1
+          "score": 28.6
         }
       ],
       "holdout": {
@@ -101,26 +117,129 @@
       }
     },
     "weather": {
-      "score": 95.8,
+      "score": 61.2,
       "of": 18,
       "measured": 18,
       "fails": [
         {
+          "ask": "weather in paris",
+          "failed": [
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 50
+        },
+        {
+          "ask": "will it rain tomorrow in london",
+          "failed": [
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 50
+        },
+        {
+          "ask": "weather in tokyo this week",
+          "failed": [
+            "answered",
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 33.3
+        },
+        {
+          "ask": "weather in seattle",
+          "failed": [
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 50
+        },
+        {
+          "ask": "what is the weather in paris",
+          "failed": [
+            "answered",
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 33.3
+        },
+        {
+          "ask": "weather in london this weekend",
+          "failed": [
+            "answered",
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 33.3
+        },
+        {
+          "ask": "what's the weather in miami tomorrow",
+          "failed": [
+            "answered",
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 33.3
+        },
+        {
+          "ask": "whats teh weather in london",
+          "failed": [
+            "answered",
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 33.3
+        },
+        {
+          "ask": "wheather in new york",
+          "failed": [
+            "answered",
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 33.3
+        },
+        {
+          "ask": "weather tomorrow in berlin",
+          "failed": [
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 50
+        },
+        {
+          "ask": "weather tomorrow in chicago",
+          "failed": [
+            "answered",
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 33.3
+        },
+        {
           "ask": "weather",
           "failed": [
-            "temp",
             "rival"
           ],
-          "score": 66.7
+          "score": 83.3
         },
         {
           "ask": "météo à lyon",
           "failed": [
-            "skill",
-            "temp",
-            "close"
+            "skill"
           ],
-          "score": 57.1
+          "score": 85.7
         }
       ],
       "holdout": {
@@ -228,19 +347,12 @@
       }
     },
     "sports": {
-      "score": 94.4,
+      "score": 95.4,
       "of": 18,
       "measured": 18,
       "fails": [
         {
           "ask": "yankees score",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "nba team celtics",
           "failed": [
             "board"
           ],
@@ -348,7 +460,7 @@
     }
   },
   "lowest": {
-    "domain": "sports",
-    "score": 94.4
+    "domain": "weather",
+    "score": 61.2
   }
 }
