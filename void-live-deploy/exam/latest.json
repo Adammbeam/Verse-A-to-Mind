@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-16T14:55:25.130Z",
+  "at": "2026-11-16T15:31:50.459Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -41,17 +41,10 @@
       }
     },
     "podcasts": {
-      "score": 94.4,
+      "score": 95.2,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "play the latest episode of the ted radio hour",
-          "failed": [
-            "episode"
-          ],
-          "score": 85.7
-        },
         {
           "ask": "play the episode before that",
           "failed": [
@@ -117,115 +110,55 @@
       }
     },
     "weather": {
-      "score": 61.2,
+      "score": 82.4,
       "of": 18,
       "measured": 18,
       "fails": [
         {
-          "ask": "weather in paris",
+          "ask": "weather tomorrow in boston",
           "failed": [
-            "skill",
+            "answered",
             "fast",
             "temp"
           ],
           "score": 50
         },
         {
-          "ask": "will it rain tomorrow in london",
+          "ask": "humidity in miami",
           "failed": [
-            "skill",
+            "answered",
             "fast",
             "temp"
           ],
           "score": 50
         },
         {
-          "ask": "weather in tokyo this week",
+          "ask": "wind speed in chicago",
           "failed": [
             "answered",
-            "skill",
-            "fast",
-            "temp"
-          ],
-          "score": 33.3
-        },
-        {
-          "ask": "weather in seattle",
-          "failed": [
-            "skill",
             "fast",
             "temp"
           ],
           "score": 50
         },
         {
-          "ask": "what is the weather in paris",
+          "ask": "do i need an umbrella today in seattle",
           "failed": [
             "answered",
-            "skill",
             "fast",
+            "place",
             "temp"
           ],
           "score": 33.3
         },
         {
-          "ask": "weather in london this weekend",
+          "ask": "weather in paris now",
           "failed": [
             "answered",
-            "skill",
-            "fast",
-            "temp"
-          ],
-          "score": 33.3
-        },
-        {
-          "ask": "what's the weather in miami tomorrow",
-          "failed": [
-            "answered",
-            "skill",
-            "fast",
-            "temp"
-          ],
-          "score": 33.3
-        },
-        {
-          "ask": "whats teh weather in london",
-          "failed": [
-            "answered",
-            "skill",
-            "fast",
-            "temp"
-          ],
-          "score": 33.3
-        },
-        {
-          "ask": "wheather in new york",
-          "failed": [
-            "answered",
-            "skill",
-            "fast",
-            "temp"
-          ],
-          "score": 33.3
-        },
-        {
-          "ask": "weather tomorrow in berlin",
-          "failed": [
-            "skill",
             "fast",
             "temp"
           ],
           "score": 50
-        },
-        {
-          "ask": "weather tomorrow in chicago",
-          "failed": [
-            "answered",
-            "skill",
-            "fast",
-            "temp"
-          ],
-          "score": 33.3
         },
         {
           "ask": "weather",
@@ -237,9 +170,10 @@
         {
           "ask": "météo à lyon",
           "failed": [
-            "skill"
+            "skill",
+            "temp"
           ],
-          "score": 85.7
+          "score": 66.7
         }
       ],
       "holdout": {
@@ -347,12 +281,12 @@
       }
     },
     "sports": {
-      "score": 95.4,
+      "score": 94.4,
       "of": 18,
       "measured": 18,
       "fails": [
         {
-          "ask": "yankees score",
+          "ask": "nba team celtics",
           "failed": [
             "board"
           ],
@@ -362,9 +296,10 @@
           "ask": "scores",
           "failed": [
             "skill",
-            "board"
+            "board",
+            "rival"
           ],
-          "score": 66.7
+          "score": 50
         },
         {
           "ask": "resultado del real madrid",
@@ -461,6 +396,6 @@
   },
   "lowest": {
     "domain": "weather",
-    "score": 61.2
+    "score": 82.4
   }
 }
