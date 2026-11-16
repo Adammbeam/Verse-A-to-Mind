@@ -11,7 +11,7 @@
   "not_here": "how often people use a skill is never counted by Verse: no usage, no popular or unused, nothing sent (no behaviour tracking). A last-used day is kept only in a person's own browser (lib/skill-use.js), shown on the family-health card, and never leaves the device"
  },
  "smoke_at": "2026-11-16",
- "bench_at": "2026-11-15",
+ "bench_at": "2026-11-16",
  "totals": {
   "experiment": 0,
   "tested": 1,
@@ -1577,11 +1577,13 @@
      "tier": "proven",
      "why": "a self-test, 9 browser-suite mentions, 5 real asks in the benchmark",
      "failing": [
-      "keep 5 miles to km as a card"
+      "keep 5 miles to km as a card",
+      "convert card for 72 f to c",
+      "72 f to c as a converter card"
      ],
      "last_tested": "2026-11-16",
      "last_tested_by": "the daily smoke test",
-     "success_rate": 0.8,
+     "success_rate": 0.4,
      "streak": 28
     },
     {
@@ -1608,12 +1610,11 @@
      "tier": "proven",
      "why": "a self-test, 9 browser-suite mentions, 13 real asks in the benchmark",
      "failing": [
-      "if i save 200 a month how much in 5 years",
-      "save $50 a week for 5 years"
+      "if i save 200 a month how much in 5 years"
      ],
      "last_tested": "2026-11-16",
      "last_tested_by": "the daily smoke test",
-     "success_rate": 0.846,
+     "success_rate": 0.923,
      "streak": 28
     },
     {
@@ -1647,7 +1648,7 @@
      ],
      "last_tested": "2026-11-16",
      "last_tested_by": "the daily smoke test",
-     "success_rate": 0.861,
+     "success_rate": 0.833,
      "streak": 28
     },
     {
