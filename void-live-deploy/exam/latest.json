@@ -1,21 +1,14 @@
 {
-  "at": "2026-11-16T16:52:32.835Z",
+  "at": "2026-11-16T18:05:00.170Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
   "domains": {
     "videos": {
-      "score": 96.1,
+      "score": 96.9,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "play a video about cooking pasta",
-          "failed": [
-            "topic"
-          ],
-          "score": 85.7
-        },
         {
           "ask": "play the trailer",
           "failed": [
@@ -41,10 +34,17 @@
       }
     },
     "podcasts": {
-      "score": 95.2,
+      "score": 94.4,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "play the latest episode of the ted radio hour",
+          "failed": [
+            "episode"
+          ],
+          "score": 85.7
+        },
         {
           "ask": "play the episode before that",
           "failed": [
@@ -110,44 +110,24 @@
       }
     },
     "weather": {
-      "score": 90.2,
+      "score": 97.2,
       "of": 18,
       "measured": 18,
       "fails": [
         {
-          "ask": "weather in paris",
-          "failed": [
-            "skill",
-            "fast",
-            "temp"
-          ],
-          "score": 50
-        },
-        {
-          "ask": "will it rain tomorrow in london",
-          "failed": [
-            "skill",
-            "fast",
-            "temp"
-          ],
-          "score": 50
-        },
-        {
           "ask": "weather",
           "failed": [
-            "temp",
             "rival"
           ],
-          "score": 66.7
+          "score": 83.3
         },
         {
           "ask": "météo à lyon",
           "failed": [
             "skill",
-            "temp",
-            "close"
+            "temp"
           ],
-          "score": 57.1
+          "score": 66.7
         }
       ],
       "holdout": {
@@ -255,17 +235,10 @@
       }
     },
     "sports": {
-      "score": 95.4,
+      "score": 96.3,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "nba team celtics",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
         {
           "ask": "scores",
           "failed": [
@@ -368,7 +341,7 @@
     }
   },
   "lowest": {
-    "domain": "weather",
-    "score": 90.2
+    "domain": "podcasts",
+    "score": 94.4
   }
 }
