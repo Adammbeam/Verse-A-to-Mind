@@ -19116,5 +19116,6 @@
   {"at": "2026-11-16T17:28:55Z", "by": "viktor", "kind": "fix", "what": "Verse health checks reject empty answers and invalid tool lists, and stop stalled requests after a minute"},
   {"at": "2026-11-16T17:43:57Z", "by": "viktor", "kind": "fix", "what": "Failed recovery jobs enter Verse's incident record, and a record that cannot be saved no longer reports success"},
   {"at": "2026-11-16T17:52:01Z", "by": "viktor", "kind": "fix", "what": "Verse notices repeated scheduled audit failures even when narrower deploy checks pass, and watches recovery infrastructure for repair"},
-  {"at": "2026-11-16T17:52:36Z", "by": "viktor", "kind": "fix", "what": "Verse keeps intentionally retired drafts out of automatic skill registration and checks overlaps against source routing order"}
+  {"at": "2026-11-16T17:52:36Z", "by": "viktor", "kind": "fix", "what": "Verse keeps intentionally retired drafts out of automatic skill registration and checks overlaps against source routing order"},
+  {"at": "2026-11-16T22:28:50Z", "by": "video-gen-live", "kind": "finding", "what": "video-gen checked against the live site, occasion 43: video is off: the partner video model says the account has no AI Gateway credits yet; Verse last tested the video model at 2026-11-16T18:14:25.981Z, and /video/ answers with the Uni gate (artifact findings/video-gen/2026-11-16T2228.json)", "ref": "https://github.com/atomeam/void-loop/blob/main/findings/video-gen/2026-11-16T2228.json"}
 ]
