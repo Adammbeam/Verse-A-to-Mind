@@ -1,44 +1,5 @@
 [
  {
-  "at": "2026-11-06T10:08:42Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 1726,
-   "failed": []
-  },
-  "note": "visitor pass 15/15"
- },
- {
-  "at": "2026-11-06T10:20:14Z",
-  "passed": 89,
-  "of": 92,
-  "ms": 397,
-  "kind": "grow",
-  "failed": [
-   {
-    "ask": "play voidquest",
-    "why": "fps 4 < 5"
-   },
-   {
-    "ask": "play chess",
-    "why": "fps 2 < 5"
-   },
-   {
-    "ask": "favorite this",
-    "why": "only \"waking up\" appeared, never the answer"
-   }
-  ],
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 1726,
-   "failed": []
-  },
-  "note": "new ground passed, kept as a regression case: \"yo make a 2d toon dog\" (skill:cartoon)"
- },
- {
   "at": "2026-11-06T10:32:48Z",
   "kind": "visitor",
   "visitor": {
@@ -7089,5 +7050,31 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"time saved for the invoice automation\" (skill:time-saved)"
+ },
+ {
+  "at": "2026-11-17T14:52:23Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 723,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-17T14:59:43Z",
+  "passed": 133,
+  "of": 133,
+  "ms": 367,
+  "kind": "grow",
+  "failed": [],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 723,
+   "failed": []
+  },
+  "note": "new ground passed, kept as a regression case: \"token stand\" (skill:token-stand)"
  }
 ]
