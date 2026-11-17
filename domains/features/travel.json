@@ -2122,6 +2122,27 @@
     "host": "flightconnections.com",
     "at": "2026-11-13",
     "id": "mwffycn6"
+   },
+   {
+    "target": "feature:flightconnections-co-d3bf4719",
+    "feature": "Widget slider",
+    "host": "flightconnections.com",
+    "at": "2026-11-16",
+    "id": "mwja5uja"
+   },
+   {
+    "target": "feature:flightconnections-co-77245665",
+    "feature": "Input of type email",
+    "host": "flightconnections.com",
+    "at": "2026-11-16",
+    "id": "mwja5vab"
+   },
+   {
+    "target": "feature:flightconnections-co-68e29fa9",
+    "feature": "Uses the location",
+    "host": "flightconnections.com",
+    "at": "2026-11-16",
+    "id": "mwja5vst"
    }
   ]
  },
@@ -3060,7 +3081,6 @@
        "section cho n mo t go i di ch vu",
        "button đa ng nha p",
        "button tra tie n",
-       "button privacy manager",
        "button hu y",
        "button lu u",
        "button đo ng y xo a",
@@ -3108,7 +3128,6 @@
        "section 请选择一个套餐",
        "button 登录",
        "button 支付",
-       "button privacy manager",
        "button 取消",
        "button 保存",
        "button 是 删除",
@@ -6578,8 +6597,6 @@
       "kind": "button",
       "templates": [
        "home",
-       "page:/vn",
-       "page:/cn",
        "page:/tw",
        "page:/airports-by-country",
        "page:/airlines",
@@ -14213,9 +14230,9 @@
      "/flights/routes/",
      "/members/"
     ],
-    "crawled": "2026-11-14"
+    "crawled": "2026-11-16"
    }
   },
-  "updated": "2026-11-14"
+  "updated": "2026-11-16"
  }
 }

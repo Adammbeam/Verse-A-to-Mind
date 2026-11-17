@@ -498,8 +498,18 @@
    "at": "2026-10-29"
   },
   "amazon.de": {
-   "refused": true,
-   "at": "2026-11-06"
+   "bytes": 2534629,
+   "controls": 261,
+   "scripts": 122,
+   "styles": 34,
+   "nodes": 2334,
+   "routes": 118,
+   "htmlControls": 210,
+   "counted": "rendered",
+   "text": 12271,
+   "shell": "none",
+   "weight": 2860969,
+   "at": "2026-11-16"
   },
   "analogouscolors.com": {
    "bytes": 905505,
@@ -598,7 +608,7 @@
    "at": "2026-10-30"
   },
   "archive.org": {
-   "bytes": 74233,
+   "bytes": 74418,
    "controls": 0,
    "scripts": 3,
    "styles": 1,
@@ -608,8 +618,8 @@
    "counted": "rendered",
    "text": 0,
    "shell": "none",
-   "weight": 80523,
-   "at": "2026-11-06"
+   "weight": 80708,
+   "at": "2026-11-16"
   },
   "arcticfoxhaircolor.com": {
    "bytes": 533516,
@@ -688,7 +698,7 @@
    "text": 136,
    "shell": "none",
    "weight": 4180,
-   "at": "2026-11-06"
+   "at": "2026-11-16"
   },
   "aurashinehub.com": {
    "bytes": 811931,
@@ -1315,6 +1325,20 @@
    "weight": 709287,
    "at": "2026-10-30"
   },
+  "businessesusa.com": {
+   "bytes": 1351631,
+   "controls": 74,
+   "scripts": 6,
+   "styles": 1,
+   "nodes": 39,
+   "routes": 19,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 3205,
+   "shell": "none",
+   "weight": 1373521,
+   "at": "2026-11-16"
+  },
   "businessnamegenerator.com": {
    "bytes": 567587,
    "controls": 77,
@@ -1917,6 +1941,20 @@
    "weight": 379704,
    "at": "2026-10-30"
   },
+  "chatjimmy.ai": {
+   "bytes": 3895236,
+   "controls": 13,
+   "scripts": 20,
+   "styles": 1,
+   "nodes": 37,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 169,
+   "shell": "none",
+   "weight": 3935606,
+   "at": "2026-11-16"
+  },
   "checkeremail.com": {
    "bytes": 865257,
    "controls": 36,
@@ -2110,7 +2148,11 @@
    "text": 41,
    "shell": "none",
    "weight": 558,
-   "at": "2026-11-06"
+   "at": "2026-11-16"
+  },
+  "co.com": {
+   "refused": true,
+   "at": "2026-11-16"
   },
   "co2.myclimate.org": {
    "refused": true,
@@ -4218,6 +4260,20 @@
    "weight": 1405622,
    "at": "2026-10-30"
   },
+  "dataprivacyframework.gov": {
+   "bytes": 3614092,
+   "controls": 67,
+   "scripts": 2,
+   "styles": 10,
+   "nodes": 26,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 1522,
+   "shell": "none",
+   "weight": 3618352,
+   "at": "2026-11-16"
+  },
   "daterangepicker.com": {
    "bytes": 736467,
    "controls": 114,
@@ -4629,7 +4685,7 @@
    "text": 0,
    "shell": "none",
    "weight": 10767,
-   "at": "2026-11-06"
+   "at": "2026-11-16"
   },
   "distancescalculator.com": {
    "refused": true,
@@ -4647,7 +4703,7 @@
    "text": 174,
    "shell": "none",
    "weight": 4161,
-   "at": "2026-11-06"
+   "at": "2026-11-16"
   },
   "docs.google.com": {
    "bytes": 954120,
@@ -5427,7 +5483,7 @@
    "text": 917,
    "shell": "none",
    "weight": 2677,
-   "at": "2026-11-06"
+   "at": "2026-11-16"
   },
   "exif.tools": {
    "bytes": 215044,
@@ -5458,6 +5514,24 @@
   "expertcommunityguide.nl": {
    "refused": true,
    "at": "2026-10-29"
+  },
+  "expressapisv2.net": {
+   "refused": true,
+   "at": "2026-11-16"
+  },
+  "eye4.cn": {
+   "bytes": 1004539,
+   "controls": 22,
+   "scripts": 2,
+   "styles": 3,
+   "nodes": 94,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 136,
+   "shell": "none",
+   "weight": 1009479,
+   "at": "2026-11-16"
   },
   "facemojikeyboard.com": {
    "bytes": 360592,
@@ -5549,6 +5623,20 @@
    "refused": true,
    "at": "2026-10-29"
   },
+  "fflivegame.com": {
+   "bytes": 648911,
+   "controls": 9,
+   "scripts": 23,
+   "styles": 5,
+   "nodes": 46,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 1003,
+   "shell": "none",
+   "weight": 695371,
+   "at": "2026-11-16"
+  },
   "fightcolorectalcancer.org": {
    "bytes": 723713,
    "controls": 289,
@@ -5626,7 +5714,7 @@
    "shell": "none",
    "text": 7,
    "weight": 8,
-   "at": "2026-11-14"
+   "at": "2026-11-16"
   },
   "flagcounter.com": {
    "bytes": 150690,
@@ -5977,7 +6065,7 @@
    "text": 279,
    "shell": "none",
    "weight": 13523,
-   "at": "2026-11-06"
+   "at": "2026-11-16"
   },
   "gametuner.ai": {
    "bytes": 1624613,
@@ -5991,6 +6079,20 @@
    "shell": "none",
    "weight": 1639103,
    "at": "2026-10-30"
+  },
+  "gamevn.vip": {
+   "bytes": 4530,
+   "controls": 3,
+   "scripts": 1,
+   "styles": 1,
+   "nodes": 16,
+   "routes": 2,
+   "htmlControls": 2,
+   "counted": "rendered",
+   "text": 200,
+   "shell": "none",
+   "weight": 7690,
+   "at": "2026-11-15"
   },
   "gcmap.com": {
    "refused": true,
@@ -6190,7 +6292,7 @@
    "text": 43,
    "shell": "none",
    "weight": 13058,
-   "at": "2026-11-06"
+   "at": "2026-11-16"
   },
   "google.com": {
    "bytes": 91344,
@@ -6273,6 +6375,10 @@
    "shell": "none",
    "weight": 519205,
    "at": "2026-10-30"
+  },
+  "haxx.se": {
+   "refused": true,
+   "at": "2026-11-16"
   },
   "healthexpertsociety.com": {
    "bytes": 331709,
@@ -6658,6 +6764,34 @@
    "weight": 54457,
    "at": "2026-10-30"
   },
+  "heytapimg.com": {
+   "bytes": 68996,
+   "controls": 2,
+   "scripts": 2,
+   "styles": 1,
+   "nodes": 14,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 18645,
+   "shell": "none",
+   "weight": 73136,
+   "at": "2026-11-16"
+  },
+  "heytapmobi.com": {
+   "bytes": 15541,
+   "controls": 3,
+   "scripts": 1,
+   "styles": 2,
+   "nodes": 53,
+   "routes": 0,
+   "htmlControls": 3,
+   "counted": "rendered",
+   "text": 393,
+   "shell": "none",
+   "weight": 18071,
+   "at": "2026-11-16"
+  },
   "highexistence.com": {
    "bytes": 912934,
    "controls": 92,
@@ -6896,7 +7030,7 @@
    "at": "2026-10-30"
   },
   "icanhazip.com": {
-   "bytes": 14,
+   "bytes": 13,
    "controls": 0,
    "scripts": 0,
    "styles": 0,
@@ -6905,9 +7039,9 @@
    "htmlControls": 0,
    "counted": "plain",
    "shell": "none",
-   "text": 13,
-   "weight": 14,
-   "at": "2026-11-14"
+   "text": 12,
+   "weight": 13,
+   "at": "2026-11-16"
   },
   "icloud.com": {
    "bytes": 3791879,
@@ -7342,6 +7476,20 @@
    "weight": 810443,
    "at": "2026-10-30"
   },
+  "jftechws.com": {
+   "bytes": 23227,
+   "controls": 5,
+   "scripts": 3,
+   "styles": 3,
+   "nodes": 47,
+   "routes": 0,
+   "htmlControls": 3,
+   "counted": "rendered",
+   "text": 84,
+   "shell": "none",
+   "weight": 29697,
+   "at": "2026-11-16"
+  },
   "jobicy.com": {
    "bytes": 494905,
    "controls": 283,
@@ -7478,7 +7626,7 @@
    "at": "2026-10-30"
   },
   "kahoot.it": {
-   "bytes": 724650,
+   "bytes": 725920,
    "controls": 41,
    "scripts": 5,
    "styles": 5,
@@ -7488,8 +7636,8 @@
    "counted": "rendered",
    "text": 529,
    "shell": "none",
-   "weight": 735040,
-   "at": "2026-11-06"
+   "weight": 736310,
+   "at": "2026-11-16"
   },
   "kakuge-checker.com": {
    "bytes": 964258,
@@ -7824,6 +7972,20 @@
    "weight": 374581,
    "at": "2026-10-30"
   },
+  "like.video": {
+   "bytes": 1739030,
+   "controls": 49,
+   "scripts": 14,
+   "styles": 2,
+   "nodes": 77,
+   "routes": 12,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 129,
+   "shell": "none",
+   "weight": 1773800,
+   "at": "2026-11-16"
+  },
   "lilahexe.top": {
    "refused": true,
    "at": "2026-10-29"
@@ -7982,6 +8144,20 @@
    "shell": "none",
    "weight": 844577,
    "at": "2026-10-30"
+  },
+  "lohntastik.de": {
+   "bytes": 1219,
+   "controls": 153,
+   "scripts": 1,
+   "styles": 1,
+   "nodes": 12,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 16581,
+   "shell": "none",
+   "weight": 3339,
+   "at": "2026-11-15"
   },
   "londondiceagency.uk": {
    "refused": true,
@@ -8313,6 +8489,20 @@
    "weight": 406583,
    "at": "2026-10-30"
   },
+  "mbm.group": {
+   "bytes": 524983,
+   "controls": 29,
+   "scripts": 3,
+   "styles": 3,
+   "nodes": 57,
+   "routes": 2,
+   "htmlControls": 5,
+   "counted": "rendered",
+   "text": 3055,
+   "shell": "none",
+   "weight": 532553,
+   "at": "2026-11-15"
+  },
   "mc187.com": {
    "bytes": 4175045,
    "controls": 3,
@@ -8439,7 +8629,21 @@
    "text": 5325,
    "shell": "none",
    "weight": 4851,
-   "at": "2026-11-06"
+   "at": "2026-11-16"
+  },
+  "mega.nz": {
+   "bytes": 202432,
+   "controls": 282,
+   "scripts": 1,
+   "styles": 0,
+   "nodes": 33,
+   "routes": 30,
+   "htmlControls": 2,
+   "counted": "rendered",
+   "text": 5325,
+   "shell": "none",
+   "weight": 219762,
+   "at": "2026-11-16"
   },
   "megatimer.ru": {
    "bytes": 345931,
@@ -8559,6 +8763,20 @@
    "shell": "none",
    "weight": 621995,
    "at": "2026-10-30"
+  },
+  "missena.io": {
+   "bytes": 65,
+   "controls": 0,
+   "scripts": 0,
+   "styles": 0,
+   "nodes": 2,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 10,
+   "shell": "none",
+   "weight": 85,
+   "at": "2026-11-16"
   },
   "modernboardcommunity.nl": {
    "refused": true,
@@ -8706,7 +8924,7 @@
    "text": 395,
    "shell": "none",
    "weight": 2691193,
-   "at": "2026-11-06"
+   "at": "2026-11-16"
   },
   "mymemory.translated.net": {
    "bytes": 220241,
@@ -9435,6 +9653,34 @@
    "weight": 2500878,
    "at": "2026-10-30"
   },
+  "paitolottohk.life": {
+   "bytes": 4581,
+   "controls": 3,
+   "scripts": 1,
+   "styles": 1,
+   "nodes": 16,
+   "routes": 2,
+   "htmlControls": 2,
+   "counted": "rendered",
+   "text": 222,
+   "shell": "none",
+   "weight": 7741,
+   "at": "2026-11-16"
+  },
+  "pananames.com": {
+   "bytes": 1349993,
+   "controls": 40,
+   "scripts": 4,
+   "styles": 1,
+   "nodes": 19,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 2442,
+   "shell": "none",
+   "weight": 1358183,
+   "at": "2026-11-16"
+  },
   "pancardresizer.com": {
    "bytes": 602495,
    "controls": 23,
@@ -9681,6 +9927,20 @@
    "refused": true,
    "at": "2026-10-29"
   },
+  "photofolio.com": {
+   "bytes": 95371,
+   "controls": 28,
+   "scripts": 5,
+   "styles": 3,
+   "nodes": 72,
+   "routes": 36,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 10515,
+   "shell": "none",
+   "weight": 124091,
+   "at": "2026-11-16"
+  },
   "photopea.com": {
    "bytes": 16444,
    "controls": 17,
@@ -9736,6 +9996,20 @@
   "player.fm": {
    "refused": true,
    "at": "2026-10-29"
+  },
+  "playrix.com": {
+   "bytes": 934396,
+   "controls": 63,
+   "scripts": 4,
+   "styles": 2,
+   "nodes": 42,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 945,
+   "shell": "none",
+   "weight": 942816,
+   "at": "2026-11-16"
   },
   "podbean.com": {
    "bytes": 1720382,
@@ -9993,7 +10267,7 @@
    "shell": "none",
    "text": 37,
    "weight": 70,
-   "at": "2026-11-14"
+   "at": "2026-11-16"
   },
   "proton.me": {
    "bytes": 835896,
@@ -10501,6 +10775,20 @@
    "refused": true,
    "at": "2026-11-06"
   },
+  "registry.in": {
+   "bytes": 876386,
+   "controls": 1,
+   "scripts": 3,
+   "styles": 3,
+   "nodes": 23,
+   "routes": 499,
+   "htmlControls": 1,
+   "counted": "rendered",
+   "text": 63,
+   "shell": "none",
+   "weight": 1132116,
+   "at": "2026-11-16"
+  },
   "remoteok.com": {
    "bytes": 519560,
    "controls": 1085,
@@ -10725,7 +11013,7 @@
    "text": 19947,
    "shell": "none",
    "weight": 953032,
-   "at": "2026-11-06"
+   "at": "2026-11-16"
   },
   "sanabriacolor.com": {
    "bytes": 499271,
@@ -10934,7 +11222,7 @@
    "text": 287,
    "shell": "none",
    "weight": 4286,
-   "at": "2026-11-06"
+   "at": "2026-11-16"
   },
   "shopcounter.jp": {
    "bytes": 1468528,
@@ -11246,7 +11534,7 @@
    "text": 83,
    "shell": "none",
    "weight": 5208,
-   "at": "2026-11-06"
+   "at": "2026-11-16"
   },
   "slightlydifferent.co.nz": {
    "bytes": 78008,
@@ -12586,18 +12874,18 @@
    "at": "2026-10-30"
   },
   "tinyurl.com": {
-   "bytes": 5062227,
-   "controls": 57,
+   "bytes": 5062561,
+   "controls": 56,
    "scripts": 4,
    "styles": 5,
    "nodes": 80,
    "routes": 2,
    "htmlControls": 0,
    "counted": "rendered",
-   "text": 3787,
+   "text": 3820,
    "shell": "none",
-   "weight": 5072027,
-   "at": "2026-11-06"
+   "weight": 5072361,
+   "at": "2026-11-16"
   },
   "tirediscounters.com": {
    "bytes": 1512512,
@@ -12637,6 +12925,20 @@
    "shell": "none",
    "weight": 1926880,
    "at": "2026-10-30"
+  },
+  "tns-counter.ru": {
+   "bytes": 13146,
+   "controls": 3,
+   "scripts": 3,
+   "styles": 2,
+   "nodes": 33,
+   "routes": 0,
+   "htmlControls": 3,
+   "counted": "rendered",
+   "text": 1625,
+   "shell": "none",
+   "weight": 19476,
+   "at": "2026-11-16"
   },
   "tokcounter.com": {
    "bytes": 1012699,
@@ -12884,6 +13186,20 @@
    "shell": "none",
    "weight": 733420,
    "at": "2026-10-30"
+  },
+  "ts.net": {
+   "bytes": 728671,
+   "controls": 4,
+   "scripts": 9,
+   "styles": 2,
+   "nodes": 56,
+   "routes": 1298,
+   "htmlControls": 4,
+   "counted": "rendered",
+   "text": 399,
+   "shell": "none",
+   "weight": 1396231,
+   "at": "2026-11-16"
   },
   "tsundere.pw": {
    "bytes": 1245,
@@ -14165,6 +14481,20 @@
    "weight": 2482,
    "at": "2026-11-06"
   },
+  "vokagalaxy.com": {
+   "bytes": 1245358,
+   "controls": 17,
+   "scripts": 14,
+   "styles": 1,
+   "nodes": 50,
+   "routes": 5,
+   "htmlControls": 5,
+   "counted": "rendered",
+   "text": 1216,
+   "shell": "none",
+   "weight": 1276358,
+   "at": "2026-11-16"
+  },
   "vtuner.com": {
    "bytes": 65115,
    "controls": 44,
@@ -14846,6 +15176,20 @@
    "at": "2026-10-29",
    "counted": "unrendered"
   },
+  "xarteta.shop": {
+   "bytes": 360917,
+   "controls": 5,
+   "scripts": 6,
+   "styles": 5,
+   "nodes": 75,
+   "routes": 0,
+   "htmlControls": 5,
+   "counted": "rendered",
+   "text": 286,
+   "shell": "none",
+   "weight": 373667,
+   "at": "2026-11-15"
+  },
   "xbot.com.vn": {
    "bytes": 570461,
    "controls": 12,
@@ -15380,6 +15724,20 @@
    "shell": "none",
    "weight": 116159,
    "at": "2026-10-30"
+  },
+  "zmaticoo.com": {
+   "bytes": 564335,
+   "controls": 4,
+   "scripts": 4,
+   "styles": 3,
+   "nodes": 15,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 5698,
+   "shell": "none",
+   "weight": 572485,
+   "at": "2026-11-16"
   },
   "zoopicker.com": {
    "bytes": 542106,
