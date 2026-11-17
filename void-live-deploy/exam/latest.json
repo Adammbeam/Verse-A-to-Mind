@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-17T06:49:31.890Z",
+  "at": "2026-11-17T07:21:05.596Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -233,7 +233,7 @@
       "measured": 18,
       "fails": [
         {
-          "ask": "yankees score",
+          "ask": "celtics score",
           "failed": [
             "board"
           ],
