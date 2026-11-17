@@ -1,9 +1,9 @@
 {
  "about": "What the conductor (tools/conductor.mjs, every 10 minutes from grow-clock.yml) did: the last 24 hours of ticks, loops it found broken, and the jobs it handed to executors that claim for themselves. Counts and job ids only.",
- "updated": "2026-11-17T01:21:03.379Z",
+ "updated": "2026-11-17T03:59:50.353Z",
  "last24h": {
-  "ticks": 16,
-  "started": 31,
+  "ticks": 18,
+  "started": 37,
   "requeued": 0,
   "setAside": 0,
   "probes": 0,
@@ -64,20 +64,16 @@
   {
    "id": "mwditzd8",
    "why": "no executor for route"
-  },
-  {
-   "id": "mwjmn1ay",
-   "why": "no executor for route"
   }
  ],
  "coder": {
   "model": "@cf/google/gemma-4-26b-a4b-it",
   "hour": {
-   "used": 41,
+   "used": 0,
    "cap": 90
   },
   "day": {
-   "used": 52,
+   "used": 124,
    "cap": 360
   },
   "room": true,
@@ -85,8 +81,8 @@
   "paid": false
  },
  "handed": {
-  "mva30i2e": 1794863893280,
-  "mva30j4u": 1794864456835,
+  "mva30i2e": 1794885767613,
+  "mva30j4u": 1794887990353,
   "mwa0agd2": 1794865017575,
   "mwa0ah54": 1794865580256,
   "mwdsggtv": 1794866142231,
@@ -100,15 +96,14 @@
   "mvbl52gd": 1794877890710,
   "mveb8rsi": 1794877890710,
   "mvu167w7": 1794878463379,
-  "mveb8svc": 1794878463379
+  "mveb8svc": 1794878463379,
+  "mvfu4evy": 1794885767613,
+  "mvpuq9g6": 1794887990353
  },
- "sweptAt": 1794877890710,
- "blueprintsAt": 1794877890710,
- "visitorAt": "2026-11-16T22:43:21Z",
+ "sweptAt": 1794885767613,
+ "blueprintsAt": 1794885767613,
+ "visitorAt": "2026-11-17T03:13:03Z",
  "visitorFiled": [
-  "heal:helper-reuse-pack",
-  "review:2616",
-  "heal:helper-credits-faucet-e39c",
   "review:2622",
   "gap:se-3123",
   "review:2620",
@@ -185,7 +180,10 @@
   "review:2725",
   "review:2728",
   "review:2729",
-  "review:2731"
+  "review:2731",
+  "review:2732",
+  "probe:what-am-i-missing-in-this-plan",
+  "probe:draft-the-handoff-checklist"
  ],
  "ticks": [
   {
@@ -737,6 +735,90 @@
    "sweep": false,
    "blueprints": 0,
    "held": 13,
+   "warnings": 1
+  },
+  {
+   "at": "2026-11-17T03:22:47.613Z",
+   "open": 446,
+   "started": [
+    {
+     "id": "want-idea-f167636764",
+     "kind": "tv",
+     "wf": "verse-job.yml",
+     "score": 123
+    },
+    {
+     "id": "mvfu4evy",
+     "kind": "miss",
+     "wf": "build-miss.yml",
+     "score": 90
+    },
+    {
+     "id": "mva30i2e",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 70
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": true,
+   "design": true,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": true,
+   "blueprints": 0,
+   "held": 12,
+   "warnings": 1
+  },
+  {
+   "at": "2026-11-17T03:59:50.353Z",
+   "open": 445,
+   "started": [
+    {
+     "id": "want-idea-f167636764",
+     "kind": "tv",
+     "wf": "verse-job.yml",
+     "score": 148
+    },
+    {
+     "id": "mvpuq9g6",
+     "kind": "miss",
+     "wf": "build-miss.yml",
+     "score": 90
+    },
+    {
+     "id": "mva30j4u",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 70
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 12,
    "warnings": 1
   }
  ]
