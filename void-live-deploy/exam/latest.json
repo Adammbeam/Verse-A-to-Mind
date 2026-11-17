@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-17T09:19:06.714Z",
+  "at": "2026-11-17T09:47:02.167Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -101,17 +101,16 @@
       }
     },
     "weather": {
-      "score": 96.3,
+      "score": 97.2,
       "of": 18,
       "measured": 18,
       "fails": [
         {
           "ask": "weather",
           "failed": [
-            "temp",
             "rival"
           ],
-          "score": 66.7
+          "score": 83.3
         },
         {
           "ask": "météo à lyon",
@@ -227,38 +226,10 @@
       }
     },
     "sports": {
-      "score": 92.6,
+      "score": 96.3,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "yankees score",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "how did the chiefs do",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "packers score",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "nba team celtics",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
         {
           "ask": "scores",
           "failed": [
@@ -361,7 +332,7 @@
     }
   },
   "lowest": {
-    "domain": "sports",
-    "score": 92.6
+    "domain": "recipes",
+    "score": 96.3
   }
 }
