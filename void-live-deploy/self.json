@@ -906,6 +906,14 @@
  },
  "commits": [
   {
+   "at": "2026-11-17T04:22:26Z",
+   "subject": "feat: render condition-aware weather artwork on exported weather cards"
+  },
+  {
+   "at": "2026-11-17T04:21:39Z",
+   "subject": "Conductor: the last 24 hours of Verse running itself"
+  },
+  {
    "at": "2026-11-17T04:18:04Z",
    "subject": "fix: add audit-sanity to map coverage"
   },
@@ -976,14 +984,6 @@
   {
    "at": "2026-11-17T03:33:24Z",
    "subject": "Verse loop: task, Queue job want-idea-f167636764 (tv: hvac-remote-management): (#2883)"
-  },
-  {
-   "at": "2026-11-17T03:29:24Z",
-   "subject": "Site test: visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-17T03:27:10Z",
-   "subject": "Tower gate: versus measured"
   }
  ],
  "builders": {
