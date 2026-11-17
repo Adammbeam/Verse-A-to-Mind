@@ -243,6 +243,7 @@ The owner, 2026-10-15: "Don't just stay out of each other's way ... build ladder
 
 ## Up for grabs
 
+- **Choose-Your-Own-Adventure engine (proposed 2026-11-17): stage card + /games/adventure/ fullscreen illustrated book mode, data-driven story graph in data/adventures/ with 3 starter books, inventory/flags, bookmarks**: fits Verse's card + full-screen game pattern (jrpg, pong just shipped); needs a `job:` claim like other builds.
 - **test_void.mjs on the box (lists run 17)**: one full run took over 15 minutes on the box and ended 351/352 with "suite ran to the end -> page.fill: Target page, context or browser has been closed" when the 900 s timeout cut it; the clock, timers, sticky and BMI checks passed in that run. Worth a look at what keeps the browser busy so long.
 - **Closed stale PRs, their unbuilt work (Grok Bot, 2026-11-09; each branch is kept on origin, nothing deleted; take a slice, merge origin/main in with `node tools/merge-main.mjs`, open a fresh automerge PR)**:
   - **ndscalc.ru tower, the rest (#2413, branch `claude/tower-ndscalc-emojigraph`)**: done or duplicate. The VAT rates were built in lists run 15 (/vat/, lib/vat.js), and emojigraph.org's page is /emoji-combos/emoji-dictionary/ through lib/self-sites.js (lists run 16, a duplicate). Only the branch's tower-targets test (a tower target needs its LANE_PAGES entry and tool-sites row) is left on the branch, unmerged.
