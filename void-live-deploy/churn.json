@@ -1,5 +1,5 @@
 {
- "at": "2026-11-17T04:37:23.155Z",
+ "at": "2026-11-17T05:01:32.180Z",
  "max": 12,
  "days": 7,
  "sweep": 100,
@@ -30,23 +30,27 @@
   },
   {
    "file": "void-live-deploy/versus/verdicts.json",
-   "changes": 30
+   "changes": 34
   },
   {
    "file": "void-live-deploy/versus/shots/qr-rival.jpg",
-   "changes": 29
+   "changes": 33
   },
   {
    "file": "void-live-deploy/versus/shots/tracks-rival.jpg",
-   "changes": 29
+   "changes": 33
   },
   {
    "file": "void-live-deploy/versus/shots/directions-rival.jpg",
+   "changes": 32
+  },
+  {
+   "file": "void-live-deploy/versus/shots/patterns-rival.jpg",
    "changes": 28
   },
   {
    "file": "tools/real-pages.mjs",
-   "changes": 26
+   "changes": 27
   },
   {
    "file": "void-live-deploy/lib/versus-floor.js",
@@ -57,16 +61,16 @@
    "changes": 24
   },
   {
-   "file": "void-live-deploy/versus/shots/patterns-rival.jpg",
-   "changes": 24
-  },
-  {
    "file": "void-live-deploy/tower-evidence/sports-flashscore-com-5768738f.json",
    "changes": 22
   },
   {
    "file": "void-live-deploy/tower-evidence/sports-onefootball-com-c7423366.json",
    "changes": 22
+  },
+  {
+   "file": "void-live-deploy/versus/shots/text-diff-rival.jpg",
+   "changes": 20
   },
   {
    "file": "domains/features/travel.json",
@@ -82,10 +86,6 @@
   },
   {
    "file": "void-live-deploy/skills/first.json",
-   "changes": 18
-  },
-  {
-   "file": "void-live-deploy/versus/shots/text-diff-rival.jpg",
    "changes": 18
   },
   {

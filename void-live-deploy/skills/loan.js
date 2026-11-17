@@ -213,7 +213,7 @@ async function run(text, api) {
         + '</tbody></table>' : '')
       + (compare.length ? '' : '<div class="sub">' + esc(moneyFmt(q.principal)) + ' at ' + esc(String(q.apr)) + '% for ' + esc(years)
       + (q.extra > 0 ? ' · ' + esc(moneyFmt(q.extra)) + ' extra / month' : '')
-      + '</div>'
+      + '</div>')
       + '<div style="font-size:48px;font-weight:300;line-height:1.15;margin:6px 0 4px">' + esc(moneyFmt(payShown))
       + '<span style="font-size:18px;color:#8a8a8a"> / month</span></div>'
       + '<ul>'
