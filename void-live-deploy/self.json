@@ -906,6 +906,10 @@
  },
  "commits": [
   {
+   "at": "2026-11-17T05:05:17Z",
+   "subject": "fix: add uni-pass to map coverage"
+  },
+  {
    "at": "2026-11-17T05:02:34Z",
    "subject": "feat: add multi-term loan comparison (vs 60 months) to loan skill"
   },
@@ -980,10 +984,6 @@
   {
    "at": "2026-11-17T04:06:24Z",
    "subject": "Tower gate: versus measured"
-  },
-  {
-   "at": "2026-11-17T04:01:43Z",
-   "subject": "fix: register weather and sky only inside the time family (#2886)"
   }
  ],
  "builders": {
