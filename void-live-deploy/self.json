@@ -906,6 +906,10 @@
  },
  "commits": [
   {
+   "at": "2026-11-17T03:16:07Z",
+   "subject": "Note the podcast fix in the growth ledger and the agent log"
+  },
+  {
    "at": "2026-11-17T03:14:01Z",
    "subject": "fix: add /research/ spec to real-pages, narrow automation skill matches, update map"
   },
@@ -916,6 +920,14 @@
   {
    "at": "2026-11-17T03:13:35Z",
    "subject": "Outcome exam: weather 53.6"
+  },
+  {
+   "at": "2026-11-17T03:12:29Z",
+   "subject": "Regenerate the generated files after the merge"
+  },
+  {
+   "at": "2026-11-17T03:10:50Z",
+   "subject": "Play a podcast's own file first, and count it as the episode the feed lists"
   },
   {
    "at": "2026-11-17T03:07:43Z",
@@ -972,18 +984,6 @@
   {
    "at": "2026-11-17T01:14:05Z",
    "subject": "Design loop: 1 page fixed, 11 -> 7 design defects"
-  },
-  {
-   "at": "2026-11-17T01:05:05Z",
-   "subject": "Add automation-proposal skill: propose concrete automations Verse owns so client does less manual work (#2877)"
-  },
-  {
-   "at": "2026-11-17T00:35:54Z",
-   "subject": "Finding: a real MCP client called Verse's live tools (findings/mcp)"
-  },
-  {
-   "at": "2026-11-17T00:35:27Z",
-   "subject": "Verse's will: today's three wants (domains/void.will.md)"
   }
  ],
  "builders": {
@@ -1165,8 +1165,8 @@
   }
  ],
  "visible": {
-  "day": 6,
-  "week": 136
+  "day": 7,
+  "week": 137
  },
  "clips": {
   "upload": "Anyone can upload any Verse film or ad clip: a-to-mind.com/films/ has 1. Download (free), 2. Copy for YouTube, TikTok, Reels or X (title, description with a tracked a-to-mind.com link, the call to action and a share-this-ad line, hashtags) and 3. Upload to that platform, signed in as yourself. No API or token. Say \"upload this to YouTube\". Verse Tube: a-to-mind.com/films/ is the Verse video site: a watch page per video at /films/?v=<id>, view counts, share buttons for every platform and an RSS feed at /films/rss (docs/void-tube.md).",

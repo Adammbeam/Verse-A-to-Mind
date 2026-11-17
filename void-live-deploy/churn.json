@@ -1,20 +1,20 @@
 {
- "at": "2026-11-17T03:37:21.319Z",
+ "at": "2026-11-17T03:11:27.688Z",
  "max": 12,
  "days": 7,
  "sweep": 100,
  "hot": [
   {
    "file": "void-live-deploy/exam/history.json",
-   "changes": 81
-  },
-  {
-   "file": "void-live-deploy/exam/latest.json",
    "changes": 80
   },
   {
+   "file": "void-live-deploy/exam/latest.json",
+   "changes": 79
+  },
+  {
    "file": "domains/handoff.md",
-   "changes": 46
+   "changes": 47
   },
   {
    "file": "void-live-deploy/design-loop.json",
@@ -37,12 +37,12 @@
    "changes": 26
   },
   {
-   "file": "void-live-deploy/versus/verdicts.json",
+   "file": "void-live-deploy/tower-evidence/travel-flightconnections-com-15042a54.json",
    "changes": 25
   },
   {
-   "file": "void-live-deploy/tower-evidence/travel-flightconnections-com-15042a54.json",
-   "changes": 24
+   "file": "void-live-deploy/versus/verdicts.json",
+   "changes": 25
   },
   {
    "file": "void-live-deploy/versus/shots/qr-rival.jpg",
@@ -53,16 +53,16 @@
    "changes": 24
   },
   {
-   "file": "void-live-deploy/versus/shots/directions-rival.jpg",
+   "file": "void-live-deploy/tower-evidence/sports-flashscore-com-5768738f.json",
    "changes": 23
   },
   {
-   "file": "void-live-deploy/tower-evidence/sports-flashscore-com-5768738f.json",
-   "changes": 22
+   "file": "void-live-deploy/tower-evidence/sports-onefootball-com-c7423366.json",
+   "changes": 23
   },
   {
-   "file": "void-live-deploy/tower-evidence/sports-onefootball-com-c7423366.json",
-   "changes": 22
+   "file": "void-live-deploy/versus/shots/directions-rival.jpg",
+   "changes": 23
   },
   {
    "file": "void-live-deploy/versus/shots/patterns-rival.jpg",
@@ -113,20 +113,20 @@
    "changes": 15
   },
   {
-   "file": "void-live-deploy/tower.features.json",
+   "file": "tools/bench.json",
    "changes": 14
   },
   {
-   "file": "tools/bench.json",
-   "changes": 13
-  },
-  {
    "file": "tools/card-cycle.json",
-   "changes": 13
+   "changes": 14
   },
   {
    "file": "tools/grow-self.state.json",
-   "changes": 13
+   "changes": 14
+  },
+  {
+   "file": "void-live-deploy/tower.features.json",
+   "changes": 14
   }
  ]
 }
