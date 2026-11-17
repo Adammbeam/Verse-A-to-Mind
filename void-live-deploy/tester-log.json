@@ -1,15 +1,30 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 133,
+ "cases": 134,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 226,
-  "grow": 44,
+  "grow": 45,
+  "visitor": 225,
   "file": 26,
   "tighten": 2,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-17T23:17:03Z",
+   "passed": 135,
+   "of": 135,
+   "kind": "grow",
+   "ms": 541,
+   "note": "new ground passed, kept as a regression case: \"is this system handoff ready\" (skill:handoff-ready)"
+  },
+  {
+   "at": "2026-11-17T23:08:30Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-17T14:59:43Z",
    "passed": 133,
@@ -175,20 +190,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-17T05:07:04Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-17T04:41:17Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -254,9 +255,9 @@
   },
   {
    "from": "2026-11-03",
-   "runs": 160,
-   "passed": 3796,
-   "of": 5446,
+   "runs": 166,
+   "passed": 3911,
+   "of": 5566,
    "broken": 14,
    "brokenOf": 1491,
    "brokenPassed": 135,
@@ -264,9 +265,9 @@
   },
   {
    "from": "2026-11-10",
-   "runs": 140,
-   "passed": 2674,
-   "of": 2770,
+   "runs": 134,
+   "passed": 2694,
+   "of": 2785,
    "ms": 383
   }
  ],
@@ -712,6 +713,8 @@
   "skill:tables": "2026-11-17T09:16:49Z",
   "skill:three-alike": "2026-11-17T10:55:38Z",
   "skill:time-saved": "2026-11-17T11:18:24Z",
-  "skill:token-stand": "2026-11-17T14:59:43Z"
+  "skill:token-stand": "2026-11-17T14:59:43Z",
+  "skill:handoff-ready": "2026-11-17T23:17:03Z",
+  "skill:summon-pack": "2026-11-17T23:17:03Z"
  }
 }

@@ -432,6 +432,9 @@
     },
     {
       "ask": "token stand"
+    },
+    {
+      "ask": "is this system handoff ready"
     }
   ],
   "candidates": [],

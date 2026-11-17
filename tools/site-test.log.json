@@ -1,41 +1,5 @@
 [
  {
-  "at": "2026-11-06T10:32:48Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1803,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "nothing useful"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
-  "at": "2026-11-06T10:58:47Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1141,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 8846 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-06T11:10:13Z",
   "passed": 90,
   "of": 93,
@@ -7076,5 +7040,31 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"token stand\" (skill:token-stand)"
+ },
+ {
+  "at": "2026-11-17T23:08:30Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 871,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-17T23:17:03Z",
+  "passed": 135,
+  "of": 135,
+  "ms": 541,
+  "kind": "grow",
+  "failed": [],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 871,
+   "failed": []
+  },
+  "note": "new ground passed, kept as a regression case: \"is this system handoff ready\" (skill:handoff-ready)"
  }
 ]
