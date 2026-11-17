@@ -906,6 +906,14 @@
  },
  "commits": [
   {
+   "at": "2026-11-17T05:02:34Z",
+   "subject": "feat: add multi-term loan comparison (vs 60 months) to loan skill"
+  },
+  {
+   "at": "2026-11-17T05:00:59Z",
+   "subject": "Failed jobs read: run 44020896220 (void-live-deploy/incidents/actions/)"
+  },
+  {
    "at": "2026-11-17T04:58:58Z",
    "subject": "fix: make weather condition art take priority over pre-baked skill art in card-image.js"
   },
@@ -976,14 +984,6 @@
   {
    "at": "2026-11-17T04:01:43Z",
    "subject": "fix: register weather and sky only inside the time family (#2886)"
-  },
-  {
-   "at": "2026-11-17T04:01:19Z",
-   "subject": "Site test: visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-17T03:57:45Z",
-   "subject": "Tower gate: versus measured"
   }
  ],
  "builders": {
@@ -1165,8 +1165,8 @@
   }
  ],
  "visible": {
-  "day": 16,
-  "week": 146
+  "day": 17,
+  "week": 147
  },
  "clips": {
   "upload": "Anyone can upload any Verse film or ad clip: a-to-mind.com/films/ has 1. Download (free), 2. Copy for YouTube, TikTok, Reels or X (title, description with a tracked a-to-mind.com link, the call to action and a share-this-ad line, hashtags) and 3. Upload to that platform, signed in as yourself. No API or token. Say \"upload this to YouTube\". Verse Tube: a-to-mind.com/films/ is the Verse video site: a watch page per video at /films/?v=<id>, view counts, share buttons for every platform and an RSS feed at /films/rss (docs/void-tube.md).",
