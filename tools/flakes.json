@@ -175,5 +175,6 @@
   {"check": "python-tests", "sha": "aff7848497f7601f7d4ae583ecd2deb7365cfba8", "at": "2026-11-17T06:50:22Z"},
   {"check": "python-tests", "sha": "c29a8ad5a86c259d72cc9c43457141c10a6143c4", "at": "2026-11-17T08:24:41Z"},
   {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "46fb13d430b1ec6e3732b868648bf875b1460a9c", "at": "2026-11-17T09:31:36Z"},
-  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "7401f7fcb6634624226876e319793c591d692539", "at": "2026-11-17T09:56:52Z"}
+  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "7401f7fcb6634624226876e319793c591d692539", "at": "2026-11-17T09:56:52Z"},
+  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "a0e66eb53020a1e4611bf9200e863f2953b98181", "at": "2026-11-17T10:30:57Z"}
 ]
