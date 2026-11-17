@@ -1,16 +1,16 @@
 {
- "at": "2026-11-17T04:17:16.343Z",
+ "at": "2026-11-17T04:21:43.347Z",
  "max": 12,
  "days": 7,
  "sweep": 100,
  "hot": [
   {
    "file": "void-live-deploy/exam/history.json",
-   "changes": 81
+   "changes": 82
   },
   {
    "file": "void-live-deploy/exam/latest.json",
-   "changes": 80
+   "changes": 81
   },
   {
    "file": "domains/handoff.md",
