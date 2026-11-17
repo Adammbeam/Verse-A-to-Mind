@@ -1,15 +1,44 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 131,
+ "cases": 132,
  "runsTotal": 300,
  "kinds": {
   "visitor": 226,
-  "file": 27,
-  "grow": 43,
+  "grow": 44,
+  "file": 26,
   "tighten": 2,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-17T11:18:24Z",
+   "passed": 129,
+   "of": 132,
+   "kind": "grow",
+   "ms": 594,
+   "note": "new ground passed, kept as a regression case: \"time saved for the invoice automation\" (skill:time-saved)",
+   "failed": [
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "geenrate a toon style dog",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-17T11:08:39Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-17T10:55:38Z",
    "passed": 131,
@@ -159,20 +188,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-17T03:13:03Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-17T02:42:50Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 14/15"
   }
  ],
  "weekly": [
@@ -238,19 +253,19 @@
   },
   {
    "from": "2026-11-03",
-   "runs": 160,
-   "passed": 3974,
-   "of": 5630,
+   "runs": 158,
+   "passed": 3885,
+   "of": 5538,
    "broken": 14,
    "brokenOf": 1491,
    "brokenPassed": 135,
-   "ms": 395
+   "ms": 393
   },
   {
    "from": "2026-11-10",
-   "runs": 140,
-   "passed": 2412,
-   "of": 2505,
+   "runs": 142,
+   "passed": 2541,
+   "of": 2637,
    "ms": 383
   }
  ],
@@ -694,6 +709,7 @@
   "skill:systems-owned": "2026-11-17T08:53:56Z",
   "skill:games-hub": "2026-11-17T09:16:49Z",
   "skill:tables": "2026-11-17T09:16:49Z",
-  "skill:three-alike": "2026-11-17T10:55:38Z"
+  "skill:three-alike": "2026-11-17T10:55:38Z",
+  "skill:time-saved": "2026-11-17T11:18:24Z"
  }
 }

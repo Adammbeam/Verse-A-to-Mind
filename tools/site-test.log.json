@@ -1,59 +1,5 @@
 [
  {
-  "at": "2026-11-06T09:44:51Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 796,
-   "failed": [
-    {
-     "ask": "what time is it",
-     "why": [
-      "nothing useful"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
-  "at": "2026-11-06T09:56:21Z",
-  "passed": 89,
-  "of": 92,
-  "ms": 415,
-  "kind": "file",
-  "key": "turn the questions i missed into a five-minute challenge | only \"waking up\" appeared, never the answer",
-  "failed": [
-   {
-    "ask": "play voidquest",
-    "why": "fps 1 < 5"
-   },
-   {
-    "ask": "play chess",
-    "why": "fps 1 < 5"
-   },
-   {
-    "ask": "turn the questions i missed into a five-minute challenge",
-    "why": "only \"waking up\" appeared, never the answer"
-   }
-  ],
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 796,
-   "failed": [
-    {
-     "ask": "what time is it",
-     "why": [
-      "nothing useful"
-     ]
-    }
-   ]
-  },
-  "note": "fix: \"turn the questions i missed into a five-minute challenge\" only \"waking up\" appeared, never the answer"
- },
- {
   "at": "2026-11-06T10:08:42Z",
   "kind": "visitor",
   "visitor": {
@@ -7104,5 +7050,44 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"three alike\" (skill:three-alike)"
+ },
+ {
+  "at": "2026-11-17T11:08:39Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1154,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-17T11:18:24Z",
+  "passed": 129,
+  "of": 132,
+  "ms": 594,
+  "kind": "grow",
+  "failed": [
+   {
+    "ask": "bokos like dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "redner a cartoon dragon",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "geenrate a toon style dog",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1154,
+   "failed": []
+  },
+  "note": "new ground passed, kept as a regression case: \"time saved for the invoice automation\" (skill:time-saved)"
  }
 ]
