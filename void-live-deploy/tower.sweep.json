@@ -1,10 +1,10 @@
 {
  "about": "The sweep for the smallest sites of all (tools/easiest-sites.mjs --small): each run reads the next slice of the Tranco top million from cursor, one plain GET of each home page, and keeps the ones with at most 5 controls and 20000 bytes that are real pages. smallest is the 500 smallest found so far, fewest controls first, then the fewer bytes.",
  "source": "https://tranco-list.eu/top-1m.csv.zip",
- "cursor": 40000,
- "swept": 1010618,
+ "cursor": 80000,
+ "swept": 1049766,
  "lap": 1,
- "at": "2026-11-16",
+ "at": "2026-11-17",
  "smallest": [
   {
    "rank": 400033,
@@ -23,6 +23,15 @@
    "words": 1,
    "title": "success",
    "plain": true
+  },
+  {
+   "rank": 40035,
+   "host": "itesm.mx",
+   "controls": 0,
+   "bytes": 10,
+   "words": 2,
+   "title": "hola 22ms",
+   "plain": false
   },
   {
    "rank": 1268,
@@ -85,6 +94,15 @@
    "bytes": 130,
    "words": 8,
    "title": "SCRU",
+   "plain": false
+  },
+  {
+   "rank": 40026,
+   "host": "pretty-fly4.net",
+   "controls": 0,
+   "bytes": 144,
+   "words": 6,
+   "title": "pretty-fly4.net",
    "plain": false
   },
   {
@@ -355,6 +373,15 @@
    "bytes": 2596,
    "words": 1,
    "title": "HeyTap",
+   "plain": false
+  },
+  {
+   "rank": 40007,
+   "host": "goonbox.cr",
+   "controls": 0,
+   "bytes": 2625,
+   "words": 4,
+   "title": "GoonBox - Image Hosting",
    "plain": false
   },
   {
