@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-17T09:47:02.167Z",
+  "at": "2026-11-17T11:12:14.747Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -101,10 +101,50 @@
       }
     },
     "weather": {
-      "score": 97.2,
+      "score": 82.5,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "weather in paris",
+          "failed": [
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 50
+        },
+        {
+          "ask": "will it rain tomorrow in london",
+          "failed": [
+            "answered",
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 33.3
+        },
+        {
+          "ask": "weather in tokyo this week",
+          "failed": [
+            "answered",
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 33.3
+        },
+        {
+          "ask": "weather in seattle",
+          "failed": [
+            "answered",
+            "skill",
+            "fast",
+            "temp",
+            "close"
+          ],
+          "score": 28.6
+        },
         {
           "ask": "weather",
           "failed": [
@@ -116,9 +156,10 @@
           "ask": "météo à lyon",
           "failed": [
             "skill",
-            "temp"
+            "temp",
+            "close"
           ],
-          "score": 66.7
+          "score": 57.1
         }
       ],
       "holdout": {
@@ -332,7 +373,7 @@
     }
   },
   "lowest": {
-    "domain": "recipes",
-    "score": 96.3
+    "domain": "weather",
+    "score": 82.5
   }
 }
