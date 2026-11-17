@@ -1,5 +1,5 @@
 {
- "at": "2026-11-17T04:10:56.171Z",
+ "at": "2026-11-17T04:15:19.018Z",
  "max": 12,
  "days": 7,
  "sweep": 100,
@@ -30,19 +30,19 @@
   },
   {
    "file": "void-live-deploy/versus/verdicts.json",
-   "changes": 29
+   "changes": 30
   },
   {
    "file": "void-live-deploy/versus/shots/qr-rival.jpg",
-   "changes": 28
+   "changes": 29
   },
   {
    "file": "void-live-deploy/versus/shots/tracks-rival.jpg",
-   "changes": 28
+   "changes": 29
   },
   {
    "file": "void-live-deploy/versus/shots/directions-rival.jpg",
-   "changes": 27
+   "changes": 28
   },
   {
    "file": "tools/real-pages.mjs",
@@ -58,7 +58,7 @@
   },
   {
    "file": "void-live-deploy/versus/shots/patterns-rival.jpg",
-   "changes": 23
+   "changes": 24
   },
   {
    "file": "void-live-deploy/tower-evidence/sports-flashscore-com-5768738f.json",
