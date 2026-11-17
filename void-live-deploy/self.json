@@ -906,6 +906,22 @@
  },
  "commits": [
   {
+   "at": "2026-11-17T05:12:55Z",
+   "subject": "fix: zero-secret builder Uni access via suiteOpen (localhost, pages.dev, VERSE_LOCAL_PREVIEW=1)"
+  },
+  {
+   "at": "2026-11-17T05:11:23Z",
+   "subject": "fix: keep condition-matched weather art on exported weather cards (#2888)"
+  },
+  {
+   "at": "2026-11-17T05:08:26Z",
+   "subject": "Tower gate: versus measured"
+  },
+  {
+   "at": "2026-11-17T05:08:10Z",
+   "subject": "Flake: 1 check(s) passed on a rerun of 3298d75 (tools/flakes.json)"
+  },
+  {
    "at": "2026-11-17T05:05:17Z",
    "subject": "fix: add uni-pass to map coverage"
   },
@@ -968,22 +984,6 @@
   {
    "at": "2026-11-17T04:18:04Z",
    "subject": "fix: add audit-sanity to map coverage"
-  },
-  {
-   "at": "2026-11-17T04:16:23Z",
-   "subject": "Outcome exam: sports 95.4"
-  },
-  {
-   "at": "2026-11-17T04:16:05Z",
-   "subject": "fix: expand no-third-party-sites to .js/.mjs, add audit-sanity check, clean starboard lede/footer"
-  },
-  {
-   "at": "2026-11-17T04:13:43Z",
-   "subject": "fix: remove third-party site names from .js files, expand no-third-party-sites check"
-  },
-  {
-   "at": "2026-11-17T04:06:24Z",
-   "subject": "Tower gate: versus measured"
   }
  ],
  "builders": {

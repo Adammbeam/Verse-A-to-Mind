@@ -1,16 +1,16 @@
 {
- "at": "2026-11-17T05:11:56.149Z",
+ "at": "2026-11-17T05:18:53.740Z",
  "max": 12,
  "days": 7,
  "sweep": 100,
  "hot": [
   {
    "file": "void-live-deploy/exam/history.json",
-   "changes": 82
+   "changes": 81
   },
   {
    "file": "void-live-deploy/exam/latest.json",
-   "changes": 81
+   "changes": 80
   },
   {
    "file": "domains/handoff.md",
@@ -30,23 +30,23 @@
   },
   {
    "file": "void-live-deploy/versus/verdicts.json",
-   "changes": 34
+   "changes": 35
   },
   {
    "file": "void-live-deploy/versus/shots/qr-rival.jpg",
-   "changes": 33
+   "changes": 34
   },
   {
    "file": "void-live-deploy/versus/shots/tracks-rival.jpg",
-   "changes": 33
+   "changes": 34
   },
   {
    "file": "void-live-deploy/versus/shots/directions-rival.jpg",
-   "changes": 32
+   "changes": 33
   },
   {
    "file": "void-live-deploy/versus/shots/patterns-rival.jpg",
-   "changes": 28
+   "changes": 29
   },
   {
    "file": "tools/real-pages.mjs",
@@ -70,7 +70,7 @@
   },
   {
    "file": "void-live-deploy/versus/shots/text-diff-rival.jpg",
-   "changes": 20
+   "changes": 21
   },
   {
    "file": "domains/features/travel.json",
@@ -109,6 +109,10 @@
    "changes": 15
   },
   {
+   "file": "void-live-deploy/brain/knows.json",
+   "changes": 15
+  },
+  {
    "file": "void-live-deploy/skills/lineage.json",
    "changes": 15
   },
@@ -122,10 +126,6 @@
   },
   {
    "file": "tools/grow-self.state.json",
-   "changes": 14
-  },
-  {
-   "file": "void-live-deploy/brain/knows.json",
    "changes": 14
   },
   {
