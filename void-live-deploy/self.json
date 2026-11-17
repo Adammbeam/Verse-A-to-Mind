@@ -906,8 +906,16 @@
  },
  "commits": [
   {
-   "at": "2026-11-17T03:55:00Z",
-   "subject": "fix: register weather and sky only inside the time family"
+   "at": "2026-11-17T04:01:43Z",
+   "subject": "fix: register weather and sky only inside the time family (#2886)"
+  },
+  {
+   "at": "2026-11-17T04:01:19Z",
+   "subject": "Site test: visitor pass 14/15"
+  },
+  {
+   "at": "2026-11-17T03:57:45Z",
+   "subject": "Tower gate: versus measured"
   },
   {
    "at": "2026-11-17T03:52:31Z",
@@ -976,14 +984,6 @@
   {
    "at": "2026-11-17T03:18:42Z",
    "subject": "Tower gate: versus measured"
-  },
-  {
-   "at": "2026-11-17T03:14:01Z",
-   "subject": "fix: add /research/ spec to real-pages, narrow automation skill matches, update map"
-  },
-  {
-   "at": "2026-11-17T03:13:59Z",
-   "subject": "Lab: 649 experiments live at /lab/, 34 waiting for a fix (#2868)"
   }
  ],
  "builders": {

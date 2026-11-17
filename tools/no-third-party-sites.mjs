@@ -1,4 +1,4 @@
-// no-third-party-sites: public HTML under void-live-deploy/ must not name competitor sites.
+// no-third-party-sites: public files under void-live-deploy/ must not name competitor sites.
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { resolve, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -9,11 +9,11 @@ const DIR = resolve(root, 'void-live-deploy');
 
 function walk(dir) {
   const out = [];
-  for (const f of readdirSync(dir)) {
-    const p = join(dir, f);
+  for (const n of readdirSync(dir)) {
+    const p = join(dir, n);
     const st = statSync(p);
     if (st.isDirectory()) out.push(...walk(p));
-    else if (/\.html$/.test(f)) out.push(p);
+    else if (/\.(html|js|mjs)$/.test(n)) out.push(p);
   }
   return out;
 }

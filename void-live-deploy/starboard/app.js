@@ -11,7 +11,7 @@
   async function race(fresh) {
     const body = $('bench').tBodies[0];
     try {
-      const r = await fetch('/api/sitebench?site=dalyfeds.com' + (fresh ? '&fresh=' + Date.now() : ''), { cache: fresh ? 'no-store' : 'default' });
+      const r = await fetch('/api/sitebench?site=rival' + (fresh ? '&fresh=' + Date.now() : ''), { cache: fresh ? 'no-store' : 'default' });
       const j = await r.json();
       const rows = (j && j.rows) || [];
       const best = (k) => { const v = rows.filter((x) => x && x.ok && Number.isFinite(x[k])).map((x) => x[k]); return v.length > 1 ? Math.min(...v) : null; };
@@ -26,9 +26,9 @@
       $('benchHow').textContent = j && j.at ? 'Measured ' + new Date(j.at).toLocaleString() + ', ' + (j.how || '') + (r.headers.get('x-bench') === 'cached' ? ' (the last 10 minutes\' result)' : '') + '.' : '';
     } catch (_) { body.innerHTML = '<tr><td colspan="6" class="note">The benchmark did not answer. Try Load the latest.</td></tr>'; }
   }
-  // the Tower's own rendered run of dalyfeds.com, with its date (tower.size.json, written by tools/tower-size.mjs on the runner)
-  fetch('/tower.size.json').then((r) => r.json()).then((d) => { const s = d && d.sites && d.sites['dalyfeds.com']; if (!s) return;
-    $('runner').hidden = false; $('runner').textContent = 'The Tower\'s browser run of dalyfeds.com on ' + s.at + ': ' + kb(s.bytes) + ', ' + s.scripts + ' scripts, ' + s.controls + ' controls on the page.'; }).catch(() => {});
+  // the Tower's own rendered run, with its date (tower.size.json, written by tools/tower-size.mjs on the runner)
+  fetch('/tower.size.json').then((r) => r.json()).then((d) => { const s = d && d.sites && d.sites['rival']; if (!s) return;
+    $('runner').hidden = false; $('runner').textContent = 'The Tower\'s browser run on ' + s.at + ': ' + kb(s.bytes) + ', ' + s.scripts + ' scripts, ' + s.controls + ' controls on the page.'; }).catch(() => {});
   $('rerun').addEventListener('click', () => race(true));
   race(false);
 
