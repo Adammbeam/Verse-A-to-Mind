@@ -5,3 +5,4 @@
 
 - `tools/sync-free-lanes.mjs`: reads OpenRouter's model list and writes the free-model registry; `--dry` previews it and `--check` checks the saved registry age.
 - `tools/no-third-party-sites.mjs`: the site-wide guard that keeps a third party's host names off the public pages (the /starboard/ cleanup): every HTML file under `void-live-deploy/` is read, and one of the named hosts fails the check.
+- `tools/audit-sanity.mjs`: the copy and domain gate: every public HTML, JS, and worker/API endpoint under `void-live-deploy/` is read, and a forbidden third-party domain or lore/rivalry copy fails the check.

@@ -906,6 +906,10 @@
  },
  "commits": [
   {
+   "at": "2026-11-17T04:16:05Z",
+   "subject": "fix: expand no-third-party-sites to .js/.mjs, add audit-sanity check, clean starboard lede/footer"
+  },
+  {
    "at": "2026-11-17T04:13:43Z",
    "subject": "fix: remove third-party site names from .js files, expand no-third-party-sites check"
   },
@@ -980,10 +984,6 @@
   {
    "at": "2026-11-17T03:25:08Z",
    "subject": "Failed jobs read: run 44009762564 (void-live-deploy/incidents/actions/)"
-  },
-  {
-   "at": "2026-11-17T03:21:38Z",
-   "subject": "Growth: fold the waiting entries into the ledger (tools/growth-fold.mjs)"
   }
  ],
  "builders": {
@@ -1165,8 +1165,8 @@
   }
  ],
  "visible": {
-  "day": 12,
-  "week": 142
+  "day": 13,
+  "week": 143
  },
  "clips": {
   "upload": "Anyone can upload any Verse film or ad clip: a-to-mind.com/films/ has 1. Download (free), 2. Copy for YouTube, TikTok, Reels or X (title, description with a tracked a-to-mind.com link, the call to action and a share-this-ad line, hashtags) and 3. Upload to that platform, signed in as yourself. No API or token. Say \"upload this to YouTube\". Verse Tube: a-to-mind.com/films/ is the Verse video site: a watch page per video at /films/?v=<id>, view counts, share buttons for every platform and an RSS feed at /films/rss (docs/void-tube.md).",
