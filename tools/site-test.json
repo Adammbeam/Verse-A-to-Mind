@@ -420,6 +420,9 @@
     },
     {
       "ask": "open folder recipes"
+    },
+    {
+      "ask": "game"
     }
   ],
   "candidates": [],

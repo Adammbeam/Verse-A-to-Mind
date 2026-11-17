@@ -1,15 +1,36 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 129,
+ "cases": 130,
  "runsTotal": 300,
  "kinds": {
-  "grow": 43,
   "visitor": 226,
+  "grow": 43,
   "file": 27,
   "tighten": 2,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-17T09:16:49Z",
+   "passed": 130,
+   "of": 131,
+   "kind": "grow",
+   "ms": 383,
+   "note": "new ground passed, kept as a regression case: \"game\" (skill:games-hub)",
+   "failed": [
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-17T09:08:51Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-17T08:53:56Z",
    "passed": 127,
@@ -174,20 +195,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-16T18:02:37Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-16T17:33:00Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 14/15"
   }
  ],
  "weekly": [
@@ -253,9 +260,9 @@
   },
   {
    "from": "2026-11-03",
-   "runs": 164,
-   "passed": 4146,
-   "of": 5811,
+   "runs": 162,
+   "passed": 4062,
+   "of": 5721,
    "broken": 14,
    "brokenOf": 1491,
    "brokenPassed": 135,
@@ -263,9 +270,9 @@
   },
   {
    "from": "2026-11-10",
-   "runs": 136,
-   "passed": 2151,
-   "of": 2243,
+   "runs": 138,
+   "passed": 2281,
+   "of": 2374,
    "ms": 373
   }
  ],
@@ -706,6 +713,8 @@
   "skill:adventure": "2026-11-17T08:33:07Z",
   "skill:automation-proposal": "2026-11-17T08:33:07Z",
   "skill:stage-marks": "2026-11-17T08:53:56Z",
-  "skill:systems-owned": "2026-11-17T08:53:56Z"
+  "skill:systems-owned": "2026-11-17T08:53:56Z",
+  "skill:games-hub": "2026-11-17T09:16:49Z",
+  "skill:tables": "2026-11-17T09:16:49Z"
  }
 }
