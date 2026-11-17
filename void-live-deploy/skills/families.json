@@ -14,7 +14,7 @@
  "bench_at": "2026-11-16",
  "totals": {
   "experiment": 0,
-  "tested": 1,
+  "tested": 3,
   "checked": 17,
   "proven": 441
  },
@@ -1136,7 +1136,7 @@
     {
      "name": "baggage",
      "tier": "proven",
-     "why": "a self-test, 3 real asks in the benchmark, 1 live finding, 2026-11-15",
+     "why": "a self-test, 3 real asks in the benchmark, 2 live findings, 2026-11-16",
      "last_tested": "2026-11-16",
      "last_tested_by": "the daily smoke test",
      "success_rate": 1,
@@ -2742,7 +2742,7 @@
     {
      "name": "rides",
      "tier": "proven",
-     "why": "a self-test, 3 browser-suite mentions, 3 real asks in the benchmark, 32 live findings, 2026-11-15",
+     "why": "a self-test, 3 browser-suite mentions, 3 real asks in the benchmark, 33 live findings, 2026-11-16",
      "last_tested": "2026-11-16",
      "last_tested_by": "the daily smoke test",
      "success_rate": 1,
@@ -3772,7 +3772,7 @@
    "for": "how Verse grows, what it wants, what it can do and sell, and acting on your behalf",
    "count": {
     "experiment": 0,
-    "tested": 1,
+    "tested": 3,
     "checked": 4,
     "proven": 87
    },
@@ -4626,6 +4626,20 @@
      "success_rate": 1,
      "promoted": "2026-11-15",
      "streak": 3
+    },
+    {
+     "name": "automation-proposal",
+     "tier": "tested",
+     "why": "a self-test",
+     "last_tested": "2026-11-17",
+     "last_tested_by": "its tests"
+    },
+    {
+     "name": "process-map",
+     "tier": "tested",
+     "why": "a self-test",
+     "last_tested": "2026-11-17",
+     "last_tested_by": "its tests"
     }
    ]
   },

@@ -286,13 +286,13 @@
   {
    "state": "shipped",
    "date": "2026-11-06",
-   "ask": "monitor-pack skill: propose the monitors, alerts and status checks Verse will own for a process so the client does not…",
+   "ask": "monitor-pack skill: propose the monitors, alerts and status checks Verse handles for a process so the client does not…",
    "from": "new idea by growth agent; helper/monitor-pack"
   },
   {
    "state": "shipped",
    "date": "2026-11-06",
-   "ask": "verify-pack skill: propose the tests, checks and verification Verse will own for a process so the client does not do…",
+   "ask": "verify-pack skill: propose the tests, checks and verification Verse handles for a process so the client does not do…",
    "from": "new idea by growth agent; helper/verify-pack"
   },
   {
@@ -334,13 +334,13 @@
   {
    "state": "shipped",
    "date": "2026-11-06",
-   "ask": "monitor-pack skill: propose the monitors, alerts and status checks Verse will own for a process so the client does not…",
+   "ask": "monitor-pack skill: propose the monitors, alerts and status checks Verse handles for a process so the client does not…",
    "from": "new idea by growth agent; helper/monitor-pack"
   },
   {
    "state": "shipped",
    "date": "2026-11-06",
-   "ask": "verify-pack skill: propose the tests, checks and verification Verse will own for a process so the client does not do…",
+   "ask": "verify-pack skill: propose the tests, checks and verification Verse handles for a process so the client does not do…",
    "from": "new idea by growth agent; helper/verify-pack"
   },
   {
@@ -906,16 +906,44 @@
  },
  "commits": [
   {
+   "at": "2026-11-17T02:42:25Z",
+   "subject": "fix: add automation-proposal skill to self family"
+  },
+  {
+   "at": "2026-11-17T02:38:14Z",
+   "subject": "fix: add verse-handoff tag to /research/ page for handoff-scan"
+  },
+  {
+   "at": "2026-11-17T02:26:16Z",
+   "subject": "Verse's voice: today's reflection, in its own words"
+  },
+  {
+   "at": "2026-11-17T02:01:49Z",
+   "subject": "Conductor: the last 24 hours of Verse running itself"
+  },
+  {
+   "at": "2026-11-17T01:31:27Z",
+   "subject": "Verse loop: task, Queue job want-revenue-2026-11 (feature: want-revenue-2026-1 (#2878)"
+  },
+  {
+   "at": "2026-11-17T01:14:05Z",
+   "subject": "Design loop: 1 page fixed, 11 -> 7 design defects"
+  },
+  {
+   "at": "2026-11-17T01:05:05Z",
+   "subject": "Add automation-proposal skill: propose concrete automations Verse owns so client does less manual work (#2877)"
+  },
+  {
+   "at": "2026-11-17T00:35:54Z",
+   "subject": "Finding: a real MCP client called Verse's live tools (findings/mcp)"
+  },
+  {
+   "at": "2026-11-17T00:35:27Z",
+   "subject": "Verse's will: today's three wants (domains/void.will.md)"
+  },
+  {
    "at": "2026-11-17T00:31:02Z",
    "subject": "Mark process-map skill shipped (on main); add next automation-proposal idea (#2876)"
-  },
-  {
-   "at": "2026-11-17T00:16:56Z",
-   "subject": "Plain words: the added copy uses ordinary words"
-  },
-  {
-   "at": "2026-11-17T00:15:43Z",
-   "subject": "Add automation-proposal skill: propose concrete automations Verse owns so client does less manual work"
   },
   {
    "at": "2026-11-16T23:22:53Z",
@@ -956,34 +984,6 @@
   {
    "at": "2026-11-16T21:58:18Z",
    "subject": "Design loop: 1 page fixed, 4 -> 2 design defects"
-  },
-  {
-   "at": "2026-11-16T21:14:10Z",
-   "subject": "reinvest: today's plan for Verse's money"
-  },
-  {
-   "at": "2026-11-16T20:52:05Z",
-   "subject": "Conductor: the last 24 hours of Verse running itself"
-  },
-  {
-   "at": "2026-11-16T20:38:14Z",
-   "subject": "Bench floor, latency baseline or misses moved by a clean run on main (tools/bench-floor.mjs)"
-  },
-  {
-   "at": "2026-11-16T20:09:20Z",
-   "subject": "Outcome exam: podcasts 92.1"
-  },
-  {
-   "at": "2026-11-16T20:08:30Z",
-   "subject": "Music: 56 real Creative Commons tracks measured across 7 genres (#2874)"
-  },
-  {
-   "at": "2026-11-16T20:08:27Z",
-   "subject": "autosalvage: daily refresh of /salvage/, /credits/ and docs/SALVAGE.md (#2873)"
-  },
-  {
-   "at": "2026-11-16T19:19:47Z",
-   "subject": "Conductor: the last 24 hours of Verse running itself"
   }
  ],
  "builders": {
@@ -1165,8 +1165,8 @@
   }
  ],
  "visible": {
-  "day": 2,
-  "week": 132
+  "day": 3,
+  "week": 133
  },
  "clips": {
   "upload": "Anyone can upload any Verse film or ad clip: a-to-mind.com/films/ has 1. Download (free), 2. Copy for YouTube, TikTok, Reels or X (title, description with a tracked a-to-mind.com link, the call to action and a share-this-ad line, hashtags) and 3. Upload to that platform, signed in as yourself. No API or token. Say \"upload this to YouTube\". Verse Tube: a-to-mind.com/films/ is the Verse video site: a watch page per video at /films/?v=<id>, view counts, share buttons for every platform and an RSS feed at /films/rss (docs/void-tube.md).",
