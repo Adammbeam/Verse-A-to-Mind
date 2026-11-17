@@ -1,138 +1,108 @@
 #!/usr/bin/env node
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+// Dry-run discovery scanner. Reads primary AI feeds, dedupes, diffs against Verse's skill inventory, and prints
+// up to three `job:` specs. IT WRITES NOTHING AND ENQUEUES NOTHING: no #work, no auto-build, no PR. Auto-enqueue
+// is a separate decision (grow-self.yml carries the owner's rule against scheduled self-hardening).
+//   node tools/daily-ai-radar.mjs --dry-run     fetch and print specs (no writes)
+//   node tools/daily-ai-radar.mjs --self-test   offline test of the pure parsers and diff
+import { readFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const SEEN = resolve(root, 'data', 'ai-radar-seen.json');
-const INVENTORY = resolve(root, 'void-live-deploy', 'skills', 'inventory.js');
+const here = dirname(fileURLToPath(import.meta.url)), root = resolve(here, '..');
+const SEEN = resolve(root, 'data/ai-radar-seen.json');
+const INDEX = resolve(root, 'void-live-deploy/skills/index.json');
+const TIMEOUT_MS = 8000;
+const UA = { 'user-agent': 'VerseRadar/1.0 (https://a-to-mind.com; read-only discovery)', accept: 'application/json, application/atom+xml, text/html' };
+const STOP = new Set('with from that this the and for are but you can its our your into use using based more new tool tools model models ai ml data open source free enable makes made help build makes about into over under'.split(' '));
 
-const UA = { 'user-agent': 'VerseRadar/1.0 (https://a-to-mind.com)', accept: 'application/json' };
-
-async function fetchJson(url, ms = 10000) {
-  const ac = new AbortController();
-  const t = setTimeout(() => ac.abort(), ms);
-  try {
-    const r = await fetch(url, { signal: ac.signal, headers: UA });
-    if (!r.ok) return null;
-    return await r.json();
-  } catch (_) { return null; }
-  finally { clearTimeout(t); }
+/** a fair title or description line from mixed markup. Pure. */
+export function plain(s) { return String(s || '').replace(/<[^>]*>/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/\s+/g, ' ').trim(); }
+/** Hugging Face daily papers response -> candidates. Pure. */
+export function hfDaily(json) {
+  const rows = Array.isArray(json) ? json : ((json || {}).dailyPapers || (json || {}).papers || []);
+  return rows.map((r) => r && (r.paper || r)).filter(Boolean).map((p) => ({ id: String(p.id || p.paperId || p.title || ''), title: plain(p.title), url: String(p.url || (p.id ? 'https://huggingface.co/papers/' + p.id : '')), summary: plain(p.summary || p.ai_keyword || '').slice(0, 240), source: 'daily papers' })).filter((x) => x.title && x.url);
 }
-
-async function fetchText(url, ms = 10000) {
-  const ac = new AbortController();
-  const t = setTimeout(() => ac.abort(), ms);
-  try {
-    const r = await fetch(url, { signal: ac.signal, headers: UA });
-    if (!r.ok) return null;
-    return await r.text();
-  } catch (_) { return null; }
-  finally { clearTimeout(t); }
-}
-
-async function discoverGitHub() {
+/** arXiv Atom response -> candidates. Pure. */
+export function arxivFeed(xml) {
   const out = [];
-  const html = await fetchText('https://github.com/trending?since=daily&spoken_language_code=en', 15000);
-  if (!html) return out;
-  for (const m of html.matchAll(/<h2[^>]*>[\s\S]*?<a[^>]*href="\/([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)) {
-    const repo = m[1].trim();
-    const name = m[2].replace(/<[^>]+>/g, '').trim();
-    if (!repo || !name) continue;
-    if (/\b(ai|ml|llm|model|neural|transformer|diffusion|agent|rag|vector|embedding)\b/i.test(repo + ' ' + name)) {
-      out.push({ source: 'github', name, repo: 'https://github.com/' + repo, topic: name });
-    }
-  }
-  return out.slice(0, 10);
-}
-
-async function discoverHuggingFace() {
-  const out = [];
-  const j = await fetchJson('https://huggingface.co/api/daily_papers', 10000);
-  if (!j || !Array.isArray(j)) return out;
-  for (const p of j.slice(0, 10)) {
-    const title = p.title || p.paper?.title || '';
-    const id = p.id || p.paper?.id || '';
-    if (title) out.push({ source: 'huggingface', name: title, repo: 'https://huggingface.co/papers/' + id, topic: title });
+  for (const m of String(xml || '').matchAll(/<entry>([\s\S]*?)<\/entry>/g)) {
+    const e = m[1], tag = (n) => plain((e.match(new RegExp('<' + n + '[^>]*>([\\s\\S]*?)</' + n + '>')) || [])[1]);
+    const link = (e.match(/<id>([\s\S]*?)<\/id>/) || [])[1] || (e.match(/href="([^"]+)"/) || [])[1] || '';
+    if (tag('title')) out.push({ id: plain(link) || tag('title'), title: tag('title'), url: plain(link), summary: tag('summary').slice(0, 240), source: 'research paper' });
   }
   return out;
 }
+/** GitHub repository search response -> candidates. Pure. */
+export function githubRepos(json) {
+  return (((json || {}).items) || []).map((r) => ({ id: 'repo:' + String(r.id || r.full_name || ''), title: String(r.name || ''), url: String(r.html_url || ''), summary: plain(r.description).slice(0, 240), source: 'open-source repository' })).filter((x) => x.url && x.title);
+}
+/** significant comparison tokens. Pure. */
+export function tokens(s) { return plain(s).toLowerCase().split(/[^a-z0-9+]+/).filter((w) => w.length >= 4 && !STOP.has(w)); }
+/** a candidate is novel when no existing skill shares two or more significant tokens with it. Pure. */
+export function isNovel(item, skills) {
+  const want = new Set(tokens(item.title));
+  if (want.size < 2) return false;
+  return !skills.some((skill) => { const have = tokens(skill); let shared = 0; for (const w of want) if (have.includes(w) && ++shared >= 2) return true; return false; });
+}
+export const seenKey = (x) => x.source + ':' + x.id.toLowerCase();
+/** a plain, bounded job spec: a request for a builder, never an enqueue. Pure. */
+export function jobSpec(x) {
+  return 'job: build a native Verse skill for ' + x.title + '\n'
+    + 'SOURCE: ' + x.source + ' — ' + x.url + '\n'
+    + 'WHAT: ' + (x.summary || 'A concrete capability this source describes.') + '\n'
+    + 'SPEC (follow strictly — change only what this asks):\n'
+    + '1. Confirm the capability is real and runnable without a key the repo cannot hold.\n'
+    + '2. Build the smallest useful skill that does the job on a-to-mind.com; reuse existing tools before writing new code.\n'
+    + '3. Add a targeted test, run node tools/pre-pr.mjs and VOID_SKIP_BENCH=1 node tools/checks.mjs --changed, and open one PR to main with label automerge.\n';
+}
+export function readJson(p, fallback) { try { return JSON.parse(readFileSync(p, 'utf8')); } catch (_) { return fallback; } }
 
-function loadSeen() {
-  try { return JSON.parse(readFileSync(SEEN, 'utf8')); } catch (_) { return { seen: [], lastRun: null }; }
+async function get(url, fetchImpl) {
+  const r = await fetchImpl(url, { headers: UA, signal: AbortSignal.timeout(TIMEOUT_MS) });
+  if (!r.ok) throw new Error(url + ' answered ' + r.status);
+  return r.json ? (url.includes('arxiv') ? r.text() : r.json()) : r.text();
 }
 
-function loadInventory() {
-  try {
-    const text = readFileSync(INVENTORY, 'utf8');
-    const names = new Set();
-    for (const m of text.matchAll(/['"]([a-z0-9-]+)['"]/g)) names.add(m[1].toLowerCase());
-    return names;
-  } catch (_) { return new Set(); }
-}
-
-function score(d) {
-  let s = 0;
-  if (/\b(tool|sdk|library|framework|api|cli|engine)\b/i.test(d.name)) s += 2;
-  if (/\b(model|paper|algorithm|method|technique)\b/i.test(d.name)) s += 1;
-  if (d.source === 'github') s += 1;
-  if (d.source === 'huggingface') s += 1;
-  return s;
-}
-
-function toJob(d) {
-  return 'job: build a native Verse skill for ' + d.name + ' (discovered via ' + d.source + ')\n\nSPEC:\n1. IMPLEMENT: Build native Verse skill for ' + d.name + '\n   Source: ' + d.repo + '\n2. VERIFY: Run pre-pr.mjs and checks.mjs --changed (0 errors). Open PR to main with automerge.';
-}
-
-async function main() {
-  const dryRun = process.argv.includes('--dry-run');
-  const check = process.argv.includes('--check');
-
-  if (check) {
-    const seen = loadSeen();
-    const age = seen.lastRun ? Math.round((Date.now() - new Date(seen.lastRun).getTime()) / 864e5) : Infinity;
-    console.log(age <= 1 ? 'ok: seen ledger fresh (' + age + ' day(s))' : 'stale: ' + age + ' day(s) since last run');
-    process.exit(age <= 1 ? 0 : 1);
+/** the three primary feeds, each independent: one failing source never hides the others. */
+export async function collect(fetchImpl = fetch, now = new Date()) {
+  const day = now.toISOString().slice(0, 10), out = [], warnings = [];
+  const feeds = [
+    ['daily papers', 'https://huggingface.co/api/daily_papers?limit=20', hfDaily],
+    ['research paper', 'https://export.arxiv.org/api/query?search_query=cat:cs.AI+OR+cat:cs.CL&sortBy=submittedDate&sortOrder=descending&max_results=20', arxivFeed],
+    ['open-source repository', 'https://api.github.com/search/repositories?q=created:>' + day + '+topic:artificial-intelligence&sort=stars&order=desc&per_page=10', githubRepos],
+  ];
+  for (const [name, url, parse] of feeds) {
+    try { out.push(...parse(await get(url, fetchImpl))); }
+    catch (e) { warnings.push(name + ': ' + String(e.message || e).slice(0, 100)); }
   }
-
-  console.log('Fetching daily AI discoveries...');
-  const [gh, hf] = await Promise.all([discoverGitHub(), discoverHuggingFace()]);
-  const all = [...gh, ...hf];
-  console.log('Found ' + all.length + ' raw discoveries');
-
-  const seen = loadSeen();
-  const seenSet = new Set(seen.seen || []);
-  const inventory = loadInventory();
-
-  const novel = [];
-  for (const d of all) {
-    const key = d.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 60);
-    if (seenSet.has(key)) continue;
-    const words = d.name.toLowerCase().split(/\s+/);
-    if (words.some((w) => w.length > 4 && inventory.has(w))) continue;
-    novel.push(d);
-  }
-
-  novel.sort((a, b) => score(b) - score(a));
-  const top = novel.slice(0, 3);
-
-  console.log('Net-new discoveries: ' + novel.length + ', top ' + top.length + ' selected');
-
-  for (const d of top) {
-    console.log('\n--- ' + d.name + ' (' + d.source + ') ---');
-    console.log(toJob(d));
-    if (!dryRun) seenSet.add(d.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 60));
-  }
-
-  if (!dryRun) {
-    seen.seen = [...seenSet];
-    seen.lastRun = new Date().toISOString();
-    mkdirSync(dirname(SEEN), { recursive: true });
-    writeFileSync(SEEN, JSON.stringify(seen, null, 2) + '\n');
-    console.log('\nSeen ledger updated: ' + seen.seen.length + ' entries');
-  } else {
-    console.log('\n(dry run: seen ledger not updated)');
-  }
+  return { items: out, warnings };
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+function selfTest() {
+  const papers = hfDaily([{ id: '2401.1', title: 'A new speech-to-SDF program synthesizer', summary: 'Speech in, 3D shapes out.' }]);
+  const papers2 = arxivFeed('<feed><entry><id>http://arxiv.org/abs/2401.2</id><title>Weather nowcasting from radar</title><summary>Rain next hour.</summary></entry></feed>');
+  const repos = githubRepos({ items: [{ id: 7, name: 'tiny-vector-store', html_url: 'https://github.com/x/tiny-vector-store', description: 'A small local vector index' }] });
+  const all = [...papers, ...papers2, ...repos];
+  if (all.length !== 3) throw new Error('parsers: expected 3 candidates, got ' + all.length);
+  if (!isNovel(all[0], ['notes', 'weather'])) throw new Error('novelty: a new capability should pass');
+  if (isNovel({ title: 'Weather nowcasting from radar' }, ['weather-nowcasting-radar', 'notes'])) throw new Error('novelty: a covered capability should be dropped');
+  const spec = jobSpec(all[0]);
+  if (!/^job: /.test(spec) || !/automerge/.test(spec)) throw new Error('spec: missing required lines');
+  console.log('ok daily-ai-radar: parsers, dedupe key, inventory diff and job spec (offline)');
+  return 0;
+}
+
+async function main(argv) {
+  if (argv.includes('--self-test')) return selfTest();
+  const { items, warnings } = await collect();
+  const seen = new Set((readJson(SEEN, []) || []).map((x) => String(x)));
+  const skills = readJson(INDEX, []) || [];
+  const fresh = items.filter((x) => !seen.has(seenKey(x))).filter((x) => isNovel(x, skills)).slice(0, 3);
+  for (const w of warnings) console.error('warn daily-ai-radar: ' + w);
+  if (!fresh.length) { console.log('ok daily-ai-radar: no net-new concrete capabilities today (nothing queued, nothing written)'); return 0; }
+  console.log('# daily AI radar — dry run, ' + fresh.length + ' of ' + items.length + ' candidates; nothing queued or written\n');
+  for (const x of fresh) console.log(jobSpec(x).trim() + '\n');
+  return 0;
+}
+
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main(process.argv.slice(2)).then((code) => process.exit(code)).catch((e) => { console.error('daily-ai-radar: ' + (e.message || e)); process.exit(1); });
