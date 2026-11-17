@@ -11,6 +11,13 @@
  },
  "runs": [
   {
+   "at": "2026-11-17T03:44:49Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 14/15"
+  },
+  {
    "at": "2026-11-17T03:13:03Z",
    "passed": 0,
    "of": 0,
@@ -219,32 +226,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-15T02:35:49Z",
-   "passed": 122,
-   "of": 126,
-   "kind": "grow",
-   "ms": 349,
-   "note": "new ground passed, kept as a regression case: \"jump stack\" (skill:jump-stack)",
-   "failed": [
-    {
-     "ask": "decision matrix for whether to move to Berlin",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "bridge these inputs",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "next system slice for the client onboarding",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "handoff pack for my SaaS idea",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    }
-   ]
   }
  ],
  "weekly": [
