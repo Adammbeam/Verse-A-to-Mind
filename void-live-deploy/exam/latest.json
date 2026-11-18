@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-18T16:37:37.629Z",
+  "at": "2026-11-18T17:16:22.583Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -34,10 +34,28 @@
       }
     },
     "podcasts": {
-      "score": 95.2,
+      "score": 92.1,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "play the latest episode of my favorite murder",
+          "failed": [
+            "fast",
+            "audio",
+            "show",
+            "episode"
+          ],
+          "score": 42.9
+        },
+        {
+          "ask": "play the podcast",
+          "failed": [
+            "fast",
+            "audio"
+          ],
+          "score": 71.4
+        },
         {
           "ask": "play the episode before that",
           "failed": [
@@ -48,13 +66,11 @@
         {
           "ask": "pon el último episodio de radiolab",
           "failed": [
-            "answered",
             "skill",
-            "fast",
             "audio",
             "episode"
           ],
-          "score": 28.6
+          "score": 57.1
         }
       ],
       "holdout": {
@@ -103,16 +119,80 @@
       }
     },
     "weather": {
-      "score": 97.2,
+      "score": 76.9,
       "of": 18,
       "measured": 18,
       "fails": [
         {
+          "ask": "weather in paris",
+          "failed": [
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 50
+        },
+        {
+          "ask": "will it rain tomorrow in london",
+          "failed": [
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 50
+        },
+        {
+          "ask": "weather in tokyo this week",
+          "failed": [
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 50
+        },
+        {
+          "ask": "weather in seattle",
+          "failed": [
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 50
+        },
+        {
+          "ask": "what is the weather in paris",
+          "failed": [
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 50
+        },
+        {
+          "ask": "weather in london this weekend",
+          "failed": [
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 50
+        },
+        {
+          "ask": "what's the weather in miami tomorrow",
+          "failed": [
+            "skill",
+            "fast",
+            "temp"
+          ],
+          "score": 50
+        },
+        {
           "ask": "weather",
           "failed": [
+            "temp",
             "rival"
           ],
-          "score": 83.3
+          "score": 66.7
         },
         {
           "ask": "météo à lyon",
@@ -228,10 +308,17 @@
       }
     },
     "sports": {
-      "score": 96.3,
+      "score": 95.4,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "how did the chiefs do",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
         {
           "ask": "scores",
           "failed": [
@@ -334,7 +421,7 @@
     }
   },
   "lowest": {
-    "domain": "podcasts",
-    "score": 95.2
+    "domain": "weather",
+    "score": 76.9
   }
 }
