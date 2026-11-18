@@ -22,5 +22,10 @@
   "tools/triage-cortex.mjs",
   "tools/triage-cortex.test.mjs",
   "tools/verse-coder.mjs"
+ ],
+ "passed": [
+  1,
+  2,
+  4
  ]
 }
