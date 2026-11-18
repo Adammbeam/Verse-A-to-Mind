@@ -1,6 +1,6 @@
 {
  "about": "What the conductor (tools/conductor.mjs, every 10 minutes from grow-clock.yml) did: the last 24 hours of ticks, loops it found broken, and the jobs it handed to executors that claim for themselves. Counts and job ids only.",
- "updated": "2026-11-18T18:05:22.851Z",
+ "updated": "2026-11-18T20:49:14.337Z",
  "last24h": {
   "ticks": 1,
   "started": 0,
@@ -19,8 +19,8 @@
  "visitorFiled": [],
  "ticks": [
   {
-   "at": "2026-11-18T18:05:22.851Z",
-   "error": "tick: fetch failed",
+   "at": "2026-11-18T20:49:14.337Z",
+   "error": "tick: terminated",
    "warnings": 1
   }
  ]
