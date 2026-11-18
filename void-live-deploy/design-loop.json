@@ -689,6 +689,16 @@
    "listed": 2,
    "defectsBefore": 5,
    "defectsAfter": 1
+  },
+  {
+   "at": "2026-11-18T11:03:57.388Z",
+   "run": 108,
+   "measured": 30,
+   "clean": 26,
+   "fixed": 1,
+   "listed": 3,
+   "defectsBefore": 40,
+   "defectsAfter": 0
   }
  ],
  "pages": {
@@ -6485,7 +6495,7 @@
    "state": "clean"
   },
   "/lab/f501-ambient-light-metabolic-swarm-mind/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 5,
     "contrast": 0,
@@ -6499,7 +6509,7 @@
    "why": "the defects did not go down (5 -> 5)"
   },
   "/lab/f192-webxr-hand-force-cloth-kernel/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6525,7 +6535,7 @@
    "state": "clean"
   },
   "/lab/f503-lennard-jones-mlp-dom-swarm-mind/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6533,12 +6543,12 @@
     "unstyled": 0,
     "empty": 0,
     "cls": 0,
-    "overflow": 203
+    "overflow": 1848956
    },
    "state": "clean"
   },
   "/lab/f468-webrtc-expression-agent-field/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6551,7 +6561,7 @@
    "state": "clean"
   },
   "/lab/f504-webgpu-poisson-potential-mlp-dom-mind/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6564,10 +6574,10 @@
    "state": "clean"
   },
   "/lab/f502-webgpu-kuramoto-phase-dom-orchestra-mind/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
-    "defects": 6,
-    "contrast": 6,
+    "defects": 7,
+    "contrast": 7,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
@@ -6575,24 +6585,23 @@
     "overflow": 21
    },
    "state": "listed",
-   "why": "the defects did not go down (6 -> 9)"
+   "why": "the defects did not go down (7 -> 8)"
   },
   "/lab/f320-orient-rnn-webgpu-softbody-dom-arena/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
-    "defects": 1,
+    "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.277,
-    "overflow": 64
+    "cls": 0.006,
+    "overflow": 28
    },
-   "state": "listed",
-   "why": "no rule fixes it (a layout shift of 0.277 that no rule fixes: listed for a builder)"
+   "state": "clean"
   },
   "/lab/f313-webgpu-causal-motion-rnn-hybrid-sculpt/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6600,12 +6609,12 @@
     "unstyled": 0,
     "empty": 0,
     "cls": 0.002,
-    "overflow": 4
+    "overflow": 18
    },
    "state": "clean"
   },
   "/lab/f199-local-rnn-webgpu-causal-particle-field/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6618,7 +6627,7 @@
    "state": "clean"
   },
   "/lab/f233-panel-play/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6631,7 +6640,7 @@
    "state": "clean"
   },
   "/lab/f222-screen-grazing-lichen/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6644,7 +6653,7 @@
    "state": "clean"
   },
   "/lab/f267-sealed-mlp-dom-resource-arena/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6652,12 +6661,12 @@
     "unstyled": 0,
     "empty": 0,
     "cls": 0,
-    "overflow": 0
+    "overflow": 19
    },
    "state": "clean"
   },
   "/lab/f585-webrtc-evo-mlp-forcegraph-mind/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6670,20 +6679,20 @@
    "state": "clean"
   },
   "/lab/f316-webxr-hand-sealed-genome-dom-arena/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0,
+    "cls": 0.017,
     "overflow": 0
    },
    "state": "clean"
   },
   "/lab/f617-recipe-scaler/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6696,7 +6705,7 @@
    "state": "clean"
   },
   "/lab/f624-text-diff/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6709,14 +6718,14 @@
    "state": "clean"
   },
   "/lab/f299-hum-crystal-music-box/": {
-   "at": "2026-11-11T07:59:25.977Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0,
+    "cls": 0.003,
     "overflow": 0
    },
    "state": "clean"
@@ -9558,7 +9567,7 @@
    "state": "clean"
   },
   "/lab/f639-label-name-tag-sheet/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9571,18 +9580,8 @@
    "state": "clean"
   },
   "/lab/f649-qr-code-generator/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
-    "defects": 1,
-    "contrast": 1,
-    "targets": 0,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0.003,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
@@ -9591,11 +9590,10 @@
     "cls": 0.003,
     "overflow": 0
    },
-   "rules": 1,
-   "moved": 0.001
+   "state": "clean"
   },
   "/lab/f630-time-card/": {
-   "at": "2026-11-15T22:04:50.961Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -9635,7 +9633,7 @@
    "state": "clean"
   },
   "/lab/f631-chore-rota/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -10937,7 +10935,7 @@
    "why": "it changed 41% of the first screen"
   },
   "/lab/f695-spatial-constrained-char-rnn-garden/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -10950,7 +10948,7 @@
    "state": "clean"
   },
   "/lab/f660-voice-note-transcriber/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -10963,7 +10961,7 @@
    "state": "clean"
   },
   "/lab/f656-spatial-note-clusterer/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -10976,7 +10974,7 @@
    "state": "clean"
   },
   "/lab/f662-orientation-mlp-note-layout/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -10989,32 +10987,21 @@
    "state": "clean"
   },
   "/lab/f751-local-message-encryptor/": {
-   "at": "2026-11-15T22:04:50.961Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
-    "defects": 1,
+    "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.141,
+    "cls": 0,
     "overflow": 0
    },
-   "state": "listed",
-   "why": "no rule fixes it (a layout shift of 0.141 that no rule fixes: listed for a builder)"
+   "state": "clean"
   },
   "/lab/f651-image-ascii-art/": {
-   "at": "2026-11-15T20:02:56.819Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
-    "defects": 1,
-    "contrast": 0,
-    "targets": 1,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0,
-    "overflow": 130
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
@@ -11023,11 +11010,10 @@
     "cls": 0.001,
     "overflow": 130
    },
-   "rules": 1,
-   "moved": 0.039
+   "state": "clean"
   },
   "/lab/f670-barcode-spatial-inventory/": {
-   "at": "2026-11-15T22:04:50.961Z",
+   "at": "2026-11-18T11:03:57.388Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11710,6 +11696,43 @@
     "overflow": 0
    },
    "state": "clean"
+  },
+  "/lab/f775-tip-calculator-fair-split/": {
+   "at": "2026-11-18T11:03:57.388Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f768-packing-list-maker/": {
+   "at": "2026-11-18T11:03:57.388Z",
+   "before": {
+    "defects": 40,
+    "contrast": 22,
+    "targets": 16,
+    "unstyled": 2,
+    "empty": 0,
+    "cls": 0.046,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.078,
+    "overflow": 0
+   },
+   "rules": 25,
+   "moved": 0.12
   }
  }
 }
