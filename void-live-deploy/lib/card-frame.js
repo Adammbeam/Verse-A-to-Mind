@@ -18,7 +18,7 @@ import { artLook } from './art-meta.js';
 import { artSvg, kindWord, seasonOf, KINDS as ART_KINDS } from './card-art.js';
 import { forge, FORGE_CSS, answerText } from './card-forge.js';
 import { sealArt, SEAL_CSS } from './void-seal.js';
-import { subjectOf, motifsFor } from './card-subject.js';
+import { subjectOf, motifsFor, skillSubjectOf } from './card-subject.js';
 import { lookOfSkill, LOOK_CSS } from './card-look.js'; // the family's frame: organic for sky and earth, blueprint for numbers and money (asked by Verse)
 import { artSource } from './art-source.js';
 import { sectionsOf } from './card-sections.js';
@@ -72,7 +72,7 @@ export function cardOf({ skill = null, page = null, book = null, kind = '', sour
     income: stats && deps ? (deps.importedBy || []).length : null, arrowsOut: stats && deps ? Math.min(3, (deps.imports || []).length) : 0, arrowIn: !!(stats && deps && (deps.importedBy || []).length),
     number: page && book ? String(page.n).padStart(3, '0') + '/' + String((book.pages || []).length || '').padStart(3, '0') : '',
     tested: (skill && skill.last_tested) || '',
-    adds: page && page.line ? addsLine(page.line) : fetched ? (kept ? 'Values read from the pages this card names, on the date shown, and kept in Verse.' : addsLine(filed)) : '', // filed: what this card itself added (lib/term-card.js addsFor, data-card-adds), never a generic line; none, no line (owner, 2026-11-06)
+    adds: fetched ? (kept ? 'Values read from the pages this card names, on the date shown, and kept in Verse.' : addsLine(filed)) : addsLine(filed), // filed: what this card itself added (lib/term-card.js addsFor, data-card-adds), never a generic line; none, no line (owner, 2026-11-06). A book page's one line says what the page is, not what the card added, so it is never shown here (2026-11-17: "Things that materialize" showed on unrelated cards)
     name: (skill && skill.name) || (page && page.name) || '', isSkill: !!(skill || page),
     keywords: keywordsOf({ tier, tested: skill && skill.last_tested, arrows: stats && deps ? (deps.imports || []).length : 0, fetched, sources, today }),
   };
@@ -262,7 +262,7 @@ export const PAGE_OF = Object.freeze({ ...Object.fromEntries(SITE_PAGES.map((p) 
   words: ['/word-count/', 'Word counter'], fakeuser: ['/random/people/', 'Made-up people'], time: ['/time/', 'Time zones'], colour: ['/color/', 'Colour codes'], color: ['/color/', 'Colour codes'],
   password: ['/password/', 'Password generator'], base64: ['/base64/', 'Base64'], random: ['/random/', 'Random number'],
   worldtime: ['/time/', 'Time zones'], imgfit: ['/resize-image/', 'Resize an image'], 'photo-tools': ['/photos/', 'Photo tools'], pwcheck: ['/password/strength/', 'Password strength'], 'stl-check': ['/stl/', 'STL checker'], toolkit: ['/tools/', 'Every tool'],
-  podcast: ['/podcasts/', 'Podcasts'], 'podcast-search': ['/podcasts/', 'Podcasts'], 'local-stations': ['/local/', 'Local TV and radio'], notepad: ['/notes/', 'Notes'], textgen: ['/generators/', 'Generators'], boards: ['/boards/', 'Boards'], fanfic: ['/fanfic/', 'Fan fiction'], 'team-chat': ['/team/', 'Team chat'], draw: ['/learn-to-draw/', 'Learn to draw'], 'verse-brain': ['/brain/', 'Verse Brain'], converter: ['/converter/', 'File converter'], rap: ['/rap/', 'Verse raps'], markets: ['/markets/', 'Markets'], stocks: ['/markets/', 'Markets'], news: ['/news/', 'News'], scores: ['/scores/', 'Scores'], 'sports-browse': ['/scores/sports/', 'Sports'], fantasy: ['/fantasy/', 'Fantasy tools'], metronome: ['/metronome/', 'Metronome'], piano: ['/piano/', 'Piano'], tuner: ['/tuner/', 'Tuner'], bpm: ['/bpm/', 'BPM counter'], chordfinder: ['/chords/', 'Chords and scales'], 'music-tools': ['/music/', 'Music tools'], cartoon: ['/image/', 'AI image generator'], 'video-gen': ['/video/', 'AI video generator'], formulas: ['/calculators/', 'Formula calculators'], repo: ['/ledger/', 'Repo activity ledger'], emoji: ['/emojis/', 'Emoji counts'], 'emoji-combos': ['/emoji-combos/', 'Emoji combos'], 'gh-file': ['/g/', 'Snippet / Note in a link'] });
+  podcast: ['/podcasts/', 'Podcasts'], 'podcast-search': ['/podcasts/', 'Podcasts'], 'local-stations': ['/local/', 'Local TV and radio'], notepad: ['/notes/', 'Notes'], textgen: ['/generators/', 'Generators'], boards: ['/boards/', 'Boards'], fanfic: ['/fanfic/', 'Fan fiction'], 'team-chat': ['/team/', 'Team chat'], draw: ['/learn-to-draw/', 'Learn to draw'], 'verse-brain': ['/brain/', 'Verse Brain'], converter: ['/converter/', 'File converter'], rap: ['/rap/', 'Verse raps'], markets: ['/markets/', 'Markets'], stocks: ['/markets/', 'Markets'], news: ['/news/', 'News'], scores: ['/scores/', 'Scores'], 'sports-browse': ['/scores/sports/', 'Sports'], fantasy: ['/fantasy/', 'Fantasy tools'], metronome: ['/metronome/', 'Metronome'], piano: ['/piano/', 'Piano'], tuner: ['/tuner/', 'Tuner'], bpm: ['/bpm/', 'BPM counter'], chordfinder: ['/chords/', 'Chords and scales'], 'music-tools': ['/music/', 'Music tools'], cartoon: ['/image/', 'AI image generator'], 'video-gen': ['/video/', 'AI video generator'], formulas: ['/calculators/', 'Formula calculators'], repo: ['/ledger/', 'Repo activity ledger'], emoji: ['/emojis/', 'Emoji counts'], 'emoji-combos': ['/emoji-combos/', 'Emoji combos'], 'gh-file': ['/g/', 'Snippet / Note in a link'], arcade: ['/arcade/', 'Verse Arcade'] });
 // a card from a skill or a built-in answer that does several things (util: colours, word counts, passwords; the page's own calculator,
 // stopwatch and random number) names its page itself with data-page; only a page in this list is linked (owner, 2026-10-25: "and vice versa")
 export const PAGE_PATHS = Object.freeze(Object.fromEntries(Object.values(PAGE_OF).map(([href, label]) => [href, label])));
@@ -310,7 +310,7 @@ export function keep(el, esc, stats) {
   // (its source's thumbnail), the art box shows that picture in its true colour (owner, 2026-10-17: the ink filter stripped a poster's colour), under a light ink texture; with none, the plate of its kind
   const photoImg = [...el.querySelectorAll('img[src]')].find((i) => !i.closest('.vc-art') && /^https:\/\//.test(i.getAttribute('src') || '')), photo = photoImg ? photoImg.getAttribute('src') : '';
   // the card's subject is what its ANSWER is about (lib/card-subject.js), not the ask's words: the plate draws it, the Art Forge paints it
-  const subj = c.isSkill || own || notFound ? { nouns: [], phrase: '' } : subjectOf(c.key, answerText(el)); c.nouns = subj.nouns; el._vcSubject = subj.phrase;
+  const subj = own || notFound ? { nouns: [], phrase: '' } : c.isSkill ? skillSubjectOf(c.key) : subjectOf(c.key, answerText(el)); c.nouns = subj.nouns; el._vcSubject = subj.phrase;
   const key = JSON.stringify([c.key, c.nouns, c.season, c.isSkill, c.chapter, c.typeLine, c.cost, c.power, c.toughness, c.income, c.arrowsOut, c.arrowIn, c.number, c.adds, c.artKind, c.artHue, c.artInk, c.rarity && c.rarity.name, c.hue, photo, c.badges, c.notice, c.theme]);
   const h2 = el.querySelector('h2');
   if (h2 && !h2.classList.contains('vc-title')) h2.classList.add('vc-title');

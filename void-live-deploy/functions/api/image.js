@@ -32,20 +32,18 @@ import { imageOf } from '../../lib/art-rules.js';
 import { capOf, asImage } from './card-art.js';
 import { publicPainter, paintWith } from './studio.js';
 import { IMAGE_MODELS } from '../../lib/models.js';
-import { cleanLine, refusalOf, promptOf, pollUrl, styleOf, shapeOf, seedOf, SHAPES, SAYS, aiShareOf, POLL_CAP, PER_CONN, PER_MINUTE, PROMPT_MAX, NEGATIVE_MAX, CHANGE_MAX, EDIT_BYTES, imageSizeOf, fitsEdit, changePromptOf, WORDS_PER_CONN, WORDS_DAY, wordsAskOf, wordsOutOf } from '../../lib/image-gen.js';
+import { cleanLine, refusalOf, promptOf, pollUrl, styleOf, shapeOf, seedOf, SHAPES, SAYS, aiShareOf, POLL_CAP, PER_CONN, PER_MINUTE, PROMPT_MAX, NEGATIVE_MAX, CHANGE_MAX, CHANGE_BODY, EDIT_BYTES, imageSizeOf, fitsEdit, changePromptOf, WORDS_PER_CONN, WORDS_DAY, wordsAskOf, wordsOutOf } from '../../lib/image-gen.js';
 
 export const AI_MS = 25000, POLL_MS = 30000; // both inside the gate's 60 s wait for a first picture (2026-10-25: 40 + 40 s let a slow painter hold a picture past it)
 import { jsonNoStore as json } from '../../lib/http.js'; // one copy (lib/http.js, convergence step 3)
 const isSecret = (t) => redact(t) !== t || scrubOut(t) !== t;
+import { tablesReady } from '../../lib/db.js'; // one copy (lib/db.js, convergence step 3)
 const say = (why, de) => (SAYS[why] || SAYS.busy)[de ? 1 : 0];
 const resting = (why, de, status = 200, extra = {}) => json({ state: 'resting', why, say: say(why, de) }, status, extra);
 
-let ready = null;
-async function ensure(env) {
-  if (!ready) ready = env.DB.prepare('CREATE TABLE IF NOT EXISTS void_image_days (k TEXT PRIMARY KEY, day TEXT NOT NULL, n INTEGER NOT NULL)').run().catch((e) => { ready = null; throw e; });
-  await ready;
-}
-export const resetReady = () => { ready = null; }; // tests: a new fake database needs its table made again
+const ready = tablesReady(['CREATE TABLE IF NOT EXISTS void_image_days (k TEXT PRIMARY KEY, day TEXT NOT NULL, n INTEGER NOT NULL)']); // made once per isolate (lib/db.js)
+async function ensure(env) { await ready(env); }
+export const resetReady = () => ready.reset(); // tests: a new fake database needs its table made again
 const used = async (env, k, day) => { const r = await env.DB.prepare('SELECT n FROM void_image_days WHERE k = ? AND day = ?').bind(k, day).first(); return r ? Number(r.n) || 0 : 0; };
 const tick = (env, k, day) => env.DB.prepare('INSERT INTO void_image_days (k, day, n) VALUES (?, ?, 1) ON CONFLICT(k) DO UPDATE SET n = CASE WHEN day = excluded.day THEN n + 1 ELSE 1 END, day = excluded.day').bind(k, day).run();
 /** the image page's Workers AI pictures today, for the Art Forge's own count (functions/api/card-art.js madeToday): the two share one cap */
@@ -60,7 +58,6 @@ const hex = (buf) => [...new Uint8Array(buf)].map((x) => x.toString(16).padStart
 export async function cacheReq(origin, parts) { return new Request(origin + '/__void-image/' + hex(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(parts.join('\u0001'))))); }
 /** a cached picture's reference: the hash its cache key ends with (the page sends it back to change that picture) */
 export const refOf = (key) => key.url.slice(key.url.lastIndexOf('/') + 1);
-const CHANGE_BODY = 240000; // a change carries the page's shrunk copy as base64 (EDIT_BYTES * 4 / 3) plus its fields
 
 // one picture from Workers AI's image model (klein takes multipart form data with the size and the seed, and reference pictures as input_image_N)
 export async function paintAi(env, prompt, [w, h], seed, withSeed = true, refs = []) {

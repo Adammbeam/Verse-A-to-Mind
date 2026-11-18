@@ -169,6 +169,7 @@ test('a paid member\'s idea goes before every free job however old, a repair bef
   assert.ok(score(free[0], NOW) > score(member, NOW), 'by score alone the old versus job would win');
   assert.deepEqual(plan({ jobs: [...free, member], wf: all(), now: NOW }).start.filter((s) => s.wf === AGENT).map((s) => s.id), ['m1']);
   assert.deepEqual(plan({ jobs: [...free, member, job('h1', 'heal:will.yml', { at: iso(0) })], wf: all(), now: NOW }).start.filter((s) => s.wf === AGENT).map((s) => s.id), ['h1'], 'a repair still goes first');
+  assert.equal(plan({ jobs: [job('h1', 'heal:will.yml', { at: iso(24 * 20) }), job('want-exam-code', 'gap:want-exam-code', { at: iso(1) })], wf: all(), now: NOW }).start.filter((s) => s.wf === AGENT).map((s) => s.id)[0], 'want-exam-code', 'an open team want starts before an old repair');
   assert.deepEqual(plan({ jobs: [member], wf: all({ [AGENT]: { today: 60 } }), now: NOW }).start.map((s) => s.id), ['m1'], 'one run a tick all day');
   assert.equal(FIRST.versus, undefined, 'free jobs keep their score order');
 });
@@ -194,6 +195,7 @@ test('a coder budget too short for one whole run holds the coder until the windo
   assert.equal(coderShort(null, at), null, 'unknown budget: started as before');
   assert.equal(coderShort({ room: true }, at), null, 'no counts: started as before');
   assert.equal(coderShort(b(0, 360, false), at, 30, true), null, 'a spare free model key: started though the budget is spent');
+  assert.equal(coderShort({ ...b(0, 360, false), paid: true }, at), null, 'the treasury pays past the free ceiling, so the coder is not held to midnight');
   const p = plan({ jobs: [job('w1', 'will:paint')], wf: all({ [AGENT]: { noModel: coderShort(b(0, 349), at) } }), now: NOW });
   assert.ok(!p.start.some((s) => s.wf === AGENT));
   assert.ok(p.held.some((h) => h.id === 'w1' && /until 00:00 UTC/.test(h.why)));
@@ -222,4 +224,48 @@ test('the film and the podcast run every day, and an automerge sweep every hour,
   assert.equal(sweepDue({ sweptMs: 0, now: NOW }), true, 'never swept');
   assert.equal(sweepDue({ sweptMs: NOW - 61 * 60000, now: NOW }), true);
   assert.equal(sweepDue({ sweptMs: NOW - 20 * 60000, now: NOW }), false, 'swept 20 minutes ago');
+});
+
+const TOWER_EVENTS = {events: ['schedule', 'workflow_run']};
+const runOf = (event, conclusion, id) => ({id, event, status: 'completed', conclusion, html_url: 'https://example.test/run/' + id, created_at: iso(id)});
+test('a successful deploy-triggered run cannot hide consecutive failed scheduled audits', () => {
+  const runs = [runOf('workflow_run', 'success', 1), runOf('schedule', 'failure', 2), runOf('workflow_run', 'success', 3), runOf('schedule', 'failure', 4), runOf('workflow_run', 'success', 5), runOf('schedule', 'failure', 6)];
+  assert.deepEqual(streakOf(runs, TOWER_EVENTS), {fails: 3, url: 'https://example.test/run/2'});
+  const p = plan({jobs: [job('audit-repair', 'heal:tower-gate.yml')], wf: {...all(), 'tower-gate.yml': live(streakOf(runs, TOWER_EVENTS))}, now: NOW});
+  assert.equal(p.heal[0].wf, 'tower-gate.yml');
+  assert.ok(!p.setAside.some((j) => j.id === 'audit-repair'), 'a deploy-only success must not retire the audit repair');
+});
+test('success on the same trigger clears its own failed streak', () => {
+  const runs = [runOf('schedule', 'success', 1), runOf('workflow_run', 'success', 2), runOf('schedule', 'failure', 3), runOf('schedule', 'failure', 4), runOf('schedule', 'failure', 5)];
+  assert.equal(streakOf(runs, TOWER_EVENTS).fails, 0);
+  const p = plan({jobs: [job('audit-repair', 'heal:tower-gate.yml')], wf: {...all(), 'tower-gate.yml': live(streakOf(runs, TOWER_EVENTS))}, now: NOW});
+  assert.ok(p.setAside.some((j) => j.id === 'audit-repair'), 'a successful scheduled audit clears its repair');
+});
+test('mixed-trigger consecutive failures still count and skipped/cancelled/running runs do not', () => {
+  assert.equal(streakOf([runOf('push', 'failure', 1), runOf('schedule', 'failure', 2), runOf('push', 'failure', 3)]).fails, 3);
+  const runs = [runOf('workflow_run', 'success', 1), {...runOf('schedule', null, 2), status: 'in_progress'}, runOf('schedule', 'cancelled', 3), runOf('schedule', 'failure', 4), runOf('schedule', 'skipped', 5), runOf('schedule', 'timed_out', 6), runOf('schedule', 'failure', 7)];
+  assert.equal(streakOf(runs, TOWER_EVENTS).fails, 3);
+});
+test('the conductor keeps scheduled Tower history even when deployment runs fill the recent window', async () => {
+  const {healthRunsOf, runsOf, WATCH} = await import('./conductor.mjs');
+  assert.ok(WATCH.includes('pages-guard.yml'));
+  assert.ok(WATCH.includes('actions-failures.yml'));
+  const recent = Array.from({length: 10}, (_, i) => runOf('workflow_run', 'success', i + 1));
+  const scheduled = [runOf('schedule', 'failure', 20), runOf('schedule', 'failure', 21), runOf('schedule', 'failure', 22)];
+  const calls = [];
+  const combined = healthRunsOf('tower-gate.yml', recent, (wf, event) => {calls.push([wf, event]); return event === 'schedule' ? scheduled : recent;});
+  assert.deepEqual(calls, [['tower-gate.yml', 'schedule'], ['tower-gate.yml', 'workflow_run']]);
+  assert.equal(streakOf(combined, TOWER_EVENTS).fails, 3);
+  assert.deepEqual(healthRunsOf('tower-gate.yml', [scheduled[0]], () => scheduled).map((r) => r.id), [20, 21, 22], 'the same run is not counted twice');
+  assert.deepEqual(healthRunsOf('deploy.yml', recent, () => {throw new Error('unexpected extra read');}), recent, 'unaffected loops use one history read');
+  runsOf('tower-gate.yml', 'schedule', (...args) => {assert.match(args[1], /event=schedule/); return '{"workflow_runs":[]}';});
+});
+
+test('Tower failures from unrelated coverage streams are never added together', () => {
+  const runs = [runOf('schedule', 'failure', 1), runOf('workflow_run', 'failure', 2), runOf('workflow_dispatch', 'failure', 3)];
+  assert.equal(streakOf(runs, TOWER_EVENTS).fails, 1);
+});
+test('a manual Tower run cannot clear scheduled audit failures without matching job coverage', () => {
+  const runs = [runOf('workflow_dispatch', 'success', 1), runOf('schedule', 'failure', 2), runOf('schedule', 'failure', 3), runOf('schedule', 'failure', 4)];
+  assert.equal(streakOf(runs, TOWER_EVENTS).fails, 3);
 });

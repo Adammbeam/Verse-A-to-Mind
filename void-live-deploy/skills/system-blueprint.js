@@ -1,6 +1,5 @@
 /**
- * system-blueprint skill — map an inbound business idea into a structured system plan
- * (A-to-Mind: facilitate ideas and take over the heavy lifting).
+ * system-blueprint skill — map an inbound business idea into a structured system plan.
  * "blueprint this: late invoice follow-ups" / "turn this into a system: ..." / "idea to system: ..."
  * also the asks from the idea-to-system and system-sketch drafts: "system plan for: ...",
  * "sketch the system for: ...", "system design for ...". A "blueprint of" that is not a system
@@ -17,9 +16,9 @@ const LEADS = [
   /^(?:please\s+)?system\s+blueprint\s+for\s+(.{8,280})$/i,
   /^turn\s+(?:this|that|it)\s+into\s+a\s+system\s*[:\-]?\s*(.{8,280})$/i,
   /^idea\s+to\s+system\s*[:\-]?\s*(.{8,280})$/i,
-  /^(?:make|build|design|generate|create)\s+(?:me\s+)?(?:a\s+)?(?:system\s+)?(?:blueprint|plan)\s+(?:for|of|:)\s*(.{8,280})$/i,
+  /^(?:make|build|design|generate|create)\s+(?:me\s+)?(?:a\s+)?(?:system\s+)?(?:blueprint|plan)\s+(?:for|of|:)\s*:\s*(.{8,280})$/i,
   /^(?:sketch|outline)\s+(?:the\s+)?system\s+(?:for|of|:)\s*(.{8,280})$/i,
-  /^system\s+(?:plan|sketch|design)\s+(?:for|of|:)\s*(.{8,280})$/i,
+  /^system\s+(?:plan|sketch|design)\s+(?:for|of|:)\s*:\s*(.{8,280})$/i,
 ];
 
 /** Strip lead-in; return the raw idea text or null. Pure. */
@@ -165,7 +164,7 @@ export default {
     'system blueprint for weekly ops metrics without copy-paste',
     'system plan for: automate client onboarding',
     'sketch the system for: automate invoices',
-    'system design for the client portal',
+    'system design for: the client portal',
   ],
   nearMisses: [
     'what is a blueprint',

@@ -104,6 +104,24 @@ test('regex test box: matches, groups, flags, and a pattern that could hang is r
   assert.equal(D.regexTest('(a+)+$', '', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa!').ok, false);
   assert.equal(D.regexTest('a', '', 'x'.repeat(5000)).ok, false);
   assert.deepEqual(D.regexPieces('ab12cd', D.regexTest('\\d+', '', 'ab12cd').matches), [{ text: 'ab', hit: false }, { text: '12', hit: true }, { text: 'cd', hit: false }]);
+  assert.deepEqual(D.regexExplain('\\d+').lines.slice(0, 2), ['`\\d+` means one or more digits.', 'Every match is listed, not only the first.']);
+  assert.match(D.regexExplain('^hi$', 'i').lines.join(' '), /start of the text/);
+  assert.match(D.regexExplain('^hi$', 'i').lines.join(' '), /Capital and small letters/);
+  assert.match(D.regexExplain('(cat)+').lines[0], /one or more saved groups/);
+  assert.equal(D.regexExplain('[').ok, false);
+  assert.equal(D.regexReplace('(\\d+)', '', 'call 555 or 911', '[$1]').out, 'call [555] or [911]');
+  assert.equal(D.regexReplace('a+', '', 'baaa', '[$&]').out, 'b[aaa]');
+  const report = D.regexReport('\\d+', '', 'call 555 or 911', '');
+  assert.equal(report.count, '2 matches');
+  assert.equal(report.passed, '555 and 911');
+  assert.equal(report.matchLines[0], 'Match 1 is 555. It starts at character 6.');
+  assert.match(D.regexExplain('(?<n>\\d+)').lines[0], /named n: one or more digits/);
+  const page = '<input id="pattern" value="old"><input id="flags" value=""><textarea id="sample">old</textarea><input id="replace" value=""><input id="flag-i" type="checkbox"><p id="count">old</p><div id="out">old</div><p id="err">old</p><ol id="matchlist"><li>old</li></ol><p id="passed">old</p><ol id="explain"><li>old</li></ol><p id="replaced">old</p><a id="share" href="/patterns/">old</a><a href="/text-diff/?changed=old" data-base="/text-diff/" data-param="changed">Text Compare</a>';
+  const filled = D.fillPatternHtml(page, new URLSearchParams('pattern=%5Cd%2B&flags=i&sample=Call%20555&replace=%5B%24%26%5D'));
+  assert.match(filled, /id="out">Call <mark>555<\/mark><\/div>/);
+  assert.match(filled, /id="replaced">Call \[555\]<\/p>/);
+  assert.match(filled, /<input checked id="flag-i"/);
+  assert.match(filled, /href="\/text-diff\/\?changed=555"/);
   assert.deepEqual(D.parseRegexBody('/\\d+/g on abc 123'), { pattern: '\\d+', flags: 'g', text: 'abc 123' });
   assert.deepEqual(D.parseRegexBody('\\w+ :: hi there'), { pattern: '\\w+', flags: '', text: 'hi there' });
 });
@@ -114,6 +132,8 @@ test('cron explain and next runs', () => {
   assert.equal(say('0 9 * * 1-5'), 'At 09:00 on Monday through Friday.');
   assert.equal(say('30 2 1 * *'), 'At 02:30 on day-of-month 1.');
   assert.equal(say('@daily'), 'At 00:00 every day.');
+  assert.equal(say('@reboot'), 'When the computer starts.');
+  assert.equal(D.nextRuns('@reboot', new Date(2026, 0, 1)).length, 0);
   assert.equal(say('0 0 1 jan *'), 'At 00:00 on day-of-month 1 in January.');
   assert.match(say('15,45 8-17 * * mon-fri'), /minutes 15 and 45 past every hour from 8 through 17 on Monday through Friday/);
   assert.match(say('0 9 15 * 1'), /either the date or the weekday/);
@@ -153,7 +173,27 @@ test('dev tool asks: what each says, and the look-alikes left alone', () => {
   assert.equal(D.devOf('http 503').input, '503');
   assert.deepEqual(D.devOf('generate 12 rows of dummy data with name email').opts.n, 12);
   assert.equal(D.devOf('polish my commit message: fixed bug').mode, 'commit');
-  for (const no of ['what is json', 'json vs xml', 'what is base64', 'regex for email', 'what is a cron job', 'http status of google.com', 'how to write a good commit message', 'dummy data']) assert.equal(D.devOf(no), null, no);
+  for (const no of ['what is json', 'json vs xml', 'what is base64', 'regex for my feelings', 'what is a cron job', 'http status of google.com', 'how to write a good commit message', 'dummy data']) assert.equal(D.devOf(no), null, no);
+});
+
+test('natural-language regex generation: a kind from words, samples, and nothing invented', () => {
+  const iso = D.devOf('regex for matching ISO 8601 dates like 2026-11-17');
+  assert.equal(iso.mode, 'regex');
+  assert.equal(iso.opts.pattern, '\\d{4}-\\d{2}-\\d{2}');
+  assert.ok(iso.opts.generated && /ISO 8601/.test(iso.opts.about), 'marked generated with its kind');
+  assert.match(iso.input, /^2026-11-17/m, 'the ask\u2019s own example leads the test text');
+  const hits = D.regexTest(iso.opts.pattern, '', iso.input).matches.map((m) => m.text);
+  assert.ok(hits.includes('2026-11-17') && !hits.includes('17/11/2026'), 'matches ISO, leaves the rest');
+  const mail = D.devOf('regex for an email address');
+  assert.equal(mail.opts.pattern, '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}');
+  assert.ok(D.regexTest(mail.opts.pattern, '', mail.input).matches.some((m) => m.text === 'ana@example.com'));
+  assert.equal(D.devOf('give me a regular expression for UUIDs').opts.pattern, '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}');
+  assert.equal(D.regexFor('matching ISO 8601 dates like 2026-11-17').about, 'ISO 8601 dates (YYYY-MM-DD)');
+  assert.equal(D.regexFor('something I dreamed up'), null, 'unknown kinds stay null');
+  assert.equal(D.regexFor(''), null);
+  // the generated card says what it made and explains each token
+  const why = D.regexExplain(iso.opts.pattern, '').lines.join('\n');
+  assert.match(why, /exactly 4 digits/);
 });
 
 test('colour converter forms land on the existing colour card', () => {

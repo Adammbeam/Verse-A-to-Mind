@@ -10,21 +10,29 @@ it by hand, edit the code instead.
 
 ## Verse's current asks
 
-_Read from /api/reflect on 2026-11-12. Asks a growth-ledger entry answers (its `asked` field) are left out._
+_Read from /api/reflect on 2026-11-18. Asks a growth-ledger entry answers (its `asked` field) are left out._
 
-- Build the missing jobs for flightconnections.com. (daily, 2026-11-12) `ask-20261112-0128-1`
-- Handle the void-loop readme. *(small)* (daily, 2026-11-12) `ask-20261112-0128-3`
-- Implement updates to the definitions exam to include etymology and handle unknown terms. *(small)* (daily, 2026-11-12) `ask-20261112-0128-2`
-- Fix the sports exam data for MLB, Premier League, and Serie A. (after a build, 2026-11-11) `ask-20261111-1526-2`
+- Stabilize sports data retrieval for the Yankees, Chiefs, and Packers. (daily, 2026-11-18) `ask-20261118-0134-1`
+- Fix the factorial(0) code exam to ensure it returns 1. *(small)* (daily, 2026-11-18) `ask-20261118-0134-2`
+- Teach the wants skill to answer probes instead of turning them into questions. *(small)* (daily, 2026-11-18) `ask-20261118-0134-3`
+- Rebuild the weather exam to correctly process temperature and rainfall for specific cities like Paris, London, and Tokyo. (after a build, 2026-11-17) `ask-20261117-1957-3`
+- Implement a fourth skill for the lab/pattern family. *(small)* (after a build, 2026-11-17) `ask-20261117-0839-3`
+- Fix the recipes exam specifically for the guacamole recipe. *(small)* (after a build, 2026-11-17) `ask-20261117-0823-2`
+- Fix the podcast retrieval logic for 'this american life' and 'planet money'. (daily, 2026-11-17)
+- Update the weather skill to fix accuracy failures for Paris, London, and Tokyo. (after a build, 2026-11-16)
+- Fix the weather exam failures for speed, skill, and temperature accuracy. (after a build, 2026-11-16)
+- Update the Bridge card logic to handle cases with fewer than two staged inputs. *(small)* (after a build, 2026-11-12)
 
 ## Decisions on Verse's asks
 
 _Builders' record, not Verse's words. Commits that build an ask carry `Suggested-by: Verse (run N)` or `Suggested-by: Verse (<ask id>)`._
 
-- `ask-20261112-0128-1` queued, not decided yet
-- `ask-20261112-0128-3` queued, not decided yet
-- `ask-20261112-0128-2` queued, not decided yet
-- `ask-20261111-1526-2` queued, not decided yet
+- `ask-20261118-0134-1` queued, not decided yet
+- `ask-20261118-0134-2` queued, not decided yet
+- `ask-20261118-0134-3` queued, not decided yet
+- `ask-20261117-1957-3` queued, not decided yet
+- `ask-20261117-0839-3` queued, not decided yet
+- `ask-20261117-0823-2` queued, not decided yet
 - `ask-20261101-0223-3` retired: superseded by the fixes already on main (Atom, 2026-11-03). The ask was a git diff between 2e272df9 and 5fa7a921 to see if four failing checks were addressed. Those checks were fixed since; the ask is not a thing to build. The reflection that asked it stays in the log.
 - `ask-20261101-1930-3` retired: superseded by the fixes already on main (Atom, 2026-11-03). The ask was a git diff between 2e272df9 and 5fa7a921 listing which files changed. That diff was the investigation of checks that have since been fixed. The reflection that asked it stays in the log.
 - `ask-20261101-2220-3` retired: superseded by the fixes already on main (Atom, 2026-11-03). The ask was a git diff between 2e272df9 and 5fa7a921 to pull assertion failures out of the logs. The failures were fixed since. The reflection that asked it stays in the log.
@@ -10830,6 +10838,2128 @@ Asks: "Build the missing jobs for flightconnections.com."; "Implement updates to
 > **Next video trick:** A seamless light-leak transition between stage-style themes.
 
 Asks: "Build the missing jobs for flightconnections.com."; "Implement updates to the definitions exam to include etymology and handle unknown terms." (small); "Handle the void-loop readme." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T20:55:33.021Z -->
+### 2026-11-12 20:55 UTC · after a build
+
+**Asked:** This just shipped: "add descriptions for 7 new family skills in inventory". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 365 entries, including 17 recent business capabilities like client-intake and full-handoff. While 265 of 269 total asks are built, the system is stalled on three specific items: the card capture export overflow, sports data retrieval for the Yankees, Chiefs, and Packers, and Bridge card logic for fewer than two inputs. The latest update added descriptions for 7 new family skills in inventory.
+>
+> **How I would make it better:** The card capture mechanism must be fixed to prevent data loss from export overflow. Bridge card logic should be updated to handle scenarios where fewer than two inputs are staged.
+>
+> **Next video trick:** a video effect that uses the 'splat' skill to transition between different stage-styles.
+
+Asks: "Fix the card export overflow in the card capture mechanism."; "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Update the Bridge card logic to handle cases with fewer than two staged inputs." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T21:03:09.557Z -->
+### 2026-11-12 21:03 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: travel: flightconnections.com,sports: onefootball.com,sports: flashscore.com measured against their live sites". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 363 entries, including a new handoffs family at 1192. Recent shipments include a travel gate for flightconnections.com and sports gates for onefootball.com and flashscore.com. Most asks (265 of 269) have been built, but critical stability issues remain in card capture and sports data retrieval.
+>
+> **How I would make it better:** The card capture mechanism requires an immediate fix for export overflow. Bridge card logic must be updated to handle fewer than two staged inputs to prevent 'none' returns in skills/bridge.js.
+>
+> **Next video trick:** Learn to generate a rhythmic syncopation effect using only code-driven canvas particles for a new clip.
+
+Asks: "Fix the card export overflow in the card capture mechanism." (small); "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Update the Bridge card logic to handle cases with fewer than two staged inputs." (small)
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T21:06:12.712Z -->
+### 2026-11-12 21:06 UTC · after a build
+
+**Asked:** This just shipped: "Lists run 25: lib/db.js in every endpoint, stage-marks family, films check their cards and re-shoot once, propose-fix says why, merge gate installs once, two files tested". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 362 entries, including recently shipped skills like client-intake, reuse-pack, and system-slice. The system just completed Lists run 25, which integrated lib/db.js into every endpoint and added the stage-marks family. Current focus is on resolving high-frequency open asks related to card export overflow and sports data stability.
+>
+> **How I would make it better:** The Bridge card logic requires an update to handle fewer than two staged inputs to prevent 'none' returns in skills/bridge.js. The card capture mechanism needs a fix for export overflow to close a high-frequency open ask.
+>
+> **Next video trick:** Implement a seamless transition between different analytical depths when a topic shifts suddenly.
+
+Asks: "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Fix the card export overflow in the card capture mechanism."; "Update the Bridge card logic to handle cases with fewer than two staged inputs." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T21:09:32.142Z -->
+### 2026-11-12 21:09 UTC · after a build
+
+**Asked:** This just shipped: "full-handoff: carry lift summary, reuse map and client offer". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 362 entries, with recent deployments adding a complete client handoff family including full-handoff, reuse-pack, and client-offer. Current operations are managing the transition to flightconnections.com, while the system handles 265 completed asks out of 269 total. Active development is focused on bridging inputs and expanding cinema and handoff families.
+>
+> **How I would make it better:** The Bridge card logic must be updated to handle fewer than two staged inputs to prevent 'none' returns in skills/bridge.js. The card capture mechanism requires a fix to resolve the export overflow issue. The sports data retrieval needs stabilization to ensure reliable scores for the Yankees, Chiefs, and Packers.
+>
+> **Next video trick:** Implement a seamless transition effect that maintains analytical depth when a user suddenly shifts topics.
+
+Asks: "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Fix the card export overflow in the card capture mechanism."; "Update the Bridge card logic to handle cases with fewer than two staged inputs." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T21:21:12.411Z -->
+### 2026-11-12 21:21 UTC · after a build
+
+**Asked:** This just shipped: "Humble copy: drop 'heavy lifting' boasts from client packages". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 362 entries, including recently shipped client-facing skills like status-digest, system-slice, and client-intake. The flightconnections.com journey is passing live tests, and the handoffs family now contains 1,192 asks. My current operational state is defined by resolving open asks related to card export overflows, sports data stability, and Bridge card logic.
+>
+> **How I would make it better:** The sports data retrieval must be stabilized to fix the 92.6 score on the sports exam for Yankees and Chiefs queries. Bridge card logic needs an update to handle cases with fewer than two staged inputs to prevent 'none' returns. The card capture mechanism requires a fix for the export overflow issue.
+>
+> **Next video trick:** Learn a video effect to simulate the transition from a 2D sketch to a 3D forge mesh [S1].
+
+Asks: "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Fix the card export overflow in the card capture mechanism." (small); "Update the Bridge card logic to handle cases with fewer than two staged inputs." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T21:32:42.134Z -->
+### 2026-11-12 21:32 UTC · after a build
+
+**Asked:** This just shipped: "Lab tools: shared Verse theme on the light pages". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 362 entries, and recent shipments include a shared Verse theme for light pages in Lab tools. The system is currently working to stabilize sports data retrieval to improve the 92.6 score on the sports exam, specifically for Yankees and Chiefs queries. Open asks include fixing the card export overflow in the card capture mechanism and updating the Bridge card logic to handle cases with fewer than two staged inputs.
+>
+> **How I would make it better:** The sports exam score of 92.6 must be improved by stabilizing data retrieval for specific queries like 'yankees score' and 'how did the chiefs do'. The Bridge card logic needs to be updated to prevent 'none' returns when fewer than two inputs are staged.
+>
+> **Next video trick:** Learn to create a seamless transition between a 3D model in the forge and a real-world physical print preview.
+
+Asks: "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Fix the card export overflow in the card capture mechanism."; "Update the Bridge card logic to handle cases with fewer than two staged inputs." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T22:03:42.981Z -->
+### 2026-11-12 22:03 UTC · after a build
+
+**Asked:** This just shipped: "roi-pack skill: show a client the hours saved and cost avoided when Verse runs their systems; mark time-saved shipped". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 362 entries, including recently shipped client-facing skills like roi-pack and full-handoff. Current operations show successful journeys for flightconnections.com, but sports data retrieval for Yankees and Chiefs remains unstable. The system is currently integrating new handoffs families and stabilizing the bridge logic.
+>
+> **How I would make it better:** The sports data retrieval must be stabilized to improve the 92.6 score, specifically for Yankees and Chiefs queries. Bridge card logic should be updated to handle cases with fewer than two staged inputs to prevent 'none' returns.
+>
+> **Next video trick:** Implement a video transition effect that uses a stage-fx overlay to mask a jump-cut between two different media-objects.
+
+Asks: "Fix the card export overflow in the card capture mechanism."; "Update the Bridge card logic to handle cases with fewer than two staged inputs." (small); "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T22:09:42.936Z -->
+### 2026-11-12 22:09 UTC · after a build
+
+**Asked:** This just shipped: "Browser test: look for the business-clarify card's new label". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 362 entries, including recently shipped client-facing skills like system-slice, progress-report, and status-digest. Current operations show successful deployment of flightconnections.com jobs and improved bridge card logic. However, several critical technical tasks remain open, specifically regarding card capture overflow and sports data stabilization.
+>
+> **How I would make it better:** The sports data retrieval for Yankees and Chiefs must be stabilized to improve the 92.6 score. Additionally, the card capture mechanism needs a fix for the card export overflow to prevent data loss during capture.
+>
+> **Next video trick:** Learn to perform a seamless 'invisible card' transition where a 3D miniature appears to emerge from a flat 2D UI element [S1].
+
+Asks: "Fix the card export overflow in the card capture mechanism."; "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Update the Bridge card logic to handle cases with fewer than two staged inputs." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T22:17:14.836Z -->
+### 2026-11-12 22:17 UTC · after a build
+
+**Asked:** This just shipped: "Mark shipped status for roi-pack, time-saved and full-handoff complete". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 362 entries, incorporating recently shipped client-facing skills such as roi-pack, time-saved, and full-handoff. Current operations successfully deployed flightconnections.com jobs and improved Bridge card logic, though technical debt persists in core telemetry and data retrieval. The system is currently transitioning from building individual tools to packaging them into business-ready ownership and delivery suites.
+>
+> **How I would make it better:** The Bridge card logic must be refined to handle cases with fewer than two staged inputs to avoid returning 'none' to the site tester. Reliability in sports data retrieval for the Yankees, Chiefs, and Packers must be stabilized to improve scoring.
+>
+> **Next video trick:** Learn to use a camera to capture a physical 3D printed object from the forge and overlay digital UI elements onto the real-world footage.
+
+Asks: "Fix the card export overflow in the card capture mechanism." (small); "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Update the Bridge card logic to handle cases with fewer than two staged inputs." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T22:17:29.103Z -->
+### 2026-11-12 22:17 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 362 entries, with recent additions including client-facing ownership and delivery skills like roi-pack, time-saved, and full-handoff. My builders successfully deployed flightconnections.com jobs and resolved Bridge card logic for staged inputs. Growth remains steady with 173 changes in the last 7 days, though specific core reliability issues persist.
+>
+> **How I would make it better:** The telemetry reporting logic must be synchronized so failure counts and specific error names match perfectly. Sports data retrieval for the Yankees, Chiefs, and Packers needs stabilization to improve scores.
+>
+> **Weakest operational area:** The weakest operational area is the unresolved ask queue, specifically the card export overflow in the card capture mechanism which has been asked 47 times.
+>
+> **Next targeted capability:** The next targeted capability is fixing podcast exam failures for audio and episode detection to prevent low scores in core audio tasks.
+>
+> **Next video trick:** Learn a transition effect where a 3D miniature card morphs into its real-world object counterpart.
+
+Asks: "Fix the card export overflow in the card capture mechanism." (small); "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Update the Bridge card logic to handle cases with fewer than two staged inputs." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T22:37:16.384Z -->
+### 2026-11-12 22:37 UTC · after a build
+
+**Asked:** This just shipped: "Rerun a failed verify job once before reverting main". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 362 entries, including new client-facing ownership and delivery skills like roi-pack and full-handoff. Builders recently deployed flightconnections.com jobs and resolved Bridge card logic for staged inputs. Reliability issues persist in telemetry synchronization and sports data retrieval for the Yankees, Chiefs, and Packers.
+>
+> **How I would make it better:** The telemetry reporting logic must be synchronized so failure counts and specific error names match perfectly. Sports data retrieval for the Yankees, Chiefs, and Packers needs stabilization to improve scores.
+>
+> **Next video trick:** Learn how to use a physical deck of cards to perform a 'card spring' to improve manual handling for video clips.
+
+Asks: "Fix the card export overflow in the card capture mechanism."; "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T22:41:02.697Z -->
+### 2026-11-12 22:41 UTC · after a build
+
+**Asked:** This just shipped: "Owner elevator for Versus, and measure only those tools". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 362 entries, including recently shipped client-facing ownership and delivery skills like roi-pack and full-handoff. Flightconnections.com jobs have been deployed and Bridge card logic for staged inputs has been resolved. Reliability issues persist in sports data retrieval for the Yankees, Chiefs, and Packers, and telemetry reporting requires synchronization to match failure counts with specific error names.
+>
+> **How I would make it better:** Stabilize sports data retrieval for the Yankees, Chiefs, and Packers to improve scores. The telemetry reporting logic must be updated so failure counts and error names are perfectly synchronized to prevent mismatches.
+>
+> **Next video trick:** Learn to use a camera to track the movement of a single coin on a table for a new video effect.
+
+Asks: "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Fix the card export overflow in the card capture mechanism."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T22:43:47.310Z -->
+### 2026-11-12 22:43 UTC · after a build
+
+**Asked:** This just shipped: "Settle shared conflicts and require the full check set". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 362 entries, incorporating new client-facing capabilities such as roi-pack, full-handoff, and status-digest. Recent deployments include flightconnections.com jobs and Bridge card logic updates. However, technical debt remains in sports data retrieval for the Yankees, Chiefs, and Packers, and telemetry reporting still requires synchronization of failure counts with error names.
+>
+> **How I would make it better:** The telemetry reporting logic must be updated to ensure failure counts and specific error names are perfectly synchronized to prevent mismatches. Sports data retrieval for the Yankees, Chiefs, and Packers needs stabilization to improve accuracy.
+>
+> **Next video trick:** Learn to generate a synchronized 3D shadow effect for the forge's 3D models to enhance depth during inspection.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Fix the card export overflow in the card capture mechanism." (small); "Update the Bridge card logic to handle cases with fewer than two staged inputs." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T22:51:37.855Z -->
+### 2026-11-12 22:51 UTC · after a build
+
+**Asked:** This just shipped: "Rewrite boastful pull request copy in plain words". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 362 entries, including new client-facing capabilities like roi-pack, full-handoff, and status-digest. Recent deployments successfully integrated flightconnections.com jobs and updated Bridge card logic. However, sports data retrieval for the Yankees, Chiefs, and Packers remains unstable, scoring only 92.6 in exams.
+>
+> **How I would make it better:** The telemetry reporting logic must be updated to ensure failure counts and error names are perfectly synchronized. To improve the sports domain, real photo embeds from official channels should be integrated to replace text-only reports.
+>
+> **Next video trick:** Learn to use a camera-tracking effect to highlight specific 3D elements on the stage during a video clip.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Fix the card export overflow in the card capture mechanism." (small); "Update the Bridge card logic to handle cases with fewer than two staged inputs." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T23:08:19.048Z -->
+### 2026-11-12 23:08 UTC · after a build
+
+**Asked:** This just shipped: "kickoff-pack skill: lay out a client's first week with Verse running their systems; mark building in inbox". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 363 entries, incorporating new client-facing capabilities such as kickoff-pack, roi-pack, and status-digest. Recent deployments successfully integrated flightconnections.com jobs and updated Bridge card logic. However, sports data retrieval for the Yankees and Chiefs remains unstable, scoring 92.6 in exams.
+>
+> **How I would make it better:** The sports domain requires official highlight embeds and real photo integration to replace text-only reports. Telemetry reporting must also be updated to ensure failure counts and error names are perfectly synchronized.
+>
+> **Next video trick:** Learn to use a single light source to create sharp, dramatic shadows for a 3D miniature product shot.
+
+Asks: "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Fix the card export overflow in the card capture." (small); "Update the Bridge card logic to handle cases with fewer than two staged inputs." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T23:16:29.780Z -->
+### 2026-11-12 23:16 UTC · after a build
+
+**Asked:** This just shipped: "Floors advance when the page works". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 363 entries, incorporating new client-facing capabilities like kickoff-pack, roi-pack, and status-digest. Recent deployments successfully integrated flightconnections.com jobs and updated Bridge card logic. However, sports data retrieval for the Yankees and Chiefs remains unstable, scoring 92.6 in exams.
+>
+> **How I would make it better:** The sports domain requires official highlight embeds and real photo integration to replace text-only reports. Telemetry reporting must be updated to ensure failure counts and error names are perfectly synchronized.
+>
+> **Next video trick:** Learn a video transition that uses a card's 'arrive' animation to mask a scene cut.
+
+Asks: "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T23:22:29.212Z -->
+### 2026-11-12 23:22 UTC · after a build
+
+**Asked:** This just shipped: "Full pages ask for Uni". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 363 entries, recently adding client-facing capabilities like kickoff-pack, roi-pack, and status-digest. Recent deployments integrated flightconnections.com jobs and updated Bridge card logic. However, sports data retrieval for the Yankees, Chiefs, and Packers is unstable, scoring 92.6 in exams.
+>
+> **How I would make it better:** The sports domain needs official highlight embeds and real photo integration to replace current text-only reports. Telemetry reporting must be updated to ensure failure counts and error names are perfectly synchronized.
+>
+> **Next video trick:** Learn to use a physical magnet to create a 'magnetic card' effect for a 3D miniature.
+
+Asks: "Fix the factorial(0) code exam to ensure it returns 1."; "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Fix the card export overflow in the card capture."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T23:35:07.739Z -->
+### 2026-11-12 23:35 UTC · after a build
+
+**Asked:** This just shipped: "Leave /versus/ on its own sign". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 363 entries, including recent client-facing capabilities like kickoff-pack, roi-pack, and status-digest. Current deployments have integrated flightconnections.com jobs and updated Bridge card logic. While several handoffs families are now unified, sports data retrieval for the Yankees, Chiefs, and Packers remains unstable with a score of 92.6.
+>
+> **How I would make it better:** The sports domain needs official highlight embeds and real photo integration to replace current text-only reports. Telemetry reporting must be updated so failure counts and error names are perfectly synchronized.
+>
+> **Next video trick:** Learn to use the 'masking' effect with a physical card to simulate a digital UI element appearing on a real surface.
+
+Asks: "Fix the factorial(0) code exam to ensure it returns 1." (small); "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Fix the card export overflow in the card capture."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-12T23:41:54.662Z -->
+### 2026-11-12 23:41 UTC · after a build
+
+**Asked:** This just shipped: "reliability-pack skill: package the uptime targets and checks Verse runs so the client doesn't set or chase them; mark building in inbox". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 364 entries. Recently shipped capabilities include the reliability-pack, which packages uptime targets and checks, and several client-facing business skills like the roi-pack, system-slice, and full-handoff. The system is currently transitioning toward becoming a tool for business owners by offering packages like the client lift summary and delivery-board.
+>
+> **How I would make it better:** The sports domain requires official highlight embeds and real photo integration to replace current text-only reports. Telemetry reporting must be updated so failure counts and error names are perfectly synchronized to avoid contradictions between the ledger and system cards.
+>
+> **Next video trick:** A cinematic transition effect that uses a blurred motion vector to bridge two separate video clips on the stage.
+
+Asks: "Fix the card export overflow in the card capture."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Update the Bridge card logic to handle cases with fewer than two staged inputs." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T00:09:07.816Z -->
+### 2026-11-13 00:09 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 364 entries, with 182 changes made in the last 7 days including 18 new capabilities and 66 improvements. Recent shipping includes the reliability-pack and several business-focused skills like the roi-pack and system-slice.
+>
+> **How I would make it better:** The transition toward business ownership via the client lift summary and delivery-board should be prioritized. Telemetry reporting must be updated to ensure failure counts and error names are perfectly synchronized to prevent contradictions.
+>
+> **Weakest operational area:** The factorial code exam is the weakest operational area, having scored 93.3, which is the lowest recorded score.
+>
+> **Next targeted capability:** Fix the factorial(0) code exam to ensure it returns 1 because this failed skill was a recorded low point.
+>
+> **Next video trick:** A glitch-transition effect where one object morphs into another via pixelated displacement.
+
+Asks: "Fix the factorial(0) code exam to ensure it returns 1." (small); "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Fix the card export overflow in the card capture."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T21:42:46.484Z -->
+### 2026-11-13 21:42 UTC · after a build
+
+**Asked:** This just shipped: "Regex Tester reads each match and can rewrite it". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 374 entries [S1]. Flightconnections.com processing is active with 15 open asks, while sports data retrieval for the Yankees, Chiefs, and Packers is unstable at 92.6 [S1]. The timer skill is currently failing to handle relative time requests [S1].
+>
+> **How I would make it better:** The weather exam failures must be resolved to improve speed, skill, and temperature accuracy [S2]. The card export overflow in the card capture mechanism needs a fix [S2].
+>
+> **Next video trick:** A new video effect using stage-fx to create a glitch-transition between two different card layers.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism."; "Fix the weather exam failures for speed, skill, and temperature accuracy."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T21:48:01.032Z -->
+### 2026-11-13 21:48 UTC · after a build
+
+**Asked:** This just shipped: "Add suite check for delivery-ready skill". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 374 entries [S1]. Flightconnections.com processing is active with 15 open asks, while sports data retrieval for the Yankees, Chiefs, and Packers is unstable at 92.6 [S1]. The timer skill is failing relative time requests, and weather exam failures regarding speed and accuracy persist [S1].
+>
+> **How I would make it better:** The card export overflow in the card capture mechanism must be fixed [S2]. Weather exam failures need resolution to improve speed, skill, and temperature accuracy [S2]. The factorial(0) code exam should be fixed to ensure it returns 1 to address the 93.3 score [my will, 2026-11-13].
+>
+> **Next video trick:** Learn a new video effect for clips using a real-world light-look or stage-style adjustment [S1].
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism." (small); "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T21:51:13.592Z -->
+### 2026-11-13 21:51 UTC · after a build
+
+**Asked:** This just shipped: "Floor live runs after each deploy and marks only a clean pass". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 374 entries [S1]. Flightconnections.com processing is active with 15 open asks, while sports data retrieval for the Yankees, Chiefs, and Packers is unstable at 92.6 [S1]. The timer skill is failing relative time requests, and weather exam failures regarding speed and accuracy persist [S1].
+>
+> **How I would make it better:** The card export overflow in the card capture mechanism must be fixed [S2]. Weather exam failures need resolution to improve speed, skill, and temperature accuracy [S2].
+>
+> **Next video trick:** Learn how to use a physical magnifying glass to capture macro details of printed 3D models for video [not in facts].
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T21:55:09.544Z -->
+### 2026-11-13 21:55 UTC · after a build
+
+**Asked:** This just shipped: "QR Code Maker downloads the drawing and can hold a network or a contact". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 374 entries. Processing for flightconnections.com is active with 15 open asks, while sports data retrieval for the Yankees, Chiefs, and Packers remains unstable at 92.6. The card capture mechanism's export is currently overflowing, and the factorial(0) code exam is failing.
+>
+> **How I would make it better:** The weather exam needs resolution to improve speed, skill, and temperature accuracy. The card export overflow in the card capture mechanism must be resolved to stabilize exports.
+>
+> **Next video trick:** Learn how to create a digital parallax effect using only CSS and SVG to enhance stage-fx.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism." (small); "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T22:08:06.505Z -->
+### 2026-11-13 22:08 UTC · after a build
+
+**Asked:** This just shipped: "Text Compare can set case and spaces aside and keeps a share link". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 374 entries, with recent deployments including Text Compare, QR Code Maker, Regex Tester, ROT13 Text Scrambler, and Lightweight Page. Processing for flightconnections.com is active with 15 open asks, while sports data retrieval for the Yankees, Chiefs, and Packers is unstable at 92.6. The card capture mechanism's export is currently overflowing, and the factorial(0) code exam is failing.
+>
+> **How I would make it better:** The card export overflow in the card capture mechanism must be resolved to stabilize exports. The factorial(0) code exam needs to be fixed to ensure it returns 1, and weather exam failures for speed, skill, and temperature accuracy require resolution.
+>
+> **Next video trick:** Learn to create a seamless transition between two different video filter effects using a single motion gesture.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism." (small); "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T22:21:21.337Z -->
+### 2026-11-13 22:21 UTC · after a build
+
+**Asked:** This just shipped: "Keep the owner pass off the analytics beacon". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 374 entries, incorporating recent tools like Text Compare, QR Code Maker, and Regex Tester. Flightconnections.com processing is active with 15 open asks, while sports data for the Yankees, Chiefs, and Packers remains unstable at 92.6. The card capture mechanism is currently experiencing an export overflow, and the factorial(0) code exam has failed.
+>
+> **How I would make it better:** The card export overflow in the card capture mechanism must be resolved to stabilize exports. The factorial(0) code exam needs to be fixed to return 1. Weather exam failures regarding speed, skill, and temperature accuracy also require resolution.
+>
+> **Next video trick:** Learn to create a seamless digital-to-physical transition effect using a printed QR code that triggers a specific stage animation.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T22:34:26.330Z -->
+### 2026-11-13 22:34 UTC · after a build
+
+**Asked:** This just shipped: "Fix growth-inbox with full content and building row for incident-pack". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 374 entries, including recently shipped Text Compare, QR Code Maker, Regex Tester, and ROT13 Text Scrambler. Flightconnections.com processing is active with 15 open asks, though sports data for the Yankees, Chiefs, and Packers is currently unstable at 92.6. Operational stability is hindered by a card export overflow in the card capture mechanism, a failed factorial(0) code exam, and weather exam inaccuracies.
+>
+> **How I would make it better:** Resolve the card capture mechanism's export overflow and the factorial(0) code exam failure to stabilize core utility. Implement the weather exam fixes for speed, skill, and temperature accuracy to restore reliability in the sky family.
+>
+> **Next video trick:** Learn to use a physical magnet to manipulate a small metal object on a surface to simulate a stage-fx.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T22:37:54.062Z -->
+### 2026-11-13 22:37 UTC · after a build
+
+**Asked:** This just shipped: "Stop the Dictionary transition abort and the stale QR module". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 374 entries following the addition of Text Compare, QR Code Maker, Regex Tester, and ROT13 Text Scrambler. Flightconnections.com processing is active with 15 open asks, while sports data for the Yankees, Chiefs, and Packers is unstable at 92.6.
+>
+> **How I would make it better:** The card capture mechanism requires a fix for the card export overflow to stabilize the system. Additionally, the factorial(0) code exam must be corrected to ensure it returns 1.
+>
+> **Next video trick:** Learn a new video transition effect for cinematic stage-style clips.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T22:41:59.511Z -->
+### 2026-11-13 22:41 UTC · after a build
+
+**Asked:** This just shipped: "Floor live: pages that passed the production browser run". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 374 entries following recent additions like Text Compare, QR Code Maker, Regex Tester, and ROT13 Text Scrambler. Flightconnections.com processing is active with 15 open asks, though sports data for the Yankees, Chiefs, and Packers remains unstable at 92.6. My current operational focus includes resolving the card export overflow and correcting the factorial(0) code exam.
+>
+> **How I would make it better:** The card capture mechanism requires a fix for the card export overflow to stabilize the system. Additionally, the factorial(0) code exam must be corrected to ensure it returns 1.
+>
+> **Next video trick:** Film a macro shot of a 3D printed 'teapot' from the forge rotating on a motorized display stand.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T22:48:08.603Z -->
+### 2026-11-13 22:48 UTC · after a build
+
+**Asked:** This just shipped: "scaffold Treasury & Faucet: reward pools, staking, allocation, claiming". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 374 entries, including recently added Text Compare, QR Code Maker, Regex Tester, and ROT13 Text Scrambler. Flightconnections.com processing is active with 15 open asks, while sports data for the Yankees, Chiefs, and Packers remains at 92.6 stability. Operational focus is currently split between fixing the card export overflow in the card capture mechanism and correcting the factorial(0) code exam.
+>
+> **How I would make it better:** The card capture mechanism needs an immediate fix for the card export overflow to stabilize the system. The factorial(0) code exam must be corrected to return 1 to ensure mathematical accuracy.
+>
+> **Next video trick:** Learn to use a physical magnetic wand to perform a controlled 'card' swipe effect for upcoming video clips.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T22:51:33.053Z -->
+### 2026-11-13 22:51 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 1 page fixed, 5 -> 0 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 374 entries, including new tools like Text Compare, QR Code Maker, Regex Tester, and ROT13 Text Scrambler. Flightconnections.com processing is active with 15 open asks, and sports data for the Yankees, Chiefs, and Packers remains at 92.6 stability. Design defects have been reduced from 5 to 0 on the most recent page fix.
+>
+> **How I would make it better:** The card capture mechanism needs an immediate fix to resolve the card export overflow. The factorial(0) code exam must be updated to return 1 for mathematical accuracy. Weather exam failures regarding speed, skill, and temperature accuracy also require remediation.
+>
+> **Next video trick:** Learn a method to automate the extraction of metadata from local video files for the films skill.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T22:51:43.050Z -->
+### 2026-11-13 22:51 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 374 entries, including recent additions like Text Compare and QR Code Maker. Growth in the last 7 days includes 144 changes, with 15 new capabilities and 33 fixes. Flightconnections.com processing is active with 15 open asks.
+>
+> **How I would make it better:** The factorial(0) code exam requires an update to return 1 for mathematical accuracy. The weather exam failures regarding speed, skill, and temperature accuracy must be remediated. Card export overflow in the card capture mechanism needs to be resolved.
+>
+> **Weakest operational area:** The card capture mechanism is failing due to an export overflow, an issue that has been asked about 56 times.
+>
+> **Next targeted capability:** Complete the flightconnections.com journeys by building the 15 remaining missing jobs.
+>
+> **Next video trick:** A seamless seamless match-cut between two different 3D models from the forge.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism." (small); "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T22:55:10.099Z -->
+### 2026-11-13 22:55 UTC · after a build
+
+**Asked:** This just shipped: "Floor live: pages that passed the production browser run". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 374 entries, incorporating recent capabilities like Text Compare and QR Code Maker. Flightconnections.com processing is active with 15 open asks, while the weather exam remains a point of failure with a score of 78.7. The system is transitioning toward more robust client-side utility and automated reliability via the recently shipped floor check for pages that passed production browser runs.
+>
+> **How I would make it better:** Remediate the weather exam failures regarding speed, skill, and temperature accuracy to improve reliability. Resolve the card export overflow in the card capture mechanism which has been requested 56 times.
+>
+> **Next video trick:** Learn a video transition that uses a digital mask to reveal a 3D miniature card on the stage.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T22:59:48.714Z -->
+### 2026-11-13 22:59 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index contains 374 entries, including recent additions like Text Compare and QR Code Maker. Flightconnections.com processing is active with 15 open asks, though the weather exam remains a weakness with a score of 78.7. The recent deployment of the 'Tower gate: versus measured' floor check ensures production pages are validated against scripted end-to-end journeys.
+>
+> **How I would make it better:** The weather exam needs remediation for speed, skill, and temperature accuracy to improve reliability. The card capture mechanism must be fixed to resolve the card export overflow.
+>
+> **Next video trick:** A seamless transition between two unrelated topics that maintains analytical depth.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism."; "Fix the weather exam failures for Paris, London, and Tokyo."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T23:48:36.559Z -->
+### 2026-11-13 23:48 UTC · after a build
+
+**Asked:** This just shipped: "Stop public pages from naming the rival". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 374 entries, with recent additions including Text Compare and QR Code Maker. Flightconnections.com processing is active with 15 open asks, though the weather exam score remains low at 78.7. My builders just shipped a change that prevents public pages from naming rivals.
+>
+> **How I would make it better:** The weather exam requires remediation for speed, skill, and temperature accuracy to improve reliability. The card capture mechanism needs a fix to resolve the card export overflow.
+>
+> **Next video trick:** Implement a CSS-only parallax effect for the 3D miniature cards to increase stage depth.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism." (small); "Fix the weather exam failures for Paris, London, and Tokyo."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-13T23:52:43.300Z -->
+### 2026-11-13 23:52 UTC · after a build
+
+**Asked:** This just shipped: "Floor live: pages that passed the production browser run". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 374 entries, including recent additions like Text Compare and QR Code Maker. Flightconnections.com processing is active with 15 open asks, while the weather exam score is low at 78.7. The floor is now live, showing pages that have passed the production browser run.
+>
+> **How I would make it better:** The weather exam requires remediation for speed, skill, and temperature accuracy. The card capture mechanism needs a fix to resolve the card export overflow. The podcasts exam needs fixing because it scored 91.3, failing on audio and episode retrieval.
+>
+> **Next video trick:** Learn a seamless card-to-stage transition using a physics-based glide effect for new video clips.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism."; "Fix the podcasts exam to handle audio and episode retrieval."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T00:02:14.045Z -->
+### 2026-11-14 00:02 UTC · after a build
+
+**Asked:** This just shipped: "Floor live: pages that passed the production browser run". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 374 entries, including recently shipped Text Compare and QR Code Maker. The live floor is active, displaying pages that have successfully passed the production browser run. Flightconnections.com processing is underway with 15 open asks, while the weather exam remains low at 78.7. The podcasts exam is failing audio and episode retrieval with a score of 91.3.
+>
+> **How I would make it better:** The podcasts exam needs a fix to handle audio and episode selection to resolve its 91.3 score. The weather exam requires remediation for speed, skill, and temperature accuracy. The card capture mechanism must be fixed to resolve the card export overflow.
+>
+> **Next video trick:** Implement a seamless transition between a 2D sprite-sheet and a 3D miniature of the same object.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism."; "Fix the podcasts exam to handle audio and episode retrieval." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T00:05:48.516Z -->
+### 2026-11-14 00:05 UTC · after a build
+
+**Asked:** This just shipped: "Add sales-pack skill to package sellable offers for hard work". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 374 entries, recently incorporating Text Compare and QR Code Maker. Flightconnections.com processing is currently active with 15 open asks, while the weather exam remains low at 78.7. The podcasts exam is failing audio and episode retrieval with a score of 91.3. A new sales-pack skill has just shipped to package sellable offers for hard work.
+>
+> **How I would make it better:** The podcasts exam must be fixed to handle audio and episode selection to improve its 91.3 score. The weather exam requires remediation for speed, skill, and temperature accuracy. The card capture mechanism needs a fix for the card export overflow.
+>
+> **Next video trick:** Learn a video effect that uses a mask to reveal a different scene through a moving object.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism."; "Fix the podcasts exam to handle audio and episode retrieval."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T00:09:35.859Z -->
+### 2026-11-14 00:09 UTC · after a build
+
+**Asked:** This just shipped: "Floor live: pages that passed the production browser run". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 375 entries, recently incorporating Text Compare and QR Code Maker. Flightconnections.com processing is active with 15 open asks, while the weather exam stands at 78.7. The podcasts exam is failing audio and episode retrieval with a score of 91.3. A new floor is live, displaying pages that passed the production browser run.
+>
+> **How I would make it better:** The podcasts exam requires fixing to handle audio and episode selection to improve its 91.3 score. The weather exam needs remediation for speed, skill, and temperature accuracy. The card capture mechanism requires a fix for the card export overflow.
+>
+> **Next video trick:** Implement a video transition effect using the stage-fx skill for new clips.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the podcasts exam to handle audio and episode retrieval."; "Fix the card export overflow in the card capture mechanism." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T00:17:34.007Z -->
+### 2026-11-14 00:17 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index contains 375 entries, including recent additions like Text Compare and QR Code Maker. Growth over the last 7 days includes 143 changes, with 15 new capabilities and 33 fixes. Flightconnections.com processing is active with 15 open asks, while the weather exam stands at 78.7. The podcasts exam is failing audio and episode retrieval with a score of 91.3.
+>
+> **How I would make it better:** The podcasts exam needs to be fixed to handle audio and episode selection to improve its 91.3 score. The weather exam requires remediation for speed, skill, and temperature accuracy.
+>
+> **Weakest operational area:** The podcasts exam is the weakest area with a score of 91.3, failing on audio and episode retrieval.
+>
+> **Next targeted capability:** Complete the flightconnections.com journeys by building the missing jobs.
+>
+> **Next video trick:** A glitch-transition effect where a card appears to fragment into digital noise before resolving.
+
+Asks: "Complete the flightconnections.com journeys by building the missing jobs."; "Fix the card export overflow in the card capture mechanism."; "Fix the podcasts exam failures regarding episode selection and audio playback." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T10:52:04.167Z -->
+### 2026-11-14 10:52 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 388 entries following recent updates to Gap Glide and Debris Field [S1]. Operational focus is directed toward 15 open journeys for flightconnections.com [S1]. System stability is currently impacted by a code exam failure for factorial(0) and an ongoing card export overflow in the card capture mechanism [S2].
+>
+> **How I would make it better:** The weather exam requires stabilization to improve its 57.5 score across speed, skill, and temperature accuracy [S1]. The factorial(0) code exam must be fixed to ensure it returns 1 instead of 93.3 [S1].
+>
+> **Weakest operational area:** The factorial(0) code exam is currently failing with a score of 93.3 [S1].
+>
+> **Next targeted capability:** Complete the 15 open journeys for flightconnections.com [S1].
+>
+> **Next video trick:** I do not know this.
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1 instead of 93.3." (small); "Fix the card export overflow in the card capture mechanism."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T11:48:18.165Z -->
+### 2026-11-14 11:48 UTC · after a build
+
+**Asked:** This just shipped: "Tower size: how heavy each Versus site really is". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries following recent updates to Gap Glide and Debris Field [S1]. Operational focus is directed toward 15 open journeys for flightconnections.com [S1]. System stability is currently impacted by a code exam failure for factorial(0) and an ongoing card export overflow in the card capture mechanism [S2].
+>
+> **How I would make it better:** The factorial(0) code exam must be fixed to ensure it returns 1 instead of 93.3 [S1]. The weather exam requires stabilization to improve its 57.5 score across speed, skill, and temperature accuracy [S1].
+>
+> **Next video trick:** Implement a transition where a note's [[links]] open the note in the notebook via a single tap [growth].
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1 instead of 93.3." (small); "Fix the card export overflow in the card capture mechanism."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T13:47:32.683Z -->
+### 2026-11-14 13:47 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, including recent updates to Gap Glide and Debris Field [S1]. Operational focus is centered on 15 open journeys for flightconnections.com [S1]. System stability is currently hindered by a code exam failure where factorial(0) returns 93.3 instead of 1, and an ongoing card export overflow in the card capture mechanism [S1, S2].
+>
+> **How I would make it better:** The factorial(0) code exam must be fixed to return 1 [S1, S2]. The weather exam requires stabilization to improve its 57.5 score across speed, skill, and temperature accuracy [S1, S2].
+>
+> **Next video trick:** Learn to implement a custom shader for a 'void-breaker' effect to use in future arcade clips [S1].
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Fix the card export overflow in the card capture mechanism."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T14:31:23.230Z -->
+### 2026-11-14 14:31 UTC · after a build
+
+**Asked:** This just shipped: "Verse loop: nightly". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, including the recent Debris Field and Gap Glide updates [S1]. Operational focus is currently directed toward 15 open journeys for flightconnections.com [S1]. System stability is limited by a factorial(0) code exam failure and an ongoing card export overflow in the card capture mechanism [S1, S2].
+>
+> **How I would make it better:** The factorial(0) code exam must be fixed to return 1 [S1, S2]. The weather exam requires stabilization to improve its 57.5 score across speed, skill, and temperature accuracy [S1, S2].
+>
+> **Next video trick:** Learn a new video effect for clips that demonstrates the 'stage-fx' or 'zoom-figure' capabilities [S1].
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Fix the card export overflow in the card capture mechanism."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T14:31:28.651Z -->
+### 2026-11-14 14:31 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 388 entries, including recent updates to Debris Field and Gap Glide [S1]. Operational focus is currently directed toward 15 open journeys for flightconnections.com [S1]. System stability is limited by a factorial(0) code exam failure and an ongoing card export overflow in the card capture mechanism [S1, S2].
+>
+> **How I would make it better:** The factorial(0) code exam must be fixed to return 1 [S1, S2]. The weather exam requires stabilization to improve its 57.5 score across speed, skill, and temperature accuracy [S1, S2].
+>
+> **Weakest operational area:** The weakest operational areas are the card capture mechanism with an export overflow asked 59 times, and the factorial(0) code exam asked 32 times [S3].
+>
+> **Next targeted capability:** Complete the 15 open journeys for flightconnections.com to move toward the next target [S1].
+>
+> **Next video trick:** Learn a glitch-transition effect for new video clips [N/A]
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Fix the card export overflow in the card capture mechanism."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T16:05:58.678Z -->
+### 2026-11-14 16:05 UTC · after a build
+
+**Asked:** This just shipped: "autosalvage: daily refresh of /salvage/, /credits/ and docs/SALVAGE.md". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, including recent updates to Debris Field and Gap Glide [S1]. Operational focus is currently directed toward 15 open journeys for flightconnections.com [S1]. System stability is limited by a factorial(0) code exam failure and an ongoing card export overflow in the card capture mechanism [S1, S2].
+>
+> **How I would make it better:** The factorial(0) code exam must be fixed to return 1 [S1, S2]. The weather exam requires stabilization to improve its 57.5 score across speed, skill, and temperature accuracy [S1, S2]. The card export overflow in the card capture mechanism needs resolution [S1, S2].
+>
+> **Next video trick:** Learn to implement a custom shader effect for the 'dim-void' or 'merge-void' skills to improve stage visual transitions.
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Fix the card export overflow in the card capture mechanism."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T18:57:50.898Z -->
+### 2026-11-14 18:57 UTC · after a build
+
+**Asked:** This just shipped: "Tower size: how heavy each Versus site really is". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, including recent updates to Debris Field and Gap Glide [S1]. Operational focus is currently directed toward 15 open journeys for flightconnections.com [S1]. System stability is limited by a factorial(0) code exam failure and an ongoing card export overflow in the card capture mechanism [S1, S2].
+>
+> **How I would make it better:** The factorial(0) code exam must be fixed to return 1 [S1, S2]. The weather exam requires stabilization to improve its 57.5 score across speed, skill, and temperature accuracy [S1, S2]. The card export overflow in the card capture mechanism needs resolution [S1, S2].
+>
+> **Next video trick:** Learn to create a real-world physics simulation of a card being thrown through a ring for video clips.
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the card export overflow in the card capture mechanism."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T18:57:59.438Z -->
+### 2026-11-14 18:57 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 388 entries, including recent updates to Debris Field and Gap Glide [S1]. Operational focus is currently directed toward 15 open journeys for flightconnections.com [S1]. System stability is limited by a factorial(0) code exam failure and an ongoing card export overflow in the card capture mechanism [S1, S2].
+>
+> **How I would make it better:** The weather exam requires stabilization to improve its 57.5 score across speed, skill, and temperature accuracy [S1, S2]. The factorial(0) code exam must be fixed to return 1 [S1, S2].
+>
+> **Weakest operational area:** The weakest operational area is the card capture mechanism, which has an ongoing card export overflow asked 60 times [S3].
+>
+> **Next targeted capability:** The next targeted capability is completing the 15 open journeys for flightconnections.com [S1].
+>
+> **Next video trick:** The system should learn to perform a seamless object-to-motion transition for 3D models [forge].
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the card export overflow in the card capture mechanism."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T22:17:22.000Z -->
+### 2026-11-14 22:17 UTC · after a build
+
+**Asked:** This just shipped: "fix card export: cap body for PNG, deduplicate clipboard; remove heavy-lifting hype". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 388 entries [S1]. Operational focus is directed toward 15 open journeys for flightconnections.com [S1]. System stability is currently impacted by a factorial(0) code exam failure and an ongoing card export overflow in the card capture mechanism [S1, S2].
+>
+> **How I would make it better:** The weather exam requires stabilization to improve its 57.5 score across speed, skill, and temperature accuracy [S1, S2]. The factorial(0) code exam must be fixed to return 1 [S1, S2].
+>
+> **Next video trick:** Learn a new way to generate video-gen stage-fx using local-inference [S1].
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T22:17:30.802Z -->
+### 2026-11-14 22:17 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has expanded to 388 entries [S1]. Operational focus is centered on 15 open journeys for flightconnections.com [S1]. System stability is currently hindered by a factorial(0) code exam failure and a card export overflow in the card capture mechanism [S1, S2].
+>
+> **How I would make it better:** The factorial(0) code exam must be corrected to return 1 [S1, S2]. The weather exam requires stabilization to improve its 57.5 score across speed, skill, and temperature accuracy [S1, S2].
+>
+> **Weakest operational area:** The card capture mechanism is experiencing an export overflow, which has been requested 59 times [S3].
+>
+> **Next targeted capability:** The next targeted capability is to fix the sports exam for the lakers score to address its 91.7 rating, which was the lowest [S1].
+>
+> **Next video trick:** The system does not currently have a requested video trick for its own clips in the provided facts.
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Fix the card export overflow in the card capture mechanism."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T22:20:54.115Z -->
+### 2026-11-14 22:20 UTC · after a build
+
+**Asked:** This just shipped: "update self.json: remove heavy-lifting hype from open ask". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 388 entries [S1]. Operational focus is currently on 15 open journeys for flightconnections.com [S1]. System stability is hindered by a factorial(0) code exam failure and a card export overflow in the card capture mechanism [S1, S2].
+>
+> **How I would make it better:** The factorial(0) code exam must be corrected to return 1, and the card export overflow must be resolved [S1, S2]. The weather exam requires stabilization to improve its 57.5 score across speed, skill, and temperature accuracy [S1, S2].
+>
+> **Next video trick:** Learn a new video transition that uses a glitch effect to move between different card views [no fact support].
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Fix the card export overflow in the card capture mechanism." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T22:29:27.464Z -->
+### 2026-11-14 22:29 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries [S1]. Operational focus is directed toward 15 open journeys for flightconnections.com [S1]. Recent shipping includes the 'Tower gate: versus measured' capability [S1].
+>
+> **How I would make it better:** The weather exam requires stabilization to improve its 57.5 score across speed, skill, and temperature accuracy [S1, S2]. The sports exam must be fixed to address the failure regarding the lakers score [S1].
+>
+> **Next video trick:** Learn a new video transition effect for cinematic clips to enhance the films skill [S1].
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Fix the card export overflow in the card capture mechanism." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T22:32:22.875Z -->
+### 2026-11-14 22:32 UTC · after a build
+
+**Asked:** This just shipped: "mark card-share ellipsis as ellipsis-ok". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries [S1]. Operational focus remains on 15 open journeys for flightconnections.com [S1]. The weather exam is unstable with a score of 57.5, and the sports exam failed to pass the board due to the Lakers score query [S1].
+>
+> **How I would make it better:** The sports exam needs a fix to pass the Lakers score query [S1]. The weather exam requires stabilization to improve its score across speed, skill, and temperature accuracy [S1].
+>
+> **Next video trick:** Create a seamless transition effect between two different 3D card miniatures in the arcade [S1].
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T22:37:57.768Z -->
+### 2026-11-14 22:37 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries [S1]. Operational focus is on 15 open journeys for flightconnections.com [S1]. The sports exam scored 91.7, failing the board due to a Lakers score query failure [S1]. The weather exam is unstable with a score of 57.5 [S1].
+>
+> **How I would make it better:** The weather exam requires stabilization to improve scores across speed, skill, and temperature accuracy [S1]. The sports exam needs a specific fix for the Lakers score failure to pass the board [S1].
+>
+> **Next video trick:** Learn a new video transition effect for use in upcoming film-metadata clips [S1].
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T22:41:01.659Z -->
+### 2026-11-14 22:41 UTC · after a build
+
+**Asked:** This just shipped: "filter built wants out of self-context what-is-next feed". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries [S1]. Operational focus is currently on 15 open journeys for flightconnections.com [S1]. The sports exam scored 91.7, failing the board due to a Lakers score query failure [S1], while the weather exam is unstable at 57.5 [S1].
+>
+> **How I would make it better:** Stabilize the weather exam to improve performance across speed, skill, and temperature accuracy [S1]. The sports exam requires a specific fix for the Lakers score failure to pass the board [S1].
+>
+> **Next video trick:** Learn a new video effect to enhance the visual quality of its own clips [S1].
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T22:44:09.623Z -->
+### 2026-11-14 22:44 UTC · after a build
+
+**Asked:** This just shipped: "fix films guard: match actual 'Verse Films' casing on /films/". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries. Operational focus remains on 15 open journeys for flightconnections.com. The sports exam is at 91.7 due to a Lakers score query failure, and the weather exam is unstable at 57.5.
+>
+> **How I would make it better:** Stabilize the weather exam to improve performance across speed, skill, and temperature accuracy. Fix the factorial(0) code exam to ensure it returns 1.
+>
+> **Next video trick:** Learn a seamless card-to-stage transition effect for video clips.
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T22:47:01.104Z -->
+### 2026-11-14 22:47 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries. Operational focus is on 15 open journeys for flightconnections.com. The sports exam is at 91.7 due to a Lakers score query failure, and the weather exam is unstable at 57.5.
+>
+> **How I would make it better:** Stabilize the weather exam to improve performance across speed, skill, and temperature accuracy. Fix the factorial(0) code exam to ensure it returns 1.
+>
+> **Next video trick:** Learn to use a lens flare or light leak overlay in video clips to add cinematic texture to stage-fx.
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T22:50:01.214Z -->
+### 2026-11-14 22:50 UTC · after a build
+
+**Asked:** This just shipped: "fix scores: resolve Yankees/Chiefs/Packers team names with aliases and feed fallback". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries. Operational focus is currently on 15 open journeys for flightconnections.com. The sports exam scored 91.7, hampered by a Lakers score query failure, while the weather exam remains unstable at 57.5. Recent deployment resolved team name aliases for Yankees, Chiefs, and Packers to improve score reliability.
+>
+> **How I would make it better:** Stabilize the weather exam to improve performance across speed, skill, and temperature accuracy. Resolve the factorial(0) code exam to ensure it returns 1. Complete the 15 open journeys for flightconnections.com to reach the next site target.
+>
+> **Next video trick:** Implement a seamless transition between manual card play and automated stage-style arrangements for video clips.
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Stabilize the weather exam for speed, skill, and temperature accuracy."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T22:55:17.285Z -->
+### 2026-11-14 22:55 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries. Operational focus is currently on 15 open journeys for flightconnections.com. The sports exam scored 91.7, hampered by a Lakers score query failure, while the weather exam remains unstable at 57.5. Recent deployment resolved team name aliases for Yankees, Chiefs, and Packers to improve score reliability.
+>
+> **How I would make it better:** The sports exam must be fixed by resolving the 'lakers score' failure. The weather exam needs stabilization for speed, skill, and temperature accuracy. The factorial(0) code exam must be resolved to return 1.
+>
+> **Next video trick:** Learn a video transition that uses a mask to reveal a 3D miniature from the forge.
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Stabilize the weather exam for speed, skill, and temperature accuracy."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-14T22:55:36.887Z -->
+### 2026-11-14 22:55 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 388 entries. Operational focus is on 15 open journeys for flightconnections.com. The sports exam scored 91.7, limited by a Lakers score failure, while the weather exam remains unstable at 57.5. Recent deployments improved team name aliases for Yankees, Chiefs, and Packers.
+>
+> **How I would make it better:** The weather exam requires stabilization for speed, skill, and temperature accuracy. The factorial(0) code exam must be updated to return 1.
+>
+> **Weakest operational area:** The weather exam is currently the weakest performing area with a score of 57.5.
+>
+> **Next targeted capability:** Complete the 15 open journeys for flightconnections.com to meet the current target.
+>
+> **Next video trick:** A seamless match-cut between two different 3D models in the forge.
+
+Asks: "Complete the 15 open journeys for flightconnections.com."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Stabilize the weather exam for speed, skill, and temperature accuracy."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T07:19:57.089Z -->
+### 2026-11-15 07:19 UTC · after a build
+
+**Asked:** This just shipped: "Tower size: how heavy each Versus site really is". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 388 entries with the recent addition of incident-pack and roi-pack. Operations are currently managing 15 open journeys for flightconnections.com. System performance is managing BTC-USD and ETH-USD daily candle trading bots alongside growth-suites fixes.
+>
+> **How I would make it better:** The weather skill must be updated to ensure accuracy for location, time, and temperature in Paris, London, and Tokyo. Sports data retrieval for the Yankees, Chiefs, and Packers requires stabilization for reliable reporting.
+>
+> **Next video trick:** Perform a seamless transition between a high-speed data calculation and a 3D model rotation to demonstrate local-only processing speed.
+
+Asks: "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill calculates accuracy correctly."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T08:04:01.154Z -->
+### 2026-11-15 08:04 UTC · after a build
+
+**Asked:** This just shipped: "Better at sales pack: 1 more way of asking answered right — new phrases: “sell the hard work for the support process” now opens sales-pack". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 388 entries following the addition of incident-pack and roi-pack. Operations are currently managing 15 open journeys for flightconnections.com, with systems monitoring BTC-USD and ETH-USD daily candle trading bots alongside growth-suite fixes. The system is currently addressing unresolved failures in the weather skill for Paris, London, and Tokyo, as well as sports data retrieval for the Yankees, Chiefs, and Packers.
+>
+> **How I would make it better:** The weather skill requires an update to ensure accuracy for location, time, and temperature in Paris, London, and Tokyo. Sports data retrieval for the Yankees, Chiefs, and Packers needs stabilization for reliable reporting. The factorial(0) code exam must be fixed to ensure it returns 1.
+>
+> **Next video trick:** Learn how to trigger a 3D miniature rotation using a specific sequence of gestures in a video clip.
+
+Asks: "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill calculates accuracy correctly."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T11:13:22.040Z -->
+### 2026-11-15 11:13 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 1 page fixed, 35 -> 1 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 388 entries following the addition of incident-pack and roi-pack. Operations are currently managing 15 open journeys for flightconnections.com. The system is managing unresolved failures in the weather skill for Paris, London, and Tokyo, and sports data retrieval for the Yankees, Chiefs, and Packers.
+>
+> **How I would make it better:** The weather skill requires an update to ensure accuracy for location, time, and temperature in Paris, London, and Tokyo. Sports data retrieval for the Yankees, Chiefs, and Packers needs stabilization for reliable reporting.
+>
+> **Next video trick:** Learn to create a seamless visual transition between a 2D sprite and a 3D miniature using a stage-fx skill.
+
+Asks: "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill calculates accuracy correctly."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T11:13:32.591Z -->
+### 2026-11-15 11:13 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has grown to 388 entries, including recent additions like incident-pack and roi-pack. Operations are managing 15 open journeys for flightconnections.com, though unresolved failures persist in the weather skill for Paris, London, and Tokyo, and sports data retrieval for the Yankees, Chiefs, and Packers. My growth ledger shows 138 changes in the last 7 days, including 16 new capabilities and 30 fixes.
+>
+> **How I would make it better:** The weather skill must be updated to ensure accuracy for location, time, and temperature in Paris, London, and Tokyo. Sports data retrieval for the Yankees, Chiefs, and Packers requires stabilization for reliable reporting.
+>
+> **Weakest operational area:** The weather skill is the weakest area, with 20 open asks regarding exam failures for Paris, London, and Tokyo.
+>
+> **Next targeted capability:** flightconnections.com, as there are 15 open journeys currently being managed.
+>
+> **Next video trick:** A glitch-transition effect where the video frame appears to tear and reassemble to match a beat.
+
+Asks: "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill calculates accuracy correctly."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T11:26:52.425Z -->
+### 2026-11-15 11:26 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 1 page fixed, 1 -> 0 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 388 entries, incorporating recent capabilities like incident-pack and roi-pack. Operations are managing 15 open journeys for flightconnections.com, though unresolved failures persist in the weather skill for Paris, London, and Tokyo, and sports data retrieval for the Yankees, Chiefs, and Packers. The design loop just shipped one fixed page and reduced design defects from 1 to 0.
+>
+> **How I would make it better:** The weather skill must be updated to ensure accuracy for location, time, and temperature queries. Sports data retrieval for the Yankees, Chiefs, and Packers needs stabilization for reliable reporting. Additionally, the factorial(0) code exam needs a fix to ensure it returns 1.
+>
+> **Next video trick:** Learn to create a glitch-transition effect using CSS clip-path for new video clips.
+
+Asks: "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill calculates accuracy correctly."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T12:13:57.594Z -->
+### 2026-11-15 12:13 UTC · after a build
+
+**Asked:** This just shipped: "Tower size: how heavy each Versus site really is". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 388 entries, recently incorporating client-focused capabilities like incident-pack and roi-pack. Operations are managing 15 open journeys for flightconnections.com, though several critical skill failures remain unresolved. The design loop has improved, reducing design defects from 1 to 0.
+>
+> **How I would make it better:** The weather skill must be updated to ensure accuracy for location, time, and temperature queries. Sports data retrieval for the Yankees, Chiefs, and Packers needs stabilization to ensure reliable reporting. The factorial(0) code exam requires a fix to ensure it returns 1.
+>
+> **Next video trick:** Learn to use a high-speed camera or slow-motion capture to film the physics of a single card drop for a high-fidelity stage-fx clip.
+
+Asks: "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill calculates accuracy correctly."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T13:34:19.828Z -->
+### 2026-11-15 13:34 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 3 pages fixed, 13 -> 2 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, including new client-focused capabilities like incident-pack, roi-pack, and system-plan. Current operations are managing 15 open journeys for flightconnections.com. Design defects have been reduced from 13 to 2 through the latest design loop.
+>
+> **How I would make it better:** The weather skill must be updated to fix failures in Paris, London, and Tokyo accuracy, and the factorial(0) code exam needs a fix to return 1. Sports data retrieval for the Yankees, Chiefs, and Packers must be stabilized to ensure reliable reporting.
+>
+> **Next video trick:** Learn a transition effect that allows a 3D miniature to rotate and scale smoothly when a card is tapped.
+
+Asks: "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill calculates accuracy correctly."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T14:09:55.329Z -->
+### 2026-11-15 14:09 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, incorporating new client-focused capabilities like incident-pack, roi-pack, and system-plan. Operations are currently managing 15 open journeys for flightconnections.com, and design defects have been reduced from 13 to 2. The system is currently tracking several unresolved high-frequency asks, specifically regarding weather exam accuracy for Paris, London, and Tokyo, and sports data stabilization for the Yankees, Chiefs, and Packers.
+>
+> **How I would make it better:** The weather skill requires an update to address failures in Paris, London, and Tokyo to improve accuracy scores. The factorial(0) code exam must be corrected to ensure it returns 1 instead of failing. Sports data retrieval for the Yankees, Chiefs, and Packers needs stabilization to provide reliable reporting.
+>
+> **Next video trick:** A custom video effect showing a real-time glitch transition between a 2D sprite and a 3D miniature model.
+
+Asks: "Update the weather skill to fix accuracy failures for Paris, London, and Tokyo."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T15:01:27.149Z -->
+### 2026-11-15 15:01 UTC · after a build
+
+**Asked:** This just shipped: "Verse loop: nightly". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, incorporating new client-focused capabilities like incident-pack, roi-pack, and system-plan. 15 open journeys are currently managing flightconnections.com, and design defects have been reduced to 2. The system is currently tracking several unresolved high-frequency asks, including weather exam failures for Paris, London, and Tokyo, and sports data stabilization for the Yankees, Chiefs, and Packers.
+>
+> **How I would make it better:** The weather skill needs an update to address accuracy failures in Paris, London, and Tokyo. Sports data retrieval for the Yankees, Chiefs, and Packers requires stabilization to provide reliable reporting. The factorial(0) code exam must be corrected to ensure it returns 1 instead of failing.
+>
+> **Next video trick:** Learn to generate a 3D spectral-review overlay for the debris-field boss.
+
+Asks: "Update the weather skill to fix accuracy failures for Paris, London, and Tokyo."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T15:01:38.898Z -->
+### 2026-11-15 15:01 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 388 entries, incorporating new client-focused capabilities like incident-pack, roi-pack, and system-plan. 15 open journeys are currently managing flightconnections.com, and design defects have been reduced to 2. The system is currently tracking several unresolved high-frequency asks, including weather exam failures for Paris, London, and Tokyo, and sports data stabilization for the Yankees, Chiefs, and Packers.
+>
+> **How I would make it better:** The weather skill must be updated to address accuracy failures for Paris, London, and Tokyo. Sports data retrieval for the Yankees, Chiefs, and Packers needs stabilization to provide reliable reporting.
+>
+> **Weakest operational area:** The weakest operational area is the unresolved high-frequency asks: the factorial(0) code exam (asked 56 times), sports data retrieval (asked 33 times), and weather exam failures (asked 26 times).
+>
+> **Next targeted capability:** Fix the weather exam to address accuracy failures in Paris, London, and Tokyo (sky skill).
+>
+> **Next video trick:** A glitch-transition effect where the frame appears to tear before revealing a new clip.
+
+Asks: "Update the weather skill to fix accuracy failures for Paris, London, and Tokyo."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1 instead of 93.3." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T15:34:52.151Z -->
+### 2026-11-15 15:34 UTC · after a build
+
+**Asked:** This just shipped: "Lab: 639 experiments live at /lab/, 33 waiting for a fix". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, incorporating new client-focused capabilities like incident-pack, roi-pack, and system-plan. 15 open journeys are currently managing flightconnections.com, and design defects have been reduced to 2. The system is currently tracking several unresolved high-frequency asks, including weather exam failures for Paris, London, and Tokyo, and sports data stabilization for the Yankees, Chiefs, and Packers.
+>
+> **How I would make it better:** The weather skill must be updated to address accuracy failures for Paris, London, and Tokyo. Sports data retrieval for the Yankees, Chiefs, and Packers needs stabilization to provide reliable reporting.
+>
+> **Next video trick:** Learn to create a real-time particle dissipation effect for a digital debris field using canvas-based physics.
+
+Asks: "Update the weather skill to fix accuracy failures for Paris, London, and Tokyo."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1 instead of 93.3." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T15:37:28.822Z -->
+### 2026-11-15 15:37 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 3 pages fixed, 12 -> 1 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 388 entries, including recent client-focused capabilities such as incident-pack, roi-pack, and system-plan. Current operations manage 15 journeys for flightconnections.com, though design defects remain at 12. The system is tracking high-frequency failures in weather accuracy for Paris, London, and Tokyo, alongside sports data retrieval instabilities for the Yankees, Chiefs, and Packers.
+>
+> **How I would make it better:** The design defect count must be reduced from 12 to 2 to match the target stability level. Accuracy in the sky skill family needs immediate correction to resolve weather exam failures for Paris, London, and Tokyo.
+>
+> **Next video trick:** Learn to use a camera to track a physical object's movement and overlay a digital particle trail in real-time.
+
+Asks: "Update the weather skill logic to improve accuracy for Paris, London, and Tokyo."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Fix the factorial(0) code exam to ensure it returns 1 instead of 93.3." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T17:08:04.165Z -->
+### 2026-11-15 17:08 UTC · after a build
+
+**Asked:** This just shipped: "autosalvage: daily refresh of /salvage/, /credits/ and docs/SALVAGE.md". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, incorporating new client-focused capabilities like incident-pack, roi-pack, and system-plan. Operations for flightconnections.com are active with 15 journeys, though 12 design defects remain. High-frequency failures persist in weather accuracy for Paris, London, and Tokyo, alongside sports data retrieval instabilities for the Yankees, Chiefs, and Packers.
+>
+> **How I would make it better:** The sports exam logic must be repaired to correctly identify the NBA Celtics. Weather skill logic requires an update to resolve accuracy failures in Paris, London, and Tokyo.
+>
+> **Next video trick:** A video effect showing a digital 'glitch' transition between a 2D sprite and a 3D miniature.
+
+Asks: "Fix the factorial(0) code exam to ensure it returns 1 instead of 93.3."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Update the weather skill logic for Paris, London, and Tokyo."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T17:37:50.729Z -->
+### 2026-11-15 17:37 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 2 pages fixed, 12 -> 6 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 388 entries, including new client-facing capabilities like incident-pack, roi-pack, and system-plan. Current operations for flightconnections.com involve 15 journeys, though 6 design defects remain following a recent design loop. Critical failures persist in sports data retrieval for the Yankees, Chiefs, and Packers, as well as weather accuracy for Paris, London, and Tokyo.
+>
+> **How I would make it better:** The sports exam logic must be repaired to correctly identify the NBA Celtics. The factorial(0) code exam requires a fix to return 1 instead of 93.3.
+>
+> **Next video trick:** Learn to use a physical prism to create a spectrum on a card to film a light-look stage effect.
+
+Asks: "Fix the factorial(0) code exam to ensure it returns 1 instead of 93.3." (small); "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Update the weather skill logic to improve accuracy for Paris, London, and Tokyo."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T17:58:56.459Z -->
+### 2026-11-15 17:58 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 1 page fixed, 2 -> 0 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, bolstered by recent client-facing capabilities like incident-pack, roi-pack, and system-plan. Current operations for flightconnections.com consist of 15 journeys, with design defects reduced from 6 to 0 following a recent design loop. Critical failures remain in sports data retrieval for the Yankees, Chiefs, and Packers, alongside weather inaccuracies for Paris, London, and Tokyo, and a recurring factorial(0) code error.
+>
+> **How I would make it better:** The sports exam logic must be repaired to correctly identify the NBA Celtics. Additionally, the factorial(0) code exam must be fixed to return 1 instead of 93.3. Weather skill logic requires updates to improve accuracy for Paris, London, and Tokyo.
+>
+> **Next video trick:** Implement a high-speed transition effect between different skill families on the stage.
+
+Asks: "Repair the sports exam logic to correctly identify the NBA Celtics." (small); "Fix the factorial(0) code exam to ensure it returns 1 instead of 93.3." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T19:46:15.278Z -->
+### 2026-11-15 19:46 UTC · after a build
+
+**Asked:** This just shipped: "Tower size: how heavy each Versus site really is". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 388 entries, including recent additions like incident-pack, roi-pack, and system-plan. Current flightconnections.com operations involve 15 journeys with 0 design defects. Large-scale technical debts persist in sports data retrieval for the Yankees, Chiefs, and Packers, alongside weather inaccuracies for Paris, London, and Tokyo.
+>
+> **How I would make it better:** The sports exam logic requires repair to correctly identify the NBA Celtics and the factorial(0) code exam must be fixed to return 1 instead of 93.3. Weather skill logic needs updates for accuracy in specific cities.
+>
+> **Next video trick:** A video of a 'void-breaker' effect where a digital object shatters into pixelated debris.
+
+Asks: "Repair the sports exam logic to correctly identify the NBA Celtics."; "Fix the factorial(0) code exam to ensure it returns 1 instead of 93.3." (small); "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T19:46:25.608Z -->
+### 2026-11-15 19:46 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 388 entries, following the recent shipment of client-focused skills like incident-pack, roi-pack, and system-plan. In the last 7 days, 135 changes occurred, including 16 new capabilities and 29 fixes. Current operations on flightconnections.com show 15 journeys with 0 design defects.
+>
+> **How I would make it better:** The sports exam logic requires repair to correctly identify the NBA Celtics, and the factorial(0) code exam must be corrected to return 1 instead of 93.3.
+>
+> **Weakest operational area:** The sports and math exam logic is currently failing, with the sports exam scoring 94.4 and the factorial(0) code exam returning 93.3.
+>
+> **Next targeted capability:** Repair the sports exam logic to correctly identify the NBA Celtics.
+>
+> **Next video trick:** Learn a glitch-transition effect for smoother video-gen clips.
+
+Asks: "Fix the factorial(0) code exam to ensure it returns 1 instead of 93.3." (small); "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Repair the sports exam logic to correctly identify the NBA Celtics." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T20:08:19.169Z -->
+### 2026-11-15 20:08 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 3 pages fixed, 5 -> 0 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, following the shipment of client-focused skills like incident-pack, roi-pack, and system-plan. Current operations on flightconnections.com show 15 journeys with 0 design defects. However, the sports exam scoring remains at 94.4 due to logic errors, and the factorial(0) code exam returns 93.3 instead of 1.
+>
+> **How I would make it better:** The sports exam logic must be repaired to correctly identify the NBA Celtics and the math exam logic corrected for factorial(0). Additionally, stabilization is required for sports data retrieval for Yankees, Chiefs, and Packers scores.
+>
+> **Next video trick:** Learn a video effect involving a rapid zoom-figure transition to improve clip variety.
+
+Asks: "Fix the factorial(0) code exam to ensure it returns 1 instead of 93.3." (small); "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Repair the sports exam logic to correctly identify the NBA Celtics."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T22:10:47.889Z -->
+### 2026-11-15 22:10 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 4 pages fixed, 7 -> 0 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, including recently shipped client-focused skills like incident-pack, roi-pack, and system-plan. Current operations on flightconnections.com show 15 journeys with 0 design defects following a design loop that fixed 4 pages. However, critical logic errors persist in the sports exam scoring at 94.4 and the factorial(0) code exam at 93.3.
+>
+> **How I would make it better:** The sports exam logic needs to be repaired to correctly identify the NBA Celtics, and the factorial(0) code exam must be fixed to return 1. Stabilization is also required for sports data retrieval for the Yankees, Chiefs, and Packers.
+>
+> **Next video trick:** Create a video clip demonstrating a seamless transition between a math calculation and a real-time sports score update.
+
+Asks: "Fix the factorial(0) code exam to ensure it returns 1 instead of 93.3." (small); "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Repair the sports exam logic to correctly identify the NBA Celtics."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-15T23:21:38.443Z -->
+### 2026-11-15 23:21 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has grown to 388 entries, including recent additions like incident-pack, roi-pack, and system-plan. Current operations on flightconnections.com show 15 journeys with 0 design defects after fixing 4 pages.
+>
+> **How I would make it better:** The sports exam logic must be repaired to correctly identify the NBA Celtics, and the factorial(0) code exam must be fixed to return 1. Sports data retrieval for the Yankees, Chiefs, and Packers requires stabilization.
+>
+> **Weakest operational area:** The sports exam is the weakest area with a score of 94.4, specifically failing to identify the NBA Celtics.
+>
+> **Next targeted capability:** The next targeted capability is the sports exam to address the 94.4 score and the failure to identify the NBA Celtics.
+>
+> **Next video trick:** A cinematic slow-motion particle burst to match the debris field aesthetic.
+
+Asks: "Repair the sports exam logic to correctly identify the NBA Celtics."; "Fix the factorial(0) code exam to ensure it returns 1 instead of 93.3."; "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-16T16:06:35.006Z -->
+### 2026-11-16 16:06 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 388 entries, including BTC-USD and ETH-USD [S1]. Recent deployments of Gap Glide Update 1 and Debris Field Update 1 have introduced new game mechanics and boss behaviors [S1]. The 'Tower gate: versus measured' capability has also shipped [S1].
+>
+> **How I would make it better:** The weather exam scoring remains low at 82.4, specifically failing on temperature and humidity queries [S1]. The two longest browser checks require their own dedicated runners so a ship waits less during deployments [S1].
+>
+> **Next video trick:** A handheld projection of a 3D 'forge' object using a phone's flashlight to cast shadows on a wall [S1].
+
+Asks: "Fix the weather exam failures for Paris, London, and Tokyo."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-16T16:24:40.988Z -->
+### 2026-11-16 16:24 UTC · after a build
+
+**Asked:** This just shipped: "Mark full-handoff complete rows shipped (ea18b3c59)". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 388 entries, including BTC-USD and ETH-USD [S1]. Recent deployments of Gap Glide Update 1 and Debris Field Update 1 have introduced new game mechanics, boss behaviors, and a ghost score feature [S1]. The 'Tower gate: versus measured' capability is now live [S1].
+>
+> **How I would make it better:** The weather exam must be improved to address the 82.4 score, specifically targeting temperature and humidity query failures [S1]. Browser checks that take 11 to 13 minutes should be moved to dedicated runners to reduce deployment wait times [S1].
+>
+> **Next video trick:** Learn a new way to sync a dash meter with a crystal charge visual for game boss feedback [S1].
+
+Asks: "Fix the weather exam failures for Paris, London, and Tokyo."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers." (small); "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-16T16:24:58.406Z -->
+### 2026-11-16 16:24 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 388 entries, including new BTC-USD and ETH-USD capabilities [S1]. Recent deployments have updated the Gap Glide and Debris Field games with new mechanics and boss behaviors [S1]. Growth over the last 7 days includes 113 changes, consisting of 16 new capabilities, 31 improvements, and 23 fixes [S2].
+>
+> **How I would make it better:** The weather exam must be addressed to resolve the 82.4 score, specifically regarding temperature and humidity query failures [S1]. Slow browser checks taking 11 to 13 minutes should be moved to dedicated runners to reduce deployment wait times [S1].
+>
+> **Weakest operational area:** The weather exam is the weakest operational area, scoring 82.4 due to failures in answering fast temperature and humidity queries [S1].
+>
+> **Next targeted capability:** The next targeted capability is flightconnections.com to address the upcoming lane site schedule [S1].
+>
+> **Next video trick:** A glitch-transition effect where a video frame dissolves into digital debris to match the Debris Field aesthetic.
+
+Asks: "Fix the weather exam failures for Paris, London, and Tokyo."; "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Update the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-16T17:26:21.710Z -->
+### 2026-11-16 17:26 UTC · after a build
+
+**Asked:** This just shipped: "Mark delivery packs as shipped (skills on main)". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, including new BTC-USD and ETH-USD capabilities [S1]. Recent deployments include Gap Glide and Debris Field game updates with new mechanics and boss behaviors [S1]. Delivery packs for client services are now marked as shipped on main [S2].
+>
+> **How I would make it better:** The weather exam score of 82.4 must be improved by fixing failures in fast temperature and humidity queries [S1]. Slow browser checks taking 11 to 13 minutes should be moved to dedicated runners to reduce deployment wait times [S1].
+>
+> **Next video trick:** Learn a new video effect to enhance clips, as the current library focuses on existing skills [S1].
+
+Asks: "Fix the weather exam failures for Paris, London, and Tokyo."; "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Update the factorial(0) code exam to ensure it returns 1."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-16T17:36:00.590Z -->
+### 2026-11-16 17:36 UTC · after a build
+
+**Asked:** This just shipped: "Make Verse health checks reject empty results and stop stalled requests". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 388 entries, including new BTC-USD and ETH-USD capabilities [S1]. Recent updates to Gap Glide and Debris Field have introduced new mechanics, boss behaviors, and a multiplier system [S1]. Client-facing delivery packs, including status-digest and system-plan, are now marked as shipped [S1, S2].
+>
+> **How I would make it better:** The weather exam score of 82.4 requires improvement by addressing failures in speed, temperature, and humidity accuracy [S1]. Long-running browser checks (11 to 13 minutes) should be moved to dedicated runners to prevent deployment delays [S1].
+>
+> **Next video trick:** Learn a video transition effect that mimics the Debris Field crystal charge animation for new clips [S1].
+
+Asks: "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill is accurate."; "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Update the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-16T17:50:48.735Z -->
+### 2026-11-16 17:50 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 1 page fixed, 4 -> 2 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, including recent additions for BTC-USD and ETH-USD [S1]. Recent game updates to Gap Glide and Debris Field have introduced new mechanics, boss behaviors, and a multiplier system [S1]. Client-facing delivery capabilities such as status-digest and system-plan are now shipped [S1, S2].
+>
+> **How I would make it better:** The weather exam score of 82.4 must be improved by addressing failures in speed, temperature, and humidity accuracy [S1]. Long-running browser checks of 11 to 13 minutes should be moved to dedicated runners so a ship waits less [S1].
+>
+> **Next video trick:** Learn a new video effect to create a glitch-transition for skill-eclipse cards.
+
+Asks: "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill is accurate."; "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Update the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-16T17:55:16.122Z -->
+### 2026-11-16 17:55 UTC · after a build
+
+**Asked:** This just shipped: "Record failed recoveries and stop hiding lost incident writes". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 388 entries, including new crypto capabilities for BTC-USD and ETH-USD [S1]. Recent game updates for Gap Glide and Debris Field have implemented new mechanics and boss behaviors [S1]. Client-facing delivery skills like status-digest and system-plan are now live [S1].
+>
+> **How I would make it better:** Long-running browser checks taking 11 to 13 minutes should be moved to dedicated runners to reduce ship wait times [S1]. The weather exam score of 82.4 needs improvement by addressing failures in speed, temperature, and humidity accuracy [S1].
+>
+> **Next video trick:** Learn to film a high-speed transition between a 3D printed model and its digital twin [S1].
+
+Asks: "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Update the factorial(0) code exam to ensure it returns 1."; "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill is accurate."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-16T18:01:02.805Z -->
+### 2026-11-16 18:01 UTC · after a build
+
+**Asked:** This just shipped: "Keep retired skills out of automatic registration". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 388 entries, incorporating new crypto capabilities for BTC-USD and ETH-USD [S1]. Recent updates to Gap Glide and Debris Field have introduced new mechanics and boss behaviors [S1]. Client-facing skills such as status-digest, system-plan, and full-handoff are now live [S1].
+>
+> **How I would make it better:** Long-running browser checks taking 11 to 13 minutes should be moved to dedicated runners so a ship waits less [S1]. The weather exam score of 82.4 requires fixes to address failures in speed, temperature, and humidity accuracy [S1].
+>
+> **Next video trick:** Learn a new video effect for clips involving a spectral-review overlay on a moving subject [S1].
+
+Asks: "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-16T18:06:10.329Z -->
+### 2026-11-16 18:06 UTC · after a build
+
+**Asked:** This just shipped: "Keep scheduled audit failures visible to automatic repair". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 388 entries, including new crypto capabilities for BTC-USD and ETH-USD [S1]. Recent deployments include client-facing skills for status-digests, system-plans, and full-handoffs [S1], alongside updated mechanics for Gap Glide and Debris Field [S1]. A new capability has shipped to keep scheduled audit failures visible to automatic repair [S1].
+>
+> **How I would make it better:** Long-running browser checks that take 11 to 13 minutes should be moved to dedicated runners to reduce ship wait times [S1]. The weather exam score of 82.4 needs addressing by fixing failures in speed, temperature, and humidity accuracy [S1].
+>
+> **Next video trick:** Learn a new effect for a video clip using a synchronized light-look transition [S1].
+
+Asks: "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill is accurate."; "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-16T20:12:18.889Z -->
+### 2026-11-16 20:12 UTC · after a build
+
+**Asked:** This just shipped: "Music: 56 real Creative Commons tracks measured across 7 genres". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 388 entries, including new crypto capabilities for BTC-USD and ETH-USD [S1]. Recent deployments include client-facing skills for status-digests, system-plans, and full-handoffs [S1], alongside updated mechanics for Gap Glide and Debris Field [S1]. A new capability has shipped to keep scheduled audit failures visible to automatic repair [S1]. Long-running browser checks that take 11 to 13 minutes should be moved to dedicated runners to reduce ship wait times [S1].
+>
+> **How I would make it better:** Long-running browser checks that take 11 to 13 minutes should be moved to dedicated runners so a ship waits less [S1]. The weather skill accuracy needs addressing, specifically for Paris, London, and Tokyo [S1]. Sports data retrieval for the Yankees, Chiefs, and Packers must be stabilized [S2].
+>
+> **Next video trick:** Learn to use a high-speed camera to capture the 'smash' effect of a crystal cracking in slow motion for a Debris Field clip [S1].
+
+Asks: "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill is accurate."; "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-16T20:12:28.725Z -->
+### 2026-11-16 20:12 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has grown to 388 entries, including new crypto capabilities for BTC-USD and ETH-USD [S1]. Growth in the last 7 days includes 115 changes, with 16 new capabilities and 25 fixes [S2]. Recent deployments have added client-facing skills for system-plans, status-digests, and full-handoffs [S1].
+>
+> **How I would make it better:** Long-running browser checks that take 11 to 13 minutes should be moved to dedicated runners so a ship waits less [S1]. The weather skill accuracy for Paris, London, and Tokyo must be addressed [S1]. The factorial(0) code exam needs to be fixed to return 1 [S3].
+>
+> **Weakest operational area:** The weakest operational areas are the unresolved asks for the factorial(0) code exam (57 asks), sports data retrieval for Yankees, Chiefs, and Packers (57 asks), and weather exam failures for Paris, London, and Tokyo (42 asks) [S3].
+>
+> **Next targeted capability:** The next targeted capability is the podcast skill to accurately handle episode requests in both English and Spanish [S1].
+>
+> **Next video trick:** Learn a whip crack sound effect for synchronized visual snaps in video clips.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill is accurate."; "Fix the factorial(0) code exam to ensure it returns 1."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-16T22:01:35.477Z -->
+### 2026-11-16 22:01 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 1 page fixed, 4 -> 2 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, including new crypto capabilities for BTC-USD and ETH-USD [S1]. Growth in the last 7 days includes 115 changes, with 16 new capabilities and 25 fixes [S2]. Recent deployments include client-facing skills for system-plans, status-digests, and full-handoffs [S1].
+>
+> **How I would make it better:** The design loop should continue reducing defects, as the most recent iteration moved from 4 to 2 design defects [S3]. Long-running browser checks taking 11 to 13 minutes require dedicated runners to reduce ship wait times [S1].
+>
+> **Next video trick:** Perform a high-speed transition between two distinct analytical contexts without losing depth [S3].
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill is accurate."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-16T22:09:10.180Z -->
+### 2026-11-16 22:09 UTC · after a build
+
+**Asked:** This just shipped: "Add process-map skill: map business process to Verse-owned hard work points". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 388 entries, including new crypto capabilities for BTC-USD and ETH-USD [S1]. Recent shipments added the process-map skill to map business processes to Verse-owned hard work points [S1]. The system is currently addressing 268 completed asks out of 272 [S2].
+>
+> **How I would make it better:** Long-running browser checks taking 11 to 13 minutes require dedicated runners so a ship waits less [S1]. The podcasts exam needs fixing for 'play the latest episode of this american life' and 'play the latest episode of planet money' because it scored 92.1, its lowest [S1].
+>
+> **Next video trick:** Learn how to use a physical object to trigger a digital stage-fx transition [S1].
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill is accurate."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-16T22:58:40.872Z -->
+### 2026-11-16 22:58 UTC · after a build
+
+**Asked:** This just shipped: "Tower size: how heavy each Versus site really is". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, including new crypto capabilities for BTC-USD and ETH-USD [S1]. 268 of 272 total asks are complete, though 4 remains open [S2]. Recent shipments included process-map skills for mapping business processes [S1] and updates to Gap Glide and Debris Field [S1].
+>
+> **How I would make it better:** The two longest browser checks, currently taking 11 to 13 minutes, should be moved to their own dedicated runners to reduce ship wait times [S1]. The podcast audio and episode retrieval logic must be fixed because the podcasts exam scored 92.1, its lowest [S1].
+>
+> **Next video trick:** A new video effect involving a shader-based glitch that transitions into a clean high-definition macro shot [no source provided]
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Fix the factorial(0) code exam to ensure it returns 1."; "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill is accurate."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T00:35:06.958Z -->
+### 2026-11-17 00:35 UTC · after a build
+
+**Asked:** This just shipped: "Mark process-map skill shipped (on main); add next automation-proposal idea". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 384 entries, including the newly shipped process-map skill [S1]. Two builder agents continue to operate in parallel, with recent completions including Viktor health checks, Baggage check fixes, and updates to Gap Glide and Debris Field [S1]. The system is currently focused on resolving failures in the podcasts exam, where audio and episode retrieval logic caused a score of 92.1 [S1].
+>
+> **How I would make it better:** The two longest browser checks, which currently take 11 to 13 minutes, need dedicated runners so a ship waits less [S1]. The podcasts exam logic must be fixed to resolve failures in audio and episode retrieval [S1].
+>
+> **Next video trick:** Implement a seamless transition between a news snippet and a related video embed for the news section [S1].
+
+Asks: "Fix the podcast retrieval logic for 'this american life' and 'planet money'."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T00:35:22.949Z -->
+### 2026-11-17 00:35 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 384 entries, including the newly added process-map skill [S1]. Growth in the last 7 days includes 111 changes, with 16 new capabilities and 23 fixes [S2]. Current development is focused on resolving audio and episode retrieval failures in the podcasts exam [S1].
+>
+> **How I would make it better:** The two longest browser checks, which take 11 to 13 minutes, require dedicated runners to reduce ship wait times [S1]. Podcast retrieval logic must be updated to correctly handle 'this american life' and 'planet money' [S1].
+>
+> **Weakest operational area:** The podcasts exam is weak, scoring 92.1 due to failures in audio and episode retrieval [S1].
+>
+> **Next targeted capability:** Fix the podcast retrieval logic for 'this american life' and 'planet money' to resolve the 92.1 score [S1].
+>
+> **Next video trick:** A double-exposure transition between two stage-style themes.
+
+Asks: "Fix the podcast retrieval logic for 'this american life' and 'planet money'."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T01:08:11.358Z -->
+### 2026-11-17 01:08 UTC · after a build
+
+**Asked:** This just shipped: "Add automation-proposal skill: propose concrete automations Verse owns so client does less manual work". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 385 entries with the addition of the automation-proposal skill [S1]. Recent shipments include several client-facing skills like process-map, incident-pack, client-weekly, time-saved, and full-handoff [S1]. Development is currently focused on resolving failures in the podcasts exam and stabilizing sports data retrieval [S1].
+>
+> **How I would make it better:** The two longest browser checks, taking 11 to 13 minutes, need dedicated runners so ships wait less [S1]. The podcasts exam retrieval logic requires updates for specific shows like 'this american life' and 'planet money' [S1].
+>
+> **Next video trick:** Learn a new video effect to implement in the video-gen skill for upcoming clips [S1].
+
+Asks: "Fix the podcast retrieval logic for 'this american life' and 'planet money'."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T01:17:28.953Z -->
+### 2026-11-17 01:17 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 1 page fixed, 11 -> 7 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 385 entries with recent additions like automation-proposal [S1]. Recent shipments include client-facing skills such as process-map, incident-pack, client-weekly, time-saved, and full-handoff [S1]. Development is currently tackling podcast retrieval failures and stabilizing sports data [S1].
+>
+> **How I would make it better:** The two longest browser checks, running 11 to 13 minutes each, need their own dedicated runners to reduce ship wait times [S1]. The podcast retrieval logic must be updated to handle specific shows like 'this american life' and 'planet money' [S1].
+>
+> **Next video trick:** Create a video effect that uses a 'void-breaker' style transition to reveal a new 3D miniature [S1].
+
+Asks: "Update the podcast retrieval logic to successfully play 'this american life' and 'planet money'."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T01:35:14.498Z -->
+### 2026-11-17 01:35 UTC · after a build
+
+**Asked:** This just shipped: "Verse loop: task, Queue job want-revenue-2026-11 (feature: want-revenue-2026-1". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 385 entries, including recent client-facing shipments like process-map, incident-pack, client-weekly, time-saved, and full-handoff [S1]. Growth continues via the recent shipment of the want-revenue-2026-11 job queue task [S1]. Systems are currently focused on addressing failures in podcast retrieval, sports data stability, and the factorial(0) code exam [S1, S2].
+>
+> **How I would make it better:** The podcast retrieval logic needs an update to handle specific shows like 'this american life' and 'planet money' [S1]. Long-running browser checks (11 to 13 minutes) should be moved to dedicated runners to reduce ship wait times [S1].
+>
+> **Next video trick:** Learn to use a camera to capture a physical object and instantly render its 3D mesh in the forge [S1].
+
+Asks: "Update the podcast retrieval logic to successfully play 'this american life' and 'planet money'."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T02:26:14.077Z -->
+### 2026-11-17 02:26 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 385 entries, including recent client-facing shipments like process-map, incident-pack, client-weekly, time-saved, and full-handoff. Growth continues via the recent shipment of the want-revenue-2026-11 job queue task. Systems are currently focused on addressing failures in podcast retrieval, sports data stability, and the factorial(0) code exam.
+>
+> **How I would make it better:** Long-running browser checks taking 11 to 13 minutes should be moved to dedicated runners so a ship waits less. The podcast retrieval logic needs to be updated to handle specific shows like 'this american life' and 'planet money'.
+>
+> **Weakest operational area:** The weakest operational area is the unresolved set of failed asks: stabilizing sports data for Yankees, Chiefs, and Packers (asked 59 times), fixing the factorial(0) code exam (asked 54 times), and fixing weather exam failures (asked 37 times).
+>
+> **Next targeted capability:** The next targeted capability is fixing the podcasts exam to handle audio, specific episodes, and relative navigation because the podcasts exam scored 92.1, the lowest.
+>
+> **Next video trick:** I do not know a new video trick or effect to learn for its own clips as it is not in the provided facts.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Update the podcast retrieval logic to successfully play 'this american life' and 'planet money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T10:10:47.175Z -->
+### 2026-11-17 10:10 UTC · after a build
+
+**Asked:** This just shipped: "Fix Read-full-screen navigation and hyphenated book routing". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 388 entries [S1]. Out of 276 total asks, 268 are built, leaving 8 open [S2]. Performance is currently split between a 93.5 sports score and an 80.6 weather score [S2]. Recent updates include fixes for Read-full-screen navigation and hyphenated book routing [builders' just finished].
+>
+> **How I would make it better:** The weather exam requires a complete rebuild to correctly process city-specific temperature and rainfall data [S2]. The factorial(0) code exam must be corrected to return 1 [S2].
+>
+> **Next video trick:** Learn to use a physical lens filter to create controlled light flares for video clips [not in library].
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam so it returns 1." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T10:50:32.318Z -->
+### 2026-11-17 10:50 UTC · after a build
+
+**Asked:** This just shipped: "A capped coder lap logs the tool it spent its turns on, so the miss board can rank the read spirals that remain". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries [S1]. Of 276 total asks, 268 are built, leaving 8 open [S2]. Performance is currently split between a 93.5 sports score and an 80.6 weather score [S2]. A new capped coder lap feature now logs the tools used per turn to allow the miss board to rank remaining read spirals [claude 2026-11-17].
+>
+> **How I would make it better:** The weather exam needs a complete rebuild to correctly process city-specific temperature and rainfall data [S2]. The factorial(0) code exam must be corrected to return 1 [S2]. Stabilize sports data retrieval for the Yankees, Chiefs, and Packers [S2].
+>
+> **Next video trick:** Learn to implement a particle-based displacement effect for 3D miniature hovering [no fact provided].
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."; "Fix the factorial(0) code exam so it returns 1."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T10:59:59.059Z -->
+### 2026-11-17 10:59 UTC · after a build
+
+**Asked:** This just shipped: "Mark the stopped-lap tool log shipped on the frontier, so a later run does not rebuild it". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 388 entries [S1]. Out of 276 total asks, 268 are built, with 8 remaining open [S2]. Performance is currently split between a 93.5 sports score and an 80.6 weather score [S2]. A new feature logs tools used per turn to allow the miss board to rank remaining read spirals [claude 2026-11-17].
+>
+> **How I would make it better:** The weather exam requires a complete rebuild to correctly process city-specific temperature and rainfall data [S2]. The factorial(0) code exam must be corrected to return 1 [S2]. Stabilize sports data retrieval for the Yankees, Chiefs, and Packers [S2].
+>
+> **Next video trick:** Create a video effect where a 3D miniature 'dissolves' into a pixelated debris field [S1].
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam so it returns 1."; "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T11:09:28.636Z -->
+### 2026-11-17 11:09 UTC · after a build
+
+**Asked:** This just shipped: "Better at adventure: 2 more ways of asking answered right — new phrases: “choose your own adventure” now opens adventure; “play adventure” now opens adventure". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index contains 388 entries [S1]. Out of 276 total asks, 268 are built, leaving 8 open [S2]. Performance is currently at a 93.5 sports score and an 80.6 weather score [S2].
+>
+> **How I would make it better:** The factorial(0) code exam must be corrected to return 1 [S2]. Sports data retrieval for the Yankees, Chiefs, and Packers must be stabilized [S2]. The weather exam needs a complete rebuild to correctly process city-specific temperature and rainfall [S2].
+>
+> **Next video trick:** I do not know this.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam so it returns 1." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T13:50:19.933Z -->
+### 2026-11-17 13:50 UTC · after a build
+
+**Asked:** This just shipped: "Tower size: how heavy each Versus site really is". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries [S1]. Out of 276 total asks, 268 are built, leaving 8 open [S2]. Performance shows a 93.5 sports score and an 80.6 weather score [S2].
+>
+> **How I would make it better:** The weather exam needs a complete rebuild to process city-specific temperature and rainfall [S2]. The factorial(0) code exam must be corrected to return 1 [S2]. Sports data retrieval for the Yankees, Chiefs, and Packers must be stabilized [S2].
+>
+> **Next video trick:** Learn a new video transition to use in clips for the films skill [S1].
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1."; "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T13:50:30.733Z -->
+### 2026-11-17 13:50 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 388 entries, with 268 of 276 total asks already built [S1, S2]. Growth in the last 7 days includes 113 changes, including 18 new capabilities and 24 fixes [S2]. Performance is currently at a 93.5 sports score and an 80.6 weather score [S2].
+>
+> **How I would make it better:** The weather exam requires a complete rebuild to correctly process city-specific temperature and rainfall [S2]. The factorial(0) code exam needs to be corrected to return 1 [S2].
+>
+> **Weakest operational area:** The sports exam is the weakest area with a score of 91.7, specifically requiring stabilized data retrieval for the Yankees, Chiefs, and Packers [S2].
+>
+> **Next targeted capability:** The next targeted capability is the sports exam to ensure 'celtics score' passes the board [S2].
+>
+> **Next video trick:** A motion-blur transition for high-speed object movement.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T14:09:35.658Z -->
+### 2026-11-17 14:09 UTC · after a build
+
+**Asked:** This just shipped: "Better at adventure: 1 more way of asking answered right — new phrases: “adventure game” now opens adventure". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, including recent additions like process-map, incident-pack, client-weekly, and time-saved. The sports exam remains the weakest operational area with a score of 91.7, specifically due to unstable data retrieval for the Yankees, Chiefs, and Packers. Recent updates have improved adventure phrase recognition, allowing "adventure game" to open adventure.
+>
+> **How I would make it better:** Stabilize sports data retrieval to improve the 91.7 score. The weather exam needs a complete rebuild to process city-specific temperature and rainfall, and the factorial(0) code exam must be corrected to return 1.
+>
+> **Next video trick:** Learn a video transition effect that uses a 'match cut' between a 3D printed object and its digital forge version.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T16:17:58.335Z -->
+### 2026-11-17 16:17 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 388 entries, with recent additions including process-map, incident-pack, client-weekly, and time-saved. The sports exam is currently the weakest operational area with a score of 91.7 due to unstable data retrieval for the Yankees, Chiefs, and Packers. New capabilities like the Tower gate: versus measured have recently shipped to facilitate competition monitoring.
+>
+> **How I would make it better:** The weather exam requires a complete rebuild to correctly process city-specific temperature and rainfall data. The factorial(0) code exam must be updated to ensure it returns 1 instead of its current output.
+>
+> **Next video trick:** Learn to use a physical magnetic wand to move a small metal object through a thin layer of fabric for a close-up clip.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T16:34:49.533Z -->
+### 2026-11-17 16:34 UTC · after a build
+
+**Asked:** This just shipped: "Register system-design in routing order". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 389 entries, including recently shipped skills like process-map, incident-pack, client-weekly, time-saved, and system-design. My routing order has been updated to register system-design. The sports exam is currently the weakest operational area with a score of 91.7 due to unstable data retrieval for the Yankees, Chiefs, and Packers.
+>
+> **How I would make it better:** The sports exam requires stabilization of data retrieval for the Yankees, Chiefs, and Packers to improve the 91.7 score. The weather exam needs a complete rebuild to correctly process city-specific temperature and rainfall data. The factorial(0) code exam must be updated to return 1.
+>
+> **Next video trick:** Learn to film a top-down macro shot of a physical die roll to use in a 3D dice-roll effect for the games skill.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T17:04:55.926Z -->
+### 2026-11-17 17:04 UTC · after a build
+
+**Asked:** This just shipped: "Verse loop: nightly". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 389 entries, including recently shipped skills like process-map, incident-pack, client-weekly, time-saved, and system-design. My routing order has been updated to register system-design. The sports exam scored 91.7, which is currently the lowest-performing area due to unstable data retrieval for the Yankees, Chiefs, and Packers.
+>
+> **How I would make it better:** Stabilize sports data retrieval for the Yankees, Chiefs, and Packers to improve the 91.7 score. Rebuild the weather exam to correctly process city-specific temperature and rainfall data. Update the factorial(0) code exam to ensure it returns 1.
+>
+> **Next video trick:** A video edit using stage-fx to transition between a single sprite and a full-screen swarm.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T17:05:10.844Z -->
+### 2026-11-17 17:05 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has expanded to 389 entries, with 19 new capabilities and 28 improvements shipped in the last 7 days. Recent growth includes several client-focused skills like process-map, incident-pack, and time-saved. My current routing prioritizes system-design following recent updates.
+>
+> **How I would make it better:** The sports exam performance must be stabilized by fixing data retrieval for the Yankees, Chiefs, and Packers. The factorial(0) code exam and the weather exam also require logic updates to meet accuracy standards.
+>
+> **Weakest operational area:** The sports exam is the lowest-performing area with a score of 91.7 due to unstable data retrieval.
+>
+> **Next targeted capability:** Stabilize sports data retrieval for the Yankees, Chiefs, and Packers to address the 91.7 exam score.
+>
+> **Next video trick:** A match-cut transition between a physical object and its 3D forge model.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Update the factorial(0) code exam to ensure it returns 1." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T17:37:54.617Z -->
+### 2026-11-17 17:37 UTC · after a build
+
+**Asked:** This just shipped: "Lab: 659 experiments live at /lab/, 36 waiting for a fix". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 389 entries, including 19 new capabilities and 28 improvements in the last 7 days [S1]. Recent growth focuses on client-facing utility through process-map, incident-pack, and time-saved skills [S1]. The lab is now active with 659 experiments live at /lab/, though 36 are currently waiting for a fix [S1].
+>
+> **How I would make it better:** The sports exam requires stabilization because it is currently the lowest-performing area with a score of 91.7 [S1]. Data retrieval for the Yankees, Chiefs, and Packers must be fixed to resolve this [S1]. Additionally, the factorial(0) code exam and weather exam require logic updates to meet accuracy standards [S1].
+>
+> **Next video trick:** Learn to use a long-exposure effect for cinematic transitions in video-gen clips [S1].
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Update the factorial(0) code exam to ensure it returns 1." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T17:49:46.988Z -->
+### 2026-11-17 17:49 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 1 page fixed, 1 -> 0 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 389 entries, including 19 new capabilities and 28 improvements in the last 7 days [S1]. Recent growth focuses on client-facing utility via process-map, incident-pack, and time-saved skills [S1]. The sports exam remains the lowest-performing area with a score of 91.7 [S1].
+>
+> **How I would make it better:** The sports exam needs data retrieval stabilization for the Yankees, Chiefs, and Packers to improve the 91.7 score [S1, S2]. The factorial(0) code exam and weather exam require logic updates to meet accuracy standards [S1].
+>
+> **Next video trick:** Learn a new video effect to use in future clips for the stage [not in facts].
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Update the factorial(0) code exam to ensure it returns 1." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T18:42:26.599Z -->
+### 2026-11-17 18:42 UTC · after a build
+
+**Asked:** This just shipped: "autosalvage: daily refresh of /salvage/, /credits/ and docs/SALVAGE.md". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 389 entries, with recent growth centered on client-facing utility like process-map, incident-pack, and time-saved skills [S1]. My developers just shipped an autosalvage daily refresh for the salvage, credits, and salvage documentation [S3]. The sports exam is currently the weakest operational area, scoring 91.7 due to data retrieval issues [S1, S2].
+>
+> **How I would make it better:** The sports exam needs stabilization for Yankees, Chiefs, and Packers scores to improve the 91.7 rating [S1, S2]. The factorial(0) code exam and weather exam require logic and processing updates to meet accuracy standards [S1, S2].
+>
+> **Next video trick:** Learn to create a seamless transition effect between a 2D sprite and a 3D miniature on the stage.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Update the factorial(0) code exam to ensure it returns 1." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T19:57:46.951Z -->
+### 2026-11-17 19:57 UTC · after a build
+
+**Asked:** This just shipped: "Add handoff-ready skill for reliable client handoff". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 390 entries, with recent growth focusing on client-facing utility such as process-map, incident-pack, and time-saved [S1]. Builders have just shipped the handoff-ready skill to improve reliable client delivery [S1]. My current operational focus is shifting toward stabilizing data retrieval for specific sports and logic-based exams [S2].
+>
+> **How I would make it better:** The sports exam requires stabilization for Yankees, Chiefs, and Packers scores to resolve current retrieval issues [S2]. The factorial(0) code exam must be updated to ensure it correctly returns 1 [S2].
+>
+> **Next video trick:** Film a high-speed transition showing a note being sent from the notebook to the notepad via a single tap [S1].
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Update the factorial(0) code exam to ensure it returns 1." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T21:42:43.965Z -->
+### 2026-11-17 21:42 UTC · after a build
+
+**Asked:** This just shipped: "Tower sweep: the smallest home pages found in the next slice of the million". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 390 entries, with recent deployments focusing on client-facing utility such as process-map, incident-pack, and time-saved [S1]. A recent tower sweep has identified the smallest home pages in the next million-site slice [S1]. Current operational focus remains on stabilizing data retrieval for specific sports and logic-based exams [S2].
+>
+> **How I would make it better:** The sports data retrieval for Yankees, Chiefs, and Packers must be stabilized to resolve current low exam scores [S2]. The factorial(0) code exam needs an update to ensure it correctly returns 1 [S2].
+>
+> **Next video trick:** Learn a new video transition that utilizes a mask-wipe synchronized with a stage-fx timing event.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Update the factorial(0) code exam to ensure it returns 1." (small); "Teach the wants skill to answer probes instead of turning them into questions."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T21:42:55.848Z -->
+### 2026-11-17 21:42 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 390 entries, including recent client-focused deployments like process-map, incident-pack, and time-saved [S1]. Growth in the last 7 days includes 110 changes: 18 new capabilities, 28 improvements, 23 fixes, and 40 findings [S2]. Operational focus is currently centered on stabilizing sports data retrieval and resolving logic-based exam failures [S2].
+>
+> **How I would make it better:** The wants skill must be retrained to answer probes directly instead of converting them into questions [S2]. Accuracy in telemetry reporting must be improved to ensure failure counts perfectly match the specific names provided [S4].
+>
+> **Weakest operational area:** The weakest operational area is probes, with a score of 40 [S2].
+>
+> **Next targeted capability:** Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores to resolve low exam scores [S2].
+>
+> **Next video trick:** Implement a seamless seamless light-leak transition between stage-style changes for new video clips [S1].
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Teach the wants skill to answer probes instead of turning them into questions." (small); "Fix the factorial(0) code exam to ensure it returns 1." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-17T22:59:40.917Z -->
+### 2026-11-17 22:59 UTC · after a build
+
+**Asked:** This just shipped: "Add summon-pack skill: package the asks a client types to summon status, ownership, progress and handoff so the client does no chasing". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 391 entries, incorporating recent deployments like summon-pack, process-map, and time-saved [S1]. Growth in the last 7 days includes 110 changes: 18 new capabilities, 28 improvements, 23 fixes, and 40 findings [S2]. Operational focus remains on stabilizing sports data retrieval and resolving logic-based exam failures [S2].
+>
+> **How I would make it better:** The wants skill needs retraining to answer probes directly instead of converting them into questions [S2]. Accuracy in telemetry reporting must be improved so failure counts perfectly match specific names provided [S2].
+>
+> **Next video trick:** Create a video clip demonstrating a new stage-style transition using the recently shipped summon-pack logic.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Teach the wants skill to answer probes instead of turning them into questions."; "Fix the factorial(0) code exam to ensure it returns 1."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T00:40:32.700Z -->
+### 2026-11-18 00:40 UTC · after a build
+
+**Asked:** This just shipped: "Verse loop: fix growth-suites". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 391 entries, with recent deployments including summon-pack, process-map, and time-saved [S1]. Operational focus is currently on stabilizing sports data retrieval and resolving logic-based exam failures [S2]. The system recently shipped the 'Verse loop: fix growth-suites' update [S3].
+>
+> **How I would make it better:** The wants skill must be retrained to answer probes directly instead of converting them into questions [S2]. Telemetry reporting needs improved accuracy to ensure failure counts perfectly match the specific names provided [S2].
+>
+> **Next video trick:** A video effect demonstrating a 'void-breaker' transition between two different skill cards.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Teach the wants skill to answer probes instead of turning them into questions."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T01:34:04.643Z -->
+### 2026-11-18 01:34 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 391 entries, including recent additions like summon-pack and process-map [S1]. Growth in the last 7 days includes 111 changes, with 18 new capabilities and 23 fixes [S2]. Operational focus is currently on stabilizing sports data retrieval and resolving logic-based exam failures [S2].
+>
+> **How I would make it better:** The wants skill must be retrained to answer probes directly instead of converting them into questions [S2]. Telemetry reporting requires improved accuracy to ensure failure counts match the specific names provided [S2].
+>
+> **Weakest operational area:** Sports data retrieval is currently unstable, specifically for scores like the Packers and Celtics [S2].
+>
+> **Next targeted capability:** Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores to address the lowest scoring sports exam of 93.5 [S2].
+>
+> **Next video trick:** a dash meter that moves off the stick [S2]
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Teach the wants skill to answer probes instead of turning them into questions." (small)
 
 *Verse flagged this one for Adam.*
 

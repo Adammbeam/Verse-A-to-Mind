@@ -97,8 +97,10 @@ const seenCheck = new Set();
 for (const [name, file] of [
   ['walker', 'walker.test.mjs'],
   ['humble-copy', 'humble-copy.test.mjs'],
+  ['plain-words', 'plain-words.test.mjs'],
   ['log-only', 'log-only.test.mjs'],
   ['handoff-scan', 'handoff-scan.test.mjs'],
+  ['rival-public', 'rival-public.test.mjs'],
   ['handoff-e2e', 'handoff-e2e.mjs'],
   ['backdrop', 'backdrop.test.mjs'],
   ['fringe', 'fringe.mjs'],
@@ -787,6 +789,9 @@ add('copies', async () => { const read = (f) => readFileSync(resolve(here, '..',
 // every line this branch adds, in every file type, holds no real key (tools/secret-scan.mjs; owner, 2026-10-15: "make Verse the best
 // at keeping secrets ever made"): the review skips docs and data, and a pasted key in a log is the likeliest leak
 addScript('secrets', 'secret-scan.mjs', ['--base', 'origin/main']);
+addScript('no-third-party-sites', 'no-third-party-sites.mjs');
+addScript('audit-sanity', 'audit-sanity.mjs');
+addScript('game-audit', 'game-audit.mjs');
 addScript('index', 'skills-index.mjs', ['--check']);
 // every module a direct page (/random/coin/, /g/, /conquered/) imports is preloaded in its head (tools/preload.mjs; owner, 2026-10-24: "speed fixes a
 // lot of our other issues and is worth fixing permanently"): an import added without its preload is a waterfall again

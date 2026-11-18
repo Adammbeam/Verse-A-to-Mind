@@ -1,6 +1,6 @@
 {
  "note": "Which skills were built by calling other skills (export const builtWith in the skill file). Written by tools/skills-index.mjs beside skills/index.json. Do not edit by hand.",
- "count": 13,
+ "count": 26,
  "skills": {
   "experiments": [
    "toolkit"
@@ -8,6 +8,17 @@
   "drive-share": [
    "calc",
    "convert"
+  ],
+  "kickoff-pack": [
+   "client-intake",
+   "system-slice",
+   "monitor-pack",
+   "full-handoff"
+  ],
+  "scope-pack": [
+   "ownership-pack",
+   "full-handoff",
+   "client-offer"
   ],
   "my-device": [
    "eat"
@@ -72,6 +83,83 @@
    "status-digest",
    "full-handoff",
    "delivery-board"
+  ],
+  "reliability-pack": [
+   "monitor-pack",
+   "status-digest",
+   "verify-pack",
+   "full-handoff"
+  ],
+  "roi-pack": [
+   "time-saved",
+   "status-digest",
+   "full-handoff"
+  ],
+  "client-weekly": [
+   "status-digest",
+   "time-saved",
+   "delivery-board",
+   "monitor-pack",
+   "full-handoff"
+  ],
+  "delivery-ready": [
+   "systems-owned",
+   "ownership-pack",
+   "monitor-pack",
+   "verify-pack",
+   "full-handoff",
+   "kickoff-pack",
+   "reliability-pack"
+  ],
+  "systems-owned": [
+   "ownership-pack",
+   "monitor-pack",
+   "verify-pack",
+   "full-handoff",
+   "delivery-pack",
+   "roi-pack"
+  ],
+  "incident-pack": [
+   "monitor-pack",
+   "reliability-pack",
+   "status-digest",
+   "system-status"
+  ],
+  "automation-proposal": [
+   "client-intake",
+   "monitor-pack",
+   "verify-pack",
+   "delivery-pack",
+   "full-handoff"
+  ],
+  "process-map": [
+   "client-intake",
+   "idea-to-system",
+   "connect-pack",
+   "verify-pack",
+   "monitor-pack",
+   "delivery-pack"
+  ],
+  "system-design": [
+   "client-intake",
+   "system-slice",
+   "monitor-pack",
+   "verify-pack",
+   "ownership"
+  ],
+  "handoff-ready": [
+   "ownership-pack",
+   "system-status",
+   "monitor-pack",
+   "verify-pack",
+   "full-handoff"
+  ],
+  "summon-pack": [
+   "delivery-board",
+   "status-digest",
+   "time-saved",
+   "ownership",
+   "progress-report"
   ]
  }
 }

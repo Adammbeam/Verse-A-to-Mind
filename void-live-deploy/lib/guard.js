@@ -7,6 +7,7 @@
 // cross-site writes from other websites' pages (Gumroad's server-to-server ping and Verse's own tools send no Origin), no CORS,
 // nosniff and no-store by default. Owner keys are compared in constant time.
 import { OWNER_ACCOUNTS, ACCOUNT_ID_RE } from './owner-accounts.js';
+import { CHANGE_BODY } from './image-gen.js';
 
 export const WINDOW_MS = 60e3;
 // rpm: requests per connection per minute on that route. body: the largest request body accepted, in bytes.
@@ -92,7 +93,7 @@ export const LIMITS = {
   arbitrage: { rpm: 30, body: 0 }, // GET only: a coin from a closed list of two in, every venue pair's net gap out (functions/api/arbitrage.js), edge-cached 20 s; a miss asks 5 fixed public hosts once each
   merge: { rpm: 30, body: 2000 }, // two idea names in, a cached name and line out (functions/api/merge.js); the model is asked at most 6 times a minute per connection by its own bucket
   'card-art': { rpm: 30, body: 2000 }, // the Art Forge (functions/api/card-art.js): a subject word in, a cached picture out; the model runs at most 3 times a minute per connection and 30 times a day in all
-  image: { rpm: 30, body: 2000 }, // the text-to-image page (functions/api/image.js): a prompt of 400 characters in, one picture out; 6 a minute and 24 a day per hashed connection and the day's shared cap in the route itself
+  image: { rpm: 30, body: CHANGE_BODY }, // the text-to-image page (functions/api/image.js): a prompt stays small in the route; "Change it" sends the page's shrunk copy (lib/image-gen.js CHANGE_BODY). The old 2,000 byte cap answered 413 before the route saw a change. 6 a minute and 24 a day per hashed connection and the day's shared cap stay in the route
   clip: { rpm: 30, body: 4000 }, // the video page (functions/api/clip.js): GET is the on/off state (and starts the six-hourly self-check while off); POST is one short clip, 2 a minute and 3 a day per hashed connection inside the day's public dollars
   studio: { rpm: 30, body: 6000000 }, // the studio (functions/api/studio.js): GET is the scoreboard; every POST is owner-only (the bench's fixed prompts, a picture or four video frames to judge, a clip with an optional first frame of up to 4 MB) inside the bench's neuron cap and the video dollar cap
   'daily-art': { rpm: 240, body: 0 }, // the daily picture for the reports (functions/api/daily-art.js): GET (a picture, or its credit as JSON), closed lists, one painting per kind, key and day, a day's budget; photos only from three fixed APIs; the owner's refresh, diag and delete
@@ -108,12 +109,14 @@ export const LIMITS = {
   weather: { rpm: 30, body: 0 }, // the weather page's forecast for a place (functions/api/weather.js): GET, edge-cached ten minutes, 10 fresh lookups a minute, no model, no KV
   autopilot: { rpm: 20, body: 0 }, // what Verse did on its own (functions/api/autopilot.js): GET, edge-cached ten minutes, reads GitHub and the conductor's record, no model, no write
   status: { rpm: 30, body: 0 }, // Verse's uptime from its own hourly guards (functions/api/status.js): GET, no input, edge-cached a minute, one fixed D1 read, yes/no and times out
+  'page-pass': { rpm: 30, body: 64000 }, // Uni checkout (functions/api/page-pass.js): a form post, or Stripe's signed webhook. No card data.
   crew: { rpm: 60, body: 0 }, // Verse's crew, wants and priorities (functions/api/crew.js): GET, no input, edge-cached a minute, a few fixed D1 reads
   repo: { rpm: 20, body: 0 }, // a public GitHub repo's facts (functions/api/repo.js): GET, edge-cached ten minutes, 6 fresh lookups a minute, no token, no model, no KV
   media: { rpm: 30, body: 0 }, // real songs and shows (functions/api/media.js): GET only, a fixed list of sources, edge-cached, no KV, no model
   filmfind: { rpm: 20, body: 0 }, // film discovery as JSON (functions/api/filmfind.js): GET only, one fixed host (iTunes), at most 10 upstream GETs per call, edge-cached a day, no KV, no model, nothing written
   holidays: { rpm: 30, body: 0 }, // the next public holidays in one country (functions/api/holidays.js): GET only, two letters in, one fixed host (Nager.Date), edge-cached six hours, no KV, no model
   movies: { rpm: 30, body: 0 }, // real movies (functions/api/movies.js): GET only, a fixed list of sources, edge-cached, no KV, no model
+  meanings: { rpm: 30, body: 0 }, // a word's senses (functions/api/meanings.js): GET, one word in, cached, the meanings page is the caller
   local: { rpm: 30, body: 0 }, // the local TV and radio page (functions/api/local.js): GET, a place in or a point in, Radio Browser and Open-Meteo's geocoder at fixed hosts, edge-cached, 20 fresh lookups a minute, no model, no KV
   ip: { rpm: 30, body: 0 }, // the connection's own public address (functions/api/ip.js): GET, no input, never cached
   where: { rpm: 20, body: 0 }, // the connection's own coarse place (functions/api/where.js): GET, no input, never cached
@@ -127,7 +130,7 @@ export const LIMITS = {
 };
 export const DEFAULT_LIMIT = { rpm: 60, body: 16000 };
 export const FAIL_MAX = 10; // wrong keys (401/403) per connection per minute before every /api call from it is refused
-export const NO_ORIGIN_CHECK = ['gumroad', 'github-events']; // server-to-server: Gumroad's ping, GitHub's webhooks (both checked by their own secret)
+export const NO_ORIGIN_CHECK = ['gumroad', 'github-events', 'page-pass']; // server-to-server: Gumroad's ping, GitHub's webhooks, Stripe's Uni webhook (each checked by its own secret)
 export const OWNER_WRITES = ['films']; // routes whose large writes only the owner sends: anyone else is refused before a byte of the body is read
 
 const enc = new TextEncoder();

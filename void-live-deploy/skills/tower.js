@@ -6,6 +6,8 @@
  * every rival has its own page (/rival/?site=); sites in plain text, no logos; no Verse dates or attempt logs on the card. Real data only.
  */
 import { towerArtSvg } from '../lib/tower-art.js';
+import { visitorHtml, ownerHtml } from '../lib/versus-floor.js';
+import { ownerModel } from '../versus/open.js';
 import { tower, towerLine, towerArgs, fatalityOf, hostOf, learnedOf, outclassLine, passedLine, countsOf, assimLine, inventoryOf } from '../lib/tower.js?v=ladder-72';
 import { siteSlug } from '../lib/obituary.js';
 import { badgeText } from '../lib/gate-badge.js?v=ladder-55';
@@ -187,7 +189,7 @@ export function whyLine(f) {
   if (f.held) return 'held, not beaten: ' + f.held;
   const tc = rankableControls(f.size), bar = (f.barred || []).length;
   // controls are what a person can press or fill; elements are every tag on the page (the chip): "0 controls" beside "11 elements" read as a
-  // contradiction (owner's card, 2026-11-06, dalyfeds.com), so the line names both counts from the same reading (lib/tower-weight.js)
+  // contradiction (owner's card, 2026-11-06), so the line names both counts from the same reading (lib/tower-weight.js)
   // the chips count every tag; this line counts only what a person can press or fill, and says so, so "0 controls" beside "11 elements" reads true
   // without repeating the chips' counts (owner, 2026-10-30)
   return (tc !== null ? tc + ' control' + (tc === 1 ? '' : 's') + ' to press or fill on its home page (buttons, links and fields; plain text and tags do not count), the count that ranks every site smallest first'
@@ -214,7 +216,7 @@ export function crawlHtml(f, esc) {
   const shown = miss.slice(0, 5);
   return '<div class="tw-crawl" style="margin:4px 0 6px 10px;font-size:12px">Crawled ' + c.pages + ' pages of ' + esc(f.site) + ' (' + c.templates + ' kinds of page, ' + c.features + ' features)' + (c.verse_pages ? '; ' + c.verse_pages + ' of Verse\'s pages read against it' : '') + '. '
     // with no Verse page read against it (verse_pages 0), "every feature found" was a claim nothing checked: the only features marked are the
-    // navigation kinds that never block a pass (tools/site-crawl.mjs GENERIC_KINDS; owner's card, 2026-11-06: dalyfeds.com, "no page for it yet")
+    // navigation kinds that never block a pass (tools/site-crawl.mjs GENERIC_KINDS; owner's card, 2026-11-06: "no page for it yet")
     + (miss.length ? '<details class="tw-missing"><summary style="cursor:pointer"><b>Missing ' + miss.length + ' feature' + (miss.length === 1 ? '' : 's') + '</b> Verse has to build before it can pass</summary><ul style="margin:2px 0 4px 18px;padding:0;max-height:120px;overflow-y:auto">' + shown.map((m) => '<li>' + esc(m) + '</li>').join('') + (miss.length > shown.length ? '<li style="opacity:.6">…and ' + (miss.length - shown.length) + ' more</li>' : '') + '</ul></details>'
       : c.verse_pages ? '<b>Verse has every feature found.</b>' : '<b>Nothing found blocks a pass</b>, but no Verse page has been read against it yet, so its features are not checked.') + '</div>';
 }
@@ -378,7 +380,17 @@ let fresh = null;
 const freshTower = async () => { try { return fresh || (fresh = await import('../lib/tower.js?fresh=' + Math.floor(Date.now() / 300000))); } catch (_) { return null; } };
 const load = async () => { const [inv, ev, fr, rk, pl, sz, tg, ft, gn, pa] = await Promise.all([get('/lap.items.json'), get('/tower.evidence.json'), get('/tower.frontier.json'), get('/tower.rank.json'), get('/tower.plan.json'), get('/tower.size.json'), get('/tower.target.json'), get('/tower.features.json'), get('/tower.gone.json'), get('/parity.json')]); const args = towerArgs((inv && inv.onlySite) || [], { ev, fr, rk, sz, tg, ft, gn, pa }); let t = tower(...args); stale = staleOf(ev, t); if (stale) { const m = await freshTower(); if (m && m.tower) { t = m.tower(...args); stale = staleOf(ev, t); } } t.rank = (rk && rk.list && rk.ranks) ? rk : null; t.plan = pl && Array.isArray(pl.next) ? pl : null; t.settled = tg && Array.isArray(tg.settled) ? tg.settled : []; t.target = tg || null; t.inventory = pa && pa.sites ? pa : null; const cur = t.floors.find((f) => f.state === 'current'); t.history = cur ? await get('/history/' + siteSlug(cur.site) + '.json') : null; return t; };
 
+const elevatorOf = (text) => /^(?:(?:show|open)(?:\s+me)?\s+)?(?:the\s+|your\s+|verse(?:'s)?\s+)?(?:elevator|tower)$/.test(String(text || '').trim().toLowerCase().replace(/[?!.]+$/, '').replace(/\s+/g, ' '));
 async function run(text, api) {
+  if (elevatorOf(text)) {
+    const { showPage } = api;
+    showPage((el) => {
+      el.classList.add('tower-card');
+      el.innerHTML = visitorHtml() + '<p class="tw-head" hidden>Versus</p>'; // void-review: ok (visitorHtml is fixed markup from this repo, and the hidden heading is a fixed string)
+      ownerModel().then((m) => { if (m && el.isConnected) el.innerHTML = ownerHtml(m); }).catch(() => {}); // void-review: ok (ownerHtml runs every value through esc before it is placed in the markup)
+    });
+    return 'tower';
+  }
   if (!towerOf(text)) return 'none';
   const { showPage, esc, say } = api;
   const t = await load();
@@ -390,8 +402,8 @@ async function run(text, api) {
 export default {
   name: 'tower',
   about: 'Versus: real sites as floors, and how many aspects of each Verse has verified it beats.',
-  examples: ['versus', 'verse versus', 'the versus', 'show me versus', 'the tower', 'verse tower', 'which sites have you surpassed', 'show the tower', 'open your tower'],
+  examples: ['versus', 'verse versus', 'the versus', 'show me versus', 'the tower', 'verse tower', 'elevator', 'the elevator', 'which sites have you surpassed', 'show the tower', 'open your tower'],
   nearMisses: ['eiffel tower', 'tower of hanoi', 'how tall is the tower', 'tower defense game', 'cell tower near me', 'cats versus dogs', 'verse versus google'],
-  match(lower, text) { return towerOf(text || lower); },
+  match(lower, text) { const t = text || lower; return towerOf(t) || elevatorOf(t); },
   run, towerOf, towerHtml, nextHtml, planOf, planHtml, detailText, changes, verseTake, vsHtml, matchupHtml, matchRows, metaLine,
 };

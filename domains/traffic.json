@@ -1,13 +1,13 @@
 {
- "at": "2026-11-12T13:47Z",
+ "at": "2026-11-18T14:01Z",
  "source": "verse",
  "note": "Verse's own count (/api/visit, a beacon per page load on the stage); Cloudflare unreadable: CLOUDFLARE_API_TOKEN: cannot look up the zone (HTTP 200; needs Zone > Zone > Read or CLOUDFLARE_ZONE_ID)",
  "week": {
-  "since": "2026-11-06",
+  "since": "2026-11-12",
   "unique": true,
-  "people": 97,
-  "views": 473,
-  "ours": 21419,
+  "people": 81,
+  "views": 370,
+  "ours": 6651,
   "bots": 0
  },
  "days": [
@@ -149,73 +149,121 @@
   },
   {
    "day": "2026-11-12",
-   "all": 649,
-   "people": 19,
-   "ours": 630,
+   "all": 3536,
+   "people": 58,
+   "ours": 3478,
    "bots": 0,
-   "uniquePeople": 13
+   "uniquePeople": 27
+  },
+  {
+   "day": "2026-11-13",
+   "all": 1024,
+   "people": 51,
+   "ours": 973,
+   "bots": 0,
+   "uniquePeople": 15
+  },
+  {
+   "day": "2026-11-14",
+   "all": 519,
+   "people": 53,
+   "ours": 466,
+   "bots": 0,
+   "uniquePeople": 5
+  },
+  {
+   "day": "2026-11-15",
+   "all": 485,
+   "people": 29,
+   "ours": 456,
+   "bots": 0,
+   "uniquePeople": 11
+  },
+  {
+   "day": "2026-11-16",
+   "all": 397,
+   "people": 13,
+   "ours": 384,
+   "bots": 0,
+   "uniquePeople": 7
+  },
+  {
+   "day": "2026-11-17",
+   "all": 850,
+   "people": 138,
+   "ours": 712,
+   "bots": 0,
+   "uniquePeople": 11
+  },
+  {
+   "day": "2026-11-18",
+   "all": 210,
+   "people": 28,
+   "ours": 182,
+   "bots": 0,
+   "uniquePeople": 5
   }
  ],
  "pages": [
   {
    "k": "/",
-   "n": 537
+   "n": 752
   },
   {
    "k": "/lab/",
-   "n": 223
+   "n": 242
   },
   {
    "k": "/team/",
-   "n": 101
-  },
-  {
-   "k": "/films/",
-   "n": 37
+   "n": 126
   },
   {
    "k": "/brain/",
-   "n": 31
+   "n": 44
+  },
+  {
+   "k": "/films/",
+   "n": 44
+  },
+  {
+   "k": "/tools/",
+   "n": 33
   },
   {
    "k": "/conquered/",
    "n": 28
   },
   {
-   "k": "/tools/",
-   "n": 28
-  },
-  {
    "k": "/treasury/",
-   "n": 19
+   "n": 21
   },
   {
-   "k": "/bots/",
-   "n": 14
+   "k": "/starboard/",
+   "n": 20
   },
   {
-   "k": "/code-review/",
-   "n": 12
+   "k": "/podcasts/",
+   "n": 18
   }
  ],
  "referrers": [
   {
    "k": "google.com",
-   "n": 27
+   "n": 34
   },
   {
    "k": "bing.com",
-   "n": 24
+   "n": 25
   },
   {
    "k": "github.com",
-   "n": 21
+   "n": 24
   }
  ],
  "countries": [
   {
    "k": "US",
-   "n": 1170
+   "n": 1509
   },
   {
    "k": "TR",
@@ -226,33 +274,33 @@
    "n": 10
   },
   {
+   "k": "CN",
+   "n": 9
+  },
+  {
    "k": "NL",
    "n": 5
   },
   {
-   "k": "CN",
+   "k": "GB",
    "n": 4
+  },
+  {
+   "k": "CA",
+   "n": 3
   },
   {
    "k": "DE",
    "n": 3
   },
   {
-   "k": "CA",
+   "k": "EG",
    "n": 2
   },
   {
    "k": "FR",
    "n": 2
-  },
-  {
-   "k": "GB",
-   "n": 2
-  },
-  {
-   "k": "SG",
-   "n": 2
   }
  ],
- "line": "People this week: 97 (473 visits; counted by Verse itself, no cookies, our own runs and bots taken out)"
+ "line": "People this week: 81 (370 visits; counted by Verse itself, no cookies, our own runs and bots taken out)"
 }

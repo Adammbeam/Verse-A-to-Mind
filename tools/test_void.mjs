@@ -16,6 +16,7 @@ import { checkAll, patchFor } from '../void-live-deploy/lib/sightline.js';
 import { parseShard, inShard } from './shard.mjs';
 import { applyAgent, inboxOf } from '../void-live-deploy/lib/agent-core.js';
 import { currentNav } from '../void-live-deploy/lib/verse-shell.js';
+import { applyBuilderUni } from './uni-pass.mjs';
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..', 'void-live-deploy');
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.txt': 'text/plain', '.xml': 'application/xml', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.svg': 'image/svg+xml' };
@@ -471,6 +472,7 @@ async function fresh(...inits) {
   const ctx = await browser.newContext(opt.phone ? { viewport: { width: 390, height: 844 }, screen: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 3 } : {}); // { phone: true }: a 390 px touch screen at 3x, as a phone is
   OPEN.add(ctx); ctx.on('close', () => OPEN.delete(ctx));
   for (const init of inits) await ctx.addInitScript(init);
+  await applyBuilderUni(ctx); // VERSE_BUILDER_UNI_TOKEN, when set: see gated pages as a Uni member
   await ctx.addInitScript(() => { document.addEventListener('DOMContentLoaded', () => { const w = document.getElementById('whisper'); if (w) new MutationObserver(() => { if (w.textContent) window.__whisperN = (window.__whisperN || 0) + 1; }).observe(w, { childList: true, characterData: true, subtree: true }); }); }); // ask() below: a whispered answer counts
   // Card miniatures (skills/scene3d.js) stay off here, so cards keep their 2D look as on a device without WebGL: the
   // headless browser draws WebGL in software and a first 3D frame can hold the page for seconds, which would make the
@@ -8456,8 +8458,9 @@ try {
     await B.p.click('.arcade-pick[data-arcade="null-sweep"]');
     const opened = await until(async () => B.p.$('.nsweep').catch(() => null), 6000);
     const gone = !(await B.p.$('.arcade-view'));
+    const { GAMES: arcadeGames } = await import('../void-live-deploy/lib/ladder.js');
     check('arcade: a card of the six arcade games with your record, and a pick opens that game (the 3D cabinet is in tools/test_3d.mjs)',
-      picks.length === 6 && /Verse Pong/.test(picks[0]) && !!opened && gone && !B.errors.length, JSON.stringify({ picks, opened: !!opened, gone, errors: B.errors }));
+      picks.length === arcadeGames.length && /Verse Pong/.test(picks[0]) && !!opened && gone && !B.errors.length, JSON.stringify({ picks, opened: !!opened, gone, errors: B.errors }));
     await B.ctx.close(); }
 
   // dependency health (asked by Verse, 2026-10-18: "Create a 'dependency-health' skill that compares the current deps.json against stability requirements"): the same map
@@ -9037,7 +9040,7 @@ try {
     check('the book: the Cover button and the Home key shut the book from any page, and the pages and the cover have art', deep.some((n) => Number(n) > 4) && pageArt >= 1 && a.shut && a.art && h && !K.errors.length, JSON.stringify({ deep, pageArt, a, h, e: K.errors }));
     await K.ctx.close(); }
   if (want("the book: open the book, flip it, tap an ask, the index, one page on a phone")) { const B = await fresh();
-    const members = JSON.parse(fs.readFileSync(path.join(root, 'skills', 'index.json'), 'utf8')).flatMap((n) => { const m = /^\s*\*\s*parts:\s*\[([^\]]*)\]/m.exec(fs.readFileSync(path.join(root, 'skills', n + '.js'), 'utf8')); return m ? Array.from(m[1].matchAll(/'([a-z0-9-]+)'/g)).map((x) => x[1]) : [n]; }); // the one Cover chip (owner, 2026-10-17: the way back to the cover) is not a menu
+    const members = [...new Set(JSON.parse(fs.readFileSync(path.join(root, 'skills', 'index.json'), 'utf8')).flatMap((n) => { const m = /^\s*\*\s*parts:\s*\[([^\]]*)\]/m.exec(fs.readFileSync(path.join(root, 'skills', n + '.js'), 'utf8')); return m ? Array.from(m[1].matchAll(/'([a-z0-9-]+)'/g)).map((x) => x[1]) : [n]; }))]; // one page per skill; a part that is also its own route is still one page. The Cover chip is not a menu
     const look = () => B.p.evaluate(() => { const t = document.querySelector('#vtome .tome'); if (!t || !window.__voidBook) return null; const pg = [...document.querySelectorAll('#vtome .tome-page')]; const r = t.getBoundingClientRect(); return { cls: t.className, shown: pg.map((s) => s.dataset.page), text: pg.map((s) => s.innerText).join('\n'), cur: window.__voidBook.cur, turning: !!window.__voidBook.turning, skills: window.__voidBook.totals.skills, card: !!document.querySelector('.vpage.on'), dim: document.documentElement.classList.contains('v-tome'), chrome: !!document.querySelector('#vtome button:not(.tome-tocover), #vtome nav, #vtome h2'), w: r.width, h: r.height, fits: r.right <= innerWidth && r.bottom <= innerHeight, serif: /Palatino|Georgia|Iowan|Times|serif/.test(getComputedStyle(pg[1] || pg[0]).fontFamily), paper: getComputedStyle(pg[1] || pg[0]).backgroundColor, drop: !!document.querySelector('#vtome .tome-body p.lead'), folio: (document.querySelector('#vtome .tome-page.right .tome-folio') || {}).textContent, prompt: (document.querySelector('#vtome .tome-prompt') || {}).innerText || '' }; });
     await B.ask('open the book', 900);
     const open = await until(async () => { const l = await look(); return l && /opened/.test(l.cls) ? l : null; }, 8000);
@@ -12598,7 +12601,7 @@ try {
     await B.ask("clarify this business idea: a tool that turns customer emails into running automations", 2000);
     const card = await until(async () => B.p.$eval('.thing.kept-card', (e) => e.textContent).catch(() => null), 5000);
     check('business-clarify: a vague business idea becomes a system plan card with the idea, problem, systems, automations, handoff and next step',
-      !!card && /Business idea clarified/.test(card) && /The idea/.test(card) && /Problem it solves/.test(card) && /Systems to design/.test(card) && /Automations that take over/.test(card) && /Handoff/.test(card) && /Next delivery step/.test(card) && /turns customer emails/.test(card) && !B.errors.length,
+      !!card && /Business idea clarified/.test(card) && /The idea/.test(card) && /Problem it solves/.test(card) && /Systems to design/.test(card) && /Automations included/.test(card) && /Handoff/.test(card) && /Next delivery step/.test(card) && /turns customer emails/.test(card) && !B.errors.length,
       JSON.stringify({ card: (card || '').slice(0, 400), errors: B.errors }));
     await B.ctx.close(); }
   if (want("agent inbox: approve resumes and the Made shelf reopens the steps")) { const A = await fresh();

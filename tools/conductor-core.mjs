@@ -105,17 +105,22 @@ export function routeOf(job) {
   return r;
 }
 
-/** the health of a loop from its newest runs (newest first, as GitHub lists them): the failed ones in a row before any success,
- *  cancelled and skipped runs left out (a newer run superseding an older one is not a failure). Pure. */
-export function streakOf(runs) {
-  let n = 0, url = '';
-  for (const r of runs || []) {
-    if (r.status !== 'completed' || r.conclusion === 'cancelled' || r.conclusion === 'skipped') continue;
-    if (r.conclusion === 'success' || r.conclusion === 'neutral') break;
-    if (!n) url = r.html_url || '';
-    n++;
-  }
-  return { fails: n, url };
+/** Failed runs before a success, ignoring unfinished, cancelled and skipped runs. When events names
+ *  distinct coverage streams, only a success in that same stream clears its failures; never sum streams. */
+export function streakOf(runs, { events } = {}) {
+  const count = (list) => {
+    let n = 0, url = '';
+    for (const r of list || []) {
+      if (r.status !== 'completed' || r.conclusion === 'cancelled' || r.conclusion === 'skipped') continue;
+      if (r.conclusion === 'success' || r.conclusion === 'neutral') break;
+      if (!n) url = r.html_url || '';
+      n++;
+    }
+    return { fails: n, url };
+  };
+  if (!events) return count(runs);
+  return events.map((event) => count((runs || []).filter((r) => r.event === event)))
+    .reduce((worst, stream) => stream.fails > worst.fails ? stream : worst, { fails: 0, url: '' });
 }
 
 /** should Verse write new probe asks this tick: only when few probes wait, and at most once in 6 hours while its fixes pass under 1 in
@@ -188,6 +193,8 @@ export const CODER_RUN_CALLS = 30;
 export function coderShort(budget, now, need = CODER_RUN_CALLS, spare = false) {
   if (spare) return null;
   if (!budget || typeof budget !== 'object') return null;
+  // past the free ceiling the treasury pays for the call. The free count is not a stop.
+  if (budget.paid === true) return null;
   if (budget.room === false) return { until: budget.until || null };
   const left = (w) => (w && Number.isFinite(w.cap) && Number.isFinite(w.used) ? w.cap - w.used : Infinity);
   const d = new Date(now);
@@ -227,7 +234,9 @@ export function plan({ jobs = [], wf = {}, handed = {}, now, exam }) {
   }
   // the most valuable queued job each executor can take; one start per executor a tick, none while it runs, under its daily cap
   const taken = new Set();
-  const first = (j) => FIRST[kindOf(j.target)] || 0;
+  // an open team want (id or target want-*, or the note fileWants writes) starts before an old repair: those repairs were taking every coder run
+  const teamWant = (j) => /^want-/.test(String(j.id || '')) || /(?:^|:)want-/.test(String(j.target || '')) || /wanted by Verse/.test(String(j.note || ''));
+  const first = (j) => (teamWant(j) ? 3 : 0) || (FIRST[kindOf(j.target)] || 0);
   const queued = jobs.filter((j) => j.state === 'queued').sort((a, b) => first(b) - first(a) || score(b, now, exam) - score(a, now, exam) || ms(a.at) - ms(b.at));
   for (const j of queued) {
     // a repair of a loop that is green again (its newest finished run passed) has nothing left to repair: it is set aside, not handed to

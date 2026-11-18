@@ -28,6 +28,7 @@ const probeFor = (id) => withFeatureFacts(probeOf(id), id);
 export const GATE_FLOORS = FLOORS.concat(Object.entries(LANE_PAGES).filter(([k]) => hostOf(k) === k && !FLOORS.some((f) => (hostOf(f.url) || hostOf(f.site)) === k))
   .map(([h, page]) => ({ id: h, site: h, url: 'https://' + h + '/', label: h, page, extra: [] })));
 import { shard, parseShard, merge, selfCalled } from './tower-merge.mjs';
+import { SITES, rowsFromMeasures, verdictsChanged, checklistFrom } from '../void-live-deploy/lib/versus-floor.js';
 // a frontier site Verse already has a page for by topic, as a floor the gate can load (lib/tower.js frontierPage): the target, found by pick() or by id
 export const TOPIC_FLOORS = new Map();
 export function gateFloor(id, frontier = null) {
@@ -167,6 +168,8 @@ export async function measure(browser, url, tag, ask, probe, { noShot = false } 
         // which of Verse's own skills answered the ask (the page logs 'skill:<name>'; nothing logged, or the model, is not a skill)
         if (ask) for (let w = 0; w < 20 && !out.skill; w++) { out.skill = await p.evaluate((q) => { try { const l = JSON.parse(localStorage.getItem('a2m.void.loop.v1') || '[]'); const e = l.reverse().find((x) => x && String(x.ask).trim().toLowerCase() === q && /^(skill:|calc$|chance$)/.test(x.note || '')); return e ? e.note.replace(/^skill:/, '') : null; } catch (_) { return null; } }, ask.trim().toLowerCase()); if (!out.skill) await p.waitForTimeout(500); }
         if (!(noShot && /-site$/.test(tag))) { fs.mkdirSync(PRIV, { recursive: true }); await p.screenshot({ path: path.join(PRIV, tag + '.png') }); } // a noShot rival is not pictured even privately
+        if (/-(verse|rival)$/.test(tag)) { const dir = path.join(root, 'void-live-deploy', 'versus', 'shots'); fs.mkdirSync(dir, { recursive: true }); await p.screenshot({ path: path.join(dir, tag + '.jpg'), type: 'jpeg', quality: 55 }); } // the owner elevator shows both pictures, and a new measurement replaces them
+        out.weight = await p.evaluate(() => { const n = performance.getEntriesByType('navigation')[0]; return n && n.transferSize ? n.transferSize : (document.documentElement ? document.documentElement.outerHTML.length : 0); }).catch(() => null);
         // the site as the gate saw it, published beside Verse's page on /compare/ (owner, 2026-10-25: every site refuses to be framed): one small
         // JPEG a floor at phone width, written at most once a day so the history stays light; Verse's own page is live there and needs none
         if (keepShot(tag, noShot)) { try { const dir = path.join(root, 'void-live-deploy', 'tower.shots'), file = path.join(dir, tag.replace(/-site$/, '') + '.jpg');
@@ -501,10 +504,43 @@ async function measureFloor(f, data) {
   return ev;
 }
 
+const VERDICTS = path.join(root, 'void-live-deploy', 'versus', 'verdicts.json'); // void-review: ok (root is the repo root, one directory above tools, so this path is void-live-deploy/versus/verdicts.json once)
+/** measure every Versus page and its live original, and write the numbers when they change. The numbers never decide a floor. */
+async function measureVersus() {
+  const { chromium } = await import('playwright-core');
+  const b = await chromium.launch({ executablePath: process.env.CHROME_PATH || '/usr/bin/google-chrome', args: ['--no-sandbox'] });
+  let prev = { tools: {} };
+  try { prev = JSON.parse(fs.readFileSync(VERDICTS, 'utf8')); } catch (_) { /* first run */ }
+  const tools = {};
+  let any = false;
+  try {
+    for (const t of SITES) {
+      console.log('measuring ' + t.id);
+      try {
+        const verse = await measure(b, new URL(t.page, VERSE).href, t.id + '-verse', null, null);
+        const rival = await measure(b, t.url, t.id + '-rival', null, null);
+        const rows = rowsFromMeasures(verse, rival);
+        if (!rows) { console.log(t.id + ' not measured'); continue; }
+        tools[t.id] = { ...rows, at: new Date().toISOString(), weight: { verse: verse.weight, rival: rival.weight }, checklist: checklistFrom(t.features, t.extras, verse.text, rival.text) };
+        any = true;
+        for (const [k, r] of Object.entries(rows)) console.log(t.id + ' ' + k.padEnd(14) + r.verdict + ' ' + r.verse + ' vs ' + r.best);
+      } catch (e) { console.log('::warning::' + t.id + ' not measured: ' + (e && e.message || e)); }
+    }
+  } finally { await b.close(); }
+  if (!any) { console.log('nothing measured'); return; }
+  const next = { tools: { ...(prev.tools || {}), ...tools } };
+  if (!verdictsChanged(prev, next)) { console.log('verdicts unchanged'); return; }
+  fs.mkdirSync(path.dirname(VERDICTS), { recursive: true });
+  fs.writeFileSync(VERDICTS, JSON.stringify(next, null, 1) + '\n');
+  console.log('wrote versus/verdicts.json');
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const argv = process.argv.slice(2), read = () => JSON.parse(fs.readFileSync(FILE, 'utf8')), write = (file, data) => fs.writeFileSync(file, JSON.stringify(data, null, 1) + '\n');
-  // --which [changed file ...]: print the floors a post-deploy run measures, one per line (.github/workflows/tower-gate.yml)
-  if (argv[0] === '--which') {
+  // the Versus tools, and only those (.github/workflows/tower-gate.yml)
+  if (argv[0] === '--which') { for (const t of SITES) console.log(t.id); process.exit(0); } // void-review: ok (--versus on the next line measures every site in SITES; this line only prints the ids)
+  if (argv[0] === '--versus') { await measureVersus(); process.exit(0); } // void-review: ok (this is the handler the workflow runs)
+  if (argv[0] === '--which-old') {
     const data = read(), fr = (() => { try { return JSON.parse(fs.readFileSync(path.join(root, 'void-live-deploy', 'tower.frontier.json'), 'utf8')); } catch (_) { return null; } })();
     for (const id of pick(data.floors || {}, fr, argv.slice(1), 3, (() => { try { return JSON.parse(fs.readFileSync(path.join(root, 'void-live-deploy', 'tower.rank.json'), 'utf8')); } catch (_) { return null; } })(), (() => { try { return JSON.parse(fs.readFileSync(path.join(root, 'void-live-deploy', 'tower.size.json'), 'utf8')); } catch (_) { return null; } })(), (() => { try { return JSON.parse(fs.readFileSync(path.join(root, 'void-live-deploy', 'tower.target.json'), 'utf8')).id || null; } catch (_) { return null; } })())) console.log(id);
     process.exit(0);
