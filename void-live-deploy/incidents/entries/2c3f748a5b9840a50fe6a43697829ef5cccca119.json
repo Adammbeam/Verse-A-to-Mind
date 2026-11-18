@@ -10,5 +10,10 @@
   "docs/SALVAGE.md",
   "domains/autosalvage.repos.json",
   "void-live-deploy/salvage.json"
+ ],
+ "passed": [
+  2,
+  3,
+  4
  ]
 }
