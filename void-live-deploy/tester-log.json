@@ -11,6 +11,13 @@
  },
  "runs": [
   {
+   "at": "2026-11-18T19:39:17Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 14/15"
+  },
+  {
    "at": "2026-11-18T19:13:23Z",
    "passed": 0,
    "of": 0,
@@ -223,13 +230,6 @@
    "kind": "grow",
    "ms": 541,
    "note": "new ground passed, kept as a regression case: \"is this system handoff ready\" (skill:handoff-ready)"
-  },
-  {
-   "at": "2026-11-17T23:08:30Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -295,7 +295,7 @@
   },
   {
    "from": "2026-11-04",
-   "runs": 158,
+   "runs": 157,
    "passed": 3606,
    "of": 5241,
    "broken": 14,
@@ -305,7 +305,7 @@
   },
   {
    "from": "2026-11-11",
-   "runs": 142,
+   "runs": 143,
    "passed": 3267,
    "of": 3366,
    "ms": 421
