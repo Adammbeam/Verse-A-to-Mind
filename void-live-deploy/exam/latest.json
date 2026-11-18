@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-18T03:20:05.750Z",
+  "at": "2026-11-18T05:53:32.549Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -101,26 +101,32 @@
       }
     },
     "weather": {
-      "score": 95.8,
+      "score": 95.4,
       "of": 18,
       "measured": 18,
       "fails": [
         {
-          "ask": "weather",
+          "ask": "weather in seattle",
           "failed": [
-            "temp",
-            "rival"
+            "fast",
+            "temp"
           ],
           "score": 66.7
+        },
+        {
+          "ask": "weather",
+          "failed": [
+            "rival"
+          ],
+          "score": 83.3
         },
         {
           "ask": "météo à lyon",
           "failed": [
             "skill",
-            "temp",
-            "close"
+            "temp"
           ],
-          "score": 57.1
+          "score": 66.7
         }
       ],
       "holdout": {
@@ -228,14 +234,28 @@
       }
     },
     "sports": {
-      "score": 95.4,
+      "score": 93.5,
       "of": 18,
       "measured": 18,
       "fails": [
         {
-          "ask": "mls scores",
+          "ask": "yankees score",
           "failed": [
-            "fast"
+            "board"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "how did the chiefs do",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "packers score",
+          "failed": [
+            "board"
           ],
           "score": 83.3
         },
@@ -314,10 +334,17 @@
       "fails": []
     },
     "definitions": {
-      "score": 96.7,
+      "score": 93.3,
       "of": 6,
       "measured": 6,
       "fails": [
+        {
+          "ask": "define spring",
+          "failed": [
+            "fast"
+          ],
+          "score": 80
+        },
         {
           "ask": "define glimbrastic",
           "failed": [
@@ -341,7 +368,7 @@
     }
   },
   "lowest": {
-    "domain": "sports",
-    "score": 95.4
+    "domain": "definitions",
+    "score": 93.3
   }
 }
