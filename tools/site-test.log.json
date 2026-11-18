@@ -1,41 +1,5 @@
 [
  {
-  "at": "2026-11-06T12:15:30Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1671,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 18379 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
-  "at": "2026-11-06T13:22:05Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1600,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 9002 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-06T13:33:35Z",
   "passed": 91,
   "of": 94,
@@ -7035,5 +6999,44 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"why is a half moon called a quarter moon\" (skill:moon)"
+ },
+ {
+  "at": "2026-11-18T05:26:39Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 452,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-18T05:37:01Z",
+  "passed": 134,
+  "of": 137,
+  "ms": 504,
+  "kind": "grow",
+  "failed": [
+   {
+    "ask": "bokos like dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "fimls by kurosawa",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "stlye like mickey mouse",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 452,
+   "failed": []
+  },
+  "note": "new ground passed, kept as a regression case: \"adaptive flow canvas\" (skill:flow-canvas)"
  }
 ]
