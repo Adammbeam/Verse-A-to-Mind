@@ -1,58 +1,5 @@
 [
  {
-  "at": "2026-11-06T11:10:13Z",
-  "passed": 90,
-  "of": 93,
-  "ms": 344,
-  "kind": "grow",
-  "failed": [
-   {
-    "ask": "play voidquest",
-    "why": "fps 1 < 5"
-   },
-   {
-    "ask": "play chess",
-    "why": "fps 2 < 5"
-   },
-   {
-    "ask": "save this recipe: Lemon cake, ingredients: 200 g flour, 3 eggs; steps: mix. bake",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   }
-  ],
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1141,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 8846 ms"
-     ]
-    }
-   ]
-  },
-  "note": "new ground passed, kept as a regression case: \"make a 2d toon dog pls\" (skill:cartoon)"
- },
- {
-  "at": "2026-11-06T11:27:48Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1139,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 10303 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-06T11:54:34Z",
   "kind": "visitor",
   "visitor": {
@@ -7066,5 +7013,31 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"is this system handoff ready\" (skill:handoff-ready)"
+ },
+ {
+  "at": "2026-11-18T02:47:27Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1214,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-18T02:55:48Z",
+  "passed": 135,
+  "of": 135,
+  "ms": 438,
+  "kind": "grow",
+  "failed": [],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1214,
+   "failed": []
+  },
+  "note": "new ground passed, kept as a regression case: \"system design for client onboarding\" (skill:system-design)"
  }
 ]

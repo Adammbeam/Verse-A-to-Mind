@@ -1,15 +1,30 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 134,
+ "cases": 135,
  "runsTotal": 300,
  "kinds": {
-  "grow": 45,
   "visitor": 225,
+  "grow": 45,
   "file": 26,
   "tighten": 2,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-18T02:55:48Z",
+   "passed": 135,
+   "of": 135,
+   "kind": "grow",
+   "ms": 438,
+   "note": "new ground passed, kept as a regression case: \"system design for client onboarding\" (skill:system-design)"
+  },
+  {
+   "at": "2026-11-18T02:47:27Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-17T23:17:03Z",
    "passed": 135,
@@ -176,98 +191,84 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-17T06:07:08Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-17T05:37:12Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 14/15"
   }
  ],
  "weekly": [
   {
-   "from": "2026-08-25",
+   "from": "2026-08-26",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-01",
+   "from": "2026-09-02",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-08",
+   "from": "2026-09-09",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-15",
+   "from": "2026-09-16",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-22",
+   "from": "2026-09-23",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-29",
+   "from": "2026-09-30",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-06",
+   "from": "2026-10-07",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-13",
+   "from": "2026-10-14",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-20",
+   "from": "2026-10-21",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-27",
+   "from": "2026-10-28",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-11-03",
+   "from": "2026-11-04",
    "runs": 166,
-   "passed": 3911,
-   "of": 5566,
+   "passed": 3937,
+   "of": 5594,
    "broken": 14,
    "brokenOf": 1491,
    "brokenPassed": 135,
-   "ms": 393
+   "ms": 395
   },
   {
-   "from": "2026-11-10",
+   "from": "2026-11-11",
    "runs": 134,
-   "passed": 2694,
-   "of": 2785,
+   "passed": 2713,
+   "of": 2799,
    "ms": 383
   }
  ],
@@ -715,6 +716,7 @@
   "skill:time-saved": "2026-11-17T11:18:24Z",
   "skill:token-stand": "2026-11-17T14:59:43Z",
   "skill:handoff-ready": "2026-11-17T23:17:03Z",
-  "skill:summon-pack": "2026-11-17T23:17:03Z"
+  "skill:summon-pack": "2026-11-17T23:17:03Z",
+  "skill:system-design": "2026-11-18T02:55:48Z"
  }
 }
