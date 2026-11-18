@@ -699,6 +699,16 @@
    "listed": 3,
    "defectsBefore": 40,
    "defectsAfter": 0
+  },
+  {
+   "at": "2026-11-18T16:33:09.161Z",
+   "run": 111,
+   "measured": 30,
+   "clean": 24,
+   "fixed": 1,
+   "listed": 5,
+   "defectsBefore": 16,
+   "defectsAfter": 0
   }
  ],
  "pages": {
@@ -7283,20 +7293,20 @@
    "state": "clean"
   },
   "/lab/f193-webrtc-indexeddb-sealed-genome-swarm/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.001,
+    "cls": 0.021,
     "overflow": 0
    },
    "state": "clean"
   },
   "/lab/f615-packing-list-maker/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7309,7 +7319,7 @@
    "state": "clean"
   },
   "/generators/story/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -7323,7 +7333,7 @@
    "why": "no rule fixes it (a layout shift of 0.101 that no rule fixes: listed for a builder)"
   },
   "/pdf/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7336,33 +7346,33 @@
    "state": "clean"
   },
   "/autopilot/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.054,
+    "cls": 0.034,
     "overflow": 0
    },
    "state": "clean"
   },
   "/lab/f612-bill-splitter/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0,
+    "cls": 0.053,
     "overflow": 0
    },
    "state": "clean"
   },
   "/fix/audit/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7388,20 +7398,21 @@
    "state": "clean"
   },
   "/lab/f235-forge-duel/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
-    "defects": 0,
+    "defects": 1,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0,
+    "cls": 0.587,
     "overflow": 0
    },
-   "state": "clean"
+   "state": "listed",
+   "why": "no rule fixes it (a layout shift of 0.587 that no rule fixes: listed for a builder)"
   },
   "/video/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -7415,7 +7426,7 @@
    "why": "no rule fixes it (a layout shift of 0.259 that no rule fixes: listed for a builder)"
   },
   "/lab/mind-map/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7428,7 +7439,7 @@
    "state": "clean"
   },
   "/generators/chat/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7441,7 +7452,7 @@
    "state": "clean"
   },
   "/fix/one-time/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7454,7 +7465,7 @@
    "state": "clean"
   },
   "/creed/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7583,7 +7594,7 @@
    "state": "clean"
   },
   "/assimilated/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9659,20 +9670,20 @@
    "state": "clean"
   },
   "/lab/f635-teleprompter/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0,
+    "cls": 0.012,
     "overflow": 0
    },
    "state": "clean"
   },
   "/lab/f641-subscription-tracker/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9685,7 +9696,7 @@
    "state": "clean"
   },
   "/lab/f632-seating-chart/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9698,7 +9709,7 @@
    "state": "clean"
   },
   "/lab/f643-receipt-to-expense/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9711,7 +9722,7 @@
    "state": "clean"
   },
   "/lab/f638-meme-maker/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9724,7 +9735,7 @@
    "state": "clean"
   },
   "/lab/f629-trip-fuel-cost/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11335,18 +11346,8 @@
    "state": "clean"
   },
   "/lab/f671-spatial-packing-list/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
-    "defects": 1,
-    "contrast": 1,
-    "targets": 0,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
@@ -11355,24 +11356,23 @@
     "cls": 0,
     "overflow": 0
    },
-   "rules": 1,
-   "moved": 0.001
+   "state": "clean"
   },
   "/lab/f730-bill-splitter/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.009,
+    "cls": 0,
     "overflow": 0
    },
    "state": "clean"
   },
   "/lab/f652-bill-splitter/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11385,7 +11385,7 @@
    "state": "clean"
   },
   "/lab/f679-bill-splitter/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 2,
     "contrast": 2,
@@ -11399,7 +11399,7 @@
    "why": "the defects did not go down (2 -> 2)"
   },
   "/lab/f749-chore-rota-generator/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 4,
     "contrast": 2,
@@ -11413,7 +11413,7 @@
    "why": "it added a layout shift"
   },
   "/lab/f718-spatial-room-material-estimator/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11426,20 +11426,20 @@
    "state": "clean"
   },
   "/lab/f731-tip-calculator/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.026,
+    "cls": 0,
     "overflow": 0
    },
    "state": "clean"
   },
   "/lab/f667-spatial-room-layout-planner/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11452,18 +11452,8 @@
    "state": "clean"
   },
   "/lab/f754-local-camera-contrast-palette-maker/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-18T16:33:09.161Z",
    "before": {
-    "defects": 4,
-    "contrast": 4,
-    "targets": 0,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
@@ -11472,8 +11462,7 @@
     "cls": 0,
     "overflow": 0
    },
-   "rules": 4,
-   "moved": 0.007
+   "state": "clean"
   },
   "/text-diff/": {
    "at": "2026-11-16T02:57:04.218Z",
@@ -11733,6 +11722,30 @@
    },
    "rules": 25,
    "moved": 0.12
+  },
+  "/lab/f768-itemized-bill-splitter/": {
+   "at": "2026-11-18T16:33:09.161Z",
+   "before": {
+    "defects": 16,
+    "contrast": 16,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "rules": 16,
+   "moved": 0.016
   }
  }
 }
