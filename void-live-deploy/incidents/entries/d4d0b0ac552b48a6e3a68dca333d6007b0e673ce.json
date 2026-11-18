@@ -13,5 +13,9 @@
   "tools/checks.d/void-evolve.chk",
   "tools/void-evolve.mjs",
   "tools/void-evolve.test.mjs"
+ ],
+ "passed": [
+  1,
+  2
  ]
 }
