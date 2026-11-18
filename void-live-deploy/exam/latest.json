@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-18T17:59:29.216Z",
+  "at": "2026-11-18T19:18:41.892Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -34,22 +34,25 @@
       }
     },
     "podcasts": {
-      "score": 94.4,
+      "score": 90.5,
       "of": 18,
       "measured": 18,
       "fails": [
         {
-          "ask": "play the latest episode of hardcore history",
+          "ask": "play the latest episode of this american life",
           "failed": [
+            "skill",
+            "fast",
+            "audio",
             "show",
             "episode"
           ],
-          "score": 71.4
+          "score": 28.6
         },
         {
-          "ask": "play the latest episode of my favorite murder",
+          "ask": "play the latest episode of planet money",
           "failed": [
-            "fast"
+            "audio"
           ],
           "score": 85.7
         },
@@ -63,11 +66,13 @@
         {
           "ask": "pon el último episodio de radiolab",
           "failed": [
+            "answered",
             "skill",
+            "fast",
             "audio",
             "episode"
           ],
-          "score": 57.1
+          "score": 28.6
         }
       ],
       "holdout": {
@@ -116,26 +121,31 @@
       }
     },
     "weather": {
-      "score": 95.8,
+      "score": 96.3,
       "of": 18,
       "measured": 18,
       "fails": [
         {
+          "ask": "weather in seattle",
+          "failed": [
+            "fast"
+          ],
+          "score": 83.3
+        },
+        {
           "ask": "weather",
           "failed": [
-            "temp",
             "rival"
           ],
-          "score": 66.7
+          "score": 83.3
         },
         {
           "ask": "météo à lyon",
           "failed": [
             "skill",
-            "temp",
-            "close"
+            "temp"
           ],
-          "score": 57.1
+          "score": 66.7
         }
       ],
       "holdout": {
@@ -167,33 +177,10 @@
       }
     },
     "recipes": {
-      "score": 91.7,
+      "score": 96.3,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "recipe for chocolate chip cookies",
-          "failed": [
-            "fast"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "recipe for salad dressing",
-          "failed": [
-            "fast"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "how to bake banana bread",
-          "failed": [
-            "fast",
-            "dish",
-            "method"
-          ],
-          "score": 50
-        },
         {
           "ask": "recipe",
           "failed": [
@@ -266,24 +253,10 @@
       }
     },
     "sports": {
-      "score": 94.4,
+      "score": 96.3,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "how did the chiefs do",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "nba team celtics",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
         {
           "ask": "scores",
           "failed": [
@@ -386,7 +359,7 @@
     }
   },
   "lowest": {
-    "domain": "recipes",
-    "score": 91.7
+    "domain": "podcasts",
+    "score": 90.5
   }
 }
