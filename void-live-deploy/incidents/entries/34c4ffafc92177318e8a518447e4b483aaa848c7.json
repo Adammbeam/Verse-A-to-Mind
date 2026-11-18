@@ -9,5 +9,8 @@
  "touched": [
   "cosmos-checks.out",
   "void-live-deploy/lib/void-cosmos.js"
+ ],
+ "passed": [
+  1
  ]
 }
