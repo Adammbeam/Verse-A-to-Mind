@@ -80,7 +80,7 @@ test('a run after a deploy measures the current fight, the floors whose page cha
   assert.ok(measurable(F.find((f) => f.id === 'colour codes')).includes('every colour model')); assert.ok(['accuracy', 'flip animation'].every((a) => measurable(F.find((f) => f.id === 'coin flip')).includes(a)), 'ten flips have a right shape, and a flip can be seen moving');
   const ev = Object.fromEntries(F.map((f) => [f.id, full(f.id)])); // every floor fully measured: only the fight is picked
   const t = pick(ev, null, []); assert.equal(t.length, 1);
-  assert.deepEqual(pick(ev, null, ['void-live-deploy/random/coin/index.html']).slice(1), ['coin flip'], 'a changed page adds its floor');
+  assert.deepEqual(pick(ev, null, ['void-live-deploy/random/modes/coin.html']).slice(1), ['coin flip'], 'a changed page adds its floor');
   delete ev.calculator.speed; assert.ok(pick(ev, null, []).includes('calculator'), 'a missing row adds its floor');
   assert.ok(pick({}, null, [], 3).length === 3 && pick({}, null, [], 1).length === 1);
   for (const id of pick({}, { sites: [{ site: 'only-on-the-frontier.example', hardness: 1 }] }, [])) assert.ok(F.some((f) => f.id === id), 'a frontier site has no Verse page to measure: ' + id);
@@ -288,7 +288,7 @@ test('a coin: its own flip control pressed 10 times by the gate, every side read
     assert.deepEqual(score(await answer(b, at('/always'), null, false, false, 0, 10), c.truth).missing, ['both sides come up in 10 fair flips'], 'a coin that always lands heads is not fair');
     assert.equal(await answer(b, at('/drawn'), null, false, false, 0, 10), null, 'a side the gate cannot read is not measured, never a loss');
     const look = async (u) => { const ctx = await b.newContext({ viewport: { width: 390, height: 800 } }), p = await ctx.newPage(); try { await p.goto(at(u)); await p.waitForTimeout(1500); return await motionOf(p); } finally { await ctx.close(); } };
-    const mv = await look('/random/coin/'), still = await look('/swap');
+    const mv = await look('/random/?mode=coin'), still = await look('/swap');
     assert.equal(scoreOf(mv, c.motion['flip animation']).n, 1, 'Verse\'s coin turns: ' + JSON.stringify(mv));
     assert.equal(scoreOf(still, c.motion['flip animation']).n, 0, 'a word swapped at once is not an animation: ' + JSON.stringify(still));
     assert.equal(await look('/plain'), null, 'no flip control: not measured');
