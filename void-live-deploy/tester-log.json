@@ -11,6 +11,13 @@
  },
  "runs": [
   {
+   "at": "2026-11-19T19:18:00Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
+  {
    "at": "2026-11-19T18:51:41Z",
    "passed": 0,
    "of": 0,
@@ -142,28 +149,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-18T16:35:17Z",
-   "passed": 136,
-   "of": 139,
-   "kind": "file",
-   "ms": 608,
-   "note": "fix: \"how do i magnetize this?\" only \"waking up\" appeared, never the answer",
-   "failed": [
-    {
-     "ask": "film meatdata for ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "how do i magnetize this?",
-     "why": "only \"waking up\" appeared, never the answer"
-    }
-   ]
   }
  ],
  "weekly": [
