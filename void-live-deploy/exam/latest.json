@@ -1,14 +1,21 @@
 {
-  "at": "2026-11-19T17:38:00.440Z",
+  "at": "2026-11-19T18:04:52.680Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
   "domains": {
     "videos": {
-      "score": 96.9,
+      "score": 96.1,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "play a video about cooking pasta",
+          "failed": [
+            "topic"
+          ],
+          "score": 85.7
+        },
         {
           "ask": "play the trailer",
           "failed": [
@@ -34,31 +41,10 @@
       }
     },
     "podcasts": {
-      "score": 94.4,
+      "score": 96.8,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "play the latest episode of the ted radio hour",
-          "failed": [
-            "audio"
-          ],
-          "score": 85.7
-        },
-        {
-          "ask": "play the latest episode of npr news now",
-          "failed": [
-            "episode"
-          ],
-          "score": 85.7
-        },
-        {
-          "ask": "play the latest episode of my favorite murder",
-          "failed": [
-            "fast"
-          ],
-          "score": 85.7
-        },
         {
           "ask": "play the episode before that",
           "failed": [
@@ -122,26 +108,24 @@
       }
     },
     "weather": {
-      "score": 95.8,
+      "score": 97.2,
       "of": 18,
       "measured": 18,
       "fails": [
         {
           "ask": "weather",
           "failed": [
-            "temp",
             "rival"
           ],
-          "score": 66.7
+          "score": 83.3
         },
         {
           "ask": "météo à lyon",
           "failed": [
             "skill",
-            "temp",
-            "close"
+            "temp"
           ],
-          "score": 57.1
+          "score": 66.7
         }
       ],
       "holdout": {
@@ -241,31 +225,10 @@
       }
     },
     "sports": {
-      "score": 93.5,
+      "score": 96.3,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "yankees score",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "how did the chiefs do",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "nba team celtics",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
         {
           "ask": "scores",
           "failed": [
@@ -368,7 +331,7 @@
     }
   },
   "lowest": {
-    "domain": "sports",
-    "score": 93.5
+    "domain": "videos",
+    "score": 96.1
   }
 }
