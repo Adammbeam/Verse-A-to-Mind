@@ -214,5 +214,8 @@
   {"check": "python-tests", "sha": "4de322754b1eae81ff75953bd91e72df32038090", "at": "2026-11-19T22:33:30Z"},
   {"check": "python-tests", "sha": "31a965914de63ed6ff8fa14d75f181f208b859b8", "at": "2026-11-19T23:00:33Z"},
   {"check": "prizes: \"Spin them on the name wheel\" opens the wheel with the bare slice names and keeps one verse_handoff copy for the paste pill", "sha": "4de322754b1eae81ff75953bd91e72df32038090", "at": "2026-11-19T23:00:39Z"},
-  {"check": "the stage is an RTS: \"start a camp\" puts up the camp (wood 0) and grounds the scene; \"add a tree\" is 8 wood; a summoned villager gathers from it by itself and t", "sha": "4de322754b1eae81ff75953bd91e72df32038090", "at": "2026-11-19T23:00:39Z"}
+  {"check": "the stage is an RTS: \"start a camp\" puts up the camp (wood 0) and grounds the scene; \"add a tree\" is 8 wood; a summoned villager gathers from it by itself and t", "sha": "4de322754b1eae81ff75953bd91e72df32038090", "at": "2026-11-19T23:00:39Z"},
+  {"check": "base converter: /base-converter/ loads one page and one module (no third party), typing ff in hex fills binary 1111 1111, octal 377 and decimal 255 with the sig", "sha": "4de322754b1eae81ff75953bd91e72df32038090", "at": "2026-11-19T23:01:04Z"},
+  {"check": "wheel: a picture becomes an entry, a 2 s spin ends with confetti and auto-removes its winner, and the stage card shows the winner inside the card at 390 px", "sha": "4de322754b1eae81ff75953bd91e72df32038090", "at": "2026-11-19T23:01:04Z"},
+  {"check": "Verse art forge: a skill card (a tip calculator) is painted too: one POST of kind skill with its name, never a button", "sha": "4de322754b1eae81ff75953bd91e72df32038090", "at": "2026-11-19T23:01:04Z"}
 ]
