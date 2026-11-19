@@ -1,45 +1,5 @@
 [
  {
-  "at": "2026-11-06T23:42:38Z",
-  "passed": 95,
-  "of": 99,
-  "ms": 444,
-  "kind": "file",
-  "key": "yo render a low poly dog | nothing appeared",
-  "failed": [
-   {
-    "ask": "play voidquest",
-    "why": "fps 1 < 5"
-   },
-   {
-    "ask": "play chess",
-    "why": "fps 1 < 5"
-   },
-   {
-    "ask": "film meatdata for ikiru",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "yo render a low poly dog",
-    "why": "nothing appeared"
-   }
-  ],
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1578,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 10385 ms"
-     ]
-    }
-   ]
-  },
-  "note": "fix: \"yo render a low poly dog\" nothing appeared; console: tester: page.waitForSelector: Timeout 15000ms exceeded."
- },
- {
   "at": "2026-11-06T23:55:49Z",
   "kind": "visitor",
   "visitor": {
@@ -6871,6 +6831,24 @@
      "ask": "define serendipity",
      "why": [
       "slow 11302 ms"
+     ]
+    }
+   ]
+  },
+  "note": "visitor pass 14/15"
+ },
+ {
+  "at": "2026-11-19T17:04:00Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 14,
+   "of": 15,
+   "medianMs": 1253,
+   "failed": [
+    {
+     "ask": "what can you do",
+     "why": [
+      "slow 9046 ms"
      ]
     }
    ]
