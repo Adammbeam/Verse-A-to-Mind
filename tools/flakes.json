@@ -205,5 +205,7 @@
   {"check": "photo resizer: a 1200x900 PNG becomes 3.5 x 2.5 cm at 200 dpi (276 x 197 px) under 12 KB, the JPEG download is that size and under the limit, the PDF download i", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:42:29Z"},
   {"check": "photo resizer: \"resize a photo to 3.5 x 2.5 cm under 50 kb\" opens a card whose link opens the resizer with 3.5, 2.5, cm and 50 filled in", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:42:29Z"},
   {"check": "base converter: /base-converter/ loads one page and one module (no third party), typing ff in hex fills binary 1111 1111, octal 377 and decimal 255 with the sig", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:51:38Z"},
-  {"check": "Verse art forge: a skill card (a tip calculator) is painted too: one POST of kind skill with its name, never a button", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:51:38Z"}
+  {"check": "Verse art forge: a skill card (a tip calculator) is painted too: one POST of kind skill with its name, never a button", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:51:38Z"},
+  {"check": "password strength: /password-strength/ loads one page and one module (no third party), rates \"password\" Very weak and instantly cracked with its reason, rates a", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:53:12Z"},
+  {"check": "base64 page: /base64/ encodes and decodes as you type, keeps emoji exact, says what is wrong with bad Base64, writes Base64URL, and turns a file into a data: UR", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:53:12Z"}
 ]
