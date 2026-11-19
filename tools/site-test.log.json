@@ -1,54 +1,5 @@
 [
  {
-  "at": "2026-11-07T16:38:05Z",
-  "passed": 97,
-  "of": 99,
-  "ms": 451,
-  "kind": "grow",
-  "failed": [
-   {
-    "ask": "play chess",
-    "why": "fps 2 < 5"
-   },
-   {
-    "ask": "who is the auhtor of dune",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   }
-  ],
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1116,
-   "failed": [
-    {
-     "ask": "what time is it",
-     "why": [
-      "slow 11462 ms"
-     ]
-    }
-   ]
-  },
-  "note": "new ground passed, kept as a regression case: \"style like mickey mouse pls\" (skill:cartoon)"
- },
- {
-  "at": "2026-11-07T16:50:47Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1453,
-   "failed": [
-    {
-     "ask": "capital of France",
-     "why": [
-      "refused"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-07T17:00:10Z",
   "passed": 97,
   "of": 100,
@@ -6827,5 +6778,81 @@
    ]
   },
   "note": "fix: \"air quality in Tokyo\" console: tries is not defined"
+ },
+ {
+  "at": "2026-11-19T21:03:04Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1301,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-19T21:19:04Z",
+  "passed": 117,
+  "of": 139,
+  "ms": 505,
+  "kind": "file",
+  "key": "bokos like dune | only \"waking up\" appeared, never the answer",
+  "failed": [
+   {
+    "ask": "bokos like dune",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "bench icon",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "longevity trial watch",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "attention field",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "fly around",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "play a local audio file",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "film meatdata for ikiru",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "who is the auhtor of dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "redner a cartoon dragon",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "stlye like mickey mouse",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "lift summary for client onboarding",
+    "why": "nothing appeared"
+   },
+   {
+    "ask": "handoff pack for my SaaS idea",
+    "why": "only \"waking up\" appeared, never the answer"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1301,
+   "failed": []
+  },
+  "note": "fix: \"bokos like dune\" only \"waking up\" appeared, never the answer; console: Failed to load resource: the server responded with a status of 404 ()"
  }
 ]
