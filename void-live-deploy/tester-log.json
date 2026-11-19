@@ -3,13 +3,20 @@
  "cases": 137,
  "runsTotal": 300,
  "kinds": {
-  "grow": 43,
-  "visitor": 227,
+  "visitor": 228,
   "file": 26,
+  "grow": 42,
   "tighten": 2,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-19T03:50:28Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 14/15"
+  },
   {
    "at": "2026-11-19T00:21:27Z",
    "passed": 0,
@@ -187,28 +194,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-18T05:37:01Z",
-   "passed": 134,
-   "of": 137,
-   "kind": "grow",
-   "ms": 504,
-   "note": "new ground passed, kept as a regression case: \"adaptive flow canvas\" (skill:flow-canvas)",
-   "failed": [
-    {
-     "ask": "bokos like dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "fimls by kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
   }
  ],
  "weekly": [
@@ -274,17 +259,17 @@
   },
   {
    "from": "2026-11-05",
-   "runs": 160,
-   "passed": 3537,
-   "of": 5169,
+   "runs": 163,
+   "passed": 3445,
+   "of": 5071,
    "broken": 14,
    "brokenOf": 1491,
    "brokenPassed": 135,
-   "ms": 396
+   "ms": 395
   },
   {
    "from": "2026-11-12",
-   "runs": 140,
+   "runs": 137,
    "passed": 3149,
    "of": 3243,
    "ms": 388
