@@ -1,23 +1,5 @@
 [
  {
-  "at": "2026-11-06T23:30:30Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1578,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 10385 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-06T23:42:38Z",
   "passed": 95,
   "of": 99,
@@ -6871,6 +6853,24 @@
      "ask": "what can you do",
      "why": [
       "slow 8169 ms"
+     ]
+    }
+   ]
+  },
+  "note": "visitor pass 14/15"
+ },
+ {
+  "at": "2026-11-19T16:35:17Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 14,
+   "of": 15,
+   "medianMs": 619,
+   "failed": [
+    {
+     "ask": "define serendipity",
+     "why": [
+      "slow 11302 ms"
      ]
     }
    ]

@@ -3,13 +3,20 @@
  "cases": 137,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 228,
   "file": 26,
+  "visitor": 228,
   "grow": 42,
   "tighten": 2,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-19T16:35:17Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 14/15"
+  },
   {
    "at": "2026-11-19T13:51:48Z",
    "passed": 0,
@@ -168,32 +175,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-18T14:42:37Z",
-   "passed": 134,
-   "of": 138,
-   "kind": "file",
-   "ms": 535,
-   "note": "fix: \"toss it off the screen\" only \"waking up\" appeared, never the answer",
-   "failed": [
-    {
-     "ask": "bokos like dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "toss it off the screen",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "film meatdata for ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
   }
  ],
  "weekly": [
