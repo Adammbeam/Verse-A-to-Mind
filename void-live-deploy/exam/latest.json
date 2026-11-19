@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-19T18:45:40.323Z",
+  "at": "2026-11-19T19:17:21.601Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -220,10 +220,24 @@
       }
     },
     "sports": {
-      "score": 95.4,
+      "score": 93.5,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "yankees score",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "how did the chiefs do",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
         {
           "ask": "packers score",
           "failed": [
@@ -334,6 +348,6 @@
   },
   "lowest": {
     "domain": "sports",
-    "score": 95.4
+    "score": 93.5
   }
 }
