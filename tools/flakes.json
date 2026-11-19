@@ -221,5 +221,7 @@
   {"check": "busy blocks: three blocks make a bar with the free gaps named, typing \"gym 5-6pm\" adds a fourth, \"clear busy blocks\" takes the card off", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:18:51Z"},
   {"check": "routines: \"call this my morning\" saves the two asks before it in the order they were asked (and not itself); after a reload \"my morning\" asks them again (the co", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:18:51Z"},
   {"check": "suite ran to the end", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:18:51Z"},
-  {"check": "late skills: \"dyslexia friendly font\" asked while its skill is still loading (10 s late) turns the dyslexia font on once the skill is in, and says so", "sha": "4de322754b1eae81ff75953bd91e72df32038090", "at": "2026-11-19T23:21:53Z"}
+  {"check": "late skills: \"dyslexia friendly font\" asked while its skill is still loading (10 s late) turns the dyslexia font on once the skill is in, and says so", "sha": "4de322754b1eae81ff75953bd91e72df32038090", "at": "2026-11-19T23:21:53Z"},
+  {"check": "password strength: /password-strength/ loads one page and one module (no third party), rates \"password\" Very weak and instantly cracked with its reason, rates a", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:22:20Z"},
+  {"check": "base64 page: /base64/ encodes and decodes as you type, keeps emoji exact, says what is wrong with bad Base64, writes Base64URL, and turns a file into a data: UR", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:22:20Z"}
 ]
