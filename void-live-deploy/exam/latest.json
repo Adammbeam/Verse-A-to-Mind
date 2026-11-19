@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-19T22:49:55.743Z",
+  "at": "2026-11-19T23:29:37.043Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -41,7 +41,7 @@
       }
     },
     "podcasts": {
-      "score": 95.2,
+      "score": 96.8,
       "of": 18,
       "measured": 18,
       "fails": [
@@ -55,13 +55,11 @@
         {
           "ask": "pon el último episodio de radiolab",
           "failed": [
-            "answered",
             "skill",
-            "fast",
             "audio",
             "episode"
           ],
-          "score": 28.6
+          "score": 57.1
         }
       ],
       "holdout": {
@@ -110,7 +108,7 @@
       }
     },
     "weather": {
-      "score": 97.2,
+      "score": 96.3,
       "of": 18,
       "measured": 18,
       "fails": [
@@ -125,9 +123,10 @@
         {
           "ask": "météo à lyon",
           "failed": [
-            "skill"
+            "skill",
+            "temp"
           ],
-          "score": 83.3
+          "score": 66.7
         }
       ],
       "holdout": {
@@ -227,19 +226,12 @@
       }
     },
     "sports": {
-      "score": 92.6,
+      "score": 93.5,
       "of": 18,
       "measured": 18,
       "fails": [
         {
           "ask": "yankees score",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "how did the chiefs do",
           "failed": [
             "board"
           ],
@@ -362,6 +354,6 @@
   },
   "lowest": {
     "domain": "sports",
-    "score": 92.6
+    "score": 93.5
   }
 }
