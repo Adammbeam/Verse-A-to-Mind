@@ -201,5 +201,7 @@
   {"check": "hunting question: it comes back at the margin after a reload, is never answered, a one-word reason does not release it and a written reason does", "sha": "21c39bd181fd8af1130dabd0eec7e19b139423eb", "at": "2026-11-19T20:28:41Z"},
   {"check": "python-tests", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:30:43Z"},
   {"check": "busy blocks: three blocks make a bar with the free gaps named, typing \"gym 5-6pm\" adds a fourth, \"clear busy blocks\" takes the card off", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:34:41Z"},
-  {"check": "suite ran to the end", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:34:41Z"}
+  {"check": "suite ran to the end", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:34:41Z"},
+  {"check": "photo resizer: a 1200x900 PNG becomes 3.5 x 2.5 cm at 200 dpi (276 x 197 px) under 12 KB, the JPEG download is that size and under the limit, the PDF download i", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:42:29Z"},
+  {"check": "photo resizer: \"resize a photo to 3.5 x 2.5 cm under 50 kb\" opens a card whose link opens the resizer with 3.5, 2.5, cm and 50 filled in", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:42:29Z"}
 ]
