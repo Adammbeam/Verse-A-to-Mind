@@ -188,5 +188,6 @@
   {"check": "photo resizer: a 1200x900 PNG becomes 3.5 x 2.5 cm at 200 dpi (276 x 197 px) under 12 KB, the JPEG download is that size and under the limit, the PDF download i", "sha": "e5755e8ddeba24baea9d67b890a6db1fbe74955c", "at": "2026-11-18T22:01:34Z"},
   {"check": "photo resizer: \"resize a photo to 3.5 x 2.5 cm under 50 kb\" opens a card whose link opens the resizer with 3.5, 2.5, cm and 50 filled in", "sha": "e5755e8ddeba24baea9d67b890a6db1fbe74955c", "at": "2026-11-18T22:01:34Z"},
   {"check": "password page: /password/ makes a 16-character password of every class with its exact bits, follows length and count, excludes look-alikes, makes passphrases, h", "sha": "e5755e8ddeba24baea9d67b890a6db1fbe74955c", "at": "2026-11-18T22:04:23Z"},
-  {"check": "python-tests", "sha": "78c6f2264a8e03d829e6eaa756f4c998bcabb987", "at": "2026-11-19T13:43:50Z"}
+  {"check": "python-tests", "sha": "78c6f2264a8e03d829e6eaa756f4c998bcabb987", "at": "2026-11-19T13:43:50Z"},
+  {"check": "python-tests", "sha": "f1dc7987664f997a642577d56f3543fde0a567de", "at": "2026-11-19T15:28:02Z"}
 ]
