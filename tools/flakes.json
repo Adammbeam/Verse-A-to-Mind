@@ -199,5 +199,7 @@
   {"check": "base converter: /base-converter/ loads one page and one module (no third party), typing ff in hex fills binary 1111 1111, octal 377 and decimal 255 with the sig", "sha": "df2ea7480cd90ae04a82a95368ef3fb75b7c4eca", "at": "2026-11-19T20:02:02Z"},
   {"check": "verse brain working memory: what it was thinking survives a full reload, kept through the shared field on this device: the same ideas come back as orbs, with it", "sha": "df2ea7480cd90ae04a82a95368ef3fb75b7c4eca", "at": "2026-11-19T20:02:02Z"},
   {"check": "hunting question: it comes back at the margin after a reload, is never answered, a one-word reason does not release it and a written reason does", "sha": "21c39bd181fd8af1130dabd0eec7e19b139423eb", "at": "2026-11-19T20:28:41Z"},
-  {"check": "python-tests", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:30:43Z"}
+  {"check": "python-tests", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:30:43Z"},
+  {"check": "busy blocks: three blocks make a bar with the free gaps named, typing \"gym 5-6pm\" adds a fourth, \"clear busy blocks\" takes the card off", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:34:41Z"},
+  {"check": "suite ran to the end", "sha": "4a38863ad657ab62262bcccd4d6b77aed2e3b336", "at": "2026-11-19T20:34:41Z"}
 ]
