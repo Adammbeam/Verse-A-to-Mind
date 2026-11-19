@@ -3,13 +3,20 @@
  "cases": 137,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 227,
   "grow": 43,
+  "visitor": 227,
   "file": 26,
   "tighten": 2,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-19T00:21:27Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 14/15"
+  },
   {
    "at": "2026-11-18T22:19:03Z",
    "passed": 0,
@@ -202,92 +209,85 @@
      "why": "console: Failed to load resource: the server responded with a status of 404 ()"
     }
    ]
-  },
-  {
-   "at": "2026-11-18T05:26:39Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
   {
-   "from": "2026-08-26",
+   "from": "2026-08-27",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-02",
+   "from": "2026-09-03",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-09",
+   "from": "2026-09-10",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-16",
+   "from": "2026-09-17",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-23",
+   "from": "2026-09-24",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-30",
+   "from": "2026-10-01",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-07",
+   "from": "2026-10-08",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-14",
+   "from": "2026-10-15",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-21",
+   "from": "2026-10-22",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-28",
+   "from": "2026-10-29",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-11-04",
-   "runs": 157,
-   "passed": 3419,
-   "of": 5046,
+   "from": "2026-11-05",
+   "runs": 160,
+   "passed": 3537,
+   "of": 5169,
    "broken": 14,
    "brokenOf": 1491,
    "brokenPassed": 135,
-   "ms": 395
+   "ms": 396
   },
   {
-   "from": "2026-11-11",
-   "runs": 143,
-   "passed": 3267,
-   "of": 3366,
-   "ms": 421
+   "from": "2026-11-12",
+   "runs": 140,
+   "passed": 3149,
+   "of": 3243,
+   "ms": 388
   }
  ],
  "seen": {
