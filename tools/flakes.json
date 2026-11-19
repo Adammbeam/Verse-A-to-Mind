@@ -217,5 +217,8 @@
   {"check": "the stage is an RTS: \"start a camp\" puts up the camp (wood 0) and grounds the scene; \"add a tree\" is 8 wood; a summoned villager gathers from it by itself and t", "sha": "4de322754b1eae81ff75953bd91e72df32038090", "at": "2026-11-19T23:00:39Z"},
   {"check": "base converter: /base-converter/ loads one page and one module (no third party), typing ff in hex fills binary 1111 1111, octal 377 and decimal 255 with the sig", "sha": "4de322754b1eae81ff75953bd91e72df32038090", "at": "2026-11-19T23:01:04Z"},
   {"check": "wheel: a picture becomes an entry, a 2 s spin ends with confetti and auto-removes its winner, and the stage card shows the winner inside the card at 390 px", "sha": "4de322754b1eae81ff75953bd91e72df32038090", "at": "2026-11-19T23:01:04Z"},
-  {"check": "Verse art forge: a skill card (a tip calculator) is painted too: one POST of kind skill with its name, never a button", "sha": "4de322754b1eae81ff75953bd91e72df32038090", "at": "2026-11-19T23:01:04Z"}
+  {"check": "Verse art forge: a skill card (a tip calculator) is painted too: one POST of kind skill with its name, never a button", "sha": "4de322754b1eae81ff75953bd91e72df32038090", "at": "2026-11-19T23:01:04Z"},
+  {"check": "busy blocks: three blocks make a bar with the free gaps named, typing \"gym 5-6pm\" adds a fourth, \"clear busy blocks\" takes the card off", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:18:51Z"},
+  {"check": "routines: \"call this my morning\" saves the two asks before it in the order they were asked (and not itself); after a reload \"my morning\" asks them again (the co", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:18:51Z"},
+  {"check": "suite ran to the end", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:18:51Z"}
 ]
