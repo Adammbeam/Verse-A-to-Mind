@@ -4,12 +4,77 @@
  "runsTotal": 300,
  "kinds": {
   "visitor": 229,
-  "file": 26,
   "grow": 41,
+  "file": 26,
   "tighten": 2,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-19T22:52:12Z",
+   "passed": 127,
+   "of": 140,
+   "kind": "file",
+   "ms": 452,
+   "note": "fix: \"favorite this\" only \"waking up\" appeared, never the answer",
+   "failed": [
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "show me the night sky",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "flip this card",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "favorite this",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "film meatdata for ikiru",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "movie night",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "bridge these inputs",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "time saved for the invoice automation",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "is this system handoff ready",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "system design for client onboarding",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-19T22:37:50Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-19T22:25:16Z",
    "passed": 137,
@@ -341,20 +406,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-19T03:50:28Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-19T00:21:27Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 14/15"
   }
  ],
  "weekly": [
@@ -420,9 +471,9 @@
   },
   {
    "from": "2026-11-05",
-   "runs": 169,
-   "passed": 3267,
-   "of": 4867,
+   "runs": 168,
+   "passed": 3169,
+   "of": 4766,
    "broken": 14,
    "brokenOf": 1491,
    "brokenPassed": 135,
@@ -430,10 +481,10 @@
   },
   {
    "from": "2026-11-12",
-   "runs": 131,
-   "passed": 3420,
-   "of": 3588,
-   "ms": 439
+   "runs": 132,
+   "passed": 3547,
+   "of": 3728,
+   "ms": 447
   }
  ],
  "seen": {
@@ -512,7 +563,7 @@
   "skill:nightsky": "2026-10-17T10:32:13Z",
   "skill:notepad": "2026-11-19T21:19:04Z",
   "skill:nutrition": "2026-11-19T21:46:27Z",
-  "skill:ovulation": "2026-10-17T11:03:56Z",
+  "skill:ovulation": "2026-11-19T22:52:12Z",
   "skill:part": "2026-10-17T11:03:56Z",
   "skill:pdf-card": "2026-10-17T11:03:56Z",
   "skill:period": "2026-10-17T11:11:24Z",

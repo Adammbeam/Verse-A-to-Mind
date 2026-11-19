@@ -1,45 +1,5 @@
 [
  {
-  "at": "2026-11-07T18:08:47Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 1116,
-   "failed": []
-  },
-  "note": "visitor pass 15/15"
- },
- {
-  "at": "2026-11-07T18:18:15Z",
-  "passed": 98,
-  "of": 101,
-  "ms": 349,
-  "kind": "file",
-  "key": "film metadata for ikiru pls | refused: don't know this yet",
-  "failed": [
-   {
-    "ask": "play chess",
-    "why": "fps 2 < 5"
-   },
-   {
-    "ask": "film metadata for ikiru pls",
-    "why": "refused: don't know this yet"
-   },
-   {
-    "ask": "who is the auhtor of dune",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   }
-  ],
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 1116,
-   "failed": []
-  },
-  "note": "fix: \"film metadata for ikiru pls\" refused: don't know this yet; console: Failed to load resource: the server responded with a status of 404 ()"
- },
- {
   "at": "2026-11-07T18:30:06Z",
   "kind": "visitor",
   "visitor": {
@@ -6806,5 +6766,81 @@
    "failed": []
   },
   "note": "fix: \"flip this card\" only \"waking up\" appeared, never the answer"
+ },
+ {
+  "at": "2026-11-19T22:37:50Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 450,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-19T22:52:12Z",
+  "passed": 127,
+  "of": 140,
+  "ms": 452,
+  "kind": "file",
+  "key": "favorite this | only \"waking up\" appeared, never the answer",
+  "failed": [
+   {
+    "ask": "bokos like dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "show me the night sky",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "flip this card",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "favorite this",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "film meatdata for ikiru",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "redner a cartoon dragon",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "stlye like mickey mouse",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "movie night",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "bridge these inputs",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "time saved for the invoice automation",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "is this system handoff ready",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   },
+   {
+    "ask": "system design for client onboarding",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 450,
+   "failed": []
+  },
+  "note": "fix: \"favorite this\" only \"waking up\" appeared, never the answer"
  }
 ]
