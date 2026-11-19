@@ -229,5 +229,6 @@
   {"check": "suite ran to the end", "sha": "73454ab38a641e9e4045b46d016e98774d19d2d6", "at": "2026-11-19T23:22:39Z"},
   {"check": "python-tests", "sha": "46443de3b123718eb17e578352fd817176d8fb5d", "at": "2026-11-19T23:25:06Z"},
   {"check": "prizes: \"Spin them on the name wheel\" opens the wheel with the bare slice names and keeps one verse_handoff copy for the paste pill", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:26:33Z"},
-  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:26:33Z"}
+  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:26:33Z"},
+  {"check": "busy blocks: three blocks make a bar with the free gaps named, typing \"gym 5-6pm\" adds a fourth, \"clear busy blocks\" takes the card off", "sha": "73454ab38a641e9e4045b46d016e98774d19d2d6", "at": "2026-11-19T23:30:30Z"}
 ]
