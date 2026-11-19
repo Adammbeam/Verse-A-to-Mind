@@ -719,6 +719,16 @@
    "listed": 2,
    "defectsBefore": 5,
    "defectsAfter": 4
+  },
+  {
+   "at": "2026-11-19T00:49:10.048Z",
+   "run": 114,
+   "measured": 30,
+   "clean": 23,
+   "fixed": 1,
+   "listed": 6,
+   "defectsBefore": 2,
+   "defectsAfter": 1
   }
  ],
  "pages": {
@@ -7904,7 +7914,7 @@
    "state": "clean"
   },
   "/rap/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7917,7 +7927,7 @@
    "state": "clean"
   },
   "/trading-bots/trend-50-200/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7930,7 +7940,7 @@
    "state": "clean"
   },
   "/trading-bots/breakout-20-10/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7943,7 +7953,7 @@
    "state": "clean"
   },
   "/trading-bots/dip-rsi2/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7956,7 +7966,7 @@
    "state": "clean"
   },
   "/local/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -7983,7 +7993,7 @@
    "state": "clean"
   },
   "/time/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7996,7 +8006,7 @@
    "state": "clean"
   },
   "/fix/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8009,7 +8019,7 @@
    "state": "clean"
   },
   "/music/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8022,7 +8032,7 @@
    "state": "clean"
   },
   "/tuner/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8035,18 +8045,18 @@
    "state": "clean"
   },
   "/brain/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 1,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.75,
+    "cls": 0.68,
     "overflow": 0
    },
    "state": "listed",
-   "why": "no rule fixes it (a layout shift of 0.75 that no rule fixes: listed for a builder)"
+   "why": "no rule fixes it (a layout shift of 0.68 that no rule fixes: listed for a builder)"
   },
   "/scores/sports/": {
    "at": "2026-11-11T21:42:14.589Z",
@@ -8062,7 +8072,7 @@
    "state": "clean"
   },
   "/color/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8088,7 +8098,7 @@
    "state": "clean"
   },
   "/store/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -8102,42 +8112,32 @@
    "why": "no rule fixes it (a layout shift of 0.372 that no rule fixes: listed for a builder)"
   },
   "/store/receipt/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
-    "defects": 0,
-    "contrast": 0,
-    "targets": 0,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0,
-    "overflow": 0
-   },
-   "state": "clean"
-  },
-  "/starboard/": {
-   "at": "2026-11-11T21:42:14.589Z",
-   "before": {
-    "defects": 2,
-    "contrast": 0,
-    "targets": 1,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0.129,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 1,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.129,
+    "cls": 0.375,
     "overflow": 0
    },
-   "rules": 1,
-   "moved": 0,
-   "why": "(a layout shift of 0.129 that no rule fixes: listed for a builder)"
+   "state": "listed",
+   "why": "no rule fixes it (a layout shift of 0.375 that no rule fixes: listed for a builder)"
+  },
+  "/starboard/": {
+   "at": "2026-11-19T00:49:10.048Z",
+   "before": {
+    "defects": 1,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.187,
+    "overflow": 0
+   },
+   "state": "listed",
+   "why": "no rule fixes it (a layout shift of 0.187 that no rule fixes: listed for a builder)"
   },
   "/base64/bases/": {
    "at": "2026-11-11T21:42:14.589Z",
@@ -8153,7 +8153,7 @@
    "state": "clean"
   },
   "/paint/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -8180,14 +8180,14 @@
    "state": "clean"
   },
   "/generators/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.012,
+    "cls": 0,
     "overflow": 0
    },
    "state": "clean"
@@ -8207,7 +8207,7 @@
    "why": "no rule fixes it"
   },
   "/prizes/": {
-   "at": "2026-11-16T07:14:43.467Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8220,7 +8220,7 @@
    "state": "clean"
   },
   "/piano/": {
-   "at": "2026-11-16T07:14:43.467Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8233,7 +8233,7 @@
    "state": "clean"
   },
   "/bpm/": {
-   "at": "2026-11-16T07:14:43.467Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8246,7 +8246,7 @@
    "state": "clean"
   },
   "/password/": {
-   "at": "2026-11-16T07:14:43.467Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8259,7 +8259,7 @@
    "state": "clean"
   },
   "/base64/": {
-   "at": "2026-11-16T07:14:43.467Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8285,7 +8285,7 @@
    "state": "clean"
   },
   "/hosting/": {
-   "at": "2026-11-16T07:14:43.467Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8298,7 +8298,7 @@
    "state": "clean"
   },
   "/tournaments/": {
-   "at": "2026-11-16T07:14:43.467Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8311,7 +8311,7 @@
    "state": "clean"
   },
   "/podcasts/": {
-   "at": "2026-11-16T07:14:43.467Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8324,7 +8324,7 @@
    "state": "clean"
   },
   "/": {
-   "at": "2026-11-16T07:14:43.467Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8350,7 +8350,7 @@
    "state": "clean"
   },
   "/news/": {
-   "at": "2026-11-16T07:14:43.467Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8363,11 +8363,11 @@
    "state": "clean"
   },
   "/team/": {
-   "at": "2026-11-16T07:14:43.467Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
-    "defects": 12,
+    "defects": 2,
     "contrast": 0,
-    "targets": 11,
+    "targets": 1,
     "unstyled": 0,
     "empty": 0,
     "cls": 1.234,
@@ -8383,12 +8383,12 @@
     "cls": 1.234,
     "overflow": 0
    },
-   "rules": 11,
+   "rules": 1,
    "moved": 0,
    "why": "(a layout shift of 1.234 that no rule fixes: listed for a builder)"
   },
   "/markets/currency-converter/": {
-   "at": "2026-11-16T07:14:43.467Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8401,14 +8401,14 @@
    "state": "clean"
   },
   "/ledger/": {
-   "at": "2026-11-16T07:14:43.467Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.005,
+    "cls": 0.01,
     "overflow": 0
    },
    "state": "clean"
@@ -9823,14 +9823,14 @@
    "why": "no rule fixes it (a layout shift of 0.218 that no rule fixes: listed for a builder)"
   },
   "/schedules/": {
-   "at": "2026-11-13T00:38:35.644Z",
+   "at": "2026-11-19T00:49:10.048Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0,
+    "cls": 0.034,
     "overflow": 0
    },
    "state": "clean"
