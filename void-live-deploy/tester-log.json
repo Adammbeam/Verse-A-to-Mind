@@ -1,15 +1,40 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 137,
+ "cases": 138,
  "runsTotal": 300,
  "kinds": {
   "visitor": 230,
-  "file": 24,
-  "grow": 42,
+  "grow": 43,
+  "file": 23,
   "tighten": 2,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-19T19:55:06Z",
+   "passed": 138,
+   "of": 140,
+   "kind": "grow",
+   "ms": 329,
+   "note": "new ground passed, kept as a regression case: \"show the data flows for client onboarding\" (skill:connections)",
+   "failed": [
+    {
+     "ask": "fimls by kurosawa",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-19T19:45:07Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-19T19:18:00Z",
    "passed": 0,
@@ -135,20 +160,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-18T17:17:24Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-18T16:50:36Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -214,9 +225,9 @@
   },
   {
    "from": "2026-11-05",
-   "runs": 175,
-   "passed": 3733,
-   "of": 5364,
+   "runs": 174,
+   "passed": 3640,
+   "of": 5265,
    "broken": 14,
    "brokenOf": 1491,
    "brokenPassed": 135,
@@ -224,9 +235,9 @@
   },
   {
    "from": "2026-11-12",
-   "runs": 125,
-   "passed": 2676,
-   "of": 2752,
+   "runs": 126,
+   "passed": 2814,
+   "of": 2892,
    "ms": 438
   }
  ],
@@ -677,6 +688,9 @@
   "skill:summon-pack": "2026-11-17T23:17:03Z",
   "skill:system-design": "2026-11-18T02:55:48Z",
   "skill:connect-flows": "2026-11-18T14:42:37Z",
-  "skill:automation-handoff": "2026-11-18T16:11:47Z"
+  "skill:automation-handoff": "2026-11-18T16:11:47Z",
+  "skill:connections": "2026-11-19T19:55:06Z",
+  "skill:monitor-receipt": "2026-11-19T19:55:06Z",
+  "skill:process-lift-pack": "2026-11-19T19:55:06Z"
  }
 }
