@@ -1,65 +1,5 @@
 [
  {
-  "at": "2026-11-07T00:08:31Z",
-  "passed": 90,
-  "of": 99,
-  "ms": 398,
-  "kind": "file",
-  "key": "test me on that | only \"waking up\" appeared, never the answer",
-  "failed": [
-   {
-    "ask": "play voidquest",
-    "why": "fps 3 < 5"
-   },
-   {
-    "ask": "play chess",
-    "why": "fps 1 < 5"
-   },
-   {
-    "ask": "is waymo in austin",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "test me on that",
-    "why": "only \"waking up\" appeared, never the answer"
-   },
-   {
-    "ask": "favorite this",
-    "why": "only \"waking up\" appeared, never the answer"
-   },
-   {
-    "ask": "find me a sci-fi film from the 80s",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "fimls by kurosawa",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "blueprint this: late invoice follow-ups for clients",
-    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-   },
-   {
-    "ask": "system handoff for the onboarding automation",
-    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-   }
-  ],
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 652,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 9665 ms"
-     ]
-    }
-   ]
-  },
-  "note": "fix: \"test me on that\" only \"waking up\" appeared, never the answer"
- },
- {
   "at": "2026-11-07T00:20:13Z",
   "kind": "visitor",
   "visitor": {
@@ -6849,6 +6789,24 @@
      "ask": "what can you do",
      "why": [
       "slow 10585 ms"
+     ]
+    }
+   ]
+  },
+  "note": "visitor pass 14/15"
+ },
+ {
+  "at": "2026-11-19T18:51:41Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 14,
+   "of": 15,
+   "medianMs": 1007,
+   "failed": [
+    {
+     "ask": "what can you do",
+     "why": [
+      "slow 16068 ms"
      ]
     }
    ]
