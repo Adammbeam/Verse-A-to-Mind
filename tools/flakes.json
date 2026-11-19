@@ -193,5 +193,7 @@
   {"check": "password strength: /password-strength/ loads one page and one module (no third party), rates \"password\" Very weak and instantly cracked with its reason, rates a", "sha": "c22e87a158c509bf72b5584ef9a310cd01499729", "at": "2026-11-19T15:35:01Z"},
   {"check": "base64 page: /base64/ encodes and decodes as you type, keeps emoji exact, says what is wrong with bad Base64, writes Base64URL, and turns a file into a data: UR", "sha": "c22e87a158c509bf72b5584ef9a310cd01499729", "at": "2026-11-19T15:35:01Z"},
   {"check": "routines: \"call this my morning\" saves the two asks before it in the order they were asked (and not itself); after a reload \"my morning\" asks them again (the co", "sha": "df2ea7480cd90ae04a82a95368ef3fb75b7c4eca", "at": "2026-11-19T19:55:14Z"},
-  {"check": "suite ran to the end", "sha": "df2ea7480cd90ae04a82a95368ef3fb75b7c4eca", "at": "2026-11-19T19:55:14Z"}
+  {"check": "suite ran to the end", "sha": "df2ea7480cd90ae04a82a95368ef3fb75b7c4eca", "at": "2026-11-19T19:55:14Z"},
+  {"check": "prizes: \"Spin them on the name wheel\" opens the wheel with the bare slice names and keeps one verse_handoff copy for the paste pill", "sha": "df2ea7480cd90ae04a82a95368ef3fb75b7c4eca", "at": "2026-11-19T19:55:50Z"},
+  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "df2ea7480cd90ae04a82a95368ef3fb75b7c4eca", "at": "2026-11-19T19:55:50Z"}
 ]
