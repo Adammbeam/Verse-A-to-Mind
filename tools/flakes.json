@@ -233,5 +233,6 @@
   {"check": "busy blocks: three blocks make a bar with the free gaps named, typing \"gym 5-6pm\" adds a fourth, \"clear busy blocks\" takes the card off", "sha": "73454ab38a641e9e4045b46d016e98774d19d2d6", "at": "2026-11-19T23:30:30Z"},
   {"check": "base converter: /base-converter/ loads one page and one module (no third party), typing ff in hex fills binary 1111 1111, octal 377 and decimal 255 with the sig", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:31:55Z"},
   {"check": "wheel: a picture becomes an entry, a 2 s spin ends with confetti and auto-removes its winner, and the stage card shows the winner inside the card at 390 px", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:31:55Z"},
-  {"check": "Verse art forge: a skill card (a tip calculator) is painted too: one POST of kind skill with its name, never a button", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:31:55Z"}
+  {"check": "Verse art forge: a skill card (a tip calculator) is painted too: one POST of kind skill with its name, never a button", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:31:55Z"},
+  {"check": "late skills: \"dyslexia friendly font\" asked while its skill is still loading (10 s late) turns the dyslexia font on once the skill is in, and says so", "sha": "46443de3b123718eb17e578352fd817176d8fb5d", "at": "2026-11-19T23:59:52Z"}
 ]
