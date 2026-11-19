@@ -223,5 +223,8 @@
   {"check": "suite ran to the end", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:18:51Z"},
   {"check": "late skills: \"dyslexia friendly font\" asked while its skill is still loading (10 s late) turns the dyslexia font on once the skill is in, and says so", "sha": "4de322754b1eae81ff75953bd91e72df32038090", "at": "2026-11-19T23:21:53Z"},
   {"check": "password strength: /password-strength/ loads one page and one module (no third party), rates \"password\" Very weak and instantly cracked with its reason, rates a", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:22:20Z"},
-  {"check": "base64 page: /base64/ encodes and decodes as you type, keeps emoji exact, says what is wrong with bad Base64, writes Base64URL, and turns a file into a data: UR", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:22:20Z"}
+  {"check": "base64 page: /base64/ encodes and decodes as you type, keeps emoji exact, says what is wrong with bad Base64, writes Base64URL, and turns a file into a data: UR", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:22:20Z"},
+  {"check": "photo resizer: a 1200x900 PNG becomes 3.5 x 2.5 cm at 200 dpi (276 x 197 px) under 12 KB, the JPEG download is that size and under the limit, the PDF download i", "sha": "73454ab38a641e9e4045b46d016e98774d19d2d6", "at": "2026-11-19T23:22:39Z"},
+  {"check": "photo resizer: \"resize a photo to 3.5 x 2.5 cm under 50 kb\" opens a card whose link opens the resizer with 3.5, 2.5, cm and 50 filled in", "sha": "73454ab38a641e9e4045b46d016e98774d19d2d6", "at": "2026-11-19T23:22:39Z"},
+  {"check": "suite ran to the end", "sha": "73454ab38a641e9e4045b46d016e98774d19d2d6", "at": "2026-11-19T23:22:39Z"}
 ]
