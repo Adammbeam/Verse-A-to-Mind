@@ -447,6 +447,9 @@
     },
     {
       "ask": "show the data flows for client onboarding"
+    },
+    {
+      "ask": "calorie calculator"
     }
   ],
   "candidates": [],

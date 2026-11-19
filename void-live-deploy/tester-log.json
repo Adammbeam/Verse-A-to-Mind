@@ -1,15 +1,56 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 138,
+ "cases": 139,
  "runsTotal": 300,
  "kinds": {
-  "grow": 41,
   "visitor": 229,
   "file": 26,
+  "grow": 41,
   "tighten": 2,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-19T21:46:27Z",
+   "passed": 133,
+   "of": 139,
+   "kind": "grow",
+   "ms": 474,
+   "note": "new ground passed, kept as a regression case: \"calorie calculator\" (skill:nutrition)",
+   "failed": [
+    {
+     "ask": "weather in boston",
+     "why": "console: Failed to load resource: the server responded with a status of 429 (Too Many Requests)"
+    },
+    {
+     "ask": "fimls by kurosawa",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "who is the auhtor of dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "yo draw yourself",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "cross the bus",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-19T21:35:54Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-19T21:19:04Z",
    "passed": 117,
@@ -299,20 +340,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-18T21:00:18Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-18T20:34:08Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -378,9 +405,9 @@
   },
   {
    "from": "2026-11-05",
-   "runs": 170,
-   "passed": 3454,
-   "of": 5068,
+   "runs": 169,
+   "passed": 3357,
+   "of": 4968,
    "broken": 14,
    "brokenOf": 1491,
    "brokenPassed": 135,
@@ -388,10 +415,10 @@
   },
   {
    "from": "2026-11-12",
-   "runs": 130,
-   "passed": 3150,
-   "of": 3309,
-   "ms": 439
+   "runs": 131,
+   "passed": 3283,
+   "of": 3448,
+   "ms": 447
   }
  ],
  "seen": {
@@ -469,7 +496,7 @@
   "skill:news": "2026-11-19T20:51:47Z",
   "skill:nightsky": "2026-10-17T10:32:13Z",
   "skill:notepad": "2026-11-19T21:19:04Z",
-  "skill:nutrition": "2026-10-17T10:32:13Z",
+  "skill:nutrition": "2026-11-19T21:46:27Z",
   "skill:ovulation": "2026-10-17T11:03:56Z",
   "skill:part": "2026-10-17T11:03:56Z",
   "skill:pdf-card": "2026-10-17T11:03:56Z",
