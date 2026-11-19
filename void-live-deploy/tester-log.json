@@ -4,12 +4,77 @@
  "runsTotal": 300,
  "kinds": {
   "visitor": 230,
-  "grow": 43,
-  "file": 23,
+  "grow": 42,
+  "file": 24,
   "tighten": 2,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-19T20:22:55Z",
+   "passed": 116,
+   "of": 139,
+   "kind": "file",
+   "ms": 533,
+   "note": "fix: \"bokos like dune\" console: Failed to load resource: the server responded with a status of 404 ()",
+   "failed": [
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "what do you get if you merge a pizza and a black hole",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "send it away",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "fimls by kurosawa",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "film meatdata for ikiru",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "yo what does ephemeral mean",
+     "why": "console: tries is not defined"
+    },
+    {
+     "ask": "yo what language does the word kindergarten come from",
+     "why": "console: tries is not defined"
+    },
+    {
+     "ask": "who is the auhtor of dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: tries is not defined"
+    },
+    {
+     "ask": "movie night",
+     "why": "console: tries is not defined"
+    },
+    {
+     "ask": "picture of a cat",
+     "why": "console: tries is not defined"
+    },
+    {
+     "ask": "how much is my watch worth",
+     "why": "console: tries is not defined"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-19T20:07:49Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-19T19:55:06Z",
    "passed": 138,
@@ -146,20 +211,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-18T18:20:19Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-18T17:49:21Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -225,19 +276,19 @@
   },
   {
    "from": "2026-11-05",
-   "runs": 174,
-   "passed": 3640,
-   "of": 5265,
+   "runs": 173,
+   "passed": 3551,
+   "of": 5167,
    "broken": 14,
    "brokenOf": 1491,
    "brokenPassed": 135,
-   "ms": 391
+   "ms": 387
   },
   {
    "from": "2026-11-12",
-   "runs": 126,
-   "passed": 2814,
-   "of": 2892,
+   "runs": 127,
+   "passed": 2930,
+   "of": 3031,
    "ms": 438
   }
  ],
@@ -691,6 +742,7 @@
   "skill:automation-handoff": "2026-11-18T16:11:47Z",
   "skill:connections": "2026-11-19T19:55:06Z",
   "skill:monitor-receipt": "2026-11-19T19:55:06Z",
-  "skill:process-lift-pack": "2026-11-19T19:55:06Z"
+  "skill:process-lift-pack": "2026-11-19T19:55:06Z",
+  "skill:ready-checks": "2026-11-19T20:22:55Z"
  }
 }
