@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-20T08:20:29.542Z",
+  "at": "2026-11-20T09:20:04.233Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -34,23 +34,122 @@
       }
     },
     "podcasts": {
-      "score": 95.2,
+      "score": 73.6,
       "of": 18,
       "measured": 18,
       "fails": [
         {
-          "ask": "play the latest episode of serial",
+          "ask": "play the latest episode of this american life",
           "failed": [
+            "audio",
             "episode"
           ],
-          "score": 85.7
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of the daily",
+          "failed": [
+            "audio",
+            "episode"
+          ],
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of serial",
+          "failed": [
+            "audio",
+            "episode"
+          ],
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of planet money",
+          "failed": [
+            "audio",
+            "episode"
+          ],
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of hardcore history",
+          "failed": [
+            "audio",
+            "show",
+            "episode"
+          ],
+          "score": 57.1
+        },
+        {
+          "ask": "play the latest episode of the ted radio hour",
+          "failed": [
+            "audio",
+            "episode"
+          ],
+          "score": 71.4
         },
         {
           "ask": "play the latest episode of hidden brain",
           "failed": [
+            "audio",
+            "episode"
+          ],
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of freakonomics radio",
+          "failed": [
+            "audio",
+            "episode"
+          ],
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of science vs",
+          "failed": [
+            "audio",
+            "episode"
+          ],
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of stuff you should know",
+          "failed": [
+            "audio",
+            "episode"
+          ],
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of crime junkie",
+          "failed": [
+            "audio",
+            "episode"
+          ],
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of the moth",
+          "failed": [
             "audio"
           ],
-          "score": 85.7
+          "score": 83.3
+        },
+        {
+          "ask": "play the latest episode of npr news now",
+          "failed": [
+            "audio",
+            "episode"
+          ],
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of my favorite murder",
+          "failed": [
+            "audio",
+            "show",
+            "episode"
+          ],
+          "score": 57.1
         },
         {
           "ask": "play the episode before that",
@@ -115,10 +214,45 @@
       }
     },
     "weather": {
-      "score": 96.3,
+      "score": 91.1,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "weather in paris",
+          "failed": [
+            "fast"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "will it rain tomorrow in london",
+          "failed": [
+            "fast"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "weather in seattle",
+          "failed": [
+            "fast"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "weather in london this weekend",
+          "failed": [
+            "fast"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "whats teh weather in london",
+          "failed": [
+            "fast"
+          ],
+          "score": 83.3
+        },
         {
           "ask": "weather",
           "failed": [
@@ -131,9 +265,10 @@
           "ask": "météo à lyon",
           "failed": [
             "skill",
-            "temp"
+            "temp",
+            "close"
           ],
-          "score": 66.7
+          "score": 57.1
         }
       ],
       "holdout": {
@@ -374,7 +509,7 @@
     }
   },
   "lowest": {
-    "domain": "sports",
-    "score": 91.7
+    "domain": "podcasts",
+    "score": 73.6
   }
 }
