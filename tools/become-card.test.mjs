@@ -5,7 +5,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { willCardHtml, workingOnAsk, freshWants, recentBuilt } from '../void-live-deploy/lib/will-card.js';
+import { willCardHtml, plainPublic, workingOnAsk, freshWants, recentBuilt } from '../void-live-deploy/lib/will-card.js';
 
 const text = (html) => html.replace(/<(?:\/(?:li|div|p|b|h2|ol|ul)|br)\s*>/g, '\n').replace(/<[^>]+>/g, '').replace(/&quot;/g, '"').replace(/&amp;/g, '&').split('\n').map((l) => l.trim()).filter(Boolean);
 
@@ -14,7 +14,7 @@ function leaks(s) {
   const hits = [];
   for (const [n, re] of [
     ['domain', /\b(?:[a-z0-9-]+\.)+[a-z]{2,}\b/gi],
-    ['path', /\b(?:[\w.-]+\/)+[\w.-]+\b|\b[\w.-]+\.(?:js|mjs|cjs|ts|tsx|jsx|py|json|html|css|yml|yaml|md|sh)\b/gi],
+    ['path', /\b(?:[\w.-]+\/)+[\w.-]+\.[A-Za-z0-9]+\b|\b[\w.-]+\.(?:js|mjs|cjs|ts|tsx|jsx|py|json|html|css|yml|yaml|md|sh)\b/gi],
     ['SCREAMING_CASE', /\b[A-Z][A-Z0-9]*(_[A-Z0-9]+)+\b/g],
     ['camelCase', /\b[a-z]+[A-Z][a-zA-Z0-9]*\b|\b[A-Z][a-z0-9]+[A-Z][a-zA-Z0-9]*\b/g],
   ]) {
@@ -63,6 +63,21 @@ test('the card shows no domain names, file paths or camelCase / SCREAMING_CASE i
   assert.deepEqual(hit, [], hit.join(' | ') + ' :: ' + t.join(' | '));
   assert.ok(!/emojigraph\.org|LANE_PAGES|lib\/tower\.js|archive\/repos/i.test(t.join(' ')), t.join(' | '));
   assert.match(t.join('\n'), /add emojigraph and begin target assimilation/i);
+});
+
+test('ordinary words with a slash or "on," stay; only real file paths and code names come out', () => {
+  assert.match(plainPublic('I want to fix the podcast exam failures for audio and show/episode detection.'), /show\/episode detection/);
+  assert.equal(plainPublic("what I'm working on, in plain words"), "what I'm working on, in plain words");
+  const cleaned = plainPublic('I want to add emojigraph.org to LANE_PAGES in lib/tower.js and begin target assimilation.');
+  assert.match(cleaned, /add emojigraph and begin target assimilation/i);
+  assert.equal(leaks(cleaned).length, 0, leaks(cleaned).join(' | '));
+  const html = willCardHtml({ at: '2026-11-20T22:41:21.142Z', wants: [
+    { i_want: 'I want to fix the podcast exam failures for audio and show/episode detection.', because: 'the podcasts exam scored 91.9, the lowest; this ask failed audio' },
+  ], recent: [{ at: '2026-11-20T20:20:01Z', when: 'Nov 20', what: "what I'm working on, in plain words" }] });
+  const vis = text(html).join('\n');
+  assert.match(vis, /show\/episode detection/);
+  assert.match(vis, /what I'm working on, in plain words/);
+  assert.deepEqual(leaks(vis), [], leaks(vis).join(' | '));
 });
 
 test('each reason comes from its own want, not from a neighbour', () => {

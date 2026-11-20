@@ -19,7 +19,7 @@ const WEAK = {
 };
 
 // Public card text: no domain names, no file paths, no camelCase or SCREAMING_CASE identifiers.
-const PATH = /\b(?:[\w.-]+\/)+[\w.-]+\b/g;
+const PATH = /\b(?:[\w.-]+\/)+[\w.-]+\.[A-Za-z0-9]+\b/g;
 const FILE = /\b[\w.-]+\.(?:js|mjs|cjs|ts|tsx|jsx|py|json|html|css|yml|yaml|md|sh)\b/gi;
 const DOMAIN = /\b(?:[a-z0-9-]+\.)+[a-z]{2,}\b/gi;
 const SCREAM = /\b[A-Z][A-Z0-9]*(_[A-Z0-9]+)+\b/g;
@@ -31,7 +31,7 @@ export function plainPublic(text) {
   let s = String(text || '').replace(PATH, '').replace(FILE, '').replace(DOMAIN, siteName).replace(SCREAM, '').replace(CAMEL, '').replace(PASCAL, '');
   s = s.replace(/\s+/g, ' ').replace(/\s*([,;:])\s*/g, '$1 ');
   for (let i = 0; i < 4; i++) s = s.replace(/\b(in|to|into|on|at|of|for|from|with)\s+(in|to|into|on|at|of|and|for|from|with)\b/gi, '$2');
-  s = s.replace(/\s+(in|to|into|on|at|of|from|with)\s*([.,;]|$)/gi, '$2').replace(/,\s*,/g, ',').replace(/ \./g, '.').trim();
+  s = s.replace(/\s+(in|to|into|on|at|of|from|with)\s*[.,;]?$/gi, '').replace(/,\s*,/g, ',').replace(/ \./g, '.').trim();
   return s;
 }
 
