@@ -164,6 +164,66 @@
           }
         ]
       }
+    },
+    {
+      "at": "2026-11-20T21:38:55.675Z",
+      "studio": true,
+      "kind": "short",
+      "title": "Tiled Windows: A 1985 Tale",
+      "source": {
+        "title": "Windows 1.0",
+        "url": "https://en.wikipedia.org/wiki/Windows_1.0"
+      },
+      "pass": false,
+      "writer": "Groq openai/gpt-oss-120b",
+      "judge": {
+        "separated": false,
+        "calibration": [
+          {
+            "id": "journal",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              3,
+              7,
+              2
+            ]
+          },
+          {
+            "id": "old34",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              4,
+              7,
+              2
+            ]
+          },
+          {
+            "id": "page",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              2,
+              7,
+              4
+            ]
+          },
+          {
+            "id": "good",
+            "kind": "good",
+            "min": 3,
+            "scores": [
+              3,
+              6,
+              7
+            ]
+          }
+        ],
+        "issues": [],
+        "via": "Groq openai/gpt-oss-120b",
+        "pass": false
+      }
     }
   ]
 }
