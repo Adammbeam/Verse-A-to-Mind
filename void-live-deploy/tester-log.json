@@ -3,13 +3,78 @@
  "cases": 148,
  "runsTotal": 300,
  "kinds": {
-  "grow": 45,
+  "grow": 44,
   "visitor": 225,
-  "file": 27,
+  "file": 28,
   "none": 2,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-20T13:17:03Z",
+   "passed": 133,
+   "of": 149,
+   "kind": "file",
+   "ms": 417,
+   "note": "fix: \"make a poster of this card\" only \"waking up\" appeared, never the answer; console: Failed to load resource: the server responded with a status of 429 ()",
+   "failed": [
+    {
+     "ask": "are you web4",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "film metadata for Ikiru",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "fimls by kurosawa",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "film meatdata for ikiru",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "make a vase",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "adaptive flow canvas",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "show the data flows for client onboarding",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "calorie calculator",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "make a poster of this card",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "how long until gta 6 comes out",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-20T13:01:36Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-20T12:49:18Z",
    "passed": 143,
@@ -378,20 +443,6 @@
      "why": "console: Failed to load resource: the server responded with a status of 404 ()"
     }
    ]
-  },
-  {
-   "at": "2026-11-20T05:57:40Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-20T05:23:12Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -457,20 +508,20 @@
   },
   {
    "from": "2026-11-06",
-   "runs": 132,
-   "passed": 2383,
-   "of": 3095,
-   "broken": 6,
-   "brokenOf": 650,
-   "brokenPassed": 61,
+   "runs": 131,
+   "passed": 2366,
+   "of": 2989,
+   "broken": 5,
+   "brokenOf": 544,
+   "brokenPassed": 44,
    "ms": 393
   },
   {
    "from": "2026-11-13",
-   "runs": 168,
-   "passed": 6248,
-   "of": 6597,
-   "ms": 430
+   "runs": 169,
+   "passed": 6381,
+   "of": 6746,
+   "ms": 425
   }
  ],
  "seen": {
@@ -572,7 +623,7 @@
   "skill:savings": "2026-11-20T12:26:27Z",
   "skill:senolytic": "2026-11-20T12:49:18Z",
   "skill:services": "2026-10-17T11:53:29Z",
-  "skill:shape": "2026-10-17T12:21:39Z",
+  "skill:shape": "2026-11-20T13:17:03Z",
   "skill:share": "2026-10-17T12:21:39Z",
   "skill:show": "2026-10-17T12:21:39Z",
   "skill:show-countdown": "2026-10-17T13:52:50Z",
