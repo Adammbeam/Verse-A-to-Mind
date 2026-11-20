@@ -1,16 +1,5 @@
 [
  {
-  "at": "2026-11-09T01:43:24Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 540,
-   "failed": []
-  },
-  "note": "visitor pass 15/15"
- },
- {
   "at": "2026-11-09T01:53:28Z",
   "passed": 44,
   "of": 108,
@@ -6484,6 +6473,17 @@
    "correct": 15,
    "of": 15,
    "medianMs": 1113,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-20T18:19:08Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 460,
    "failed": []
   },
   "note": "visitor pass 15/15"
