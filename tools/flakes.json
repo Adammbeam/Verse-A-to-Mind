@@ -270,5 +270,7 @@
   {"check": "suite ran to the end", "sha": "9222c0cecc94ea290211ceaab6de0c4de9ffa3c6", "at": "2026-11-20T11:13:35Z"},
   {"check": "void asks batch 4: the Zorbleflux throttle: while an input in another card has focus the flux field runs at about a quarter speed, and full speed comes back aft", "sha": "9222c0cecc94ea290211ceaab6de0c4de9ffa3c6", "at": "2026-11-20T11:21:41Z"},
   {"check": "prizes: \"Spin them on the name wheel\" opens the wheel with the bare slice names and keeps one verse_handoff copy for the paste pill", "sha": "9222c0cecc94ea290211ceaab6de0c4de9ffa3c6", "at": "2026-11-20T11:21:55Z"},
-  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "9222c0cecc94ea290211ceaab6de0c4de9ffa3c6", "at": "2026-11-20T11:21:55Z"}
+  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "9222c0cecc94ea290211ceaab6de0c4de9ffa3c6", "at": "2026-11-20T11:21:55Z"},
+  {"check": "prizes: \"Spin them on the name wheel\" opens the wheel with the bare slice names and keeps one verse_handoff copy for the paste pill", "sha": "61d82192539d87f580f55a3155151b4f29c0e354", "at": "2026-11-20T11:47:43Z"},
+  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "61d82192539d87f580f55a3155151b4f29c0e354", "at": "2026-11-20T11:47:43Z"}
 ]
