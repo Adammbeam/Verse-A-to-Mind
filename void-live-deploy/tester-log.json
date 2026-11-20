@@ -4,12 +4,49 @@
  "runsTotal": 300,
  "kinds": {
   "visitor": 228,
-  "file": 29,
-  "tighten": 2,
+  "file": 28,
+  "tighten": 3,
   "grow": 39,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-20T03:14:14Z",
+   "passed": 137,
+   "of": 142,
+   "kind": "tighten",
+   "ms": 365,
+   "note": "fps floor 1 -> 2",
+   "failed": [
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "who is the auhtor of dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "set a goal of 10 on the list",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "ivf due date 5 day transfer on may 2",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-20T03:03:09Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-20T02:50:21Z",
    "passed": 137,
@@ -442,71 +479,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-19T21:19:04Z",
-   "passed": 117,
-   "of": 139,
-   "kind": "file",
-   "ms": 505,
-   "note": "fix: \"bokos like dune\" only \"waking up\" appeared, never the answer; console: Failed to load resource: the server responded with a status of 404 ()",
-   "failed": [
-    {
-     "ask": "bokos like dune",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "bench icon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "longevity trial watch",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "attention field",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "fly around",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "play a local audio file",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "film meatdata for ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "who is the auhtor of dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "lift summary for client onboarding",
-     "why": "nothing appeared"
-    },
-    {
-     "ask": "handoff pack for my SaaS idea",
-     "why": "only \"waking up\" appeared, never the answer"
-    }
-   ]
-  },
-  {
-   "at": "2026-11-19T21:03:04Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -572,20 +544,20 @@
   },
   {
    "from": "2026-11-06",
-   "runs": 161,
-   "passed": 2721,
-   "of": 4251,
-   "broken": 14,
-   "brokenOf": 1491,
-   "brokenPassed": 135,
+   "runs": 159,
+   "passed": 2713,
+   "of": 4146,
+   "broken": 13,
+   "brokenOf": 1386,
+   "brokenPassed": 127,
    "ms": 384
   },
   {
    "from": "2026-11-13",
-   "runs": 139,
-   "passed": 4336,
-   "of": 4570,
-   "ms": 452
+   "runs": 141,
+   "passed": 4473,
+   "of": 4712,
+   "ms": 447
   }
  ],
  "seen": {
@@ -671,7 +643,7 @@
   "skill:place": "2026-10-17T11:11:24Z",
   "skill:pong": "2026-11-20T02:06:02Z",
   "skill:poster": "2026-11-20T02:50:21Z",
-  "skill:pregnancy": "2026-10-17T11:17:08Z",
+  "skill:pregnancy": "2026-11-20T03:14:14Z",
   "skill:print-download": "2026-10-17T11:17:08Z",
   "skill:print-file": "2026-10-17T11:23:07Z",
   "skill:printedmotor": "2026-10-17T11:23:07Z",
