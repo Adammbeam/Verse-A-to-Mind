@@ -19,7 +19,6 @@ import { artSvg, kindWord, seasonOf, KINDS as ART_KINDS } from './card-art.js';
 import { forge, FORGE_CSS, answerText } from './card-forge.js';
 import { sealArt, SEAL_CSS } from './void-seal.js';
 import { subjectOf, motifsFor, skillSubjectOf } from './card-subject.js';
-import { artSubjectOf } from './will-card.js';
 import { lookOfSkill, LOOK_CSS } from './card-look.js'; // the family's frame: organic for sky and earth, blueprint for numbers and money (asked by Verse)
 import { artSource } from './art-source.js';
 import { cardUnsafe, scrubCard } from './image-safety.js'; // fail closed: a card about nudity, sex, the explicit body or minors in such a context carries no photo (2026-11-20)
@@ -117,11 +116,10 @@ export function chromeHtml(c, esc) {
   const stat = (k, v, t) => '<span title="' + t + '">' + k + '<b>' + v + '</b></span>';
   // a fetched answer's two numbers say what they are in words (owner, 2026-11-06: "P 1" and "R 2" read as nothing): the sources it stands on, and how fresh they are out of 9
   const said = (v, word, t) => '<span title="' + t + '"><b>' + v + '</b> ' + word + '</span>';
-  const quiet = !!c.quiet; // the working-on / will card: P/R/I and a rarity collector number mean nothing here
-  const plate = quiet || c.power == null ? '' : '<div class="vc-pt">' + (c.fetched ? said(c.power, c.power === 1 ? 'source' : 'sources', 'power: the sources it stands on') + said(c.toughness, 'of 9 fresh', 'resistance: how fresh the source is, 9 if edited today, 1 if a year or more')
+  const plate = c.power == null ? '' : '<div class="vc-pt">' + (c.fetched ? said(c.power, c.power === 1 ? 'source' : 'sources', 'power: the sources it stands on') + said(c.toughness, 'of 9 fresh', 'resistance: how fresh the source is, 9 if edited today, 1 if a year or more')
     : stat('P', c.power, 'power: success rate out of nine') + stat('R', c.toughness, 'resistance: the real asks that proved it, about 3 more for each tenfold') + (c.income == null ? '' : stat('I', c.income, 'income: how many other files lean on it'))) + '</div>';
   const arrows = '<div class="vc-arrows" aria-hidden="true">' + (c.arrowIn ? '<i class="in">\u25bc</i>' : '') + ['r', 'b', 'l'].slice(0, c.arrowsOut).map((d) => '<i class="' + d + '">\u25b6</i>').join('') + '</div>';
-  const foot = '<div class="vc-foot"><div class="vc-num">' + (quiet ? 'Verse' : (c.rarity ? esc(c.rarity.name) + ' · ' : '') + (c.number ? esc(c.number) + ' · ' : '') + 'Verse' + (c.tested ? ' · tested ' + esc(c.tested) : '')) + '</div>' + plate + '</div>';
+  const foot = '<div class="vc-foot"><div class="vc-num">' + (c.rarity ? esc(c.rarity.name) + ' · ' : '') + (c.number ? esc(c.number) + ' · ' : '') + 'Verse' + (c.tested ? ' · tested ' + esc(c.tested) : '') + '</div>' + plate + '</div>';
   return { art, type, adds, foot, arrows };
 }
 
@@ -328,11 +326,7 @@ export function keep(el, esc, stats) {
   if (el.dataset.imgSafe === 'blocked' || cardUnsafe(el, el._ask || '')) scrubCard(el);
   const photoImg = [...el.querySelectorAll('img[src]')].find((i) => !i.closest('.vc-art') && /^https:\/\//.test(i.getAttribute('src') || '')), photo = photoImg ? photoImg.getAttribute('src') : '';
   // the card's subject is what its ANSWER is about (lib/card-subject.js), not the ask's words: the plate draws it, the Art Forge paints it
-  const willGoal = el.querySelector('.will-goal');
-  const willCard = !!(willGoal || /what i(?:'m| am) working on|what i want to become/i.test((h2t && h2t.textContent) || ''));
-  if (willCard) { c.quiet = true; c.power = null; c.toughness = null; c.income = null; }
-  const subj = own || notFound ? { nouns: [], phrase: '' } : willGoal ? subjectOf('', willGoal.textContent) : c.isSkill ? skillSubjectOf(c.key) : subjectOf(c.key, answerText(el)); c.nouns = subj.nouns; el._vcSubject = subj.phrase;
-  if (willGoal && !el.dataset.artSubject) el.dataset.artSubject = artSubjectOf(willGoal.textContent);
+  const subj = own || notFound ? { nouns: [], phrase: '' } : c.isSkill ? skillSubjectOf(c.key) : subjectOf(c.key, answerText(el)); c.nouns = subj.nouns; el._vcSubject = subj.phrase;
   const key = JSON.stringify([c.key, c.nouns, c.season, c.isSkill, c.chapter, c.typeLine, c.cost, c.power, c.toughness, c.income, c.arrowsOut, c.arrowIn, c.number, c.adds, c.artKind, c.artHue, c.artInk, c.rarity && c.rarity.name, c.hue, photo, c.badges, c.notice, c.theme]);
   const h2 = el.querySelector('h2');
   if (h2 && !h2.classList.contains('vc-title')) h2.classList.add('vc-title');

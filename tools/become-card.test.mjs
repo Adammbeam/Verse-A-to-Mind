@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { willCardHtml, workingOnHtml, plainPublic, visitorGoal, artSubjectOf, workingOnAsk, freshWants, recentBuilt } from '../void-live-deploy/lib/will-card.js';
 
-const text = (html) => html.replace(/<(?:\/(?:li|div|p|b|h2|ol|ul)|br)\s*>/g, '\n').replace(/<[^>]+>/g, '').replace(/&quot;/g, '"').replace(/&amp;/g, '&').split('\n').map((l) => l.trim()).filter(Boolean);
+const text = (html) => html.replace(/<style[\s\S]*?<\/style>/gi, '').replace(/<(?:\/(?:li|div|p|b|h2|ol|ul)|br)\s*>/g, '\n').replace(/<[^>]+>/g, '').replace(/&quot;/g, '"').replace(/&amp;/g, '&').split('\n').map((l) => l.trim()).filter(Boolean);
 
 // Visible card text only (hrefs are not shown). No domain names, file paths, or camelCase / SCREAMING_CASE identifiers.
 function leaks(s) {
@@ -143,6 +143,8 @@ test('the working-on card is one capital sentence, no internal log jargon, and c
     const body = line.replace(/^[A-Z][a-z]{2} \d+ — /, '');
     if (body) assert.match(body, /^[A-Z]/, line);
   }
+  assert.match(html, /data-will-quiet/);
+  assert.match(html, /vc-pt/);
   assert.equal(artSubjectOf('I want to fix the podcast exam failures for audio and show/episode detection.'), 'podcast microphone on a wooden workbench');
   assert.match(visitorGoal({ i_want: 'I want to fix the podcast exam failures for audio and show/episode detection.' }), /^[A-Z]/);
 });

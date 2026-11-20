@@ -212,6 +212,7 @@ function chosenLine(at, esc) {
   return t && !isNaN(+t) ? ' · chosen ' + esc(t.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }) + ' ET') : '';
 }
 
+const QUIET_CHROME = '<style data-will-quiet>.vcard:has(.will-goal) .vc-pt,.vcard:has(.will-goal) .vc-arrows,.vcard:has(.will-goal) .vc-num{display:none!important}</style>';
 export function willCardHtml(will, esc = escDef, ledger) {
   const w = will || {};
   const wants = Array.isArray(w.wants) ? w.wants : [];
@@ -226,7 +227,7 @@ export function willCardHtml(will, esc = escDef, ledger) {
         + (reason ? '<p class="will-why" style="color:#8a8a8a;margin:6px 0 0">' + esc(reason) + '</p>' : '') + '</div>';
     }).join('') + '</div>'
     : '<p>Everything I last chose is built. I choose again within the hour.</p>';
-  return '<h2>What I want to become</h2><div class="sub">I choose this myself, from what people ask me and everything I\'m made of.</div>' + goals + builtBlock(built, esc) + '<div class="src">Source: my will' + chosenLine(w.at, esc) + '</div>';
+  return '<h2>What I want to become</h2><div class="sub">I choose this myself, from what people ask me and everything I\'m made of.</div>' + goals + builtBlock(built, esc) + '<div class="src">Source: my will' + chosenLine(w.at, esc) + '</div>' + QUIET_CHROME;
 }
 
 export function workingOnHtml(will, esc = escDef, ledger) {
@@ -241,5 +242,5 @@ export function workingOnHtml(will, esc = escDef, ledger) {
   return '<h2>What I\'m working on</h2>'
     + body
     + builtBlock(built, esc)
-    + '<div class="src">Source: my will' + chosenLine(w.at, esc) + '</div>';
+    + '<div class="src">Source: my will' + chosenLine(w.at, esc) + '</div>' + QUIET_CHROME;
 }

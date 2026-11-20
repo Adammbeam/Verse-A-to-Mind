@@ -238,11 +238,3 @@ test('the side arrows sit inside the card (2026-11-06: the right arrow at right:
   assert.match(CARD_CSS, /\.vc-arrows \.r\{right:0;/); assert.match(CARD_CSS, /\.vc-arrows \.l\{left:0;/);
   assert.doesNotMatch(CARD_CSS, /\.vc-arrows \.[rl]\{(?:right|left):-/);
 });
-
-test('a quiet working-on card hides P/R/I and the rarity collector number', () => {
-  const deps = JSON.parse(readFileSync(resolve(root, 'deps.json'), 'utf8'));
-  const c = { ...cardOf({ ...lookup({ book, fam, deps }, 'forge') }), quiet: true };
-  const h = chromeHtml(c, esc);
-  assert.doesNotMatch(h.foot, /vc-pt|P<b>|R<b>|I<b>|Rare|Mythic|\d+\/\d+/i);
-  assert.match(h.foot, /Verse/);
-});
