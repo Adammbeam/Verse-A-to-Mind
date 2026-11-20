@@ -1,34 +1,5 @@
 [
  {
-  "at": "2026-11-08T04:27:53Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 1147,
-   "failed": []
-  },
-  "note": "visitor pass 15/15"
- },
- {
-  "at": "2026-11-08T04:56:24Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1678,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 16387 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-08T06:40:27Z",
   "kind": "visitor",
   "visitor": {
@@ -6588,5 +6559,81 @@
    "failed": []
   },
   "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-20T09:21:32Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 752,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-20T09:37:30Z",
+  "passed": 126,
+  "of": 146,
+  "ms": 454,
+  "kind": "file",
+  "key": "update for you: a new routine now runs every 3 hours from 3:17 AM ET and clears every list | missing text /News about me/",
+  "failed": [
+   {
+    "ask": "update for you: a new routine now runs every 3 hours from 3:17 AM ET and clears ",
+    "why": "missing text /News about me/"
+   },
+   {
+    "ask": "bokos like dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "yo automations",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "play reversi",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "send it away",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "echo this",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "fimls by kurosawa",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "film meatdata for ikiru",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "build a hut",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "open folder recipes",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "three alike",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "token stand",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 752,
+   "failed": []
+  },
+  "note": "fix: \"update for you: a new routine now runs every 3 hours from 3:17 AM ET and clears every list\" missing text /News about me/"
  }
 ]
