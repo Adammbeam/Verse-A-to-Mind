@@ -14,7 +14,7 @@
  "bench_at": "2026-11-18",
  "totals": {
   "experiment": 0,
-  "tested": 6,
+  "tested": 8,
   "checked": 19,
   "proven": 447
  },
@@ -3789,7 +3789,7 @@
    "for": "how Verse grows, what it wants, what it can do and sell, and acting on your behalf",
    "count": {
     "experiment": 0,
-    "tested": 5,
+    "tested": 7,
     "checked": 6,
     "proven": 92
    },
@@ -4370,6 +4370,13 @@
      "streak": 31
     },
     {
+     "name": "working-on",
+     "tier": "tested",
+     "why": "1 browser-suite mention",
+     "last_tested": "2026-11-20",
+     "last_tested_by": "the daily smoke test"
+    },
+    {
      "name": "podcast",
      "tier": "proven",
      "why": "a self-test, 5 browser-suite mentions, 3 real asks in the benchmark",
@@ -4751,6 +4758,13 @@
      "last_tested_by": "the daily smoke test",
      "success_rate": 1,
      "promoted": "2026-11-19"
+    },
+    {
+     "name": "before-after-pack",
+     "tier": "tested",
+     "why": "a self-test",
+     "last_tested": "2026-11-20",
+     "last_tested_by": "the daily smoke test"
     }
    ]
   },
