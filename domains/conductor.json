@@ -1,10 +1,10 @@
 {
  "about": "What the conductor (tools/conductor.mjs, every 10 minutes from grow-clock.yml) did: the last 24 hours of ticks, loops it found broken, and the jobs it handed to executors that claim for themselves. Counts and job ids only.",
- "updated": "2026-11-20T05:42:13.530Z",
+ "updated": "2026-11-20T08:43:26.869Z",
  "last24h": {
-  "ticks": 60,
-  "started": 49,
-  "requeued": 10,
+  "ticks": 79,
+  "started": 70,
+  "requeued": 11,
   "setAside": 1,
   "probes": 0,
   "errors": 1
@@ -18,90 +18,90 @@
  ],
  "held": [
   {
-   "id": "mveb8rsi",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "want-guard-hourly-deploy-green",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mveb8svc",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "want-guard-hourly-main-green",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mvfu4evy",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "want-exam-weather",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mvpuq9g6",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "want-exam-definitions",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mvpuqaee",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "mwcuue69",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mvpuqb4r",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "mwdkp801",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mvvjzso8",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "mwe1dy24",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mw5mm5fm",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "mwe1sh8c",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mvvql4d9",
-   "why": "no executor for route"
+   "id": "mwe1w3ao",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mw3fl8fe",
-   "why": "no executor for bot"
+   "id": "mwe253d6",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mw3fl8fi",
-   "why": "no executor for bot"
+   "id": "mwe25lmi",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mw3fl8g0",
-   "why": "no executor for bot"
+   "id": "mwe46i1x",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mw3fl8i4",
-   "why": "no executor for bot"
+   "id": "mwe4pvdh",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mwav1pw9",
-   "why": "no executor for retest"
+   "id": "mwe5oqe5",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mwazktlm",
-   "why": "no executor for bot"
+   "id": "mwe5z3mk",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mwazktnz",
-   "why": "no executor for bot"
+   "id": "mwe873tt",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mwazktrq",
-   "why": "no executor for bot"
+   "id": "mweacyot",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mwazktv3",
-   "why": "no executor for bot"
+   "id": "mwf07l4t",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mwazktv9",
-   "why": "no executor for bot"
+   "id": "mwf2cj4o",
+   "why": "verse-job.yml reached its 40 runs today"
   },
   {
-   "id": "mwditzd8",
-   "why": "no executor for route"
+   "id": "mwf6h46q",
+   "why": "verse-job.yml reached its 40 runs today"
   }
  ],
  "coder": {
   "model": "@cf/google/gemma-4-26b-a4b-it",
   "hour": {
-   "used": 15,
+   "used": 8,
    "cap": 90
   },
   "day": {
@@ -113,9 +113,9 @@
   "paid": false
  },
  "handed": {
-  "mvbl52gd": 1795133003663,
+  "mvbl52gd": 1795155124554,
   "mveb8rsi": 1795133003663,
-  "mvu167w7": 1795133576525,
+  "mvu167w7": 1795155695690,
   "mveb8svc": 1795133576525,
   "mvfu4evy": 1795134146575,
   "mvpuq9g6": 1795134709317,
@@ -134,13 +134,15 @@
   "mweaah6f": 1795151502635,
   "mwey8iy6": 1795152143224,
   "mwme3uk5": 1795152717608,
-  "mwmi5727": 1795153333530
+  "mwmi5727": 1795153333530,
+  "mwmpup7b": 1795153897848,
+  "mwnbxf5o": 1795154462052,
+  "mwnkyhgw": 1795155124554
  },
- "sweptAt": 1795152143224,
- "blueprintsAt": 1795152143224,
- "visitorAt": "2026-11-20T05:23:12Z",
+ "sweptAt": 1795164206869,
+ "blueprintsAt": 1795164206869,
+ "visitorAt": "2026-11-20T08:00:46Z",
  "visitorFiled": [
-  "review:2701",
   "heal:helper-shows-live-clean",
   "review:2702",
   "heal:helper-shows-craft-6fca",
@@ -184,6 +186,7 @@
   "heal:helper-register-delivery-skills",
   "heal:helper-systems-owned",
   "review:2758",
+  "gap:want-exam-weather",
   "probe:is-the-bot-running",
   "probe:summarize-the-last-sprint",
   "review:2761",
@@ -1968,6 +1971,585 @@
    "sweep": false,
    "blueprints": 0,
    "held": 22,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T05:51:37.848Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwcuue69",
+     "kind": "heal",
+     "wf": "verse-job.yml",
+     "score": 116
+    },
+    {
+     "id": "mwmpup7b",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 43
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": true,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 22,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T06:01:02.052Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwcuue69",
+     "kind": "heal",
+     "wf": "verse-job.yml",
+     "score": 116
+    },
+    {
+     "id": "mwnbxf5o",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 42
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 22,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T06:12:04.554Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwcuue69",
+     "kind": "heal",
+     "wf": "verse-job.yml",
+     "score": 116
+    },
+    {
+     "id": "mvbl52gd",
+     "kind": "store-gap",
+     "wf": "store-gap.yml",
+     "score": 120
+    },
+    {
+     "id": "mwnkyhgw",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 41
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": true,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 22,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T06:21:35.690Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "want-guard-hourly-deploy-green",
+     "kind": "heal",
+     "wf": "verse-job.yml",
+     "score": 105
+    },
+    {
+     "id": "mvu167w7",
+     "kind": "store-gap",
+     "wf": "store-gap.yml",
+     "score": 120
+    }
+   ],
+   "requeued": 1,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 22,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T06:30:56.160Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwcuue69",
+     "kind": "heal",
+     "wf": "verse-job.yml",
+     "score": 116
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": true,
+   "blueprints": 0,
+   "held": 22,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T06:40:17.749Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwcuue69",
+     "kind": "heal",
+     "wf": "verse-job.yml",
+     "score": 116
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 22,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T06:49:42.804Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwcuue69",
+     "kind": "heal",
+     "wf": "verse-job.yml",
+     "score": 116
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 22,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T06:59:04.210Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwcuue69",
+     "kind": "heal",
+     "wf": "verse-job.yml",
+     "score": 116
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 22,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T07:08:42.683Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "want-exam-definitions",
+     "kind": "gap",
+     "wf": "verse-job.yml",
+     "score": 65
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 22,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T07:18:14.534Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwcuue69",
+     "kind": "heal",
+     "wf": "verse-job.yml",
+     "score": 117
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 22,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T07:27:41.949Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "want-exam-weather",
+     "kind": "gap",
+     "wf": "verse-job.yml",
+     "score": 75
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 22,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T07:37:03.932Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "want-exam-weather",
+     "kind": "gap",
+     "wf": "verse-job.yml",
+     "score": 75
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": true,
+   "blueprints": 0,
+   "held": 22,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T07:46:39.371Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "want-exam-weather",
+     "kind": "gap",
+     "wf": "verse-job.yml",
+     "score": 75
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 22,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T07:56:02.207Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mw21cj6l",
+     "kind": "tv",
+     "wf": "verse-job.yml",
+     "score": 92
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": true,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 266,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T08:05:39.274Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mw5blp33",
+     "kind": "tv",
+     "wf": "verse-job.yml",
+     "score": 89
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 344,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T08:15:03.999Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mw5blphr",
+     "kind": "tv",
+     "wf": "verse-job.yml",
+     "score": 89
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": true,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 344,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T08:24:32.727Z",
+   "open": 500,
+   "started": [],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 470,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T08:34:00.870Z",
+   "open": 500,
+   "started": [],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 470,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-20T08:43:26.869Z",
+   "open": 500,
+   "started": [],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "tower-gate.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": true,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "sweep": true,
+   "blueprints": 0,
+   "held": 470,
    "warnings": 0
   }
  ]
