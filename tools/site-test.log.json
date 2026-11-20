@@ -1,23 +1,5 @@
 [
  {
-  "at": "2026-11-08T03:38:01Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 431,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 11617 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-08T04:27:53Z",
   "kind": "visitor",
   "visitor": {
@@ -6595,5 +6577,16 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"how do i make guacamole\" (skill:recipe)"
+ },
+ {
+  "at": "2026-11-20T08:51:22Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1668,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
