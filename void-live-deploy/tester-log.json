@@ -1,15 +1,64 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 146,
+ "cases": 147,
  "runsTotal": 300,
  "kinds": {
   "visitor": 226,
-  "grow": 44,
   "tighten": 2,
+  "grow": 44,
   "file": 26,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-20T11:21:26Z",
+   "passed": 139,
+   "of": 147,
+   "kind": "grow",
+   "ms": 393,
+   "note": "new ground passed, kept as a regression case: \"my routines\" (skill:routine)",
+   "failed": [
+    {
+     "ask": "update for you: a new routine now runs every 3 hours from 3:17 AM ET and clears ",
+     "why": "missing text /News about me/"
+    },
+    {
+     "ask": "weather in boston",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "is waymo in austin",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "show the days until a date",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "fimls by kurosawa",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "film meatdata for ikiru",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "geenrate a toon style dog",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-20T11:09:41Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-20T10:56:55Z",
    "passed": 143,
@@ -335,35 +384,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-20T04:08:22Z",
-   "passed": 139,
-   "of": 142,
-   "kind": "grow",
-   "ms": 374,
-   "note": "new ground passed, kept as a regression case: \"how long until gta 6 comes out\" (skill:event-countdown)",
-   "failed": [
-    {
-     "ask": "who is the auhtor of dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "geenrate a toon style dog",
-     "why": "refused: don't know this yet"
-    }
-   ]
-  },
-  {
-   "at": "2026-11-20T03:59:10Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -429,19 +449,19 @@
   },
   {
    "from": "2026-11-06",
-   "runs": 138,
-   "passed": 2453,
-   "of": 3306,
+   "runs": 136,
+   "passed": 2383,
+   "of": 3201,
    "broken": 7,
    "brokenOf": 756,
    "brokenPassed": 61,
-   "ms": 393
+   "ms": 395
   },
   {
    "from": "2026-11-13",
-   "runs": 162,
-   "passed": 5846,
-   "of": 6154,
+   "runs": 164,
+   "passed": 5985,
+   "of": 6301,
    "ms": 430
   }
  ],
@@ -540,7 +560,7 @@
   "skill:releasenotes": "2026-11-20T09:37:30Z",
   "skill:rides": "2026-11-20T10:56:55Z",
   "skill:room": "2026-10-17T11:42:36Z",
-  "skill:routine": "2026-10-17T11:42:36Z",
+  "skill:routine": "2026-11-20T11:21:26Z",
   "skill:savings": "2026-10-17T11:53:29Z",
   "skill:senolytic": "2026-10-17T11:53:29Z",
   "skill:services": "2026-10-17T11:53:29Z",

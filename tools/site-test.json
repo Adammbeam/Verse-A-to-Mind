@@ -471,6 +471,9 @@
     },
     {
       "ask": "pizza delivery to 1 main st phoenix"
+    },
+    {
+      "ask": "my routines"
     }
   ],
   "candidates": [],
