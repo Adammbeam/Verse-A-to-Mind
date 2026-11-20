@@ -1,15 +1,60 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 139,
+ "cases": 140,
  "runsTotal": 300,
  "kinds": {
-  "grow": 39,
   "visitor": 228,
+  "grow": 39,
   "file": 29,
   "tighten": 2,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-20T01:05:56Z",
+   "passed": 133,
+   "of": 140,
+   "kind": "grow",
+   "ms": 483,
+   "note": "new ground passed, kept as a regression case: \"show my period log\" (skill:period)",
+   "failed": [
+    {
+     "ask": "weather in boston",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "who is the auhtor of dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "geenrate a toon style dog",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "make a vase",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "why is a half moon called a quarter moon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-20T00:54:43Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-20T00:31:48Z",
    "passed": 131,
@@ -494,31 +539,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-19T19:55:06Z",
-   "passed": 138,
-   "of": 140,
-   "kind": "grow",
-   "ms": 329,
-   "note": "new ground passed, kept as a regression case: \"show the data flows for client onboarding\" (skill:connections)",
-   "failed": [
-    {
-     "ask": "fimls by kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
-  },
-  {
-   "at": "2026-11-19T19:45:07Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -584,9 +604,9 @@
   },
   {
    "from": "2026-11-06",
-   "runs": 164,
-   "passed": 2974,
-   "of": 4563,
+   "runs": 162,
+   "passed": 2877,
+   "of": 4460,
    "broken": 14,
    "brokenOf": 1491,
    "brokenPassed": 135,
@@ -594,10 +614,10 @@
   },
   {
    "from": "2026-11-13",
-   "runs": 136,
-   "passed": 3939,
-   "of": 4148,
-   "ms": 439
+   "runs": 138,
+   "passed": 4072,
+   "of": 4288,
+   "ms": 447
   }
  ],
  "seen": {
@@ -679,7 +699,7 @@
   "skill:ovulation": "2026-11-19T22:52:12Z",
   "skill:part": "2026-11-19T23:27:14Z",
   "skill:pdf-card": "2026-11-20T00:08:19Z",
-  "skill:period": "2026-10-17T11:11:24Z",
+  "skill:period": "2026-11-20T01:05:56Z",
   "skill:place": "2026-10-17T11:11:24Z",
   "skill:pong": "2026-10-17T11:11:24Z",
   "skill:poster": "2026-10-17T11:17:08Z",
