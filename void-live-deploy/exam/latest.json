@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-20T04:03:54.766Z",
+  "at": "2026-11-20T04:38:15.868Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -34,16 +34,57 @@
       }
     },
     "podcasts": {
-      "score": 82.3,
+      "score": 74.4,
       "of": 18,
       "measured": 18,
       "fails": [
         {
           "ask": "play the latest episode of this american life",
           "failed": [
-            "audio"
+            "audio",
+            "episode"
           ],
-          "score": 85.7
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of radiolab",
+          "failed": [
+            "audio",
+            "episode"
+          ],
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of the daily",
+          "failed": [
+            "audio",
+            "episode"
+          ],
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of serial",
+          "failed": [
+            "audio",
+            "episode"
+          ],
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of planet money",
+          "failed": [
+            "audio",
+            "episode"
+          ],
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of the ted radio hour",
+          "failed": [
+            "audio",
+            "episode"
+          ],
+          "score": 71.4
         },
         {
           "ask": "play the latest episode of hidden brain",
@@ -70,14 +111,6 @@
           "score": 71.4
         },
         {
-          "ask": "play the latest episode of stuff you should know",
-          "failed": [
-            "audio",
-            "episode"
-          ],
-          "score": 71.4
-        },
-        {
           "ask": "play the latest episode of crime junkie",
           "failed": [
             "audio",
@@ -96,35 +129,36 @@
           "ask": "play the latest episode of npr news now",
           "failed": [
             "audio",
+            "episode"
+          ],
+          "score": 71.4
+        },
+        {
+          "ask": "play the latest episode of my favorite murder",
+          "failed": [
+            "audio",
             "show",
             "episode"
           ],
           "score": 57.1
         },
         {
-          "ask": "play the latest episode of my favorite murder",
-          "failed": [
-            "audio"
-          ],
-          "score": 83.3
-        },
-        {
           "ask": "play the episode before that",
           "failed": [
-            "skill"
+            "skill",
+            "audio",
+            "episode"
           ],
-          "score": 85.7
+          "score": 57.1
         },
         {
           "ask": "pon el último episodio de radiolab",
           "failed": [
-            "answered",
             "skill",
-            "fast",
             "audio",
             "episode"
           ],
-          "score": 28.6
+          "score": 57.1
         }
       ],
       "holdout": {
@@ -292,24 +326,10 @@
       }
     },
     "sports": {
-      "score": 91.7,
+      "score": 93.5,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "celtics score",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "yankees score",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
         {
           "ask": "how did the chiefs do",
           "failed": [
@@ -434,6 +454,6 @@
   },
   "lowest": {
     "domain": "podcasts",
-    "score": 82.3
+    "score": 74.4
   }
 }
