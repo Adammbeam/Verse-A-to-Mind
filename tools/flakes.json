@@ -273,5 +273,7 @@
   {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "9222c0cecc94ea290211ceaab6de0c4de9ffa3c6", "at": "2026-11-20T11:21:55Z"},
   {"check": "prizes: \"Spin them on the name wheel\" opens the wheel with the bare slice names and keeps one verse_handoff copy for the paste pill", "sha": "61d82192539d87f580f55a3155151b4f29c0e354", "at": "2026-11-20T11:47:43Z"},
   {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "61d82192539d87f580f55a3155151b4f29c0e354", "at": "2026-11-20T11:47:43Z"},
-  {"check": "late skills: \"dyslexia friendly font\" asked while its skill is still loading (10 s late) turns the dyslexia font on once the skill is in, and says so", "sha": "61d82192539d87f580f55a3155151b4f29c0e354", "at": "2026-11-20T12:01:14Z"}
+  {"check": "late skills: \"dyslexia friendly font\" asked while its skill is still loading (10 s late) turns the dyslexia font on once the skill is in, and says so", "sha": "61d82192539d87f580f55a3155151b4f29c0e354", "at": "2026-11-20T12:01:14Z"},
+  {"check": "prizes: \"Spin them on the name wheel\" opens the wheel with the bare slice names and keeps one verse_handoff copy for the paste pill", "sha": "3c3e06e3ad772016ddbcbc0429da03689eb06d04", "at": "2026-11-20T12:14:03Z"},
+  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "3c3e06e3ad772016ddbcbc0429da03689eb06d04", "at": "2026-11-20T12:14:03Z"}
 ]
