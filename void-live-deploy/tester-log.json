@@ -4,12 +4,77 @@
  "runsTotal": 300,
  "kinds": {
   "visitor": 228,
-  "grow": 39,
-  "file": 29,
+  "file": 30,
   "tighten": 2,
+  "grow": 38,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-20T02:06:02Z",
+   "passed": 127,
+   "of": 141,
+   "kind": "file",
+   "ms": 486,
+   "note": "fix: \"test me on that\" only \"waking up\" appeared, never the answer",
+   "failed": [
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "test me on that",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "set my ambition temperature for the podcast",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "films by kurosawa pls",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "film meatdata for ikiru",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "time saved for the invoice automation",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "token stand",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "is this system handoff ready",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "system design for client onboarding",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "adaptive flow canvas",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-20T01:50:44Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-20T01:05:56Z",
    "passed": 133,
@@ -474,71 +539,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 14/15"
-  },
-  {
-   "at": "2026-11-19T20:22:55Z",
-   "passed": 116,
-   "of": 139,
-   "kind": "file",
-   "ms": 533,
-   "note": "fix: \"bokos like dune\" console: Failed to load resource: the server responded with a status of 404 ()",
-   "failed": [
-    {
-     "ask": "bokos like dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "what do you get if you merge a pizza and a black hole",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "send it away",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "fimls by kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "film meatdata for ikiru",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "yo what does ephemeral mean",
-     "why": "console: tries is not defined"
-    },
-    {
-     "ask": "yo what language does the word kindergarten come from",
-     "why": "console: tries is not defined"
-    },
-    {
-     "ask": "who is the auhtor of dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: tries is not defined"
-    },
-    {
-     "ask": "movie night",
-     "why": "console: tries is not defined"
-    },
-    {
-     "ask": "picture of a cat",
-     "why": "console: tries is not defined"
-    },
-    {
-     "ask": "how much is my watch worth",
-     "why": "console: tries is not defined"
-    }
-   ]
-  },
-  {
-   "at": "2026-11-19T20:07:49Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -605,18 +605,18 @@
   {
    "from": "2026-11-06",
    "runs": 162,
-   "passed": 2877,
-   "of": 4460,
+   "passed": 2776,
+   "of": 4356,
    "broken": 14,
    "brokenOf": 1491,
    "brokenPassed": 135,
-   "ms": 387
+   "ms": 384
   },
   {
    "from": "2026-11-13",
    "runs": 138,
-   "passed": 4072,
-   "of": 4288,
+   "passed": 4199,
+   "of": 4429,
    "ms": 447
   }
  ],
@@ -701,7 +701,7 @@
   "skill:pdf-card": "2026-11-20T00:08:19Z",
   "skill:period": "2026-11-20T01:05:56Z",
   "skill:place": "2026-10-17T11:11:24Z",
-  "skill:pong": "2026-10-17T11:11:24Z",
+  "skill:pong": "2026-11-20T02:06:02Z",
   "skill:poster": "2026-10-17T11:17:08Z",
   "skill:pregnancy": "2026-10-17T11:17:08Z",
   "skill:print-download": "2026-10-17T11:17:08Z",
