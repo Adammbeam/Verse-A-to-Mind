@@ -3,13 +3,20 @@
  "cases": 148,
  "runsTotal": 300,
  "kinds": {
-  "grow": 44,
-  "visitor": 225,
+  "visitor": 226,
+  "grow": 43,
   "file": 28,
   "none": 2,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-20T13:34:26Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-20T13:17:03Z",
    "passed": 133,
@@ -417,32 +424,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-20T06:08:02Z",
-   "passed": 140,
-   "of": 144,
-   "kind": "grow",
-   "ms": 299,
-   "note": "new ground passed, kept as a regression case: \"test me on this\" (skill:quiz)",
-   "failed": [
-    {
-     "ask": "send it away",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "yo films by kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
   }
  ],
  "weekly": [
@@ -509,8 +490,8 @@
   {
    "from": "2026-11-06",
    "runs": 131,
-   "passed": 2366,
-   "of": 2989,
+   "passed": 2281,
+   "of": 2882,
    "broken": 5,
    "brokenOf": 544,
    "brokenPassed": 44,
