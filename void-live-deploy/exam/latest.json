@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-20T07:34:38.960Z",
+  "at": "2026-11-20T08:20:29.542Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -34,120 +34,23 @@
       }
     },
     "podcasts": {
-      "score": 73.5,
+      "score": 95.2,
       "of": 18,
       "measured": 18,
       "fails": [
         {
-          "ask": "play the latest episode of this american life",
+          "ask": "play the latest episode of serial",
           "failed": [
-            "audio"
+            "episode"
           ],
           "score": 85.7
         },
         {
-          "ask": "play the latest episode of the daily",
-          "failed": [
-            "audio",
-            "episode"
-          ],
-          "score": 71.4
-        },
-        {
-          "ask": "play the latest episode of serial",
-          "failed": [
-            "audio",
-            "episode"
-          ],
-          "score": 71.4
-        },
-        {
-          "ask": "play the latest episode of planet money",
-          "failed": [
-            "audio",
-            "episode"
-          ],
-          "score": 71.4
-        },
-        {
-          "ask": "play the latest episode of hardcore history",
-          "failed": [
-            "audio",
-            "show",
-            "episode"
-          ],
-          "score": 57.1
-        },
-        {
-          "ask": "play the latest episode of the ted radio hour",
-          "failed": [
-            "audio",
-            "episode"
-          ],
-          "score": 71.4
-        },
-        {
           "ask": "play the latest episode of hidden brain",
           "failed": [
-            "audio",
-            "episode"
-          ],
-          "score": 71.4
-        },
-        {
-          "ask": "play the latest episode of freakonomics radio",
-          "failed": [
-            "audio",
-            "episode"
-          ],
-          "score": 71.4
-        },
-        {
-          "ask": "play the latest episode of science vs",
-          "failed": [
-            "audio",
-            "episode"
-          ],
-          "score": 71.4
-        },
-        {
-          "ask": "play the latest episode of stuff you should know",
-          "failed": [
-            "audio",
-            "episode"
-          ],
-          "score": 71.4
-        },
-        {
-          "ask": "play the latest episode of crime junkie",
-          "failed": [
-            "audio",
-            "episode"
-          ],
-          "score": 71.4
-        },
-        {
-          "ask": "play the latest episode of the moth",
-          "failed": [
             "audio"
           ],
-          "score": 83.3
-        },
-        {
-          "ask": "play the latest episode of npr news now",
-          "failed": [
-            "audio",
-            "show",
-            "episode"
-          ],
-          "score": 57.1
-        },
-        {
-          "ask": "play the latest episode of my favorite murder",
-          "failed": [
-            "audio"
-          ],
-          "score": 83.3
+          "score": 85.7
         },
         {
           "ask": "play the episode before that",
@@ -159,13 +62,11 @@
         {
           "ask": "pon el último episodio de radiolab",
           "failed": [
-            "answered",
             "skill",
-            "fast",
             "audio",
             "episode"
           ],
-          "score": 28.6
+          "score": 57.1
         }
       ],
       "holdout": {
@@ -214,66 +115,10 @@
       }
     },
     "weather": {
-      "score": 84.8,
+      "score": 96.3,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "will it rain tomorrow in london",
-          "failed": [
-            "fast"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "weather in tokyo this week",
-          "failed": [
-            "fast"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "what's the weather in miami tomorrow",
-          "failed": [
-            "answered",
-            "fast",
-            "temp"
-          ],
-          "score": 50
-        },
-        {
-          "ask": "whats teh weather in london",
-          "failed": [
-            "fast"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "weather tomorrow in chicago",
-          "failed": [
-            "answered",
-            "fast",
-            "temp",
-            "close"
-          ],
-          "score": 42.9
-        },
-        {
-          "ask": "humidity in miami",
-          "failed": [
-            "answered",
-            "fast",
-            "temp"
-          ],
-          "score": 50
-        },
-        {
-          "ask": "wind speed in chicago",
-          "failed": [
-            "fast"
-          ],
-          "score": 83.3
-        },
         {
           "ask": "weather",
           "failed": [
@@ -285,9 +130,10 @@
         {
           "ask": "météo à lyon",
           "failed": [
-            "skill"
+            "skill",
+            "temp"
           ],
-          "score": 83.3
+          "score": 66.7
         }
       ],
       "holdout": {
@@ -528,7 +374,7 @@
     }
   },
   "lowest": {
-    "domain": "podcasts",
-    "score": 73.5
+    "domain": "sports",
+    "score": 91.7
   }
 }
