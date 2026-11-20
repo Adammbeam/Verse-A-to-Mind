@@ -480,6 +480,9 @@
     },
     {
       "ask": "share the open card"
+    },
+    {
+      "ask": "show me the tv show andor"
     }
   ],
   "candidates": [],

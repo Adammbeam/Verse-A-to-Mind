@@ -1,15 +1,56 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 149,
+ "cases": 150,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 226,
   "file": 28,
+  "visitor": 225,
   "none": 2,
-  "grow": 43,
+  "grow": 44,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-20T21:42:30Z",
+   "passed": 144,
+   "of": 150,
+   "kind": "grow",
+   "ms": 368,
+   "note": "new ground passed, kept as a regression case: \"show me the tv show andor\" (skill:show)",
+   "failed": [
+    {
+     "ask": "fimls by kurosawa",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "film meatdata for ikiru",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "dim the void",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "geenrate a toon style dog",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "make a poster of this card",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-20T21:29:43Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-20T21:13:13Z",
    "passed": 132,
@@ -459,27 +500,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-20T08:51:22Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-20T08:00:46Z",
-   "passed": 144,
-   "of": 145,
-   "kind": "grow",
-   "ms": 309,
-   "note": "new ground passed, kept as a regression case: \"how do i make guacamole\" (skill:recipe)",
-   "failed": [
-    {
-     "ask": "flip this card",
-     "why": "only \"waking up\" appeared, never the answer"
-    }
-   ]
   }
  ],
  "weekly": [
@@ -545,7 +565,7 @@
   },
   {
    "from": "2026-11-06",
-   "runs": 135,
+   "runs": 133,
    "passed": 2347,
    "of": 2790,
    "broken": 3,
@@ -555,10 +575,10 @@
   },
   {
    "from": "2026-11-13",
-   "runs": 165,
-   "passed": 6541,
-   "of": 6920,
-   "ms": 438
+   "runs": 167,
+   "passed": 6685,
+   "of": 7070,
+   "ms": 430
   }
  ],
  "seen": {
@@ -662,7 +682,7 @@
   "skill:services": "2026-10-17T11:53:29Z",
   "skill:shape": "2026-11-20T13:17:03Z",
   "skill:share": "2026-11-20T20:18:57Z",
-  "skill:show": "2026-10-17T12:21:39Z",
+  "skill:show": "2026-11-20T21:42:30Z",
   "skill:show-countdown": "2026-10-17T13:52:50Z",
   "skill:showcase": "2026-10-17T13:52:50Z",
   "skill:skycard": "2026-10-17T13:52:50Z",
