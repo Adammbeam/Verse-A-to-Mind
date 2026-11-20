@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-20T09:20:04.233Z",
+  "at": "2026-11-20T09:54:38.531Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -34,18 +34,10 @@
       }
     },
     "podcasts": {
-      "score": 73.6,
+      "score": 76.7,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "play the latest episode of this american life",
-          "failed": [
-            "audio",
-            "episode"
-          ],
-          "score": 71.4
-        },
         {
           "ask": "play the latest episode of the daily",
           "failed": [
@@ -112,14 +104,6 @@
           "score": 71.4
         },
         {
-          "ask": "play the latest episode of stuff you should know",
-          "failed": [
-            "audio",
-            "episode"
-          ],
-          "score": 71.4
-        },
-        {
           "ask": "play the latest episode of crime junkie",
           "failed": [
             "audio",
@@ -145,11 +129,9 @@
         {
           "ask": "play the latest episode of my favorite murder",
           "failed": [
-            "audio",
-            "show",
-            "episode"
+            "audio"
           ],
-          "score": 57.1
+          "score": 83.3
         },
         {
           "ask": "play the episode before that",
@@ -161,11 +143,13 @@
         {
           "ask": "pon el último episodio de radiolab",
           "failed": [
+            "answered",
             "skill",
+            "fast",
             "audio",
             "episode"
           ],
-          "score": 57.1
+          "score": 28.6
         }
       ],
       "holdout": {
@@ -214,40 +198,12 @@
       }
     },
     "weather": {
-      "score": 91.1,
+      "score": 94.8,
       "of": 18,
       "measured": 18,
       "fails": [
         {
-          "ask": "weather in paris",
-          "failed": [
-            "fast"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "will it rain tomorrow in london",
-          "failed": [
-            "fast"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "weather in seattle",
-          "failed": [
-            "fast"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "weather in london this weekend",
-          "failed": [
-            "fast"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "whats teh weather in london",
+          "ask": "what's the weather in miami tomorrow",
           "failed": [
             "fast"
           ],
@@ -300,7 +256,7 @@
       }
     },
     "recipes": {
-      "score": 98.2,
+      "score": 97.2,
       "of": 18,
       "measured": 18,
       "fails": [
@@ -308,9 +264,10 @@
           "ask": "recipe",
           "failed": [
             "skill",
+            "method",
             "rival"
           ],
-          "score": 66.7
+          "score": 50
         }
       ],
       "holdout": {
@@ -510,6 +467,6 @@
   },
   "lowest": {
     "domain": "podcasts",
-    "score": 73.6
+    "score": 76.7
   }
 }
