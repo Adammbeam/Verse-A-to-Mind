@@ -255,5 +255,7 @@
   {"check": "routines: \"call this my morning\" saves the two asks before it in the order they were asked (and not itself); after a reload \"my morning\" asks them again (the co", "sha": "0787c11906cd852428778d564a098014bb117ac0", "at": "2026-11-20T07:06:22Z"},
   {"check": "suite ran to the end", "sha": "0787c11906cd852428778d564a098014bb117ac0", "at": "2026-11-20T07:06:22Z"},
   {"check": "password strength: /password-strength/ loads one page and one module (no third party), rates \"password\" Very weak and instantly cracked with its reason, rates a", "sha": "0787c11906cd852428778d564a098014bb117ac0", "at": "2026-11-20T07:08:19Z"},
-  {"check": "base64 page: /base64/ encodes and decodes as you type, keeps emoji exact, says what is wrong with bad Base64, writes Base64URL, and turns a file into a data: UR", "sha": "0787c11906cd852428778d564a098014bb117ac0", "at": "2026-11-20T07:08:19Z"}
+  {"check": "base64 page: /base64/ encodes and decodes as you type, keeps emoji exact, says what is wrong with bad Base64, writes Base64URL, and turns a file into a data: UR", "sha": "0787c11906cd852428778d564a098014bb117ac0", "at": "2026-11-20T07:08:19Z"},
+  {"check": "prizes: \"Spin them on the name wheel\" opens the wheel with the bare slice names and keeps one verse_handoff copy for the paste pill", "sha": "d11ff117008673176c887e604a0b6bc50097766b", "at": "2026-11-20T07:47:28Z"},
+  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "d11ff117008673176c887e604a0b6bc50097766b", "at": "2026-11-20T07:47:28Z"}
 ]
