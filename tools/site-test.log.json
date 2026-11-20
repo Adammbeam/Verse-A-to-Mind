@@ -1,68 +1,5 @@
 [
  {
-  "at": "2026-11-08T02:22:30Z",
-  "passed": 98,
-  "of": 105,
-  "ms": 417,
-  "kind": "file",
-  "key": "weak | closer on the figure",
-  "failed": [
-   {
-    "ask": "play voidquest",
-    "why": "fps 4 < 5"
-   },
-   {
-    "ask": "play chess",
-    "why": "fps 1 < 5"
-   },
-   {
-    "ask": "send it away",
-    "why": "only \"waking up\" appeared, never the answer"
-   },
-   {
-    "ask": "fimls by kurosawa",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "yo draw yourself",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "proof-carrying claims",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "word ladder from cat to dog",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   }
-  ],
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 1159,
-   "failed": []
-  },
-  "note": "quality upgrade: weakest answer was \"closer on the figure\" (14 chars)"
- },
- {
-  "at": "2026-11-08T02:36:28Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1329,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 9092 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-08T03:10:37Z",
   "kind": "visitor",
   "visitor": {
@@ -6668,5 +6605,53 @@
    "failed": []
   },
   "note": "fix: \"show the days until a date\" only \"waking up\" appeared, never the answer"
+ },
+ {
+  "at": "2026-11-20T06:48:39Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1167,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-20T06:58:54Z",
+  "passed": 140,
+  "of": 145,
+  "ms": 279,
+  "kind": "file",
+  "key": "export as stl | only \"waking up\" appeared, never the answer",
+  "failed": [
+   {
+    "ask": "send it away",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "films by Kurosawa",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "stlye like mickey mouse",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "geenrate a toon style dog",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "export as stl",
+    "why": "only \"waking up\" appeared, never the answer"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1167,
+   "failed": []
+  },
+  "note": "fix: \"export as stl\" only \"waking up\" appeared, never the answer"
  }
 ]
