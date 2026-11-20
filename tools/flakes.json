@@ -240,5 +240,6 @@
   {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "2196dc106400f84d22d4b68fc392291524513ad7", "at": "2026-11-20T03:11:37Z"},
   {"check": "photo resizer: a 1200x900 PNG becomes 3.5 x 2.5 cm at 200 dpi (276 x 197 px) under 12 KB, the JPEG download is that size and under the limit, the PDF download i", "sha": "622478a6f358cbc8b785c7caff19b3165941d25f", "at": "2026-11-20T04:00:24Z"},
   {"check": "photo resizer: \"resize a photo to 3.5 x 2.5 cm under 50 kb\" opens a card whose link opens the resizer with 3.5, 2.5, cm and 50 filled in", "sha": "622478a6f358cbc8b785c7caff19b3165941d25f", "at": "2026-11-20T04:00:24Z"},
-  {"check": "suite ran to the end", "sha": "622478a6f358cbc8b785c7caff19b3165941d25f", "at": "2026-11-20T04:00:24Z"}
+  {"check": "suite ran to the end", "sha": "622478a6f358cbc8b785c7caff19b3165941d25f", "at": "2026-11-20T04:00:24Z"},
+  {"check": "routines: \"call this my morning\" saves the two asks before it in the order they were asked (and not itself); after a reload \"my morning\" asks them again (the co", "sha": "622478a6f358cbc8b785c7caff19b3165941d25f", "at": "2026-11-20T04:03:20Z"}
 ]
