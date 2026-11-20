@@ -453,6 +453,9 @@
     },
     {
       "ask": "show my period log"
+    },
+    {
+      "ask": "make a poster of this card"
     }
   ],
   "candidates": [],

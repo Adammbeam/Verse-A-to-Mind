@@ -1,15 +1,48 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 140,
+ "cases": 141,
  "runsTotal": 300,
  "kinds": {
   "visitor": 228,
-  "file": 30,
+  "file": 29,
   "tighten": 2,
-  "grow": 38,
+  "grow": 39,
   "none": 2
  },
  "runs": [
+  {
+   "at": "2026-11-20T02:50:21Z",
+   "passed": 137,
+   "of": 141,
+   "kind": "grow",
+   "ms": 509,
+   "note": "new ground passed, kept as a regression case: \"make a poster of this card\" (skill:poster)",
+   "failed": [
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "approve later: keep morning-digest running every 2 hours",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "film meatdata for ikiru",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-20T02:38:35Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-20T02:06:02Z",
    "passed": 127,
@@ -474,71 +507,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-19T20:51:47Z",
-   "passed": 103,
-   "of": 139,
-   "kind": "file",
-   "ms": 519,
-   "note": "fix: \"air quality in Tokyo\" console: tries is not defined",
-   "failed": [
-    {
-     "ask": "air quality in Tokyo",
-     "why": "console: tries is not defined"
-    },
-    {
-     "ask": "put on lofi hip hop pls",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "find the book the left hand of dakrness",
-     "why": "console: tries is not defined"
-    },
-    {
-     "ask": "bokos like dune",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "what time is it in tokyo",
-     "why": "console: tries is not defined"
-    },
-    {
-     "ask": "play connect four",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "are you web4",
-     "why": "console: tries is not defined"
-    },
-    {
-     "ask": "what are the figures doing",
-     "why": "nothing appeared"
-    },
-    {
-     "ask": "longevity trial watch",
-     "why": "console: tries is not defined"
-    },
-    {
-     "ask": "test me on that",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "find me a sci-fi film from the 80s",
-     "why": "console: tries is not defined"
-    },
-    {
-     "ask": "films by Kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
-  },
-  {
-   "at": "2026-11-19T20:34:44Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 14/15"
   }
  ],
  "weekly": [
@@ -604,9 +572,9 @@
   },
   {
    "from": "2026-11-06",
-   "runs": 162,
-   "passed": 2776,
-   "of": 4356,
+   "runs": 161,
+   "passed": 2721,
+   "of": 4251,
    "broken": 14,
    "brokenOf": 1491,
    "brokenPassed": 135,
@@ -614,10 +582,10 @@
   },
   {
    "from": "2026-11-13",
-   "runs": 138,
-   "passed": 4199,
-   "of": 4429,
-   "ms": 447
+   "runs": 139,
+   "passed": 4336,
+   "of": 4570,
+   "ms": 452
   }
  ],
  "seen": {
@@ -702,7 +670,7 @@
   "skill:period": "2026-11-20T01:05:56Z",
   "skill:place": "2026-10-17T11:11:24Z",
   "skill:pong": "2026-11-20T02:06:02Z",
-  "skill:poster": "2026-10-17T11:17:08Z",
+  "skill:poster": "2026-11-20T02:50:21Z",
   "skill:pregnancy": "2026-10-17T11:17:08Z",
   "skill:print-download": "2026-10-17T11:17:08Z",
   "skill:print-file": "2026-10-17T11:23:07Z",
