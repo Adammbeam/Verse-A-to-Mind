@@ -335,6 +335,16 @@ export async function crewTick(env, now = Date.now()) {
 
 // ---- Priorities (lib/team-priorities.js): Verse ranks its own queue; daily, each Monday, and whenever the evidence moves ----
 const dayKey = (now) => new Date(now).toISOString().slice(0, 10);
+/** the repairs Verse gave up on and the wants stuck at 0 (lib/team-priorities.js prioritize gaveUp) leave the queue as 'set aside', with why */
+export async function setAside(env, gone, now) {
+  const list = (gone || []).slice(0, 40), at = new Date(now).toISOString();
+  if (!list.length) return;
+  const stmts = list.flatMap((g) => [
+    env.DB.prepare("UPDATE void_queue SET state = 'set aside', note = ?, updated = ? WHERE id = ? AND state = 'queued'").bind(('set aside by Verse\'s attention: ' + g.why).slice(0, 300), at, g.id),
+    ...(g.want ? [env.DB.prepare("UPDATE void_team_wants SET state = 'set aside' WHERE key = ? AND state = 'open'").bind(g.want)] : []),
+  ]);
+  try { await env.DB.batch(stmts); } catch (_) { /* the next run tries again */ }
+}
 export async function prioritizeRun(env, ev, now, { force = false } = {}) {
   let jobs = [], wants = [];
   try { jobs = ((await env.DB.prepare("SELECT id, ask, target, state, note, at FROM void_queue WHERE state IN ('queued', 'building') ORDER BY at ASC LIMIT 400").all()).results || []).filter((j) => TEAM_KINDS.includes(kindOf(j.target))); } catch (_) { jobs = []; }
@@ -342,7 +352,9 @@ export async function prioritizeRun(env, ev, now, { force = false } = {}) {
   const override = await getState(env, 'override'), last = await getState(env, 'priorities');
   let done = [];
   try { done = (await env.DB.prepare("SELECT id, ask, target, state, updated FROM void_queue WHERE state IN ('done', 'live') AND updated >= ? ORDER BY updated DESC LIMIT 400").bind(new Date(now - 14 * 864e5).toISOString()).all()).results || []; } catch (_) { done = []; }
-  const p = P.prioritize(jobs, wants, { ...ev, done }, override, now), week = 'the week of ' + C.weekOf(new Date(now).toISOString()), monday = new Date(now).getUTCDay() === 1;
+  const p = P.prioritize(jobs, wants, { ...ev, done }, override, now);
+  await setAside(env, p.gaveUp, now);
+  const week = 'the week of ' + C.weekOf(new Date(now).toISOString()), monday = new Date(now).getUTCDay() === 1;
   const why = !last ? 'first ranking' : force ? 'the owner overrode' : monday && last.week !== week ? 'Monday: the new week\'s bets' : last.day !== dayKey(now) ? 'the daily ranking' : last.sig !== p.sig ? 'the evidence moved' : '';
   if (!why) return { changed: false, bets: last.bets.map((b) => b.id) };
   const betsMoved = !last || last.bets.map((b) => b.id).join(' ') !== p.bets.map((b) => b.id).join(' ');
