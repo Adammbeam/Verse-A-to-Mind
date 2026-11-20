@@ -11,6 +11,43 @@
  },
  "runs": [
   {
+   "at": "2026-11-20T03:46:21Z",
+   "passed": 137,
+   "of": 142,
+   "kind": "file",
+   "ms": 440,
+   "note": "fix: \"send it away\" only \"waking up\" appeared, never the answer",
+   "failed": [
+    {
+     "ask": "send it away",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "fimls by kurosawa",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "film meatdata for ikiru",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "who is the auhtor of dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-20T03:35:11Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
+  {
    "at": "2026-11-20T03:14:14Z",
    "passed": 137,
    "of": 142,
@@ -438,47 +475,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-19T21:46:27Z",
-   "passed": 133,
-   "of": 139,
-   "kind": "grow",
-   "ms": 474,
-   "note": "new ground passed, kept as a regression case: \"calorie calculator\" (skill:nutrition)",
-   "failed": [
-    {
-     "ask": "weather in boston",
-     "why": "console: Failed to load resource: the server responded with a status of 429 (Too Many Requests)"
-    },
-    {
-     "ask": "fimls by kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "who is the auhtor of dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "yo draw yourself",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "cross the bus",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
-  },
-  {
-   "at": "2026-11-19T21:35:54Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -544,19 +540,19 @@
   },
   {
    "from": "2026-11-06",
-   "runs": 159,
-   "passed": 2713,
-   "of": 4146,
-   "broken": 13,
-   "brokenOf": 1386,
-   "brokenPassed": 127,
-   "ms": 384
+   "runs": 157,
+   "passed": 2712,
+   "of": 4041,
+   "broken": 12,
+   "brokenOf": 1281,
+   "brokenPassed": 126,
+   "ms": 391
   },
   {
    "from": "2026-11-13",
-   "runs": 141,
-   "passed": 4473,
-   "of": 4712,
+   "runs": 143,
+   "passed": 4610,
+   "of": 4854,
    "ms": 447
   }
  ],
@@ -644,7 +640,7 @@
   "skill:pong": "2026-11-20T02:06:02Z",
   "skill:poster": "2026-11-20T02:50:21Z",
   "skill:pregnancy": "2026-11-20T03:14:14Z",
-  "skill:print-download": "2026-10-17T11:17:08Z",
+  "skill:print-download": "2026-11-20T03:46:21Z",
   "skill:print-file": "2026-10-17T11:23:07Z",
   "skill:printedmotor": "2026-10-17T11:23:07Z",
   "skill:proposal": "2026-10-17T11:28:39Z",
