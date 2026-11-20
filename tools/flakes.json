@@ -257,5 +257,6 @@
   {"check": "password strength: /password-strength/ loads one page and one module (no third party), rates \"password\" Very weak and instantly cracked with its reason, rates a", "sha": "0787c11906cd852428778d564a098014bb117ac0", "at": "2026-11-20T07:08:19Z"},
   {"check": "base64 page: /base64/ encodes and decodes as you type, keeps emoji exact, says what is wrong with bad Base64, writes Base64URL, and turns a file into a data: UR", "sha": "0787c11906cd852428778d564a098014bb117ac0", "at": "2026-11-20T07:08:19Z"},
   {"check": "prizes: \"Spin them on the name wheel\" opens the wheel with the bare slice names and keeps one verse_handoff copy for the paste pill", "sha": "d11ff117008673176c887e604a0b6bc50097766b", "at": "2026-11-20T07:47:28Z"},
-  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "d11ff117008673176c887e604a0b6bc50097766b", "at": "2026-11-20T07:47:28Z"}
+  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "d11ff117008673176c887e604a0b6bc50097766b", "at": "2026-11-20T07:47:28Z"},
+  {"check": "late skills: \"dyslexia friendly font\" asked while its skill is still loading (10 s late) turns the dyslexia font on once the skill is in, and says so", "sha": "8a145d8ecbe9b88cd2852198d99d6d985e392b9d", "at": "2026-11-20T08:22:53Z"}
 ]
