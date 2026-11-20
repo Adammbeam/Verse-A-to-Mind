@@ -235,5 +235,7 @@
   {"check": "wheel: a picture becomes an entry, a 2 s spin ends with confetti and auto-removes its winner, and the stage card shows the winner inside the card at 390 px", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:31:55Z"},
   {"check": "Verse art forge: a skill card (a tip calculator) is painted too: one POST of kind skill with its name, never a button", "sha": "a031e1858655ff830daed058e3d7cf5236e6c269", "at": "2026-11-19T23:31:55Z"},
   {"check": "late skills: \"dyslexia friendly font\" asked while its skill is still loading (10 s late) turns the dyslexia font on once the skill is in, and says so", "sha": "46443de3b123718eb17e578352fd817176d8fb5d", "at": "2026-11-19T23:59:52Z"},
-  {"check": "suite ran to the end", "sha": "571d31df04b9e11f7eb8277b42a0b85a2de2d101", "at": "2026-11-20T03:08:09Z"}
+  {"check": "suite ran to the end", "sha": "571d31df04b9e11f7eb8277b42a0b85a2de2d101", "at": "2026-11-20T03:08:09Z"},
+  {"check": "prizes: \"Spin them on the name wheel\" opens the wheel with the bare slice names and keeps one verse_handoff copy for the paste pill", "sha": "2196dc106400f84d22d4b68fc392291524513ad7", "at": "2026-11-20T03:11:37Z"},
+  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "2196dc106400f84d22d4b68fc392291524513ad7", "at": "2026-11-20T03:11:37Z"}
 ]
