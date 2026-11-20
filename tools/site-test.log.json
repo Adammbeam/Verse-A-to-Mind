@@ -1,34 +1,5 @@
 [
  {
-  "at": "2026-11-07T22:15:16Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1875,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 12271 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
-  "at": "2026-11-07T22:43:50Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 428,
-   "failed": []
-  },
-  "note": "visitor pass 15/15"
- },
- {
   "at": "2026-11-07T22:57:43Z",
   "passed": 0,
   "of": 105,
@@ -6785,5 +6756,44 @@
    "failed": []
   },
   "note": "fix: \"send it away\" only \"waking up\" appeared, never the answer"
+ },
+ {
+  "at": "2026-11-20T03:59:10Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 704,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-20T04:08:22Z",
+  "passed": 139,
+  "of": 142,
+  "ms": 374,
+  "kind": "grow",
+  "failed": [
+   {
+    "ask": "who is the auhtor of dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "stlye like mickey mouse",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "geenrate a toon style dog",
+    "why": "refused: don't know this yet"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 704,
+   "failed": []
+  },
+  "note": "new ground passed, kept as a regression case: \"how long until gta 6 comes out\" (skill:event-countdown)"
  }
 ]
