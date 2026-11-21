@@ -507,6 +507,9 @@
     },
     {
       "ask": "card duel"
+    },
+    {
+      "ask": "note this card"
     }
   ],
   "candidates": [],

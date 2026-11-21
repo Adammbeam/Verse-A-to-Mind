@@ -1,41 +1,5 @@
 [
  {
-  "at": "2026-11-10T02:07:27Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1470,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 8001 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
-  "at": "2026-11-10T02:36:31Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1091,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 11743 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-10T03:04:10Z",
   "kind": "visitor",
   "visitor": {
@@ -6379,5 +6343,48 @@
    "failed": []
   },
   "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-21T20:21:03Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 781,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-21T20:32:05Z",
+  "passed": 155,
+  "of": 159,
+  "ms": 381,
+  "kind": "grow",
+  "failed": [
+   {
+    "ask": "send it away",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "film meatdata for ikiru",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "stlye like mickey mouse",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "geenrate a toon style dog",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 781,
+   "failed": []
+  },
+  "note": "new ground passed, kept as a regression case: \"note this card\" (skill:kept)"
  }
 ]
