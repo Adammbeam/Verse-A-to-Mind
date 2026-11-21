@@ -34,7 +34,7 @@
    "file": "lib/image-safety.js",
    "skills": 32,
    "direct": 0,
-   "dependants": 195,
+   "dependants": 196,
    "tests": 1
   },
   {
@@ -48,21 +48,21 @@
    "file": "lib/keeper.js",
    "skills": 31,
    "direct": 0,
-   "dependants": 187,
+   "dependants": 188,
    "tests": 1
   },
   {
    "file": "lib/merge-rules.js",
    "skills": 31,
    "direct": 1,
-   "dependants": 187,
+   "dependants": 188,
    "tests": 1
   },
   {
    "file": "lib/art-rules.js",
    "skills": 31,
    "direct": 0,
-   "dependants": 186,
+   "dependants": 187,
    "tests": 8
   },
   {
@@ -1035,7 +1035,7 @@
    "file": "lib/image-gen.js",
    "skills": 2,
    "direct": 1,
-   "dependants": 127,
+   "dependants": 128,
    "tests": 4
   },
   {
@@ -1049,7 +1049,7 @@
    "file": "lib/gumroad.js",
    "skills": 2,
    "direct": 1,
-   "dependants": 45,
+   "dependants": 46,
    "tests": 4
   },
   {
@@ -2547,14 +2547,14 @@
    "file": "lib/owner-accounts.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 123,
+   "dependants": 124,
    "tests": 0
   },
   {
    "file": "lib/guard.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 122,
+   "dependants": 123,
    "tests": 37
   },
   {
@@ -2589,7 +2589,7 @@
    "file": "lib/earnings.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 61,
+   "dependants": 62,
    "tests": 0
   },
   {
@@ -5684,11 +5684,13 @@
     "lib/gumroad.js",
     "lib/store.js"
    ],
-   "importedBy": []
+   "importedBy": [
+    "functions/api/stripe/webhook.js"
+   ]
   },
   "functions/api/stripe/webhook.js": {
    "imports": [
-    "lib/store.js"
+    "functions/api/store/[[path]].js"
    ],
    "importedBy": []
   },
@@ -6746,6 +6748,7 @@
     "functions/api/sponsors.js",
     "functions/api/sportsearch.js",
     "functions/api/store/[[path]].js",
+    "functions/api/stripe/webhook.js",
     "functions/api/studies.js",
     "functions/api/studio.js",
     "functions/api/support.js",
@@ -9798,6 +9801,7 @@
     "functions/api/scores.js",
     "functions/api/sing.js",
     "functions/api/sportsearch.js",
+    "functions/api/stripe/webhook.js",
     "functions/api/team.js",
     "functions/api/translate.js",
     "functions/api/unbidden.js",
@@ -10795,6 +10799,7 @@
     "functions/api/searches.js",
     "functions/api/share/index.js",
     "functions/api/sing.js",
+    "functions/api/stripe/webhook.js",
     "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/weather.js",
@@ -10922,6 +10927,7 @@
     "functions/api/paypal/review.js",
     "functions/api/productsearch.js",
     "functions/api/review.js",
+    "functions/api/stripe/webhook.js",
     "functions/api/support.js",
     "functions/api/team.js",
     "functions/api/treasury.js",
@@ -11299,6 +11305,7 @@
     "functions/api/sponsors.js",
     "functions/api/sportsearch.js",
     "functions/api/store/[[path]].js",
+    "functions/api/stripe/webhook.js",
     "functions/api/studies.js",
     "functions/api/support.js",
     "functions/api/tally.js",
@@ -11444,6 +11451,7 @@
     "functions/api/sponsors.js",
     "functions/api/sportsearch.js",
     "functions/api/store/[[path]].js",
+    "functions/api/stripe/webhook.js",
     "functions/api/studies.js",
     "functions/api/studio.js",
     "functions/api/support.js",
@@ -11916,6 +11924,7 @@
     "functions/api/sponsors.js",
     "functions/api/sportsearch.js",
     "functions/api/store/[[path]].js",
+    "functions/api/stripe/webhook.js",
     "functions/api/studies.js",
     "functions/api/studio.js",
     "functions/api/support.js",
@@ -12892,6 +12901,7 @@
     "functions/api/sponsors.js",
     "functions/api/sportsearch.js",
     "functions/api/store/[[path]].js",
+    "functions/api/stripe/webhook.js",
     "functions/api/studies.js",
     "functions/api/studio.js",
     "functions/api/support.js",
@@ -13838,6 +13848,7 @@
     "functions/api/sponsors.js",
     "functions/api/sportsearch.js",
     "functions/api/store/[[path]].js",
+    "functions/api/stripe/webhook.js",
     "functions/api/studies.js",
     "functions/api/studio.js",
     "functions/api/support.js",
@@ -17029,7 +17040,6 @@
     "functions/api/buy.js",
     "functions/api/page-pass.js",
     "functions/api/store/[[path]].js",
-    "functions/api/stripe/webhook.js",
     "lib/price-lock.js",
     "skills/store.js"
    ],
@@ -17060,6 +17070,7 @@
     "functions/api/scores.js",
     "functions/api/sing.js",
     "functions/api/sportsearch.js",
+    "functions/api/stripe/webhook.js",
     "functions/api/translate.js",
     "functions/api/watchalong.js",
     "functions/api/weather.js",
