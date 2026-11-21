@@ -1,0 +1,38 @@
+{
+ "at": "2026-11-21T21:06:40.651Z",
+ "sha": "24322313dfd167682e4dbf83f9c881a574caa98a",
+ "run": "https://github.com/atomeam/void-loop/actions/runs/44946503655",
+ "suite": "browser suite on main",
+ "checks": [
+  "coin: \"flip a coin\" shows one coin and Heads or Tails at once (no fake wait), the coin labelled with its side, the tally counting 1 flip, and a tap on the coin flips again (2 flips); the card links to the full page, /flip/",
+  "podcast: play the podcast opens the player card with the full transcript - newest episode, an mp3 player, every line whole and unclipped at 360 px, Download, Share, RSS and Tip; the feed is podcast RSS with an enclosure and explicit false",
+  "podcast: \"latest episode\" opens the same player card",
+  "podcast: \"verse podcast\" opens the same player card",
+  "will: Verse's own outputs become its input: an ask from its reflections is a want with how often it asked; asked more weighs more, capped at 40; a two-letter ask is not a want",
+  "poster wins: on a skill card (phone) the stats chip touches no text, the rarity and collector row included",
+  "will: Verse says what it wants",
+  "router: models are on by default whenever Workers AI is bound; VOID_ANSWER_MODELS=off = the open-web answer and rules-only fixes (no Workers AI call, no D1 write, no route)",
+  "suite ran to the end"
+ ],
+ "touched": [
+  "docs/GAPS.md",
+  "docs/map.d/studios.md",
+  "tools/budget-planner.test.mjs",
+  "tools/business-card.test.mjs",
+  "tools/checks.d/budget-planner.chk",
+  "tools/checks.d/business-card.chk",
+  "tools/checks.d/resume.chk",
+  "tools/crypto.test.mjs",
+  "tools/families.mjs",
+  "tools/markets.test.mjs",
+  "tools/resume.test.mjs",
+  "void-live-deploy/functions/api/markets.js",
+  "void-live-deploy/lib/markets.js",
+  "void-live-deploy/skills/budget-planner.js",
+  "void-live-deploy/skills/business-card.js"
+ ],
+ "shards": [
+  1,
+  4
+ ]
+}
