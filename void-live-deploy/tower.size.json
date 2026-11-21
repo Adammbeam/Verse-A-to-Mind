@@ -11963,6 +11963,20 @@
    "weight": 795371,
    "at": "2026-10-30"
   },
+  "startekinfo.com": {
+   "bytes": 3892219,
+   "controls": 12,
+   "scripts": 5,
+   "styles": 3,
+   "nodes": 21,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 738,
+   "shell": "none",
+   "weight": 3902429,
+   "at": "2026-11-21"
+  },
   "stealthex.io": {
    "bytes": 1452630,
    "controls": 131,
