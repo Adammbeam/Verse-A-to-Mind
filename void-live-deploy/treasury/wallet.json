@@ -1,10 +1,10 @@
 {
- "as_of": "2026-11-21T12:55:10.453Z",
+ "as_of": "2026-11-21T19:22:49.460Z",
  "address": "0x172198B605c3A6388fc4265b09Bc9b3b71CC7196",
  "network": "Base",
  "asset": "USDC",
  "contract": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
- "read_to_block": 60376675,
+ "read_to_block": 60492970,
  "balance_units": "0",
  "balance_cents": 0,
  "transfers_in": 0,
