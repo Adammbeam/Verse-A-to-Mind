@@ -498,6 +498,9 @@
     },
     {
       "ask": "clear search history"
+    },
+    {
+      "ask": "what stadium do the yankees play in"
     }
   ],
   "candidates": [],

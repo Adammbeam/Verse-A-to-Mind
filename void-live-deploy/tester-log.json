@@ -1,14 +1,47 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 155,
+ "cases": 156,
  "runsTotal": 300,
  "kinds": {
-  "grow": 44,
-  "visitor": 224,
   "file": 31,
+  "visitor": 224,
+  "grow": 44,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-21T13:17:16Z",
+   "passed": 152,
+   "of": 156,
+   "kind": "grow",
+   "ms": 352,
+   "note": "new ground passed, kept as a regression case: \"what stadium do the yankees play in\" (skill:sport)",
+   "failed": [
+    {
+     "ask": "show me the night sky",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "fimls by kurosawa",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "open folder recipes",
+     "why": "only \"waking up\" appeared, never the answer"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-21T13:05:10Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-21T11:57:01Z",
    "passed": 146,
@@ -335,35 +368,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-21T02:17:49Z",
-   "passed": 148,
-   "of": 151,
-   "kind": "grow",
-   "ms": 383,
-   "note": "new ground passed, kept as a regression case: \"what automations does Verse run\" (skill:verse-runs)",
-   "failed": [
-    {
-     "ask": "fimls by kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "yo draw yourself",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
-  },
-  {
-   "at": "2026-11-21T02:05:51Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -429,17 +433,17 @@
   },
   {
    "from": "2026-11-07",
-   "runs": 116,
-   "passed": 1835,
-   "of": 1929,
-   "ms": 391
+   "runs": 114,
+   "passed": 1727,
+   "of": 1815,
+   "ms": 388
   },
   {
    "from": "2026-11-14",
-   "runs": 184,
-   "passed": 8008,
-   "of": 8506,
-   "ms": 428
+   "runs": 186,
+   "passed": 8160,
+   "of": 8662,
+   "ms": 425
   }
  ],
  "seen": {
@@ -552,7 +556,7 @@
   "skill:social": "2026-11-21T10:22:24Z",
   "skill:spanish": "2026-10-17T17:36:35Z",
   "skill:splat": "2026-11-21T11:57:01Z",
-  "skill:sport": "2026-10-17T19:47:49Z",
+  "skill:sport": "2026-11-21T13:17:16Z",
   "skill:status": "2026-10-17T19:47:49Z",
   "skill:sticky": "2026-10-17T19:47:49Z",
   "skill:store": "2026-10-17T22:05:31Z",
