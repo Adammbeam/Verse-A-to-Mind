@@ -3,12 +3,77 @@
  "cases": 159,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 222,
+  "visitor": 221,
   "grow": 44,
-  "file": 33,
+  "file": 34,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-21T23:21:16Z",
+   "passed": 150,
+   "of": 162,
+   "kind": "file",
+   "ms": 425,
+   "note": "fix: \"clear search history\" only \"waking up\" appeared, never the answer",
+   "failed": [
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "weather in boston",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "yo bitcoin price",
+     "why": "console: Failed to load resource: the server responded with a status of 503 ()"
+    },
+    {
+     "ask": "film meatdata for ikiru",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "who is the auhtor of dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "what automations does Verse run",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "clear search history",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "budget planner",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "make a business card",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "make a resume",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-21T23:07:18Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-21T21:25:30Z",
    "passed": 0,
@@ -324,39 +389,6 @@
      "why": "console: Failed to load resource: the server responded with a status of 404 ()"
     }
    ]
-  },
-  {
-   "at": "2026-11-21T14:11:01Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-21T13:17:16Z",
-   "passed": 152,
-   "of": 156,
-   "kind": "grow",
-   "ms": 352,
-   "note": "new ground passed, kept as a regression case: \"what stadium do the yankees play in\" (skill:sport)",
-   "failed": [
-    {
-     "ask": "show me the night sky",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "fimls by kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "open folder recipes",
-     "why": "only \"waking up\" appeared, never the answer"
-    }
-   ]
   }
  ],
  "weekly": [
@@ -422,20 +454,20 @@
   },
   {
    "from": "2026-11-07",
-   "runs": 97,
+   "runs": 98,
    "passed": 1286,
    "of": 1350,
    "ms": 373
   },
   {
    "from": "2026-11-14",
-   "runs": 203,
-   "passed": 8927,
-   "of": 9611,
+   "runs": 202,
+   "passed": 9077,
+   "of": 9773,
    "broken": 1,
    "brokenOf": 158,
    "brokenPassed": 16,
-   "ms": 417
+   "ms": 421
   }
  ],
  "seen": {
@@ -899,6 +931,9 @@
   "skill:daily-challenge": "2026-11-21T01:36:49Z",
   "skill:verse-runs": "2026-11-21T02:17:49Z",
   "skill:working-on": "2026-11-21T02:41:20Z",
-  "skill:clear-search-history": "2026-11-21T08:14:27Z"
+  "skill:clear-search-history": "2026-11-21T08:14:27Z",
+  "skill:budget-planner": "2026-11-21T23:21:16Z",
+  "skill:business-card": "2026-11-21T23:21:16Z",
+  "skill:resume": "2026-11-21T23:21:16Z"
  }
 }
