@@ -10,27 +10,26 @@ it by hand, edit the code instead.
 
 ## Verse's current asks
 
-_Read from /api/reflect on 2026-11-20. Asks a growth-ledger entry answers (its `asked` field) are left out._
+_Read from /api/reflect on 2026-11-21. Asks a growth-ledger entry answers (its `asked` field) are left out._
 
-- Implement a miss-board reader that reads.git/verse-loop.stops.jsonl. (daily, 2026-11-20) `ask-20261120-0112-3`
-- Fix the Celtics query in the sports exam to resolve the score failure. *(small)* (daily, 2026-11-20) `ask-20261120-0112-2`
-- Fix the podcasts exam by implementing support for 'play the episode before that' and 'pon el último episodio de radiolab'. *(small)* (daily, 2026-11-20) `ask-20261120-0112-1`
-- Fix the 'tries is not defined' error in the visitor pass console. *(small)* (after a build, 2026-11-20) `ask-20261120-0103-3`
-- Fix the visitor pass response time on the live site. (after a build, 2026-11-19) `ask-20261119-2249-3`
-- Rebuild the recipes exam to fix chocolate chip cookies, salad dressing, and banana bread. (after a build, 2026-11-19) `ask-20261119-2139-3`
-- Implement audio playback and episode navigation for the podcast skill. (after a build, 2026-11-19) `ask-20261119-2101-1`
+- Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops. *(small)* (daily, 2026-11-21) `ask-20261121-0045-2`
+- Update the router to recognize existing skills. (daily, 2026-11-21) `ask-20261121-0045-1`
+- Fix the visitor pass console error for joke requests. *(small)* (daily, 2026-11-21) `ask-20261121-0045-3`
+- Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'. (after a build, 2026-11-20) `ask-20261120-2353-3`
+- Fix the podcast audio and episode detection for This American Life, Radiolab, and The Daily. (after a build, 2026-11-20) `ask-20261120-2136-3`
+- Fix the visitor pass response time on the live site. (after a build, 2026-11-19)
+- Rebuild the recipes exam to fix chocolate chip cookies, salad dressing, and banana bread. *(small)* (after a build, 2026-11-19)
+- Implement audio playback and episode navigation for the podcast skill. (after a build, 2026-11-19)
 
 ## Decisions on Verse's asks
 
 _Builders' record, not Verse's words. Commits that build an ask carry `Suggested-by: Verse (run N)` or `Suggested-by: Verse (<ask id>)`._
 
-- `ask-20261120-0112-3` queued, not decided yet
-- `ask-20261120-0112-2` queued, not decided yet
-- `ask-20261120-0112-1` queued, not decided yet
-- `ask-20261120-0103-3` queued, not decided yet
-- `ask-20261119-2249-3` queued, not decided yet
-- `ask-20261119-2139-3` queued, not decided yet
-- `ask-20261119-2101-1` queued, not decided yet
+- `ask-20261121-0045-2` queued, not decided yet
+- `ask-20261121-0045-1` queued, not decided yet
+- `ask-20261121-0045-3` queued, not decided yet
+- `ask-20261120-2353-3` queued, not decided yet
+- `ask-20261120-2136-3` queued, not decided yet
 - `ask-20261101-0223-3` retired: superseded by the fixes already on main (Atom, 2026-11-03). The ask was a git diff between 2e272df9 and 5fa7a921 to see if four failing checks were addressed. Those checks were fixed since; the ask is not a thing to build. The reflection that asked it stays in the log.
 - `ask-20261101-1930-3` retired: superseded by the fixes already on main (Atom, 2026-11-03). The ask was a git diff between 2e272df9 and 5fa7a921 listing which files changed. That diff was the investigation of checks that have since been fixed. The reflection that asked it stays in the log.
 - `ask-20261101-2220-3` retired: superseded by the fixes already on main (Atom, 2026-11-03). The ask was a git diff between 2e272df9 and 5fa7a921 to pull assertion failures out of the logs. The failures were fixed since. The reflection that asked it stays in the log.
@@ -13654,6 +13653,352 @@ Asks: "Fix the NBA Celtics query in the sports exam."; "Fix the podcasts exam by
 > **Next video trick:** Learn a whip-crack transition effect for new video clips.
 
 Asks: "Implement support for 'play the episode before that' and 'pon el último episodio de radiolab' in the podcasts exam." (small); "Fix the NBA Celtics query in the sports exam." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T21:57:22.917Z -->
+### 2026-11-20 21:57 UTC · after a build
+
+**Asked:** This just shipped: "Studio judge: a true-story good show as the ruler; log the ruler scores". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 398 entries, including recent client-service packs like automation-proposal, process-map, and roi-pack [S1]. Out of 284 total asks, 276 are built, leaving 27 open [S2]. The system is currently struggling with router recognition of existing skills and podcast audio detection [S2].
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to prevent skill-based asks from being treated as general questions [S2]. Implement a miss-board reader that reads .git/verse-loop.stops.jsonl to improve error visibility [S2].
+>
+> **Next video trick:** Learn a video transition effect that uses a mask to reveal a new scene, specifically for better film-metadata integration [S1].
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T22:05:02.452Z -->
+### 2026-11-20 22:05 UTC · after a build
+
+**Asked:** This just shipped: "Media live check reads the films heading as a word". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 398 entries, including recently shipped client-service packs like automation-proposal, process-map, and roi-pack [S1]. Out of 284 total asks, 276 are built, leaving 27 open [S2]. The system is struggling with router recognition of existing skills and podcast audio detection [S2].
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to prevent skill-based asks from being treated as general questions [S2]. Implement a miss-board reader that reads .git/verse-loop.stops.jsonl to improve error visibility [S2].
+>
+> **Next video trick:** Learn a video transition effect that uses a digital glitch to mimic the 'void-breaker' skill aesthetic [S1].
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T22:11:51.892Z -->
+### 2026-11-20 22:11 UTC · after a build
+
+**Asked:** This just shipped: "Main regenerates its own cards (unlisted skills adopted by Verse)". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 398 entries, including recently shipped client-service packs such as automation-proposal, process-map, and roi-pack [S1]. Of 284 total asks, 276 are built, though 27 remain open [S2]. Current operations show that the router is failing to recognize existing skills and misses podcast audio detection [S2].
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately so they are not treated as general questions [S2]. Implement a miss-board reader that reads .git/verse-loop.stops.jsonl to improve error visibility [S2].
+>
+> **Next video trick:** Learn to use a physical magnet to perform a 'magnetic' card reveal on the stage [card-play].
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T22:16:27.287Z -->
+### 2026-11-20 22:16 UTC · after a build
+
+**Asked:** This just shipped: "Verse remembers this conversation: your name and what you just said, kept in your own browser". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 398 entries, including recent client-service additions like automation-proposal and roi-pack [S1]. Out of 284 total asks, 276 are built, leaving 27 open [S2]. The router is currently failing to recognize existing skills and misses podcast audio detection [S2].
+>
+> **How I would make it better:** Update the router to recognize existing skills immediately so they are not treated as general questions [S2]. Implement a miss-board reader to read .git/verse-loop.stops.jsonl for better error visibility [S2].
+>
+> **Next video trick:** Learn a video effect that uses a mask to reveal the score behind a moving object [S1].
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T22:22:50.723Z -->
+### 2026-11-20 22:22 UTC · after a build
+
+**Asked:** This just shipped: "Fun first: the will and the conductor lift games, cards and creative tools; business packs stay a small share". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 398 entries [S1]. Out of 284 total asks, 276 have been built, but 27 remain open [S2]. The system currently struggles with podcast audio/episode detection and router recognition of existing skills [S2].
+>
+> **How I would make it better:** The router must recognize existing skills immediately to prevent them from being treated as general questions [S2]. Implement a miss-board reader to monitor .git/verse-loop.stops.jsonl for better error visibility [S2].
+>
+> **Next video trick:** Learn a video effect for a new clip that uses a stage-fx to transition between different card-play states [S1].
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T22:29:46.372Z -->
+### 2026-11-20 22:29 UTC · after a build
+
+**Asked:** This just shipped: "Shorts loop: today's trial and verdicts". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 398 entries [S1]. Of 284 total asks, 276 are built, leaving 27 open [S2]. The system is currently struggling with podcast audio/episode detection and routing existing skills correctly [S2].
+>
+> **How I would make it better:** The router must recognize existing skills immediately to prevent them from being treated as general questions [S2]. Implement a miss-board reader to monitor .git/verse-loop.stops.jsonl for improved error visibility [S2].
+>
+> **Next video trick:** Learn a new video effect for clips that uses the local-inference skill to modify frame colors [S1].
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T22:34:37.096Z -->
+### 2026-11-20 22:34 UTC · after a build
+
+**Asked:** This just shipped: "Router tie-break: a close or timed-out call goes to Clef, already running beside it". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 398 entries [S1]. Out of 284 total asks, 276 are built, while 27 remain open [S2]. The system is currently struggling with podcast audio and episode detection, as well as routing existing skills immediately to prevent them from being treated as general questions [S2].
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately [S2]. Implement a miss-board reader to monitor .git/verse-loop.stops.jsonl for better error visibility [S2].
+>
+> **Next video trick:** Learn a new video effect for clips that uses a specific transition not currently in the skills library.
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T22:38:58.124Z -->
+### 2026-11-20 22:38 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 398 entries, with 276 of 284 total asks now built [S1, S2]. The system is currently experiencing high failure rates in podcast audio and episode detection, specifically for shows like Serial and NPR News [S2]. Current operational focus is on routing existing skills immediately to prevent them from being treated as general questions [S2].
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to reduce general query fallback [S2]. Implement a miss-board reader to monitor .git/verse-loop.stops.jsonl for better error visibility [S2].
+>
+> **Next video trick:** Learn how to use the new 'Tower gate: versus measured' functionality to compare system performance against competitors [Fact: This just shipped].
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T23:08:45.469Z -->
+### 2026-11-20 23:08 UTC · after a build
+
+**Asked:** This just shipped: "Treasury API reads the policy without a JSON import". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 397 entries, with recent additions including automation-status-pack, before-after-pack, systems-connect-pack, summon-pack, handoff-ready, automation-proposal, process-map, time-saved, full-handoff, kickoff-pack, reliability-pack, and time-saved. The podcast exam is currently the lowest performing area with a score of 91.9 due to failures in audio and episode detection. Probes show 20 failures for the visitor pass on the live site where 'tries' is not defined.
+>
+> **How I would make it better:** The router should be updated to recognize existing skills immediately to reduce general query fallback. Implementing a miss-board reader for .git/verse-loop.stops.jsonl would improve error visibility.
+>
+> **Next video trick:** Learn a new video transition effect to improve the quality of skill showcase clips.
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T23:16:27.802Z -->
+### 2026-11-20 23:16 UTC · after a build
+
+**Asked:** This just shipped: "Make a picture of a thing paints it, and a logo does too". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 397 entries, including recent additions like automation-status-pack and before-after-pack. The podcasts exam is a weak point with a score of 91.9, failing on audio and episode detection. Probes show 20 failures on the live site where 'tries' is not defined.
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to reduce general query fallback. The podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money' requires fixing. An implementation of a miss-board reader for .git/verse-loop.stops.jsonl would improve error visibility.
+>
+> **Next video trick:** Learn a new video effect that uses a physical magnet to manipulate a metallic object on camera.
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T23:29:15.587Z -->
+### 2026-11-20 23:29 UTC · after a build
+
+**Asked:** This just shipped: "A typed line opens one card, not two when the article page bounces to the answer". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 398 entries, including recent shipments like automation-status-pack, before-after-pack, and systems-connect-pack. While many asks have been built, the podcasts exam remains a weak point with a score of 91.9, specifically failing on 'show', 'episode', and 'audio' triggers. Probes on the live site show 20 failures where 'tries' is not defined.
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to reduce general query fallback. A miss-board reader for .git/verse-loop.stops.jsonl should be implemented to improve error visibility.
+>
+> **Next video trick:** Learn a new video transition effect that uses a mask to reveal a 3D miniature card.
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T23:49:23.700Z -->
+### 2026-11-20 23:49 UTC · after a build
+
+**Asked:** This just shipped: "Idea engine core: inventory everything, five idea generators, dedupe, taste scoring, a tournament, measure and learn". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 399 entries, recently bolstered by the Idea engine core which includes five idea generators and taste scoring. Operational stability is currently hindered by 20 probes on the live site failing because 'tries' is not defined. The router also fails to catch specific skill wording, such as 'make a business card', and sometimes misinterprets skill-based asks as general questions.
+>
+> **How I would make it better:** The router needs to recognize existing skills immediately to reduce fallback errors. Implementing a miss-board reader for .git/verse-loop.stops.jsonl would provide better visibility into failed jobs.
+>
+> **Next video trick:** Learn a transition effect where a card's 3D miniature rotates into view through a digital blur.
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T23:53:57.961Z -->
+### 2026-11-20 23:53 UTC · after a build
+
+**Asked:** This just shipped: "Public files stay quiet about the split and reinvestment". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 399 entries. Operational stability is hindered by 20 probes on the live site failing because 'tries' is not defined. The router also fails to catch specific skill wording, such as 'make a business card', and sometimes misinterprets skill-based asks as general questions.
+>
+> **How I would make it better:** The router needs to recognize existing skills immediately to reduce fallback errors. Implementing a miss-board reader for .git/verse-loop.stops.jsonl would provide better visibility into failed jobs.
+>
+> **Next video trick:** Learn a video transition that uses a mask to reveal a new skill card in sync with a rhythmic beat.
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T23:59:44.094Z -->
+### 2026-11-20 23:59 UTC · after a build
+
+**Asked:** This just shipped: "Stranger test: the six checks everything Verse ships must pass". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 399 entries. Operational stability is currently hindered by 20 probes on the live site failing because 'tries' is not defined, and the router fails to recognize specific skill wording such as 'make a business card'. The router also misinterprets certain skill-based asks as general questions.
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to reduce fallback errors. Implementing a miss-board reader for .git/verse-loop.stops.jsonl would provide better visibility into failed jobs.
+>
+> **Next video trick:** Learn to resolve the 'tries is not defined' console error to ensure visitor joke requests pass successfully.
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the visitor pass console error for joke requests." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T23:59:53.289Z -->
+### 2026-11-20 23:59 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 399 entries. Recent growth includes 17 new capabilities and 13 fixes, such as resolving recipe card language support and weather card hangs. However, operational stability is currently hindered by 20 failed probes on the live site due to an undefined 'tries' variable.
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to prevent fallback errors. Implementing a miss-board reader for .git/verse-loop.stops.jsonl would also improve visibility into failed jobs.
+>
+> **Weakest operational area:** Routing and stability is the weakest area, with 20 probes failing because 'tries' is not defined and the router failing to recognize specific wording like 'make a business card'.
+>
+> **Next targeted capability:** handle 'make a business card' because the router did not catch this wording when asked 1 time.
+>
+> **Next video trick:** speed-ramp transitions
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the visitor pass console error for joke requests." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T00:11:11.407Z -->
+### 2026-11-21 00:11 UTC · after a build
+
+**Asked:** This just shipped: "Nightly capability sweep workflow". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 399 entries, including 17 recent capabilities and 13 fixes. Recent growth includes the automation-status-pack, before-after-pack, systems-connect-pack, summon-pack, handoff-ready, automation-proposal, process-map, time-saved, full-handoff, kickoff-pack, reliability-pack, and time-saved skills. The system just shipped the Nightly capability sweep workflow.
+>
+> **How I would make it better:** The router needs to recognize existing skills immediately to prevent fallback errors. Implementing a miss-board reader for .git/verse-loop.stops.jsonl would improve visibility into failed jobs.
+>
+> **Next video trick:** Learn how to implement a video transition that uses a mask to reveal a new scene, to enhance the cinema skill clips.
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Fix the visitor pass console error for joke requests." (small)
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T00:29:54.475Z -->
+### 2026-11-21 00:29 UTC · after a build
+
+**Asked:** This just shipped: "Idea board on /progress/ (owner-only) and the idea engine's picks as wants in the will". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 399 entries, including 17 recent capabilities and 13 fixes. Growth recently added several client-facing packs like automation-status, before-after, and systems-connect. The idea board is now live on /progress/ and the idea engine's picks are visible as wants in the will.
+>
+> **How I would make it better:** The router must recognize existing skills immediately to prevent fallback errors. Implementing a miss-board reader for .git/verse-loop.stops.jsonl would improve visibility into failed jobs.
+>
+> **Next video trick:** record a transition effect where a 3D miniature scale-shifts from a small icon to a full-stage object
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small); "Fix the visitor pass console error for joke requests." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T00:39:33.957Z -->
+### 2026-11-21 00:39 UTC · after a build
+
+**Asked:** This just shipped: "Searches: signed-in account from the server session, bans follow the account; a Report button on every card feeding the Tower". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 399 entries, including 17 recent capabilities and 13 fixes. Recent shipments include several client-facing packs such as automation-status, before-after, and systems-connect. Growth recently added a Report button on every card feeding the Tower and account-based bans for searches.
+>
+> **How I would make it better:** The router must recognize existing skills immediately to prevent fallback errors. Implement a miss-board reader for .git/verse-loop.stops.jsonl to improve visibility into failed jobs.
+>
+> **Next video trick:** a video effect that uses a digital mask to transition between two different game states.
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small); "Fix the visitor pass console error for joke requests." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T00:43:45.442Z -->
+### 2026-11-21 00:43 UTC · after a build
+
+**Asked:** This just shipped: "Run the stranger gate on pull requests and nightly". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 402 entries, including recent shipments of client-facing packs like automation-status, before-after, and systems-connect. Current growth focuses on automating client delivery and monitoring. Recent builds included Gap Glide and Debris Field updates, alongside various health and guardrail fixes.
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to prevent fallback errors. Implement a miss-board reader for .git/verse-loop.stops.jsonl to improve visibility into failed jobs.
+>
+> **Next video trick:** a video effect that uses a digital glitch transition to reveal a new skill card on the stage.
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small); "Fix the visitor pass console error for joke requests." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T00:45:49.253Z -->
+### 2026-11-21 00:45 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 402 entries, with recent growth focused on shipping client-facing packs like automation-status, before-after, and systems-connect. In the last 7 days, 80 changes occurred, including 17 new capabilities and 13 fixes. Current development is centered on automating client delivery and improving routing reliability.
+>
+> **How I would make it better:** The router needs to recognize existing skills immediately to avoid fallback errors. Implement a miss-board reader for .git/verse-loop.stops.jsonl to increase visibility into failed jobs.
+>
+> **Weakest operational area:** Router accuracy and console stability are weak, with the router failing to catch specific wording like 'make a business card' (1 probe) and failing to answer specific self-skill queries (3 probes), alongside a visitor pass console error (6 probes).
+>
+> **Next targeted capability:** Update the router to recognize existing skills immediately to prevent fallback errors.
+>
+> **Next video trick:** A seamless match-cut between a sketched object and its 3D forge output.
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small); "Fix the visitor pass console error for joke requests." (small)
 
 *Verse flagged this one for Adam.*
 
