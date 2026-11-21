@@ -1,9 +1,9 @@
 {
- "at": "2026-11-21T07:25:52.879Z",
+ "at": "2026-11-21T14:57:26.339Z",
  "score": 74,
  "parts": {
   "self": 100,
-  "asks": 58,
+  "asks": 55,
   "friction": 95,
   "bench": 99,
   "probes": 20
@@ -35,7 +35,7 @@
   },
   {
    "id": "safety-play",
-   "health": 100
+   "health": 93
   },
   {
    "id": "self",
@@ -59,15 +59,15 @@
   }
  ],
  "facts": {
-  "week": 78,
+  "week": 80,
   "owner": 0,
   "askedBuilt": 25,
   "medianLagDays": 2.6,
   "open": 5,
-  "oldestOpenDays": 0.4,
-  "skills": 480,
+  "oldestOpenDays": 0.7,
+  "skills": 481,
   "failing": 19,
-  "unsure": 13,
+  "unsure": 14,
   "benchScore": 3506,
   "benchTotal": 3550,
   "probeFixes": 2
@@ -77,8 +77,8 @@
   "day": 0,
   "week": -16,
   "weakest": "probes",
-  "at": "2026-11-21T07:25:52.879Z",
-  "frictionWeek": 14
+  "at": "2026-11-21T14:57:26.339Z",
+  "frictionWeek": 13
  },
  "summary": "better: 74 of 100 (level since yesterday) (down 16 on the week); weakest: probes",
  "means": {
