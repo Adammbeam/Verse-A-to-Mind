@@ -504,6 +504,9 @@
     },
     {
       "ask": "yo sticky note buy milk"
+    },
+    {
+      "ask": "card duel"
     }
   ],
   "candidates": [],
