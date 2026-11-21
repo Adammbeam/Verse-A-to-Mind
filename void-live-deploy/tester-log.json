@@ -4,11 +4,60 @@
  "runsTotal": 300,
  "kinds": {
   "visitor": 225,
-  "grow": 44,
-  "file": 30,
+  "grow": 43,
+  "file": 31,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-21T05:18:25Z",
+   "passed": 145,
+   "of": 153,
+   "kind": "file",
+   "ms": 379,
+   "note": "fix: \"test me on this\" only \"waking up\" appeared, never the answer",
+   "failed": [
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "fimls by kurosawa",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "contéstame en español",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "yo what language does the word kindergarten come from",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "yo draw a cartoon cat",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "test me on this",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "what automations does Verse run",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "what's new pussycat",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-21T05:05:59Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-21T04:09:16Z",
    "passed": 0,
@@ -348,71 +397,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-20T21:13:13Z",
-   "passed": 132,
-   "of": 150,
-   "kind": "file",
-   "ms": 493,
-   "note": "fix: \"is this system handoff ready\" only \"waking up\" appeared, never the answer",
-   "failed": [
-    {
-     "ask": "flip this card",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "echo this",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "films by Kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "film metadata for Ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "fimls by kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "film meatdata for ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "who is the auhtor of dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "make a vase",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "open folder recipes",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "three alike",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "token stand",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "is this system handoff ready",
-     "why": "only \"waking up\" appeared, never the answer"
-    }
-   ]
-  },
-  {
-   "at": "2026-11-20T20:56:11Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -478,16 +462,16 @@
   },
   {
    "from": "2026-11-07",
-   "runs": 128,
-   "passed": 2253,
-   "of": 2368,
-   "ms": 393
+   "runs": 126,
+   "passed": 2148,
+   "of": 2257,
+   "ms": 391
   },
   {
    "from": "2026-11-14",
-   "runs": 172,
-   "passed": 7245,
-   "of": 7704,
+   "runs": 174,
+   "passed": 7390,
+   "of": 7857,
    "ms": 438
   }
  ],
@@ -594,7 +578,7 @@
   "skill:share": "2026-11-20T20:18:57Z",
   "skill:show": "2026-11-20T21:42:30Z",
   "skill:show-countdown": "2026-11-21T00:41:00Z",
-  "skill:showcase": "2026-10-17T13:52:50Z",
+  "skill:showcase": "2026-11-21T05:18:25Z",
   "skill:skycard": "2026-10-17T13:52:50Z",
   "skill:sleep": "2026-10-17T14:29:51Z",
   "skill:snake": "2026-10-17T14:29:51Z",
