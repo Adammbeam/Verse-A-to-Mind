@@ -10,6 +10,13 @@
  },
  "runs": [
   {
+   "at": "2026-11-21T04:09:16Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 14/15"
+  },
+  {
    "at": "2026-11-21T03:30:36Z",
    "passed": 0,
    "of": 0,
@@ -406,60 +413,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-20T20:18:57Z",
-   "passed": 138,
-   "of": 149,
-   "kind": "grow",
-   "ms": 440,
-   "note": "new ground passed, kept as a regression case: \"share the open card\" (skill:share)",
-   "failed": [
-    {
-     "ask": "bokos like dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "favorite this",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "find me a sci-fi film from the 80s pls",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "film metadata for ikiru pls",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "film meatdata for ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "who is the auhtor of dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "geenrate a toon style dog",
-     "why": "refused: don't know this yet"
-    },
-    {
-     "ask": "yo draw yourself",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "draw yourself pls",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
   }
  ],
  "weekly": [
@@ -525,14 +478,14 @@
   },
   {
    "from": "2026-11-07",
-   "runs": 129,
+   "runs": 128,
    "passed": 2253,
    "of": 2368,
    "ms": 393
   },
   {
    "from": "2026-11-14",
-   "runs": 171,
+   "runs": 172,
    "passed": 7245,
    "of": 7704,
    "ms": 438
