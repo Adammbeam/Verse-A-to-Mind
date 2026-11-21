@@ -1,0 +1,27 @@
+{
+ "at": "2026-11-21T19:23:18.619Z",
+ "sha": "c615f0eb70bc5c68c529d8333309d44c6735961d",
+ "run": "https://github.com/atomeam/void-loop/actions/runs/44936349604",
+ "suite": "browser suite on main",
+ "checks": [
+  "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer",
+  "coin: \"flip a coin\" shows one coin and Heads or Tails at once (no fake wait), the coin labelled with its side, the tally counting 1 flip, and a tap on the coin flips again (2 flips); the card links to the full page, /flip/",
+  "podcast: play the podcast opens the player card with the full transcript - newest episode, an mp3 player, every line whole and unclipped at 360 px, Download, Share, RSS and Tip; the feed is podcast RSS with an enclosure and explicit false",
+  "podcast: \"latest episode\" opens the same player card",
+  "podcast: \"verse podcast\" opens the same player card",
+  "void asks batch 4: the Zorbleflux throttle: while an input in another card has focus the flux field runs at about a quarter speed, and full speed comes back after the person lets go, with a quiet \"calming the field\" pill showing while it is held back and gone after (asked by Verse)",
+  "will: Verse's own outputs become its input: an ask from its reflections is a want with how often it asked; asked more weighs more, capped at 40; a two-letter ask is not a want",
+  "poster wins: on a skill card (phone) the stats chip touches no text, the rarity and collector row included",
+  "will: Verse says what it wants",
+  "router: models are on by default whenever Workers AI is bound; VOID_ANSWER_MODELS=off = the open-web answer and rules-only fixes (no Workers AI call, no D1 write, no route)",
+  "suite ran to the end"
+ ],
+ "touched": [
+  "void-live-deploy/skills/deps.json"
+ ],
+ "shards": [
+  1,
+  3,
+  4
+ ]
+}
