@@ -889,6 +889,16 @@
    "listed": 1,
    "defectsBefore": 3,
    "defectsAfter": 1
+  },
+  {
+   "at": "2026-11-21T23:07:12.555Z",
+   "run": 150,
+   "measured": 30,
+   "clean": 26,
+   "fixed": 1,
+   "listed": 3,
+   "defectsBefore": 6,
+   "defectsAfter": 0
   }
  ],
  "pages": {
@@ -7040,7 +7050,7 @@
    "state": "clean"
   },
   "/under-the-hood/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -7237,7 +7247,7 @@
    "state": "clean"
   },
   "/first-automation-setup/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7250,7 +7260,7 @@
    "state": "clean"
   },
   "/keep-it-running/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7263,7 +7273,7 @@
    "state": "clean"
   },
   "/fix/make-connection-error/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7276,7 +7286,7 @@
    "state": "clean"
   },
   "/fix/zapier-zap-turned-off-or-held/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7289,7 +7299,7 @@
    "state": "clean"
   },
   "/fix/n8n-webhook-404-not-registered/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7316,7 +7326,7 @@
    "why": "no rule fixes it (a layout shift of 0.147 that no rule fixes: listed for a builder)"
   },
   "/books/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7329,7 +7339,7 @@
    "state": "clean"
   },
   "/generators/forum/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7342,7 +7352,7 @@
    "state": "clean"
   },
   "/jobs/salary/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7355,7 +7365,7 @@
    "state": "clean"
   },
   "/jobs/regions/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7381,7 +7391,7 @@
    "state": "clean"
   },
   "/flights/airports/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7394,7 +7404,7 @@
    "state": "clean"
   },
   "/flights/distance/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7432,7 +7442,7 @@
    "why": "(a layout shift of 0.321 that no rule fixes: listed for a builder)"
   },
   "/lab/f626-flooring-tile-estimator/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -7446,7 +7456,7 @@
    "why": "no rule fixes it (a layout shift of 0.165 that no rule fixes: listed for a builder)"
   },
   "/lab/f613-tip-calculator/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7459,20 +7469,20 @@
    "state": "clean"
   },
   "/jobs/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.011,
+    "cls": 0.01,
     "overflow": 0
    },
    "state": "clean"
   },
   "/flights/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7485,7 +7495,7 @@
    "state": "clean"
   },
   "/lab/f193-webrtc-indexeddb-sealed-genome-swarm/": {
-   "at": "2026-11-18T16:33:09.161Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7493,7 +7503,7 @@
     "unstyled": 0,
     "empty": 0,
     "cls": 0.021,
-    "overflow": 0
+    "overflow": 5
    },
    "state": "clean"
   },
@@ -9830,14 +9840,14 @@
    "state": "clean"
   },
   "/lab/f635-teleprompter/": {
-   "at": "2026-11-18T16:33:09.161Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.012,
+    "cls": 0.011,
     "overflow": 0
    },
    "state": "clean"
@@ -11272,18 +11282,8 @@
    "state": "clean"
   },
   "/lab/f699-meeting-cost-calculator/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
-    "defects": 2,
-    "contrast": 2,
-    "targets": 0,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
@@ -11292,22 +11292,11 @@
     "cls": 0,
     "overflow": 0
    },
-   "rules": 2,
-   "moved": 0.004
+   "state": "clean"
   },
   "/lab/f718-subscription-tracker/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
-    "defects": 1,
-    "contrast": 1,
-    "targets": 0,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
@@ -11316,35 +11305,23 @@
     "cls": 0,
     "overflow": 0
    },
-   "rules": 1,
-   "moved": 0.003
+   "state": "clean"
   },
   "/lab/f757-sleep-cycle-calculator/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
-    "defects": 2,
-    "contrast": 0,
-    "targets": 2,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.027,
+    "cls": 0.016,
     "overflow": 0
    },
-   "rules": 2,
-   "moved": 0.141
+   "state": "clean"
   },
   "/lab/f661-label-name-tag-sheet/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11357,18 +11334,8 @@
    "state": "clean"
   },
   "/arcade/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
-    "defects": 2,
-    "contrast": 0,
-    "targets": 1,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0.38,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 1,
     "contrast": 0,
     "targets": 0,
@@ -11377,12 +11344,11 @@
     "cls": 0.38,
     "overflow": 0
    },
-   "rules": 1,
-   "moved": 0,
-   "why": "(a layout shift of 0.38 that no rule fixes: listed for a builder)"
+   "state": "listed",
+   "why": "no rule fixes it (a layout shift of 0.38 that no rule fixes: listed for a builder)"
   },
   "/lab/f748-debt-snowball-planner/": {
-   "at": "2026-11-15T23:27:19.659Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 6,
     "contrast": 3,
@@ -11392,11 +11358,21 @@
     "cls": 0,
     "overflow": 0
    },
-   "state": "listed",
-   "why": "it added a layout shift"
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "rules": 4,
+   "moved": 0.001
   },
   "/lab/f684-devicemotion-step-counter/": {
-   "at": "2026-11-16T01:31:29.199Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11409,7 +11385,7 @@
    "state": "clean"
   },
   "/lab/f671-spatial-packing-list/": {
-   "at": "2026-11-18T16:33:09.161Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11422,7 +11398,7 @@
    "state": "clean"
   },
   "/lab/f730-bill-splitter/": {
-   "at": "2026-11-18T16:33:09.161Z",
+   "at": "2026-11-21T23:07:12.555Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -12580,6 +12556,45 @@
    },
    "rules": 1,
    "moved": 0.003
+  },
+  "/lab/f807-local-ga-seating-chart/": {
+   "at": "2026-11-21T23:07:12.555Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.019,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/research/": {
+   "at": "2026-11-21T23:07:12.555Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f867-spatial-seating-chart-optimizer/": {
+   "at": "2026-11-21T23:07:12.555Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
   }
  }
 }
