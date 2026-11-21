@@ -3,12 +3,77 @@
  "cases": 155,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 225,
-  "file": 30,
+  "file": 31,
+  "visitor": 224,
   "grow": 44,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-21T10:22:24Z",
+   "passed": 141,
+   "of": 156,
+   "kind": "file",
+   "ms": 370,
+   "note": "fix: \"show my period log\" only \"waking up\" appeared, never the answer",
+   "failed": [
+    {
+     "ask": "send it away",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "make a vase",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "calorie calculator",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "show my period log",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "how do i make guacamole",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "my routines",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "dasatinib and quercetin for mash",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "share the open card",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "what automations does Verse run",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "what are you working on",
+     "why": "only \"waking up\" appeared, never the answer"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-21T10:06:19Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-21T09:09:58Z",
    "passed": 0,
@@ -307,71 +372,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-21T00:41:00Z",
-   "passed": 125,
-   "of": 151,
-   "kind": "file",
-   "ms": 449,
-   "note": "fix: \"adaptive flow canvas\" only \"waking up\" appeared, never the answer",
-   "failed": [
-    {
-     "ask": "dyslexia friendly font",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "flip this card",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "film metadata for Ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "film meatdata for ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "my photos",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "who is the auhtor of dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "yo draw me a robot",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "help me launch the newsletter by the end of the month",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "cross the bus",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "adaptive flow canvas",
-     "why": "only \"waking up\" appeared, never the answer"
-    }
-   ]
-  },
-  {
-   "at": "2026-11-21T00:25:41Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -437,17 +437,17 @@
   },
   {
    "from": "2026-11-07",
-   "runs": 121,
+   "runs": 119,
    "passed": 1941,
    "of": 2043,
    "ms": 391
   },
   {
    "from": "2026-11-14",
-   "runs": 179,
-   "passed": 7721,
-   "of": 8194,
-   "ms": 430
+   "runs": 181,
+   "passed": 7862,
+   "of": 8350,
+   "ms": 425
   }
  ],
  "seen": {
@@ -557,7 +557,7 @@
   "skill:skycard": "2026-10-17T13:52:50Z",
   "skill:sleep": "2026-11-21T05:58:32Z",
   "skill:snake": "2026-11-21T07:19:43Z",
-  "skill:social": "2026-10-17T17:36:35Z",
+  "skill:social": "2026-11-21T10:22:24Z",
   "skill:spanish": "2026-10-17T17:36:35Z",
   "skill:splat": "2026-10-17T17:36:35Z",
   "skill:sport": "2026-10-17T19:47:49Z",
