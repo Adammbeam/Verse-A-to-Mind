@@ -1,23 +1,5 @@
 [
  {
-  "at": "2026-11-09T22:27:59Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1442,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 8465 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-09T22:59:18Z",
   "kind": "visitor",
   "visitor": {
@@ -6360,5 +6342,16 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"card duel\" (skill:duel)"
+ },
+ {
+  "at": "2026-11-21T18:25:14Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 593,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
