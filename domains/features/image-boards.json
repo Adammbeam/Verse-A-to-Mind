@@ -2009,8 +2009,8 @@
     "rendered": 1,
     "sitemaps": 0,
     "urls_found": 0,
-    "pages": 17,
-    "fetched": 23,
+    "pages": 18,
+    "fetched": 24,
     "skipped": {
      "robots": 0,
      "failed": 5
@@ -2178,10 +2178,10 @@
       "kind": "list",
       "known": 4,
       "sampled": [
+       "https://www.2chan.net/hinan/res/299530.htm",
+       "https://www.2chan.net/hinan/res/299851.htm",
        "https://www.2chan.net/hinan/res/299849.htm",
-       "https://www.2chan.net/hinan/res/299525.htm",
-       "https://www.2chan.net/hinan/res/299661.htm",
-       "https://www.2chan.net/hinan/res/298907.htm"
+       "https://www.2chan.net/hinan/res/299525.htm"
       ],
       "features": [
        "button ԑm",
@@ -2194,9 +2194,10 @@
      {
       "key": "path:/bin/*",
       "kind": "list",
-      "known": 1,
+      "known": 2,
       "sampled": [
-       "https://www.2chan.net/bin/jump.php?https://kanimaturi.sakura.ne.jp/ht/sakura/sakura.htm"
+       "https://www.2chan.net/bin/jump.php?https://kanimaturi.sakura.ne.jp/ht/sakura/sakura.htm",
+       "https://www.2chan.net/bin/jump.php?https://battlenest.jp/trainers/s/htdqh26"
       ],
       "features": []
      },
