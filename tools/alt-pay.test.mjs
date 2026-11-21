@@ -5,10 +5,11 @@ import { DatabaseSync } from 'node:sqlite';
 import { railsOf, specialRails, memoUnits, usdcUnits, usdcText, verifyUsdcTx, USDC_BASE, TRANSFER_TOPIC } from '../void-live-deploy/lib/alt-pay.js';
 import { onRequest } from '../void-live-deploy/functions/api/store/[[path]].js';
 import { productOf, STORE_PRODUCTS } from '../void-live-deploy/lib/store.js';
-// a paid special item of the test's own (lists run 2, 2026-10-21): site-tester, the old fixture, is open as pay-what-you-want until a rail is live
+// a paid special item of the test's own (lists run 2, 2026-10-21): site-tester used to be the fixture, open as pay-what-you-want until a
+// rail was live; the fixed prices (2026-11-21) make it $24 like everything else, so this test brings its own paid item
 const FIX = 'alt-pay-fixture';
 STORE_PRODUCTS.push({ id: FIX, name: 'Alt-pay fixture', cents: 2400, kind: 'download', special: ['cashapp', 'usdc-base'], files: [{ key: 'store/site-tester-v1.zip' }], status: 'live', soon: false });
-assert.ok(productOf('site-tester').pwyw && productOf('site-tester').cents === 0 && !productOf('site-tester').soon, 'site-tester is open as pay-what-you-want until a paid rail is live');
+assert.ok(productOf('site-tester').cents === 2400 && !productOf('site-tester').pwyw && !productOf('site-tester').soon, 'site-tester is a fixed $24 now, not pay-what-you-want');
 
 const sql = new DatabaseSync(':memory:');
 const stmt = (q, a = []) => ({ bind: (...b) => stmt(q, b), run: async () => { const r = sql.prepare(q).run(...a); return { meta: { changes: r.changes } }; }, first: async () => sql.prepare(q).get(...a) || null, all: async () => ({ results: sql.prepare(q).all(...a) }) });

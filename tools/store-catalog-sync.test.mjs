@@ -13,9 +13,15 @@ test('every product id is used once', () => {
   const ids = data.map((p) => p.id);
   assert.deepEqual(ids.filter((id, i) => ids.indexOf(id) !== i), []);
 });
-test('a paid product marked live has a hosted checkout', () => {
-  const bad = data.filter((p) => p.status === 'live' && p.cents > 0 && !p.pwyw && !p.gumroad && !p.special).map((p) => p.id);
-  assert.deepEqual(bad, [], 'list it on Gumroad first, or mark it needs-gumroad');
+// a fixed price is a checkout (2026-11-21): the store's own Stripe adapter charges any product with cents, so a paid live product
+// no longer needs a Gumroad listing. What must stay true is that the store is on the rail that can charge a bare price: if a live
+// paid product has only its price, the deployed provider has to be stripe, or it is the old bug again (a row nobody could buy).
+test('a paid product marked live has a way to pay', () => {
+  const toml = fs.readFileSync(new URL('../void-live-deploy/wrangler.toml', import.meta.url), 'utf8');
+  const provider = (toml.match(/STORE_PROVIDER\s*=\s*"([^"]+)"/) || [])[1] || 'gumroad';
+  const priceOnly = data.filter((p) => p.status === 'live' && p.cents > 0 && !p.gumroad && !p.special).map((p) => p.id);
+  if (priceOnly.length) assert.equal(provider, 'stripe', 'sold by price alone, so the store must be on Stripe: ' + priceOnly.join(', '));
+  assert.ok(provider === 'stripe' || provider === 'gumroad');
 });
 test('the shipped catalog is the data file (node tools/store-publish.mjs sync)', () => {
   assert.deepEqual(SHIPPED.map((p) => [p.id, p.cents, p.gumroad || '', p.status, p.trial || '']), data.map((p) => [p.id, p.cents, p.gumroad || '', p.status, p.trial || '']));

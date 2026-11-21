@@ -132,7 +132,7 @@ function renderGrid() {
   $('#grid').innerHTML = list.map((p) => `<article class="card" id="${p.id}" data-id="${p.id}"><div class="view" ${p.preview ? `data-glb="${p.preview}"` : ''}><span class="tag">${esc(p.status === 'needs-gumroad' ? 'coming soon · ' + (p.wouldBe || '') : p.soon ? 'coming soon' : p.pack ? 'made by Verse' : p.kind)}</span>${p.preview ? '' : ICON[p.kind] || ICON.membership}</div>
     <div class="body"><h3>${esc(p.name)}</h3><p>${esc(p.blurb)}</p><div class="row"><span class="price">${esc(p.price)}</span><span class="avail">${p.soon ? 'Coming soon' : 'Available now'}</span>
     ${p.soon ? '<button disabled>Soon</button>' : p.share ? `<button data-share="${p.id}">Pay ${esc(usd(p.cents))}</button>` : p.cents === 0 ? `<button data-free="${p.id}">Download</button>` : `<button data-add="${p.id}">Add to cart</button>`}</div>
-    ${p.buy && !p.soon ? `<a class="note" href="${p.buy}" target="_blank" rel="noopener">or buy on Gumroad</a>` : ''}${p.share ? shareBox(p) : ''}${p.pwyw && !p.share ? `<a class="note" href="${TIP}" target="_blank" rel="noopener">Pay what you want: tip the crew</a>` : ''}${p.license ? `<span class="note">${esc(p.license)}</span>` : ''}</div></article>`).join('');
+    ${p.buy && !p.soon ? `<a class="note" href="${p.buy}" target="_blank" rel="noopener">or buy on Gumroad</a>` : ''}${p.share ? shareBox(p) : ''}${p.id === 'join-the-team' ? `<a class="note" href="${TIP}" target="_blank" rel="noopener">Tip more</a>` : ''}${p.license ? `<span class="note">${esc(p.license)}</span>` : ''}</div></article>`).join('');
 }
 document.addEventListener('input', (e) => {
   const id = e.target.dataset && e.target.dataset.slide; if (!id) return; const p = products.find((x) => x.id === id), pay = +e.target.value;
