@@ -495,6 +495,9 @@
     },
     {
       "ask": "snake game"
+    },
+    {
+      "ask": "clear search history"
     }
   ],
   "candidates": [],

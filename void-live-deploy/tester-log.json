@@ -1,14 +1,43 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 154,
+ "cases": 155,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 225,
   "file": 31,
-  "grow": 43,
+  "visitor": 224,
+  "grow": 44,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-21T08:14:27Z",
+   "passed": 152,
+   "of": 155,
+   "kind": "grow",
+   "ms": 401,
+   "note": "new ground passed, kept as a regression case: \"clear search history\" (skill:clear-search-history)",
+   "failed": [
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-21T08:03:54Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-21T07:19:43Z",
    "passed": 148,
@@ -394,20 +423,6 @@
      "why": "console: Failed to load resource: the server responded with a status of 404 ()"
     }
    ]
-  },
-  {
-   "at": "2026-11-20T23:57:17Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-20T23:19:48Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -473,16 +488,16 @@
   },
   {
    "from": "2026-11-07",
-   "runs": 124,
+   "runs": 122,
    "passed": 2052,
    "of": 2157,
    "ms": 393
   },
   {
    "from": "2026-11-14",
-   "runs": 176,
-   "passed": 7569,
-   "of": 8039,
+   "runs": 178,
+   "passed": 7721,
+   "of": 8194,
    "ms": 430
   }
  ],
@@ -946,6 +961,7 @@
   "skill:chart": "2026-11-21T01:36:49Z",
   "skill:daily-challenge": "2026-11-21T01:36:49Z",
   "skill:verse-runs": "2026-11-21T02:17:49Z",
-  "skill:working-on": "2026-11-21T02:41:20Z"
+  "skill:working-on": "2026-11-21T02:41:20Z",
+  "skill:clear-search-history": "2026-11-21T08:14:27Z"
  }
 }
