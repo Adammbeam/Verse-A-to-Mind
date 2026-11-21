@@ -138,7 +138,20 @@ async function askSentence(h1) {
     return { text: oneSentence(j && j.result && (j.result.response || '')), tier };
   } catch { return { text: '', tier }; }
 }
+function growthPick() {
+  const raw = read(join(root, 'void-live-deploy/tower.ideas.json'));
+  if (!raw.trim()) return '';
+  let j;
+  try { j = JSON.parse(raw); } catch (e) {
+    console.log('growth board: ' + String(e && e.message || e).slice(0, 120));
+    return '';
+  }
+  const p = j && j.picks && j.picks[0];
+  return p && p.title ? 'The growth loop pick is ' + String(p.title).slice(0, 160) + '.' : '';
+}
 async function runNext() {
+  const fromLoop = growthPick();
+  if (fromLoop) return { last: fromLoop, ok: true, note: 'Folded into the growth loop. No separate model call.', paidCents: 0 };
   const g = nextGap(read(join(root, 'docs/GAPS.md')));
   let last = g ? 'Oldest open gap is ' + g.n + ', ' + g.ask + '.' : 'No open gap in the list.';
   if (!g || process.env.HOUSE_ASK !== '1') return { last, ok: true };
