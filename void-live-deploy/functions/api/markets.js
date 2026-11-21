@@ -1,4 +1,5 @@
-// Prices for Verse's markets: the crypto card's coin list (?ids=, since 2026-10) and the /markets/ page's quotes (?s=SYMBOL&r=RANGE, ?strip=1, ?movers=1).
+// Prices for Verse's markets: the crypto card's coin list (?ids=&vs=, since 2026-10; the browser calls this, never CoinGecko itself, so a
+// crypto ask leaves no CORS console error) and the /markets/ page's quotes (?s=SYMBOL&r=RANGE, ?strip=1, ?movers=1).
 //
 // WHAT A STRANGER COULD MAKE THIS DO, AND WHY IT IS BOUNDED (docs/RULES.md: every open GET is written down). This is an open, read-only GET. The most a caller can do is:
 //   - make Verse's server ask one of FOUR fixed hosts (stooq.com, query1.finance.yahoo.com, api.coingecko.com, api.frankfurter.dev) for a price: the host and the
@@ -14,7 +15,7 @@
 // answer.js is loaded when first needed, not at import: the report code (lib/report-run.js) reaches this file from answer.js, and a static import back would be a cycle
 const rateLimited = async (...a) => (await import('./answer.js')).rateLimited(...a);
 import { recordClose, RECORD_NAME } from '../../lib/markets-record.js';
-import { capsRows, scanRows, COINS, resolve, RANGES, parseStooqDaily, parseYahoo, summarize, closeOn, rowsFromPrices, rowsFromFx } from '../../lib/markets.js';
+import { capsRows, scanRows, COINS, VS_CODES, resolve, RANGES, parseStooqDaily, parseYahoo, summarize, closeOn, rowsFromPrices, rowsFromFx } from '../../lib/markets.js';
 import { jsonNoStore } from '../../lib/http.js'; // one copy (lib/http.js, convergence step 3)
 
 export const ID_RE = /^[a-z0-9-]{2,40}$/;
@@ -217,7 +218,8 @@ export async function onRequestGet({ request, env, fetchFn = fetch }) {
 }
 async function coinList({ request }) {
   const url = new URL(request.url), ids = cleanIds(url.searchParams.get('ids'));
-  const vs = /^(usd|eur|gbp|jpy)$/.test(url.searchParams.get('vs') || '') ? url.searchParams.get('vs') : 'usd';
+  const asked = url.searchParams.get('vs') || '';
+  const vs = VS_CODES.includes(asked) ? asked : 'usd'; // a closed list: a stranger cannot pick another currency
   const key = new Request(url.origin + '/__markets/' + vs + '/' + ids);
   const cache = typeof caches !== 'undefined' ? caches.default : null;
   if (cache) { const hit = await cache.match(key); if (hit) return hit; }

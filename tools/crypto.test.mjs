@@ -22,19 +22,19 @@ test('the asks: coin, ticker, currency, an amount', () => {
   for (const a of ['bitcoin whitepaper', 'is ethereum a good investment', 'price of eggs']) assert.ok(!crypto.match(a.toLowerCase(), a), a);
 });
 
-test('run: asks CoinGecko for the coin and currency, shows the price, the 24 h change and the source', async () => {
-  await withFetch({ bitcoin: { usd: 64250.5, usd_24h_change: -1.234, last_updated_at: 1700000000 } }, async (urls) => {
+test('run: asks Verse\'s own /api/markets for the coin and currency, shows the price, the 24 h change and the source', async () => {
+  await withFetch({ ok: true, coins: [{ id: 'bitcoin', price: 64250.5, change24h: -1.234, updated: '2026-11-21T18:00:00Z' }] }, async (urls) => {
     const api = apiOf();
     assert.equal(await crypto.run('bitcoin price', api), 'crypto');
-    assert.equal(urls.length, 1); assert.match(urls[0], /^https:\/\/api\.coingecko\.com\/api\/v3\/simple\/price\?ids=bitcoin&vs_currencies=usd&/);
+    assert.equal(urls.length, 1); assert.equal(urls[0], '/api/markets?ids=bitcoin&vs=usd');
     const h = api.pages[0].innerHTML;
     assert.ok(h.includes('<h2>Bitcoin</h2>'), h); assert.ok(h.includes('$64,250.50'), h);
     assert.ok(h.includes('-1.23% in 24 hours') && h.includes('#ff8a8a'), h);
-    assert.ok(h.includes('https://www.coingecko.com/en/coins/bitcoin') && h.includes('not advice'), h);
+    assert.ok(h.includes('CoinGecko via Verse') && h.includes('https://www.coingecko.com/en/coins/bitcoin') && h.includes('not advice'), h);
   });
-  await withFetch({ ethereum: { eur: 2100, eur_24h_change: 2.5 } }, async (urls) => {
+  await withFetch({ ok: true, coins: [{ id: 'ethereum', price: 2100, change24h: 2.5, updated: '2026-11-21T18:00:00Z' }] }, async (urls) => {
     const api = apiOf(); assert.equal(await crypto.run('what is ethereum worth in euros', api), 'crypto');
-    assert.ok(urls[0].includes('ids=ethereum&vs_currencies=eur'));
+    assert.equal(urls[0], '/api/markets?ids=ethereum&vs=eur');
     const h = api.pages[0].innerHTML; assert.ok(h.includes('€2,100.00'), h); assert.ok(h.includes('+2.50% in 24 hours') && h.includes('#7fd6a0'), h);
   });
 });
@@ -44,15 +44,15 @@ test('other currencies: rupees, pesos and the codes CoinGecko takes are asked fo
   assert.deepEqual(coinOf('1 btc in pesos'), { id: 'bitcoin', name: 'btc', vs: 'mxn' });
   assert.equal(coinOf('bitcoin price in cad').vs, 'cad'); assert.equal(coinOf('2 eth in inr').vs, 'inr'); assert.equal(coinOf('dogecoin price in yuan').vs, 'cny');
   assert.deepEqual(coinOf('bitcoin price in kroner'), { id: 'bitcoin', name: 'bitcoin', vs: 'usd', unknown: 'kroner' });
-  await withFetch({ bitcoin: { inr: 5400000, inr_24h_change: 0.5 } }, async (urls) => {
+  await withFetch({ ok: true, coins: [{ price: 5400000, change24h: 0.5, updated: '2026-11-21T18:00:00Z' }] }, async (urls) => {
     const api = apiOf(); assert.equal(await crypto.run('price of bitcoin in rupees', api), 'crypto');
-    assert.ok(urls[0].includes('ids=bitcoin&vs_currencies=inr'), urls[0]);
+    assert.equal(urls[0], '/api/markets?ids=bitcoin&vs=inr', urls[0]);
     const h = api.pages[0].innerHTML; assert.ok(h.includes('₹'), h); assert.ok(!h.includes('Shown in US dollars'), h);
   });
-  await withFetch({ bitcoin: { mxn: 1200000 } }, async (urls) => { const api = apiOf(); await crypto.run('1 btc in pesos', api); assert.ok(urls[0].includes('vs_currencies=mxn'), urls[0]); assert.ok(api.pages[0].innerHTML.includes('MX$'), api.pages[0].innerHTML); });
-  await withFetch({ bitcoin: { usd: 64250.5 } }, async (urls) => {
+  await withFetch({ ok: true, coins: [{ price: 1200000, updated: '2026-11-21T18:00:00Z' }] }, async (urls) => { const api = apiOf(); await crypto.run('1 btc in pesos', api); assert.equal(urls[0], '/api/markets?ids=bitcoin&vs=mxn', urls[0]); assert.ok(api.pages[0].innerHTML.includes('MX$'), api.pages[0].innerHTML); });
+  await withFetch({ ok: true, coins: [{ price: 64250.5, updated: '2026-11-21T18:00:00Z' }] }, async (urls) => {
     const api = apiOf(); assert.equal(await crypto.run('bitcoin price in kroner', api), 'crypto');
-    assert.ok(urls[0].includes('vs_currencies=usd'), urls[0]);
+    assert.equal(urls[0], '/api/markets?ids=bitcoin&vs=usd', urls[0]);
     const h = api.pages[0].innerHTML; assert.ok(h.includes('$64,250.50'), h); assert.ok(h.includes('Shown in US dollars: "kroner" is not a currency I can price in.'), h);
   });
 });
@@ -60,7 +60,7 @@ test('other currencies: rupees, pesos and the codes CoinGecko takes are asked fo
 test('run: a coin the service has no price for, a dead service, a page left, an ask it does not read', async () => {
   await withFetch({}, async () => { const api = apiOf(); assert.equal(await crypto.run('solana price', api), 'none'); assert.ok(api.pages[0].innerHTML.includes("didn't answer just now")); });
   await withFetch(new Error('offline'), async () => { const api = apiOf(); assert.equal(await crypto.run('solana price', api), 'none'); assert.ok(api.pages[0].innerHTML.includes("didn't answer just now")); });
-  await withFetch({ solana: { usd: 150 } }, async () => { const api = apiOf(false); assert.equal(await crypto.run('solana price', api), 'crypto'); assert.ok(!api.pages[0].innerHTML.includes('150')); });
+  await withFetch({ ok: true, coins: [{ price: 150, updated: '2026-11-21T18:00:00Z' }] }, async () => { const api = apiOf(false); assert.equal(await crypto.run('solana price', api), 'crypto'); assert.ok(!api.pages[0].innerHTML.includes('150')); });
   await withFetch({}, async (urls) => { const api = apiOf(); assert.equal(await crypto.run('who invented bitcoin', api), 'none'); assert.equal(urls.length, 0); assert.equal(api.pages.length, 0); });
 });
 
@@ -94,19 +94,28 @@ test('ethereum, said every way: price words, a currency it is turned into, a tra
   assert.equal(tickerOf('ethereum'), 'ETH'); assert.equal(tickerOf('nope'), '');
 });
 
-test('sources: CoinGecko first; Verse Markets (dollars only) and Coinbase wait 1.2 s; each reads its own answer', () => {
+test('sources: Verse\'s /api/markets first, Coinbase 1.2 s later; each reads its own answer and none calls CoinGecko from the browser', () => {
   const usd = sourcesOf({ id: 'ethereum', vs: 'usd' }), eur = sourcesOf({ id: 'ethereum', vs: 'eur' });
-  assert.deepEqual(usd.map((s) => [s.name, s.delay]), [['CoinGecko', 0], ['Verse Markets', 1200], ['Coinbase', 1200]]);
-  assert.deepEqual(eur.map((s) => s.name), ['CoinGecko', 'Coinbase'], 'Verse Markets prices in dollars only');
-  assert.equal(usd[1].url, '/api/markets?w=ETH'); assert.equal(eur[1].url, 'https://api.coinbase.com/v2/prices/ETH-EUR/spot');
-  assert.deepEqual(usd[0].read({ ethereum: { usd: 3000, usd_24h_change: 1.5, last_updated_at: 10 } }), { price: 3000, change: 1.5, at: 10000 });
-  assert.equal(usd[0].read({}), null);
-  assert.deepEqual(usd[1].read({ ok: true, quotes: [{ ok: true, price: 3001, pct: 2, asOf: 5, source: 'CoinGecko' }] }), { price: 3001, change: 2, at: 5, via: 'CoinGecko' });
-  assert.equal(usd[1].read({ ok: true, quotes: [{ ok: true, price: 3001, pct: 2, asOf: 5, source: 'Yahoo Finance (unofficial)' }] }).change, null, "Yahoo's day move is not called 24 hours");
-  assert.equal(usd[1].read({ ok: false }), null);
+  assert.deepEqual(usd.map((s) => [s.name, s.delay]), [['CoinGecko via Verse', 0], ['Coinbase', 1200]]);
+  assert.deepEqual(eur.map((s) => s.name), ['CoinGecko via Verse', 'Coinbase']);
+  assert.equal(usd[0].url, '/api/markets?ids=ethereum&vs=usd'); assert.equal(usd[1].url, 'https://api.coinbase.com/v2/prices/ETH-USD/spot'); assert.equal(eur[1].url, 'https://api.coinbase.com/v2/prices/ETH-EUR/spot');
+  assert.deepEqual(usd[0].read({ ok: true, coins: [{ price: 3000, change24h: 1.5, updated: '1970-01-01T00:00:10Z' }] }), { price: 3000, change: 1.5, at: 10000 });
+  assert.equal(usd[0].read({}), null); assert.equal(usd[0].read({ ok: false }), null);
+  assert.deepEqual(usd[1].read({ data: { amount: '3001', base: 'ETH', currency: 'USD' } }), { price: 3001, change: null, at: 0 });
   assert.deepEqual(eur[1].read({ data: { amount: '2800.5', base: 'ETH', currency: 'EUR' } }), { price: 2800.5, change: null, at: 0 });
   assert.equal(eur[1].read({ data: { amount: '1', currency: 'USD' } }), null, 'a price in another currency is not this one');
-  assert.deepEqual(sourcesOf({ id: 'some-coin', vs: 'usd' }).map((s) => s.name), ['CoinGecko'], 'a coin with no ticker has one source');
+  assert.deepEqual(sourcesOf({ id: 'some-coin', vs: 'usd' }).map((s) => s.name), ['CoinGecko via Verse'], 'a coin with no ticker has one source');
+});
+
+// issue #3335: a direct browser fetch to api.coingecko.com is refused by its CORS headers and logs a console error on every crypto ask.
+// Every source the card uses is either Verse's own origin or Coinbase, whose public spot endpoint sends CORS headers.
+test('the browser never calls CoinGecko directly (issue #3335: no CORS console error)', () => {
+  for (const q of [{ id: 'bitcoin', vs: 'usd' }, { id: 'ethereum', vs: 'eur' }, { id: 'monero', vs: 'jpy' }, { id: 'some-coin', vs: 'inr' }]) {
+    for (const s of sourcesOf(q)) {
+      assert.ok(!/^https?:\/\/(?:www\.)?api\.coingecko\.com/.test(s.url), s.url);
+      assert.ok(s.url.startsWith('/') || s.url.startsWith('https://api.coinbase.com/'), s.url);
+    }
+  }
 });
 
 // a clock the test moves by hand: wait(ms) resolves when tick() passes it
@@ -140,12 +149,12 @@ test('firstPrice: a first source that hangs is overtaken after the delay; one th
   await assert.rejects(firstPrice([src('a', 0), src('b', 1200)], async () => ({ ok: true, json: async () => ({ p: 0 }) }), { wait: clock().wait }), 'no price anywhere: rejects');
 });
 
-test('run: CoinGecko silent, the price comes from the next source; an amount is priced and its unit price shown', async () => {
+test('run: Verse\'s route silent, the price comes from Coinbase; an amount is priced and its unit price shown', async () => {
   const real = globalThis.fetch, urls = [];
-  globalThis.fetch = async (u) => { urls.push(String(u)); if (/coingecko/.test(u)) throw new Error('429'); if (/^\/api\/markets/.test(u)) return { ok: true, json: async () => ({ ok: true, quotes: [{ ok: true, price: 3000, pct: -1, asOf: 0, source: 'CoinGecko' }] }) }; return { ok: true, json: async () => ({ data: { amount: '3010', currency: 'USD' } }) }; };
+  globalThis.fetch = async (u) => { urls.push(String(u)); if (/^\/api\/markets/.test(u)) throw new Error('503'); return { ok: true, json: async () => ({ data: { amount: '3010', currency: 'USD' } }) }; };
   try {
     const api = apiOf(); assert.equal(await crypto.run('how much is ethereum', api), 'crypto');
-    const h = api.pages[0].innerHTML; assert.ok(/\$3,0[01]0\.00/.test(h), h); assert.ok(/Verse Markets|Coinbase/.test(h), h); assert.ok(!h.includes('…'), h);
+    const h = api.pages[0].innerHTML; assert.ok(/\$3,0[01]0\.00/.test(h), h); assert.ok(/Coinbase/.test(h), h); assert.ok(!h.includes('…'), h);
     const api2 = apiOf(); assert.equal(await crypto.run('convert 2 eth to usd', api2), 'crypto');
     const h2 = api2.pages[0].innerHTML; assert.ok(h2.includes('<h2>2 ETH</h2>'), h2); assert.ok(/\$6,0[02]0\.00/.test(h2), h2); assert.ok(/1 ETH = \$3,0[01]0\.00/.test(h2), h2);
   } finally { globalThis.fetch = real; }

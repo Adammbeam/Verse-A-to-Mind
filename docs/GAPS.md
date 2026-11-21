@@ -60,11 +60,11 @@ Seen: what the live answer was, and the day. Batch 1 is in `tools/gaps-batch1.te
 | 44 | numerology for my name | 2026-10-30: not found | the Pythagorean letter sum worked out step by step, said to be a tradition, not a science | open |
 | 45 | tarot reading | 2026-10-30: an article | cards drawn at random from the 78, with their traditional meanings, said to be for fun | open |
 | 46 | horoscope for leo | 2026-10-30: not found | the sign's dates, element and planet; no invented prediction | open |
-| 47 | make a budget | 2026-11-06: how-to text | a budget table: income, lines, what is left, kept on the device | open |
-| 48 | expense tracker | 2026-11-06: a definition | add expenses by category and see totals, kept on the device | open |
+| 47 | make a budget | 2026-11-06: how-to text | a budget table: income, lines, what is left, kept on the device | implemented |
+| 48 | expense tracker | 2026-11-06: a definition | add expenses by category and see totals, kept on the device | implemented |
 | 49 | net worth tracker | 2026-11-06: a definition | assets and debts in, net worth out, kept on the device | open |
-| 50 | make a business card | 2026-11-06: a card about Verse itself | a card from your name, role and contact, to print or save as PNG | open |
-| 51 | make a resume | 2026-11-06: how-to text | a resume form that becomes a clean page to print or save | open |
+| 50 | make a business card | 2026-11-06: a card about Verse itself | a card from your name, role and contact, to print or save as PNG | implemented |
+| 51 | make a resume | 2026-11-06: how-to text | a resume form that becomes a clean page to print or save | implemented |
 | 52 | word counter for essay | 2026-11-06: an explanation | the word counter opens, the same as "word counter" | verified live 2026-11-06 |
 | 53 | grocery list | 2026-11-06: nothing | a list card on the stage that takes items and ticks them off | verified live 2026-11-12 |
 | 54 | strikethrough text | 2026-11-06: an article on the character | the text comes back with combining strokes, ready to copy | verified live 2026-11-06 |

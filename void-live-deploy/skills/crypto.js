@@ -1,18 +1,18 @@
 /**
- * crypto skill — the price of a cryptocurrency now, from CoinGecko (no key)
+ * crypto skill — the price of a cryptocurrency now, from CoinGecko through Verse's own /api/markets (no key, no CORS)
  * Contract: { name, examples, nearMisses, match(lower, text), run(text, api) }
  * "bitcoin price", "price of ethereum in euros", "how much is solana".
  * Its card opens the Markets page on the same coin (data-page), and the Markets page's card asks for this one (lib/markets-card.js).
  */
-import { COINS as LISTED } from '../lib/markets.js';
+import { COINS as LISTED, VS_CODES } from '../lib/markets.js';
 const COINS = { bitcoin: 'bitcoin', btc: 'bitcoin', ethereum: 'ethereum', eth: 'ethereum', ether: 'ethereum', solana: 'solana', sol: 'solana', dogecoin: 'dogecoin', doge: 'dogecoin',
   cardano: 'cardano', ada: 'cardano', xrp: 'ripple', ripple: 'ripple', litecoin: 'litecoin', ltc: 'litecoin', tether: 'tether', usdt: 'tether', bnb: 'binancecoin', polkadot: 'polkadot', dot: 'polkadot', monero: 'monero', xmr: 'monero' };
 const VS = { usd: 'usd', dollars: 'usd', dollar: 'usd', eur: 'eur', euros: 'eur', euro: 'eur', gbp: 'gbp', pounds: 'gbp', pound: 'gbp', jpy: 'jpy', yen: 'jpy',
   rupee: 'inr', rupees: 'inr', peso: 'mxn', pesos: 'mxn', yuan: 'cny', renminbi: 'cny', rmb: 'cny', won: 'krw', ruble: 'rub', rubles: 'rub', rouble: 'rub', roubles: 'rub',
   real: 'brl', reais: 'brl', rand: 'zar', lira: 'try', zloty: 'pln', franc: 'chf', francs: 'chf', shekel: 'ils', shekels: 'ils', baht: 'thb', ringgit: 'myr', rupiah: 'idr',
   dirham: 'aed', dirhams: 'aed', riyal: 'sar', riyals: 'sar', naira: 'ngn', hryvnia: 'uah', forint: 'huf', koruna: 'czk' };
-// the fiat currencies CoinGecko's simple/price takes as vs_currencies, by their codes ("1 btc in inr")
-const CODES = 'aed ars aud bdt bhd bmd brl cad chf clp cny czk dkk eur gbp gel hkd huf idr ils inr jpy krw kwd lkr mmk mxn myr ngn nok nzd php pkr pln rub sar sek sgd thb try twd uah usd vnd zar'.split(' ');
+// the fiat currencies CoinGecko's coin list takes as vs_currency, by their codes ("1 btc in inr"); the list is shared with /api/markets
+const CODES = VS_CODES;
 // the currency a word names, or null; a word it does not know is kept so the card can say the price is in dollars instead
 const vsOf = (w) => (!w ? 'usd' : VS[w] || (CODES.includes(w) ? w : null));
 /** the Markets page for a CoinGecko id ('/markets/?s=BTC'), or '' for a coin the page does not list. Pure. */
@@ -49,18 +49,17 @@ export function coinOf(text) {
 // the ticker a CoinGecko id trades under ('ethereum' -> 'ETH'), from the Markets page's own list, or ''. Pure.
 export const tickerOf = (id) => Object.keys(LISTED).find((s) => LISTED[s][0] === id) || '';
 /**
- * Where a coin's price can come from, first choice first (exam prices: "how much is ethereum" hung on "…" for 17 s when CoinGecko,
- * the only source, did not answer the browser). CoinGecko from the visitor's own connection (with the 24 h change); then, 1.2 s
- * later or at once when it fails: Verse's own /api/markets (dollars only; CoinGecko from Cloudflare, else Yahoo Finance, kept two
- * minutes at the edge) and Coinbase's public spot price (no key). Each: { name, url, href, delay, read(json) -> { price, change, at } | null }. Pure.
+ * Where a coin's price can come from, first choice first. Verse's own /api/markets is first and the browser never calls CoinGecko
+ * itself: a direct call from the page is refused by CoinGecko's CORS headers and left a console error on every crypto ask (issue
+ * #3335). The route asks CoinGecko from Cloudflare in the currency the ask named, keeps the answer two minutes at the edge, and
+ * says which source answered; Coinbase's public spot price (no key) joins 1.2 s later, or at once when the route fails, for a
+ * second read on dollars and euros. Each: { name, url, href, delay, read(json) -> { price, change, at } | null }. Pure.
  */
 export function sourcesOf(q) {
   const sym = tickerOf(q.id), vs = q.vs, up = vs.toUpperCase();
-  const list = [{ name: 'CoinGecko', href: 'https://www.coingecko.com/en/coins/' + q.id, delay: 0,
-    url: 'https://api.coingecko.com/api/v3/simple/price?ids=' + q.id + '&vs_currencies=' + vs + '&include_24hr_change=true&include_last_updated_at=true',
-    read: (j) => { const row = j && j[q.id]; return row && row[vs] != null ? { price: Number(row[vs]), change: row[vs + '_24h_change'], at: row.last_updated_at ? row.last_updated_at * 1000 : 0 } : null; } }];
-  if (sym && vs === 'usd') list.push({ name: 'Verse Markets', href: '/markets/?s=' + sym, delay: 1200, url: '/api/markets?w=' + sym,
-    read: (j) => { const x = j && j.ok && Array.isArray(j.quotes) && j.quotes[0]; return x && x.ok ? { price: Number(x.price), change: x.source === 'CoinGecko' && Number.isFinite(x.pct) ? x.pct : null, at: Number(x.asOf) || 0, via: x.source } : null; } }); // Yahoo's move is from the last daily close, not 24 hours: not shown as one
+  const list = [{ name: 'CoinGecko via Verse', href: 'https://www.coingecko.com/en/coins/' + q.id, delay: 0,
+    url: '/api/markets?ids=' + encodeURIComponent(q.id) + '&vs=' + encodeURIComponent(vs),
+    read: (j) => { const row = j && j.ok && Array.isArray(j.coins) && j.coins[0]; return row && row.price != null ? { price: Number(row.price), change: row.change24h, at: Date.parse(row.updated) || 0 } : null; } }];
   if (sym) list.push({ name: 'Coinbase', href: 'https://www.coinbase.com/price/' + (sym ? LISTED[sym][1].toLowerCase().replace(/\s+/g, '-') : ''), delay: 1200, url: 'https://api.coinbase.com/v2/prices/' + sym + '-' + up + '/spot',
     read: (j) => { const d = j && j.data; return d && String(d.currency || '').toUpperCase() === up ? { price: Number(d.amount), change: null, at: 0 } : null; } });
   return list;
