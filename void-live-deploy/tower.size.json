@@ -7058,7 +7058,7 @@
    "at": "2026-10-30"
   },
   "icanhazip.com": {
-   "bytes": 16,
+   "bytes": 14,
    "controls": 0,
    "scripts": 0,
    "styles": 0,
@@ -7067,8 +7067,8 @@
    "htmlControls": 0,
    "counted": "plain",
    "shell": "none",
-   "text": 15,
-   "weight": 16,
+   "text": 13,
+   "weight": 14,
    "at": "2026-11-21"
   },
   "icloud.com": {
