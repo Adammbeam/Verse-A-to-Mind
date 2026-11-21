@@ -3,12 +3,19 @@
  "cases": 155,
  "runsTotal": 300,
  "kinds": {
-  "file": 31,
-  "visitor": 224,
+  "visitor": 225,
+  "file": 30,
   "grow": 44,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-21T09:09:58Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-21T08:14:27Z",
    "passed": 152,
@@ -365,64 +372,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-21T00:13:30Z",
-   "passed": 126,
-   "of": 151,
-   "kind": "file",
-   "ms": 487,
-   "note": "fix: \"dyslexia friendly font\" only \"waking up\" appeared, never the answer",
-   "failed": [
-    {
-     "ask": "bokos like dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "what do you get if you merge a pizza and a black hole",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "closer on the figure",
-     "why": "console: Failed to load resource: the server responded with a status of 520 ()"
-    },
-    {
-     "ask": "test me on that",
-     "why": "console: Failed to load resource: the server responded with a status of 520 ()"
-    },
-    {
-     "ask": "set my ambition temperature for the podcast",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "dyslexia friendly font",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "fimls by kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "film meatdata for ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "who is the auhtor of dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "geenrate a toon style dog",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
   }
  ],
  "weekly": [
@@ -488,14 +437,14 @@
   },
   {
    "from": "2026-11-07",
-   "runs": 122,
-   "passed": 2052,
-   "of": 2157,
-   "ms": 393
+   "runs": 121,
+   "passed": 1941,
+   "of": 2043,
+   "ms": 391
   },
   {
    "from": "2026-11-14",
-   "runs": 178,
+   "runs": 179,
    "passed": 7721,
    "of": 8194,
    "ms": 430
