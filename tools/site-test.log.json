@@ -1,41 +1,5 @@
 [
  {
-  "at": "2026-11-09T11:40:04Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1051,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 12130 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
-  "at": "2026-11-09T12:08:14Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1309,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 12635 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-09T12:22:50Z",
   "passed": 102,
   "of": 109,
@@ -6386,5 +6350,81 @@
    "failed": []
   },
   "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-21T01:19:47Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 494,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-21T01:36:49Z",
+  "passed": 129,
+  "of": 153,
+  "ms": 477,
+  "kind": "file",
+  "key": "fimls by kurosawa | only \"waking up\" appeared, never the answer",
+  "failed": [
+   {
+    "ask": "fimls by kurosawa",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "film metadata for ikiru pls",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "who is the auhtor of dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "create a toon style bird pls",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "redner a cartoon dragon",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "geenrate a toon style dog",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "summon a cup",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "stackwell",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "open folder recipes",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "time saved for the invoice automation",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "token stand",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "is this system handoff ready",
+    "why": "only \"waking up\" appeared, never the answer"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 494,
+   "failed": []
+  },
+  "note": "fix: \"fimls by kurosawa\" only \"waking up\" appeared, never the answer; console: Failed to load resource: the server responded with a status of 404 ()"
  }
 ]
