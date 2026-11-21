@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-21T06:12:18.800Z",
+  "at": "2026-11-21T10:29:49.671Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -34,10 +34,18 @@
       }
     },
     "podcasts": {
-      "score": 94.3,
+      "score": 92.7,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "play the latest episode of npr news now",
+          "failed": [
+            "show",
+            "episode"
+          ],
+          "score": 71.4
+        },
         {
           "ask": "play the podcast",
           "failed": [
@@ -110,16 +118,17 @@
       }
     },
     "weather": {
-      "score": 97.2,
+      "score": 96.3,
       "of": 18,
       "measured": 18,
       "fails": [
         {
           "ask": "weather",
           "failed": [
+            "temp",
             "rival"
           ],
-          "score": 83.3
+          "score": 66.7
         },
         {
           "ask": "météo à lyon",
@@ -227,10 +236,38 @@
       }
     },
     "sports": {
-      "score": 96.3,
+      "score": 92.6,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "yankees score",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "how did the chiefs do",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "packers score",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "nba team celtics",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
         {
           "ask": "scores",
           "failed": [
@@ -306,17 +343,10 @@
       "fails": []
     },
     "definitions": {
-      "score": 93.3,
+      "score": 96.7,
       "of": 6,
       "measured": 6,
       "fails": [
-        {
-          "ask": "define spring",
-          "failed": [
-            "fast"
-          ],
-          "score": 80
-        },
         {
           "ask": "define glimbrastic",
           "failed": [
@@ -340,7 +370,7 @@
     }
   },
   "lowest": {
-    "domain": "definitions",
-    "score": 93.3
+    "domain": "sports",
+    "score": 92.6
   }
 }
