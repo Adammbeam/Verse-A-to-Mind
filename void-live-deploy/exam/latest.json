@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-21T01:55:56.325Z",
+  "at": "2026-11-21T02:55:34.132Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -34,32 +34,10 @@
       }
     },
     "podcasts": {
-      "score": 91.1,
+      "score": 95.9,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "play the latest episode of the daily",
-          "failed": [
-            "audio"
-          ],
-          "score": 85.7
-        },
-        {
-          "ask": "play the latest episode of serial",
-          "failed": [
-            "audio"
-          ],
-          "score": 85.7
-        },
-        {
-          "ask": "play the latest episode of npr news now",
-          "failed": [
-            "show",
-            "episode"
-          ],
-          "score": 71.4
-        },
         {
           "ask": "play the podcast",
           "failed": [
@@ -77,13 +55,11 @@
         {
           "ask": "pon el último episodio de radiolab",
           "failed": [
-            "answered",
             "skill",
-            "fast",
             "audio",
             "episode"
           ],
-          "score": 28.6
+          "score": 57.1
         }
       ],
       "holdout": {
@@ -132,7 +108,7 @@
       }
     },
     "weather": {
-      "score": 96.3,
+      "score": 95.8,
       "of": 18,
       "measured": 18,
       "fails": [
@@ -148,9 +124,10 @@
           "ask": "météo à lyon",
           "failed": [
             "skill",
-            "temp"
+            "temp",
+            "close"
           ],
-          "score": 66.7
+          "score": 57.1
         }
       ],
       "holdout": {
@@ -250,17 +227,10 @@
       }
     },
     "sports": {
-      "score": 93.5,
+      "score": 94.4,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "how did the chiefs do",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
         {
           "ask": "packers score",
           "failed": [
@@ -377,7 +347,7 @@
     }
   },
   "lowest": {
-    "domain": "podcasts",
-    "score": 91.1
+    "domain": "sports",
+    "score": 94.4
   }
 }
