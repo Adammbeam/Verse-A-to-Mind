@@ -1,74 +1,5 @@
 [
  {
-  "at": "2026-11-09T12:22:50Z",
-  "passed": 102,
-  "of": 109,
-  "ms": 350,
-  "kind": "grow",
-  "failed": [
-   {
-    "ask": "play voidquest",
-    "why": "fps 1 < 7"
-   },
-   {
-    "ask": "what can I buy",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "play chess",
-    "why": "fps 1 < 7"
-   },
-   {
-    "ask": "yo find me a sci-fi film from the 80s",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "redner a cartoon dragon",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "stlye like mickey mouse",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "fat burning heart rate for a 35 year old",
-    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-   }
-  ],
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1309,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 12635 ms"
-     ]
-    }
-   ]
-  },
-  "note": "new ground passed, kept as a regression case: \"turn this idea into a system plan: weekly status reports that write themselves\" (skill:idea-to-system)"
- },
- {
-  "at": "2026-11-09T12:50:35Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1480,
-   "failed": [
-    {
-     "ask": "what time is it",
-     "why": [
-      "nothing useful"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-09T13:19:48Z",
   "kind": "visitor",
   "visitor": {
@@ -6426,5 +6357,44 @@
    "failed": []
   },
   "note": "fix: \"fimls by kurosawa\" only \"waking up\" appeared, never the answer; console: Failed to load resource: the server responded with a status of 404 ()"
+ },
+ {
+  "at": "2026-11-21T02:05:51Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 574,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-21T02:17:49Z",
+  "passed": 148,
+  "of": 151,
+  "ms": 383,
+  "kind": "grow",
+  "failed": [
+   {
+    "ask": "fimls by kurosawa",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "redner a cartoon dragon",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "yo draw yourself",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 574,
+   "failed": []
+  },
+  "note": "new ground passed, kept as a regression case: \"what automations does Verse run\" (skill:verse-runs)"
  }
 ]

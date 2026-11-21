@@ -1,14 +1,43 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 150,
+ "cases": 151,
  "runsTotal": 300,
  "kinds": {
-  "grow": 44,
   "visitor": 225,
+  "grow": 44,
   "file": 30,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-21T02:17:49Z",
+   "passed": 148,
+   "of": 151,
+   "kind": "grow",
+   "ms": 383,
+   "note": "new ground passed, kept as a regression case: \"what automations does Verse run\" (skill:verse-runs)",
+   "failed": [
+    {
+     "ask": "fimls by kurosawa",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "yo draw yourself",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-21T02:05:51Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-21T01:36:49Z",
    "passed": 129,
@@ -412,71 +441,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-20T13:17:03Z",
-   "passed": 133,
-   "of": 149,
-   "kind": "file",
-   "ms": 417,
-   "note": "fix: \"make a poster of this card\" only \"waking up\" appeared, never the answer; console: Failed to load resource: the server responded with a status of 429 ()",
-   "failed": [
-    {
-     "ask": "are you web4",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "film metadata for Ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "fimls by kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "film meatdata for ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "make a vase",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "adaptive flow canvas",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "show the data flows for client onboarding",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "calorie calculator",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "make a poster of this card",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "how long until gta 6 comes out",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    }
-   ]
-  },
-  {
-   "at": "2026-11-20T13:01:36Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -542,16 +506,16 @@
   },
   {
    "from": "2026-11-07",
-   "runs": 132,
-   "passed": 2463,
-   "of": 2587,
+   "runs": 131,
+   "passed": 2361,
+   "of": 2478,
    "ms": 391
   },
   {
    "from": "2026-11-14",
-   "runs": 168,
-   "passed": 6949,
-   "of": 7401,
+   "runs": 169,
+   "passed": 7097,
+   "of": 7552,
    "ms": 439
   }
  ],
@@ -1013,6 +977,7 @@
   "skill:we-own-it-pack": "2026-11-21T00:13:30Z",
   "skill:before-after-pack": "2026-11-21T01:36:49Z",
   "skill:chart": "2026-11-21T01:36:49Z",
-  "skill:daily-challenge": "2026-11-21T01:36:49Z"
+  "skill:daily-challenge": "2026-11-21T01:36:49Z",
+  "skill:verse-runs": "2026-11-21T02:17:49Z"
  }
 }

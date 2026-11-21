@@ -483,6 +483,9 @@
     },
     {
       "ask": "show me the tv show andor"
+    },
+    {
+      "ask": "what automations does Verse run"
     }
   ],
   "candidates": [],
