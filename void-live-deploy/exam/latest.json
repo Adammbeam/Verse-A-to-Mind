@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-21T00:14:54.697Z",
+  "at": "2026-11-21T00:49:07.595Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -34,7 +34,7 @@
       }
     },
     "podcasts": {
-      "score": 95.9,
+      "score": 94.3,
       "of": 18,
       "measured": 18,
       "fails": [
@@ -55,11 +55,13 @@
         {
           "ask": "pon el último episodio de radiolab",
           "failed": [
+            "answered",
             "skill",
+            "fast",
             "audio",
             "episode"
           ],
-          "score": 57.1
+          "score": 28.6
         }
       ],
       "holdout": {
@@ -108,25 +110,41 @@
       }
     },
     "weather": {
-      "score": 96.3,
+      "score": 93,
       "of": 18,
       "measured": 18,
       "fails": [
         {
+          "ask": "will it rain tomorrow in london",
+          "failed": [
+            "fast"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "weather in tokyo this week",
+          "failed": [
+            "answered",
+            "fast",
+            "temp"
+          ],
+          "score": 50
+        },
+        {
           "ask": "weather",
           "failed": [
-            "temp",
             "rival"
           ],
-          "score": 66.7
+          "score": 83.3
         },
         {
           "ask": "météo à lyon",
           "failed": [
             "skill",
-            "temp"
+            "temp",
+            "close"
           ],
-          "score": 66.7
+          "score": 57.1
         }
       ],
       "holdout": {
@@ -199,24 +217,10 @@
       }
     },
     "news": {
-      "score": 95.6,
+      "score": 97.8,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "tech news today",
-          "failed": [
-            "fast"
-          ],
-          "score": 80
-        },
-        {
-          "ask": "technology news",
-          "failed": [
-            "fast"
-          ],
-          "score": 80
-        },
         {
           "ask": "and the science ones?",
           "failed": [
@@ -240,38 +244,10 @@
       }
     },
     "sports": {
-      "score": 92.6,
+      "score": 96.3,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "yankees score",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "how did the chiefs do",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "packers score",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "nba team celtics",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
         {
           "ask": "scores",
           "failed": [
@@ -374,7 +350,7 @@
     }
   },
   "lowest": {
-    "domain": "sports",
-    "score": 92.6
+    "domain": "weather",
+    "score": 93
   }
 }
