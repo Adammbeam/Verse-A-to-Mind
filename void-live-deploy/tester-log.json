@@ -3,12 +3,41 @@
  "cases": 157,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 224,
+  "visitor": 223,
   "grow": 44,
-  "file": 31,
+  "file": 32,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-21T17:46:38Z",
+   "passed": 155,
+   "of": 158,
+   "kind": "file",
+   "ms": 329,
+   "note": "fix: \"yo bitcoin price\" console: Access to fetch at 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true",
+   "failed": [
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "yo bitcoin price",
+     "why": "console: Access to fetch at 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_ch"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-21T17:34:59Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-21T17:22:09Z",
    "passed": 16,
@@ -363,31 +392,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-21T05:58:32Z",
-   "passed": 151,
-   "of": 153,
-   "kind": "grow",
-   "ms": 345,
-   "note": "new ground passed, kept as a regression case: \"when should i wake up if i go to sleep now\" (skill:sleep)",
-   "failed": [
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "what automations does Verse run",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
-  },
-  {
-   "at": "2026-11-21T05:47:11Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -453,16 +457,16 @@
   },
   {
    "from": "2026-11-07",
-   "runs": 109,
+   "runs": 107,
    "passed": 1511,
    "of": 1585,
    "ms": 373
   },
   {
    "from": "2026-11-14",
-   "runs": 191,
-   "passed": 8328,
-   "of": 8977,
+   "runs": 193,
+   "passed": 8483,
+   "of": 9135,
    "broken": 1,
    "brokenOf": 158,
    "brokenPassed": 16,
@@ -603,7 +607,7 @@
   "skill:deps": "2026-10-18T00:52:54Z",
   "skill:fringe-to-skill": "2026-10-18T04:03:13Z",
   "skill:bench": "2026-11-21T17:22:09Z",
-  "skill:collide": "2026-10-17T20:35:41Z",
+  "skill:collide": "2026-11-21T17:46:38Z",
   "skill:duel": "2026-10-17T20:35:41Z",
   "skill:friction": "2026-10-17T21:02:03Z",
   "skill:kept": "2026-10-17T21:02:03Z",

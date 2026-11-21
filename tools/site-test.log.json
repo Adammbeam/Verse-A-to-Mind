@@ -1,34 +1,5 @@
 [
  {
-  "at": "2026-11-09T21:10:20Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 912,
-   "failed": []
-  },
-  "note": "visitor pass 15/15"
- },
- {
-  "at": "2026-11-09T21:35:54Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1424,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 10185 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-09T22:03:34Z",
   "kind": "visitor",
   "visitor": {
@@ -6341,5 +6312,45 @@
    "failed": []
   },
   "note": "fix: \"film meatdata for ikiru\" no skill caught it (it went to the model, which the tester never calls); console: Failed to load resource: the server responded with a status of 404 ()"
+ },
+ {
+  "at": "2026-11-21T17:34:59Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 952,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-21T17:46:38Z",
+  "passed": 155,
+  "of": 158,
+  "ms": 329,
+  "kind": "file",
+  "key": "site | console: Access to fetch at 'https://api#coingecko#com/api/v",
+  "failed": [
+   {
+    "ask": "bokos like dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "yo bitcoin price",
+    "why": "console: Access to fetch at 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_ch"
+   },
+   {
+    "ask": "redner a cartoon dragon",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 952,
+   "failed": []
+  },
+  "note": "fix: \"yo bitcoin price\" console: Access to fetch at 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true"
  }
 ]
