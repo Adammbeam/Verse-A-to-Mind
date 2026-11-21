@@ -20,7 +20,10 @@
   h1 { font-size: 1.6rem; margin: 0 0 8px; } h2 { font-size: 1.1rem; margin: 26px 0 6px; }
   a { color: var(--accent); } .note { color: var(--soft); font-size: .92rem; }
   input { width: 100%; box-sizing: border-box; padding: 8px 10px; background: #12101c; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; font: inherit; }
-  table { width: 100%; border-collapse: collapse; margin: 10px 0; } td { padding: 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; } td { padding: 6px; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: anywhere; }
+  /* the bot and skill tables can be wider than a phone: they scroll inside this box, never the page (a wide font
+     in the merge gate's browser measured the page 18 px wider than the window, 2026-11-21) */
+  .scroll { overflow-x: auto; max-width: 100%; }
   code { background: #12101c; padding: 1px 5px; border-radius: 4px; }
 </style>
 <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}</style>
@@ -40,9 +43,9 @@
 <h2>Browse the pieces</h2>
 <input id="q" type="search" placeholder="Filter bots and skills" aria-label="Filter bots and skills">
 <h2 id="bots-h">Bots</h2>
-<table><tbody id="bots"><tr><td class="note">Loading…</td></tr></tbody></table>
+<div class="scroll"><table><tbody id="bots"><tr><td class="note">Loading…</td></tr></tbody></table></div>
 <h2 id="skills-h">Skills</h2>
-<table><tbody id="skills"><tr><td class="note">Loading…</td></tr></tbody></table>
+<div class="scroll"><table><tbody id="skills"><tr><td class="note">Loading…</td></tr></tbody></table></div>
 <p class="note">Run the bots at <a href="/bots/">/bots/</a>. See how Verse is doing on the <a href="/progress/">progress</a> page.</p>
 </main>
 <script src="/contribute/app.js" defer></script>
