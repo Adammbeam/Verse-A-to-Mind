@@ -1,7 +1,7 @@
 {
- "at": "2026-11-20T14:26:41.184Z",
+ "at": "2026-11-21T06:25:30.562Z",
  "mode": "live",
- "pass": 53,
+ "pass": 51,
  "total": 54,
  "results": [
   {
@@ -64,7 +64,7 @@
   {
    "ask": "the beatles",
    "ok": true,
-   "kind": "Band · Album — 1960",
+   "kind": "Band — 1960",
    "title": "The Beatles",
    "theme": "sleeve",
    "photo": true,
@@ -85,7 +85,7 @@
   {
    "ask": "bohemian rhapsody",
    "ok": true,
-   "kind": "Song · Film · Album — 1975 · Queen",
+   "kind": "Song — 1975 · Queen",
    "title": "Bohemian Rhapsody",
    "theme": "sleeve",
    "photo": true,
@@ -123,7 +123,7 @@
   {
    "ask": "the godfather",
    "ok": true,
-   "kind": "Film · Book · Game · Album — 1972 · Francis Ford Coppola",
+   "kind": "Film — 1972 · Francis Ford Coppola",
    "title": "The Godfather",
    "theme": "cinema",
    "photo": true,
@@ -163,7 +163,7 @@
   {
    "ask": "tetris",
    "ok": true,
-   "kind": "Game · Film",
+   "kind": "Game",
    "title": "Tetris",
    "theme": "plain",
    "photo": true,
@@ -225,14 +225,14 @@
    "kind": "Creature",
    "title": "Snow leopard",
    "theme": "specimen",
-   "photo": true,
+   "photo": false,
    "api": {
     "name": "Snow leopard",
     "desc": "Species of large felid",
     "fuzzy": false,
     "noAnswer": false,
     "guess": "",
-    "pic": true,
+    "pic": false,
     "sources": [],
     "answer": "The snow leopard is a felid species in the genus Panthera. It has a thick whitish to grey "
    },
@@ -327,7 +327,7 @@
     "fuzzy": false,
     "noAnswer": false,
     "guess": "",
-    "pic": true,
+    "pic": false,
     "sources": [],
     "answer": "Zeus is the supreme deity of the Greek pantheon. He is a sky and thunder god in ancient Gr"
    },
@@ -335,10 +335,10 @@
   },
   {
    "ask": "pythagorean theorem",
-   "ok": true,
-   "kind": "Concept",
+   "ok": false,
+   "kind": "Idea",
    "title": "Pythagorean theorem",
-   "theme": "plain",
+   "theme": "",
    "photo": true,
    "api": {
     "name": "Pythagorean theorem",
@@ -350,26 +350,46 @@
     "sources": [],
     "answer": "In mathematics, the Pythagorean theorem or Pythagoras's theorem is a fundamental relation "
    },
-   "redirect": "Pythagorean theorem"
+   "redirect": "Pythagorean theorem",
+   "seen": {
+    "called": 1,
+    "failed": [],
+    "bad": [],
+    "text": "Pythagorean theorem IDEA Relation between sides of a right triangle In mathematics, the Pythagorean theorem or Pythagoras's theorem is a fun …  8 OF 9 FRESH Reply to what I said, or correct me Send Kept on this device only. My self card lists it under Correct me."
+   },
+   "problems": [
+    "type line \"Idea\" does not match /Concept/",
+    "theme \"\", wanted plain"
+   ]
   },
   {
    "ask": "world war ii",
-   "ok": true,
-   "kind": "Event — 1939",
+   "ok": false,
+   "kind": "Idea — 1939",
    "title": "World War II",
-   "theme": "plain",
-   "photo": true,
+   "theme": "",
+   "photo": false,
    "api": {
     "name": "World War II",
     "desc": "Global conflict from 1939 to 1945",
     "fuzzy": false,
     "noAnswer": false,
     "guess": "",
-    "pic": true,
+    "pic": false,
     "sources": [],
     "answer": "World War II, or the Second World War, was a global conflict between two coalitions: the A"
    },
-   "redirect": "World War II"
+   "redirect": "World War II",
+   "seen": {
+    "called": 1,
+    "failed": [],
+    "bad": [],
+    "text": "World War II IDEA — 1939 World War II, or the Second World War, was a global conflict between two coalitions: the Allies and the Axis powers …  report VERSE Reply to what I said, or correct me Send Kept on this device only. My self card lists it under Correct me."
+   },
+   "problems": [
+    "type line \"Idea — 1939\" does not match /Event/",
+    "theme \"\", wanted plain"
+   ]
   },
   {
    "ask": "apple inc",
@@ -643,14 +663,14 @@
    "kind": "Creature",
    "title": "African forest elephant",
    "theme": "specimen",
-   "photo": true,
+   "photo": false,
    "api": {
     "name": "African forest elephant",
     "desc": "African elephant species",
     "fuzzy": false,
     "noAnswer": false,
     "guess": "",
-    "pic": true,
+    "pic": false,
     "sources": [],
     "answer": "The African forest elephant is an elephant species native to humid tropical forests in Wes"
    },
@@ -796,7 +816,7 @@
   {
    "ask": "orange juice",
    "ok": true,
-   "kind": "Food · Band",
+   "kind": "Food",
    "title": "Orange juice",
    "theme": "specimen",
    "photo": false,
@@ -829,7 +849,7 @@
     "guess": "",
     "pic": false,
     "sources": [],
-    "answer": "Bread is a baked food product made from water, flour, and often yeast. It is a staple food"
+    "answer": "Biga is a type of pre-fermentation used in Italian baking. Many popular Italian breads, in"
    },
    "redirect": "none"
   },
