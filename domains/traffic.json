@@ -1,14 +1,14 @@
 {
- "at": "2026-11-20T14:02Z",
+ "at": "2026-11-21T05:51Z",
  "source": "verse",
  "note": "Verse's own count (/api/visit, a beacon per page load on the stage); Cloudflare unreadable: CLOUDFLARE_API_TOKEN: cannot look up the zone (HTTP 200; needs Zone > Zone > Read or CLOUDFLARE_ZONE_ID)",
  "week": {
-  "since": "2026-11-14",
+  "since": "2026-11-15",
   "unique": true,
-  "people": 50,
-  "views": 281,
-  "ours": 4438,
-  "bots": 0
+  "people": 58,
+  "views": 338,
+  "ours": 4885,
+  "bots": 2
  },
  "days": [
   {
@@ -213,37 +213,45 @@
   },
   {
    "day": "2026-11-20",
-   "all": 1030,
-   "people": 1,
-   "ours": 1029,
-   "bots": 0,
-   "uniquePeople": 1
+   "all": 1704,
+   "people": 96,
+   "ours": 1607,
+   "bots": 1,
+   "uniquePeople": 8
+  },
+  {
+   "day": "2026-11-21",
+   "all": 351,
+   "people": 15,
+   "ours": 335,
+   "bots": 1,
+   "uniquePeople": 6
   }
  ],
  "pages": [
   {
    "k": "/",
-   "n": 769
+   "n": 802
   },
   {
    "k": "/lab/",
-   "n": 242
+   "n": 243
   },
   {
    "k": "/team/",
-   "n": 126
-  },
-  {
-   "k": "/brain/",
-   "n": 44
+   "n": 157
   },
   {
    "k": "/films/",
-   "n": 44
+   "n": 55
+  },
+  {
+   "k": "/brain/",
+   "n": 45
   },
   {
    "k": "/tools/",
-   "n": 33
+   "n": 37
   },
   {
    "k": "/conquered/",
@@ -251,7 +259,7 @@
   },
   {
    "k": "/treasury/",
-   "n": 21
+   "n": 23
   },
   {
    "k": "/starboard/",
@@ -259,7 +267,7 @@
   },
   {
    "k": "/podcasts/",
-   "n": 18
+   "n": 19
   }
  ],
  "referrers": [
@@ -269,7 +277,7 @@
   },
   {
    "k": "bing.com",
-   "n": 25
+   "n": 26
   },
   {
    "k": "github.com",
@@ -279,7 +287,7 @@
  "countries": [
   {
    "k": "US",
-   "n": 1525
+   "n": 1635
   },
   {
    "k": "CN",
@@ -318,5 +326,5 @@
    "n": 2
   }
  ],
- "line": "People this week: 50 (281 visits; counted by Verse itself, no cookies, our own runs and bots taken out)"
+ "line": "People this week: 58 (338 visits; counted by Verse itself, no cookies, our own runs and bots taken out)"
 }
