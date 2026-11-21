@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-21T00:49:07.595Z",
+  "at": "2026-11-21T01:23:30.019Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -34,10 +34,39 @@
       }
     },
     "podcasts": {
-      "score": 94.3,
+      "score": 90.3,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "play the latest episode of this american life",
+          "failed": [
+            "audio"
+          ],
+          "score": 85.7
+        },
+        {
+          "ask": "play the latest episode of the daily",
+          "failed": [
+            "audio"
+          ],
+          "score": 85.7
+        },
+        {
+          "ask": "play the latest episode of hidden brain",
+          "failed": [
+            "audio"
+          ],
+          "score": 85.7
+        },
+        {
+          "ask": "play the latest episode of npr news now",
+          "failed": [
+            "show",
+            "episode"
+          ],
+          "score": 71.4
+        },
         {
           "ask": "play the podcast",
           "failed": [
@@ -110,32 +139,17 @@
       }
     },
     "weather": {
-      "score": 93,
+      "score": 95.8,
       "of": 18,
       "measured": 18,
       "fails": [
         {
-          "ask": "will it rain tomorrow in london",
-          "failed": [
-            "fast"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "weather in tokyo this week",
-          "failed": [
-            "answered",
-            "fast",
-            "temp"
-          ],
-          "score": 50
-        },
-        {
           "ask": "weather",
           "failed": [
+            "temp",
             "rival"
           ],
-          "score": 83.3
+          "score": 66.7
         },
         {
           "ask": "météo à lyon",
@@ -244,10 +258,17 @@
       }
     },
     "sports": {
-      "score": 96.3,
+      "score": 95.4,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "nba team celtics",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
         {
           "ask": "scores",
           "failed": [
@@ -350,7 +371,7 @@
     }
   },
   "lowest": {
-    "domain": "weather",
-    "score": 93
+    "domain": "podcasts",
+    "score": 90.3
   }
 }
