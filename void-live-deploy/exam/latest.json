@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-21T10:29:49.671Z",
+  "at": "2026-11-21T17:54:43.881Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -34,18 +34,10 @@
       }
     },
     "podcasts": {
-      "score": 92.7,
+      "score": 94.3,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "play the latest episode of npr news now",
-          "failed": [
-            "show",
-            "episode"
-          ],
-          "score": 71.4
-        },
         {
           "ask": "play the podcast",
           "failed": [
