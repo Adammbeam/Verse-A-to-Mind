@@ -1,36 +1,5 @@
 [
  {
-  "at": "2026-11-09T14:00:21Z",
-  "passed": 108,
-  "of": 110,
-  "ms": 358,
-  "kind": "grow",
-  "failed": [
-   {
-    "ask": "play voidquest",
-    "why": "fps 2 < 7"
-   },
-   {
-    "ask": "play chess",
-    "why": "fps 2 < 7"
-   }
-  ],
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1053,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 8734 ms"
-     ]
-    }
-   ]
-  },
-  "note": "new ground passed, kept as a regression case: \"picture of a cat\" (skill:image)"
- },
- {
   "at": "2026-11-09T14:12:44Z",
   "kind": "visitor",
   "visitor": {
@@ -6403,5 +6372,16 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"what are you working on\" (skill:working-on)"
+ },
+ {
+  "at": "2026-11-21T03:30:36Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 443,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
