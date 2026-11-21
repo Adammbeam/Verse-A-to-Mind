@@ -10,6 +10,13 @@
  },
  "runs": [
   {
+   "at": "2026-11-21T18:53:08Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
+  {
    "at": "2026-11-21T18:25:14Z",
    "passed": 0,
    "of": 0,
@@ -374,28 +381,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-21T08:14:27Z",
-   "passed": 152,
-   "of": 155,
-   "kind": "grow",
-   "ms": 401,
-   "note": "new ground passed, kept as a regression case: \"clear search history\" (skill:clear-search-history)",
-   "failed": [
-    {
-     "ask": "bokos like dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
   }
  ],
  "weekly": [
@@ -461,14 +446,14 @@
   },
   {
    "from": "2026-11-07",
-   "runs": 104,
+   "runs": 103,
    "passed": 1400,
    "of": 1469,
    "ms": 373
   },
   {
    "from": "2026-11-14",
-   "runs": 196,
+   "runs": 197,
    "passed": 8634,
    "of": 9293,
    "broken": 1,
