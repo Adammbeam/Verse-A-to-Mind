@@ -1180,7 +1180,7 @@
     {
      "name": "baggage",
      "tier": "proven",
-     "why": "a self-test, 3 real asks in the benchmark, 6 live findings, 2026-11-20",
+     "why": "a self-test, 3 real asks in the benchmark, 7 live findings, 2026-11-21",
      "last_tested": "2026-11-21",
      "last_tested_by": "the daily smoke test",
      "success_rate": 1,
@@ -2810,7 +2810,7 @@
     {
      "name": "rides",
      "tier": "proven",
-     "why": "a self-test, 3 browser-suite mentions, 3 real asks in the benchmark, 39 live findings, 2026-11-21",
+     "why": "a self-test, 3 browser-suite mentions, 3 real asks in the benchmark, 40 live findings, 2026-11-21",
      "last_tested": "2026-11-21",
      "last_tested_by": "a live call",
      "success_rate": 1,

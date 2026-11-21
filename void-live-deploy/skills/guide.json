@@ -2626,7 +2626,7 @@
     "how heavy can my suitcase be"
    ],
    "tier": "proven",
-   "why": "a self-test, 3 real asks in the benchmark, 6 live findings, 2026-11-20",
+   "why": "a self-test, 3 real asks in the benchmark, 7 live findings, 2026-11-21",
    "flavor": "Of all the sky and earth, this one is trusted enough to be taught. Say the words below and it answers.",
    "glow": 100,
    "n": 132
@@ -5045,7 +5045,7 @@
     "is waymo in austin"
    ],
    "tier": "proven",
-   "why": "a self-test, 3 browser-suite mentions, 3 real asks in the benchmark, 39 live findings, 2026-11-21",
+   "why": "a self-test, 3 browser-suite mentions, 3 real asks in the benchmark, 40 live findings, 2026-11-21",
    "flavor": "Keep this page; the out in the world are built on it. Say the words below and it answers.",
    "glow": 100,
    "n": 271
