@@ -11,7 +11,7 @@
   "not_here": "how often people use a skill is never counted by Verse: no usage, no popular or unused, nothing sent (no behaviour tracking). A last-used day is kept only in a person's own browser (lib/skill-use.js), shown on the family-health card, and never leaves the device"
  },
  "smoke_at": "2026-11-21",
- "bench_at": "2026-11-18",
+ "bench_at": "2026-11-21",
  "totals": {
   "experiment": 5,
   "tested": 9,
@@ -1417,9 +1417,9 @@
      "tier": "proven",
      "why": "a self-test, 8 browser-suite mentions, 20 real asks in the benchmark",
      "failing": [
+      "days until july 4",
       "countdown to chirstmas",
-      "how many days until january 1st",
-      "days until the 1st of march"
+      "how many days until january 1st"
      ],
      "last_tested": "2026-11-21",
      "last_tested_by": "the daily smoke test",
@@ -1557,9 +1557,12 @@
      "name": "baseconv",
      "tier": "proven",
      "why": "a self-test, 1 browser-suite mention, 9 real asks in the benchmark",
+     "failing": [
+      "1010 binary to decimal"
+     ],
      "last_tested": "2026-11-21",
      "last_tested_by": "the daily smoke test",
-     "success_rate": 1,
+     "success_rate": 0.889,
      "promoted": "2026-10-29",
      "streak": 27
     },
@@ -1611,8 +1614,8 @@
      "tier": "proven",
      "why": "a self-test, 9 browser-suite mentions, 5 real asks in the benchmark",
      "failing": [
-      "keep 5 miles to km as a card",
-      "convert card for 72 f to c"
+      "convert card for 72 f to c",
+      "72 f to c as a converter card"
      ],
      "last_tested": "2026-11-21",
      "last_tested_by": "the daily smoke test",
@@ -1675,13 +1678,13 @@
      "tier": "proven",
      "why": "a self-test, 2 browser-suite mentions, 36 real asks in the benchmark",
      "failing": [
+      "calculate a 20% tip on 45",
       "what is a 20% tip on 45",
-      "split 120 between 4 people",
-      "18% tip on 64 dollars"
+      "split 120 between 4 people"
      ],
      "last_tested": "2026-11-21",
      "last_tested_by": "the daily smoke test",
-     "success_rate": 0.861,
+     "success_rate": 0.833,
      "streak": 33
     },
     {
@@ -4064,7 +4067,7 @@
       "\"handoff pack for my SaaS idea\" -> handoffs",
       "\"delivery package: invoice reminders that run themselves\" -> handoffs"
      ],
-     "last_tested": "2026-11-18",
+     "last_tested": "2026-11-21",
      "last_tested_by": "the benchmark",
      "success_rate": 1,
      "streak": 0
