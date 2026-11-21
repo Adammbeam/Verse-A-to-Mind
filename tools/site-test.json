@@ -486,6 +486,9 @@
     },
     {
       "ask": "what automations does Verse run"
+    },
+    {
+      "ask": "what are you working on"
     }
   ],
   "candidates": [],
