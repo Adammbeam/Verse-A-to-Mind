@@ -10,6 +10,13 @@
  },
  "runs": [
   {
+   "at": "2026-11-21T19:52:49Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
+  {
    "at": "2026-11-21T19:41:33Z",
    "passed": 138,
    "of": 159,
@@ -374,64 +381,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-21T10:22:24Z",
-   "passed": 141,
-   "of": 156,
-   "kind": "file",
-   "ms": 370,
-   "note": "fix: \"show my period log\" only \"waking up\" appeared, never the answer",
-   "failed": [
-    {
-     "ask": "send it away",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "make a vase",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "calorie calculator",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "show my period log",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "how do i make guacamole",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "my routines",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "dasatinib and quercetin for mash",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "share the open card",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "what automations does Verse run",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "what are you working on",
-     "why": "only \"waking up\" appeared, never the answer"
-    }
-   ]
   }
  ],
  "weekly": [
@@ -497,14 +446,14 @@
   },
   {
    "from": "2026-11-07",
-   "runs": 102,
+   "runs": 101,
    "passed": 1400,
    "of": 1469,
    "ms": 373
   },
   {
    "from": "2026-11-14",
-   "runs": 198,
+   "runs": 199,
    "passed": 8772,
    "of": 9452,
    "broken": 1,

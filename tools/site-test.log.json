@@ -1,23 +1,5 @@
 [
  {
-  "at": "2026-11-10T00:19:12Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 606,
-   "failed": [
-    {
-     "ask": "what time is it",
-     "why": [
-      "slow 12440 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-10T02:07:27Z",
   "kind": "visitor",
   "visitor": {
@@ -6386,5 +6368,16 @@
    "failed": []
   },
   "note": "fix: \"show the data flows for client onboarding\" only \"waking up\" appeared, never the answer"
+ },
+ {
+  "at": "2026-11-21T19:52:49Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 425,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
