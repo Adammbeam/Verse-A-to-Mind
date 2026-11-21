@@ -1,16 +1,5 @@
 [
  {
-  "at": "2026-11-10T03:04:10Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 422,
-   "failed": []
-  },
-  "note": "visitor pass 15/15"
- },
- {
   "at": "2026-11-10T03:17:41Z",
   "passed": 114,
   "of": 119,
@@ -6386,5 +6375,16 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"note this card\" (skill:kept)"
+ },
+ {
+  "at": "2026-11-21T20:45:05Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1036,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
