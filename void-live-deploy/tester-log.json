@@ -3,12 +3,69 @@
  "cases": 155,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 225,
   "grow": 44,
-  "file": 30,
+  "visitor": 224,
+  "file": 31,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-21T11:57:01Z",
+   "passed": 146,
+   "of": 156,
+   "kind": "file",
+   "ms": 428,
+   "note": "fix: \"what are you working on\" only \"waking up\" appeared, never the answer; console: Failed to load resource: the server responded with a status of 429 ()",
+   "failed": [
+    {
+     "ask": "update for you: a new routine now runs every 3 hours from 3:17 AM ET and clears ",
+     "why": "missing text /News about me/"
+    },
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "flip this card",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "fimls by kurosawa",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "who is the auhtor of dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "what are you working on",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "snake game",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "clear search history",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "show me a splat",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-21T11:44:12Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-21T11:02:48Z",
    "passed": 0,
@@ -307,71 +364,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-21T01:36:49Z",
-   "passed": 129,
-   "of": 153,
-   "kind": "file",
-   "ms": 477,
-   "note": "fix: \"fimls by kurosawa\" only \"waking up\" appeared, never the answer; console: Failed to load resource: the server responded with a status of 404 ()",
-   "failed": [
-    {
-     "ask": "fimls by kurosawa",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "film metadata for ikiru pls",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "who is the auhtor of dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "create a toon style bird pls",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "geenrate a toon style dog",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "summon a cup",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stackwell",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "open folder recipes",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "time saved for the invoice automation",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "token stand",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "is this system handoff ready",
-     "why": "only \"waking up\" appeared, never the answer"
-    }
-   ]
-  },
-  {
-   "at": "2026-11-21T01:19:47Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -437,17 +429,17 @@
   },
   {
    "from": "2026-11-07",
-   "runs": 118,
+   "runs": 116,
    "passed": 1835,
    "of": 1929,
    "ms": 391
   },
   {
    "from": "2026-11-14",
-   "runs": 182,
-   "passed": 7862,
-   "of": 8350,
-   "ms": 425
+   "runs": 184,
+   "passed": 8008,
+   "of": 8506,
+   "ms": 428
   }
  ],
  "seen": {
@@ -559,7 +551,7 @@
   "skill:snake": "2026-11-21T07:19:43Z",
   "skill:social": "2026-11-21T10:22:24Z",
   "skill:spanish": "2026-10-17T17:36:35Z",
-  "skill:splat": "2026-10-17T17:36:35Z",
+  "skill:splat": "2026-11-21T11:57:01Z",
   "skill:sport": "2026-10-17T19:47:49Z",
   "skill:status": "2026-10-17T19:47:49Z",
   "skill:sticky": "2026-10-17T19:47:49Z",
