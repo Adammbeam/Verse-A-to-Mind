@@ -1,14 +1,51 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 156,
+ "cases": 157,
  "runsTotal": 300,
  "kinds": {
-  "file": 31,
+  "grow": 45,
   "visitor": 224,
-  "grow": 44,
+  "file": 30,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-21T14:22:31Z",
+   "passed": 152,
+   "of": 157,
+   "kind": "grow",
+   "ms": 413,
+   "note": "new ground passed, kept as a regression case: \"yo sticky note buy milk\" (skill:sticky)",
+   "failed": [
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "favorite this",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "geenrate a toon style dog",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "show my period log",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-21T14:11:01Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-21T13:17:16Z",
    "passed": 152,
@@ -335,39 +372,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-21T02:41:20Z",
-   "passed": 148,
-   "of": 152,
-   "kind": "grow",
-   "ms": 355,
-   "note": "new ground passed, kept as a regression case: \"what are you working on\" (skill:working-on)",
-   "failed": [
-    {
-     "ask": "send it away",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "fimls by kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "geenrate a toon style dog",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
-  },
-  {
-   "at": "2026-11-21T02:30:44Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -433,16 +437,16 @@
   },
   {
    "from": "2026-11-07",
-   "runs": 114,
-   "passed": 1727,
-   "of": 1815,
+   "runs": 112,
+   "passed": 1624,
+   "of": 1700,
    "ms": 388
   },
   {
    "from": "2026-11-14",
-   "runs": 186,
-   "passed": 8160,
-   "of": 8662,
+   "runs": 188,
+   "passed": 8312,
+   "of": 8819,
    "ms": 425
   }
  ],
@@ -558,7 +562,7 @@
   "skill:splat": "2026-11-21T11:57:01Z",
   "skill:sport": "2026-11-21T13:17:16Z",
   "skill:status": "2026-10-17T19:47:49Z",
-  "skill:sticky": "2026-10-17T19:47:49Z",
+  "skill:sticky": "2026-11-21T14:22:31Z",
   "skill:store": "2026-10-17T22:05:31Z",
   "skill:swaps": "2026-10-17T22:18:36Z",
   "skill:swarm": "2026-10-17T22:33:54Z",

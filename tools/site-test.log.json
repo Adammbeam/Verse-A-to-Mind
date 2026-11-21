@@ -1,81 +1,5 @@
 [
  {
-  "at": "2026-11-09T19:12:26Z",
-  "passed": 103,
-  "of": 115,
-  "ms": 393,
-  "kind": "file",
-  "key": "can we play despacito | only \"waking up\" appeared, never the answer",
-  "failed": [
-   {
-    "ask": "play voidquest",
-    "why": "fps 2 < 7"
-   },
-   {
-    "ask": "play chess",
-    "why": "fps 1 < 7"
-   },
-   {
-    "ask": "fimls by kurosawa",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "film meatdata for ikiru",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "can we play despacito",
-    "why": "only \"waking up\" appeared, never the answer"
-   },
-   {
-    "ask": "yo funny cartoon dog",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "funny cartoon dog pls",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "redner a cartoon dragon",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "yo style like mickey mouse",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "stlye like mickey mouse",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "movie night",
-    "why": "only \"waking up\" appeared, never the answer"
-   },
-   {
-    "ask": "check this commit against d1 schema",
-    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-   }
-  ],
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 1438,
-   "failed": []
-  },
-  "note": "fix: \"can we play despacito\" only \"waking up\" appeared, never the answer"
- },
- {
-  "at": "2026-11-09T19:22:30Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 438,
-   "failed": []
-  },
-  "note": "visitor pass 15/15"
- },
- {
   "at": "2026-11-09T19:33:30Z",
   "passed": 113,
   "of": 115,
@@ -6350,5 +6274,52 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"what stadium do the yankees play in\" (skill:sport)"
+ },
+ {
+  "at": "2026-11-21T14:11:01Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 771,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-21T14:22:31Z",
+  "passed": 152,
+  "of": 157,
+  "ms": 413,
+  "kind": "grow",
+  "failed": [
+   {
+    "ask": "bokos like dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "favorite this",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "redner a cartoon dragon",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "geenrate a toon style dog",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "show my period log",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 771,
+   "failed": []
+  },
+  "note": "new ground passed, kept as a regression case: \"yo sticky note buy milk\" (skill:sticky)"
  }
 ]

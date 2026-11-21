@@ -501,6 +501,9 @@
     },
     {
       "ask": "what stadium do the yankees play in"
+    },
+    {
+      "ask": "yo sticky note buy milk"
     }
   ],
   "candidates": [],
