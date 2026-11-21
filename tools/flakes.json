@@ -282,5 +282,6 @@
   {"check": "films page: every sign-in this browser holds is tried, and none is ever asked for", "sha": "250286527e7718a30722851b2e10fc3320fd6568", "at": "2026-11-20T20:28:54Z"},
   {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "c3e66cdbf6332a76caa6e169224af2c9f219a9a9", "at": "2026-11-20T22:47:51Z"},
   {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "8ec777e02ed3027bf6a73c91a94964942b7ab81d", "at": "2026-11-21T03:56:17Z"},
-  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "78d5ce55cf1bc7a326b8f04bd3b84a1238caf345", "at": "2026-11-21T15:49:51Z"}
+  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "78d5ce55cf1bc7a326b8f04bd3b84a1238caf345", "at": "2026-11-21T15:49:51Z"},
+  {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "9c597586da037be37da982c7875e30b84abb163e", "at": "2026-11-21T18:26:46Z"}
 ]
