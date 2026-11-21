@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-21T18:30:12.302Z",
+  "at": "2026-11-21T19:05:04.417Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -34,10 +34,17 @@
       }
     },
     "podcasts": {
-      "score": 95.9,
+      "score": 95.1,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "play the latest episode of the ted radio hour",
+          "failed": [
+            "audio"
+          ],
+          "score": 85.7
+        },
         {
           "ask": "play the podcast",
           "failed": [
@@ -226,17 +233,10 @@
       }
     },
     "sports": {
-      "score": 92.6,
+      "score": 93.5,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "yankees score",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
         {
           "ask": "how did the chiefs do",
           "failed": [
@@ -361,6 +361,6 @@
   },
   "lowest": {
     "domain": "sports",
-    "score": 92.6
+    "score": 93.5
   }
 }
