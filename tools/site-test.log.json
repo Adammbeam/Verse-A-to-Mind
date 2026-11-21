@@ -1,94 +1,5 @@
 [
  {
-  "at": "2026-11-09T08:37:49Z",
-  "passed": 0,
-  "of": 109,
-  "ms": 233,
-  "kind": "none",
-  "failed": [
-   {
-    "ask": "what are you?",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "play voidquest",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "play solarquest",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "what can I buy",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "show me your videos",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "play chess",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "my actions",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "air quality in Tokyo",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "update for you: a new routine now runs every 3 hours from 3:17 AM ET and clears ",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "put on lofi hip hop pls",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "find the book the left hand of dakrness",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "bokos like dune",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   }
-  ],
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1521,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 9118 ms"
-     ]
-    }
-   ]
-  },
-  "note": "nothing left to improve this run (add candidates)"
- },
- {
-  "at": "2026-11-09T08:50:03Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1698,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 10637 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-09T09:18:22Z",
   "kind": "visitor",
   "visitor": {
@@ -6406,5 +6317,81 @@
    "failed": []
   },
   "note": "fix: \"dyslexia friendly font\" only \"waking up\" appeared, never the answer"
+ },
+ {
+  "at": "2026-11-21T00:25:41Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 986,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-21T00:41:00Z",
+  "passed": 125,
+  "of": 151,
+  "ms": 449,
+  "kind": "file",
+  "key": "adaptive flow canvas | only \"waking up\" appeared, never the answer",
+  "failed": [
+   {
+    "ask": "dyslexia friendly font",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "flip this card",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "film metadata for Ikiru",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "film meatdata for ikiru",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "my photos",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "who is the auhtor of dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "yo draw me a robot",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "redner a cartoon dragon",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "stlye like mickey mouse",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "help me launch the newsletter by the end of the month",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "cross the bus",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "adaptive flow canvas",
+    "why": "only \"waking up\" appeared, never the answer"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 986,
+   "failed": []
+  },
+  "note": "fix: \"adaptive flow canvas\" only \"waking up\" appeared, never the answer"
  }
 ]
