@@ -489,6 +489,9 @@
     },
     {
       "ask": "what are you working on"
+    },
+    {
+      "ask": "when should i wake up if i go to sleep now"
     }
   ],
   "candidates": [],
