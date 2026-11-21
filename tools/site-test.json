@@ -492,6 +492,9 @@
     },
     {
       "ask": "when should i wake up if i go to sleep now"
+    },
+    {
+      "ask": "snake game"
     }
   ],
   "candidates": [],
