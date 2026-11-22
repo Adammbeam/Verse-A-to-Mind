@@ -10,6 +10,13 @@
  },
  "runs": [
   {
+   "at": "2026-11-22T14:10:38Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
+  {
    "at": "2026-11-22T13:04:40Z",
    "passed": 0,
    "of": 0,
@@ -308,13 +315,6 @@
      "why": "console: Failed to load resource: the server responded with a status of 429 ()"
     }
    ]
-  },
-  {
-   "at": "2026-11-21T23:07:18Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -380,14 +380,14 @@
   },
   {
    "from": "2026-11-08",
-   "runs": 92,
+   "runs": 91,
    "passed": 1420,
    "of": 1488,
    "ms": 364
   },
   {
    "from": "2026-11-15",
-   "runs": 208,
+   "runs": 209,
    "passed": 9329,
    "of": 10037,
    "broken": 1,
