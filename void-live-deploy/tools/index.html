@@ -100,5 +100,10 @@
   addEventListener("load", () => { import('/lib/toolkit.js').then((m) => m.mountRelated(document.getElementById('related'), '/tools/', [], { card: () => benchAsk(m.CARD_ASK) })).catch(() => {}); });</script>
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => { navigator.serviceWorker.register("/sw.js").catch(() => {}); });</script>
 <script type="module" src="/verse-shell.js"></script>
+<style>
+/* verse design loop: kept by tools/design-loop.mjs, measured before and after */
+#verse-foot > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+/* end verse design loop */
+</style>
 </body>
 </html>
