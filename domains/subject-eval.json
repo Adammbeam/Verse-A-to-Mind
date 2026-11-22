@@ -1,5 +1,5 @@
 {
- "at": "2026-11-21T13:48:11.571Z",
+ "at": "2026-11-22T06:24:39.465Z",
  "mode": "live",
  "pass": 51,
  "total": 54,
@@ -327,7 +327,7 @@
     "fuzzy": false,
     "noAnswer": false,
     "guess": "",
-    "pic": false,
+    "pic": true,
     "sources": [],
     "answer": "Zeus is the supreme deity of the Greek pantheon. He is a sky and thunder god in ancient Gr"
    },
@@ -355,7 +355,7 @@
     "called": 1,
     "failed": [],
     "bad": [],
-    "text": "Pythagorean theorem IDEA Relation between sides of a right triangle In mathematics, the Pythagorean theorem or Pythagoras's theorem is a fun …  8 OF 9 FRESH Reply to what I said, or correct me Send Kept on this device only. My self card lists it under Correct me."
+    "text": "Pythagorean theorem IDEA Relation between sides of a right triangle In mathematics, the Pythagorean theorem or Pythagoras's theorem is a fun …  7 OF 9 FRESH Reply to what I said, or correct me Send Kept on this device only. My self card lists it under Correct me."
    },
    "problems": [
     "type line \"Idea\" does not match /Concept/",
@@ -849,7 +849,7 @@
     "guess": "",
     "pic": false,
     "sources": [],
-    "answer": "Biga is a type of pre-fermentation used in Italian baking. Many popular Italian breads, in"
+    "answer": "Bread is a baked food product made from water, flour, and often yeast. It is a staple food"
    },
    "redirect": "none"
   },
