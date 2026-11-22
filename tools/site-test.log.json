@@ -1,23 +1,5 @@
 [
  {
-  "at": "2026-11-11T23:55:41Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1156,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 14364 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-12T00:08:04Z",
   "passed": 118,
   "of": 123,
@@ -6512,5 +6494,16 @@
    "failed": []
   },
   "note": "fix: \"pulse of my arrows\" only \"waking up\" appeared, never the answer"
+ },
+ {
+  "at": "2026-11-22T23:06:27Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 570,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
