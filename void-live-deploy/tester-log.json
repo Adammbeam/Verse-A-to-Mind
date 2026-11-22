@@ -10,6 +10,13 @@
  },
  "runs": [
   {
+   "at": "2026-11-22T02:05:53Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
+  {
    "at": "2026-11-22T01:09:51Z",
    "passed": 0,
    "of": 0,
@@ -359,13 +366,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-21T16:04:02Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -431,16 +431,16 @@
   },
   {
    "from": "2026-11-08",
-   "runs": 100,
-   "passed": 1286,
-   "of": 1350,
+   "runs": 102,
+   "passed": 1408,
+   "of": 1476,
    "ms": 373
   },
   {
    "from": "2026-11-15",
-   "runs": 200,
-   "passed": 9077,
-   "of": 9773,
+   "runs": 198,
+   "passed": 8955,
+   "of": 9647,
    "broken": 1,
    "brokenOf": 158,
    "brokenPassed": 16,
