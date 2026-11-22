@@ -837,6 +837,22 @@
     "scanned": "2026-11-22",
     "features": []
    },
+   "namegenerator.com": {
+    "url": "https://namegen.com/",
+    "scanned": "2026-11-22",
+    "features": [
+     {
+      "name": "Works offline (service worker)",
+      "detail": "pwa, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "service worker icons-worker.js"
+     }
+    ]
+   },
    "rangen.co.uk": {
     "url": "https://rangen.co.uk/",
     "scanned": "2026-11-22",
@@ -859,6 +875,111 @@
       "found_by": "re",
       "tag": "read",
       "evidence": "vitals.js@11864"
+     }
+    ]
+   },
+   "tools.dungeonmastersvault.com": {
+    "url": "https://tools.dungeonmastersvault.com/",
+    "scanned": "2026-11-22",
+    "blocked": {
+     "kind": "unreachable",
+     "why": "page.goto: net::ERR_NAME_NOT_RESOLVED at https://tools.dungeonmastersvault.com/ Call log: - navigati"
+    },
+    "features": []
+   },
+   "writingexercises.com": {
+    "url": "https://www.queerpoems.com/",
+    "scanned": "2026-11-22",
+    "features": [
+     {
+      "name": "RSS or Atom feed",
+      "detail": "share, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "link[type$=xml]"
+     },
+     {
+      "name": "Embeds substack.com",
+      "detail": "embed, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "iframe"
+     },
+     {
+      "name": "Embeds www.googletagmanager.com",
+      "detail": "embed, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "iframe"
+     },
+     {
+      "name": "API call www.queerpoems.com/api/v1/homepage_data",
+      "detail": "api, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "network"
+     },
+     {
+      "name": "Input of type email",
+      "detail": "input, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "input[type=email] x2"
+     },
+     {
+      "name": "Remembers a setting in the browser: _gcl_ls",
+      "detail": "storage, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "localStorage"
+     },
+     {
+      "name": "Remembers a setting in the browser: substack_ref",
+      "detail": "storage, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "localStorage"
+     },
+     {
+      "name": "Remembers a setting in the browser: substack_ref_url",
+      "detail": "storage, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "localStorage"
+     },
+     {
+      "name": "Screen reader announcements (aria-live)",
+      "detail": "a11y, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "[aria-live]"
      }
     ]
    }
