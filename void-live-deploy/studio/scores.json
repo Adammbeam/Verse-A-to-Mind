@@ -589,6 +589,91 @@
         "via": "Groq openai/gpt-oss-120b",
         "pass": false
       }
+    },
+    {
+      "at": "2026-11-22T21:44:14.595Z",
+      "studio": true,
+      "kind": "short",
+      "title": "The Chicago Hijackings",
+      "source": {
+        "title": "Max Headroom signal hijackings",
+        "url": "https://en.wikipedia.org/wiki/Max_Headroom_signal_hijackings"
+      },
+      "pass": false,
+      "writer": "Gemini gemini-3.5-flash-lite",
+      "judge": {
+        "separated": true,
+        "calibration": [
+          {
+            "id": "journal",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              3,
+              2,
+              10
+            ]
+          },
+          {
+            "id": "old34",
+            "kind": "bad",
+            "min": 5,
+            "scores": [
+              7,
+              6,
+              5
+            ]
+          },
+          {
+            "id": "page",
+            "kind": "bad",
+            "min": 4,
+            "scores": [
+              5,
+              4,
+              9
+            ]
+          },
+          {
+            "id": "clickbait",
+            "kind": "bad",
+            "min": 3,
+            "scores": [
+              5,
+              3,
+              9
+            ]
+          },
+          {
+            "id": "good-story",
+            "kind": "good",
+            "min": 8,
+            "scores": [
+              8,
+              8,
+              10
+            ]
+          }
+        ],
+        "issues": [],
+        "blind": {
+          "min": 1,
+          "scores": [
+            4,
+            1,
+            9
+          ],
+          "notes": [
+            "Score 4. Verse: Can you believe this Chicago TV takeover? Critic: Chicago stations falling for a plastic mask is peak eighty-seven. Verse: Plastic disguise made thousands watch a b",
+            "Score 1",
+            "Score 9"
+          ]
+        },
+        "human": 7,
+        "humanNotes": "Human: 7 Notes: Each consecutive line forms a continuous chain of responses while preserving the numerical sequence embedded in the text.",
+        "via": "Gemini gemini-3.5-flash-lite",
+        "pass": false
+      }
     }
   ]
 }
