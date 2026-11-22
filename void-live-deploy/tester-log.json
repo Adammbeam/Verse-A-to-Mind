@@ -10,6 +10,13 @@
  },
  "runs": [
   {
+   "at": "2026-11-22T18:05:18Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
+  {
    "at": "2026-11-22T17:23:10Z",
    "passed": 148,
    "of": 163,
@@ -308,13 +315,6 @@
      "why": "console: Failed to load resource: the server responded with a status of 404 ()"
     }
    ]
-  },
-  {
-   "at": "2026-11-22T03:02:17Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [

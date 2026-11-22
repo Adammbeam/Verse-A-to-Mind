@@ -1,23 +1,5 @@
 [
  {
-  "at": "2026-11-11T17:35:28Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 782,
-   "failed": [
-    {
-     "ask": "flip a coin",
-     "why": [
-      "slow 10525 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-11T18:15:46Z",
   "kind": "visitor",
   "visitor": {
@@ -6408,5 +6390,16 @@
    "failed": []
   },
   "note": "fix: \"what stadium do the yankees play in\" only \"waking up\" appeared, never the answer; console: Failed to load resource: the server responded with a status of 429 ()"
+ },
+ {
+  "at": "2026-11-22T18:05:18Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 632,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
