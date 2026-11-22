@@ -2717,11 +2717,11 @@
   }
  },
  {
-  "at": "2026-11-22T07:24:51.232Z",
-  "score": 72,
+  "at": "2026-11-22T14:55:26.844Z",
+  "score": 71,
   "parts": {
    "self": 100,
-   "asks": 55,
+   "asks": 53,
    "friction": 94,
    "bench": 99,
    "probes": 10
@@ -2777,12 +2777,12 @@
    }
   ],
   "facts": {
-   "week": 73,
+   "week": 74,
    "owner": 0,
    "askedBuilt": 25,
    "medianLagDays": 2.6,
    "open": 6,
-   "oldestOpenDays": 0.7,
+   "oldestOpenDays": 1,
    "skills": 485,
    "failing": 20,
    "unsure": 18,
