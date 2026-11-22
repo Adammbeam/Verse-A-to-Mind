@@ -3,12 +3,61 @@
  "cases": 159,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 221,
+  "visitor": 220,
   "grow": 44,
-  "file": 34,
+  "file": 35,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-22T03:15:34Z",
+   "passed": 152,
+   "of": 160,
+   "kind": "file",
+   "ms": 395,
+   "note": "quality upgrade: weakest answer was \"closer on the figure\" (14 chars)",
+   "failed": [
+    {
+     "ask": "yo bitcoin price",
+     "why": "console: Failed to load resource: the server responded with a status of 503 ()"
+    },
+    {
+     "ask": "fimls by kurosawa",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "start despacito",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "yo watch the apollo 11 landing",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "geenrate a toon style dog",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "what stadium do the yankees play in",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "are the services up",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-22T03:02:17Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-22T02:05:53Z",
    "passed": 0,
@@ -301,71 +350,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-21T17:22:09Z",
-   "passed": 16,
-   "of": 158,
-   "kind": "file",
-   "ms": 409,
-   "note": "fix: \"film meatdata for ikiru\" no skill caught it (it went to the model, which the tester never calls); console: Failed to load resource: the server responded with a status of 404 ()",
-   "failed": [
-    {
-     "ask": "convert 5 miles to km",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "play connect four",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "set a timer for 5 minutes",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "what is 17 times 23",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "play reversi",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "show me the night sky",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "is waymo in austin",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "how much do i need to save a month to have 1 million in 30 years at 7%",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "draw a line",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "show the days until a date",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "living spatial cards mind",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "bluesky feed of jay.bsky.team",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
-  },
-  {
-   "at": "2026-11-21T17:10:05Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -431,20 +415,20 @@
   },
   {
    "from": "2026-11-08",
-   "runs": 102,
-   "passed": 1408,
-   "of": 1476,
+   "runs": 103,
+   "passed": 1651,
+   "of": 1729,
    "ms": 373
   },
   {
    "from": "2026-11-15",
-   "runs": 198,
-   "passed": 8955,
-   "of": 9647,
+   "runs": 197,
+   "passed": 8864,
+   "of": 9554,
    "broken": 1,
    "brokenOf": 158,
    "brokenPassed": 16,
-   "ms": 421
+   "ms": 425
   }
  ],
  "seen": {
@@ -604,7 +588,7 @@
   "skill:flow-canvas": "2026-11-18T05:37:01Z",
   "skill:event-countdown": "2026-11-20T04:08:22Z",
   "skill:living-cards-mind": "2026-10-17T14:29:51Z",
-  "skill:service-health": "2026-10-17T21:02:03Z",
+  "skill:service-health": "2026-11-22T03:15:34Z",
   "skill:attention-field-mind": "2026-10-18T03:06:28Z",
   "skill:collectible": "2026-10-18T03:06:28Z",
   "skill:nca-mind": "2026-10-18T03:06:28Z",
