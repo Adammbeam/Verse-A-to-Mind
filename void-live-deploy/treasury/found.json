@@ -1,5 +1,5 @@
 {
- "as_of": "2026-11-22T12:54:39.937Z",
+ "as_of": "2026-11-22T19:46:22.888Z",
  "rules": "Legitimate sources only, each cited. A value is a number its source publishes (a prize pool, a bounty, a program credit) and is not a forecast; null means unknown. Anything that needs Atom's identity, a login or a card is ready to claim; Verse claims nothing in anyone's name.",
  "probes": {
   "devpost": "read",
@@ -450,7 +450,7 @@
   {
    "id": "devpost:31644",
    "category": "hackathon prizes",
-   "title": "Reddit’s Game of the Day Hackathon (Nov 11 - Dec 08, 2026, 17 days left)",
+   "title": "Reddit’s Game of the Day Hackathon (Nov 11 - Dec 08, 2026, 16 days left)",
    "source": "https://redditgameofday2026.devpost.com/",
    "value_cents": null,
    "prize_pool_cents": 3500000,
@@ -474,14 +474,14 @@
    "next_step": "Pick it if a Verse feature already matches the theme; build the entry; Atom submits."
   },
   {
-   "id": "devpost:31721",
+   "id": "devpost:31571",
    "category": "hackathon prizes",
-   "title": "EvoHacks 2 (Nov 21 - 22, 2026, about 7 hours left)",
-   "source": "https://evohacks2.devpost.com/",
+   "title": "Cloud9 x JetBrains: Sky's The Limit Hackathon 2026 (Nov 17, 2026 - Jan 12, 2027, about 2 months left)",
+   "source": "https://cloud9.devpost.com/",
    "value_cents": null,
-   "prize_pool_cents": 2762900,
-   "value_note": "prize pool $27,629 shared by the winners; not an estimate of what Verse would win",
-   "fit": "themes: Beginner Friendly, Low/No Code, Social Good",
+   "prize_pool_cents": 2500000,
+   "value_note": "prize pool $25,000 shared by the winners; not an estimate of what Verse would win",
+   "fit": "themes: Databases, Gaming, Machine Learning/AI",
    "status": "ready to claim",
    "needs": "Atom registers and submits as the entrant (Devpost account)",
    "next_step": "Pick it if a Verse feature already matches the theme; build the entry; Atom submits."
