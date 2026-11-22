@@ -510,6 +510,9 @@
     },
     {
       "ask": "note this card"
+    },
+    {
+      "ask": "trivia"
     }
   ],
   "candidates": [],
