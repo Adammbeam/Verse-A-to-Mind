@@ -226,10 +226,10 @@ const SHOW_STOP = new Set(['the', 'of', 'a', 'an', 'and']);
 /** "play the latest episode of radiolab" -> { show }, or null. Verse's own show stays with the verse-podcast asks. Pure. */
 export function latestEpisodeOf(text) {
   const t = String(text || '').trim().replace(/[?!.]+$/, '').replace(/\s+/g, ' ');
-  const m = t.match(/^(?:please\s+)?(?:play|listen\s+to|put\s+on|hear)\s+(?:me\s+)?(?:the\s+)?(?:latest|newest|last|new)\s+episode\s+of\s+(.{2,80})$/i);
+  const m = t.match(/^(?:please\s+)?(?:play|listen\s+to|put\s+on|hear)\s+(?:me\s+)?(?:the\s+)?(?:latest|newest|last|new)\s+episode\s+of\s+(.{2,80})$/i) || t.match(/^(?:please\s+)?(?:play|listen\s+to|put\s+on)\s+(?:the\s+)?podcast\s+(.{2,80})$/i);
   if (!m) return null;
   const show = m[1].trim();
-  if (/^(?:the\s+)?(?:verse|v01d|void|a-?to-?mind)\b/i.test(show)) return null;
+  if (/^(?:the\s+)?(?:verse|v01d|void|a-?to-?mind|rss|feed)\b/i.test(show)) return null;
   return { show };
 }
 /** the directory row whose title holds every word of the asked show, the shortest title first, or null. Pure. */

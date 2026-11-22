@@ -156,6 +156,8 @@ test('Apple away: search and charts fall back to fyyd with a note naming it, the
 
 test('the latest episode of a named show is that show, not Verse\'s own', () => {
   assert.deepEqual(P.latestEpisodeOf('play the latest episode of radiolab'), { show: 'radiolab' });
+  assert.deepEqual(P.latestEpisodeOf('play podcast The Daily'), { show: 'The Daily' });
+  assert.equal(P.latestEpisodeOf('play podcast'), null);
   assert.equal(P.latestEpisodeOf('play the latest episode'), null);
   assert.equal(P.latestEpisodeOf('play the latest episode of verse'), null);
   assert.equal(P.latestEpisodeOf('podcasts about history'), null);
