@@ -2817,8 +2817,8 @@
     {
      "name": "rides",
      "tier": "proven",
-     "why": "a self-test, 3 browser-suite mentions, 3 real asks in the benchmark, 40 live findings, 2026-11-21",
-     "last_tested": "2026-11-21",
+     "why": "a self-test, 3 browser-suite mentions, 3 real asks in the benchmark, 41 live findings, 2026-11-22",
+     "last_tested": "2026-11-22",
      "last_tested_by": "a live call",
      "success_rate": 1,
      "streak": 33
