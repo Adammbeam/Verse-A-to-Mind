@@ -516,6 +516,9 @@
     },
     {
       "ask": "which miniatures do you have"
+    },
+    {
+      "ask": "pulse of my arrows"
     }
   ],
   "candidates": [],

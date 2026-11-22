@@ -1,52 +1,5 @@
 [
  {
-  "at": "2026-11-11T00:53:21Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 597,
-   "failed": []
-  },
-  "note": "visitor pass 15/15"
- },
- {
-  "at": "2026-11-11T01:05:14Z",
-  "passed": 116,
-  "of": 121,
-  "ms": 443,
-  "kind": "grow",
-  "failed": [
-   {
-    "ask": "toss it off the screen",
-    "why": "only \"waking up\" appeared, never the answer"
-   },
-   {
-    "ask": "approve later: keep morning-digest running every 2 hours",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "dim the void",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "who is the auhtor of dune",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "yo style like mickey mouse",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   }
-  ],
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 597,
-   "failed": []
-  },
-  "note": "new ground passed, kept as a regression case: \"client brief for Acme onboarding\" (skill:client-brief)"
- },
- {
   "at": "2026-11-11T08:22:29Z",
   "kind": "visitor",
   "visitor": {
@@ -6383,5 +6336,68 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"which miniatures do you have\" (skill:know)"
+ },
+ {
+  "at": "2026-11-22T12:07:45Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1038,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-22T12:20:51Z",
+  "passed": 153,
+  "of": 162,
+  "ms": 373,
+  "kind": "grow",
+  "failed": [
+   {
+    "ask": "bokos like dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "is unwrap risky in rust",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "yo bitcoin price",
+    "why": "console: Failed to load resource: the server responded with a status of 503 ()"
+   },
+   {
+    "ask": "films by Kurosawa",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "fimls by kurosawa",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "redner a cartoon dragon",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "stlye like mickey mouse",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "open folder recipes",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "which miniatures do you have",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1038,
+   "failed": []
+  },
+  "note": "new ground passed, kept as a regression case: \"pulse of my arrows\" (skill:pulse)"
  }
 ]
