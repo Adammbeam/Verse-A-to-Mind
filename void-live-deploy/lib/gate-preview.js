@@ -25,5 +25,5 @@ export function previewFor(pathname) {
   const m = /^\/([^/?#]+)/.exec(String(pathname || ''));
   const hit = m && PREVIEWS['/' + m[1].toLowerCase()];
   if (hit) return hit;
-  return { name: '', line: 'The full page, with everything the free card leaves out.', img: '', ask: '' };
+  return { name: '', line: '', img: '', ask: '' };
 }

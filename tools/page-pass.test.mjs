@@ -34,7 +34,7 @@ test('open paths stay open, full pages are Uni, and a missing key does not lock 
   assert.equal(gatedPath('/versus/'), false);
   assert.equal(backPath('https://evil.example/x'), '/'); assert.equal(money(CENTS), '$20 a month');
   const page = screen({ cents: CENTS }, '/flights/');
-  assert.match(page, /<h1>UniVerse<\/h1>/); assert.match(page, /Subscribe/); assert.match(page, /href="\/">Free cards/); assert.match(page, /href="\/members\/">MultiVerse/);
+  assert.match(page, /<h1>UniVerse<\/h1>/); assert.match(page, /Subscribe/); assert.match(page, /href="\/">Home/); assert.match(page, /href="\/members\/">MultiVerse/);
   assert.equal(/\bUni\b|Premium|4242/.test(page), false, 'the plan is spelled UniVerse, never Uni'); assert.match(page, /Subscribe to UniVerse/); assert.match(page, /<canvas id="s"/); assert.match(page, /href="\/credits\/"/);
   const arcade = screen({ cents: CENTS }, '/arcade/'); assert.match(arcade, /\/gate\/arcade\.webp/); assert.match(arcade, /href="\/\?q=open%20the%20arcade"/); assert.equal(gatedPath('/credits/'), false, 'credits are public: licenses require it');
   assert.equal(await (await gate({ request: ask('/flights/'), env: {}, next: html('FLIGHTS') })).text(), 'FLIGHTS');
