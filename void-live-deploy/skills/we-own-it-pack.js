@@ -7,9 +7,7 @@
  */
 export function isWeOwnIt(text) {
   const t = String(text || '').trim().replace(/[?!.]+$/, '');
-  return /^(?:we\s+own\s+it|heavy\s+lifting)\s+(?:pack|package)\b/i.test(t)
-    || /^(?:package|pack)\s+the\s+heavy\s+lifting\b/i.test(t)
-    || /^(?:make|create|generate)\s+(?:a\s+)?(?:we-own-it|heavy-lift)\s+(?:pack|package)\b/i.test(t);
+  return /we-own-it|heavy lifting|verse does it|package the hard work/i.test(t);
 }
 
 function extractIdea(text) {
@@ -57,6 +55,7 @@ export default {
       && isWeOwnIt('package the hard work for client onboarding')
       && isWeOwnIt('we-own-it for SaaS support')
       && isWeOwnIt('make a we-own-it pack for the support ticket router')
+      && isWeOwnIt('package the heavy lifting')
       && !isWeOwnIt('what do verse does')
       && !isWeOwnIt('own it')
       && !isWeOwnIt('hard work only');
