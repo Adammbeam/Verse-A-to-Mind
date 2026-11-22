@@ -10,6 +10,13 @@
  },
  "runs": [
   {
+   "at": "2026-11-22T00:03:43Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
+  {
    "at": "2026-11-21T23:21:16Z",
    "passed": 150,
    "of": 162,
@@ -359,109 +366,79 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-21T14:22:31Z",
-   "passed": 152,
-   "of": 157,
-   "kind": "grow",
-   "ms": 413,
-   "note": "new ground passed, kept as a regression case: \"yo sticky note buy milk\" (skill:sticky)",
-   "failed": [
-    {
-     "ask": "bokos like dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "favorite this",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "geenrate a toon style dog",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "show my period log",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
   }
  ],
  "weekly": [
   {
-   "from": "2026-08-29",
+   "from": "2026-08-30",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-05",
+   "from": "2026-09-06",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-12",
+   "from": "2026-09-13",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-19",
+   "from": "2026-09-20",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-26",
+   "from": "2026-09-27",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-03",
+   "from": "2026-10-04",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-10",
+   "from": "2026-10-11",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-17",
+   "from": "2026-10-18",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-24",
+   "from": "2026-10-25",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-31",
+   "from": "2026-11-01",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-11-07",
-   "runs": 98,
+   "from": "2026-11-08",
+   "runs": 99,
    "passed": 1286,
    "of": 1350,
    "ms": 373
   },
   {
-   "from": "2026-11-14",
-   "runs": 202,
+   "from": "2026-11-15",
+   "runs": 201,
    "passed": 9077,
    "of": 9773,
    "broken": 1,

@@ -1,23 +1,5 @@
 [
  {
-  "at": "2026-11-10T04:23:17Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 953,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 11665 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-10T05:35:51Z",
   "kind": "visitor",
   "visitor": {
@@ -6401,5 +6383,16 @@
    "failed": []
   },
   "note": "fix: \"clear search history\" only \"waking up\" appeared, never the answer"
+ },
+ {
+  "at": "2026-11-22T00:03:43Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 736,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
