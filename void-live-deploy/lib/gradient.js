@@ -181,8 +181,8 @@ export function askGradient(text) {
   if (t.length > 120) return null;
   let m = new RegExp('^(?:make|create|generate|show|give)?\\s*(?:me\\s+)?(?:an?\\s+)?(?:(linear|radial|conic)\\s+)?(?:css\\s+)?gradient\\s+(?:from\\s+)?' + COL + '\\s+(?:to|and|into)\\s+' + COL + '$').exec(t);
   if (m) return { g: normal({ type: m[1] || 'linear', angle: 90, stops: [{ color: m[2] }, { color: m[3] }] }) };
-  m = /^(?:(?:a|the)\s+)?(?:(linear|radial|conic)\s+)?(?:css\s+)?(?:colou?r\s+)?gradient(?:\s+(?:generator|maker|editor|creator|tool|background))?$/.exec(t);
-  if (m && (/\b(?:generator|maker|editor|creator|tool|background|css)\b/.test(t) || m[1])) return { g: normal({ ...PRESETS[2].g, type: m[1] || 'linear' }) };
+  m = /^(?:(?:make|create|generate|build|open|show|give)\s+(?:me\s+)?)?(?:(?:a|the)\s+)?(?:(linear|radial|conic)\s+)?(?:css\s+)?(?:colou?r\s+)?gradient(?:\s+(?:generator|maker|editor|creator|tool|background|builder))?$/.exec(t);
+  if (m && (/\b(?:make|create|generate|build|open|generator|maker|editor|creator|tool|background|builder|css)\b/.test(t) || m[1])) return { g: normal({ ...PRESETS[2].g, type: m[1] || 'linear' }) };
   if (/^(?:css|ultimate css|colorzilla)\s+gradient(?:\s+generator)?$|^gradient\s+css(?:\s+generator)?$/.test(t)) return { g: normal(PRESETS[2].g) };
   // "make a 2d sunset with blue and orange", "render a sphere with pink to blue": a thing drawn in two named colours (a sphere is radial).
   // Both colours must be named, so "make a list with milk, eggs" or "make a plan with sam" are not gradients.
