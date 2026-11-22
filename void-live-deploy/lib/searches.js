@@ -77,7 +77,7 @@ export function d1Store(db) {
     async listReports(limit = 100) { await init(); const r = await db.prepare('SELECT * FROM void_card_reports ORDER BY at DESC LIMIT ?').bind(limit).all(); return r.results || []; },
     async list({ who = '', q = '', limit = 200 } = {}) { await init(); const r = await db.prepare('SELECT at, ask, who, kind, blocked, acct FROM void_searches WHERE (? = \'\' OR who = ? OR acct = ?) AND (? = \'\' OR ask LIKE ?) ORDER BY at DESC LIMIT ?').bind(who, who, who, q, '%' + q + '%', limit).all(); return r.results || []; },
     async blockedSince(who, since) { await init(); const r = await db.prepare('SELECT COUNT(*) AS n FROM void_searches WHERE who = ? AND blocked != \'\' AND at >= ?').bind(who, since).first(); return (r && r.n) || 0; },
-    async ban(who) { await init(); return (await db.prepare('SELECT who, state, why, at FROM void_search_bans WHERE who = ?').bind(who).first()) || null; },
+    async ban(who) { try { return (await db.prepare('SELECT who, state, why, at FROM void_search_bans WHERE who = ?').bind(who).first()) || null; } catch (_) { return null; } },
     async setBan(who, state, why) { await init(); if (state) await db.prepare('INSERT INTO void_search_bans (who, state, why, at) VALUES (?, ?, ?, ?) ON CONFLICT(who) DO UPDATE SET state = excluded.state, why = excluded.why, at = excluded.at').bind(who, state, why || '', Date.now()).run(); else await db.prepare('DELETE FROM void_search_bans WHERE who = ?').bind(who).run(); },
     async prune(before) { await init(); await db.prepare('DELETE FROM void_searches WHERE at < ?').bind(before).run(); await db.prepare('DELETE FROM void_card_reports WHERE at < ?').bind(before).run(); },
   };

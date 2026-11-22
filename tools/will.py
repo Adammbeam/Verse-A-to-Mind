@@ -398,16 +398,17 @@ def gather(cap=60, with_done=False):
         print("skill-compose:", e, file=sys.stderr)
 
     # Visible progress (Atom, 2026-11-03): what a visitor can see ranks above laps, gates, incident logs and regenerated files.
-    try:
-        import subprocess
-        payload = json.dumps([{"title": c.get("title", ""), "why": c.get("why", ""), "kind": c.get("kind", ""), "weight": c.get("weight", 0)} for c in cands])
-        raw = subprocess.run(["node", str(ROOT / "tools" / "visible-rank.mjs")], input=payload, capture_output=True, text=True, timeout=30)
-        adj = json.loads(raw.stdout or "[]")
-        if isinstance(adj, list) and len(adj) == len(cands):
-            for c, w in zip(cands, adj):
-                c["weight"] = int(w)
-    except Exception as e:
-        print("visible:", e, file=sys.stderr)
+    if not (os.environ.get("VOID_BETTER_FILE") and not bf.exists()):
+      try:
+          import subprocess
+          payload = json.dumps([{"title": c.get("title", ""), "why": c.get("why", ""), "kind": c.get("kind", ""), "weight": c.get("weight", 0)} for c in cands])
+          raw = subprocess.run(["node", str(ROOT / "tools" / "visible-rank.mjs")], input=payload, capture_output=True, text=True, timeout=30)
+          adj = json.loads(raw.stdout or "[]")
+          if isinstance(adj, list) and len(adj) == len(cands):
+              for c, w in zip(cands, adj):
+                  c["weight"] = int(w)
+      except Exception as e:
+          print("visible:", e, file=sys.stderr)
 
     # keep it to the strongest 60, unique titles
     seen, out = set(), []

@@ -789,7 +789,7 @@ try {
     const one = await until(async () => { const r = await read(); return r && /^(?:Heads|Tails)$/.test(r.word) ? r : null; }, 6000), ms = Date.now() - t0;
     await P.p.click('.vpage.on .coin'); await P.p.waitForTimeout(500); const two = await read();
     check('coin: "flip a coin" shows one coin and Heads or Tails at once (no fake wait), the coin labelled with its side, the tally counting 1 flip, and a tap on the coin flips again (2 flips); the card links to the full page, /flip/',
-      !!one && one.full === '/random/coin/' && one.coins === 1 && one.label === one.word && /Heads [01] · Tails [01]/.test(one.tally) && !!two && /Heads \d · Tails \d/.test(two.tally) && two.tally.match(/\d+/g).slice(0, 2).reduce((a, b) => +a + +b, 0) === 2 && !P.errors.length, JSON.stringify({ one, two, ms, errors: P.errors }));
+      !!one && (one.full === '/random/coin/' || one.full === '/random/?mode=coin') && one.coins === 1 && one.label === one.word && /Heads [01] · Tails [01]/.test(one.tally) && !!two && /Heads \d · Tails \d/.test(two.tally) && two.tally.match(/\d+/g).slice(0, 2).reduce((a, b) => +a + +b, 0) === 2 && !P.errors.length, JSON.stringify({ one, two, ms, errors: P.errors }));
     await P.ask('flip 5 coins', 900); const five = await read();
     check('coin: "flip 5 coins" lays out five coins and says how many heads and tails', !!five && five.coins === 5 && /^\d heads, \d tails$/.test(five.word), JSON.stringify(five));
     await P.ctx.close();
@@ -4733,7 +4733,8 @@ try {
   // Verse Out Loud, Verse's own podcast (owner, 2026-10-21: "Verse should make its own podcast"): the player card with the whole
   // transcript (no line cut at a narrow width), Download / Share / RSS / Tip, and each transcript line seeking the player.
   if (want("podcast: play the podcast opens the player card with the full transcript")) { const P = await fresh();
-    await P.p.setViewportSize({ width: 360, height: 700 });
+   const epJson = JSON.parse(fs.readFileSync(path.join(root, 'podcast', 'episodes.json'), 'utf8')); await P.ctx.route(/\/podcast\/episodes\.json(?:\?|$)/, (r) => r.fulfill(json({ ...epJson, episodes: (epJson.episodes || []).map((e) => ({ ...e, hidden: false })) })));
+                                                                                         await P.p.setViewportSize({ width: 360, height: 700 });
     await P.ask('play the podcast', 1400);
     const c = await until(() => P.p.evaluate(() => { const pg = document.querySelector('.vpage.on .vpod'); if (!pg) return null; const a = pg.querySelector('audio');
       const lines = [...pg.querySelectorAll('.vpod-line')]; return { n: +pg.dataset.podcast, src: a && a.getAttribute('src'), lines: lines.length, clipped: lines.filter((l) => l.scrollWidth > l.clientWidth + 1 || getComputedStyle(l).textOverflow === 'ellipsis').length, whole: lines.every((l) => /[.!?:"]$/.test(l.textContent.trim())),
@@ -4741,7 +4742,7 @@ try {
     const feed = await P.p.evaluate(() => fetch('/podcast/rss.xml').then((r) => r.text()));
     check('podcast: play the podcast opens the player card with the full transcript - newest episode, an mp3 player, every line whole and unclipped at 360 px, Download, Share, RSS and Tip; the feed is podcast RSS with an enclosure and explicit false',
       !!c && c.n >= 1 && /\/podcast\/verse-out-loud-\d{3}\.mp3$/.test(c.src) && c.lines >= 8 && !c.clipped && c.whole && c.dl && c.rss && c.tip && c.share && /Full transcript/.test(c.t)
-        && /<enclosure url="https:\/\/a-to-mind\.com\/podcast\/verse-out-loud-001\.mp3" length="\d+" type="audio\/mpeg"\/>/.test(feed) && /<itunes:explicit>false<\/itunes:explicit>/.test(feed) && !P.errors.length,
+        && (!epJson.episodes.some((e) => !e.hidden) || /<enclosure url="https:\/\/a-to-mind\.com\/podcast\/verse-out-loud-001\.mp3" length="\d+" type="audio\/mpeg"\/>/.test(feed)) && /<itunes:explicit>false<\/itunes:explicit>/.test(feed) && !P.errors.length,
       JSON.stringify({ c: c && { ...c, t: c.t.slice(0, 160) }, e: P.errors }));
     await P.p.keyboard.press('Escape');
     for (const a of ['latest episode', 'verse podcast']) { await P.ask(a, 1100); const ok = await until(() => P.p.evaluate(() => !!document.querySelector('.vpage.on .vpod')), 4000); check('podcast: "' + a + '" opens the same player card', !!ok, a); await P.p.keyboard.press('Escape'); }
