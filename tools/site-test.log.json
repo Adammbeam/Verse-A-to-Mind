@@ -1,16 +1,5 @@
 [
  {
-  "at": "2026-11-11T08:22:29Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 1429,
-   "failed": []
-  },
-  "note": "visitor pass 15/15"
- },
- {
   "at": "2026-11-11T13:18:28Z",
   "kind": "visitor",
   "visitor": {
@@ -6399,5 +6388,16 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"pulse of my arrows\" (skill:pulse)"
+ },
+ {
+  "at": "2026-11-22T13:04:40Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1228,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
