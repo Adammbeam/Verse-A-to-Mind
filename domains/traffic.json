@@ -1,5 +1,5 @@
 {
- "at": "2026-11-22T05:50Z",
+ "at": "2026-11-22T13:23Z",
  "source": "verse",
  "note": "Verse's own count (/api/visit, a beacon per page load on the stage); Cloudflare unreadable: CLOUDFLARE_API_TOKEN: cannot look up the zone (HTTP 200; needs Zone > Zone > Read or CLOUDFLARE_ZONE_ID)",
  "week": {
@@ -7,8 +7,8 @@
   "unique": true,
   "people": 53,
   "views": 333,
-  "ours": 5702,
-  "bots": 24
+  "ours": 6018,
+  "bots": 31
  },
  "days": [
   {
@@ -229,10 +229,10 @@
   },
   {
    "day": "2026-11-22",
-   "all": 249,
+   "all": 572,
    "people": 1,
-   "ours": 242,
-   "bots": 6,
+   "ours": 558,
+   "bots": 13,
    "uniquePeople": 1
   }
  ],
