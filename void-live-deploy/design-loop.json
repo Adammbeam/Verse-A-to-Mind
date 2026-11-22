@@ -909,6 +909,16 @@
    "listed": 4,
    "defectsBefore": 10,
    "defectsAfter": 1
+  },
+  {
+   "at": "2026-11-22T01:29:03.068Z",
+   "run": 152,
+   "measured": 30,
+   "clean": 25,
+   "fixed": 2,
+   "listed": 3,
+   "defectsBefore": 5,
+   "defectsAfter": 0
   }
  ],
  "pages": {
@@ -7635,18 +7645,17 @@
    "why": "no rule fixes it (a layout shift of 0.615 that no rule fixes: listed for a builder)"
   },
   "/video/": {
-   "at": "2026-11-18T16:33:09.161Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
-    "defects": 1,
+    "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.259,
+    "cls": 0.008,
     "overflow": 0
    },
-   "state": "listed",
-   "why": "no rule fixes it (a layout shift of 0.259 that no rule fixes: listed for a builder)"
+   "state": "clean"
   },
   "/lab/mind-map/": {
    "at": "2026-11-22T01:09:18.516Z",
@@ -7752,7 +7761,21 @@
    "why": "no rule fixes it (a layout shift of 0.27 that no rule fixes: listed for a builder)"
   },
   "/lab/f625-regex-tester/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
+   "before": {
+    "defects": 1,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.107,
+    "overflow": 0
+   },
+   "state": "listed",
+   "why": "no rule fixes it (a layout shift of 0.107 that no rule fixes: listed for a builder)"
+  },
+  "/lab/f620-pomodoro-task-timer/": {
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7764,21 +7787,8 @@
    },
    "state": "clean"
   },
-  "/lab/f620-pomodoro-task-timer/": {
-   "at": "2026-11-16T02:57:04.218Z",
-   "before": {
-    "defects": 0,
-    "contrast": 0,
-    "targets": 0,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0.004,
-    "overflow": 0
-   },
-   "state": "clean"
-  },
   "/trading-bots/arbitrage/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7791,7 +7801,7 @@
    "state": "clean"
   },
   "/lab/checksum/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7830,7 +7840,7 @@
    "state": "clean"
   },
   "/creed/give/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7843,7 +7853,7 @@
    "state": "clean"
   },
   "/generators/make/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7856,7 +7866,7 @@
    "state": "clean"
   },
   "/cpan/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7869,7 +7879,7 @@
    "state": "clean"
   },
   "/lab/f619-spatial-memory-palace-flashcards/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7882,7 +7892,7 @@
    "state": "clean"
   },
   "/lab/pattern/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7895,7 +7905,7 @@
    "state": "clean"
   },
   "/trading-bots/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7908,7 +7918,7 @@
    "state": "clean"
   },
   "/vat/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7921,7 +7931,7 @@
    "state": "clean"
   },
   "/fantasy/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7934,7 +7944,7 @@
    "state": "clean"
   },
   "/code-review/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7947,7 +7957,7 @@
    "state": "clean"
   },
   "/lab/level/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7960,7 +7970,7 @@
    "state": "clean"
   },
   "/image/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7973,7 +7983,7 @@
    "state": "clean"
   },
   "/word-count/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -7986,7 +7996,7 @@
    "state": "clean"
   },
   "/journal/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -8000,18 +8010,17 @@
    "why": "no rule fixes it (a layout shift of 0.561 that no rule fixes: listed for a builder)"
   },
   "/learn-to-draw/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
-    "defects": 1,
+    "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.116,
+    "cls": 0.093,
     "overflow": 0
    },
-   "state": "listed",
-   "why": "no rule fixes it (a layout shift of 0.116 that no rule fixes: listed for a builder)"
+   "state": "clean"
   },
   "/emojis/everywhere/": {
    "at": "2026-11-16T02:57:04.218Z",
@@ -8028,7 +8037,7 @@
    "why": "no rule fixes it (a layout shift of 0.191 that no rule fixes: listed for a builder)"
   },
   "/identity/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8041,7 +8050,7 @@
    "state": "clean"
   },
   "/g/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 1,
     "contrast": 0,
@@ -8055,7 +8064,7 @@
    "why": "no rule fixes it (a layout shift of 0.386 that no rule fixes: listed for a builder)"
   },
   "/stl/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8094,7 +8103,7 @@
    "state": "clean"
   },
   "/converter/": {
-   "at": "2026-11-11T21:42:14.589Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9756,7 +9765,7 @@
    "state": "clean"
   },
   "/track-times/": {
-   "at": "2026-11-11T07:59:25.977Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9848,7 +9857,7 @@
    "state": "clean"
   },
   "/rotate-letters/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11536,7 +11545,7 @@
    "state": "clean"
   },
   "/text-diff/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11549,7 +11558,7 @@
    "state": "clean"
   },
   "/qr/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11562,7 +11571,7 @@
    "state": "clean"
   },
   "/patterns/": {
-   "at": "2026-11-16T02:57:04.218Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11575,8 +11584,18 @@
    "state": "clean"
   },
   "/echo-vault/": {
-   "at": "2026-11-16T17:45:23.414Z",
+   "at": "2026-11-22T01:29:03.068Z",
    "before": {
+    "defects": 1,
+    "contrast": 1,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
@@ -11585,7 +11604,8 @@
     "cls": 0,
     "overflow": 0
    },
-   "state": "clean"
+   "rules": 1,
+   "moved": 0.005
   },
   "/factorials/": {
    "at": "2026-11-16T17:45:23.414Z",
@@ -12653,6 +12673,30 @@
    },
    "rules": 4,
    "moved": 0.009
+  },
+  "/budget/": {
+   "at": "2026-11-22T01:29:03.068Z",
+   "before": {
+    "defects": 4,
+    "contrast": 0,
+    "targets": 4,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "rules": 4,
+   "moved": 0
   }
  }
 }
