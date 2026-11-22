@@ -287,5 +287,6 @@
   {"check": "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer", "sha": "085dd802dcd1f12d4e3bbafebd153d5672d69e70", "at": "2026-11-21T21:25:50Z"},
   {"check": "suite ran to the end", "sha": "16370839eed84e4884de5d4531cf2d918b549a08", "at": "2026-11-21T23:23:41Z"},
   {"check": "python-tests", "sha": "046bdd676ceb05ab19f348a5d1b8bd7694a3f95e", "at": "2026-11-22T20:40:45Z"},
-  {"check": "python-tests", "sha": "1a194fb3e836f3e2ad0d939f052463d0eba99b0a", "at": "2026-11-22T20:47:45Z"}
+  {"check": "python-tests", "sha": "1a194fb3e836f3e2ad0d939f052463d0eba99b0a", "at": "2026-11-22T20:47:45Z"},
+  {"check": "one side card per lifted board: a move made while the 3D board loads leaves exactly one side card on the stage, and it carries the move, not the empty first sta", "sha": "de3c5717544dbca9a9eb4dbda921426299ee98f2", "at": "2026-11-22T22:20:01Z"}
 ]
