@@ -1281,7 +1281,7 @@
   "queued": []
  },
  "re": {
-  "scanned": "2026-11-15",
+  "scanned": "2026-11-22",
   "sites": {
    "bbs.progrider.org": {
     "url": "https://bbs.progrider.org/",
@@ -1907,6 +1907,15 @@
      }
     ]
    },
+   "lainchan.org": {
+    "url": "https://lainchan.org/",
+    "scanned": "2026-11-22",
+    "blocked": {
+     "kind": "robots",
+     "why": "robots.txt disallows the page for every crawler"
+    },
+    "features": []
+   },
    "sushigirl.us": {
     "url": "https://sushigirl.cafe/",
     "scanned": "2026-11-15",
@@ -1995,6 +2004,252 @@
       "found_by": "re",
       "tag": "observed",
       "evidence": "localStorage"
+     }
+    ]
+   },
+   "wizchan.org": {
+    "url": "https://wizchan.org/",
+    "scanned": "2026-11-22",
+    "features": [
+     {
+      "name": "Hotkey library keymaster",
+      "detail": "shortcut, read",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "read",
+      "evidence": "main.js"
+     },
+     {
+      "name": "Keyboard shortcut alt+b",
+      "detail": "shortcut, read",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "read",
+      "evidence": "main.js@402140"
+     },
+     {
+      "name": "Keyboard shortcut alt+e",
+      "detail": "shortcut, read",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "read",
+      "evidence": "main.js@401959"
+     },
+     {
+      "name": "Keyboard shortcut alt+l",
+      "detail": "shortcut, read",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "read",
+      "evidence": "main.js@401599"
+     },
+     {
+      "name": "Keyboard shortcut alt+p",
+      "detail": "shortcut, read",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "read",
+      "evidence": "main.js@401778"
+     },
+     {
+      "name": "Keyboard shortcut alt+x",
+      "detail": "shortcut, read",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "read",
+      "evidence": "main.js@401110"
+     },
+     {
+      "name": "Keyboard shortcut alt+z",
+      "detail": "shortcut, read",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "read",
+      "evidence": "main.js@400766"
+     },
+     {
+      "name": "Feature flag useRange",
+      "detail": "flag, inferred",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "inferred",
+      "evidence": "main.js@413104"
+     },
+     {
+      "name": "Input of type number",
+      "detail": "input, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "input[type=number] x3"
+     },
+     {
+      "name": "Input of type range",
+      "detail": "input, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "input[type=range] x2"
+     },
+     {
+      "name": "Remembers a setting in the browser: auto_thread_update",
+      "detail": "storage, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "localStorage"
+     },
+     {
+      "name": "Remembers a setting in the browser: favorites",
+      "detail": "storage, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "localStorage"
+     },
+     {
+      "name": "Remembers a setting in the browser: hiddenimages",
+      "detail": "storage, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "localStorage"
+     },
+     {
+      "name": "Remembers a setting in the browser: watchlist",
+      "detail": "storage, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "localStorage"
+     },
+     {
+      "name": "Notifications",
+      "detail": "service, read",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "read",
+      "evidence": "main.js@245519"
+     },
+     {
+      "name": "Path kept from crawlers /b/",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "robots.txt"
+     },
+     {
+      "name": "Path kept from crawlers /music/",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "robots.txt"
+     },
+     {
+      "name": "Path kept from crawlers /v9k/",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "robots.txt"
+     },
+     {
+      "name": "Section /b/ (101 pages)",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "sitemap.xml"
+     },
+     {
+      "name": "Section /dep/ (100 pages)",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "sitemap.xml"
+     },
+     {
+      "name": "Section /hob/ (99 pages)",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "sitemap.xml"
+     },
+     {
+      "name": "Section /jp/ (97 pages)",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "sitemap.xml"
+     },
+     {
+      "name": "Section /meta/ (98 pages)",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "sitemap.xml"
+     },
+     {
+      "name": "Section /wiz/ (99 pages)",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "sitemap.xml"
      }
     ]
    }

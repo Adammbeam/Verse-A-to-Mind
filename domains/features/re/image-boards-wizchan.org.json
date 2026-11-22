@@ -1,0 +1,340 @@
+{
+ "site": "wizchan.org",
+ "url": "https://wizchan.org/",
+ "scanned": "2026-11-22",
+ "status": 200,
+ "assets": [
+  {
+   "f": "main.js",
+   "t": "js",
+   "b": 469217
+  },
+  {
+   "f": "recent2.css",
+   "t": "css",
+   "b": 1018
+  },
+  {
+   "f": "flags.css",
+   "t": "css",
+   "b": 14561
+  },
+  {
+   "f": "font-awesome.min.css",
+   "t": "css",
+   "b": 28759
+  },
+  {
+   "f": "style.css",
+   "t": "css",
+   "b": 23523
+  },
+  {
+   "f": "style.css",
+   "t": "css",
+   "b": 23523
+  }
+ ],
+ "assetCount": 6,
+ "bytes": 560601,
+ "html": {
+  "mobile": {
+   "title": "Wizardchan",
+   "lang": "",
+   "manifest": null,
+   "share": {
+    "og": 0,
+    "twitter": false,
+    "themeColor": false,
+    "appleCapable": false
+   },
+   "inputTypes": {
+    "checkbox": 11,
+    "number": 3,
+    "range": 2,
+    "text": 1
+   },
+   "textareas": 2
+  },
+  "desktop": {}
+ },
+ "controls": [
+  {
+   "l": "NPFchan",
+   "w": "md"
+  },
+  {
+   "l": "vichan",
+   "w": "md"
+  }
+ ],
+ "robots": {
+  "disallow": [
+   "/music/",
+   "/b/",
+   "/v9k/"
+  ],
+  "sitemaps": [],
+  "crawlDelay": null
+ },
+ "sitemap": {
+  "urls": 594,
+  "index": false,
+  "sections": [
+   {
+    "s": "b",
+    "n": 101
+   },
+   {
+    "s": "dep",
+    "n": 100
+   },
+   {
+    "s": "hob",
+    "n": 99
+   },
+   {
+    "s": "wiz",
+    "n": 99
+   },
+   {
+    "s": "meta",
+    "n": 98
+   },
+   {
+    "s": "jp",
+    "n": 97
+   }
+  ],
+  "langs": []
+ },
+ "code": [
+  {
+   "file": "main.js",
+   "own": true,
+   "chords": [
+    "alt+z@400766",
+    "alt+x@401110",
+    "alt+l@401599",
+    "alt+p@401778",
+    "alt+e@401959",
+    "alt+b@402140"
+   ],
+   "keys": [
+    "Enter@445888"
+   ],
+   "flags": [
+    "useRange@413104"
+   ],
+   "apis": [
+    "Notifications"
+   ],
+   "mimes": [
+    "application/x-shockwave-flash",
+    "image/png",
+    "image/jpeg"
+   ],
+   "usesLocationSearch": true,
+   "hotkeyLib": "keymaster"
+  }
+ ],
+ "hosts": [
+  {
+   "host": "axonflux.com",
+   "file": "main.js",
+   "at": 356247
+  },
+  {
+   "host": "caniuse.com",
+   "file": "main.js",
+   "at": 259475
+  },
+  {
+   "host": "fontawesome.io",
+   "file": "font-awesome.min.css",
+   "at": 43
+  },
+  {
+   "host": "gitlab.com",
+   "file": "main.js",
+   "at": 319576
+  },
+  {
+   "host": "jqueryui.com",
+   "file": "main.js",
+   "at": 101064
+  },
+  {
+   "host": "mixitup.kunkalabs.com",
+   "file": "main.js",
+   "at": 285863
+  }
+ ],
+ "thirdParty": [
+  "axonflux.com",
+  "caniuse.com",
+  "fontawesome.io",
+  "gitlab.com",
+  "jqueryui.com",
+  "mixitup.kunkalabs.com"
+ ],
+ "services": [
+  "Web fonts"
+ ],
+ "storage": {
+  "local": [
+   "auto_thread_update",
+   "favorites",
+   "hiddenimages",
+   "watchlist"
+  ],
+  "session": [],
+  "idb": []
+ },
+ "candidates": [
+  {
+   "name": "Hotkey library keymaster",
+   "kind": "shortcut",
+   "tag": "read",
+   "evidence": "main.js"
+  },
+  {
+   "name": "Keyboard shortcut alt+b",
+   "kind": "shortcut",
+   "tag": "read",
+   "evidence": "main.js@402140"
+  },
+  {
+   "name": "Keyboard shortcut alt+e",
+   "kind": "shortcut",
+   "tag": "read",
+   "evidence": "main.js@401959"
+  },
+  {
+   "name": "Keyboard shortcut alt+l",
+   "kind": "shortcut",
+   "tag": "read",
+   "evidence": "main.js@401599"
+  },
+  {
+   "name": "Keyboard shortcut alt+p",
+   "kind": "shortcut",
+   "tag": "read",
+   "evidence": "main.js@401778"
+  },
+  {
+   "name": "Keyboard shortcut alt+x",
+   "kind": "shortcut",
+   "tag": "read",
+   "evidence": "main.js@401110"
+  },
+  {
+   "name": "Keyboard shortcut alt+z",
+   "kind": "shortcut",
+   "tag": "read",
+   "evidence": "main.js@400766"
+  },
+  {
+   "name": "Feature flag useRange",
+   "kind": "flag",
+   "tag": "inferred",
+   "evidence": "main.js@413104"
+  },
+  {
+   "name": "Input of type number",
+   "kind": "input",
+   "tag": "observed",
+   "evidence": "input[type=number] x3"
+  },
+  {
+   "name": "Input of type range",
+   "kind": "input",
+   "tag": "observed",
+   "evidence": "input[type=range] x2"
+  },
+  {
+   "name": "Remembers a setting in the browser: auto_thread_update",
+   "kind": "storage",
+   "tag": "observed",
+   "evidence": "localStorage"
+  },
+  {
+   "name": "Remembers a setting in the browser: favorites",
+   "kind": "storage",
+   "tag": "observed",
+   "evidence": "localStorage"
+  },
+  {
+   "name": "Remembers a setting in the browser: hiddenimages",
+   "kind": "storage",
+   "tag": "observed",
+   "evidence": "localStorage"
+  },
+  {
+   "name": "Remembers a setting in the browser: watchlist",
+   "kind": "storage",
+   "tag": "observed",
+   "evidence": "localStorage"
+  },
+  {
+   "name": "Notifications",
+   "kind": "service",
+   "tag": "read",
+   "evidence": "main.js@245519"
+  },
+  {
+   "name": "Path kept from crawlers /b/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /music/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /v9k/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Section /b/ (101 pages)",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "sitemap.xml"
+  },
+  {
+   "name": "Section /dep/ (100 pages)",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "sitemap.xml"
+  },
+  {
+   "name": "Section /hob/ (99 pages)",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "sitemap.xml"
+  },
+  {
+   "name": "Section /jp/ (97 pages)",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "sitemap.xml"
+  },
+  {
+   "name": "Section /meta/ (98 pages)",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "sitemap.xml"
+  },
+  {
+   "name": "Section /wiz/ (99 pages)",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "sitemap.xml"
+  }
+ ]
+}

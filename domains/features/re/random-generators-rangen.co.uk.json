@@ -1,0 +1,21 @@
+{
+ "site": "rangen.co.uk",
+ "url": "https://rangen.co.uk/",
+ "scanned": "2026-11-22",
+ "blocked": {
+  "kind": "unreachable",
+  "why": "page.goto: Timeout 40000ms exceeded. Call log: - navigating to \"https://rangen.co.uk/\", waiting unti"
+ },
+ "assetCount": 0,
+ "bytes": 0,
+ "robots": {
+  "disallow": [],
+  "sitemaps": [],
+  "crawlDelay": null
+ },
+ "storage": {
+  "local": [],
+  "session": [],
+  "idb": []
+ }
+}

@@ -1,0 +1,180 @@
+{
+ "site": "www.springhole.net",
+ "url": "https://www.springhole.net/",
+ "scanned": "2026-11-22",
+ "status": 200,
+ "assets": [
+  {
+   "f": "ajax.googleapis.com/jquery.min.js",
+   "t": "js",
+   "b": 86351,
+   "ext": true
+  },
+  {
+   "f": "cmp.gatekeeperconsent.com/min.js",
+   "t": "js",
+   "b": 309212,
+   "ext": true
+  },
+  {
+   "f": "static.cloudflareinsights.[token]",
+   "t": "js",
+   "b": 31853,
+   "ext": true
+  },
+  {
+   "f": "www.google-analytics.com/analytics.js",
+   "t": "js",
+   "b": 52310,
+   "ext": true
+  },
+  {
+   "f": "www.googletagmanager.com/js",
+   "t": "js",
+   "b": 488817,
+   "ext": true
+  },
+  {
+   "f": "birmingham.js",
+   "t": "js",
+   "b": 1254
+  },
+  {
+   "f": "boise.js",
+   "t": "js",
+   "b": 860
+  },
+  {
+   "f": "omaha.js",
+   "t": "js",
+   "b": 1915
+  },
+  {
+   "f": "overlandpark.js",
+   "t": "js",
+   "b": 1113
+  },
+  {
+   "f": "reno.js",
+   "t": "js",
+   "b": 3308
+  },
+  {
+   "f": "wichita.js",
+   "t": "js",
+   "b": 3642
+  },
+  {
+   "f": "abilene.js",
+   "t": "js",
+   "b": 14983
+  },
+  {
+   "f": "chanute.js",
+   "t": "js",
+   "b": 22599
+  },
+  {
+   "f": "mulvane.js",
+   "t": "js",
+   "b": 1141
+  },
+  {
+   "f": "olathe.js",
+   "t": "js",
+   "b": 2249
+  },
+  {
+   "f": "et.js",
+   "t": "js",
+   "b": 1644
+  },
+  {
+   "f": "jellyfish.js",
+   "t": "js",
+   "b": 31350
+  },
+  {
+   "f": "springhole-style.css",
+   "t": "css",
+   "b": 4922
+  },
+  {
+   "f": "vitals.js",
+   "t": "js",
+   "b": 16815
+  }
+ ],
+ "assetCount": 19,
+ "bytes": 1076338,
+ "html": {
+  "mobile": {
+   "title": "Springhole.net - Writing tips, roleplayi",
+   "lang": "",
+   "manifest": null,
+   "canonical": true,
+   "share": {
+    "og": 0,
+    "twitter": false,
+    "themeColor": false,
+    "appleCapable": false
+   },
+   "noscript": true
+  },
+  "desktop": {}
+ },
+ "controls": [
+  {
+   "l": "Consent",
+   "w": "md"
+  },
+  {
+   "l": "Do Not Sell My Information",
+   "w": "md"
+  }
+ ],
+ "robots": {
+  "disallow": [],
+  "sitemaps": [],
+  "crawlDelay": null
+ },
+ "code": [
+  {
+   "file": "vitals.js",
+   "own": true,
+   "apiPaths": [
+    "/embed/spot-picker.js@11864"
+   ]
+  }
+ ],
+ "thirdParty": [
+  "ajax.googleapis.com",
+  "cmp.gatekeeperconsent.com",
+  "static.cloudflareinsights.com",
+  "www.google-analytics.com",
+  "www.googletagmanager.com"
+ ],
+ "services": [
+  "Cloudflare",
+  "Google Analytics"
+ ],
+ "requests": [
+  "https://www.google-analytics.com/g/collect?_ee&_eu&_fv&_p&_s&_ss&cid&dl",
+  "https://www.google-analytics.com/j/collect?_gid&_r&_s&_slc&_u&_v&a&cid",
+  "https://www.springhole.net/ezais/analytics?cb",
+  "https://www.springhole.net/nav-logo.htm"
+ ],
+ "storage": {
+  "local": [],
+  "session": [],
+  "idb": []
+ },
+ "candidates": [
+  {
+   "name": "API path /embed/spot-picker.js",
+   "kind": "api",
+   "tag": "read",
+   "evidence": "vitals.js@11864"
+  }
+ ]
+}
