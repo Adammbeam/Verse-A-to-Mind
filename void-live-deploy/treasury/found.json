@@ -1,5 +1,5 @@
 {
- "as_of": "2026-11-21T19:22:43.334Z",
+ "as_of": "2026-11-22T12:54:39.937Z",
  "rules": "Legitimate sources only, each cited. A value is a number its source publishes (a prize pool, a bounty, a program credit) and is not a forecast; null means unknown. Anything that needs Atom's identity, a login or a card is ready to claim; Verse claims nothing in anyone's name.",
  "probes": {
   "devpost": "read",
@@ -398,7 +398,7 @@
   {
    "id": "devpost:31667",
    "category": "hackathon prizes",
-   "title": "Kiroween 2026 (Oct 30 - Dec 04, 2026, 13 days left)",
+   "title": "Kiroween 2026 (Oct 30 - Dec 04, 2026, 12 days left)",
    "source": "https://kiroween.devpost.com/",
    "value_cents": null,
    "prize_pool_cents": 10000000,
@@ -411,7 +411,7 @@
   {
    "id": "devpost:31642",
    "category": "hackathon prizes",
-   "title": "AWS MSP AI Hackathon (Nov 02 - Dec 11, 2026, 20 days left)",
+   "title": "AWS MSP AI Hackathon (Nov 02 - Dec 11, 2026, 19 days left)",
    "source": "https://aws-agentic-msp.devpost.com/",
    "value_cents": null,
    "prize_pool_cents": 6400000,
@@ -437,7 +437,7 @@
   {
    "id": "devpost:31083",
    "category": "hackathon prizes",
-   "title": "QNX Global Hackathon (Nov 02 - Dec 15, 2026, 24 days left)",
+   "title": "QNX Global Hackathon (Nov 02 - Dec 15, 2026, 23 days left)",
    "source": "https://qnx.devpost.com/",
    "value_cents": null,
    "prize_pool_cents": 5000000,
@@ -463,7 +463,7 @@
   {
    "id": "devpost:31808",
    "category": "hackathon prizes",
-   "title": "#BuildHybridAI 2026 (Nov 11 - 30, 2026, 9 days left)",
+   "title": "#BuildHybridAI 2026 (Nov 11 - 30, 2026, 8 days left)",
    "source": "https://firebasehybridaihackathon.devpost.com/",
    "value_cents": null,
    "prize_pool_cents": 3000000,
@@ -476,7 +476,7 @@
   {
    "id": "devpost:31721",
    "category": "hackathon prizes",
-   "title": "EvoHacks 2 (Nov 21 - 22, 2026, 1 day left)",
+   "title": "EvoHacks 2 (Nov 21 - 22, 2026, about 7 hours left)",
    "source": "https://evohacks2.devpost.com/",
    "value_cents": null,
    "prize_pool_cents": 2762900,
@@ -547,10 +547,10 @@
    "next_step": "Add the paid-Verse offer (/members/) to the page, where it helps the visitor."
   },
   {
-   "id": "upsell:/tools/",
+   "id": "upsell:/lab/",
    "category": "missed upsells",
-   "title": "People open /tools/ (5 views in 7 days) and it offers nothing to buy",
-   "source": "https://a-to-mind.com/tools/",
+   "title": "People open /lab/ (6 views in 7 days) and it offers nothing to buy",
+   "source": "https://a-to-mind.com/lab/",
    "value_cents": null,
    "value_note": "unknown until it converts: traffic is still small",
    "fit": "Verse's own public visit counts (/api/visit)",
@@ -559,10 +559,10 @@
    "next_step": "Add the paid-Verse offer (/members/) to the page, where it helps the visitor."
   },
   {
-   "id": "upsell:/podcasts/",
+   "id": "upsell:/tools/",
    "category": "missed upsells",
-   "title": "People open /podcasts/ (4 views in 7 days) and it offers nothing to buy",
-   "source": "https://a-to-mind.com/podcasts/",
+   "title": "People open /tools/ (5 views in 7 days) and it offers nothing to buy",
+   "source": "https://a-to-mind.com/tools/",
    "value_cents": null,
    "value_note": "unknown until it converts: traffic is still small",
    "fit": "Verse's own public visit counts (/api/visit)",
