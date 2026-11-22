@@ -1,23 +1,5 @@
 [
  {
-  "at": "2026-11-10T14:30:49Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1097,
-   "failed": [
-    {
-     "ask": "what time is it",
-     "why": [
-      "slow 10611 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-10T15:00:15Z",
   "kind": "visitor",
   "visitor": {
@@ -6411,5 +6393,16 @@
    "failed": []
   },
   "note": "quality upgrade: weakest answer was \"closer on the figure\" (14 chars)"
+ },
+ {
+  "at": "2026-11-22T04:08:10Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 632,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
