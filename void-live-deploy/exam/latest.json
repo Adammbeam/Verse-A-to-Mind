@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-22T21:28:17.038Z",
+  "at": "2026-11-22T21:53:33.703Z",
   "against": "live",
   "week": "2026-W47",
   "scale": 2,
@@ -34,24 +34,10 @@
       }
     },
     "podcasts": {
-      "score": 94.3,
+      "score": 95.9,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "play the latest episode of this american life",
-          "failed": [
-            "audio"
-          ],
-          "score": 85.7
-        },
-        {
-          "ask": "play the latest episode of serial",
-          "failed": [
-            "audio"
-          ],
-          "score": 85.7
-        },
         {
           "ask": "play the podcast",
           "failed": [
@@ -122,7 +108,7 @@
       }
     },
     "weather": {
-      "score": 98.1,
+      "score": 96.7,
       "of": 18,
       "measured": 18,
       "fails": [
@@ -136,9 +122,11 @@
         {
           "ask": "météo à lyon",
           "failed": [
-            "skill"
+            "skill",
+            "temp",
+            "close"
           ],
-          "score": 83.3
+          "score": 57.1
         }
       ],
       "holdout": {
@@ -238,10 +226,17 @@
       }
     },
     "sports": {
-      "score": 96.3,
+      "score": 95.4,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "nba team celtics",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
         {
           "ask": "scores",
           "failed": [
@@ -344,7 +339,7 @@
     }
   },
   "lowest": {
-    "domain": "podcasts",
-    "score": 94.3
+    "domain": "sports",
+    "score": 95.4
   }
 }
