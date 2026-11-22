@@ -1,23 +1,5 @@
 [
  {
-  "at": "2026-11-10T16:08:31Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 451,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 8855 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-10T16:36:48Z",
   "kind": "visitor",
   "visitor": {
@@ -6414,5 +6396,16 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"trivia\" (skill:trivia)"
+ },
+ {
+  "at": "2026-11-22T06:10:32Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1040,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
