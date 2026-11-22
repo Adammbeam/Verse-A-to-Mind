@@ -25,6 +25,7 @@ export const INTERNAL = {
   '/api/selfcheck': "Verse's check of its own pages: the status card reads the newest report, and only the owner's self-check job (tools/self-check.mjs, .github/workflows/self-check.yml) hands one in (functions/api/selfcheck.js)",
   '/api/members': "the /members/ page's own API: what paid Verse gives, and a paid member's ideas (passkey session, paid tier from Gumroad, a daily and monthly limit) queued as member: jobs that may only add (functions/api/members.js, lib/members.js, tools/add-only.mjs)",
   '/api/page-pass': "Uni checkout for the site (functions/api/page-pass.js): a Subscribe button opens Stripe Checkout, and Stripe's signed webhook records the subscription. No card data. The page is the only caller.",
+  '/api/stripe/webhook': "Stripe signed webhook listener for subscriptions (functions/api/stripe/webhook.js): receives signed events from Stripe to record subscriptions. Stripe is the only caller.",
   '/api/versus-floor': "the /versus/ page's own numbers (functions/api/versus-floor.js): a visitor gets the same answer as a missing page, and the signed-in owner gets the elevator model. The page is the only caller.",
   '/api/owner-cookie': "sets the owner-only files' cookie (functions/api/owner-cookie.js, lib/owner-gate.js): a visitor gets the same answer as a missing page. versus/open.js is the only caller.",
   '/api/coder': "Verse's coder thinking on Verse's own model: owner only, the Workers AI shape in and out, under an hourly and daily cap (functions/api/coder.js); tools/verse-coder.mjs is the only caller",
