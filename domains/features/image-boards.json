@@ -2179,9 +2179,9 @@
       "known": 4,
       "sampled": [
        "https://www.2chan.net/hinan/res/299530.htm",
-       "https://www.2chan.net/hinan/res/299851.htm",
-       "https://www.2chan.net/hinan/res/299849.htm",
-       "https://www.2chan.net/hinan/res/299525.htm"
+       "https://www.2chan.net/hinan/res/299864.htm",
+       "https://www.2chan.net/hinan/res/299518.htm",
+       "https://www.2chan.net/hinan/res/299851.htm"
       ],
       "features": [
        "button ԑm",
@@ -2975,9 +2975,9 @@
      "/members/",
      "/credits/"
     ],
-    "crawled": "2026-11-21"
+    "crawled": "2026-11-22"
    }
   },
-  "updated": "2026-11-21"
+  "updated": "2026-11-22"
  }
 }
