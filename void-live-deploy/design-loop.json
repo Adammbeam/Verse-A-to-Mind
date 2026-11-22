@@ -939,6 +939,16 @@
    "listed": 1,
    "defectsBefore": 3,
    "defectsAfter": 0
+  },
+  {
+   "at": "2026-11-22T07:34:39.503Z",
+   "run": 155,
+   "measured": 30,
+   "clean": 22,
+   "fixed": 3,
+   "listed": 5,
+   "defectsBefore": 9,
+   "defectsAfter": 1
   }
  ],
  "pages": {
@@ -8872,20 +8882,20 @@
    "state": "clean"
   },
   "/calendar/embed/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0,
+    "cls": 0.005,
     "overflow": 0
    },
    "state": "clean"
   },
   "/salvage/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8911,7 +8921,7 @@
    "state": "clean"
   },
   "/log/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8948,8 +8958,18 @@
    "moved": 0
   },
   "/credits/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
+    "defects": 3,
+    "contrast": 0,
+    "targets": 3,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
@@ -8958,10 +8978,11 @@
     "cls": 0,
     "overflow": 0
    },
-   "state": "clean"
+   "rules": 3,
+   "moved": 0
   },
   "/lab/f041-local-ai-portal-lattice-mind/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8974,7 +8995,7 @@
    "state": "clean"
   },
   "/lab/f254-webgpu-multiagent-genome-competition/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -8987,7 +9008,7 @@
    "state": "clean"
   },
   "/lab/f433-webgpu-multiagent-genome-competition/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9000,7 +9021,7 @@
    "state": "clean"
   },
   "/lab/f485-webgpu-lbm-audio-feedback-mind/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9013,20 +9034,20 @@
    "state": "clean"
   },
   "/lab/f513-mlp-voter-model-dom-mind/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.099,
+    "cls": 0.085,
     "overflow": 0
    },
    "state": "clean"
   },
   "/lab/f0491-webrtc-causal-portal-swarm/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 5,
     "contrast": 5,
@@ -9040,7 +9061,7 @@
    "why": "the defects did not go down (5 -> 5)"
   },
   "/lab/171-webgpu-resonance-agent/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9079,7 +9100,7 @@
    "state": "clean"
   },
   "/lab/f219-webgpu-spatial-attention-mind/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9092,7 +9113,7 @@
    "state": "clean"
   },
   "/lab/f454-deviceorient-hebbian-genome-theft/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9118,7 +9139,7 @@
    "state": "clean"
   },
   "/lab/f536-webgpu-quantum-walk-residual-oracle-mind/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9131,7 +9152,7 @@
    "state": "clean"
   },
   "/lab/f280-webgpu-spectral-causal-portal-mind/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9144,7 +9165,7 @@
    "state": "clean"
   },
   "/lab/f197-local-spatial-token-mind/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9157,7 +9178,7 @@
    "state": "clean"
   },
   "/lab/f424-local-spatial-token-mind/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -9170,7 +9191,7 @@
    "state": "clean"
   },
   "/lab/f046-webgpu-volumetric-thought-injection-mind/": {
-   "at": "2026-11-12T08:39:07.503Z",
+   "at": "2026-11-22T07:34:39.503Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -12844,6 +12865,188 @@
     "overflow": 0
    },
    "state": "clean"
+  },
+  "/world/": {
+   "at": "2026-11-22T07:34:39.503Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.097,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/internet-history/": {
+   "at": "2026-11-22T07:34:39.503Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/games/snake/": {
+   "at": "2026-11-22T07:34:39.503Z",
+   "before": {
+    "defects": 1,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.138,
+    "overflow": 0
+   },
+   "state": "listed",
+   "why": "no rule fixes it (a layout shift of 0.138 that no rule fixes: listed for a builder)"
+  },
+  "/games/pong/": {
+   "at": "2026-11-22T07:34:39.503Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/games/dim-void/": {
+   "at": "2026-11-22T07:34:39.503Z",
+   "before": {
+    "defects": 1,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.138,
+    "overflow": 0
+   },
+   "state": "listed",
+   "why": "no rule fixes it (a layout shift of 0.138 that no rule fixes: listed for a builder)"
+  },
+  "/games/null-sweep/": {
+   "at": "2026-11-22T07:34:39.503Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/games/merge-void/": {
+   "at": "2026-11-22T07:34:39.503Z",
+   "before": {
+    "defects": 1,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.138,
+    "overflow": 0
+   },
+   "state": "listed",
+   "why": "no rule fixes it (a layout shift of 0.138 that no rule fixes: listed for a builder)"
+  },
+  "/games/roguelike/": {
+   "at": "2026-11-22T07:34:39.503Z",
+   "before": {
+    "defects": 1,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.178,
+    "overflow": 0
+   },
+   "state": "listed",
+   "why": "no rule fixes it (a layout shift of 0.178 that no rule fixes: listed for a builder)"
+  },
+  "/lab/f858-webrtc-mlp-competitive-dom-auction-mind/": {
+   "at": "2026-11-22T07:34:39.503Z",
+   "before": {
+    "defects": 4,
+    "contrast": 4,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "rules": 1,
+   "moved": 0.078
+  },
+  "/lab/f826-devicemotion-kalman-webgpu-chain-mind/": {
+   "at": "2026-11-22T07:34:39.503Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0.002,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f828-webgpu-cml-orientation-mlp-portal-mind/": {
+   "at": "2026-11-22T07:34:39.503Z",
+   "before": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "state": "clean"
+  },
+  "/lab/f848-webxr-hand-hopfield-spatial-recall-mind/": {
+   "at": "2026-11-22T07:34:39.503Z",
+   "before": {
+    "defects": 2,
+    "contrast": 2,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 44
+   },
+   "state": "fixed",
+   "after": {
+    "defects": 1,
+    "contrast": 1,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 44
+   },
+   "rules": 2,
+   "moved": 0
   }
  }
 }
