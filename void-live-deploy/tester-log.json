@@ -3,12 +3,19 @@
  "cases": 160,
  "runsTotal": 300,
  "kinds": {
-  "grow": 45,
-  "visitor": 219,
+  "visitor": 220,
+  "grow": 44,
   "file": 35,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-22T09:09:15Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-22T08:03:11Z",
    "passed": 0,
@@ -312,13 +319,6 @@
      "why": "only \"waking up\" appeared, never the answer"
     }
    ]
-  },
-  {
-   "at": "2026-11-21T19:25:32Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -384,14 +384,14 @@
   },
   {
    "from": "2026-11-08",
-   "runs": 98,
-   "passed": 1651,
-   "of": 1729,
-   "ms": 373
+   "runs": 97,
+   "passed": 1536,
+   "of": 1609,
+   "ms": 364
   },
   {
    "from": "2026-11-15",
-   "runs": 202,
+   "runs": 203,
    "passed": 9021,
    "of": 9714,
    "broken": 1,
