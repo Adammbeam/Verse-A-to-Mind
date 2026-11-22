@@ -14,7 +14,7 @@
  "bench_at": "2026-11-21",
  "totals": {
   "experiment": 5,
-  "tested": 12,
+  "tested": 13,
   "checked": 20,
   "proven": 447
  },
@@ -610,7 +610,7 @@
    "for": "board games, card games, arcade and puzzle games and play: one picker (\"games\"), one Verse strength, one 3D stage",
    "count": {
     "experiment": 0,
-    "tested": 2,
+    "tested": 3,
     "checked": 11,
     "proven": 45
    },
@@ -793,6 +793,13 @@
      "last_tested_by": "the daily smoke test",
      "success_rate": 1,
      "streak": 33
+    },
+    {
+     "name": "trivia",
+     "tier": "tested",
+     "why": "a self-test",
+     "last_tested": "2026-11-22",
+     "last_tested_by": "its tests"
     },
     {
      "name": "challenge",

@@ -1,6 +1,6 @@
 {
  "note": "Who imports whom under void-live-deploy/ (tools/deps.mjs, from the import lines; asked by Verse). libs: each lib file with the skills that depend on it, directly or through another file (skills), directly (direct), and every dependant of any kind (dependants). files: each file's imports, the files that import it (importedBy) and the ones that reach it through them (reachedBy).",
- "counted": 1426,
+ "counted": 1428,
  "libs": [
   {
    "file": "lib/stage-pack.js",
@@ -87,6 +87,13 @@
    "tests": 1
   },
   {
+   "file": "lib/card-focus.js",
+   "skills": 25,
+   "direct": 2,
+   "dependants": 26,
+   "tests": 1
+  },
+  {
    "file": "lib/reactions.js",
    "skills": 23,
    "direct": 1,
@@ -113,13 +120,6 @@
    "direct": 6,
    "dependants": 68,
    "tests": 6
-  },
-  {
-   "file": "lib/card-focus.js",
-   "skills": 21,
-   "direct": 1,
-   "dependants": 22,
-   "tests": 1
   },
   {
    "file": "lib/motion-throttle.js",
@@ -839,6 +839,13 @@
    "file": "lib/stage-words.js",
    "skills": 4,
    "direct": 4,
+   "dependants": 4,
+   "tests": 1
+  },
+  {
+   "file": "lib/trivia.js",
+   "skills": 4,
+   "direct": 1,
    "dependants": 4,
    "tests": 1
   },
@@ -8565,15 +8572,18 @@
    "imports": [],
    "importedBy": [
     "lib/studio-card.js",
-    "skills/arcade-card.js"
+    "skills/arcade-card.js",
+    "skills/trivia.js"
    ],
    "reachedBy": [
+    "skills/challenge.js",
     "skills/cross-bus.js",
     "skills/daily-challenge.js",
     "skills/debris-field.js",
     "skills/dim-void.js",
     "skills/gap-glide.js",
     "skills/glyph-verse.js",
+    "skills/goal.js",
     "skills/jump-stack.js",
     "skills/merge-void.js",
     "skills/nine-grid.js",
@@ -8582,6 +8592,7 @@
     "skills/packet-maze.js",
     "skills/pong.js",
     "skills/push-packets.js",
+    "skills/quiz.js",
     "skills/snake.js",
     "skills/stackwell.js",
     "skills/three-alike.js",
@@ -18090,6 +18101,17 @@
     "functions/api/x402/[service].js"
    ]
   },
+  "lib/trivia.js": {
+   "imports": [],
+   "importedBy": [
+    "skills/trivia.js"
+   ],
+   "reachedBy": [
+    "skills/challenge.js",
+    "skills/goal.js",
+    "skills/quiz.js"
+   ]
+  },
   "lib/unbidden.js": {
    "imports": [
     "lib/persona.js"
@@ -22555,7 +22577,8 @@
   "skills/quiz.js": {
    "imports": [
     "skills/quiz-rules.js",
-    "skills/gear-pair-rules.js"
+    "skills/gear-pair-rules.js",
+    "skills/trivia.js"
    ],
    "importedBy": [
     "skills/challenge.js",
@@ -23907,6 +23930,19 @@
   "skills/triangulate.js": {
    "imports": [],
    "importedBy": []
+  },
+  "skills/trivia.js": {
+   "imports": [
+    "lib/trivia.js",
+    "lib/card-focus.js"
+   ],
+   "importedBy": [
+    "skills/quiz.js"
+   ],
+   "reachedBy": [
+    "skills/challenge.js",
+    "skills/goal.js"
+   ]
   },
   "skills/type-filter.js": {
    "imports": [],
