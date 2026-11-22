@@ -1189,7 +1189,7 @@
     {
      "name": "baggage",
      "tier": "proven",
-     "why": "a self-test, 3 real asks in the benchmark, 8 live findings, 2026-11-22",
+     "why": "a self-test, 3 real asks in the benchmark, 9 live findings, 2026-11-22",
      "last_tested": "2026-11-22",
      "last_tested_by": "a live call",
      "success_rate": 1,
