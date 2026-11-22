@@ -1,6 +1,6 @@
 {
  "note": "the daily re-test of skills not tested in 7 days (tools/retest.mjs; asked by Verse): each loaded, its examples routed, its near misses kept out, its own unit test run. Read by tools/families.mjs: a passing skill was tested that day, a failing one has no passing self-test.",
- "at": "2026-11-21",
+ "at": "2026-11-22",
  "retested": {
   "automation-status-pack": {
    "ok": false,
@@ -27,9 +27,7 @@
   "we-own-it-pack": {
    "ok": false,
    "failing": [
-    "\"verse does it pack for my invoice idea\" -> null",
-    "\"package the hard work for client onboarding\" -> process-lift-pack",
-    "\"we-own-it for SaaS support\" -> null"
+    "\"package the hard work for client onboarding\" -> process-lift-pack"
    ],
    "test": null
   }
