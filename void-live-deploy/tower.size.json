@@ -11691,6 +11691,20 @@
    "weight": 665430,
    "at": "2026-10-30"
   },
+  "soldns.de": {
+   "bytes": 15,
+   "controls": 0,
+   "scripts": 0,
+   "styles": 0,
+   "nodes": 0,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 15,
+   "shell": "none",
+   "weight": 15,
+   "at": "2026-11-22"
+  },
   "songgenerator.io": {
    "bytes": 1230000,
    "controls": 60,
