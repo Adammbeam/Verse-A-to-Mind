@@ -10,6 +10,13 @@
  },
  "runs": [
   {
+   "at": "2026-11-22T15:06:44Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
+  {
    "at": "2026-11-22T14:10:38Z",
    "passed": 0,
    "of": 0,
@@ -257,64 +264,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-21T23:21:16Z",
-   "passed": 150,
-   "of": 162,
-   "kind": "file",
-   "ms": 425,
-   "note": "fix: \"clear search history\" only \"waking up\" appeared, never the answer",
-   "failed": [
-    {
-     "ask": "bokos like dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "weather in boston",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "yo bitcoin price",
-     "why": "console: Failed to load resource: the server responded with a status of 503 ()"
-    },
-    {
-     "ask": "film meatdata for ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "who is the auhtor of dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "what automations does Verse run",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "clear search history",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "budget planner",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "make a business card",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "make a resume",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    }
-   ]
   }
  ],
  "weekly": [
@@ -380,14 +329,14 @@
   },
   {
    "from": "2026-11-08",
-   "runs": 91,
+   "runs": 90,
    "passed": 1420,
    "of": 1488,
    "ms": 364
   },
   {
    "from": "2026-11-15",
-   "runs": 209,
+   "runs": 210,
    "passed": 9329,
    "of": 10037,
    "broken": 1,
