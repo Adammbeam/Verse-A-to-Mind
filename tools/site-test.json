@@ -513,6 +513,9 @@
     },
     {
       "ask": "trivia"
+    },
+    {
+      "ask": "which miniatures do you have"
     }
   ],
   "candidates": [],
