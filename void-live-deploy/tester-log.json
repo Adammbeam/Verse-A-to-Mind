@@ -1,14 +1,55 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 163,
+ "cases": 164,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 217,
-  "grow": 45,
+  "visitor": 216,
+  "grow": 46,
   "file": 37,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-22T21:13:49Z",
+   "passed": 158,
+   "of": 164,
+   "kind": "grow",
+   "ms": 282,
+   "note": "new ground passed, kept as a regression case: \"technical context for unwrap\" (skill:technical-context)",
+   "failed": [
+    {
+     "ask": "is waymo in austin",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "yo bitcoin price",
+     "why": "console: Failed to load resource: the server responded with a status of 503 ()"
+    },
+    {
+     "ask": "send it away",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "dyslexia friendly font",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "film meatdata for ikiru",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-22T21:02:04Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-22T20:22:01Z",
    "passed": 150,
@@ -313,20 +354,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-22T07:06:35Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-22T06:10:32Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -392,20 +419,20 @@
   },
   {
    "from": "2026-11-08",
-   "runs": 83,
+   "runs": 81,
    "passed": 1302,
    "of": 1367,
    "ms": 360
   },
   {
    "from": "2026-11-15",
-   "runs": 217,
-   "passed": 9788,
-   "of": 10527,
+   "runs": 219,
+   "passed": 9946,
+   "of": 10691,
    "broken": 1,
    "brokenOf": 158,
    "brokenPassed": 16,
-   "ms": 409
+   "ms": 408
   }
  ],
  "seen": {
@@ -552,7 +579,7 @@
   "skill:merge": "2026-11-22T17:23:10Z",
   "skill:shortcut": "2026-11-22T19:21:36Z",
   "skill:state": "2026-11-22T20:22:01Z",
-  "skill:technical-context": "2026-10-17T22:05:31Z",
+  "skill:technical-context": "2026-11-22T21:13:49Z",
   "skill:type-filter": "2026-10-17T22:05:31Z",
   "skill:web4": "2026-10-17T22:18:36Z",
   "skill:movie": "2026-11-09T00:50:13Z",
