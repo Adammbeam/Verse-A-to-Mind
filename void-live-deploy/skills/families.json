@@ -11,7 +11,7 @@
   "not_here": "how often people use a skill is never counted by Verse: no usage, no popular or unused, nothing sent (no behaviour tracking). A last-used day is kept only in a person's own browser (lib/skill-use.js), shown on the family-health card, and never leaves the device"
  },
  "smoke_at": "2026-11-22",
- "bench_at": "2026-11-21",
+ "bench_at": "2026-11-22",
  "totals": {
   "experiment": 5,
   "tested": 13,
@@ -1434,12 +1434,11 @@
      "why": "a self-test, 8 browser-suite mentions, 20 real asks in the benchmark",
      "failing": [
       "days until july 4",
-      "countdown to chirstmas",
       "how many days until january 1st"
      ],
      "last_tested": "2026-11-22",
      "last_tested_by": "the daily smoke test",
-     "success_rate": 0.75
+     "success_rate": 0.9
     },
     {
      "name": "event-countdown",
@@ -1607,12 +1606,11 @@
      "tier": "proven",
      "why": "a self-test, 2 browser-suite mentions, 839 real asks in the benchmark",
      "failing": [
-      "what day is 2026-10-30",
       "2026-10-30"
      ],
      "last_tested": "2026-11-22",
      "last_tested_by": "the daily smoke test",
-     "success_rate": 0.998,
+     "success_rate": 0.999,
      "streak": 34
     },
     {
@@ -1630,7 +1628,7 @@
      "tier": "proven",
      "why": "a self-test, 9 browser-suite mentions, 5 real asks in the benchmark",
      "failing": [
-      "convert card for 72 f to c",
+      "keep 5 miles to km as a card",
       "72 f to c as a converter card"
      ],
      "last_tested": "2026-11-22",
@@ -1662,11 +1660,12 @@
      "tier": "proven",
      "why": "a self-test, 9 browser-suite mentions, 13 real asks in the benchmark",
      "failing": [
+      "if i save 200 a month how much in 5 years",
       "save $50 a week for 5 years"
      ],
      "last_tested": "2026-11-22",
      "last_tested_by": "the daily smoke test",
-     "success_rate": 0.923,
+     "success_rate": 0.846,
      "streak": 34
     },
     {
@@ -1715,9 +1714,14 @@
      "name": "crypto",
      "tier": "proven",
      "why": "a self-test, 7 real asks in the benchmark",
+     "failing": [
+      "bitcoin price",
+      "bitcoin price today",
+      "ethereum price"
+     ],
      "last_tested": "2026-11-22",
      "last_tested_by": "the daily smoke test",
-     "success_rate": 1,
+     "success_rate": 0.286,
      "promoted": "2026-10-29",
      "streak": 34
     },
@@ -1851,12 +1855,9 @@
      "name": "sums",
      "tier": "proven",
      "why": "a self-test, 3 real asks in the benchmark",
-     "failing": [
-      "400 + 562 + 129"
-     ],
      "last_tested": "2026-11-22",
      "last_tested_by": "the daily smoke test",
-     "success_rate": 0.667,
+     "success_rate": 1,
      "promoted": "2026-11-07",
      "streak": 19
     },
@@ -2957,12 +2958,9 @@
      "name": "notes-fill",
      "tier": "proven",
      "why": "a self-test, 5 real asks in the benchmark",
-     "failing": [
-      "add a note: buy milk"
-     ],
      "last_tested": "2026-11-22",
      "last_tested_by": "the daily smoke test",
-     "success_rate": 0.8,
+     "success_rate": 1,
      "promoted": "2026-10-29",
      "streak": 26
     },
@@ -4099,7 +4097,7 @@
       "\"handoff pack for my SaaS idea\" -> handoffs",
       "\"delivery package: invoice reminders that run themselves\" -> handoffs"
      ],
-     "last_tested": "2026-11-21",
+     "last_tested": "2026-11-22",
      "last_tested_by": "the benchmark",
      "success_rate": 1,
      "streak": 0
