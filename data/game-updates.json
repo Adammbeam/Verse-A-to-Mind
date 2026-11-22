@@ -1,5 +1,5 @@
 {
- "cursor": 7,
+ "cursor": 8,
  "picks": {
   "debris-field": 1,
   "gap-glide": 1,
@@ -9,7 +9,8 @@
   "nine-grid": 1,
   "three-alike": 1,
   "pong": 1,
-  "null-sweep": 1
+  "null-sweep": 1,
+  "dim-void": 1
  },
  "scores": {
   "debris-field": {
@@ -157,6 +158,27 @@
     "fun": 7,
     "polish": 8
    }
+  },
+  "dim-void": {
+   "update": 1,
+   "note": "Update 1: the dark feels peaceful, not scary",
+   "why": "shipped",
+   "fun": 57,
+   "cents": 0,
+   "paid": false,
+   "cycle": 1,
+   "video": "https://github.com/atomeam/void-loop/actions/runs/44994560818",
+   "parts": {
+    "danger": 0,
+    "goal": 8,
+    "boss": 2,
+    "juice": 4,
+    "phone": 9,
+    "fair": 10,
+    "end": 5,
+    "fun": 7,
+    "polish": 6
+   }
   }
  },
  "shown": [
@@ -261,6 +283,20 @@
    "paid": false,
    "provider": "verse @cf/google/gemma-4-26b-a4b-it",
    "video": "https://github.com/atomeam/void-loop/actions/runs/44673119041",
+   "dropped": false,
+   "born": false
+  },
+  {
+   "at": "2026-11-22T06:43:06.203Z",
+   "id": "dim-void",
+   "title": "Dim the Verse",
+   "n": 1,
+   "note": "Update 1: the dark feels peaceful, not scary",
+   "fun": 57,
+   "cents": 0,
+   "paid": false,
+   "provider": "verse @cf/google/gemma-4-26b-a4b-it",
+   "video": "https://github.com/atomeam/void-loop/actions/runs/44994560818",
    "dropped": false,
    "born": false
   }

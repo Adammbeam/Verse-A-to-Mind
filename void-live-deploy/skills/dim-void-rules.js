@@ -83,3 +83,5 @@ export function selfPlay(seed, n = N) {
   while (!s.over && k++ < n * n * 2) { const m = botMove(s); if (!m) break; apply(s, m); }
   return { over: s.over, presses: s.presses, par: s.par };
 }
+
+export const whatsNew = 'Update 1: the dark feels peaceful, not scary';
