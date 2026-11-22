@@ -223,8 +223,7 @@ function flipCard(text, api, ask, look, keepEl) {
       + '<div class="coin-tools"><button type="button" class="coin-again">Flip again</button><button type="button" class="coin-sound"></button><button type="button" class="coin-reset">Reset tally</button></div>'
       + '<div class="src">' + (look ? esc(look.src) : (ask.p === 0.5 ? 'A fair flip' : 'Weighted ' + Math.round(ask.p * 100) + '% heads') + ' from this device’s secure random numbers, no network') + '</div>'
       // on the stage, the way to the coin's own page (/random/coin/) and what it adds there; the page itself needs no link to itself
-      + '<div class="src">Tap the coin to flip it again — the animation is drawn live, and the result is shown under the coin.</div>'
-      + (typeof location !== 'undefined' && onCoinPage() ? '' : '<p class="coin-full" style="text-align:center;font-size:13px;margin:8px 0"><a href="/random/?mode=coin" style="color:inherit">The full coin flip page: Space or Enter flips again, a Share button, and it opens offline after one visit</a></p>');
+      + (typeof location !== 'undefined' && onCoinPage() ? '' : '<p class="coin-full" style="text-align:center;font-size:13px;margin:8px 0"><a href="/random/?mode=coin" style="color:inherit">Coin flip page →</a></p>');
   });
   if (!el || !el.querySelector) return 'coin';
   const row = el.querySelector('.coin-row'), word = el.querySelector('.coin-word'), tally = el.querySelector('.coin-tally'), snd = el.querySelector('.coin-sound');
