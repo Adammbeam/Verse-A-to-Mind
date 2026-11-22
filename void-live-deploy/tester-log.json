@@ -3,12 +3,77 @@
  "cases": 162,
  "runsTotal": 300,
  "kinds": {
-  "grow": 45,
   "visitor": 219,
-  "file": 35,
+  "grow": 44,
+  "file": 36,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-22T17:23:10Z",
+   "passed": 148,
+   "of": 163,
+   "kind": "file",
+   "ms": 398,
+   "note": "fix: \"what stadium do the yankees play in\" only \"waking up\" appeared, never the answer; console: Failed to load resource: the server responded with a status of 429 ()",
+   "failed": [
+    {
+     "ask": "yo bitcoin price",
+     "why": "console: Failed to load resource: the server responded with a status of 503 ()"
+    },
+    {
+     "ask": "set my ambition temperature for the podcast",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "geenrate a toon style dog",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "build a hut",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stackwell",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "export as stl",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "what are you working on",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "when should i wake up if i go to sleep now",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "snake game",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "clear search history",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "what stadium do the yankees play in",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "card duel",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-22T17:08:50Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-22T16:03:06Z",
    "passed": 0,
@@ -250,20 +315,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-22T02:05:53Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-22T01:09:51Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -329,16 +380,16 @@
   },
   {
    "from": "2026-11-08",
-   "runs": 89,
-   "passed": 1420,
-   "of": 1488,
-   "ms": 364
+   "runs": 87,
+   "passed": 1302,
+   "of": 1367,
+   "ms": 360
   },
   {
    "from": "2026-11-15",
-   "runs": 211,
-   "passed": 9329,
-   "of": 10037,
+   "runs": 213,
+   "passed": 9477,
+   "of": 10200,
    "broken": 1,
    "brokenOf": 158,
    "brokenPassed": 16,
@@ -486,7 +537,7 @@
   "skill:know": "2026-11-22T11:24:27Z",
   "skill:pulse": "2026-11-22T12:20:51Z",
   "skill:rts": "2026-10-17T21:21:26Z",
-  "skill:merge": "2026-10-17T21:51:18Z",
+  "skill:merge": "2026-11-22T17:23:10Z",
   "skill:shortcut": "2026-10-17T21:51:18Z",
   "skill:state": "2026-10-17T21:51:18Z",
   "skill:technical-context": "2026-10-17T22:05:31Z",
