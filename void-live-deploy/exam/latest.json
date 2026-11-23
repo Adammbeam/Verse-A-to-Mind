@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-23T14:56:42.072Z",
+  "at": "2026-11-23T15:48:06.062Z",
   "against": "live",
   "week": "2026-W48",
   "scale": 2,
@@ -34,17 +34,10 @@
       }
     },
     "podcasts": {
-      "score": 95.1,
+      "score": 94.3,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "play the latest episode of this american life",
-          "failed": [
-            "audio"
-          ],
-          "score": 85.7
-        },
         {
           "ask": "play the podcast",
           "failed": [
@@ -62,11 +55,13 @@
         {
           "ask": "pon el último episodio de radiolab",
           "failed": [
+            "answered",
             "skill",
+            "fast",
             "audio",
             "episode"
           ],
-          "score": 57.1
+          "score": 28.6
         }
       ],
       "holdout": {
@@ -115,10 +110,17 @@
       }
     },
     "weather": {
-      "score": 96.3,
+      "score": 95.4,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "weather in paris",
+          "failed": [
+            "fast"
+          ],
+          "score": 83.3
+        },
         {
           "ask": "weather",
           "failed": [
@@ -233,10 +235,17 @@
       }
     },
     "sports": {
-      "score": 95.4,
+      "score": 94.4,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "packers score",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
         {
           "ask": "nba team celtics",
           "failed": [
@@ -319,10 +328,17 @@
       "fails": []
     },
     "definitions": {
-      "score": 96.7,
+      "score": 93.3,
       "of": 6,
       "measured": 6,
       "fails": [
+        {
+          "ask": "define spring",
+          "failed": [
+            "fast"
+          ],
+          "score": 80
+        },
         {
           "ask": "define glimbrastic",
           "failed": [
@@ -346,7 +362,7 @@
     }
   },
   "lowest": {
-    "domain": "podcasts",
-    "score": 95.1
+    "domain": "definitions",
+    "score": 93.3
   }
 }
