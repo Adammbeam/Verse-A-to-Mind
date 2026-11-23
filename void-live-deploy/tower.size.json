@@ -6885,6 +6885,20 @@
    "weight": 531472,
    "at": "2026-10-30"
   },
+  "hostingnovapyme30.com": {
+   "bytes": 1503,
+   "controls": 4,
+   "scripts": 0,
+   "styles": 1,
+   "nodes": 36,
+   "routes": 0,
+   "htmlControls": 4,
+   "counted": "rendered",
+   "text": 78,
+   "shell": "none",
+   "weight": 1863,
+   "at": "2026-11-23"
+  },
   "hotwheelsmonstertruckslive.com": {
    "bytes": 3328995,
    "controls": 1465,
