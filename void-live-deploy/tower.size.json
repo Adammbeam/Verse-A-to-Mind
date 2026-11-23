@@ -7479,6 +7479,20 @@
    "weight": 916645,
    "at": "2026-10-30"
   },
+  "ixora.ru": {
+   "bytes": 1634769,
+   "controls": 14,
+   "scripts": 6,
+   "styles": 4,
+   "nodes": 24,
+   "routes": 3,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 3423,
+   "shell": "none",
+   "weight": 1648509,
+   "at": "2026-11-23"
+  },
   "jamrolledicecream.com": {
    "bytes": 886894,
    "controls": 660,
