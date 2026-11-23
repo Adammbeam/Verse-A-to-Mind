@@ -69,7 +69,7 @@ function layout() {
     // a kept card and a thing on the stage share one grid, or the card (z-index above the stage) covers the thing's buttons
     if (pages.length >= 2) put([...pages, ...things], area);
     else if (things.length >= 6) put(things, area);
-  } catch (_) {}
+  } catch (err) { console.warn('card-stage layout failed:', err); }
 }
 function put(els, area) {
   const stage = document.getElementById('stage');
@@ -83,7 +83,7 @@ function put(els, area) {
   });
   // a phone (the card's own narrow breakpoint, 520px) keeps an answer card one column wide. Two columns there are ~180px,
   // and the card's row (four ratings, a film poster) is wider than that, so the page scrolls sideways.
-  const floor = els.some((el) => el.classList && el.classList.contains('vpage')) && area.w <= 520 ? area.w : 0;
+  const floor = els.some((el) => el.classList && el.classList.contains('vpage')) ? (area.w <= 520 ? area.w : 280) : 0;
   const moves = tidy(cards, area, floor);
   for (const c of cards) {
     const m = moves[c.id]; if (!m) continue;
