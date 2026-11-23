@@ -1,15 +1,15 @@
 {
   "status": "open",
-  "run": "45115490001",
-  "at": "2026-11-23T05:05:31Z",
-  "what": "Verse hardened itself: 12 benchmark ask(s) for budget-planner, resume, verse-runs, automation-status-pack, delivery-status-pack.  Why these: budget-planner (no benchmark ask, evidence tier: tested); resume (no benchmark ask, evidence tier: tested); verse-runs (no benchmark ask, evidence tier: tested); chart (only 2 benchmark asks, evidence tier: experiment, a visitor plays with it); automation-status-pack (no benchmark ask, evidence tier: experiment, a business tool (a small share of the work)); delivery-status-pack (no benchmark ask, evidence tier: experiment, a business tool (a small share of the work)). New phrases: “budget planner” now opens budget-planner; “make a budget” now opens budget-planner; “expense tracker” now opens budget-planner; “make a resume” now opens resume; “write a resume” now opens resume; “resume builder” now opens resume; “what automations does Verse run” now opens verse-runs; “Verse's scheduled automations” now opens verse-runs; “scheduled automations” now opens verse-runs; “running status for the support router Verse owns” now opens automation-status-pack; “delivery status for the onboarding automation” now opens delivery-status-pack; “what is the delivery status of the invoice system” now opens delivery-status-pack. Did not route: line chart jan 10, feb 14, mar 9; automation status pack for client onboarding; status of the automations for invoice reminders; status pack for my client idea.",
-  "try": "budget planner",
+  "run": "45128744500",
+  "at": "2026-11-23T07:07:44Z",
+  "what": "Verse hardened itself: 13 benchmark ask(s) for we-own-it-pack, before-after-pack, full-lift-plan, monitor-receipt, process-lift-pack.  Why these: chart (only 2 benchmark asks, evidence tier: experiment, a visitor plays with it); we-own-it-pack (no benchmark ask, evidence tier: experiment, a business tool (a small share of the work)); before-after-pack (no benchmark ask, evidence tier: tested, a business tool (a small share of the work)); full-lift-plan (no benchmark ask, evidence tier: tested, a business tool (a small share of the work)); monitor-receipt (no benchmark ask, evidence tier: tested, a business tool (a small share of the work)); process-lift-pack (no benchmark ask, evidence tier: tested, a business tool (a small share of the work)). New phrases: “we-own-it for SaaS support” now opens we-own-it-pack; “before after pack for client onboarding” now opens before-after-pack; “package the before and after for invoice automation” now opens before-after-pack; “show the lift from client work to Verse owns it for support routing” now opens before-after-pack; “full lift plan for my idea: automate invoice reminders” now opens full-lift-plan; “ownership plan for client onboarding system” now opens full-lift-plan; “what systems does Verse own for this business idea” now opens full-lift-plan; “monitor receipt for the onboarding automation” now opens monitor-receipt; “client monitor receipt for invoice flow” now opens monitor-receipt; “receipt of monitors for weekly reports” now opens monitor-receipt; “process lift pack for client onboarding” now opens process-lift-pack; “package the hard work for invoice automation” now opens process-lift-pack; “verse does the lift for support routing” now opens process-lift-pack. Did not route: line chart jan 10, feb 14, mar 9; verse does it pack for my invoice idea; package the hard work for client onboarding.",
+  "try": "we-own-it for SaaS support",
   "closedAt": null,
   "proof": null,
   "note": "",
   "previous": {
-    "at": "2026-11-23T03:02:40Z",
-    "try": "clear search history",
-    "closedAt": "2026-11-23T05:05:17Z"
+    "at": "2026-11-23T05:05:31Z",
+    "try": "budget planner",
+    "closedAt": "2026-11-23T07:07:25Z"
   }
 }
