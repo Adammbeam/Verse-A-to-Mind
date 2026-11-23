@@ -1,2 +1,2 @@
 import './currency.js';
-export { default } from '../../currency.js';
+export { default } from '../currency.js';

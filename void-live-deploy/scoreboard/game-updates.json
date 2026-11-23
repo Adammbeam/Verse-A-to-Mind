@@ -1,5 +1,5 @@
 {
- "cursor": 1,
+ "cursor": 2,
  "picks": {
   "debris-field": 1,
   "gap-glide": 1,
@@ -11,7 +11,8 @@
   "pong": 1,
   "null-sweep": 1,
   "dim-void": 1,
-  "cross-bus": 1
+  "cross-bus": 1,
+  "push-packets": 1
  },
  "scores": {
   "debris-field": {
@@ -201,6 +202,27 @@
     "fun": 7,
     "polish": 6
    }
+  },
+  "push-packets": {
+   "update": 1,
+   "note": "Update 1: You can finally master the rhythm of the tug and land the packet perfectly.",
+   "why": "shipped",
+   "fun": 53,
+   "cents": 0,
+   "paid": false,
+   "cycle": 1,
+   "video": "https://github.com/atomeam/void-loop/actions/runs/45109950586",
+   "parts": {
+    "danger": 3,
+    "goal": 7,
+    "boss": 1,
+    "juice": 5,
+    "phone": 8,
+    "fair": 9,
+    "end": 4,
+    "fun": 6,
+    "polish": 5
+   }
   }
  },
  "shown": [
@@ -333,6 +355,20 @@
    "paid": false,
    "provider": "verse @cf/google/gemma-4-26b-a4b-it",
    "video": "https://github.com/atomeam/void-loop/actions/runs/45103530433",
+   "dropped": false,
+   "born": false
+  },
+  {
+   "at": "2026-11-23T04:12:14.120Z",
+   "id": "push-packets",
+   "title": "Push Packets",
+   "n": 1,
+   "note": "Update 1: You can finally master the rhythm of the tug and land the packet perfectly.",
+   "fun": 53,
+   "cents": 0,
+   "paid": false,
+   "provider": "verse @cf/google/gemma-4-26b-a4b-it",
+   "video": "https://github.com/atomeam/void-loop/actions/runs/45109950586",
    "dropped": false,
    "born": false
   }
