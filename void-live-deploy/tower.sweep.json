@@ -1,10 +1,10 @@
 {
  "about": "The sweep for the smallest sites of all (tools/easiest-sites.mjs --small): each run reads the next slice of the Tranco top million from cursor, one plain GET of each home page, and keeps the ones with at most 5 controls and 20000 bytes that are real pages. smallest is the 500 smallest found so far, fewest controls first, then the fewer bytes.",
  "source": "https://tranco-list.eu/top-1m.csv.zip",
- "cursor": 520000,
- "swept": 1479580,
+ "cursor": 560000,
+ "swept": 1518553,
  "lap": 1,
- "at": "2026-11-22",
+ "at": "2026-11-23",
  "smallest": [
   {
    "rank": 400033,
@@ -808,6 +808,15 @@
    "plain": false
   },
   {
+   "rank": 520003,
+   "host": "ixora.ru",
+   "controls": 0,
+   "bytes": 12403,
+   "words": 3,
+   "title": "Аналитическая платформа Ixora",
+   "plain": false
+  },
+  {
    "rank": 170,
    "host": "skybridge.click",
    "controls": 0,
@@ -1219,6 +1228,15 @@
    "bytes": 13555,
    "words": 11,
    "title": "Macaudewa Situs Judi Slot Online Tepercaya dan Terbaik di Tahun 2023",
+   "plain": false
+  },
+  {
+   "rank": 520066,
+   "host": "hostingnovapyme30.com",
+   "controls": 4,
+   "bytes": 1503,
+   "words": 8,
+   "title": "hostingnovapyme30.com",
    "plain": false
   },
   {

@@ -7758,6 +7758,24 @@
    "hardness": null,
    "title": "ACCESS REJECTED",
    "small": "2026-11-22"
+  },
+  {
+   "site": "ixora.ru",
+   "rank": 520003,
+   "controls": 0,
+   "bytes": 12403,
+   "hardness": null,
+   "title": "Аналитическая платформа Ixora",
+   "small": "2026-11-23"
+  },
+  {
+   "site": "hostingnovapyme30.com",
+   "rank": 520066,
+   "controls": 4,
+   "bytes": 1503,
+   "hardness": null,
+   "title": "hostingnovapyme30.com",
+   "small": "2026-11-23"
   }
  ]
 }
