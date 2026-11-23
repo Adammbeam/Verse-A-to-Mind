@@ -1,22 +1,17 @@
 {
-  "at": "2026-11-22T14:55:26.938Z",
+  "at": "2026-11-23T07:26:13.246Z",
   "mode": "dry-run",
   "max_per_run": 3,
   "selected": [
     {
-      "id": "ask-20261121-2345-2",
+      "id": "ask-20261123-0012-3",
       "ask": "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops.",
-      "target": "voice:ask-20261121-2345-2"
+      "target": "voice:ask-20261123-0012-3"
     },
     {
-      "id": "ask-20261121-2345-3",
+      "id": "ask-20261123-0012-1",
       "ask": "Reduce the 20 probes causing the 12042 ms visitor pass delay.",
-      "target": "voice:ask-20261121-2345-3"
-    },
-    {
-      "id": "ask-20261121-2002-2",
-      "ask": "Update the router to handle 'make a business card' requests.",
-      "target": "voice:ask-20261121-2002-2"
+      "target": "voice:ask-20261123-0012-1"
     }
   ],
   "note": "Small reversible Verse asks only. No spend. Owner confirm still required for bridge delivery."
