@@ -1,5 +1,5 @@
 {
- "at": "2026-11-23T06:25:11.358Z",
+ "at": "2026-11-23T16:33:18.639Z",
  "mode": "live",
  "pass": 51,
  "total": 54,
@@ -353,9 +353,7 @@
    "redirect": "Pythagorean theorem",
    "seen": {
     "called": 1,
-    "failed": [
-     "http://127.0.0.1:46813/skills/currency.js net::ERR_ABORTED"
-    ],
+    "failed": [],
     "bad": [],
     "text": "Pythagorean theorem IDEA Relation between sides of a right triangle In mathematics, the Pythagorean theorem or Pythagoras's theorem is a fun …  7 OF 9 FRESH Reply to what I said, or correct me Send Kept on this device only. My self card lists it under Correct me."
    },
@@ -384,9 +382,7 @@
    "redirect": "World War II",
    "seen": {
     "called": 1,
-    "failed": [
-     "http://127.0.0.1:46813/skills/currency.js net::ERR_ABORTED"
-    ],
+    "failed": [],
     "bad": [],
     "text": "World War II IDEA — 1939 World War II, or the Second World War, was a global conflict between two coalitions: the Allies and the Axis powers …  report VERSE Reply to what I said, or correct me Send Kept on this device only. My self card lists it under Correct me."
    },
@@ -457,9 +453,7 @@
    "redirect": "List of Aqua Teen Hunger Force characters",
    "seen": {
     "called": 1,
-    "failed": [
-     "http://127.0.0.1:46813/skills/currency.js net::ERR_ABORTED"
-    ],
+    "failed": [],
     "bad": [],
     "text": "HAPPY TIME HARRY CHARACTER Happy Time Harry (David Cross) – A mean, cynical, and depressed doll Frylock bought for Meatwad due to his low pr …  1 OF 9 FRESH Reply to what I said, or correct me Send Kept on this device only. My self card lists it under Correct me."
    },
@@ -843,7 +837,7 @@
   {
    "ask": "how to bake bread",
    "ok": true,
-   "kind": "Answer — from Verse",
+   "kind": "Skill — Body and mind",
    "title": "Rye bread",
    "theme": "",
    "photo": true,
