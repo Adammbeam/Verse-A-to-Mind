@@ -35,7 +35,7 @@ Seen: what the live answer was, and the day. Batch 1 is in `tools/gaps-batch1.te
 | 19 | country codes list | 2026-11-06: an explanation of the code systems | a searchable list of ISO 3166 codes and calling codes, from the published standard | open |
 | 20 | gas mileage calculator | 2026-11-06: an explanation of mpg | a calculator: distance and fuel in, mpg and L/100 km out | verified live 2026-11-06 |
 | 21 | currency converter 100 usd to eur | 2026-11-06: "rates change, check a live service" | the amount at a published reference rate, with the rate's date and source | open |
-| 22 | inflation calculator 100 in 1990 | 2026-11-06: "I have no CPI values" | the value today from the published US CPI series, with the series named | open |
+| 22 | inflation calculator 100 in 1990 | 2026-11-06: "I have no CPI values" | the value today from the published US CPI series, with the series named | implemented |
 | 23 | how many calories do i burn running 3 miles | 2026-11-06: only 3 miles in km | an estimate from the MET formula with weight asked, the formula shown | open |
 | 24 | times tables quiz | 2026-11-06: a Python script | a quiz in the page: questions, typed answers, a score | verified live 2026-11-06 |
 | 25 | math quiz | 2026-11-06: article on a Ghana school competition | a quiz in the page with levels and a score | verified live 2026-11-06 |
