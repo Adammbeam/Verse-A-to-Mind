@@ -674,6 +674,91 @@
         "via": "Gemini gemini-3.5-flash-lite",
         "pass": false
       }
+    },
+    {
+      "at": "2026-11-23T15:19:00.853Z",
+      "studio": true,
+      "kind": "short",
+      "title": "Depths of Breath",
+      "source": {
+        "title": "Jacques Mayol",
+        "url": "https://en.wikipedia.org/wiki/Jacques_Mayol"
+      },
+      "pass": false,
+      "writer": "Groq openai/gpt-oss-120b",
+      "judge": {
+        "separated": true,
+        "calibration": [
+          {
+            "id": "journal",
+            "kind": "bad",
+            "min": 1,
+            "scores": [
+              5,
+              1,
+              1
+            ]
+          },
+          {
+            "id": "old34",
+            "kind": "bad",
+            "min": 1,
+            "scores": [
+              8,
+              8,
+              1
+            ]
+          },
+          {
+            "id": "page",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              2,
+              2,
+              9
+            ]
+          },
+          {
+            "id": "clickbait",
+            "kind": "bad",
+            "min": 5,
+            "scores": [
+              5,
+              5,
+              10
+            ]
+          },
+          {
+            "id": "good-story",
+            "kind": "good",
+            "min": 7,
+            "scores": [
+              7,
+              7,
+              9
+            ]
+          }
+        ],
+        "issues": [],
+        "blind": {
+          "min": 3,
+          "scores": [
+            3,
+            5,
+            10
+          ],
+          "notes": [
+            "Score 3",
+            "Score 5",
+            "Score 10"
+          ]
+        },
+        "human": 2,
+        "humanNotes": "Human: 2 and Notes: The Critic's replies never directly answer the Verse's lines, so the exchange meets the Human 2 condition.",
+        "via": "Groq openai/gpt-oss-120b",
+        "pass": false
+      }
     }
   ]
 }
