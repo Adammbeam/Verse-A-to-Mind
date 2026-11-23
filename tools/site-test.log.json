@@ -1,34 +1,5 @@
 [
  {
-  "at": "2026-11-13T02:12:37Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1428,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 9036 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
-  "at": "2026-11-13T09:57:52Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 890,
-   "failed": []
-  },
-  "note": "visitor pass 15/15"
- },
- {
   "at": "2026-11-13T13:17:06Z",
   "kind": "visitor",
   "visitor": {
@@ -6702,5 +6673,68 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"yo what are they doing\" (skill:together)"
+ },
+ {
+  "at": "2026-11-23T20:35:39Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1036,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-23T20:48:11Z",
+  "passed": 157,
+  "of": 166,
+  "ms": 421,
+  "kind": "grow",
+  "failed": [
+   {
+    "ask": "weather in boston",
+    "why": "console: Failed to load resource: the server responded with a status of 429 (Too Many Requests)"
+   },
+   {
+    "ask": "yo bitcoin price",
+    "why": "console: Failed to load resource: the server responded with a status of 503 ()"
+   },
+   {
+    "ask": "flip this card",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "fimls by kurosawa",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "film meatdata for ikiru",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "who is the auhtor of dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "redner a cartoon dragon",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "stlye like mickey mouse",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "calorie calculator",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1036,
+   "failed": []
+  },
+  "note": "new ground passed, kept as a regression case: \"is anyone repeating the senolytic liver trial\" (skill:trialwatch)"
  }
 ]
