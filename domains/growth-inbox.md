@@ -73,15 +73,15 @@ Shipped rows stay, with the main SHA. Rows are not deleted.
 | open | 2026-10-29 | timer skill: a simple countdown timer on the stage | new idea by growth agent |
 | building | 2026-10-29 | rock paper scissors skill: play a quick game | new idea by growth agent; helper/rps-skill |
 | open | 2026-10-29 | stopwatch skill: a simple stopwatch on the stage | new idea by growth agent |
-| open | 2026-10-29 | anagram skill: scramble a word or check if two words are anagrams | new idea by growth agent |
+| building | 2026-10-29 | anagram skill: scramble a word or check if two words are anagrams | new idea by growth agent; helper/handoff-confidence |
 | open | 2026-10-29 | palindrome skill: check if a word or phrase is a palindrome | new idea by growth agent |
 | building | 2026-10-29 | hangman skill: play a simple word-guessing game | new idea by growth agent; helper/hangman |
 | shipped 452b17a | 2026-10-29 | word ladder skill: transform one word to another by changing one letter at a time | new idea by growth agent; already on main |
 | building | 2026-10-30 | compliment skill: give a random compliment | new idea by growth agent; helper/new-compliment |
 | building | 2026-10-30 | riddle skill: a random riddle with answer on request | new idea by growth agent; helper/riddle-skill |
-| open | 2026-10-30 | fortune skill: a random fortune cookie message | new idea by growth agent |
-| open | 2026-10-30 | pig latin skill: convert text to pig latin | new idea by growth agent |
-| open | 2026-10-30 | acronym skill: expand or make an acronym | new idea by growth agent |
+| building | 2026-10-30 | fortune skill: a random fortune cookie message | new idea by growth agent; helper/handoff-confidence |
+| building | 2026-10-30 | pig latin skill: convert text to pig latin | new idea by growth agent; helper/handoff-confidence |
+| building | 2026-10-30 | acronym skill: expand or make an acronym | new idea by growth agent; helper/handoff-confidence |
 | shipped 94eaa48 | 2026-11-03 | delivery-pack skill: package a business idea into a client handoff (clarify, systems, status/docs/automations) | new idea by growth agent; helper/delivery-pack |
 | shipped | 2026-11-05 | Numbers and money family: savings growth at 0% is the money put in, a 20% tip on 45 is 9, and 96 px at 96 dpi is 2.54 cm. vat and hear already had their own tests. The numbers-prove branch was not taken: it cleared the hear skill's HTML escaping. | tools/numbers-proof.test.mjs |
 | open | 2026-11-04 | Versus topic pages: replace the flat tower placeholder with a real per-topic experience | asked by Verse (void-voice 2026-11-04) |
@@ -132,3 +132,4 @@ Shipped rows stay, with the main SHA. Rows are not deleted.
 | open | 2026-11-21 | comparison page generator skill: generate structured "X vs Y" comparison cards and exportable HTML landers for fast SEO and AI-search testing | from Wispr summary: 12 open-source sales tools (2026-11-21) |
 | open | 2026-11-21 | failed-payment win-back sequence skill: generate a polite 3-step card-retry and trial win-back email sequence plus Stripe webhook checklist | from Wispr summary: 12 open-source sales tools (2026-11-21) |
 | open | 2026-11-21 | subtle store exit-survey prompt: one-question "Why didn't you buy?" feedback chip on /store/ saving visitor wording to sharpen offer copy | from Wispr summary: 12 open-source sales tools (2026-11-21) |
+| building | 2026-11-23 | handoff-confidence skill: client-visible confidence card for a system Verse owns (tests, monitors, ownership, client work dropped) so delivery is more reliable and the client does less checking | new idea by growth agent; helper/handoff-confidence |
