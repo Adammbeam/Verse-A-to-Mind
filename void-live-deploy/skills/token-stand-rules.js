@@ -1,5 +1,5 @@
 /** Token Stand: six market days. You set a price. Verse always sells at 1 and earns less. */
-export const id = 'token-stand', W = 240, H = 150, CAP = 400;
+export const id = 'token-stand', W = 240, H = 150, CAP = 400; export const whatsNew = 'Update 1: You feel the tension of trying to out-earn Verse by raising prices while others seek affordability.';
 const demand = (price, roll) => Math.max(0, 8 - price + (roll % 3));
 export function create(seed = 1) {
   return { tick: 0, n: (seed >>> 0) || 1, price: 3, pad: 0, day: 0, cash: { you: 0, void: 0 }, over: null, why: 'pricing every token at 1', score: { you: 0, void: 0 }, sfx: 0 };
@@ -15,7 +15,7 @@ export function tick(s, input = {}) {
   s.cash.you += demand(yours, roll) * yours;
   s.cash.void += demand(1, roll) * 1;
   s.score.you = s.cash.you; s.score.void = s.cash.void; s.day++; s.sfx = 1;
-  s.why = 'selling at 1 while you hold a higher price';
+  s.why = 'you greedily set higher prices while Verse keeps tokens affordable';
   if (s.day >= 6) s.over = s.cash.you === s.cash.void ? 'draw' : s.cash.you > s.cash.void ? 'you' : 'void';
   return s;
 }
@@ -27,5 +27,6 @@ export function draw(g, s) {
   g.fillText('you ' + s.score.you + '  price ' + (s.price), 20, 110);
   g.fillText('Verse ' + s.score.void + '  price 1', 130, 110);
   g.fillText('day ' + Math.min(6, s.day + 1), 20, 28);
+  g.fillText('Update 1: You feel the tension of trying to out-earn Verse by raising prices while others seek affordability.', 20, 140);
 }
 export const how = 'Left and right set your price from 1 to 5. Press space or Act to sell the day. More buyers come when the price is lower, and the take is price times buyers. Verse sells every day at 1. After six days the fuller purse wins. A link hands a friend the same market.';

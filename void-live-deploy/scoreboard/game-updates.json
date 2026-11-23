@@ -1,5 +1,5 @@
 {
- "cursor": 2,
+ "cursor": 3,
  "picks": {
   "debris-field": 1,
   "gap-glide": 1,
@@ -12,7 +12,8 @@
   "null-sweep": 1,
   "dim-void": 1,
   "cross-bus": 1,
-  "push-packets": 1
+  "push-packets": 1,
+  "token-stand": 1
  },
  "scores": {
   "debris-field": {
@@ -223,6 +224,27 @@
     "fun": 6,
     "polish": 5
    }
+  },
+  "token-stand": {
+   "update": 1,
+   "note": "Update 1: You feel the tension of trying to out-earn Verse by raising prices while others seek affordability.",
+   "why": "shipped",
+   "fun": 33,
+   "cents": 0,
+   "paid": false,
+   "cycle": 1,
+   "video": "https://github.com/atomeam/void-loop/actions/runs/45118425474",
+   "parts": {
+    "danger": 2,
+    "goal": 4,
+    "boss": 1,
+    "juice": 3,
+    "phone": 5,
+    "fair": 6,
+    "end": 2,
+    "fun": 4,
+    "polish": 3
+   }
   }
  },
  "shown": [
@@ -369,6 +391,20 @@
    "paid": false,
    "provider": "verse @cf/google/gemma-4-26b-a4b-it",
    "video": "https://github.com/atomeam/void-loop/actions/runs/45109950586",
+   "dropped": false,
+   "born": false
+  },
+  {
+   "at": "2026-11-23T05:37:48.887Z",
+   "id": "token-stand",
+   "title": "Token Stand",
+   "n": 1,
+   "note": "Update 1: You feel the tension of trying to out-earn Verse by raising prices while others seek affordability.",
+   "fun": 33,
+   "cents": 0,
+   "paid": false,
+   "provider": "verse @cf/google/gemma-4-26b-a4b-it",
+   "video": "https://github.com/atomeam/void-loop/actions/runs/45118425474",
    "dropped": false,
    "born": false
   }
