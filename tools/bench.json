@@ -7315,5 +7315,17 @@
   {"ask": "play the daily challenge", "want": "skill:daily-challenge"},
   {"ask": "trivia", "want": "skill:trivia"},
   {"ask": "play trivia", "want": "skill:trivia"},
-  {"ask": "trivia game", "want": "skill:trivia"}
+  {"ask": "trivia game", "want": "skill:trivia"},
+  {"ask": "budget planner", "want": "skill:budget-planner"},
+  {"ask": "make a budget", "want": "skill:budget-planner"},
+  {"ask": "expense tracker", "want": "skill:budget-planner"},
+  {"ask": "make a resume", "want": "skill:resume"},
+  {"ask": "write a resume", "want": "skill:resume"},
+  {"ask": "resume builder", "want": "skill:resume"},
+  {"ask": "what automations does Verse run", "want": "skill:verse-runs"},
+  {"ask": "Verse's scheduled automations", "want": "skill:verse-runs"},
+  {"ask": "scheduled automations", "want": "skill:verse-runs"},
+  {"ask": "running status for the support router Verse owns", "want": "skill:automation-status-pack"},
+  {"ask": "delivery status for the onboarding automation", "want": "skill:delivery-status-pack"},
+  {"ask": "what is the delivery status of the invoice system", "want": "skill:delivery-status-pack"}
 ]
