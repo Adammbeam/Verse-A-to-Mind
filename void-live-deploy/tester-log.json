@@ -3,12 +3,77 @@
  "cases": 164,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 213,
-  "file": 40,
+  "visitor": 212,
+  "file": 41,
   "grow": 43,
   "tighten": 4
  },
  "runs": [
+  {
+   "at": "2026-11-23T14:43:18Z",
+   "passed": 3,
+   "of": 165,
+   "kind": "file",
+   "ms": 375,
+   "note": "quality upgrade: weakest answer was \"convert 5 miles to km\" (121 chars)",
+   "failed": [
+    {
+     "ask": "what are you?",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "play voidquest",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "play solarquest",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "what can I buy",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "show me your videos",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "play chess",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "my actions",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "air quality in Tokyo",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "update for you: a new routine now runs every 3 hours from 3:17 AM ET and clears ",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "put on lofi hip hop pls",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "find the book the left hand of dakrness",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-23T14:29:08Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-23T14:14:40Z",
    "passed": 1,
@@ -432,71 +497,6 @@
      "why": "console: Failed to load resource: the server responded with a status of 429 ()"
     }
    ]
-  },
-  {
-   "at": "2026-11-23T02:30:58Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-23T02:19:06Z",
-   "passed": 152,
-   "of": 165,
-   "kind": "file",
-   "ms": 382,
-   "note": "quality upgrade: weakest answer was \"flip this card\" (29 chars)",
-   "failed": [
-    {
-     "ask": "show the days until a date",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "what are the figures doing",
-     "why": "nothing appeared"
-    },
-    {
-     "ask": "yo bitcoin price",
-     "why": "console: Failed to load resource: the server responded with a status of 503 ()"
-    },
-    {
-     "ask": "fimls by kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "film meatdata for ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "yo watch the apollo 11 landing",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "clear search history",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "what stadium do the yankees play in",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "which miniatures do you have",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "give me a shortcut",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "technical context for unwrap",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    }
-   ]
   }
  ],
  "weekly": [
@@ -562,20 +562,20 @@
   },
   {
    "from": "2026-11-09",
-   "runs": 58,
+   "runs": 57,
    "passed": 832,
    "of": 880,
    "ms": 360
   },
   {
    "from": "2026-11-16",
-   "runs": 242,
-   "passed": 10290,
-   "of": 11884,
-   "broken": 6,
-   "brokenOf": 983,
-   "brokenPassed": 20,
-   "ms": 408
+   "runs": 243,
+   "passed": 10293,
+   "of": 12049,
+   "broken": 7,
+   "brokenOf": 1148,
+   "brokenPassed": 23,
+   "ms": 401
   }
  ],
  "seen": {
@@ -1043,6 +1043,7 @@
   "skill:budget-planner": "2026-11-21T23:21:16Z",
   "skill:business-card": "2026-11-21T23:21:16Z",
   "skill:resume": "2026-11-21T23:21:16Z",
-  "skill:trivia": "2026-11-22T05:15:02Z"
+  "skill:trivia": "2026-11-22T05:15:02Z",
+  "skill:inflation": "2026-11-23T14:43:18Z"
  }
 }
