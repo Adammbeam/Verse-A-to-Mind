@@ -1,23 +1,5 @@
 [
  {
-  "at": "2026-11-12T23:47:05Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 623,
-   "failed": [
-    {
-     "ask": "what time is it",
-     "why": [
-      "slow 12348 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-13T01:17:53Z",
   "kind": "visitor",
   "visitor": {
@@ -6695,5 +6677,16 @@
    "failed": []
   },
   "note": "fix: \"play chess\" fps 4 < 5"
+ },
+ {
+  "at": "2026-11-23T19:30:45Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 589,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
