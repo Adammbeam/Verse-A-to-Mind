@@ -2143,6 +2143,27 @@
     "host": "flightconnections.com",
     "at": "2026-11-16",
     "id": "mwja5vst"
+   },
+   {
+    "target": "feature:flightconnections-co-f798b366",
+    "feature": "Remembers a setting in the browser: [token]",
+    "host": "flightconnections.com",
+    "at": "2026-11-23",
+    "id": "mwtf1bcn"
+   },
+   {
+    "target": "feature:flightconnections-co-987151e7",
+    "feature": "Remembers a setting in the browser: aws_waf_referrer",
+    "host": "flightconnections.com",
+    "at": "2026-11-23",
+    "id": "mwtf1bsj"
+   },
+   {
+    "target": "feature:flightconnections-co-1ea371d9",
+    "feature": "Remembers a setting in the browser: awswaf_token_refresh_timestamp",
+    "host": "flightconnections.com",
+    "at": "2026-11-23",
+    "id": "mwtf1c84"
    }
   ]
  },
