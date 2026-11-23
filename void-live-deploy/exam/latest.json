@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-23T07:49:57.279Z",
+  "at": "2026-11-23T10:30:49.130Z",
   "against": "live",
   "week": "2026-W48",
   "scale": 2,
@@ -34,7 +34,7 @@
       }
     },
     "podcasts": {
-      "score": 95.1,
+      "score": 95.9,
       "of": 18,
       "measured": 18,
       "fails": [
@@ -48,10 +48,9 @@
         {
           "ask": "play the episode before that",
           "failed": [
-            "skill",
-            "audio"
+            "skill"
           ],
-          "score": 71.4
+          "score": 85.7
         },
         {
           "ask": "pon el último episodio de radiolab",
@@ -109,7 +108,7 @@
       }
     },
     "weather": {
-      "score": 97.2,
+      "score": 95.8,
       "of": 18,
       "measured": 18,
       "fails": [
@@ -124,9 +123,11 @@
         {
           "ask": "météo à lyon",
           "failed": [
-            "skill"
+            "skill",
+            "temp",
+            "close"
           ],
-          "score": 83.3
+          "score": 57.1
         }
       ],
       "holdout": {
