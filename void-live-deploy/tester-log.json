@@ -3,12 +3,19 @@
  "cases": 164,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 214,
   "grow": 45,
+  "visitor": 214,
   "file": 39,
   "tighten": 2
  },
  "runs": [
+  {
+   "at": "2026-11-23T04:08:32Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-23T03:11:01Z",
    "passed": 0,
@@ -422,64 +429,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-22T17:23:10Z",
-   "passed": 148,
-   "of": 163,
-   "kind": "file",
-   "ms": 398,
-   "note": "fix: \"what stadium do the yankees play in\" only \"waking up\" appeared, never the answer; console: Failed to load resource: the server responded with a status of 429 ()",
-   "failed": [
-    {
-     "ask": "yo bitcoin price",
-     "why": "console: Failed to load resource: the server responded with a status of 503 ()"
-    },
-    {
-     "ask": "set my ambition temperature for the podcast",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "geenrate a toon style dog",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "build a hut",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stackwell",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "export as stl",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "what are you working on",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "when should i wake up if i go to sleep now",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "snake game",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    },
-    {
-     "ask": "clear search history",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "what stadium do the yankees play in",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "card duel",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
   }
  ],
  "weekly": [
@@ -546,19 +495,19 @@
   {
    "from": "2026-11-09",
    "runs": 71,
-   "passed": 1068,
-   "of": 1120,
-   "ms": 349
+   "passed": 1189,
+   "of": 1247,
+   "ms": 354
   },
   {
    "from": "2026-11-16",
    "runs": 229,
-   "passed": 10407,
-   "of": 11351,
+   "passed": 10286,
+   "of": 11224,
    "broken": 2,
    "brokenOf": 323,
    "brokenPassed": 16,
-   "ms": 401
+   "ms": 408
   }
  ],
  "seen": {
