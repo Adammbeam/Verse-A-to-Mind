@@ -1,95 +1,5 @@
 [
  {
-  "at": "2026-11-13T14:08:05Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 553,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 13150 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
-  "at": "2026-11-13T14:22:25Z",
-  "passed": 110,
-  "of": 125,
-  "ms": 388,
-  "kind": "file",
-  "key": "weak | favorite this",
-  "failed": [
-   {
-    "ask": "turn the questions i missed into a five-minute challenge",
-    "why": "only \"waking up\" appeared, never the answer"
-   },
-   {
-    "ask": "attention field",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "flip this card",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "fimls by kurosawa",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "film metadata for ikiru pls",
-    "why": "refused: don't know this yet"
-   },
-   {
-    "ask": "who is the auhtor of dune",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "yo create a toon style bird",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "stlye like mickey mouse",
-    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-   },
-   {
-    "ask": "credits",
-    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-   },
-   {
-    "ask": "client brief for Acme onboarding",
-    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-   },
-   {
-    "ask": "lift summary for client onboarding",
-    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-   },
-   {
-    "ask": "bridge these inputs",
-    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-   }
-  ],
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 553,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 13150 ms"
-     ]
-    }
-   ]
-  },
-  "note": "quality upgrade: weakest answer was \"favorite this\" (17 chars)"
- },
- {
   "at": "2026-11-13T16:20:24Z",
   "kind": "visitor",
   "visitor": {
@@ -6753,5 +6663,81 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"Verse's fixes\" (skill:v01d-fixes)"
+ },
+ {
+  "at": "2026-11-23T22:04:57Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 940,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-23T22:20:25Z",
+  "passed": 148,
+  "of": 168,
+  "ms": 423,
+  "kind": "file",
+  "key": "turn the questions i missed into a five-minute challenge | only \"waking up\" appeared, never the answer",
+  "failed": [
+   {
+    "ask": "turn the questions i missed into a five-minute challenge",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "yo bitcoin price",
+    "why": "console: Failed to load resource: the server responded with a status of 503 ()"
+   },
+   {
+    "ask": "find me a sci-fi film from the 80s pls",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "fimls by kurosawa",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "who is the auhtor of dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "redner a cartoon dragon",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "geenrate a toon style dog",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "movie night",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "export as stl",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "what automations does Verse run",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   },
+   {
+    "ask": "what are you working on",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   },
+   {
+    "ask": "when should i wake up if i go to sleep now",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 940,
+   "failed": []
+  },
+  "note": "fix: \"turn the questions i missed into a five-minute challenge\" only \"waking up\" appeared, never the answer"
  }
 ]
