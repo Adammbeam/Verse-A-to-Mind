@@ -145,7 +145,7 @@ export function stuckDecision(pr, checks, now = Date.now(), hours = 6) {
   if (pr.mergeable_state === 'dirty') return { action: 'rebase', why: 'conflicts with main' };
   const runs = checks || [];
   const bad = runs.find((c) => c && c.status === 'completed' && !GREEN.has(c.conclusion) && c.conclusion !== 'cancelled');
-  if (bad) return { action: 'comment', why: bad.name + ' ' + (bad.conclusion || 'failure') };
+  if (bad) return { action: 'comment', why: bad.name + ' ' + (bad.conclusion || 'failure').replace(/^failure$/, 'failure') };
   const pending = runs.find((c) => c && c.status !== 'completed');
   if (pending) return { action: 'wait', why: pending.name + ' still running' };
   if (!runs.length) return { action: 'comment', why: 'no checks have reported on this head' };
