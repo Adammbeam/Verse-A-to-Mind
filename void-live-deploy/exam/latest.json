@@ -1,7 +1,7 @@
 {
-  "at": "2026-11-22T21:53:33.703Z",
+  "at": "2026-11-23T01:58:36.105Z",
   "against": "live",
-  "week": "2026-W47",
+  "week": "2026-W48",
   "scale": 2,
   "domains": {
     "videos": {
@@ -108,7 +108,7 @@
       }
     },
     "weather": {
-      "score": 96.7,
+      "score": 97.2,
       "of": 18,
       "measured": 18,
       "fails": [
@@ -123,10 +123,9 @@
           "ask": "météo à lyon",
           "failed": [
             "skill",
-            "temp",
-            "close"
+            "temp"
           ],
-          "score": 57.1
+          "score": 66.7
         }
       ],
       "holdout": {
@@ -226,17 +225,10 @@
       }
     },
     "sports": {
-      "score": 95.4,
+      "score": 96.3,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "nba team celtics",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
         {
           "ask": "scores",
           "failed": [
@@ -339,7 +331,7 @@
     }
   },
   "lowest": {
-    "domain": "sports",
-    "score": 95.4
+    "domain": "podcasts",
+    "score": 95.9
   }
 }
