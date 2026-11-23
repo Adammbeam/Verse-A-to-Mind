@@ -1,15 +1,15 @@
 {
- "at": "2026-11-23T07:42:44.159Z",
+ "at": "2026-11-23T20:16:18.099Z",
  "share": {
-  "loop": 78,
-  "outside": 485,
-  "bot": 182,
-  "of": 563,
-  "share": 13.9
+  "loop": 80,
+  "outside": 458,
+  "bot": 185,
+  "of": 538,
+  "share": 14.9
  },
  "pick": {
   "kind": "exam",
-  "id": "sports",
-  "why": "lowest exam domain sports at 95.4"
+  "id": "definitions",
+  "why": "lowest exam domain definitions at 93.3"
  }
 }
