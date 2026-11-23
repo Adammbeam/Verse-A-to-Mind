@@ -1,0 +1,32 @@
+{
+ "at": "2026-11-23T16:36:18.622Z",
+ "sha": "94e6879a453f398041374db8c8df8c5a2e7a024f",
+ "run": "https://github.com/atomeam/void-loop/actions/runs/45207381436",
+ "suite": "browser suite on main",
+ "checks": [
+  "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer",
+  "poster wins: on a skill card (phone) the stats chip touches no text, the rarity and collector row included",
+  "will: Verse says what it wants",
+  "store: an ask a product covers gets Verse's answer first, then one line (product, live price, link) from the live catalog; new store products are found",
+  "catalog: first read pulls the live store (all 7 products, tiered Verse Monthly = $49 a month) and saves it",
+  "coin: /flip/ shows all 7 things a full answer shows — the flip counter named, the tap and the result said in words (the gate's own rule, the 3 the tower sat at 4 of 7 on)",
+  "suite ran to the end"
+ ],
+ "touched": [
+  "domains/growth-inbox.md",
+  "tools/acronym.test.mjs",
+  "tools/anagram.test.mjs",
+  "tools/fortune.test.mjs",
+  "tools/handoff-confidence.test.mjs",
+  "tools/pig-latin.test.mjs",
+  "void-live-deploy/skills/acronym.js",
+  "void-live-deploy/skills/anagram.js",
+  "void-live-deploy/skills/fortune.js",
+  "void-live-deploy/skills/handoff-confidence.js",
+  "void-live-deploy/skills/pig-latin.js"
+ ],
+ "shards": [
+  1,
+  3
+ ]
+}
