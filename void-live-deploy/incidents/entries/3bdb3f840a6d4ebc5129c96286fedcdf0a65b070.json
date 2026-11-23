@@ -1,0 +1,20 @@
+{
+ "at": "2026-11-23T00:35:41.409Z",
+ "sha": "3bdb3f840a6d4ebc5129c96286fedcdf0a65b070",
+ "run": "https://github.com/atomeam/void-loop/actions/runs/45086491268",
+ "suite": "browser suite on main",
+ "checks": [
+  "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer",
+  "poster wins: on a skill card (phone) the stats chip touches no text, the rarity and collector row included",
+  "will: Verse says what it wants",
+  "coin: /flip/ shows all 7 things a full answer shows — the flip counter named, the tap and the result said in words (the gate's own rule, the 3 the tower sat at 4 of 7 on)",
+  "suite ran to the end"
+ ],
+ "touched": [
+  "void-live-deploy/progress/nightly.json"
+ ],
+ "shards": [
+  1,
+  3
+ ]
+}
