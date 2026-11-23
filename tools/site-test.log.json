@@ -1,41 +1,5 @@
 [
  {
-  "at": "2026-11-12T19:14:59Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 438,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 8213 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
-  "at": "2026-11-12T19:43:45Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 565,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 18483 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-12T20:15:23Z",
   "kind": "visitor",
   "visitor": {
@@ -6602,5 +6566,81 @@
    "failed": []
   },
   "note": "fix: \"what automations does Verse run\" console: Refused to apply style from 'https://a-to-mind.com/void-cards.css' because its MIME type ('text/html') is not a supporte"
+ },
+ {
+  "at": "2026-11-23T14:03:15Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 794,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-23T14:14:40Z",
+  "passed": 1,
+  "of": 165,
+  "ms": 413,
+  "kind": "file",
+  "key": "weak | make a 2d toon dog pls",
+  "failed": [
+   {
+    "ask": "what are you?",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "play voidquest",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "play solarquest",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "what can I buy",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "show me your videos",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "play chess",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "my actions",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "air quality in Tokyo",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "update for you: a new routine now runs every 3 hours from 3:17 AM ET and clears ",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "put on lofi hip hop pls",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "find the book the left hand of dakrness",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "bokos like dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 794,
+   "failed": []
+  },
+  "note": "quality upgrade: weakest answer was \"make a 2d toon dog pls\" (265 chars)"
  }
 ]
