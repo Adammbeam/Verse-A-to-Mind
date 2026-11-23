@@ -1,9 +1,9 @@
 {
  "about": "What the conductor (tools/conductor.mjs, every 10 minutes from grow-clock.yml) did: the last 24 hours of ticks, loops it found broken, and the jobs it handed to executors that claim for themselves. Counts and job ids only.",
- "updated": "2026-11-23T05:41:37.870Z",
+ "updated": "2026-11-23T08:50:11.014Z",
  "last24h": {
   "ticks": 153,
-  "started": 103,
+  "started": 98,
   "requeued": 2,
   "setAside": 0,
   "probes": 0,
@@ -12,8 +12,8 @@
  "broken": [
   {
    "wf": "store-gap.yml",
-   "fails": 5,
-   "url": "https://github.com/atomeam/void-loop/actions/runs/45116447105"
+   "fails": 6,
+   "url": "https://github.com/atomeam/void-loop/actions/runs/45136126252"
   },
   {
    "wf": "tower-gate.yml",
@@ -22,100 +22,100 @@
   },
   {
    "wf": "verify.yml",
-   "fails": 4,
-   "url": "https://github.com/atomeam/void-loop/actions/runs/45110017670"
+   "fails": 8,
+   "url": "https://github.com/atomeam/void-loop/actions/runs/45135703317"
   }
  ],
  "held": [
   {
-   "id": "mvbl52gd",
-   "why": "store-gap.yml is broken (5 failed runs); its repair is queued"
+   "id": "want-guard-hourly-deploy-green",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mvu167w7",
-   "why": "store-gap.yml is broken (5 failed runs); its repair is queued"
+   "id": "want-idea-298bf37d16",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mveb8rsi",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "want-idea-f167636764",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mveb8svc",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "want-idea-ac2885447b",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mvfu4evy",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "want-exam-definitions",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mvpuq9g6",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "want-idea-f50546a338",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mvpuqaee",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "want-idea-25e717d31f",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mvpuqb4r",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "want-idea-1a3192a173",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mvvjzso8",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "want-idea-5e6497554d",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mw5mm5fm",
-   "why": "build-miss.yml reached its 8 runs today"
+   "id": "mwau0ded",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mvvql4d9",
-   "why": "no executor for route"
+   "id": "mwfe1mby",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mw3fl8fe",
-   "why": "no executor for bot"
+   "id": "mwfmgjzo",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mw3fl8fi",
-   "why": "no executor for bot"
+   "id": "mwfolhc4",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mw3fl8g0",
-   "why": "no executor for bot"
+   "id": "mwcg2h14",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mw3fl8i4",
-   "why": "no executor for bot"
+   "id": "mwcuue69",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mwn99ues",
-   "why": "no executor for route"
+   "id": "mwh2xv4s",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mwazktlm",
-   "why": "no executor for bot"
+   "id": "mwe46i1x",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mwazktnz",
-   "why": "no executor for bot"
+   "id": "mwjdywr5",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mwazktrq",
-   "why": "no executor for bot"
+   "id": "mwjko1yr",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   },
   {
-   "id": "mwazktv3",
-   "why": "no executor for bot"
+   "id": "mwlfrawa",
+   "why": "verse-job.yml is paused (the coder's back-off, #3407, until 12:02 UTC)"
   }
  ],
  "coder": {
   "model": "@cf/google/gemma-4-26b-a4b-it",
   "hour": {
-   "used": 18,
+   "used": 8,
    "cap": 90
   },
   "day": {
-   "used": 215,
+   "used": 313,
    "cap": 360
   },
   "room": true,
@@ -124,22 +124,21 @@
  },
  "handed": {
   "mvbl52gd": 1795392091101,
-  "mvu167w7": 1795328309413,
   "mva30i2e": 1795410798943,
   "mva30j4u": 1795411932870,
   "mwa0agd2": 1795412497870,
-  "mwa0ah54": 1795392091101,
-  "mwdsggtv": 1795390967938,
-  "mwdsgi9n": 1795395468469,
-  "mwdsgj2z": 1795396030380,
-  "mweaagmp": 1795397149435,
-  "mweaah6f": 1795393777348,
-  "mwey8iy6": 1795394904739,
-  "mwme3uk5": 1795394342135,
-  "mwmi5727": 1795397712738,
-  "mwmpup7b": 1795398273885,
-  "mwnbxf5o": 1795398837751,
-  "mwnkyhgw": 1795399400217,
+  "mwa0ah54": 1795414181253,
+  "mwdsggtv": 1795413061801,
+  "mwdsgi9n": 1795417581219,
+  "mwdsgj2z": 1795418143093,
+  "mweaagmp": 1795419291654,
+  "mweaah6f": 1795415878418,
+  "mwey8iy6": 1795417012766,
+  "mwme3uk5": 1795416443061,
+  "mwmi5727": 1795419853340,
+  "mwmpup7b": 1795420420555,
+  "mwnbxf5o": 1795420983484,
+  "mwnkyhgw": 1795421556377,
   "mveb8rsi": 1795392091101,
   "mveb8svc": 1795392655448,
   "mvfu4evy": 1795393215919,
@@ -149,20 +148,20 @@
   "mvvjzso8": 1795395468469,
   "mw5mm5fm": 1795396030380
  },
- "sweptAt": 1795409107755,
- "blueprintsAt": 1795409107755,
+ "sweptAt": 1795420983484,
+ "blueprintsAt": 1795420983484,
  "catchup": {
   "site-test.yml": {
-   "slot": 1795408860000,
-   "startedAt": 1795410236589
+   "slot": 1795419660000,
+   "startedAt": 1795420983484
   },
   "exam.yml": {
    "slot": 1795339020000,
    "startedAt": 1795341311262
   },
   "tower-gate.yml": {
-   "slot": 1795328220000,
-   "startedAt": 1795330559563
+   "slot": 1795414620000,
+   "startedAt": 1795416443061
   },
   "tower-size.yml": {
    "slot": 1795407780000,
@@ -185,20 +184,20 @@
    "startedAt": 1795405714556
   },
   "traffic.yml": {
-   "slot": 1795324620000,
-   "startedAt": 1795326620232
+   "slot": 1795411020000,
+   "startedAt": 1795413061801
   },
   "trialwatch.yml": {
-   "slot": 1795329660000,
-   "startedAt": 1795331694029
+   "slot": 1795416060000,
+   "startedAt": 1795418143093
   },
   "reefwatch.yml": {
-   "slot": 1795330020000,
-   "startedAt": 1795332256297
+   "slot": 1795416420000,
+   "startedAt": 1795418727564
   },
   "site-history.yml": {
-   "slot": 1795330020000,
-   "startedAt": 1795332256297
+   "slot": 1795416420000,
+   "startedAt": 1795418727564
   },
   "rides-live.yml": {
    "slot": 1795357020000,
@@ -209,32 +208,32 @@
    "startedAt": 1795357126519
   },
   "jobs-snapshot.yml": {
-   "slot": 1795328580000,
-   "startedAt": 1795330559563
+   "slot": 1795414980000,
+   "startedAt": 1795417012766
   },
   "misses-snapshot.yml": {
-   "slot": 1795328580000,
-   "startedAt": 1795330559563
+   "slot": 1795414980000,
+   "startedAt": 1795417012766
   },
   "coins-snapshot.yml": {
-   "slot": 1795326060000,
-   "startedAt": 1795328309413
+   "slot": 1795412460000,
+   "startedAt": 1795414748437
   },
   "rea-study.yml": {
-   "slot": 1795324980000,
-   "startedAt": 1795327184249
+   "slot": 1795411380000,
+   "startedAt": 1795413621623
   },
   "subject-eval.yml": {
-   "slot": 1795326060000,
-   "startedAt": 1795328309413
+   "slot": 1795412460000,
+   "startedAt": 1795414748437
   },
   "better.yml": {
-   "slot": 1795330260000,
-   "startedAt": 1795332256297
+   "slot": 1795416660000,
+   "startedAt": 1795418727564
   },
   "lab-sync.yml": {
-   "slot": 1795333020000,
-   "startedAt": 1795335097856
+   "slot": 1795419420000,
+   "startedAt": 1795421556377
   },
   "dispatcher.yml": {
    "slot": 1795353780000,
@@ -245,8 +244,8 @@
    "startedAt": 1795410798943
   },
   "pages-guard.yml": {
-   "slot": 1795411800000,
-   "startedAt": 1795412497870
+   "slot": 1795422600000,
+   "startedAt": 1795423248254
   },
   "autosalvage.yml": {
    "slot": 1795339020000,
@@ -261,8 +260,8 @@
    "startedAt": 1795342439834
   },
   "word-sweep.yml": {
-   "slot": 1795393020000,
-   "startedAt": 1795394904739
+   "slot": 1795414620000,
+   "startedAt": 1795416443061
   },
   "gaps.yml": {
    "slot": 1794845820000
@@ -282,36 +281,38 @@
    "startedAt": 1795328871177
   },
   "review-bench.yml": {
-   "slot": 1794809820000
+   "slot": 1795414620000,
+   "startedAt": 1795418727564
   },
   "free-pics-probe.yml": {
-   "slot": 1794806220000
+   "slot": 1795411020000,
+   "startedAt": 1795414748437
   },
   "tower-rank.yml": {
    "slot": 1793683020000
   },
   "verse-watch.yml": {
-   "slot": 1795408620000,
-   "startedAt": 1795410236589
+   "slot": 1795419420000,
+   "startedAt": 1795420983484
   },
   "growth-fold.yml": {
-   "slot": 1795408860000,
-   "startedAt": 1795410236589
+   "slot": 1795419660000,
+   "startedAt": 1795420983484
   },
   "arb-record.yml": {
-   "slot": 1795410420000,
-   "startedAt": 1795411364963
+   "slot": 1795421220000,
+   "startedAt": 1795422123585
   }
  },
  "census": {
-  "at": "2026-11-23T03:10:55.553Z",
+  "at": "2026-11-23T06:19:08.437Z",
   "loops": 113,
-  "working": 86,
-  "failing": 9,
+  "working": 88,
+  "failing": 7,
   "behind": 5,
   "idle": 9,
-  "runs24": 872,
-  "minutes24": 4949,
+  "runs24": 880,
+  "minutes24": 5280,
   "costCents24": 0,
   "note": "GitHub Actions on a public repository: standard runner minutes are not billed, so each run costs $0. Models are the free ones first; a paid call is logged by the treasury.",
   "rows": [
@@ -326,18 +327,18 @@
     "scheduled24": 0,
     "lateMin": null,
     "last": {
-     "at": "2026-11-23T02:49:34Z",
-     "event": "push",
-     "result": "pending",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45102390024"
+     "at": "2026-11-23T05:52:15Z",
+     "event": "workflow_dispatch",
+     "result": "in_progress",
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45120456164"
     },
     "seen": 30,
     "ok": 0,
-    "fail": 14,
+    "fail": 15,
     "rate": 0,
-    "streak": 14,
-    "minutesPerRun": 42.9,
-    "minutesPerDay": 1287,
+    "streak": 15,
+    "minutesPerRun": 43.5,
+    "minutesPerDay": 1304,
     "costCentsPerDay": 0,
     "status": "failing"
    },
@@ -350,22 +351,22 @@
     ],
     "onClock": true,
     "expected24": 6,
-    "ran24": 12,
+    "ran24": 10,
     "scheduled24": 3,
-    "lateMin": 78,
+    "lateMin": 70,
     "last": {
-     "at": "2026-11-23T01:16:52Z",
+     "at": "2026-11-23T05:13:48Z",
      "event": "workflow_dispatch",
      "result": "failure",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45093663258"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45116447105"
     },
     "seen": 30,
-    "ok": 26,
-    "fail": 4,
-    "rate": 87,
-    "streak": 4,
-    "minutesPerRun": 0.7,
-    "minutesPerDay": 8,
+    "ok": 25,
+    "fail": 5,
+    "rate": 83,
+    "streak": 5,
+    "minutesPerRun": 0.6,
+    "minutesPerDay": 6,
     "costCentsPerDay": 0,
     "status": "failing"
    },
@@ -426,34 +427,6 @@
     "status": "failing"
    },
    {
-    "wf": "exam.yml",
-    "name": "Outcome exam",
-    "what": "The outcome exam (tools/exam.mjs).",
-    "crons": [
-     "17 9 * * *"
-    ],
-    "onClock": true,
-    "expected24": 1,
-    "ran24": 30,
-    "scheduled24": 0,
-    "lateMin": null,
-    "last": {
-     "at": "2026-11-23T02:59:47Z",
-     "event": "workflow_run",
-     "result": "pending",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45103318704"
-    },
-    "seen": 30,
-    "ok": 3,
-    "fail": 1,
-    "rate": 75,
-    "streak": 1,
-    "minutesPerRun": 36,
-    "minutesPerDay": 1080,
-    "costCentsPerDay": 0,
-    "status": "last run failed"
-   },
-   {
     "wf": "verse-engineer.yml",
     "name": "Verse engineer",
     "what": "Verse's own engineer, on the free model stack the coder already uses (Workers AI, then OpenRouter, Groq, Gemini and Cerebras when those keys exist: the…",
@@ -478,34 +451,6 @@
     "streak": 1,
     "minutesPerRun": 1.3,
     "minutesPerDay": 39,
-    "costCentsPerDay": 0,
-    "status": "last run failed"
-   },
-   {
-    "wf": "verse-watch.yml",
-    "name": "Verse watch",
-    "what": "Verse watches TV and listens to the radio on its own, to learn (owner, 2026-10-30: \"make it so verse can watch tv or listen to the radio on its own to learn…",
-    "crons": [
-     "37 * * * *"
-    ],
-    "onClock": true,
-    "expected24": 24,
-    "ran24": 25,
-    "scheduled24": 3,
-    "lateMin": 38,
-    "last": {
-     "at": "2026-11-23T03:01:58Z",
-     "event": "workflow_dispatch",
-     "result": "failure",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45103538438"
-    },
-    "seen": 30,
-    "ok": 27,
-    "fail": 3,
-    "rate": 90,
-    "streak": 1,
-    "minutesPerRun": 2.2,
-    "minutesPerDay": 55,
     "costCentsPerDay": 0,
     "status": "last run failed"
    },
@@ -578,8 +523,8 @@
     ],
     "onClock": false,
     "expected24": 27,
-    "ran24": 6,
-    "scheduled24": 6,
+    "ran24": 5,
+    "scheduled24": 5,
     "lateMin": 32,
     "last": {
      "at": "2026-11-23T00:45:51Z",
@@ -593,35 +538,7 @@
     "rate": 100,
     "streak": 0,
     "minutesPerRun": 0.3,
-    "minutesPerDay": 2,
-    "costCentsPerDay": 0,
-    "status": "behind"
-   },
-   {
-    "wf": "bot-factory.yml",
-    "name": "bot-factory",
-    "what": "The bot factory.",
-    "crons": [
-     "17 * * * *"
-    ],
-    "onClock": false,
-    "expected24": 24,
-    "ran24": 4,
-    "scheduled24": 4,
-    "lateMin": 32,
-    "last": {
-     "at": "2026-11-23T00:54:24Z",
-     "event": "schedule",
-     "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45091482200"
-    },
-    "seen": 30,
-    "ok": 30,
-    "fail": 0,
-    "rate": 100,
-    "streak": 0,
-    "minutesPerRun": 0.4,
-    "minutesPerDay": 2,
+    "minutesPerDay": 1,
     "costCentsPerDay": 0,
     "status": "behind"
    },
@@ -650,6 +567,34 @@
     "streak": 0,
     "minutesPerRun": 0.6,
     "minutesPerDay": 2,
+    "costCentsPerDay": 0,
+    "status": "behind"
+   },
+   {
+    "wf": "bot-factory.yml",
+    "name": "bot-factory",
+    "what": "The bot factory.",
+    "crons": [
+     "17 * * * *"
+    ],
+    "onClock": false,
+    "expected24": 24,
+    "ran24": 3,
+    "scheduled24": 3,
+    "lateMin": 32,
+    "last": {
+     "at": "2026-11-23T00:54:24Z",
+     "event": "schedule",
+     "result": "success",
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45091482200"
+    },
+    "seen": 30,
+    "ok": 30,
+    "fail": 0,
+    "rate": 100,
+    "streak": 0,
+    "minutesPerRun": 0.4,
+    "minutesPerDay": 1,
     "costCentsPerDay": 0,
     "status": "behind"
    },
@@ -762,18 +707,18 @@
     "scheduled24": 0,
     "lateMin": null,
     "last": {
-     "at": "2026-11-23T03:03:16Z",
+     "at": "2026-11-23T05:48:13Z",
      "event": "workflow_run",
      "result": "skipped",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45103661802"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45120040033"
     },
     "seen": 30,
-    "ok": 0,
+    "ok": 2,
     "fail": 0,
-    "rate": null,
+    "rate": 100,
     "streak": 0,
-    "minutesPerRun": 0,
-    "minutesPerDay": 0,
+    "minutesPerRun": 0.4,
+    "minutesPerDay": 12,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -787,13 +732,13 @@
     "onClock": true,
     "expected24": 48,
     "ran24": 30,
-    "scheduled24": 3,
+    "scheduled24": 2,
     "lateMin": 19,
     "last": {
-     "at": "2026-11-23T02:52:42Z",
+     "at": "2026-11-23T06:00:51Z",
      "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45102676924"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45121322679"
     },
     "seen": 30,
     "ok": 30,
@@ -816,10 +761,10 @@
     "scheduled24": 0,
     "lateMin": null,
     "last": {
-     "at": "2026-11-23T03:06:09Z",
+     "at": "2026-11-23T06:06:27Z",
      "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45103948780"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45121924224"
     },
     "seen": 30,
     "ok": 30,
@@ -827,7 +772,7 @@
     "rate": 100,
     "streak": 0,
     "minutesPerRun": 0.7,
-    "minutesPerDay": 21,
+    "minutesPerDay": 20,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -842,21 +787,21 @@
     "onClock": false,
     "expected24": 25,
     "ran24": 30,
-    "scheduled24": 1,
-    "lateMin": 35,
+    "scheduled24": 0,
+    "lateMin": null,
     "last": {
-     "at": "2026-11-23T03:11:15Z",
+     "at": "2026-11-23T06:00:57Z",
      "event": "workflow_dispatch",
-     "result": "cancelled",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45104470620"
+     "result": "success",
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45121334068"
     },
     "seen": 30,
-    "ok": 22,
+    "ok": 26,
     "fail": 0,
     "rate": 100,
     "streak": 0,
-    "minutesPerRun": 0.9,
-    "minutesPerDay": 28,
+    "minutesPerRun": 0.6,
+    "minutesPerDay": 18,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -871,18 +816,46 @@
     "scheduled24": 0,
     "lateMin": null,
     "last": {
-     "at": "2026-11-23T03:02:43Z",
+     "at": "2026-11-23T06:02:59Z",
      "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45103608262"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45121550518"
     },
     "seen": 30,
     "ok": 23,
     "fail": 0,
     "rate": 100,
     "streak": 0,
-    "minutesPerRun": 4.5,
-    "minutesPerDay": 136,
+    "minutesPerRun": 4.4,
+    "minutesPerDay": 132,
+    "costCentsPerDay": 0,
+    "status": "working"
+   },
+   {
+    "wf": "exam.yml",
+    "name": "Outcome exam",
+    "what": "The outcome exam (tools/exam.mjs).",
+    "crons": [
+     "17 9 * * *"
+    ],
+    "onClock": true,
+    "expected24": 1,
+    "ran24": 30,
+    "scheduled24": 0,
+    "lateMin": null,
+    "last": {
+     "at": "2026-11-23T02:59:47Z",
+     "event": "workflow_run",
+     "result": "success",
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45103318704"
+    },
+    "seen": 30,
+    "ok": 4,
+    "fail": 1,
+    "rate": 80,
+    "streak": 0,
+    "minutesPerRun": 47.2,
+    "minutesPerDay": 1416,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -897,10 +870,10 @@
     "scheduled24": 0,
     "lateMin": null,
     "last": {
-     "at": "2026-11-23T03:06:05Z",
+     "at": "2026-11-23T06:06:24Z",
      "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45103941793"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45121917221"
     },
     "seen": 30,
     "ok": 30,
@@ -908,7 +881,7 @@
     "rate": 100,
     "streak": 0,
     "minutesPerRun": 0.9,
-    "minutesPerDay": 26,
+    "minutesPerDay": 27,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -924,12 +897,12 @@
     "expected24": 168,
     "ran24": 30,
     "scheduled24": 1,
-    "lateMin": 0,
+    "lateMin": 3,
     "last": {
-     "at": "2026-11-23T03:10:34Z",
+     "at": "2026-11-23T06:18:43Z",
      "event": "workflow_dispatch",
      "result": "in_progress",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45104399733"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45123244696"
     },
     "seen": 30,
     "ok": 28,
@@ -937,7 +910,7 @@
     "rate": 100,
     "streak": 0,
     "minutesPerRun": 9.5,
-    "minutesPerDay": 285,
+    "minutesPerDay": 286,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -952,18 +925,18 @@
     "scheduled24": 0,
     "lateMin": null,
     "last": {
-     "at": "2026-11-23T03:06:03Z",
+     "at": "2026-11-23T06:06:22Z",
      "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45103938414"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45121913743"
     },
     "seen": 30,
     "ok": 18,
     "fail": 0,
     "rate": 100,
     "streak": 0,
-    "minutesPerRun": 1.3,
-    "minutesPerDay": 40,
+    "minutesPerRun": 1.4,
+    "minutesPerDay": 41,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -978,10 +951,10 @@
     "scheduled24": 0,
     "lateMin": null,
     "last": {
-     "at": "2026-11-23T03:06:07Z",
+     "at": "2026-11-23T06:06:25Z",
      "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45103945387"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45121920519"
     },
     "seen": 30,
     "ok": 29,
@@ -1003,21 +976,21 @@
     "onClock": true,
     "expected24": 96,
     "ran24": 30,
-    "scheduled24": 1,
+    "scheduled24": 2,
     "lateMin": 12,
     "last": {
-     "at": "2026-11-23T03:11:23Z",
-     "event": "workflow_dispatch",
-     "result": "in_progress",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45104483205"
+     "at": "2026-11-23T05:47:46Z",
+     "event": "schedule",
+     "result": "success",
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45119992603"
     },
     "seen": 30,
-    "ok": 25,
+    "ok": 26,
     "fail": 0,
     "rate": 100,
     "streak": 0,
     "minutesPerRun": 1,
-    "minutesPerDay": 30,
+    "minutesPerDay": 29,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -1032,18 +1005,18 @@
     "scheduled24": 0,
     "lateMin": null,
     "last": {
-     "at": "2026-11-23T03:09:29Z",
+     "at": "2026-11-23T05:52:08Z",
      "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45104284930"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45120445552"
     },
     "seen": 30,
     "ok": 30,
     "fail": 0,
     "rate": 100,
     "streak": 0,
-    "minutesPerRun": 1.9,
-    "minutesPerDay": 56,
+    "minutesPerRun": 2,
+    "minutesPerDay": 60,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -1057,21 +1030,21 @@
     "onClock": false,
     "expected24": 12,
     "ran24": 30,
-    "scheduled24": 1,
+    "scheduled24": 2,
     "lateMin": 76,
     "last": {
-     "at": "2026-11-23T02:03:46Z",
+     "at": "2026-11-23T06:10:03Z",
      "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45098022454"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45122304435"
     },
     "seen": 30,
     "ok": 30,
     "fail": 0,
     "rate": 100,
     "streak": 0,
-    "minutesPerRun": 0.9,
-    "minutesPerDay": 28,
+    "minutesPerRun": 1,
+    "minutesPerDay": 29,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -1111,21 +1084,21 @@
     "onClock": true,
     "expected24": 24,
     "ran24": 30,
-    "scheduled24": 2,
-    "lateMin": 35,
+    "scheduled24": 1,
+    "lateMin": 16,
     "last": {
-     "at": "2026-11-23T02:59:47Z",
-     "event": "workflow_run",
+     "at": "2026-11-23T06:10:07Z",
+     "event": "workflow_dispatch",
      "result": "in_progress",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45103318685"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45122311429"
     },
     "seen": 30,
-    "ok": 7,
+    "ok": 9,
     "fail": 0,
     "rate": 100,
     "streak": 0,
-    "minutesPerRun": 30.4,
-    "minutesPerDay": 913,
+    "minutesPerRun": 28.7,
+    "minutesPerDay": 861,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -1158,6 +1131,32 @@
     "status": "working"
    },
    {
+    "wf": "verse-job.yml",
+    "name": "Verse job",
+    "what": "One queue job through Verse's own coding agent (tools/verse-job.mjs; docs/playbooks/conductor.md).",
+    "crons": [],
+    "onClock": false,
+    "expected24": 0,
+    "ran24": 30,
+    "scheduled24": 0,
+    "lateMin": null,
+    "last": {
+     "at": "2026-11-23T06:00:42Z",
+     "event": "workflow_dispatch",
+     "result": "success",
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45121304557"
+    },
+    "seen": 30,
+    "ok": 28,
+    "fail": 2,
+    "rate": 93,
+    "streak": 0,
+    "minutesPerRun": 4.2,
+    "minutesPerDay": 127,
+    "costCentsPerDay": 0,
+    "status": "working"
+   },
+   {
     "wf": "void-tick.yml",
     "name": "Verse's clock",
     "what": "The clock for Verse's own automations (lib/automations.js, functions/api/automations/tick.js): every 15 minutes it asks a-to-mind.com to run the scheduled…",
@@ -1170,10 +1169,10 @@
     "scheduled24": 1,
     "lateMin": 15,
     "last": {
-     "at": "2026-11-23T03:11:21Z",
+     "at": "2026-11-23T06:19:31Z",
      "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45104480471"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45123330921"
     },
     "seen": 30,
     "ok": 30,
@@ -1198,18 +1197,18 @@
     "scheduled24": 1,
     "lateMin": 4,
     "last": {
-     "at": "2026-11-23T03:06:11Z",
+     "at": "2026-11-23T06:06:29Z",
      "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45103952319"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45121927600"
     },
     "seen": 30,
     "ok": 30,
     "fail": 0,
     "rate": 100,
     "streak": 0,
-    "minutesPerRun": 0.9,
-    "minutesPerDay": 26,
+    "minutesPerRun": 0.8,
+    "minutesPerDay": 25,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -1226,10 +1225,10 @@
     "scheduled24": 3,
     "lateMin": 39,
     "last": {
-     "at": "2026-11-23T03:02:00Z",
+     "at": "2026-11-23T06:10:09Z",
      "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45103541083"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45122315667"
     },
     "seen": 30,
     "ok": 30,
@@ -1242,28 +1241,30 @@
     "status": "working"
    },
    {
-    "wf": "verse-job.yml",
-    "name": "Verse job",
-    "what": "One queue job through Verse's own coding agent (tools/verse-job.mjs; docs/playbooks/conductor.md).",
-    "crons": [],
-    "onClock": false,
-    "expected24": 0,
-    "ran24": 18,
-    "scheduled24": 0,
-    "lateMin": null,
+    "wf": "verse-watch.yml",
+    "name": "Verse watch",
+    "what": "Verse watches TV and listens to the radio on its own, to learn (owner, 2026-10-30: \"make it so verse can watch tv or listen to the radio on its own to learn…",
+    "crons": [
+     "37 * * * *"
+    ],
+    "onClock": true,
+    "expected24": 24,
+    "ran24": 25,
+    "scheduled24": 3,
+    "lateMin": 38,
     "last": {
-     "at": "2026-11-23T03:11:19Z",
+     "at": "2026-11-23T06:00:49Z",
      "event": "workflow_dispatch",
-     "result": "in_progress",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45104476291"
+     "result": "success",
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45121318914"
     },
     "seen": 30,
-    "ok": 26,
+    "ok": 27,
     "fail": 3,
     "rate": 90,
     "streak": 0,
-    "minutesPerRun": 5,
-    "minutesPerDay": 90,
+    "minutesPerRun": 2.2,
+    "minutesPerDay": 56,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -1277,21 +1278,21 @@
     "onClock": false,
     "expected24": 12,
     "ran24": 14,
-    "scheduled24": 3,
+    "scheduled24": 4,
     "lateMin": 69,
     "last": {
-     "at": "2026-11-23T02:52:37Z",
+     "at": "2026-11-23T06:00:44Z",
      "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45102670432"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45121307291"
     },
     "seen": 30,
     "ok": 27,
     "fail": 3,
     "rate": 90,
     "streak": 0,
-    "minutesPerRun": 2.9,
-    "minutesPerDay": 40,
+    "minutesPerRun": 2.3,
+    "minutesPerDay": 32,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -1336,10 +1337,10 @@
     "scheduled24": 1,
     "lateMin": 508,
     "last": {
-     "at": "2026-11-23T03:01:55Z",
+     "at": "2026-11-23T05:04:16Z",
      "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45103532424"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45115490001"
     },
     "seen": 30,
     "ok": 25,
@@ -1347,7 +1348,7 @@
     "rate": 83,
     "streak": 0,
     "minutesPerRun": 1.6,
-    "minutesPerDay": 19,
+    "minutesPerDay": 20,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -1510,17 +1511,17 @@
     "scheduled24": 1,
     "lateMin": 515,
     "last": {
-     "at": "2026-11-22T20:20:15Z",
+     "at": "2026-11-23T04:54:59Z",
      "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45065859063"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45114616415"
     },
     "seen": 30,
     "ok": 29,
     "fail": 0,
     "rate": 100,
     "streak": 0,
-    "minutesPerRun": 6.8,
+    "minutesPerRun": 6.7,
     "minutesPerDay": 27,
     "costCentsPerDay": 0,
     "status": "working"
@@ -1622,13 +1623,13 @@
     "scheduled24": 1,
     "lateMin": 455,
     "last": {
-     "at": "2026-11-22T13:35:41Z",
-     "event": "schedule",
-     "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45028307045"
+     "at": "2026-11-23T06:19:33Z",
+     "event": "workflow_dispatch",
+     "result": "in_progress",
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45123333422"
     },
     "seen": 30,
-    "ok": 30,
+    "ok": 29,
     "fail": 0,
     "rate": 100,
     "streak": 0,
@@ -1734,18 +1735,18 @@
     "scheduled24": 1,
     "lateMin": 463,
     "last": {
-     "at": "2026-11-22T11:26:36Z",
-     "event": "schedule",
+     "at": "2026-11-23T03:48:55Z",
+     "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45017343943"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45108169356"
     },
-    "seen": 25,
-    "ok": 25,
+    "seen": 26,
+    "ok": 26,
     "fail": 0,
     "rate": 100,
     "streak": 0,
-    "minutesPerRun": 0.3,
-    "minutesPerDay": 1,
+    "minutesPerRun": 0.2,
+    "minutesPerDay": 0,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -1803,34 +1804,6 @@
     "streak": 0,
     "minutesPerRun": 0.5,
     "minutesPerDay": 1,
-    "costCentsPerDay": 0,
-    "status": "working"
-   },
-   {
-    "wf": "mirror.yml",
-    "name": "Mirror",
-    "what": "Once a week, copy the non-secret knowledge of this repo (skills, the growth ledger, docs, domains) to a second git host.",
-    "crons": [
-     "41 3 * * 0"
-    ],
-    "onClock": true,
-    "expected24": 1,
-    "ran24": 2,
-    "scheduled24": 1,
-    "lateMin": 424,
-    "last": {
-     "at": "2026-11-22T11:58:33Z",
-     "event": "schedule",
-     "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45019904110"
-    },
-    "seen": 8,
-    "ok": 7,
-    "fail": 1,
-    "rate": 88,
-    "streak": 0,
-    "minutesPerRun": 0.2,
-    "minutesPerDay": 0,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -1903,10 +1876,10 @@
     "scheduled24": 1,
     "lateMin": 464,
     "last": {
-     "at": "2026-11-22T13:27:36Z",
-     "event": "schedule",
+     "at": "2026-11-23T06:00:47Z",
+     "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45027591274"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45121314964"
     },
     "seen": 30,
     "ok": 30,
@@ -2066,7 +2039,7 @@
      "23 5 * * 0"
     ],
     "onClock": true,
-    "expected24": 1,
+    "expected24": 0,
     "ran24": 2,
     "scheduled24": 1,
     "lateMin": 447,
@@ -2127,13 +2100,13 @@
     "scheduled24": 1,
     "lateMin": 455,
     "last": {
-     "at": "2026-11-22T13:35:51Z",
-     "event": "schedule",
-     "result": "cancelled",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45028320967"
+     "at": "2026-11-23T06:19:35Z",
+     "event": "workflow_dispatch",
+     "result": "in_progress",
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45123336844"
     },
     "seen": 30,
-    "ok": 29,
+    "ok": 28,
     "fail": 0,
     "rate": 100,
     "streak": 0,
@@ -2183,10 +2156,10 @@
     "scheduled24": 1,
     "lateMin": 463,
     "last": {
-     "at": "2026-11-22T13:23:14Z",
-     "event": "schedule",
+     "at": "2026-11-23T05:51:28Z",
+     "event": "workflow_dispatch",
      "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/45027215335"
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45120378058"
     },
     "seen": 30,
     "ok": 30,
@@ -2481,6 +2454,34 @@
     "status": "working"
    },
    {
+    "wf": "free-pics-probe.yml",
+    "name": "Free pictures probe",
+    "what": "The free picture sources, asked once each from a runner (the build sandbox cannot reach them): tools/free-pics-probe.mjs writes domains/free-pics.probe.json…",
+    "crons": [
+     "17 5 * * 1"
+    ],
+    "onClock": true,
+    "expected24": 1,
+    "ran24": 1,
+    "scheduled24": 0,
+    "lateMin": 499,
+    "last": {
+     "at": "2026-11-23T06:19:37Z",
+     "event": "workflow_dispatch",
+     "result": "in_progress",
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45123339959"
+    },
+    "seen": 9,
+    "ok": 8,
+    "fail": 0,
+    "rate": 100,
+    "streak": 0,
+    "minutesPerRun": 0.7,
+    "minutesPerDay": 1,
+    "costCentsPerDay": 0,
+    "status": "working"
+   },
+   {
     "wf": "idea-engine.yml",
     "name": "Idea engine",
     "what": "The one growth loop, once a day.",
@@ -2533,6 +2534,34 @@
     "streak": 0,
     "minutesPerRun": 0.7,
     "minutesPerDay": 1,
+    "costCentsPerDay": 0,
+    "status": "working"
+   },
+   {
+    "wf": "mirror.yml",
+    "name": "Mirror",
+    "what": "Once a week, copy the non-secret knowledge of this repo (skills, the growth ledger, docs, domains) to a second git host.",
+    "crons": [
+     "41 3 * * 0"
+    ],
+    "onClock": true,
+    "expected24": 0,
+    "ran24": 1,
+    "scheduled24": 1,
+    "lateMin": 424,
+    "last": {
+     "at": "2026-11-22T11:58:33Z",
+     "event": "schedule",
+     "result": "success",
+     "url": "https://github.com/atomeam/void-loop/actions/runs/45019904110"
+    },
+    "seen": 8,
+    "ok": 7,
+    "fail": 1,
+    "rate": 88,
+    "streak": 0,
+    "minutesPerRun": 0.2,
+    "minutesPerDay": 0,
     "costCentsPerDay": 0,
     "status": "working"
    },
@@ -2732,7 +2761,7 @@
      "41 4 * * 1"
     ],
     "onClock": false,
-    "expected24": 0,
+    "expected24": 1,
     "ran24": 0,
     "scheduled24": 0,
     "lateMin": 508,
@@ -2748,34 +2777,6 @@
     "rate": 100,
     "streak": 0,
     "minutesPerRun": 0.6,
-    "minutesPerDay": 0,
-    "costCentsPerDay": 0,
-    "status": "working"
-   },
-   {
-    "wf": "free-pics-probe.yml",
-    "name": "Free pictures probe",
-    "what": "The free picture sources, asked once each from a runner (the build sandbox cannot reach them): tools/free-pics-probe.mjs writes domains/free-pics.probe.json…",
-    "crons": [
-     "17 5 * * 1"
-    ],
-    "onClock": true,
-    "expected24": 0,
-    "ran24": 0,
-    "scheduled24": 0,
-    "lateMin": 499,
-    "last": {
-     "at": "2026-11-16T13:35:44Z",
-     "event": "schedule",
-     "result": "success",
-     "url": "https://github.com/atomeam/void-loop/actions/runs/43877273106"
-    },
-    "seen": 8,
-    "ok": 8,
-    "fail": 0,
-    "rate": 100,
-    "streak": 0,
-    "minutesPerRun": 0.7,
     "minutesPerDay": 0,
     "costCentsPerDay": 0,
     "status": "working"
@@ -2896,7 +2897,7 @@
      "17 6 * * 1"
     ],
     "onClock": true,
-    "expected24": 0,
+    "expected24": 1,
     "ran24": 0,
     "scheduled24": 0,
     "lateMin": 568,
@@ -3396,8 +3397,8 @@
    }
   ]
  },
- "censusAt": 1795403455553,
- "visitorAt": "2026-11-23T05:05:12Z",
+ "censusAt": 1795414748437,
+ "visitorAt": "2026-11-23T08:14:59Z",
  "visitorFiled": [
   "heal:helper-shows-craft-6fca",
   "review:2667",
@@ -3481,701 +3482,6 @@
   "heal:helper-monitor-receipt"
  ],
  "ticks": [
-  {
-   "at": "2026-11-22T05:50:20.232Z",
-   "open": 500,
-   "started": [],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [
-    "traffic.yml"
-   ],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 480,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T05:59:44.249Z",
-   "open": 500,
-   "started": [],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [
-    "pages-guard.yml",
-    "rea-study.yml",
-    "verse-watch.yml",
-    "arb-record.yml"
-   ],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 480,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T06:09:07.158Z",
-   "open": 500,
-   "started": [
-    {
-     "id": "mvbl52gd",
-     "kind": "store-gap",
-     "wf": "store-gap.yml",
-     "score": 120
-    },
-    {
-     "id": "mweaah6f",
-     "kind": "probe",
-     "wf": "propose-fix.yml",
-     "score": 58
-    }
-   ],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [
-    "site-test.yml",
-    "growth-fold.yml"
-   ],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 480,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T06:18:29.413Z",
-   "open": 500,
-   "started": [
-    {
-     "id": "mvu167w7",
-     "kind": "store-gap",
-     "wf": "store-gap.yml",
-     "score": 120
-    },
-    {
-     "id": "mwme3uk5",
-     "kind": "probe",
-     "wf": "propose-fix.yml",
-     "score": 67
-    }
-   ],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [
-    "coins-snapshot.yml",
-    "subject-eval.yml"
-   ],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 480,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T06:27:51.177Z",
-   "open": 500,
-   "started": [
-    {
-     "id": "want-guard-hourly-deploy-green",
-     "kind": "heal",
-     "wf": "verse-job.yml",
-     "score": 125
-    },
-    {
-     "id": "mwey8iy6",
-     "kind": "probe",
-     "wf": "propose-fix.yml",
-     "score": 58
-    }
-   ],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [
-    "pages-guard.yml",
-    "arb-record.yml",
-    "site-re.yml"
-   ],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 24,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T06:37:14.358Z",
-   "open": 500,
-   "started": [
-    {
-     "id": "want-exam-definitions",
-     "kind": "gap",
-     "wf": "verse-job.yml",
-     "score": 85
-    },
-    {
-     "id": "mwdsgi9n",
-     "kind": "probe",
-     "wf": "propose-fix.yml",
-     "score": 34
-    }
-   ],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": true,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 24,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T06:46:33.664Z",
-   "open": 500,
-   "started": [
-    {
-     "id": "mwe4pvdh",
-     "kind": "heal",
-     "wf": "verse-job.yml",
-     "score": 139
-    },
-    {
-     "id": "mwdsgj2z",
-     "kind": "probe",
-     "wf": "propose-fix.yml",
-     "score": 34
-    }
-   ],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [],
-   "cancelled": [],
-   "sweep": true,
-   "blueprints": 0,
-   "held": 24,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T06:55:59.563Z",
-   "open": 500,
-   "started": [
-    {
-     "id": "mwe4pvdh",
-     "kind": "heal",
-     "wf": "verse-job.yml",
-     "score": 139
-    }
-   ],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [
-    "pages-guard.yml",
-    "tower-gate.yml",
-    "jobs-snapshot.yml",
-    "misses-snapshot.yml",
-    "word-sweep.yml",
-    "arb-record.yml"
-   ],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 24,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T07:05:27.249Z",
-   "open": 500,
-   "started": [
-    {
-     "id": "mwe4pvdh",
-     "kind": "heal",
-     "wf": "verse-job.yml",
-     "score": 139
-    },
-    {
-     "id": "mweaagmp",
-     "kind": "probe",
-     "wf": "propose-fix.yml",
-     "score": 33
-    }
-   ],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": true,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [
-    "site-test.yml",
-    "verse-watch.yml",
-    "growth-fold.yml"
-   ],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 24,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T07:14:54.029Z",
-   "open": 500,
-   "started": [
-    {
-     "id": "mwe4pvdh",
-     "kind": "heal",
-     "wf": "verse-job.yml",
-     "score": 119
-    },
-    {
-     "id": "mwmi5727",
-     "kind": "probe",
-     "wf": "propose-fix.yml",
-     "score": 22
-    }
-   ],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [
-    "pages-guard.yml",
-    "trialwatch.yml"
-   ],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 24,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T07:24:16.297Z",
-   "open": 500,
-   "started": [
-    {
-     "id": "mwe5oqe5",
-     "kind": "heal",
-     "wf": "verse-job.yml",
-     "score": 119
-    },
-    {
-     "id": "mwmpup7b",
-     "kind": "probe",
-     "wf": "propose-fix.yml",
-     "score": 22
-    }
-   ],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [
-    "reefwatch.yml",
-    "site-history.yml",
-    "better.yml"
-   ],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 24,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T07:33:39.007Z",
-   "open": 500,
-   "started": [
-    {
-     "id": "mwnbxf5o",
-     "kind": "probe",
-     "wf": "propose-fix.yml",
-     "score": 21
-    }
-   ],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": true,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [],
-   "cancelled": [
-    "site-test.yml#44998266795"
-   ],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 482,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T07:43:06.671Z",
-   "open": 500,
-   "started": [
-    {
-     "id": "mwnkyhgw",
-     "kind": "probe",
-     "wf": "propose-fix.yml",
-     "score": 21
-    }
-   ],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [
-    "pages-guard.yml"
-   ],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 482,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T07:52:43.986Z",
-   "open": 500,
-   "started": [],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [
-    "arb-record.yml"
-   ],
-   "cancelled": [],
-   "sweep": true,
-   "blueprints": 0,
-   "held": 482,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T08:02:08.044Z",
-   "open": 500,
-   "started": [],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [
-    "site-test.yml",
-    "verse-watch.yml",
-    "growth-fold.yml"
-   ],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 482,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T08:11:37.856Z",
-   "open": 500,
-   "started": [],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [
-    "pages-guard.yml",
-    "lab-sync.yml"
-   ],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 482,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T08:21:01.750Z",
-   "open": 500,
-   "started": [],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 482,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T08:30:26.677Z",
-   "open": 500,
-   "started": [],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [
-    "arb-record.yml"
-   ],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 482,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T08:39:45.612Z",
-   "open": 500,
-   "started": [],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 482,
-   "warnings": 0
-  },
-  {
-   "at": "2026-11-22T08:49:17.497Z",
-   "open": 500,
-   "started": [],
-   "requeued": 0,
-   "setAside": 0,
-   "healed": [
-    "tower-gate.yml",
-    "verify.yml"
-   ],
-   "probe": false,
-   "grow": false,
-   "design": false,
-   "will": false,
-   "lap": false,
-   "revived": [
-    "void-tick.yml"
-   ],
-   "daily": [],
-   "catchup": [],
-   "cancelled": [],
-   "sweep": false,
-   "blueprints": 0,
-   "held": 482,
-   "warnings": 0
-  },
   {
    "at": "2026-11-22T08:58:42.575Z",
    "open": 500,
@@ -8502,6 +7808,694 @@
    "sweep": false,
    "blueprints": 0,
    "held": 24,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T05:51:01.801Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwfe1mby",
+     "kind": "heal",
+     "wf": "verse-job.yml",
+     "score": 127
+    },
+    {
+     "id": "mwdsggtv",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 61
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "traffic.yml"
+   ],
+   "cancelled": [],
+   "sweep": true,
+   "blueprints": 0,
+   "held": 24,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T06:00:21.623Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwfe1mby",
+     "kind": "heal",
+     "wf": "verse-job.yml",
+     "score": 127
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": true,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "rea-study.yml",
+    "verse-watch.yml",
+    "arb-record.yml"
+   ],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 24,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T06:09:41.253Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwa0ah54",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 41
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "site-test.yml",
+    "growth-fold.yml"
+   ],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T06:19:08.437Z",
+   "open": 500,
+   "started": [],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "coins-snapshot.yml",
+    "subject-eval.yml",
+    "free-pics-probe.yml"
+   ],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T06:28:34.631Z",
+   "open": 500,
+   "started": [],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "pages-guard.yml",
+    "arb-record.yml"
+   ],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T06:37:58.418Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mweaah6f",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 60
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T06:47:23.061Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwme3uk5",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 69
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "tower-gate.yml",
+    "word-sweep.yml"
+   ],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T06:56:52.766Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwey8iy6",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 60
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "pages-guard.yml",
+    "jobs-snapshot.yml",
+    "misses-snapshot.yml",
+    "arb-record.yml"
+   ],
+   "cancelled": [],
+   "sweep": true,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T07:06:21.219Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwdsgi9n",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 36
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": true,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "verse-watch.yml",
+    "growth-fold.yml"
+   ],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T07:15:43.093Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwdsgj2z",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 36
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "trialwatch.yml"
+   ],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T07:25:27.564Z",
+   "open": 500,
+   "started": [],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "pages-guard.yml",
+    "reefwatch.yml",
+    "site-history.yml",
+    "better.yml",
+    "arb-record.yml",
+    "review-bench.yml"
+   ],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T07:34:51.654Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mweaagmp",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 36
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T07:44:13.340Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwmi5727",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 24
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "pages-guard.yml"
+   ],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T07:53:40.555Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwmpup7b",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 24
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "arb-record.yml"
+   ],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T08:03:03.484Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwnbxf5o",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 23
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": true,
+   "will": true,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "site-test.yml",
+    "verse-watch.yml",
+    "growth-fold.yml"
+   ],
+   "cancelled": [],
+   "sweep": true,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T08:12:36.377Z",
+   "open": 500,
+   "started": [
+    {
+     "id": "mwnkyhgw",
+     "kind": "probe",
+     "wf": "propose-fix.yml",
+     "score": 23
+    }
+   ],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "pages-guard.yml",
+    "lab-sync.yml"
+   ],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T08:22:03.585Z",
+   "open": 500,
+   "started": [],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "arb-record.yml"
+   ],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T08:31:24.623Z",
+   "open": 500,
+   "started": [],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T08:40:48.254Z",
+   "open": 500,
+   "started": [],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [
+    "pages-guard.yml"
+   ],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
+   "warnings": 0
+  },
+  {
+   "at": "2026-11-23T08:50:11.014Z",
+   "open": 500,
+   "started": [],
+   "requeued": 0,
+   "setAside": 0,
+   "healed": [
+    "store-gap.yml",
+    "tower-gate.yml",
+    "verify.yml"
+   ],
+   "probe": false,
+   "grow": false,
+   "design": false,
+   "will": false,
+   "lap": false,
+   "revived": [
+    "void-tick.yml"
+   ],
+   "daily": [],
+   "catchup": [],
+   "cancelled": [],
+   "sweep": false,
+   "blueprints": 0,
+   "held": 482,
    "warnings": 0
   }
  ]
