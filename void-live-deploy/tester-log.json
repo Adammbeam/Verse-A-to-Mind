@@ -3,12 +3,77 @@
  "cases": 164,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 212,
-  "file": 41,
+  "visitor": 211,
+  "file": 42,
   "grow": 43,
   "tighten": 4
  },
  "runs": [
+  {
+   "at": "2026-11-23T19:18:44Z",
+   "passed": 149,
+   "of": 165,
+   "kind": "file",
+   "ms": 443,
+   "note": "fix: \"play chess\" fps 4 < 5",
+   "failed": [
+    {
+     "ask": "play chess",
+     "why": "fps 4 < 5"
+    },
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "yo bitcoin price",
+     "why": "console: Failed to load resource: the server responded with a status of 503 ()"
+    },
+    {
+     "ask": "dyslexia friendly font",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "yo find me a sci-fi film from the 80s",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "fimls by kurosawa",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "yo draw yourself",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "draw yourself pls",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "bridge these inputs",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "what stadium do the yankees play in",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-23T19:04:49Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-23T17:03:01Z",
    "passed": 0,
@@ -389,20 +454,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-23T05:05:12Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-23T04:08:32Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -476,12 +527,12 @@
   {
    "from": "2026-11-16",
    "runs": 243,
-   "passed": 10293,
-   "of": 12049,
+   "passed": 10442,
+   "of": 12214,
    "broken": 7,
    "brokenOf": 1148,
    "brokenPassed": 23,
-   "ms": 401
+   "ms": 408
   }
  ],
  "seen": {
@@ -950,6 +1001,7 @@
   "skill:business-card": "2026-11-21T23:21:16Z",
   "skill:resume": "2026-11-21T23:21:16Z",
   "skill:trivia": "2026-11-22T05:15:02Z",
-  "skill:inflation": "2026-11-23T14:43:18Z"
+  "skill:inflation": "2026-11-23T14:43:18Z",
+  "skill:handoff-confidence": "2026-11-23T19:18:44Z"
  }
 }
