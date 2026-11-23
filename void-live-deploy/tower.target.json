@@ -1,10 +1,10 @@
 {
  "about": "The site Verse is working on. It counts once every check against the live site is won and Verse has its own working page for the job; the crawl's gaps go to the build queue. A site with no progress for 3 days gives way: its gaps go to the build queue and the next closest site takes over (docs/TOWER-RULES.md, tools/tower-target.mjs).",
- "id": "image boards: 2chan.net",
- "since": "2026-11-20",
- "n": 13,
- "assim": 85,
- "progressAt": "2026-11-20",
+ "id": "password strength",
+ "since": "2026-11-23",
+ "n": 12,
+ "assim": 80,
+ "progressAt": "2026-11-23",
  "requeue": [
   "image boards: 2chan.net",
   "password strength",
@@ -246,6 +246,60 @@
    "aspect": "journey: share the result and reopen it from the link",
    "since": "2026-11-10",
    "job": "retry: script the journey with steps and negative controls"
+  },
+  {
+   "id": "image boards: 2chan.net",
+   "aspect": "feature: webm",
+   "since": "2026-11-23",
+   "job": "build: add webm to /boards/"
+  },
+  {
+   "id": "image boards: 2chan.net",
+   "aspect": "feature: VTuber",
+   "since": "2026-11-23",
+   "job": "build: add VTuber to /boards/"
+  },
+  {
+   "id": "image boards: 2chan.net",
+   "aspect": "feature: 3DCG",
+   "since": "2026-11-23",
+   "job": "build: add 3DCG to /boards/"
+  },
+  {
+   "id": "image boards: 2chan.net",
+   "aspect": "feature: FGO",
+   "since": "2026-11-23",
+   "job": "build: add FGO to /boards/"
+  },
+  {
+   "id": "image boards: 2chan.net",
+   "aspect": "feature: ZOIDS",
+   "since": "2026-11-23",
+   "job": "build: add ZOIDS to /boards/"
+  },
+  {
+   "id": "image boards: 2chan.net",
+   "aspect": "feature: flash",
+   "since": "2026-11-23",
+   "job": "build: add flash to /boards/"
+  },
+  {
+   "id": "image boards: 2chan.net",
+   "aspect": "feature: A grid",
+   "since": "2026-11-23",
+   "job": "build: add A grid to /boards/"
+  },
+  {
+   "id": "image boards: 2chan.net",
+   "aspect": "feature: Upload a file",
+   "since": "2026-11-23",
+   "job": "build: add Upload a file to /boards/"
+  },
+  {
+   "id": "image boards: 2chan.net",
+   "aspect": "feature: Options to tick or choose",
+   "since": "2026-11-23",
+   "job": "build: add Options to tick or choose to /boards/"
   }
  ],
  "skipped": [
@@ -283,6 +337,12 @@
    "id": "tsundere.pw",
    "at": "2026-11-09",
    "why": "tsundere.pw is not a floor: not a studied, real site (docs/TOWER-RULES.md rule 1)"
+  },
+  {
+   "id": "image boards: 2chan.net",
+   "at": "2026-11-23",
+   "stalled": true,
+   "why": "image boards: 2chan.net made no progress for 3 days (13 of 16 checks won, 9 gaps), so its gaps went to the build queue and the climb moved on"
   }
  ],
  "settled": [
@@ -302,7 +362,7 @@
   }
  ],
  "last": {
-  "at": "2026-11-19",
-  "why": "assimilated travel: flightconnections.com (16 of 16 aspects verified)"
+  "at": "2026-11-23",
+  "why": "image boards: 2chan.net made no progress for 3 days (13 of 16 checks won, 9 gaps), so its gaps went to the build queue and the climb moved on"
  }
 }
