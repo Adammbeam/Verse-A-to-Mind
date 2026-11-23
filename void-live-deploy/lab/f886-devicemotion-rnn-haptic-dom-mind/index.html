@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<style>
+body { margin:0; background:#0a0a12; color:#e0e0ff; font-family:system-ui,sans-serif; overflow:hidden; }
+#stage { position:fixed; inset:0; }
+.card {
+  position:absolute; width:70px; height:50px; border-radius:8px; background:rgba(40,60,140,0.85);
+  border:2px solid #6af; display:flex; align-items:center; justify-content:center; font-size:11px;
+  cursor:pointer; user-select:none; transition:transform 0.05s; box-shadow:0 4px 12px rgba(0,0,0,.5);
+}
+.card.rewarded { border-color:#f80; box-shadow:0 0 16px #f80; }
+#hud {
+  position:fixed; top:12px; left:12px; background:rgba(10,12,30,0.9); padding:12px; border-radius:10px;
+  border:1px solid #445; max-width:280px; z-index:100; font-size:13px;
+}
+button { background:#224; color:#cef; border:1px solid #68a; padding:6px 10px; margin:4px 4px 0 0; border-radius:6px; cursor:pointer; }
+button:hover { background:#336; }
+#status { font-size:12px; color:#8af; margin-top:6px; }
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="verse-handoff" content="in: none; out: none">
+<title>DeviceMotion RNN Haptic DOM Mind · Verse lab</title>
+<meta name="description" content="A pure browser-native hybrid embodiment for The Verse: DeviceMotionEvent acceleration (ax/ay/az) is the sole causal sequential input to a tiny local Elman RNN">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Verse">
+<meta property="og:title" content="DeviceMotion RNN Haptic DOM Mind · Verse lab">
+<meta property="og:description" content="A pure browser-native hybrid embodiment for The Verse: DeviceMotionEvent acceleration (ax/ay/az) is the sole causal sequential input to a tiny local Elman RNN">
+<meta property="og:url" content="https://a-to-mind.com/lab/f886-devicemotion-rnn-haptic-dom-mind/">
+<meta property="og:image" content="https://a-to-mind.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://a-to-mind.com/lab/f886-devicemotion-rnn-haptic-dom-mind/">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/lab/lab.css">
+<style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}</style>
+<script src="/visit.js" defer></script>
+</head>
+<body>
+<div id="stage"></div>
+<div id="hud">
+  <h3 style="margin:0 0 8px">F886 Haptic RNN Mind</h3>
+  <p>Tilt or move the device. Cards respond via local Elman RNN. Click to reward. Collisions transfer sealed genomes.</p>
+  <button id="perm">Enable Motion</button>
+  <button id="seal">Seal Best</button>
+  <button id="reset">Reset</button>
+  <div id="status">Ready. Offline-capable.</div>
+</div>
+<script src="app.js"></script>
+<h1 class="vl-sr">DeviceMotion RNN Haptic DOM Mind</h1>
+<footer class="vl-bar"><a href="/lab/">&larr; Lab</a> <a href="/">Ask Verse anything</a> <a class="vl-use" href="/lab/mind-map/" data-tool="Mind map">Use it: Mind map</a></footer><script src="/lab/use-it.js" defer></script>
+</body>
+</html>

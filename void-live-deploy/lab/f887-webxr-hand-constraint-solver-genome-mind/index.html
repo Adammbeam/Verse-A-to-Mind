@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<style>
+  body { margin: 0; background: #0a0a12; color: #eee; font-family: system-ui, sans-serif; overflow: hidden; }
+  #scene { position: absolute; inset: 0; perspective: 800px; transform-style: preserve-3d; }
+  .mass { position: absolute; width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle, #6cf, #048); transform-style: preserve-3d; will-change: transform; pointer-events: auto; }
+  .mass.high { background: radial-gradient(circle, #fc6, #a40); }
+  #hud { position: fixed; top: 12px; left: 12px; background: rgba(0,0,0,.7); padding: 10px 14px; border-radius: 8px; font-size: 13px; z-index: 10; max-width: 280px; }
+  button { background: #248; color: #fff; border: 0; padding: 6px 12px; border-radius: 4px; margin: 4px 4px 0 0; cursor: pointer; }
+  #status { font-size: 11px; opacity: .8; margin-top: 6px; }
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="verse-handoff" content="in: none; out: none">
+<title>WebXR Hand Constraint-Solver Genome Mind · Verse lab</title>
+<meta name="description" content="A spatial multi-agent mind for The Verse: true WebXR hand tracking (or high-fidelity pointer + DeviceOrientation fallback) sets dynamic rest-length targets for a">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Verse">
+<meta property="og:title" content="WebXR Hand Constraint-Solver Genome Mind · Verse lab">
+<meta property="og:description" content="A spatial multi-agent mind for The Verse: true WebXR hand tracking (or high-fidelity pointer + DeviceOrientation fallback) sets dynamic rest-length targets for a">
+<meta property="og:url" content="https://a-to-mind.com/lab/f887-webxr-hand-constraint-solver-genome-mind/">
+<meta property="og:image" content="https://a-to-mind.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://a-to-mind.com/lab/f887-webxr-hand-constraint-solver-genome-mind/">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/lab/lab.css">
+<script src="/lab/needs.js" data-needs="webxr" defer></script>
+<style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}</style>
+<script src="/visit.js" defer></script>
+</head>
+<body>
+<div id="hud">
+  <strong>F887 Constraint-Solver Mind</strong><br>
+  Hand / pointer sets rest lengths. Agents compete & transfer genomes.<br>
+  <button id="seal">Seal Best Genome</button>
+  <button id="reset">Reset</button>
+  <div id="status">Initializing…</div>
+</div>
+<div id="scene"></div>
+<script src="app.js"></script>
+<h1 class="vl-sr">WebXR Hand Constraint-Solver Genome Mind</h1>
+<footer class="vl-bar"><a href="/lab/">&larr; Lab</a> <a href="/">Ask Verse anything</a> <a class="vl-use" href="/lab/level/" data-tool="Spirit level">Use it: Spirit level</a></footer><script src="/lab/use-it.js" defer></script>
+</body>
+</html>
