@@ -1,5 +1,5 @@
 {
- "at": "2026-11-22T06:24:39.465Z",
+ "at": "2026-11-23T06:25:11.358Z",
  "mode": "live",
  "pass": 51,
  "total": 54,
@@ -353,7 +353,9 @@
    "redirect": "Pythagorean theorem",
    "seen": {
     "called": 1,
-    "failed": [],
+    "failed": [
+     "http://127.0.0.1:46813/skills/currency.js net::ERR_ABORTED"
+    ],
     "bad": [],
     "text": "Pythagorean theorem IDEA Relation between sides of a right triangle In mathematics, the Pythagorean theorem or Pythagoras's theorem is a fun …  7 OF 9 FRESH Reply to what I said, or correct me Send Kept on this device only. My self card lists it under Correct me."
    },
@@ -382,7 +384,9 @@
    "redirect": "World War II",
    "seen": {
     "called": 1,
-    "failed": [],
+    "failed": [
+     "http://127.0.0.1:46813/skills/currency.js net::ERR_ABORTED"
+    ],
     "bad": [],
     "text": "World War II IDEA — 1939 World War II, or the Second World War, was a global conflict between two coalitions: the Allies and the Axis powers …  report VERSE Reply to what I said, or correct me Send Kept on this device only. My self card lists it under Correct me."
    },
@@ -453,7 +457,9 @@
    "redirect": "List of Aqua Teen Hunger Force characters",
    "seen": {
     "called": 1,
-    "failed": [],
+    "failed": [
+     "http://127.0.0.1:46813/skills/currency.js net::ERR_ABORTED"
+    ],
     "bad": [],
     "text": "HAPPY TIME HARRY CHARACTER Happy Time Harry (David Cross) – A mean, cynical, and depressed doll Frylock bought for Meatwad due to his low pr …  1 OF 9 FRESH Reply to what I said, or correct me Send Kept on this device only. My self card lists it under Correct me."
    },
@@ -613,7 +619,7 @@
     "guess": "",
     "pic": false,
     "sources": [],
-    "answer": "The Drunk and On Drugs Happy Funtime Hour is a Canadian television sketch comedy series, w"
+    "answer": "Happy Hour is the fifth studio album by experimental music band King Missile, and released"
    },
    "redirect": "none"
   },
@@ -790,7 +796,7 @@
     "sources": [
      "Golden Gate Bridge"
     ],
-    "answer": "The Golden Gate Bridge is a suspension bridge spanning the Golden Gate, the one-mile-wide "
+    "answer": "The San Francisco Golden Gate Bridge is a suspension bridge spanning the Golden Gate, the "
    },
    "redirect": "none"
   },
@@ -837,7 +843,7 @@
   {
    "ask": "how to bake bread",
    "ok": true,
-   "kind": "Skill — Body and mind",
+   "kind": "Answer — from Verse",
    "title": "Rye bread",
    "theme": "",
    "photo": true,
