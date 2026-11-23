@@ -1,5 +1,5 @@
 {
- "at": "2026-11-16T13:35:53.159Z",
+ "at": "2026-11-23T06:19:51.905Z",
  "note": "one polite request per source; no keys, no picture bytes",
  "sources": {
   "commons": {
@@ -8,7 +8,7 @@
    "why": "",
    "query": "football",
    "status": 200,
-   "ms": 659,
+   "ms": 746,
    "via": "primary",
    "rate": {},
    "topKeys": [
@@ -61,7 +61,7 @@
    "why": "",
    "query": "football",
    "status": 200,
-   "ms": 579,
+   "ms": 559,
    "via": "primary",
    "rate": {},
    "topKeys": [
@@ -149,7 +149,7 @@
    "why": "",
    "query": "moon",
    "status": 200,
-   "ms": 250,
+   "ms": 476,
    "via": "primary",
    "rate": {},
    "topKeys": [
@@ -207,7 +207,7 @@
    "why": "",
    "query": "baseball",
    "status": 200,
-   "ms": 2715,
+   "ms": 5743,
    "via": "primary",
    "rate": {},
    "topKeys": [
@@ -226,6 +226,7 @@
     "next",
     "next_sibling",
     "options",
+    "page_campaigns",
     "pages",
     "pagination",
     "portal",
@@ -344,7 +345,7 @@
    "why": "",
    "query": "horse",
    "status": 200,
-   "ms": 238,
+   "ms": 184,
    "via": "primary",
    "rate": {},
    "topKeys": [
@@ -394,7 +395,7 @@
    "why": "",
    "query": "horse",
    "status": 200,
-   "ms": 258,
+   "ms": 349,
    "via": "primary",
    "rate": {
     "x-ratelimit-limit": "60",
@@ -468,7 +469,7 @@
    "why": "",
    "query": "horse",
    "status": 200,
-   "ms": 1276,
+   "ms": 1134,
    "via": "primary",
    "rate": {},
    "topKeys": [
@@ -609,7 +610,7 @@
    "why": "",
    "query": "football",
    "status": 200,
-   "ms": 969,
+   "ms": 368,
    "via": "primary",
    "rate": {},
    "topKeys": [
@@ -620,6 +621,7 @@
     "path": "$.response.docs",
     "n": 10,
     "keys": [
+     "creator",
      "date",
      "identifier",
      "licenseurl",
@@ -627,25 +629,25 @@
      "title"
     ],
     "rights": {
-     "date": "\"2009-09-16T00:00:00Z\"",
-     "licenseurl": "\"https://creativecommons.org/publicdomain/zero/1.0/\""
+     "date": "\"1994-01-01T00:00:00Z\"",
+     "licenseurl": "\"http://creativecommons.org/licenses/by-nc-nd/4.0/\""
     }
    },
    "found": 10,
-   "accepted": 9,
+   "accepted": 8,
    "refused": {
-    "a logo, sponsor or advertising category": 1
+    "a non-commercial or no-derivatives licence": 2
    },
    "licenceShapes": [
     {
      "licRaw": "",
      "licVersion": "",
-     "licUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+     "licUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
      "own": false,
-     "hasAuthor": false,
+     "hasAuthor": true,
      "hasSourcePage": true,
      "thumbHost": "archive.org",
-     "taken": "2009-09-16"
+     "taken": "1994-01-01"
     },
     {
      "licRaw": "",
@@ -655,7 +657,7 @@
      "hasAuthor": false,
      "hasSourcePage": true,
      "thumbHost": "archive.org",
-     "taken": "2009-08-19"
+     "taken": "2010-12-04"
     },
     {
      "licRaw": "",
@@ -665,7 +667,7 @@
      "hasAuthor": false,
      "hasSourcePage": true,
      "thumbHost": "archive.org",
-     "taken": "2009-09-22"
+     "taken": "2009-09-19"
     }
    ]
   }
