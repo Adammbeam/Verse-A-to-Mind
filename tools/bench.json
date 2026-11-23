@@ -7298,5 +7298,22 @@
   {"ask": "handoff the running automations for onboarding", "want": "skill:automation-handoff"},
   {"ask": "package the running jobs for the client", "want": "skill:automation-handoff"},
   {"ask": "systems connect pack for client onboarding", "want": "skill:systems-connect-pack"},
-  {"ask": "package the connections for weekly status reports", "want": "skill:systems-connect-pack"}
+  {"ask": "package the connections for weekly status reports", "want": "skill:systems-connect-pack"},
+  {"ask": "clear search history", "want": "skill:clear-search-history"},
+  {"ask": "clear my history", "want": "skill:clear-search-history"},
+  {"ask": "delete recent searches", "want": "skill:clear-search-history"},
+  {"ask": "make a bar chart from apples 12, oranges 7, bananas 15", "want": "skill:chart"},
+  {"ask": "pie chart of Q1 40, Q2 35, Q3 25", "want": "skill:chart"},
+  {"ask": "what are you working on", "want": "skill:working-on"},
+  {"ask": "what are you building", "want": "skill:working-on"},
+  {"ask": "what are you doing now", "want": "skill:working-on"},
+  {"ask": "make a business card", "want": "skill:business-card"},
+  {"ask": "business card for Ana Ruiz", "want": "skill:business-card"},
+  {"ask": "design my business card", "want": "skill:business-card"},
+  {"ask": "daily challenge", "want": "skill:daily-challenge"},
+  {"ask": "today's challenge", "want": "skill:daily-challenge"},
+  {"ask": "play the daily challenge", "want": "skill:daily-challenge"},
+  {"ask": "trivia", "want": "skill:trivia"},
+  {"ask": "play trivia", "want": "skill:trivia"},
+  {"ask": "trivia game", "want": "skill:trivia"}
 ]
