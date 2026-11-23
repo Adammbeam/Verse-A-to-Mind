@@ -1,41 +1,5 @@
 [
  {
-  "at": "2026-11-12T02:27:41Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1878,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 11126 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
-  "at": "2026-11-12T02:56:30Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1246,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 9896 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-12T04:10:41Z",
   "kind": "visitor",
   "visitor": {
@@ -6466,5 +6430,81 @@
    "failed": []
   },
   "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-23T02:05:15Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 907,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-23T02:19:06Z",
+  "passed": 152,
+  "of": 165,
+  "ms": 382,
+  "kind": "file",
+  "key": "weak | flip this card",
+  "failed": [
+   {
+    "ask": "show the days until a date",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "what are the figures doing",
+    "why": "nothing appeared"
+   },
+   {
+    "ask": "yo bitcoin price",
+    "why": "console: Failed to load resource: the server responded with a status of 503 ()"
+   },
+   {
+    "ask": "fimls by kurosawa",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "film meatdata for ikiru",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "yo watch the apollo 11 landing",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "stlye like mickey mouse",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "clear search history",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   },
+   {
+    "ask": "what stadium do the yankees play in",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   },
+   {
+    "ask": "which miniatures do you have",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   },
+   {
+    "ask": "give me a shortcut",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   },
+   {
+    "ask": "technical context for unwrap",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 907,
+   "failed": []
+  },
+  "note": "quality upgrade: weakest answer was \"flip this card\" (29 chars)"
  }
 ]

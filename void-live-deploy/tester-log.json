@@ -3,12 +3,77 @@
  "cases": 164,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 216,
-  "file": 38,
+  "visitor": 215,
+  "file": 39,
   "grow": 45,
   "tighten": 1
  },
  "runs": [
+  {
+   "at": "2026-11-23T02:19:06Z",
+   "passed": 152,
+   "of": 165,
+   "kind": "file",
+   "ms": 382,
+   "note": "quality upgrade: weakest answer was \"flip this card\" (29 chars)",
+   "failed": [
+    {
+     "ask": "show the days until a date",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "what are the figures doing",
+     "why": "nothing appeared"
+    },
+    {
+     "ask": "yo bitcoin price",
+     "why": "console: Failed to load resource: the server responded with a status of 503 ()"
+    },
+    {
+     "ask": "fimls by kurosawa",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "film meatdata for ikiru",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "yo watch the apollo 11 landing",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "stlye like mickey mouse",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "clear search history",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "what stadium do the yankees play in",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "which miniatures do you have",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "give me a shortcut",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    },
+    {
+     "ask": "technical context for unwrap",
+     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-23T02:05:15Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-23T01:37:22Z",
    "passed": 0,
@@ -321,59 +386,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-22T13:04:40Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-22T12:20:51Z",
-   "passed": 153,
-   "of": 162,
-   "kind": "grow",
-   "ms": 373,
-   "note": "new ground passed, kept as a regression case: \"pulse of my arrows\" (skill:pulse)",
-   "failed": [
-    {
-     "ask": "bokos like dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "is unwrap risky in rust",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "yo bitcoin price",
-     "why": "console: Failed to load resource: the server responded with a status of 503 ()"
-    },
-    {
-     "ask": "films by Kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "fimls by kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "open folder recipes",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "which miniatures do you have",
-     "why": "console: Failed to load resource: the server responded with a status of 429 ()"
-    }
-   ]
   }
  ],
  "weekly": [
@@ -439,20 +451,20 @@
   },
   {
    "from": "2026-11-09",
-   "runs": 76,
+   "runs": 74,
    "passed": 1184,
    "of": 1244,
    "ms": 360
   },
   {
    "from": "2026-11-16",
-   "runs": 224,
-   "passed": 10100,
-   "of": 10856,
+   "runs": 226,
+   "passed": 10252,
+   "of": 11021,
    "broken": 1,
    "brokenOf": 158,
    "brokenPassed": 16,
-   "ms": 408
+   "ms": 401
   }
  ],
  "seen": {
@@ -571,7 +583,7 @@
   "skill:store": "2026-10-17T22:05:31Z",
   "skill:swaps": "2026-10-17T22:18:36Z",
   "skill:swarm": "2026-10-17T22:33:54Z",
-  "skill:guide": "2026-10-17T22:18:36Z",
+  "skill:guide": "2026-11-23T02:19:06Z",
   "skill:throw-off": "2026-10-17T22:33:54Z",
   "skill:tip": "2026-10-17T22:33:54Z",
   "skill:together": "2026-10-17T22:46:32Z",
