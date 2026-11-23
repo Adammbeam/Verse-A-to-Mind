@@ -199,5 +199,10 @@ export function mergeCatalog(old, fresh, now = new Date().toISOString()) {
   }
   return { products: [...bySlug.values()], changed: [...changed] };
 }
+// The products Verse sells itself on /store/ (a fixed price, so no Gumroad listing is needed). Asking for one of these
+// opens the store with that item in the cart, not a Gumroad page (owner, 2026-11-21: "join the team" answered with a
+// Gumroad link while the Stripe checkout on /store/ was already live).
+export const SELF_SOLD = new Set(['join-the-team']);
+export const checkoutUrl = (p) => SELF_SOLD.has(String(p.slug || p.id || '')) ? '/store/?cart=' + encodeURIComponent(String(p.slug || p.id)) : (p.url || STORE + '/l/' + p.slug);
 // What the page gets: live fields only (no history).
-export const publicProduct = (p) => ({ slug: p.slug, id: p.id || null, name: shortName(p.name), description: String(p.description || '').slice(0, 800), price_cents: p.price_cents, currency: p.currency || 'usd', recurrence: p.recurrence || null, url: p.url || STORE + '/l/' + p.slug, available: p.available !== false });
+export const publicProduct = (p) => ({ slug: p.slug, id: p.id || null, name: shortName(p.name), description: String(p.description || '').slice(0, 800), price_cents: p.price_cents, currency: p.currency || 'usd', recurrence: p.recurrence || null, url: checkoutUrl(p), available: p.available !== false });
