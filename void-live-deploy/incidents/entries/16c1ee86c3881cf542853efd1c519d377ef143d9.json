@@ -1,0 +1,27 @@
+{
+ "at": "2026-11-23T08:31:54.210Z",
+ "sha": "16c1ee86c3881cf542853efd1c519d377ef143d9",
+ "run": "https://github.com/atomeam/void-loop/actions/runs/45135703317",
+ "suite": "browser suite on main",
+ "checks": [
+  "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer",
+  "void asks batch 4: the Zorbleflux throttle: while an input in another card has focus the flux field runs at about a quarter speed, and full speed comes back after the person lets go, with a quiet \"calming the field\" pill showing while it is held back and gone after (asked by Verse)",
+  "poster wins: on a skill card (phone) the stats chip touches no text, the rarity and collector row included",
+  "suite ran to the end",
+  "stage extras success pulse: a skill the last status check could not load and this one can makes a green pulse on the stage; the failure list is then empty",
+  "draw 3D: \"new 3d layer for the ring\" makes a 3D layer; a drag paints a ring in space; \"turn the ring 70\" turns it so it narrows on the canvas; Undo takes the stroke back; where 3D cannot start it says so and adds no layer",
+  "will: Verse says what it wants",
+  "store: an ask a product covers gets Verse's answer first, then one line (product, live price, link) from the live catalog; new store products are found",
+  "catalog: first read pulls the live store (all 7 products, tiered Verse Monthly = $49 a month) and saves it",
+  "coin: /flip/ shows all 7 things a full answer shows — the flip counter named, the tap and the result said in words (the gate's own rule, the 3 the tower sat at 4 of 7 on)",
+  "status: \"void status\" shows every skill loading, the browser checks, and the sources as they answer: both Open-Meteo services and Wikipedia up, Frankfurter answering 503, the blocked rest unreachable; nothing left in storage"
+ ],
+ "touched": [
+  "void-live-deploy/progress/nightly.json"
+ ],
+ "shards": [
+  1,
+  3,
+  4
+ ]
+}
