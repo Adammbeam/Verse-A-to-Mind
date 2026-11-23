@@ -1,23 +1,5 @@
 [
  {
-  "at": "2026-11-13T16:20:24Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 487,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 10217 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-13T18:02:25Z",
   "kind": "visitor",
   "visitor": {
@@ -6739,5 +6721,16 @@
    "failed": []
   },
   "note": "fix: \"turn the questions i missed into a five-minute challenge\" only \"waking up\" appeared, never the answer"
+ },
+ {
+  "at": "2026-11-23T22:54:52Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 514,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
