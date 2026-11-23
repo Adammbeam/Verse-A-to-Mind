@@ -3,12 +3,19 @@
  "cases": 164,
  "runsTotal": 300,
  "kinds": {
-  "file": 39,
-  "visitor": 215,
+  "visitor": 216,
   "grow": 44,
+  "file": 38,
   "tighten": 2
  },
  "runs": [
+  {
+   "at": "2026-11-23T06:50:10Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-23T06:10:54Z",
    "passed": 0,
@@ -411,24 +418,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-22T19:21:37Z",
-   "passed": 161,
-   "of": 163,
-   "kind": "grow",
-   "ms": 326,
-   "note": "new ground passed, kept as a regression case: \"give me a shortcut\" (skill:shortcut)",
-   "failed": [
-    {
-     "ask": "yo bitcoin price",
-     "why": "console: Failed to load resource: the server responded with a status of 503 ()"
-    },
-    {
-     "ask": "fimls by kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
   }
  ],
  "weekly": [
@@ -494,14 +483,14 @@
   },
   {
    "from": "2026-11-09",
-   "runs": 69,
-   "passed": 1071,
-   "of": 1125,
-   "ms": 354
+   "runs": 68,
+   "passed": 951,
+   "of": 1003,
+   "ms": 360
   },
   {
    "from": "2026-11-16",
-   "runs": 231,
+   "runs": 232,
    "passed": 10286,
    "of": 11224,
    "broken": 2,
