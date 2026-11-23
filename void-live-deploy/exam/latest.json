@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-23T15:48:06.062Z",
+  "at": "2026-11-23T21:22:45.635Z",
   "against": "live",
   "week": "2026-W48",
   "scale": 2,
@@ -110,17 +110,10 @@
       }
     },
     "weather": {
-      "score": 95.4,
+      "score": 95.8,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "weather in paris",
-          "failed": [
-            "fast"
-          ],
-          "score": 83.3
-        },
         {
           "ask": "weather",
           "failed": [
@@ -133,9 +126,10 @@
           "ask": "météo à lyon",
           "failed": [
             "skill",
-            "temp"
+            "temp",
+            "close"
           ],
-          "score": 66.7
+          "score": 57.1
         }
       ],
       "holdout": {
@@ -235,10 +229,17 @@
       }
     },
     "sports": {
-      "score": 94.4,
+      "score": 93.5,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "yankees score",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
         {
           "ask": "packers score",
           "failed": [
@@ -328,17 +329,10 @@
       "fails": []
     },
     "definitions": {
-      "score": 93.3,
+      "score": 96.7,
       "of": 6,
       "measured": 6,
       "fails": [
-        {
-          "ask": "define spring",
-          "failed": [
-            "fast"
-          ],
-          "score": 80
-        },
         {
           "ask": "define glimbrastic",
           "failed": [
@@ -362,7 +356,7 @@
     }
   },
   "lowest": {
-    "domain": "definitions",
-    "score": 93.3
+    "domain": "sports",
+    "score": 93.5
   }
 }
