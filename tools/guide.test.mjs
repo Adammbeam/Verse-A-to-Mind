@@ -132,7 +132,7 @@ test('completeness: the real book has every skill in skills/index.json (families
   const where = {}; for (const p of b.pages) if (p.kind === 'skill') where[p.name] = (where[p.name] || 0) + 1;
   const missing = members.filter((n) => !where[n]), twice = Object.entries(where).filter(([, c]) => c > 1).map(([n]) => n);
   assert.deepEqual(missing, [], 'skills on no page'); assert.deepEqual(twice, [], 'skills on two pages'); assert.deepEqual(b.unplaced, []);
-  assert.equal(b.totals.skills, members.length);
+  assert.equal(b.totals.skills, new Set(members).size); // a family part may also be a routed skill (delivery-pack): it still owns one page
   const games = gamesOf(readFileSync(resolve(root, 'void-live-deploy/skills/rack.js'), 'utf8'));
   for (const g of games) assert.ok(b.pages.some((p) => p.game && p.game.title === g.title), g.title + ' is in the games chapter');
   const minis = readdirSync(resolve(root, 'void-live-deploy/skills/mini')).filter((f) => f.endsWith('.js') && f !== 'sample.js').map((f) => f.replace(/\.js$/, ''));

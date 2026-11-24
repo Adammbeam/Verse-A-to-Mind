@@ -14,9 +14,9 @@
  "bench_at": "2026-11-22",
  "totals": {
   "experiment": 0,
-  "tested": 9,
-  "checked": 19,
-  "proven": 458
+  "tested": 11,
+  "checked": 18,
+  "proven": 459
  },
  "families": [
   {
@@ -25,7 +25,7 @@
    "for": "figures, 3D models, prints, drawings and parts",
    "count": {
     "experiment": 0,
-    "tested": 0,
+    "tested": 1,
     "checked": 0,
     "proven": 63
    },
@@ -349,6 +349,13 @@
      "streak": 35
     },
     {
+     "name": "flowchart",
+     "tier": "tested",
+     "why": "a self-test",
+     "last_tested": "2026-11-24",
+     "last_tested_by": "its tests"
+    },
+    {
      "name": "shape",
      "tier": "proven",
      "why": "a self-test, 2 browser-suite mentions, 4 real asks in the benchmark",
@@ -616,8 +623,8 @@
    "count": {
     "experiment": 0,
     "tested": 1,
-    "checked": 11,
-    "proven": 47
+    "checked": 10,
+    "proven": 48
    },
    "skills": [
     {
@@ -1112,15 +1119,15 @@
     },
     {
      "name": "rps",
-     "tier": "checked",
-     "why": "a self-test, 2 real asks in the benchmark",
+     "tier": "proven",
+     "why": "a self-test, 3 browser-suite mentions, 2 real asks in the benchmark",
      "failing": [
       "play rock paper scissors"
      ],
-     "last_tested": "2026-11-23",
-     "last_tested_by": "the daily smoke test",
+     "last_tested": "2026-11-24",
+     "last_tested_by": "its tests",
      "success_rate": 0.5,
-     "promoted": "2026-11-04",
+     "promoted": "2026-11-24",
      "streak": 20
     },
     {
@@ -1197,8 +1204,8 @@
     {
      "name": "baggage",
      "tier": "proven",
-     "why": "a self-test, 3 real asks in the benchmark, 10 live findings, 2026-11-23",
-     "last_tested": "2026-11-23",
+     "why": "a self-test, 3 real asks in the benchmark, 11 live findings, 2026-11-24",
+     "last_tested": "2026-11-24",
      "last_tested_by": "a live call",
      "success_rate": 1,
      "promoted": "2026-10-30",
@@ -2844,8 +2851,8 @@
     {
      "name": "rides",
      "tier": "proven",
-     "why": "a self-test, 3 browser-suite mentions, 3 real asks in the benchmark, 43 live findings, 2026-11-23",
-     "last_tested": "2026-11-23",
+     "why": "a self-test, 3 browser-suite mentions, 3 real asks in the benchmark, 44 live findings, 2026-11-24",
+     "last_tested": "2026-11-24",
      "last_tested_by": "a live call",
      "success_rate": 1,
      "streak": 35
@@ -3871,7 +3878,7 @@
    "for": "how Verse grows, what it wants, what it can do and sell, and acting on your behalf",
    "count": {
     "experiment": 0,
-    "tested": 5,
+    "tested": 6,
     "checked": 6,
     "proven": 97
    },
@@ -4180,6 +4187,14 @@
      "last_tested_by": "the daily smoke test",
      "success_rate": 1,
      "promoted": "2026-11-06"
+    },
+    {
+     "name": "handoff-confidence",
+     "tier": "tested",
+     "why": "a self-test",
+     "last_tested": "2026-11-24",
+     "last_tested_by": "its tests",
+     "streak": 1
     },
     {
      "name": "system-handoff",
