@@ -1,5 +1,5 @@
 {
- "at": "2026-11-23T16:33:18.639Z",
+ "at": "2026-11-24T06:20:00.544Z",
  "mode": "live",
  "pass": 51,
  "total": 54,
@@ -327,7 +327,7 @@
     "fuzzy": false,
     "noAnswer": false,
     "guess": "",
-    "pic": true,
+    "pic": false,
     "sources": [],
     "answer": "Zeus is the supreme deity of the Greek pantheon. He is a sky and thunder god in ancient Gr"
    },
@@ -613,7 +613,7 @@
     "guess": "",
     "pic": false,
     "sources": [],
-    "answer": "Happy Hour is the fifth studio album by experimental music band King Missile, and released"
+    "answer": "The Drunk and On Drugs Happy Funtime Hour is a Canadian television sketch comedy series, w"
    },
    "redirect": "none"
   },
