@@ -115,6 +115,21 @@ jobs:
         run: |
           m=$((10#$(date -u +%M)))
           if [ $((m / 10 % 3)) -eq 0 ]; then gh workflow run automerge.yml --repo "$GITHUB_REPOSITORY" --ref main && echo "full merge sweep started (minute $m)"; else echo "no sweep this tick (minute $m)"; fi
+      # The free-agent clock runs here, once an hour (2026-11-24): recruit.yml's own GitHub schedule was throttled for hours at a time.
+      # A dispatch keeps recruit.yml's actions/cache state, so cap/park/drop survive between calls; running recruit inline would lose it.
+      # The :07 restart of this clock tries again if a dispatch fails.
+      - name: The free-agent clock, once an hour
+        if: always() && !inputs.dry && steps.clock.outputs.chain == 'yes'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          m=$((10#$(date -u +%M)))
+          if [ "$m" -lt 10 ]; then
+            gh workflow run recruit.yml --repo "$GITHUB_REPOSITORY" || echo "dispatch failed; the :07 restart of this clock will try again"
+          else
+            echo "no free-agent dispatch this tick (minute $m)"
+          fi
       # every run that ticked starts the next one 9 minutes after its tick landed (the fresh check is 8 minutes, so that run ticks too).
       # The wait holds this runner about 9 minutes of every 10; the repository is public, so Actions minutes are not metered.
       - name: Start the next clock run
