@@ -1,41 +1,5 @@
 [
  {
-  "at": "2026-11-13T20:12:33Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 457,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 11358 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
-  "at": "2026-11-13T20:42:01Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1686,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 9314 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-13T21:11:16Z",
   "kind": "visitor",
   "visitor": {
@@ -6740,5 +6704,81 @@
    "failed": []
   },
   "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-24T02:09:47Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 906,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-24T02:24:49Z",
+  "passed": 153,
+  "of": 168,
+  "ms": 523,
+  "kind": "file",
+  "key": "yo sticky note buy milk | only \"waking up\" appeared, never the answer",
+  "failed": [
+   {
+    "ask": "play chess",
+    "why": "fps 4 < 5"
+   },
+   {
+    "ask": "yo bitcoin price",
+    "why": "console: Failed to load resource: the server responded with a status of 503 ()"
+   },
+   {
+    "ask": "favorite this",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "film meatdata for ikiru",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "stlye like mickey mouse",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "yo draw yourself",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "how much is my watch worth",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "build a hut",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "jump stack",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "dasatinib and quercetin for mash",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "snake game",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "yo sticky note buy milk",
+    "why": "only \"waking up\" appeared, never the answer"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 906,
+   "failed": []
+  },
+  "note": "fix: \"yo sticky note buy milk\" only \"waking up\" appeared, never the answer"
  }
 ]
