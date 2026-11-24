@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-24T06:59:02.265Z",
+  "at": "2026-11-24T07:41:59.952Z",
   "against": "live",
   "week": "2026-W48",
   "scale": 2,
@@ -34,12 +34,19 @@
       }
     },
     "podcasts": {
-      "score": 93.5,
+      "score": 92.7,
       "of": 18,
       "measured": 18,
       "fails": [
         {
           "ask": "play the latest episode of hidden brain",
+          "failed": [
+            "audio"
+          ],
+          "score": 85.7
+        },
+        {
+          "ask": "play the latest episode of npr news now",
           "failed": [
             "audio"
           ],
@@ -117,16 +124,17 @@
       }
     },
     "weather": {
-      "score": 97.2,
+      "score": 96.3,
       "of": 18,
       "measured": 18,
       "fails": [
         {
           "ask": "weather",
           "failed": [
+            "temp",
             "rival"
           ],
-          "score": 83.3
+          "score": 66.7
         },
         {
           "ask": "météo à lyon",
@@ -234,17 +242,37 @@
       }
     },
     "sports": {
-      "score": 94.5,
+      "score": 92.6,
       "of": 18,
       "measured": 18,
       "fails": [
         {
-          "ask": "nhl scores",
+          "ask": "yankees score",
           "failed": [
-            "fast",
-            "team"
+            "board"
           ],
-          "score": 66.7
+          "score": 83.3
+        },
+        {
+          "ask": "how did the chiefs do",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "packers score",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "nba team celtics",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
         },
         {
           "ask": "scores",
@@ -348,7 +376,7 @@
     }
   },
   "lowest": {
-    "domain": "podcasts",
-    "score": 93.5
+    "domain": "sports",
+    "score": 92.6
   }
 }
