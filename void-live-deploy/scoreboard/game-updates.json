@@ -1,5 +1,5 @@
 {
- "cursor": 2,
+ "cursor": 1,
  "picks": {
   "debris-field": 1,
   "gap-glide": 1,
@@ -16,7 +16,8 @@
   "token-stand": 1,
   "merge-void": 1,
   "jump-stack": 1,
-  "snake": 1
+  "snake": 1,
+  "glyph-verse": 1
  },
  "scores": {
   "debris-field": {
@@ -311,6 +312,27 @@
     "fun": 8,
     "polish": 7
    }
+  },
+  "glyph-verse": {
+   "update": 1,
+   "note": "Update 1: Every word feels within reach as Verse plays right alongside you.",
+   "why": "shipped",
+   "fun": 71,
+   "cents": 0,
+   "paid": false,
+   "cycle": 1,
+   "video": "https://github.com/atomeam/void-loop/actions/runs/45382650579",
+   "parts": {
+    "danger": 2,
+    "goal": 8,
+    "boss": 1,
+    "juice": 9,
+    "phone": 10,
+    "fair": 10,
+    "end": 5,
+    "fun": 9,
+    "polish": 10
+   }
   }
  },
  "shown": [
@@ -513,6 +535,20 @@
    "paid": false,
    "provider": "verse @cf/google/gemma-4-26b-a4b-it",
    "video": "https://github.com/atomeam/void-loop/actions/runs/45373687429",
+   "dropped": false,
+   "born": false
+  },
+  {
+   "at": "2026-11-24T11:21:11.670Z",
+   "id": "glyph-verse",
+   "title": "Glyph Verse",
+   "n": 1,
+   "note": "Update 1: Every word feels within reach as Verse plays right alongside you.",
+   "fun": 71,
+   "cents": 0,
+   "paid": false,
+   "provider": "verse @cf/google/gemma-4-26b-a4b-it",
+   "video": "https://github.com/atomeam/void-loop/actions/runs/45382650579",
    "dropped": false,
    "born": false
   }
