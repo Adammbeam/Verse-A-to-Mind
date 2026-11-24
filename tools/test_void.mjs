@@ -794,6 +794,20 @@ try {
     check('coin: "flip 5 coins" lays out five coins and says how many heads and tails', !!five && five.coins === 5 && /^\d heads, \d tails$/.test(five.word), JSON.stringify(five));
     await P.ctx.close();
   }
+  // rock paper scissors is the rps skill's game (skills/rps.js); the page's own chanceOf throw used to answer first with one line (owner: 'rps')
+  if (want("rock paper scissors: play rock paper scissors opens the rps game, not the page's one-line chance throw")) {
+    const noteOf = (P, q) => P.p.evaluate((ask) => { try { const l = JSON.parse(localStorage.getItem('a2m.void.loop.v1') || '[]'); const e = (Array.isArray(l) ? l : []).filter((x) => String(x.ask).trim() === ask).pop(); return (e && e.note) || ''; } catch (_) { return ''; } }, q);
+    const cardOf = (P) => P.p.$eval('.vpage.on', (c) => ({ h: (c.querySelector('h2') || {}).textContent || '', choices: [...c.querySelectorAll('button[data-choice]')].map((b) => b.dataset.choice) })).catch(() => null);
+    const P = await fresh(); await P.ask('play rock paper scissors', 900);
+    const game = await until(async () => { const r = await cardOf(P); return r && r.choices.length ? r : null; }, 6000);
+    const note = await noteOf(P, 'play rock paper scissors');
+    check('rock paper scissors: "play rock paper scissors" is answered by the rps skill (skill:rps) and opens the game with the three choices, not the page\'s one-line chance throw',
+      note === 'skill:rps' && !!game && /rock paper scissors/i.test(game.h) && game.choices.join(',') === 'rock,paper,scissors' && !P.errors.length, JSON.stringify({ note, game, errors: P.errors }));
+    await P.ask('what is rock paper scissors', 900);
+    const info = await cardOf(P);
+    check('rock paper scissors: "what is rock paper scissors" stays an explanation, never the game', !!info && !info.choices.length, JSON.stringify(info));
+    await P.ctx.close();
+  }
   // the coin floor's own completeness checklist (tools/tower-probes.mjs withFeatureFacts, domains/features/coin-flip.json): the gate reads the page
   // the way a visitor does, so a feature the page has but never says in words counts as missing — the 4 of 7 the tower sat at for a day
   if (want("coin: /flip/ shows every feature the completeness checklist reads — the counter named, the tap and the result said")) {

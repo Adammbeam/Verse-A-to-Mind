@@ -14,6 +14,11 @@ assert.equal(got[2].path, '/notes/');
 assert.equal(got[3].ask, 'weather');
 assert.equal(targetsFromFiles(Array.from({ length: 10 }, (_, i) => 'void-live-deploy/games/g' + i + '/app.js')).length, MAX);
 assert.equal(targetOfPath('/games/void-breaker', sweep).kind, 'game');
+// the stage at / is its own kind: blank by design, judged by its ask box rather than as a content page
+assert.equal(targetOfPath('/', sweep).kind, 'stage');
+assert.equal(targetsFromFiles(['void.html'], {}).at(0).kind, 'stage');
+assert.equal(targetsFromFiles(['void-live-deploy/index.html'], {}).at(0).kind, 'stage');
+assert.equal(targetOfPath('/qr/', sweep).kind, 'tool');
 assert.deepEqual(rotate(['a', 'b', 'c'], 1, 2), ['b', 'c']);
 assert.deepEqual(rotate(['a', 'b'], 1, 2), ['b', 'a']);
 
@@ -29,6 +34,7 @@ assert.match(shortPlay({ hook: false }).join(' '), /window.__game/);
 const ok = { metrics: { errs: { errors: 0 }, flows: { controls: 2, controlsWithEffect: 1 }, art: {}, layout: { scrollX: 0, clipped: 0 }, speedPhone: { dcl: 900, bytes: 80_000, cls: 0.01 } }, details: { text: 'The forecast for today is clear.', brokenLinks: ['#'] } };
 assert.deepEqual(reasonsOf({ kind: 'tool', measure: ok, text: ok.details.text }), []);
 assert.deepEqual(reasonsOf({ kind: 'page', measure: { fail: 'gated: the Uni screen shows, not the page' }, text: '' }), []);
+assert.deepEqual(reasonsOf({ kind: 'stage', measure: ok, text: 'Verse' }), []);
 const slow = { metrics: { errs: { errors: 1 }, flows: { controls: 1, controlsWithEffect: 0 }, art: { placeholders: 1, broken: 1 }, layout: { scrollX: 20, clipped: 1 }, speedPhone: { dcl: SPEED.dclMs + 1, bytes: SPEED.bytes + 1, cls: 0.4 } }, details: { text: 'Acme Corp is the world\'s best. See tools/x.mjs', errors: ['TypeError: nope'], brokenLinks: ['/missing/ 404'] } };
 const why = reasonsOf({ kind: 'page', measure: slow, text: slow.details.text, titleMissing: true, handoffMissing: true });
 for (const bit of ['error', 'main control', 'placeholder art', 'picture is broken', 'scrolls sideways', 'cut off', 'link goes nowhere', 'phone wait', 'phone download', 'jumps', 'invented name', 'world\'s best', 'no title', 'what it takes', 'source file path']) assert.match(why.join(' | '), new RegExp(bit), bit);

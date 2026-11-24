@@ -44,7 +44,7 @@ export function sweepByPath(list) {
 export function targetsFromFiles(files, { sweep = {}, max = MAX, exists = () => false, added = new Set() } = {}) {
   const out = [], seen = new Set();
   const add = (t) => { if (!t || out.length >= max || seen.has(t.id)) return; seen.add(t.id); out.push(t); };
-  const page = (route, file) => add({ id: route, kind: sweep[route] ? 'tool' : 'page', path: route, added: !!(file && added.has(file)) });
+  const page = (route, file) => add({ id: route, kind: route === '/' ? 'stage' : sweep[route] ? 'tool' : 'page', path: route, added: !!(file && added.has(file)) });
   for (const f of files || []) {
     const g = /^void-live-deploy\/games\/([\w.-]+)\//.exec(f);
     if (g) add({ id: g[1], kind: 'game', path: '/games/' + g[1] + '/' });
@@ -69,7 +69,7 @@ export function targetOfPath(p, sweep = {}) {
   const g = /^\/games\/([\w.-]+)\/?$/.exec(pathName);
   if (g) return { id: g[1], kind: 'game', path: '/games/' + g[1] + '/' };
   const route = pathName.replace(/\/?$/, '/');
-  return { id: route, kind: sweep[route] ? 'tool' : 'page', path: route };
+  return { id: route, kind: route === '/' ? 'stage' : sweep[route] ? 'tool' : 'page', path: route };
 }
 
 /** `n` items from a rotation that moves one step a day. Pure. */
@@ -220,7 +220,9 @@ export async function runTargets(targets, { origin = '', shotDir = '', env = pro
           }
         }
         let reasons = reasonsOf({ kind: t.kind, measure: m, text, titleMissing, handoffMissing });
-        if (judgeKeyName(env)) reasons = [...new Set(reasons.concat(reasonsFromJudge(readJudge(await askJudge(judgePrompt({ id: t.id, kind: t.kind, title: t.id, visible: text.slice(0, 1500) }), env, fetchImpl)))))];
+        // the stage at / is blank by design: its one job is the ask box, so a content judge would call the empty stage a failure
+        if (t.kind === 'stage' && html && !/<(?:input|textarea)\b/i.test(html)) reasons.push('the stage has no ask box');
+        if (t.kind !== 'stage' && judgeKeyName(env)) reasons = [...new Set(reasons.concat(reasonsFromJudge(readJudge(await askJudge(judgePrompt({ id: t.id, kind: t.kind, title: t.id, visible: text.slice(0, 1500) }), env, fetchImpl)))))];
         const shots = writeShots(shotDir, t.id, m.shots);
         rows.push({ id: t.id, kind: t.kind, path: t.path, pass: reasons.length === 0, reasons, shots, note: m.fail && /^gated:/.test(m.fail) ? 'a stranger sees the sign-in screen' : '' });
       }
