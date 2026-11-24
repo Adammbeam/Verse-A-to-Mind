@@ -1,21 +1,14 @@
 {
-  "at": "2026-11-24T05:13:04.851Z",
+  "at": "2026-11-24T05:47:08.646Z",
   "against": "live",
   "week": "2026-W48",
   "scale": 2,
   "domains": {
     "videos": {
-      "score": 96.1,
+      "score": 96.9,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "play a video about cooking pasta",
-          "failed": [
-            "topic"
-          ],
-          "score": 85.7
-        },
         {
           "ask": "play the trailer",
           "failed": [
@@ -41,12 +34,26 @@
       }
     },
     "podcasts": {
-      "score": 93.5,
+      "score": 91.9,
       "of": 18,
       "measured": 18,
       "fails": [
         {
           "ask": "play the latest episode of radiolab",
+          "failed": [
+            "audio"
+          ],
+          "score": 85.7
+        },
+        {
+          "ask": "play the latest episode of the ted radio hour",
+          "failed": [
+            "audio"
+          ],
+          "score": 85.7
+        },
+        {
+          "ask": "play the latest episode of crime junkie",
           "failed": [
             "audio"
           ],
@@ -124,10 +131,17 @@
       }
     },
     "weather": {
-      "score": 96.3,
+      "score": 94.8,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "weather tomorrow in boston",
+          "failed": [
+            "fast"
+          ],
+          "score": 83.3
+        },
         {
           "ask": "weather",
           "failed": [
@@ -140,9 +154,10 @@
           "ask": "météo à lyon",
           "failed": [
             "skill",
-            "temp"
+            "temp",
+            "close"
           ],
-          "score": 66.7
+          "score": 57.1
         }
       ],
       "holdout": {
@@ -215,17 +230,10 @@
       }
     },
     "news": {
-      "score": 96.7,
+      "score": 97.8,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "tech news",
-          "failed": [
-            "fast"
-          ],
-          "score": 80
-        },
         {
           "ask": "and the science ones?",
           "failed": [
@@ -249,19 +257,12 @@
       }
     },
     "sports": {
-      "score": 92.6,
+      "score": 93.5,
       "of": 18,
       "measured": 18,
       "fails": [
         {
           "ask": "yankees score",
-          "failed": [
-            "board"
-          ],
-          "score": 83.3
-        },
-        {
-          "ask": "how did the chiefs do",
           "failed": [
             "board"
           ],
@@ -350,18 +351,10 @@
       "fails": []
     },
     "prices": {
-      "score": 96.7,
+      "score": 100,
       "of": 6,
       "measured": 6,
-      "fails": [
-        {
-          "ask": "100 usd in eur",
-          "failed": [
-            "rival"
-          ],
-          "score": 80
-        }
-      ]
+      "fails": []
     },
     "definitions": {
       "score": 96.7,
@@ -391,7 +384,7 @@
     }
   },
   "lowest": {
-    "domain": "sports",
-    "score": 92.6
+    "domain": "podcasts",
+    "score": 91.9
   }
 }
