@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-24T07:41:59.952Z",
+  "at": "2026-11-24T08:10:00.389Z",
   "against": "live",
   "week": "2026-W48",
   "scale": 2,
@@ -34,24 +34,10 @@
       }
     },
     "podcasts": {
-      "score": 92.7,
+      "score": 95.9,
       "of": 18,
       "measured": 18,
       "fails": [
-        {
-          "ask": "play the latest episode of hidden brain",
-          "failed": [
-            "audio"
-          ],
-          "score": 85.7
-        },
-        {
-          "ask": "play the latest episode of npr news now",
-          "failed": [
-            "audio"
-          ],
-          "score": 85.7
-        },
         {
           "ask": "play the podcast",
           "failed": [
@@ -69,13 +55,11 @@
         {
           "ask": "pon el último episodio de radiolab",
           "failed": [
-            "answered",
             "skill",
-            "fast",
             "audio",
             "episode"
           ],
-          "score": 28.6
+          "score": 57.1
         }
       ],
       "holdout": {
