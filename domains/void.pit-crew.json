@@ -1,17 +1,17 @@
 {
-  "at": "2026-11-23T18:47:19.707Z",
+  "at": "2026-11-24T07:29:39.121Z",
   "mode": "dry-run",
   "max_per_run": 3,
   "selected": [
     {
-      "id": "ask-20261123-0012-3",
-      "ask": "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops.",
-      "target": "voice:ask-20261123-0012-3"
+      "id": "ask-20261124-0416-1",
+      "ask": "Reduce the 20 probes causing the 12042 ms visitor pass delay.",
+      "target": "voice:ask-20261124-0416-1"
     },
     {
-      "id": "ask-20261123-0012-1",
-      "ask": "Reduce the 20 probes causing the 12042 ms visitor pass delay.",
-      "target": "voice:ask-20261123-0012-1"
+      "id": "ask-20261124-0407-1",
+      "ask": "Reduce the number of probes during the visitor pass.",
+      "target": "voice:ask-20261124-0407-1"
     }
   ],
   "note": "Small reversible Verse asks only. No spend. Owner confirm still required for bridge delivery."
