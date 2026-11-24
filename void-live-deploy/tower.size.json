@@ -7560,6 +7560,20 @@
    "weight": 29697,
    "at": "2026-11-16"
   },
+  "jlwockee.xyz": {
+   "bytes": 2156,
+   "controls": 1,
+   "scripts": 0,
+   "styles": 1,
+   "nodes": 11,
+   "routes": 0,
+   "htmlControls": 1,
+   "counted": "rendered",
+   "text": 53,
+   "shell": "none",
+   "weight": 2266,
+   "at": "2026-11-24"
+  },
   "jobicy.com": {
    "bytes": 494905,
    "controls": 283,
@@ -15668,6 +15682,20 @@
    "shell": "none",
    "weight": 159920,
    "at": "2026-11-14"
+  },
+  "xx9.com": {
+   "bytes": 2141015,
+   "controls": 28,
+   "scripts": 13,
+   "styles": 4,
+   "nodes": 59,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 4519,
+   "shell": "none",
+   "weight": 2167605,
+   "at": "2026-11-24"
   },
   "y-exe.jp": {
    "bytes": 250436,
