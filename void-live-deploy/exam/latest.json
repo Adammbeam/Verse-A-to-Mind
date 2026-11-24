@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-23T21:51:01.417Z",
+  "at": "2026-11-24T00:57:12.390Z",
   "against": "live",
   "week": "2026-W48",
   "scale": 2,
@@ -41,12 +41,26 @@
       }
     },
     "podcasts": {
-      "score": 93.5,
+      "score": 91.9,
       "of": 18,
       "measured": 18,
       "fails": [
         {
-          "ask": "play the latest episode of planet money",
+          "ask": "play the latest episode of this american life",
+          "failed": [
+            "audio"
+          ],
+          "score": 85.7
+        },
+        {
+          "ask": "play the latest episode of the daily",
+          "failed": [
+            "audio"
+          ],
+          "score": 85.7
+        },
+        {
+          "ask": "play the latest episode of hidden brain",
           "failed": [
             "audio"
           ],
@@ -241,10 +255,38 @@
       }
     },
     "sports": {
-      "score": 96.3,
+      "score": 92.6,
       "of": 18,
       "measured": 18,
       "fails": [
+        {
+          "ask": "yankees score",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "how did the chiefs do",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "packers score",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
+        {
+          "ask": "nba team celtics",
+          "failed": [
+            "board"
+          ],
+          "score": 83.3
+        },
         {
           "ask": "scores",
           "failed": [
@@ -348,6 +390,6 @@
   },
   "lowest": {
     "domain": "podcasts",
-    "score": 93.5
+    "score": 91.9
   }
 }
