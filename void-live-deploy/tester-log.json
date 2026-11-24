@@ -10,6 +10,13 @@
  },
  "runs": [
   {
+   "at": "2026-11-24T09:04:37Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
+  {
    "at": "2026-11-24T08:07:51Z",
    "passed": 0,
    "of": 0,
@@ -281,28 +288,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-23T21:19:09Z",
-   "passed": 164,
-   "of": 167,
-   "kind": "grow",
-   "ms": 406,
-   "note": "new ground passed, kept as a regression case: \"Verse's fixes\" (skill:v01d-fixes)",
-   "failed": [
-    {
-     "ask": "favorite this",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "film meatdata for ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "why is a half moon called a quarter moon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
   }
  ],
  "weekly": [
@@ -368,16 +353,16 @@
   },
   {
    "from": "2026-11-10",
-   "runs": 45,
-   "passed": 729,
-   "of": 759,
-   "ms": 364
+   "runs": 50,
+   "passed": 1115,
+   "of": 1149,
+   "ms": 371
   },
   {
    "from": "2026-11-17",
-   "runs": 255,
-   "passed": 11431,
-   "of": 13257,
+   "runs": 250,
+   "passed": 11045,
+   "of": 12867,
    "broken": 7,
    "brokenOf": 1148,
    "brokenPassed": 23,
