@@ -10,6 +10,13 @@
  },
  "runs": [
   {
+   "at": "2026-11-24T12:04:29Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
+  {
    "at": "2026-11-24T11:18:48Z",
    "passed": 165,
    "of": 169,
@@ -249,13 +256,6 @@
      "why": "refused: don't know this yet"
     }
    ]
-  },
-  {
-   "at": "2026-11-24T00:28:51Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -321,14 +321,14 @@
   },
   {
    "from": "2026-11-10",
-   "runs": 51,
+   "runs": 50,
    "passed": 1255,
    "of": 1287,
    "ms": 421
   },
   {
    "from": "2026-11-17",
-   "runs": 249,
+   "runs": 250,
    "passed": 10950,
    "of": 12773,
    "broken": 7,

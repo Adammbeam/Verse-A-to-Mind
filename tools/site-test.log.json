@@ -1,23 +1,5 @@
 [
  {
-  "at": "2026-11-14T19:28:21Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 792,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 9660 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-14T22:18:44Z",
   "kind": "visitor",
   "visitor": {
@@ -6717,5 +6699,16 @@
    "failed": []
   },
   "note": "new ground passed, kept as a regression case: \"make a 2d toon dog pls pls\" (skill:cartoon)"
+ },
+ {
+  "at": "2026-11-24T12:04:29Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 1093,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
