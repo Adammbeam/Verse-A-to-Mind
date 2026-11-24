@@ -1,5 +1,5 @@
 {
- "cursor": 1,
+ "cursor": 2,
  "picks": {
   "debris-field": 1,
   "gap-glide": 1,
@@ -15,7 +15,8 @@
   "push-packets": 1,
   "token-stand": 1,
   "merge-void": 1,
-  "jump-stack": 1
+  "jump-stack": 1,
+  "snake": 1
  },
  "scores": {
   "debris-field": {
@@ -289,6 +290,27 @@
     "fun": 6,
     "polish": 4
    }
+  },
+  "snake": {
+   "update": 1,
+   "note": "Update 1: You now feel the tension as Verse hunts the orb more aggressively, making every move a desperate race for survival.",
+   "why": "shipped",
+   "fun": 74,
+   "cents": 0,
+   "paid": false,
+   "cycle": 1,
+   "video": "https://github.com/atomeam/void-loop/actions/runs/45373687429",
+   "parts": {
+    "danger": 7,
+    "goal": 8,
+    "boss": 6,
+    "juice": 5,
+    "phone": 9,
+    "fair": 10,
+    "end": 7,
+    "fun": 8,
+    "polish": 7
+   }
   }
  },
  "shown": [
@@ -477,6 +499,20 @@
    "paid": false,
    "provider": "verse @cf/google/gemma-4-26b-a4b-it",
    "video": "https://github.com/atomeam/void-loop/actions/runs/45314839500",
+   "dropped": false,
+   "born": false
+  },
+  {
+   "at": "2026-11-24T10:24:47.272Z",
+   "id": "snake",
+   "title": "Verse Snake",
+   "n": 1,
+   "note": "Update 1: You now feel the tension as Verse hunts the orb more aggressively, making every move a desperate race for survival.",
+   "fun": 74,
+   "cents": 0,
+   "paid": false,
+   "provider": "verse @cf/google/gemma-4-26b-a4b-it",
+   "video": "https://github.com/atomeam/void-loop/actions/runs/45373687429",
    "dropped": false,
    "born": false
   }

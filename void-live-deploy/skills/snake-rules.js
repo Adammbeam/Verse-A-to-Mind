@@ -6,6 +6,8 @@
  *   create(seed?) -> s    turn(s, dir) -> s    tick(s) -> s (mutates)    voidDir(s) -> { dir, why }
  */
 export const N = 20, START = 4;
+
+export const whatsNew = 'Update 1: You now feel the tension as Verse hunts the orb more aggressively, making every move a desperate race for survival.';
 export const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
 const OPP = { up: 'down', down: 'up', left: 'right', right: 'left' };
 const key = (x, y) => y * N + x;
