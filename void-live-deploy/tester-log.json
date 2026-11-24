@@ -10,6 +10,13 @@
  },
  "runs": [
   {
+   "at": "2026-11-24T07:05:46Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
+  {
    "at": "2026-11-24T06:34:50Z",
    "passed": 0,
    "of": 0,
@@ -316,32 +323,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-23T20:22:19Z",
-   "passed": 161,
-   "of": 165,
-   "kind": "grow",
-   "ms": 425,
-   "note": "new ground passed, kept as a regression case: \"yo what are they doing\" (skill:together)",
-   "failed": [
-    {
-     "ask": "yo film metadata for ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "film meatdata for ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
   }
  ],
  "weekly": [
