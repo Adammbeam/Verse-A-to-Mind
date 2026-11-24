@@ -10011,6 +10011,20 @@
    "refused": true,
    "at": "2026-10-29"
   },
+  "perfect-webspace.de": {
+   "bytes": 4028,
+   "controls": 5,
+   "scripts": 2,
+   "styles": 1,
+   "nodes": 24,
+   "routes": 0,
+   "htmlControls": 5,
+   "counted": "rendered",
+   "text": 379,
+   "shell": "none",
+   "weight": 8268,
+   "at": "2026-11-24"
+  },
   "photofolio.com": {
    "bytes": 95371,
    "controls": 28,
