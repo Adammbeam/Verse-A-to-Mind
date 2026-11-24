@@ -3,12 +3,45 @@
  "cases": 167,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 208,
-  "file": 42,
+  "visitor": 207,
+  "file": 43,
   "grow": 46,
   "tighten": 4
  },
  "runs": [
+  {
+   "at": "2026-11-24T00:40:32Z",
+   "passed": 164,
+   "of": 168,
+   "kind": "file",
+   "ms": 365,
+   "note": "fix: \"geenrate a toon style dog\" refused: don't know this yet; console: Failed to load resource: the server responded with a status of 404 ()",
+   "failed": [
+    {
+     "ask": "update for you: a new routine now runs every 3 hours from 3:17 AM ET and clears ",
+     "why": "missing text /News about me/"
+    },
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "yo bitcoin price",
+     "why": "console: Failed to load resource: the server responded with a status of 503 ()"
+    },
+    {
+     "ask": "geenrate a toon style dog",
+     "why": "refused: don't know this yet"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-24T00:28:51Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-23T22:54:52Z",
    "passed": 0,
@@ -411,146 +444,81 @@
      "why": "console: Failed to load resource: the server responded with a status of 404 ()"
     }
    ]
-  },
-  {
-   "at": "2026-11-23T14:03:15Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-23T12:24:22Z",
-   "passed": 3,
-   "of": 165,
-   "kind": "file",
-   "ms": 413,
-   "note": "fix: \"what automations does Verse run\" console: Refused to apply style from 'https://a-to-mind.com/void-cards.css' because its MIME type ('text/html') is not a supporte",
-   "failed": [
-    {
-     "ask": "what are you?",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "play voidquest",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "play solarquest",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "what can I buy",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "show me your videos",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "play chess",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "my actions",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "air quality in Tokyo",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "update for you: a new routine now runs every 3 hours from 3:17 AM ET and clears ",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "put on lofi hip hop pls",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "find the book the left hand of dakrness",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "bokos like dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
   }
  ],
  "weekly": [
   {
-   "from": "2026-08-31",
+   "from": "2026-09-01",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-07",
+   "from": "2026-09-08",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-14",
+   "from": "2026-09-15",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-21",
+   "from": "2026-09-22",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-09-28",
+   "from": "2026-09-29",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-05",
+   "from": "2026-10-06",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-12",
+   "from": "2026-10-13",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-19",
+   "from": "2026-10-20",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-10-26",
+   "from": "2026-10-27",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-11-02",
+   "from": "2026-11-03",
    "runs": 0,
    "passed": 0,
    "of": 0
   },
   {
-   "from": "2026-11-09",
-   "runs": 49,
+   "from": "2026-11-10",
+   "runs": 47,
    "passed": 845,
    "of": 883,
    "ms": 360
   },
   {
-   "from": "2026-11-16",
-   "runs": 251,
-   "passed": 10949,
-   "of": 12752,
+   "from": "2026-11-17",
+   "runs": 253,
+   "passed": 11113,
+   "of": 12920,
    "broken": 7,
    "brokenOf": 1148,
    "brokenPassed": 23,
@@ -1025,6 +993,7 @@
   "skill:trivia": "2026-11-22T05:15:02Z",
   "skill:inflation": "2026-11-23T14:43:18Z",
   "skill:handoff-confidence": "2026-11-23T19:18:44Z",
-  "skill:client-stage-tracker": "2026-11-23T22:20:25Z"
+  "skill:client-stage-tracker": "2026-11-23T22:20:25Z",
+  "skill:source-to-site": "2026-11-24T00:40:32Z"
  }
 }
