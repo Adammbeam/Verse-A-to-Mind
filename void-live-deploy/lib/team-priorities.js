@@ -15,6 +15,7 @@ const EFFORT = { heal: 1, flake: 1, review: 1, gap: 2, will: 2, voice: 2, auto: 
 // times (its tries, or the same branch's repair filed that many times in 14 days) is given up and set aside; a want still at 0 after
 // STALE_MS is scored at half, and after DROP_MS it is set aside too, so the bets turn to what people use.
 export const REPAIR_BETS_MAX = 2;
+export const FLAKE_BETS_MAX = 2;
 export const GIVE_UP = 3;
 export const STALE_MS = 7 * 864e5, DROP_MS = 14 * 864e5;
 const REPAIR = /^Repair (\S+) until it lands\b/;
@@ -114,21 +115,22 @@ export function prioritize(jobs, wants, ev = {}, override = null, now = Date.now
   const gone = ranked.filter((r) => r.gaveUp && free(r)); // given up or stuck: never a bet, last of all, set aside by the crew run
   const busy = ranked.filter((r) => r.busywork && !r.gaveUp && free(r)); // busywork goes last and is never a bet
   const all = ranked.filter((r) => free(r) && !r.busywork && !r.gaveUp);
-  // at most REPAIR_BETS_MAX repairs ahead of other work; the other repairs wait behind it
-  let reps = 0; const lead = [], later = [];
-  for (const r of all) (r.repair && ++reps > REPAIR_BETS_MAX ? later : lead).push(r);
-  const rest = [...lead, ...later];
-  const ordered = [...pinned, ...rest, ...dropped, ...busy, ...gone];
-  // the bets: pins first, then the best, within the WIP lanes (3 build, 1 research), at most 3, no more than 2 repairs, and none far below the best
+  // at most REPAIR_BETS_MAX repairs and FLAKE_BETS_MAX flaky checks ahead of other work; the rest wait behind other work
+  let reps = 0, flakes = 0; const lead = [], later = [];
+for (const r of all) ((r.repair && ++reps > REPAIR_BETS_MAX) || (r.kind === 'flake' && ++flakes > FLAKE_BETS_MAX) ? later : lead).push(r);
+const rest = [...lead, ...later];
+const ordered = [...pinned, ...rest, ...dropped, ...busy, ...gone];
+// the bets: pins first, then the best, within the WIP lanes (3 build, 1 research), at most 3, capped repairs and flakes, and none far below the best
   const bets = [], lanes = { build: 0, research: 0 }, top = rest.length ? rest[0].score : 0;
-  let repBets = 0;
-  for (const r of [...pinned, ...rest]) {
-    if (bets.length >= BETS_MAX) break;
-    if (lanes[r.lane] >= WIP[r.lane]) continue;
-    if (!r.override && r.repair && repBets >= REPAIR_BETS_MAX) continue;
-    if (!r.override && bets.length && r.score < top * 0.5 && !(r.repair == null && bets.every((b) => b.repair))) break;
-    bets.push(r); lanes[r.lane]++; if (r.repair) repBets++;
-  }
+let repBets = 0, flakeBets = 0;
+for (const r of [...pinned, ...rest]) {
+  if (bets.length >= BETS_MAX) break;
+if (lanes[r.lane] >= WIP[r.lane]) continue;
+if (!r.override && r.repair && repBets >= REPAIR_BETS_MAX) continue;
+if (!r.override && r.kind === 'flake' && flakeBets >= FLAKE_BETS_MAX) continue;
+if (!r.override && bets.length && r.score < top * 0.5 && !(r.repair == null && r.kind !== 'flake' && bets.every((b) => b.repair || b.kind === 'flake'))) break;
+bets.push(r); lanes[r.lane]++; if (r.repair) repBets++; if (r.kind === 'flake') flakeBets++;
+}
   const sig = bets.map((b) => b.id).join(' ') + '|' + ordered.slice(0, 12).map((r) => r.id).join(' ');
   return { order: ordered.map((r) => r.id), bets, ranked: ordered, sig, busywork: busy.map((r) => r.id), gaveUp: gone.map((r) => ({ id: r.id, why: r.gaveUp, want: r.want })) };
 }

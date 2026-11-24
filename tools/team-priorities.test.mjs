@@ -120,6 +120,14 @@ test('attention: no more than two repairs are bets, other work gets the third', 
   assert.ok(p.bets.some((b) => b.id === 'g1'), 'the non-repair job is a bet');
   assert.ok(p.order.indexOf('g1') < p.order.indexOf('r3'), 'the third repair waits behind other work');
 });
+test('attention: no more than two flaky checks are bets, other work gets the third', () => {
+  const flk = (id, name) => ({ id, ask: 'make "' + name + '" robust: fix the test or the code', target: 'flake:' + id, state: 'queued' });
+const jobs = [flk('k1', 'a'), flk('k2', 'b'), flk('k3', 'c'), flk('k4', 'd'), { id: 'g1', ask: 'Build a feature', target: 'feature:x', state: 'queued' }];
+const p = prio2(jobs, [], {}, null, 1e12);
+assert.equal(p.bets.filter((b) => b.kind === 'flake').length, P.FLAKE_BETS_MAX);
+assert.ok(p.bets.some((b) => b.id === 'g1'), 'non-flake work gets a bet');
+assert.ok(p.order.indexOf('g1') < p.order.indexOf('k3'), 'the third flake waits behind other work');
+});
 test('attention: a repair that failed three times is given up', () => {
   assert.equal(repairOf(rep('x', 'q')), 'helper/q');
   assert.equal(repairFails(rep('x', 'q', 'tries 3'), [], []), 3);
