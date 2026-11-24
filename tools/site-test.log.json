@@ -1,23 +1,5 @@
 [
  {
-  "at": "2026-11-13T19:44:40Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 898,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 11592 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-13T20:12:33Z",
   "kind": "visitor",
   "visitor": {
@@ -6747,5 +6729,16 @@
    "failed": []
   },
   "note": "fix: \"geenrate a toon style dog\" refused: don't know this yet; console: Failed to load resource: the server responded with a status of 404 ()"
+ },
+ {
+  "at": "2026-11-24T01:03:47Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 452,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
