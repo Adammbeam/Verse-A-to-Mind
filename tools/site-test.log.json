@@ -1,23 +1,5 @@
 [
  {
-  "at": "2026-11-13T21:11:16Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1512,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 11700 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-13T21:48:17Z",
   "kind": "visitor",
   "visitor": {
@@ -6780,5 +6762,16 @@
    "failed": []
   },
   "note": "fix: \"yo sticky note buy milk\" only \"waking up\" appeared, never the answer"
+ },
+ {
+  "at": "2026-11-24T03:06:06Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 452,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
  }
 ]
