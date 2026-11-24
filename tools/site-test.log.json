@@ -1,34 +1,5 @@
 [
  {
-  "at": "2026-11-14T00:27:41Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1278,
-   "failed": [
-    {
-     "ask": "what's the weather in Lakeland FL",
-     "why": [
-      "slow 12254 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
-  "at": "2026-11-14T00:54:55Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 1256,
-   "failed": []
-  },
-  "note": "visitor pass 15/15"
- },
- {
   "at": "2026-11-14T01:58:26Z",
   "kind": "visitor",
   "visitor": {
@@ -6728,5 +6699,48 @@
    "failed": []
   },
   "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-24T07:34:06Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 463,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-24T07:45:06Z",
+  "passed": 165,
+  "of": 169,
+  "ms": 345,
+  "kind": "grow",
+  "failed": [
+   {
+    "ask": "bokos like dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "redner a cartoon dragon",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "export as stl",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "pulse of my arrows",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 463,
+   "failed": []
+  },
+  "note": "new ground passed, kept as a regression case: \"yo make a 2d toon dog pls\" (skill:cartoon)"
  }
 ]

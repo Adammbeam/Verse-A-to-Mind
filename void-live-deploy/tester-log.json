@@ -1,14 +1,47 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 168,
+ "cases": 169,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 207,
-  "grow": 46,
+  "visitor": 206,
+  "grow": 47,
   "file": 43,
   "tighten": 4
  },
  "runs": [
+  {
+   "at": "2026-11-24T07:45:06Z",
+   "passed": 165,
+   "of": 169,
+   "kind": "grow",
+   "ms": 345,
+   "note": "new ground passed, kept as a regression case: \"yo make a 2d toon dog pls\" (skill:cartoon)",
+   "failed": [
+    {
+     "ask": "bokos like dune",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "redner a cartoon dragon",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+     "ask": "export as stl",
+     "why": "only \"waking up\" appeared, never the answer"
+    },
+    {
+     "ask": "pulse of my arrows",
+     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+    }
+   ]
+  },
+  {
+   "at": "2026-11-24T07:34:06Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-24T07:05:46Z",
    "passed": 0,
@@ -270,59 +303,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-23T20:48:11Z",
-   "passed": 157,
-   "of": 166,
-   "kind": "grow",
-   "ms": 421,
-   "note": "new ground passed, kept as a regression case: \"is anyone repeating the senolytic liver trial\" (skill:trialwatch)",
-   "failed": [
-    {
-     "ask": "weather in boston",
-     "why": "console: Failed to load resource: the server responded with a status of 429 (Too Many Requests)"
-    },
-    {
-     "ask": "yo bitcoin price",
-     "why": "console: Failed to load resource: the server responded with a status of 503 ()"
-    },
-    {
-     "ask": "flip this card",
-     "why": "only \"waking up\" appeared, never the answer"
-    },
-    {
-     "ask": "fimls by kurosawa",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "film meatdata for ikiru",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "who is the auhtor of dune",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "redner a cartoon dragon",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "stlye like mickey mouse",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    },
-    {
-     "ask": "calorie calculator",
-     "why": "console: Failed to load resource: the server responded with a status of 404 ()"
-    }
-   ]
-  },
-  {
-   "at": "2026-11-23T20:35:39Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -388,16 +368,16 @@
   },
   {
    "from": "2026-11-10",
-   "runs": 46,
+   "runs": 45,
    "passed": 729,
    "of": 759,
    "ms": 364
   },
   {
    "from": "2026-11-17",
-   "runs": 254,
-   "passed": 11266,
-   "of": 13088,
+   "runs": 255,
+   "passed": 11431,
+   "of": 13257,
    "broken": 7,
    "brokenOf": 1148,
    "brokenPassed": 23,
@@ -421,7 +401,7 @@
   "skill:define": "2026-11-05T00:26:50Z",
   "skill:digest": "2026-10-15T06:50:33Z",
   "skill:film-metadata": "2026-10-19T02:18:29Z",
-  "skill:cartoon": "2026-11-07T23:22:42Z",
+  "skill:cartoon": "2026-11-24T07:45:06Z",
   "skill:challenge": "2026-10-18T00:02:54Z",
   "skill:checkers": "2026-10-15T08:58:55Z",
   "skill:connect4": "2026-10-15T10:30:49Z",
@@ -873,6 +853,7 @@
   "skill:inflation": "2026-11-23T14:43:18Z",
   "skill:handoff-confidence": "2026-11-23T19:18:44Z",
   "skill:client-stage-tracker": "2026-11-23T22:20:25Z",
-  "skill:source-to-site": "2026-11-24T00:40:32Z"
+  "skill:source-to-site": "2026-11-24T00:40:32Z",
+  "skill:flowchart": "2026-11-24T07:45:06Z"
  }
 }
