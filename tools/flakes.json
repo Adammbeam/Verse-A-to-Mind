@@ -288,5 +288,6 @@
   {"check": "suite ran to the end", "sha": "16370839eed84e4884de5d4531cf2d918b549a08", "at": "2026-11-21T23:23:41Z"},
   {"check": "python-tests", "sha": "046bdd676ceb05ab19f348a5d1b8bd7694a3f95e", "at": "2026-11-22T20:40:45Z"},
   {"check": "python-tests", "sha": "1a194fb3e836f3e2ad0d939f052463d0eba99b0a", "at": "2026-11-22T20:47:45Z"},
-  {"check": "one side card per lifted board: a move made while the 3D board loads leaves exactly one side card on the stage, and it carries the move, not the empty first sta", "sha": "de3c5717544dbca9a9eb4dbda921426299ee98f2", "at": "2026-11-22T22:20:01Z"}
+  {"check": "one side card per lifted board: a move made while the 3D board loads leaves exactly one side card on the stage, and it carries the move, not the empty first sta", "sha": "de3c5717544dbca9a9eb4dbda921426299ee98f2", "at": "2026-11-22T22:20:01Z"},
+  {"check": "suite ran to the end", "sha": "14a9b79deb4b3eadc1b12c9ef769d305ea0b8f01", "at": "2026-11-24T12:51:25Z"}
 ]
