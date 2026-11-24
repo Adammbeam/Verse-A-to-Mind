@@ -1099,6 +1099,16 @@
    "listed": 6,
    "defectsBefore": 68,
    "defectsAfter": 0
+  },
+  {
+   "at": "2026-11-24T11:35:50.260Z",
+   "run": 184,
+   "measured": 30,
+   "clean": 25,
+   "fixed": 1,
+   "listed": 4,
+   "defectsBefore": 5,
+   "defectsAfter": 0
   }
  ],
  "pages": {
@@ -6541,18 +6551,8 @@
    "state": "clean"
   },
   "/contribute/": {
-   "at": "2026-11-24T09:32:42.456Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
-    "defects": 68,
-    "contrast": 0,
-    "targets": 68,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
@@ -6561,8 +6561,7 @@
     "cls": 0,
     "overflow": 0
    },
-   "rules": 68,
-   "moved": 0
+   "state": "clean"
   },
   "/lab/145-local-gaze-not-command/": {
    "at": "2026-11-24T09:32:42.456Z",
@@ -6644,7 +6643,7 @@
    "why": "no rule fixes it (a layout shift of 0.14 that no rule fixes: listed for a builder)"
   },
   "/fix/n8n-econnrefused-http-request/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6657,7 +6656,7 @@
    "state": "clean"
   },
   "/fix/n8n-json-parameter-needs-valid-json/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6670,7 +6669,7 @@
    "state": "clean"
   },
   "/fix/zapier-422-unprocessable-entity/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6683,7 +6682,7 @@
    "state": "clean"
   },
   "/fix/github-actions-npm-ci-lockfile-out-of-sync/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6696,7 +6695,7 @@
    "state": "clean"
   },
   "/fix/power-automate-invalid-template-expression/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6709,7 +6708,7 @@
    "state": "clean"
   },
   "/fix/power-automate-connection-needs-fixing/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6722,7 +6721,7 @@
    "state": "clean"
   },
   "/fix/github-actions-permission-denied-publickey/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6800,7 +6799,7 @@
    "state": "clean"
   },
   "/lab/f317-webxr-hand-rd-dom-field/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6813,14 +6812,14 @@
    "state": "clean"
   },
   "/lab/f234-loop-grid/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.027,
+    "cls": 0,
     "overflow": 15
    },
    "state": "clean"
@@ -6840,7 +6839,7 @@
    "why": "the defects did not go down (5 -> 5)"
   },
   "/lab/f192-webxr-hand-force-cloth-kernel/": {
-   "at": "2026-11-18T19:15:21.270Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6853,7 +6852,7 @@
    "state": "clean"
   },
   "/lab/f175-webrtc-shared-device-field/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6866,7 +6865,7 @@
    "state": "clean"
   },
   "/lab/f503-lennard-jones-mlp-dom-swarm-mind/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6874,12 +6873,12 @@
     "unstyled": 0,
     "empty": 0,
     "cls": 0,
-    "overflow": 52669
+    "overflow": 10216989
    },
    "state": "clean"
   },
   "/lab/f468-webrtc-expression-agent-field/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6892,7 +6891,7 @@
    "state": "clean"
   },
   "/lab/f504-webgpu-poisson-potential-mlp-dom-mind/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6900,7 +6899,7 @@
     "unstyled": 0,
     "empty": 0,
     "cls": 0,
-    "overflow": 0
+    "overflow": 18
    },
    "state": "clean"
   },
@@ -6929,20 +6928,21 @@
    "moved": 0.134
   },
   "/lab/f320-orient-rnn-webgpu-softbody-dom-arena/": {
-   "at": "2026-11-18T19:15:21.270Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
-    "defects": 0,
+    "defects": 1,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0,
+    "cls": 0.65,
     "overflow": 0
    },
-   "state": "clean"
+   "state": "listed",
+   "why": "no rule fixes it (a layout shift of 0.65 that no rule fixes: listed for a builder)"
   },
   "/lab/f313-webgpu-causal-motion-rnn-hybrid-sculpt/": {
-   "at": "2026-11-18T19:15:21.270Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6950,12 +6950,12 @@
     "unstyled": 0,
     "empty": 0,
     "cls": 0.001,
-    "overflow": 8
+    "overflow": 0
    },
    "state": "clean"
   },
   "/lab/f199-local-rnn-webgpu-causal-particle-field/": {
-   "at": "2026-11-18T19:15:21.270Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -6968,14 +6968,14 @@
    "state": "clean"
   },
   "/lab/f233-panel-play/": {
-   "at": "2026-11-18T19:15:21.270Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.052,
+    "cls": 0,
     "overflow": 0
    },
    "state": "clean"
@@ -7579,18 +7579,8 @@
    "state": "clean"
   },
   "/scoreboard/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
-    "defects": 2,
-    "contrast": 0,
-    "targets": 1,
-    "unstyled": 0,
-    "empty": 0,
-    "cls": 0.321,
-    "overflow": 0
-   },
-   "state": "fixed",
-   "after": {
     "defects": 1,
     "contrast": 0,
     "targets": 0,
@@ -7599,9 +7589,8 @@
     "cls": 0.326,
     "overflow": 0
    },
-   "rules": 1,
-   "moved": 0,
-   "why": "(a layout shift of 0.321 that no rule fixes: listed for a builder)"
+   "state": "listed",
+   "why": "no rule fixes it (a layout shift of 0.326 that no rule fixes: listed for a builder)"
   },
   "/lab/f626-flooring-tile-estimator/": {
    "at": "2026-11-21T23:07:12.555Z",
@@ -9921,7 +9910,7 @@
    "state": "clean"
   },
   "/lab/f639-label-name-tag-sheet/": {
-   "at": "2026-11-18T19:15:21.270Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11168,7 +11157,7 @@
    "state": "clean"
   },
   "/lab/f721-webxr-hand-decision-tree-spatial-notes/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11181,7 +11170,7 @@
    "state": "clean"
   },
   "/lab/f683-inertial-particle-filter-spatial-mind/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11194,7 +11183,7 @@
    "state": "clean"
   },
   "/lab/f673-webgpu-spatial-bin-packer/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 5,
     "contrast": 0,
@@ -11204,11 +11193,21 @@
     "cls": 0,
     "overflow": 0
    },
-   "state": "listed",
-   "why": "it added a layout shift"
+   "state": "fixed",
+   "after": {
+    "defects": 0,
+    "contrast": 0,
+    "targets": 0,
+    "unstyled": 0,
+    "empty": 0,
+    "cls": 0,
+    "overflow": 0
+   },
+   "rules": 5,
+   "moved": 0.054
   },
   "/lab/f689-webgpu-semantic-embedding-force-mind/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11221,7 +11220,7 @@
    "state": "clean"
   },
   "/lab/f728-webgpu-discrete-ca-audio-spatial-rule-cards-mind/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 21,
     "contrast": 0,
@@ -11232,10 +11231,10 @@
     "overflow": 370
    },
    "state": "listed",
-   "why": "it changed 40% of the first screen"
+   "why": "it changed 41% of the first screen"
   },
   "/lab/f695-spatial-constrained-char-rnn-garden/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11248,7 +11247,7 @@
    "state": "clean"
   },
   "/lab/f660-voice-note-transcriber/": {
-   "at": "2026-11-18T19:15:21.270Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -11261,7 +11260,7 @@
    "state": "clean"
   },
   "/lab/f656-spatial-note-clusterer/": {
-   "at": "2026-11-18T19:15:21.270Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 0,
     "contrast": 0,
@@ -12659,18 +12658,18 @@
    "state": "clean"
   },
   "/games/jrpg/": {
-   "at": "2026-11-21T17:47:27.770Z",
+   "at": "2026-11-24T11:35:50.260Z",
    "before": {
     "defects": 1,
     "contrast": 0,
     "targets": 0,
     "unstyled": 0,
     "empty": 0,
-    "cls": 0.172,
+    "cls": 0.139,
     "overflow": 0
    },
    "state": "listed",
-   "why": "no rule fixes it (a layout shift of 0.172 that no rule fixes: listed for a builder)"
+   "why": "no rule fixes it (a layout shift of 0.139 that no rule fixes: listed for a builder)"
   },
   "/lab/f795-seating-chart/": {
    "at": "2026-11-21T20:58:58.263Z",
