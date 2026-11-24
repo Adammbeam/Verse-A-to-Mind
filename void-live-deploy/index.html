@@ -60,7 +60,9 @@
     /* home polish: never cut words, fit phones, no sideways scroll */
     html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     body { overflow-x: hidden; }
-    h1, h2, h3, p, li, label, button, a, figcaption { overflow-wrap: anywhere; }
+    h1, h3, p, li, label, a, figcaption { overflow-wrap: anywhere; }
+    h2, button { overflow-wrap: normal; }  /* prevent 1-char collapses in docked cards */
+    button span { overflow-wrap: break-word; }
     img, video, canvas, iframe { max-width: 100%; }
     :root {
       color-scheme: dark;
@@ -551,6 +553,7 @@
     .vpage h2 { margin: 0 0 4px; font-weight: 500; font-size: 22px; letter-spacing: .01em; }
     .vpage .sub { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
     .vpage img { float: right; max-width: 150px; max-height: 150px; margin: 2px 0 10px 16px; border-radius: 10px; opacity: .92; }
+    .vpage.placed img, .vpage.kept img { float: right; max-width: 72px; max-height: 72px; margin: 4px 0 12px 16px; border-radius: 10px; opacity: .92; }
     .vpage p { margin: 0 0 10px; color: #d6d6d6; }
     .vpage ul { margin: 0 0 10px; padding-left: 18px; color: #d6d6d6; }
     .vpage .src { clear: both; margin-top: 12px; font-size: 12px; color: var(--muted); }
