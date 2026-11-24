@@ -19201,5 +19201,6 @@
   {"at": "2026-11-24T04:42:31Z", "by": "openhands", "kind": "fix", "what": "the stranger gate judges the blank stage at / by its ask box, not as a content page"},
   {"at": "2026-11-24T04:58:15Z", "by": "openhands", "kind": "fix", "what": "the daily bench records its floor and misses again: a routed skill with no family no longer aborts the step, and the routing index and book agree"},
   {"at": "2026-11-24T05:02:31Z", "by": "opencode", "kind": "fix", "what": "A failed Merge gate or Verse review on a same-repo helper or loop PR now tries a mechanical fix and one scoped patch before queueing a Repair job"},
-  {"at": "2026-11-24T06:46:23Z", "by": "claude", "kind": "fix", "what": "Widen team handoff and let the conductor drain unroutable queue jobs"}
+  {"at": "2026-11-24T06:46:23Z", "by": "claude", "kind": "fix", "what": "Widen team handoff and let the conductor drain unroutable queue jobs"},
+  {"at": "2026-11-24T10:21:42Z", "by": "video-gen-live", "kind": "finding", "what": "video-gen checked against the live site, occasion 58: video is off: the partner video model says the account has no AI Gateway credits yet; Verse last tested the video model at 2026-11-24T09:17:00.727Z, and /video/ answers with the Uni gate (artifact findings/video-gen/2026-11-24T1021.json)", "ref": "https://github.com/atomeam/void-loop/blob/main/findings/video-gen/2026-11-24T1021.json"}
 ]
