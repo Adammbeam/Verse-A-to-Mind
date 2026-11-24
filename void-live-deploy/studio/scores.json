@@ -759,6 +759,76 @@
         "via": "Groq openai/gpt-oss-120b",
         "pass": false
       }
+    },
+    {
+      "at": "2026-11-24T02:21:50.051Z",
+      "studio": true,
+      "kind": "short",
+      "title": "Betting Scandal Showdown",
+      "source": {
+        "title": "Canton Bulldogs–Massillon Tigers betting scandal",
+        "url": "https://en.wikipedia.org/wiki/Canton_Bulldogs%E2%80%93Massillon_Tigers_betting_scandal"
+      },
+      "pass": false,
+      "writer": "Groq openai/gpt-oss-120b",
+      "judge": {
+        "separated": false,
+        "calibration": [
+          {
+            "id": "journal",
+            "kind": "bad",
+            "min": 1,
+            "scores": [
+              3,
+              2,
+              1
+            ]
+          },
+          {
+            "id": "old34",
+            "kind": "bad",
+            "min": 1,
+            "scores": [
+              8,
+              8,
+              1
+            ]
+          },
+          {
+            "id": "page",
+            "kind": "bad",
+            "min": 3,
+            "scores": [
+              3,
+              7,
+              9
+            ]
+          },
+          {
+            "id": "clickbait",
+            "kind": "bad",
+            "min": 6,
+            "scores": [
+              6,
+              6,
+              9
+            ]
+          },
+          {
+            "id": "good-story",
+            "kind": "good",
+            "min": 7,
+            "scores": [
+              7,
+              7,
+              10
+            ]
+          }
+        ],
+        "issues": [],
+        "via": "Groq openai/gpt-oss-120b",
+        "pass": false
+      }
     }
   ]
 }
