@@ -1,4 +1,5 @@
 /** Jump Stack: both climb the same ledges. You jump as soon as you land. Verse waits, so you reach the top first. */
+export const whatsNew = 'Update 1: You now feel the rush of beating the void to the summit.';
 export const id = 'jump-stack', W = 220, H = 200, CAP = 700;
 const LEDGES = [0, 1, 2, 3, 4, 5].map((i) => ({ x: 24, y: 176 - i * 30, w: 170 }));
 export function create(seed = 1) {

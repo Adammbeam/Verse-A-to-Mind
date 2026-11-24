@@ -1,5 +1,5 @@
 {
- "cursor": 4,
+ "cursor": 1,
  "picks": {
   "debris-field": 1,
   "gap-glide": 1,
@@ -14,7 +14,8 @@
   "cross-bus": 1,
   "push-packets": 1,
   "token-stand": 1,
-  "merge-void": 1
+  "merge-void": 1,
+  "jump-stack": 1
  },
  "scores": {
   "debris-field": {
@@ -267,6 +268,27 @@
     "fun": 5,
     "polish": 6
    }
+  },
+  "jump-stack": {
+   "update": 1,
+   "note": "Update 1: You now feel the rush of beating the void to the summit.",
+   "why": "shipped",
+   "fun": 51,
+   "cents": 0,
+   "paid": false,
+   "cycle": 1,
+   "video": "https://github.com/atomeam/void-loop/actions/runs/45314839500",
+   "parts": {
+    "danger": 4,
+    "goal": 7,
+    "boss": 0,
+    "juice": 5,
+    "phone": 8,
+    "fair": 9,
+    "end": 3,
+    "fun": 6,
+    "polish": 4
+   }
   }
  },
  "shown": [
@@ -441,6 +463,20 @@
    "paid": false,
    "provider": "verse @cf/google/gemma-4-26b-a4b-it",
    "video": "https://github.com/atomeam/void-loop/actions/runs/45171485911",
+   "dropped": false,
+   "born": false
+  },
+  {
+   "at": "2026-11-24T02:51:52.250Z",
+   "id": "jump-stack",
+   "title": "Jump Stack",
+   "n": 1,
+   "note": "Update 1: You now feel the rush of beating the void to the summit.",
+   "fun": 51,
+   "cents": 0,
+   "paid": false,
+   "provider": "verse @cf/google/gemma-4-26b-a4b-it",
+   "video": "https://github.com/atomeam/void-loop/actions/runs/45314839500",
    "dropped": false,
    "born": false
   }
