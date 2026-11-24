@@ -1,34 +1,5 @@
 [
  {
-  "at": "2026-11-14T22:18:44Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 15,
-   "of": 15,
-   "medianMs": 1142,
-   "failed": []
-  },
-  "note": "visitor pass 15/15"
- },
- {
-  "at": "2026-11-14T22:43:59Z",
-  "kind": "visitor",
-  "visitor": {
-   "correct": 14,
-   "of": 15,
-   "medianMs": 1354,
-   "failed": [
-    {
-     "ask": "what can you do",
-     "why": [
-      "slow 9152 ms"
-     ]
-    }
-   ]
-  },
-  "note": "visitor pass 14/15"
- },
- {
   "at": "2026-11-14T23:12:28Z",
   "kind": "visitor",
   "visitor": {
@@ -6710,5 +6681,80 @@
    "failed": []
   },
   "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-24T13:10:20Z",
+  "kind": "visitor",
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 994,
+   "failed": []
+  },
+  "note": "visitor pass 15/15"
+ },
+ {
+  "at": "2026-11-24T13:24:45Z",
+  "passed": 157,
+  "of": 170,
+  "ms": 372,
+  "kind": "grow",
+  "failed": [
+   {
+    "ask": "are you web4",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "yo bitcoin price",
+    "why": "console: Failed to load resource: the server responded with a status of 503 ()"
+   },
+   {
+    "ask": "swarm mind",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "who is the auhtor of dune",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "redner a cartoon dragon",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "stlye like mickey mouse",
+    "why": "console: Failed to load resource: the server responded with a status of 404 ()"
+   },
+   {
+    "ask": "what are you working on",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "snake game",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "clear search history",
+    "why": "only \"waking up\" appeared, never the answer"
+   },
+   {
+    "ask": "which miniatures do you have",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   },
+   {
+    "ask": "give me a shortcut",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   },
+   {
+    "ask": "technical context for unwrap",
+    "why": "console: Failed to load resource: the server responded with a status of 429 ()"
+   }
+  ],
+  "visitor": {
+   "correct": 15,
+   "of": 15,
+   "medianMs": 994,
+   "failed": []
+  },
+  "note": "new ground passed, kept as a regression case: \"watch https://example.com/news for changes\" (skill:watch)"
  }
 ]
