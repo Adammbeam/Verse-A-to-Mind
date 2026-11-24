@@ -587,11 +587,30 @@ test('the waiting jobs move without asking: an idle agent that reads is handed t
   assert.equal(job(env, 'j5').state, 'building'); assert.match(job(env, 'j5').note, /^claimed by team:Cy ·/, 'the will\'s job, next in the queue\'s order');
   const heard = await get(env, '?activity', cy, T0 + 3000);
   assert.ok(heard.hits.some((m) => /^@Cy your next job \(will/.test(m.body)), 'Cy hears it in its mentions');
-  // an agent away (no word for AWAY_MS) is handed nothing: the job would only wait on it
+  // past the old 10-minute gate but inside 30, an idle agent is still here: presence says idle and the page hands it the job
   const env2 = world([JOBS[0]]), dee = (await admit(env2, 'Dee')).key;
   assert.equal((await post(env2, { do: 'post', c: 'general', body: 'hi' }, dee)).status, 201);
-  const away = await get(env2, '', null, T0 + T.AWAY_MS + 1000);
-  assert.equal(away.waiting, 1); assert.equal(job(env2, 'j1').state, 'queued');
+  const here = await get(env2, '', null, T0 + T.AWAY_MS + 1000);
+  assert.equal(here.members[0].state, 'busy'); assert.equal(here.waiting, 0);
+  assert.equal(job(env2, 'j1').state, 'building'); assert.match(job(env2, 'j1').note, /^claimed by team:Dee ·/);
+});
+
+test('a pull seat heard from within 30 minutes gets a job; a paused, off, held or crew seat and a 30-minute-old silence do not', async () => {
+  assert.equal(T.HAND_IDLE_MS, 30 * 60e3);
+  const env = world(JOBS), now = T0 + 2 * T.HAND_IDLE_MS, inside = now - T.HAND_IDLE_MS + 1000, outside = now - T.HAND_IDLE_MS - 1000;
+  for (const name of ['Fresh', 'PushGaveUp', 'Edge', 'Paused', 'Off', 'Held', 'Crew']) await admit(env, name);
+  const shape = (name, { seen = inside, auto = 1, off = 0, job: held = null, crew = 0 } = {}) =>
+    env.DB.raw.prepare('UPDATE void_team_agents SET seen = ?, auto = ?, off = ?, job = ?, crew = ? WHERE name = ?').run(seen, auto, off, held, crew, name);
+  const seat = (name) => env.DB.raw.prepare('SELECT * FROM void_team_agents WHERE name = ?').get(name);
+  shape('Fresh'); shape('PushGaveUp', { seen: inside - 1000 });
+  env.DB.raw.prepare('UPDATE void_team_agents SET hook = ?, hook_fails = ? WHERE name = ?').run('https://push.test/jobs', T.HOOK.tries, 'PushGaveUp');
+  shape('Edge', { seen: outside }); shape('Paused', { auto: 0 }); shape('Off', { off: 1 });
+  shape('Held', { job: 'j-held' }); shape('Crew', { crew: 1, auto: 0 });
+  assert.equal(await API.handIdle(env, now, 10), 2, 'only the two seats inside the window and opted in');
+  assert.match(job(env, 'j2').note, /^claimed by team:Fresh ·/);
+  assert.match(job(env, 'j5').note, /^claimed by team:PushGaveUp ·/);
+  for (const name of ['Edge', 'Paused', 'Off', 'Crew']) assert.equal(seat(name).job, null, name + ' was not handed work it will not finish');
+  assert.equal(seat('Held').job, 'j-held', 'a seat already holding work is not handed more');
 });
 
 test('over MCP, a read that comes back with a handed job says the job first', async () => {

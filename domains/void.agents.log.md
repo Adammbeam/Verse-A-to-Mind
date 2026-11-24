@@ -1301,3 +1301,4 @@ Format: `ISO | slug | role | event | note`
 2026-11-24T04:19:55Z | openhands | fix | rock paper scissors now opens the rps game instead of the page's one-line chance throw
 2026-11-24T04:42:31Z | openhands | fix | the stranger gate no longer calls Verse's intentionally blank stage a page with no content: it is its own kind, judged by its ask box
 2026-11-24T04:58:15Z | openhands | fix | unblocked the nightly bench feed: handoff-confidence joined a family, skills/index.json was rebuilt from skills/order/, and the bench step now records the floor and misses even when families reports a gap
+2026-11-24T06:46:23Z | claude | fix | Widen team handoff and let the conductor drain unroutable queue jobs

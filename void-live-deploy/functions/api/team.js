@@ -466,11 +466,13 @@ export async function pushAll(env, now, max = 4) {
   }
   return sent;
 }
-/** every idle agent that pulls (no push address that answers) and spoke in the last AWAY_MS gets its next job too, in the queue's order: the
- *  job is its thread in #work that @mentions it, and its next read carries the job. At most `max` agents a call. -> the number handed a job */
+/** every idle agent that pulls (no push address that answers) and spoke in the last HAND_IDLE_MS gets its next job too, in the queue's order:
+ *  the job is its thread in #work that @mentions it, and its next read carries the job. "Idle" here is no job in hand and opted in
+ *  (auto = 1, off = 0, a key): a crew, held or switched-off seat is never handed work it will not finish. At most `max` agents a call.
+ *  -> the number handed a job */
 export async function handIdle(env, now, max = 4) {
   let rows = [];
-  try { rows = (await env.DB.prepare("SELECT * FROM void_team_agents WHERE off = 0 AND key != '' AND (hook IS NULL OR hook = '' OR hook_fails >= ?) AND job IS NULL AND auto = 1 AND seen >= ? ORDER BY seen DESC LIMIT ?").bind(T.HOOK.tries, now - T.AWAY_MS, max).all()).results; } catch (_) { return 0; }
+  try { rows = (await env.DB.prepare("SELECT * FROM void_team_agents WHERE off = 0 AND key != '' AND (hook IS NULL OR hook = '' OR hook_fails >= ?) AND job IS NULL AND auto = 1 AND seen >= ? ORDER BY seen DESC LIMIT ?").bind(T.HOOK.tries, now - T.HAND_IDLE_MS, max).all()).results; } catch (_) { return 0; }
   let n = 0;
   for (const a of rows) { if (!(await handOut(env, a, now))) break; n++; } // void-review: ok (at most `max` agents, each claimed in one statement as for a pull)
   return n;
