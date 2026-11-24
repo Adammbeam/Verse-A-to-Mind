@@ -371,6 +371,7 @@ for (const [name, file] of [
   ['chess-replay', 'chess-replay.test.mjs'],
   ['sorry', 'sorry.test.mjs'],
   ['voice', 'voice.test.mjs'],
+  ['pr-autofix', 'pr-autofix.test.mjs'],
   ['pr-ready', 'pr-ready.test.mjs'],
   ['suite-gate', 'suite-gate.test.mjs'],
   ['suite-diff', 'suite-diff.test.mjs'],

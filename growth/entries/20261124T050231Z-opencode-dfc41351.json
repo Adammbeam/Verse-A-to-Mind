@@ -1,0 +1,1 @@
+{"at":"2026-11-24T05:02:31Z","by":"opencode","kind":"fix","what":"A failed Merge gate or Verse review on a same-repo helper or loop PR now tries a mechanical fix and one scoped patch before queueing a Repair job"}

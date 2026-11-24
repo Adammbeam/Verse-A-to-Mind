@@ -126,7 +126,7 @@ test('merge-main takes main\'s side of a conflicted parity inventory instead of 
   const inv = 'docs/PARITY/site.md', a = repoFile(inv, 'cites line 10\n', 'cites line 12\n', 'cites line 11\n');
   const r = mergeMain(a);
   assert.equal(r.status, 0, r.stdout + r.stderr);
-  assert.equal(readFileSync(join(a, inv), 'utf8'), 'cites line 12\n');
+  assert.equal(readFileSync(join(a, inv), 'utf8').replace(/\r\n/g, '\n'), 'cites line 12\n');
   assert.equal(execSync('git status --porcelain', { cwd: a, encoding: 'utf8' }).trim(), '', 'the merge is committed');
 });
 
