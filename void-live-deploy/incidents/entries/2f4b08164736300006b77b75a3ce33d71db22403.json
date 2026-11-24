@@ -1,0 +1,31 @@
+{
+ "at": "2026-11-24T06:47:01.156Z",
+ "sha": "2f4b08164736300006b77b75a3ce33d71db22403",
+ "run": "https://github.com/atomeam/void-loop/actions/runs/45335589634",
+ "suite": "browser suite on main",
+ "checks": [
+  "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer",
+  "poster wins: on a skill card (phone) the stats chip touches no text, the rarity and collector row included",
+  "will: Verse says what it wants",
+  "store: an ask a product covers gets Verse's answer first, then one line (product, live price, link) from the live catalog; new store products are found",
+  "catalog: first read pulls the live store (all 7 products, tiered Verse Monthly = $49 a month) and saves it",
+  "coin: /flip/ shows all 7 things a full answer shows — the flip counter named, the tap and the result said in words (the gate's own rule, the 3 the tower sat at 4 of 7 on)",
+  "suite ran to the end"
+ ],
+ "touched": [
+  ".github/workflows/pr-autofix.yml",
+  "docs/MAP.md",
+  "docs/map.d/pr-autofix.md",
+  "domains/void.agents.log.md",
+  "growth/entries/20261124T050231Z-opencode-dfc41351.json",
+  "tools/checks.mjs",
+  "tools/fix-cap.mjs",
+  "tools/merge-main.test.mjs",
+  "tools/pr-autofix.mjs",
+  "tools/pr-autofix.test.mjs"
+ ],
+ "shards": [
+  1,
+  3
+ ]
+}
