@@ -1,5 +1,5 @@
 {
- "cursor": 1,
+ "cursor": 0,
  "picks": {
   "debris-field": 1,
   "gap-glide": 1,
@@ -17,7 +17,8 @@
   "merge-void": 1,
   "jump-stack": 1,
   "snake": 1,
-  "glyph-verse": 1
+  "glyph-verse": 1,
+  "void-breaker": 1
  },
  "scores": {
   "debris-field": {
@@ -333,6 +334,27 @@
     "fun": 9,
     "polish": 10
    }
+  },
+  "void-breaker": {
+   "update": 1,
+   "note": "Update 1: You can now feel the weight of every bounce and the triumph of every brick broken.",
+   "why": "shipped",
+   "fun": 53,
+   "cents": 0,
+   "paid": false,
+   "cycle": 1,
+   "video": "https://github.com/atomeam/void-loop/actions/runs/45391356510",
+   "parts": {
+    "danger": 2,
+    "goal": 7,
+    "boss": 0,
+    "juice": 6,
+    "phone": 8,
+    "fair": 10,
+    "end": 3,
+    "fun": 7,
+    "polish": 5
+   }
   }
  },
  "shown": [
@@ -549,6 +571,20 @@
    "paid": false,
    "provider": "verse @cf/google/gemma-4-26b-a4b-it",
    "video": "https://github.com/atomeam/void-loop/actions/runs/45382650579",
+   "dropped": false,
+   "born": false
+  },
+  {
+   "at": "2026-11-24T12:20:42.939Z",
+   "id": "void-breaker",
+   "title": "Verse Breaker",
+   "n": 1,
+   "note": "Update 1: You can now feel the weight of every bounce and the triumph of every brick broken.",
+   "fun": 53,
+   "cents": 0,
+   "paid": false,
+   "provider": "verse @cf/google/gemma-4-26b-a4b-it",
+   "video": "https://github.com/atomeam/void-loop/actions/runs/45391356510",
    "dropped": false,
    "born": false
   }
