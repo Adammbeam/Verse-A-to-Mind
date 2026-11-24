@@ -55,7 +55,7 @@ const PLANNED = /\bas expected\b|\bmutat(?:ion|ed|ing)\b|\bon purpose\b|\bdelibe
 // a failure that has not happened is not still failing: a condition ("If either PR goes red or hits a conflict, fix it first.") or a "would" ("A failing
 // check would automatically revert the commit that broke it.") came back on a card as two of "3 things still failing" (2026-10-19)
 // and a plan's designed outcome ("The laptop task then fails loudly instead of overwriting the card.", "Step 2 makes it fail harmlessly either way.") the same day
-const HYPOTHETICAL = /^(?:if|when|whenever|should|unless|in case)\b|\b(?:would|will|then|makes?\s+(?:it|them|this|that))\s+(?:\w+\s+)?(?:revert|fails?|break|block|stop)\b|\bfails?\s+(?:loudly|harmlessly|safely|closed|gracefully|fast)\b|\bif\s+(?:either|any|the|a|one)\b[^.]{0,60}\b(?:red|fail|fails|conflicts?)\b|\b(?:a|an|any|each|every)\s+(?:[\w-]+\s+){0,2}that\s+fails?\b/i; // "reverts a commit that fails it" says what the suite does, not that something failed (2026-10-30)
+const HYPOTHETICAL = /^(?:(?:right now|today|currently),?\s+)?(?:if|when|whenever|should|unless|in case)\b|\b(?:only\s+)?if\b[^.]{0,60}\b(?:red|still\s+red|fail|fails|conflicts?)\b|\b(?:would|will|then|makes?\s+(?:it|them|this|that))\s+(?:\w+\s+)?(?:revert|fails?|break|block|stop)\b|\bfails?\s+(?:loudly|harmlessly|safely|closed|gracefully|fast)\b|\b(?:a|an|any|each|every)\s+(?:[\w-]+\s+){0,2}that\s+fails?\b/i; // "reverts a commit that fails it" and "only if Tier 1 is still red" are conditions, not failures
 /** the lines that name something failing, cleaned and clipped: the "FAIL ..." lines, "- **Name:** ... failed", stalls and conflicts; never a builder's
  *  own narration, and "red" only as a state. Pure. */
 export function failuresOf(text) {
@@ -132,6 +132,8 @@ function readingOf(raw) {
   if (signals.length < MIN_SIGNALS && !ours && !read) return null;
   const shas = [...new Set((text.match(/\b[0-9a-f]{7,40}\b/g) || []).filter((s) => /\d/.test(s) && /[a-f]/.test(s)))].slice(0, 5);
   const prs = openFirst([...new Set([...text.matchAll(/(?:\bPR\s*#?|pull\/|void-loop#|#)(\d{2,6})\b/gi)].map((m) => m[1]))], read).slice(0, 5);
+  // a design proposal or architecture note that mentions "workflow", "PR", and "fails/red/green" in the abstract without naming a real PR number, commit SHA, run id, or test count is not a CI report (2026-11-24)
+  if (!ours && !read && !shas.length && !prs.length && !signals.includes('run') && !signals.includes('counts')) return null;
   const m = /(\d+)\s*(?:\/|of)\s*(\d+)\s*passed/i.exec(text);
   return { kind: read ? 'status' : signals.includes('run') || signals.includes('ci') ? 'ci' : 'status', signals, shas, prs, failures: failuresOf(text), passed: m ? { ok: +m[1], of: +m[2] } : null, read };
 }
