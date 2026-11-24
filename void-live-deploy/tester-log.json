@@ -1,14 +1,21 @@
 {
  "note": "Verse's site tester: what it checked on a-to-mind.com and what each run improved (tools/site-test.mjs).",
- "cases": 167,
+ "cases": 168,
  "runsTotal": 300,
  "kinds": {
-  "visitor": 206,
   "file": 44,
+  "visitor": 206,
   "grow": 46,
   "tighten": 4
  },
  "runs": [
+  {
+   "at": "2026-11-24T04:08:37Z",
+   "passed": 0,
+   "of": 0,
+   "kind": "visitor",
+   "note": "visitor pass 15/15"
+  },
   {
    "at": "2026-11-24T03:06:06Z",
    "passed": 0,
@@ -386,13 +393,6 @@
    "of": 0,
    "kind": "visitor",
    "note": "visitor pass 15/15"
-  },
-  {
-   "at": "2026-11-23T16:06:26Z",
-   "passed": 0,
-   "of": 0,
-   "kind": "visitor",
-   "note": "visitor pass 15/15"
   }
  ],
  "weekly": [
@@ -458,14 +458,14 @@
   },
   {
    "from": "2026-11-10",
-   "runs": 45,
+   "runs": 46,
    "passed": 845,
    "of": 883,
    "ms": 360
   },
   {
    "from": "2026-11-17",
-   "runs": 255,
+   "runs": 254,
    "passed": 11266,
    "of": 13088,
    "broken": 7,
