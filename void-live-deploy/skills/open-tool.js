@@ -28,6 +28,9 @@ const ALIASES = { 'character counter': '/word-count/', 'letter counter': '/word-
   // the menu's theme names (2026-11-06): each opens its page by the name the menu shows
   'drones': '/bots/', 'verse drones': '/bots/', 'envoy': '/agent/', 'verse envoy': '/agent/', 'holovids': '/films/', 'verse holovids': '/films/', 'out loud': '/podcast/',
   'hoard': '/treasury/', 'the hoard': '/treasury/', 'verse star chart': '/scoreboard/', 'shields': '/security/', 'verse shields': '/security/', 'verse event horizon': '/limits/', 'assimilate page': '/contribute/',
+  // the currency converter is a markets page (2026-11-25: "currency converter" fell to an article about currency converters)
+  'currency converter': '/markets/currency-converter/', 'currency exchange': '/markets/currency-converter/', 'currency calculator': '/markets/currency-converter/',
+  'exchange rate': '/markets/currency-converter/', 'exchange rates': '/markets/currency-converter/', 'exchange rate converter': '/markets/currency-converter/', 'money converter': '/markets/currency-converter/',
   'mind map': '/lab/mind-map/', 'mind map maker': '/lab/mind-map/', 'mindmap': '/lab/mind-map/', 'make a mind map': '/lab/mind-map/' };
 const TOOL_NOUN = /\s(?:counter|converter|calculator|generator|checker|picker|maker|editor|tester|finder|timer|formatter|encoder|decoder|viewer)$/;
 // pages whose own stage skill answers their name with a card that links the page (tools/skill-overlap.mjs): those asks stay there
