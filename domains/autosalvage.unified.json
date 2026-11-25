@@ -438,6 +438,12 @@
       "into": "/bots/ (api-paper-finder)",
       "test": "tools/api-bots.test.mjs",
       "pr": null
+    },
+    "outside:Hopding/pdf-lib": {
+      "target": "tool",
+      "into": "/pdf/ and skills/stage-pdf.js (lib/pdf-tools.js fromText)",
+      "test": "tools/pdf-tools.test.mjs and tools/stage-pdf.test.mjs",
+      "pr": null
     }
   }
 }
