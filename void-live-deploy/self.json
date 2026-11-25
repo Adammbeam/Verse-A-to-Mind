@@ -672,6 +672,26 @@
  },
  "commits": [
   {
+   "at": "2026-11-25T23:23:33Z",
+   "subject": "Leave asks the build ledger proves out of Verse's open frontier"
+  },
+  {
+   "at": "2026-11-25T23:23:05Z",
+   "subject": "Add oldestClaimMin to GET /api/team counts"
+  },
+  {
+   "at": "2026-11-25T23:19:37Z",
+   "subject": "Treat in-charge offers as directives, not not-found lookups"
+  },
+  {
+   "at": "2026-11-25T23:16:17Z",
+   "subject": "refuse a merge-gate wipe the way 9a726fe did"
+  },
+  {
+   "at": "2026-11-25T23:14:33Z",
+   "subject": "Classify asks as question, directive or passage before routing"
+  },
+  {
    "at": "2026-11-25T22:55:49Z",
    "subject": "Report only the correction, not an unrelated Fixed list"
   },
@@ -730,26 +750,6 @@
   {
    "at": "2026-11-25T21:42:14Z",
    "subject": "fix: separate crew from idle in presence; import pushAll/handIdle into crewTick"
-  },
-  {
-   "at": "2026-11-25T21:20:42Z",
-   "subject": "Route paper, formula and trial asks through the science APIs, and mark them unified"
-  },
-  {
-   "at": "2026-11-25T21:19:51Z",
-   "subject": "salvage: archive 7 non-stub Workers + retire 15 June-6 stubs"
-  },
-  {
-   "at": "2026-11-25T21:15:02Z",
-   "subject": "wire: OpenAlex, PubChem, ClinicalTrials.gov v2 into /bots/ (api-bots) + mark 4 science APIs unified"
-  },
-  {
-   "at": "2026-11-25T21:13:16Z",
-   "subject": "Forethinkers: planet restoration Q8 corrected for peak heat; Q9 opened"
-  },
-  {
-   "at": "2026-11-25T20:50:17Z",
-   "subject": "feat(autosalvage): add Autosalvage Repo Agent and 10 vetted outside sources"
   }
  ],
  "builders": {
