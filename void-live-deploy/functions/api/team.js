@@ -401,14 +401,34 @@ async function unstall(env, a, now) {
   await write(env, { c: root.channel, by: 'verse', body: '@' + a.name + ' ' + T.noWaitSay(a.job), thread: a.thread, now });
   return true;
 }
+/** a job whose claim outlived its seat: the queue row says building, no live seat holds it, and its claim is older than STALE_MS. The claim
+ *  dies between the two writes when a Worker is killed mid-hand-out, or when a runner crashes with the job in hand. A conductor claim is not
+ *  a team claim, so it is left alone: tools/conductor.mjs reaps its own. -> the number put back on the queue */
+async function reapOrphans(env, now, max = 20) {
+  const cut = new Date(now - T.STALE_MS).toISOString();
+  let rows = [];
+  try { rows = (await env.DB.prepare("SELECT id, note FROM void_queue WHERE state = 'building' AND note LIKE 'claimed by team:%' AND updated < ? AND id NOT IN (SELECT job FROM void_team_agents WHERE job IS NOT NULL AND off = 0) LIMIT ?").bind(cut, max).all()).results || []; } catch (_) { return 0; }
+  let n = 0;
+  for (const row of rows) {
+    try {
+      const r = await env.DB.prepare("UPDATE void_queue SET state = 'queued', note = ?, updated = ? WHERE id = ? AND state = 'building'").bind(T.backNote(row.note, 'its claim died with no seat holding it', false), new Date(now).toISOString(), row.id).run();
+      if (r.meta.changes === 1) n++;
+    } catch (_) { /* one row that will not move must not stop the rest */ }
+  }
+  return n;
+}
 export async function sweep(env, now) {
-  const { results: busy } = await env.DB.prepare('SELECT * FROM void_team_agents WHERE job IS NOT NULL AND off = 0 AND seen >= ?').bind(now - T.STALE_MS).all();
+  // the lease starts at the claim, not at the seat's last word. `seen < now - STALE_MS` read a NULL `seen` (a push seat, a seat handed work
+  // before it ever polled) as "still alive", so that job was held forever; and a quiet seat handed a job was reaped on the very next request.
+  const LEASE = 'MAX(COALESCE(seen, 0), COALESCE(job_at, 0))';
+  const { results: busy } = await env.DB.prepare('SELECT * FROM void_team_agents WHERE job IS NOT NULL AND off = 0 AND ' + LEASE + ' >= ?').bind(now - T.STALE_MS).all();
   for (const a of busy) await unstall(env, a, now);
-  const { results } = await env.DB.prepare('SELECT * FROM void_team_agents WHERE job IS NOT NULL AND seen < ?').bind(now - T.STALE_MS).all();
+  const { results } = await env.DB.prepare('SELECT * FROM void_team_agents WHERE job IS NOT NULL AND ' + LEASE + ' < ?').bind(now - T.STALE_MS).all();
   for (const a of results) await giveBack(env, a, now, '@' + a.name + ' went quiet for 30 minutes', false);
+  const orphans = await reapOrphans(env, now).catch(() => 0);
   await deconflict(env, now).catch(() => []);
   await offerBetter(env, now).catch(() => 0);
-  return results.length;
+  return results.length + orphans;
 }
 /** a builder on a low-value job gets one Verse message in that job's thread pointing at visitor work. At most four a sweep. */
 export async function offerBetter(env, now) {
@@ -466,11 +486,11 @@ export async function pushAll(env, now, max = 4) {
   }
   return sent;
 }
-/** every idle agent that pulls (no push address that answers) and spoke in the last AWAY_MS gets its next job too, in the queue's order: the
+/** every idle agent that pulls (no push address that answers) and spoke in the last HAND_MS gets its next job too, in the queue's order: the
  *  job is its thread in #work that @mentions it, and its next read carries the job. At most `max` agents a call. -> the number handed a job */
 export async function handIdle(env, now, max = 4) {
   let rows = [];
-  try { rows = (await env.DB.prepare("SELECT * FROM void_team_agents WHERE off = 0 AND key != '' AND (hook IS NULL OR hook = '' OR hook_fails >= ?) AND job IS NULL AND auto = 1 AND seen >= ? ORDER BY seen DESC LIMIT ?").bind(T.HOOK.tries, now - T.AWAY_MS, max).all()).results; } catch (_) { return 0; }
+  try { rows = (await env.DB.prepare("SELECT * FROM void_team_agents WHERE off = 0 AND key != '' AND (hook IS NULL OR hook = '' OR hook_fails >= ?) AND job IS NULL AND auto = 1 AND seen >= ? ORDER BY seen DESC LIMIT ?").bind(T.HOOK.tries, now - T.HAND_MS, max).all()).results; } catch (_) { return 0; }
   let n = 0;
   for (const a of rows) { if (!(await handOut(env, a, now))) break; n++; } // void-review: ok (at most `max` agents, each claimed in one statement as for a pull)
   return n;

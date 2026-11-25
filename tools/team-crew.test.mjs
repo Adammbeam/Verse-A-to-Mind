@@ -116,7 +116,7 @@ test('a run seats the crew, files wants as queue jobs with #work threads, and ea
   const growth = rows(env, "SELECT body FROM void_team_msgs WHERE channel = 'growth'")[0].body; assert.match(growth, /x\.com\/intent\/post/); assert.match(growth, /never post outside/);
   const sh = await API.onRequestGet({ env, request: new Request('https://verse.test/api/team'), now: T0 + 60e3 }), j = await sh.json();
   assert.equal(j.members.find((m) => m.name === 'TowerScout'), undefined);
-  assert.equal(j.members.find((m) => m.name === 'ExamCoach').state, 'idle', '20 minutes after a run a crew member is still here (the clock is every 15)');
+  assert.equal(j.members.find((m) => m.name === 'ExamCoach').state, 'crew', '20 minutes after a run a crew member is still here (the clock is every 15)');
   // the second run: nobody due yet except StatusWatch at 30 minutes; nothing filed twice
   const out2 = await crewTick(env, T0 + 31 * 60e3);
   assert.deepEqual(out2.jobs.map((x) => x.bot), ['StatusWatch']);

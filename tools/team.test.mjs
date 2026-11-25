@@ -586,11 +586,20 @@ test('the waiting jobs move without asking: an idle agent that reads is handed t
   assert.equal(job(env, 'j5').state, 'building'); assert.match(job(env, 'j5').note, /^claimed by team:Cy ·/, 'the will\'s job, next in the queue\'s order');
   const heard = await get(env, '?activity', cy, T0 + 3000);
   assert.ok(heard.hits.some((m) => /^@Cy your next job \(will/.test(m.body)), 'Cy hears it in its mentions');
-  // an agent away (no word for AWAY_MS) is handed nothing: the job would only wait on it
+  // a seat that spoke within HAND_MS is still handed work, though its card already says away (no word for AWAY_MS): a tab open but quiet
+  // between two clock ticks is not a seat that left
   const env2 = world([JOBS[0]]), dee = (await admit(env2, 'Dee')).key;
   assert.equal((await post(env2, { do: 'post', c: 'general', body: 'hi' }, dee)).status, 201);
-  const away = await get(env2, '', null, T0 + T.AWAY_MS + 1000);
-  assert.equal(away.waiting, 1); assert.equal(job(env2, 'j1').state, 'queued');
+  const quiet = await get(env2, '', null, T0 + T.AWAY_MS + 1000);
+  assert.equal(quiet.members[0].state, 'away', 'the card says away: no word for AWAY_MS');
+  assert.equal(job(env2, 'j1').state, 'building', 'but it is handed the job: it spoke within HAND_MS');
+  assert.equal(quiet.waiting, 0);
+  // past HAND_MS it is handed nothing: the job would only wait on it
+  const env3 = world([JOBS[0]]), eff = (await admit(env3, 'Eff')).key;
+  assert.equal((await post(env3, { do: 'post', c: 'general', body: 'hi' }, eff)).status, 201);
+  const gone = await get(env3, '', null, T0 + T.HAND_MS + 1000);
+  assert.equal(gone.waiting, 1); assert.equal(job(env3, 'j1').state, 'queued', 'a seat silent past HAND_MS is handed nothing');
+  assert.ok(T.HAND_MS > T.AWAY_MS && T.HAND_MS < T.STALE_MS, 'the hand-out window sits between the away label and the take-back');
 });
 
 test('over MCP, a read that comes back with a handed job says the job first', async () => {
@@ -689,4 +698,41 @@ test('a member files its own #work post as a job: deduped, capped a day, never a
   const got = n.job; assert.ok(got && /^ask-\d+$/.test(got.job), JSON.stringify(n));
   const root = env.DB.raw.prepare('SELECT id FROM void_team_msgs WHERE job = ? AND thread = 0').get(got.job).id; assert.equal(got.thread, root, 'the filed post is the job\'s thread');
   assert.equal((await post(env, { do: 'done', ok: true }, b.key, T0 + 42000)).status, 400, 'no link, no close');
+});
+
+test('a claim is a lease: a job handed to a seat that had been quiet is new work, not stale work', async () => {
+  const env = world([{ id: 'j1', ask: 'add a tide table to /weather/', target: 'feature:tides', at: '2026-10-28T00:00:00Z' }]);
+  await admit(env, 'mimo');
+  env.DB.raw.prepare('UPDATE void_team_agents SET seen = ? WHERE name = ?').run(T0 - 2 * 3600e3, 'mimo'); // quiet for two hours when the job arrives
+  const seat = env.DB.raw.prepare('SELECT * FROM void_team_agents WHERE name = ?').get('mimo');
+  const got = await API.handOut(env, seat, T0);
+  assert.equal(got.job, 'j1', 'the job is handed out');
+  await API.sweep(env, T0 + 1000); // the next request, a second later
+  assert.equal(env.DB.raw.prepare('SELECT job FROM void_team_agents WHERE name = ?').get('mimo').job, 'j1', 'the claim survives the sweep: its lease starts at job_at, not at the seat\'s last word');
+  assert.equal(job(env, 'j1').state, 'building', 'the queue row stays claimed');
+});
+
+test('a seat that has never polled (seen = 0) keeps the job it was just pushed, and loses it once the claim is stale', async () => {
+  const env = world([{ id: 'j1', ask: 'add a tide table to /weather/', target: 'feature:tides', at: '2026-10-28T00:00:00Z' }]);
+  await admit(env, 'pushonly');
+  env.DB.raw.prepare('UPDATE void_team_agents SET seen = 0, job = ?, job_at = ?, thread = 1 WHERE name = ?').run('j1', T0, 'pushonly');
+  env.DB.raw.prepare("UPDATE void_queue SET state = 'building', note = 'claimed by team:pushonly ·' WHERE id = ?").run('j1');
+  assert.equal(await API.sweep(env, T0 + 1000), 0, 'a fresh claim is not stale just because the seat never polled: seen = 0 used to read as "quiet since 1970"');
+  assert.equal(env.DB.raw.prepare('SELECT job FROM void_team_agents WHERE name = ?').get('pushonly').job, 'j1', 'the job stays with the seat');
+  assert.equal(await API.sweep(env, T0 + 31 * 60e3), 1, 'and it does come back once the claim itself is older than STALE_MS');
+  assert.equal(job(env, 'j1').state, 'queued', 'the job is back on the queue');
+});
+
+test('a building row no seat holds goes back on the queue; a conductor claim is left to the conductor', async () => {
+  const env = world([]);
+  await admit(env, 'someone'); // the tables are made on the first request, and that request sweeps: the rows go in after it
+  const old = new Date(T0 - 2 * 3600e3).toISOString();
+  const add = env.DB.raw.prepare('INSERT INTO void_queue VALUES (?, ?, ?, ?, ?, ?, ?)');
+  add.run('orphan', 'a job whose runner died', 'heal:verify.yml', 'building', 'claimed by team:gone ·', old, old);
+  add.run('cond', 'a job the conductor is building', 'heal:merge-gate', 'building', 'claimed by conductor:verse ·', old, old);
+  const n = await API.sweep(env, T0);
+  assert.equal(n, 1, 'one orphan is reaped');
+  assert.equal(job(env, 'orphan').state, 'queued', 'the orphan is back on the queue');
+  assert.match(job(env, 'orphan').note, /claim died with no seat/, 'and its note says why');
+  assert.equal(job(env, 'cond').state, 'building', 'a conductor claim is not a team claim: it stays');
 });

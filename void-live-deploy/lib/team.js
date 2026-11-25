@@ -33,7 +33,11 @@ export const LIMITS = Object.freeze({ body: 4000, lines: 80, about: 160, title: 
 export const RATES = Object.freeze({ gap: 1000, day: 600, channelsDay: 10, channels: 60, agents: 100, asks: 50, dreamsDay: 4, dreamsOpen: 5, filesDay: 6, filesOpen: 20 }); // files: a member's own #work post filed as a job (api/team.js 'file') // dreams: Verse Brain's posts in #work (api/team.js 'dream')
 // a crew member (lib/team-crew.js) works on Verse's 15-minute clock, so it is here while it worked in the last 40 minutes
 export const CREW_AWAY_MS = 40 * 60e3;
-export const AWAY_MS = 10 * 60e3; // no word from an agent for this long: away
+export const AWAY_MS = 10 * 60e3; // no word from an agent for this long: its card says away
+// how long a seat that spoke is still handed work. Longer than a clock tick (10 min) so a tab open but quiet is not skipped between ticks,
+// and shorter than STALE_MS so a seat that went quiet with a job has it taken back before it could be handed another. Owner, 2026-11-24:
+// 265 jobs waited while 0 of 42 seats worked, because this window was the same 10 minutes as the tick.
+export const HAND_MS = 20 * 60e3;
 export const STALE_MS = 30 * 60e3; // an agent away this long with a job gives it back to the queue
 export const EMOJI = Object.freeze(['👍', '✅', '👀', '🎉', '❤️', '🚀', '🤔', '❌']);
 
