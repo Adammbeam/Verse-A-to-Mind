@@ -52,6 +52,7 @@ import { isNote, noteRule, relatedPage, talksLimits, dropLimits, NO_LIMITS_RULE,
 import { telemetryOf } from '../../lib/telemetry.js';
 import { isPass } from '../../lib/pass-mark.js';
 import { planOf, runBot, routeFree, freeLlm, loadRegistry } from '../../lib/answer-free.js';
+import { isJokeAsk, jokeAnswer } from '../../lib/joke-answer.js';
 import { beforeOf, points, FOLLOW_RULE, beforeBlock, mergeSources } from '../../lib/follow-ask.js';
 import { askShape, PASSAGE_LINE, fileDirective, DIRECTIVE_SAY, DIRECTIVE_DUP, DIRECTIVE_HELD, TALK_LINE } from '../../lib/ask-shape.js';
 import { askWords, grounded, isNameAsk, isNoAnswer, sourcesMatch, suggestedGuess, listRedirect, sectionHit, sectionText, linked } from '../../lib/no-answer.js';
@@ -493,6 +494,8 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
   // free-resource routing (lib/answer-free.js): an exact, computable ask goes to the live Verse bot whose job it is, before any cache or model;
   // a research ask goes to a free public API (OpenAlex) below, after the rate limit; everything else stays with the free Workers AI model
   const plan = self || told ? null : planOf(ask);
+  // a joke is the joke skill's (lib/joke-answer.js): told fresh from its sources, before the answer cache that once served a song article for it
+  if (!self && !told && isJokeAsk(ask)) { const j = await jokeAnswer(ask); if (j) return Response.json(j); }
   if (plan && plan.kind === 'bot') { const b = runBot(plan); if (b) return Response.json({ answer: b.answer, sources: [], at: new Date().toISOString(), route: 'bot', source: 'bot:' + b.bot.id, bot: b.bot }); }
   // the edge cache first, for an allow-listed ask only (lib/answer-edge.js edgeGate: no bearer, cookie, key or extra field, not personal, not
   // about Verse, not a paste); the key carries this deploy's build id, so a deploy never reads the last one's copies. A hit is the whole reply.
