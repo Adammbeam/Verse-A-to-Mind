@@ -62,6 +62,7 @@ import * as T from '../../lib/team.js';
 import { CREW } from '../../lib/team-crew.js';
 import { briefOf } from '../../lib/job-guide.js';
 import * as Dream from '../../lib/brain-dream.js';
+import { REPO } from '../../lib/verse-repo.js';
 import { fire } from '../../lib/automations-run.js';
 import { teamEvent } from '../../lib/automations.js';
 import { jsonNoStore } from '../../lib/http.js'; // one copy (lib/http.js, convergence step 3)
@@ -597,7 +598,7 @@ async function prTitles(env, nums, now) {
   if (token) headers.authorization = 'Bearer ' + token; // Cloudflare's shared addresses get 403 from GitHub without it
   const got = await Promise.all(missing.map(async (n) => {
     try {
-      const r = await fetch('https://api.github.com/repos/atomeam/void-loop/pulls/' + n, { headers, signal: AbortSignal.timeout(5000) });
+      const r = await fetch('https://api.github.com/repos/' + REPO + '/pulls/' + n, { headers, signal: AbortSignal.timeout(5000) });
       if (!r.ok) return [n, ''];
       const j = await r.json();
       return [n, String(j && j.title || '').slice(0, 300)];
