@@ -7,6 +7,7 @@
 //   node tools/self-context.mjs          write the file
 //   node tools/self-context.mjs --check  exit 1 if the committed file differs from what would be written
 import { openItems } from './frontier.mjs';
+import { builtIndex, unbuilt } from '../void-live-deploy/lib/frontier.js';
 import { parseFacingLog, shippedVisible } from '../void-live-deploy/lib/visible.js';
 import { isPrivate, deepQuoteFree } from './private.mjs';
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
@@ -101,7 +102,7 @@ export function towerOf(floors, target, pages = {}, n = 3) {
   return { target: name(t), ...(target && target.since ? { since: clip(target.since, 10) } : {}), ...(page ? { page } : {}), next: open.filter((f) => f.id !== id).slice(0, n).map(name), beaten: fl.length - open.length, total: fl.length };
 }
 
-export function buildSelf(llms, inbox, { skills = [], minis = [], canon = null, tracks = null, building = null, commits = null, open = null, builders = null, wishlist = null } = {}) {
+export function buildSelf(llms, inbox, { skills = [], minis = [], canon = null, tracks = null, building = null, commits = null, open = null, builders = null, wishlist = null, built = null } = {}) {
   const about = clip((/^>\s*(.+)$/m.exec(llms) || [])[1], 300);
   const rows = [];
   for (const line of inbox.split('\n')) {
@@ -116,6 +117,9 @@ export function buildSelf(llms, inbox, { skills = [], minis = [], canon = null, 
   const pub = (r) => !isPrivate(r.ask) && !isPrivate(r.from) && !isPrivate(r.subject) && !isPrivate(r.title);
   if (commits) commits = commits.filter(pub);
   if (open) open = open.filter(pub);
+  // an item the build ledger already proves (void.growth.json `asked`, lib/frontier.js) is not open: "Absorb and connect every repo" was
+  // built 2026-10-22 and still sat in "Still open" because the frontier line was never struck. No ledger, nothing pruned.
+  if (open && built) open = unbuilt(open, built);
   if (building && isPrivate(JSON.stringify(building))) building = null;
   return {
     about, shipped: rows.filter((r) => r.state === 'shipped' && pub(r)),
@@ -145,6 +149,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const self = buildSelf(readFileSync(resolve(root, 'void-live-deploy/llms.txt'), 'utf8'), readFileSync(resolve(root, 'domains/growth-inbox.md'), 'utf8'), { skills, minis, canon: existsSync(resolve(root, 'domains/void.canon.md')) ? readCanon(readFileSync(resolve(root, 'domains/void.canon.md'), 'utf8')) : null,
     tracks: existsSync(tank) ? readTracks(readFileSync(tank, 'utf8')) : null, building: existsSync(frontier) ? readBuilding(readFileSync(frontier, 'utf8'), lineTimes) : null,
     open: existsSync(frontier) ? openItems(readFileSync(frontier, 'utf8')) : null,
+    built: (() => { try { return builtIndex(JSON.parse(readFileSync(resolve(root, 'void-live-deploy/void.growth.json'), 'utf8'))); } catch (_) { return null; } })(),
     builders: existsSync(tagteam) ? readTagteam(readFileSync(tagteam, 'utf8')) : null,
     wishlist: existsSync(resolve(root, 'docs/wishlist.md')) ? readWishlist(readFileSync(resolve(root, 'docs/wishlist.md'), 'utf8')) : null,
     commits: readCommits(spawnSync('git', ['log', '--no-merges', '-20', '--format=%cI%x09%s', 'HEAD'], { cwd: root, encoding: 'utf8', timeout: 20000 }).stdout) });
