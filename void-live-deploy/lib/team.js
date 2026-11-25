@@ -95,6 +95,7 @@ export function crewNext(nextAt, now = Date.now()) {
 export function presence(a, now) {
   if (a && !a.off && !a.key) return 'invited';
   if (!a || a.off || !(now - (a.seen || 0) < (a.crew ? CREW_AWAY_MS : AWAY_MS) || hookUp(a))) return 'away';
+  if (a.crew) return 'crew';
   return a.job ? 'busy' : 'idle';
 }
 

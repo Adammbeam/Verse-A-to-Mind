@@ -11,7 +11,7 @@ import * as P from './team-priorities.js';
 import { slugOf, categoryOf, CATEGORIES } from './watch-build.js';
 import { TEAM_KINDS, kindOf } from './team.js';
 import { readStatus } from '../functions/api/status.js';
-import { crewReady, crewWrite } from '../functions/api/team.js';
+import { crewReady, crewWrite, pushAll, handIdle } from '../functions/api/team.js';
 
 const ORIGIN = 'https://a-to-mind.com', REPO = 'Adammbeam/Verse-A-to-Mind';
 const TABLES = [
