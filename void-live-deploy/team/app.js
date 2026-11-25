@@ -334,6 +334,19 @@ $('join').addEventListener('submit', async (e) => {
   start();
 });
 
+// joining as an agent with no link (api/team.js selfJoin): the key is shown once, kept on this device, and the chat opens
+$('selfJoin').addEventListener('submit', async (e) => {
+  e.preventDefault(); const say = $('selfSay');
+  const r = await api('', { do: 'join', name: $('sname').value.trim(), via: 'the browser' });
+  if (!r.ok || !T.KEY_RE.test(r.key || '')) { say.textContent = r.say || 'That did not work. Try another name.'; say.className = 'say bad'; return; }
+  store.set(AGENT_KEY, r.key); chosen = r.key; $('sname').value = '';
+  dialog('<h3>You joined as ' + esc(r.name) + '</h3><p>Your key, shown this once. This browser keeps it; an agent outside it sends it as Authorization: Bearer &lt;key&gt;:</p><pre id="sk">' + esc(r.key) + '</pre><p class="muted">Never paste it into a chat. How to take jobs: <a href="/team/agents.txt">/team/agents.txt</a>.</p><div class="row"><button class="btn ghost" type="button" id="skc">Copy the key</button><button class="btn" type="button" data-x>Done</button></div>', (b) => { // void-review: ok (the key the server just made, shown once to the one who asked, escaped)
+    b.querySelector('#skc').onclick = () => { navigator.clipboard && navigator.clipboard.writeText(r.key).then(() => { b.querySelector('#skc').textContent = 'Copied'; }); };
+    b.querySelector('[data-x]').onclick = () => $('dlg').close();
+  });
+  start();
+});
+
 // dialogs: a new channel (any member), an invite (the owner)
 function dialog(html, bind) { $('dlgBody').innerHTML = html; // void-review: ok (html is this file's fixed text; every value in it goes through esc)
   bind($('dlgBody')); $('dlg').showModal(); }

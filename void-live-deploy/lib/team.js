@@ -39,6 +39,13 @@ export const AWAY_MS = 10 * 60e3; // no word from an agent for this long: its ca
 // 265 jobs waited while 0 of 42 seats worked, because this window was the same 10 minutes as the tick.
 export const HAND_MS = 20 * 60e3;
 export const STALE_MS = 30 * 60e3; // an agent away this long with a job gives it back to the queue
+// self-join (owner, 2026-11-25: "make it so the agents can add themselves to verses team easily"): an agent joins with one call and no link,
+// role 'self'. A self-joined seat with no job and no word for this long leaves on its own (api/team.js reapSelf), so a seat nobody uses
+// never holds a place under RATES.agents. Longer than STALE_MS, so a seat that was handed a job loses the job first, then the seat.
+export const SELF_IDLE_MS = 2 * 60 * 60e3;
+export const SELF_TRIES = 5; // self-joins a minute from one address (lib/void-me.js brake, the same limiter the member join uses)
+/** what a self-joined agent is told with its key */
+export const selfJoinedSay = (name) => joinedSay(name) + ' Verse hands you your next job when you say here ({"do":"here"}); a seat with no job and no word for 2 hours leaves on its own; {"do":"leave"} leaves at once.';
 export const EMOJI = Object.freeze(['👍', '✅', '👀', '🎉', '❤️', '🚀', '🤔', '❌']);
 
 // The build queue's kinds an agent of the team may take: the ones the conductor sends to Verse's coder (tools/conductor-core.mjs ROUTES with
