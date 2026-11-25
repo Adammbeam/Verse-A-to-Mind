@@ -129,6 +129,10 @@ async function main() {
   if (has('--merge') || has('--all')) {
     for (const r of merged) {
       if (!r.ok) continue;
+      const del = await git(['diff', '--name-only', '--diff-filter=D', 'HEAD...' + r.branch], { cwd: root });
+      const tree = await git(['ls-tree', '-r', '--name-only', 'HEAD'], { cwd: root });
+      const wipe = wipeRefusal({ deleted: del.ok ? del.out.split('\n').filter(Boolean).length : 0, treeSize: tree.ok ? tree.out.split('\n').filter(Boolean).length : 0, allow: allowWipe() });
+      if (wipe) { bad = 1; console.log('✗ merge ' + r.branch + ': ' + wipe); continue; }
       const m = await git(['merge', '--no-ff', '-m', 'ship: ' + r.branch, r.branch], { cwd: root });
       r.merged = m.ok;
       if (!m.ok) { bad = 1; console.log('✗ merge ' + r.branch + ': ' + m.out.trim().split('\n')[0]); }

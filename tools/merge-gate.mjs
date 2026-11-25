@@ -12,6 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { BUILD_OUTPUTS } from './generated.mjs';
 import { APPEND_JSON, APPEND_TEXT, keyOf } from './records.mjs';
 import { settleText } from './shared-merge.mjs';
+import { wipeRefusal, allowWipe } from './wipe-guard.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const build = new Set(BUILD_OUTPUTS);
@@ -89,15 +90,26 @@ function git(args, cwd) {
   return spawnSync('git', args, { cwd, encoding: 'utf8', maxBuffer: 20e6 });
 }
 
+/** deletions in the current index versus a parent tree, for the wipe cap. Pure given the two git texts. */
+export function mergeWipe({ deletedText, treeText, allow = false } = {}) {
+  const deleted = String(deletedText || '').split('\n').filter(Boolean).length;
+  const treeSize = String(treeText || '').split('\n').filter(Boolean).length;
+  return wipeRefusal({ deleted, treeSize, allow });
+}
+
+
 function main() {
+  const repo = process.env.MERGE_GATE_ROOT ? resolve(process.env.MERGE_GATE_ROOT) : root;
   const dir = mkdtempSync(resolve(tmpdir(), 'merge-gate-'));
-  const rm = () => git(['worktree', 'remove', '--force', dir], root);
-  const add = git(['worktree', 'add', '--detach', '-q', dir, 'HEAD'], root);
+  const rm = () => git(['worktree', 'remove', '--force', dir], repo);
+  const add = git(['worktree', 'add', '--detach', '-q', dir, 'HEAD'], repo);
   if (add.status !== 0) { console.error('merge-gate: ' + (add.stderr || add.stdout)); process.exit(2); }
+  let code = 0;
   try {
     const base = process.env.MERGE_GATE_BASE || 'origin/main';
     git(['config', 'user.email', 'merge-gate@users.noreply.github.com'], dir);
     git(['config', 'user.name', 'merge-gate'], dir);
+    const ours = String(git(['rev-parse', 'HEAD'], dir).stdout || '').trim();
     const merged = git(['merge', '--no-commit', '--no-ff', base], dir);
     let conflicted = []; // the paths the merge could not take whole: their settles stay as committed, never put back from ours
     if (merged.status !== 0) {
@@ -149,9 +161,18 @@ function main() {
         console.log('merge-gate: regenerated through the conflict in ' + files.join(', '));
       }
     }
+    // a merge that would delete most of the tree (the 9a726fe shape) is refused before the merge-gate commit
+    const refs = [...new Set([base, ours].filter(Boolean))];
+    for (const ref of refs) {
+      const del = git(['diff', '--cached', '--name-only', '--diff-filter=D', ref], dir);
+      const tree = git(['ls-tree', '-r', '--name-only', ref], dir);
+      const wipe = mergeWipe({ deletedText: del.stdout, treeText: tree.stdout, allow: allowWipe() });
+      if (wipe) { console.error('merge-gate: ' + wipe); rm(); process.exit(1); }
+    }
     // commit the merge so the checks see this pull request's files, not every file main just brought in
     const committed = git(['commit', '-q', '--no-edit'], dir);
     if (committed.status === 0) console.log('merge-gate: committed the merge');
+    if (process.env.MERGE_GATE_STOP_AFTER_WIPE === '1') return;
     // the generators, so a build output that conflicted is rewritten before we put the tree back. The files the
     // merge itself rewrote (the append-mostly settles, and build outputs taken from ours) stay as committed in the
     // merge commit: resetting them would drop the settle and re-break the very files this branch appends to.
@@ -199,8 +220,9 @@ function main() {
       if (lines.length) for (const line of lines) console.error('merge-gate: ' + line);
       else console.error('merge-gate: merge-policy failed and named no rule');
     }
-    process.exit(checks.status ?? 1);
+    code = checks.status ?? 1;
   } finally { rm(); }
+  process.exit(code);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
