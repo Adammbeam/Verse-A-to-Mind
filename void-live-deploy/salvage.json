@@ -1,8 +1,8 @@
 {
  "at": "2026-11-25",
- "scanned": 561,
+ "scanned": 562,
  "counts": {
-  "unified": 73,
+  "unified": 74,
   "live": 69,
   "salvageable": 393,
   "history": 23,
@@ -10,18 +10,6 @@
  },
  "remaining": 393,
  "top10": [
-  {
-   "id": "outside:Hopding/pdf-lib",
-   "kind": "outside",
-   "status": "salvageable",
-   "target": "tool",
-   "value": 31,
-   "why": "reuse with credit; keep the license notice",
-   "into": null,
-   "test": null,
-   "pr": null,
-   "license": "MIT"
-  },
   {
    "id": "outside:sql-js/sql.js",
    "kind": "outside",
@@ -124,6 +112,18 @@
    "status": "salvageable",
    "target": "tool",
    "value": 25.6,
+   "why": "",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": null
+  },
+  {
+   "id": "archive/repos/a-to-mind.com/drafts/027-default-deny-cookie-notice",
+   "kind": "archived part",
+   "status": "salvageable",
+   "target": "tool",
+   "value": 25.5,
    "why": "",
    "into": null,
    "test": null,
@@ -337,7 +337,7 @@
    "author": "Hopding",
    "license": "MIT",
    "link": "https://github.com/Hopding/pdf-lib",
-   "used": null,
+   "used": "/pdf/ and skills/stage-pdf.js (lib/pdf-tools.js fromText)",
    "isolated": false
   },
   {
@@ -5167,6 +5167,18 @@
    "license": null
   },
   {
+   "id": "archive/workers",
+   "kind": "archive",
+   "status": "salvageable",
+   "target": "bot",
+   "value": 18.4,
+   "why": "live code shares its name; check for overlap before migrating",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": null
+  },
+  {
    "id": "drafts/figures-smooth-bodies.png",
    "kind": "draft",
    "status": "salvageable",
@@ -7053,12 +7065,12 @@
   {
    "id": "outside:Hopding/pdf-lib",
    "kind": "outside",
-   "status": "salvageable",
+   "status": "unified",
    "target": "tool",
    "value": 31,
-   "why": "reuse with credit; keep the license notice",
-   "into": null,
-   "test": null,
+   "why": "Pure JavaScript PDF creation and modification in browser or Worker",
+   "into": "/pdf/ and skills/stage-pdf.js (lib/pdf-tools.js fromText)",
+   "test": "tools/pdf-tools.test.mjs and tools/stage-pdf.test.mjs",
    "pr": null,
    "license": "MIT"
   },
