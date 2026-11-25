@@ -26,6 +26,34 @@ export function sourcesMatch(ask, sources) {
 }
 /** the closest guess among fuzzy sources: its title, or ''. Pure. */
 export const guessOf = (sources) => String(((sources || []).find((s) => s && s.title) || {}).title || '').slice(0, 120);
+/** true when a "Did you mean" guess is worth offering: the ask is a short name, and the title shares a distinctive word or is a close typo. A long sentence is never close enough. Pure. */
+export function closeGuess(ask, title) {
+  const g = String(title || '').trim();
+  if (!g || !isNameAsk(ask)) return false;
+  const need = askWords(ask), have = words(g), set = new Set(have);
+  if (need.some((w) => set.has(w))) return true;
+  const typo = (a, b) => {
+    if (a === b) return true;
+    const n = Math.min(a.length, b.length);
+    if (n < 5 || Math.abs(a.length - b.length) > 2) return false;
+    const max = n >= 8 ? 2 : 1;
+    let i = 0, j = 0, d = 0;
+    while (i < a.length && j < b.length) {
+      if (a[i] === b[j]) { i++; j++; continue; }
+      if (++d > max) return false;
+      if (a.length > b.length) i++;
+      else if (b.length > a.length) j++;
+      else { i++; j++; }
+    }
+    return d + (a.length - i) + (b.length - j) <= max;
+  };
+  return need.some((w) => have.some((h) => typo(w, h)));
+}
+/** a guess to offer on a not-found card, or '' when the ask is long or the title is not close. Pure. */
+export function suggestedGuess(ask, sources) {
+  const title = guessOf(sources);
+  return closeGuess(ask, title) ? title : '';
+}
 /** a redirect that lands inside a list page: { page, section } from MediaWiki's action=query&redirects reply, or null. Pure. */
 export function listRedirect(reply) {
   const r = reply && reply.query && Array.isArray(reply.query.redirects) ? reply.query.redirects[reply.query.redirects.length - 1] : null;

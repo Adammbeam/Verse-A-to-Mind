@@ -1,7 +1,7 @@
 // A refusal is not an answer, and a list-page section is found (owner, 2026-10-26, "happy time harry"). Run: node --test tools/no-answer.test.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { isNoAnswer, linked, sourcesMatch, guessOf, listRedirect, sectionHit, sectionText, notFound, askWords } from '../void-live-deploy/lib/no-answer.js';
+import { isNoAnswer, linked, sourcesMatch, guessOf, closeGuess, suggestedGuess, listRedirect, sectionHit, sectionText, notFound, askWords, isNameAsk } from '../void-live-deploy/lib/no-answer.js';
 import { cardOf } from '../void-live-deploy/lib/card-frame.js';
 import { codeOf, parse, cutAtWord, shareText } from '../void-live-deploy/lib/card-share.js';
 import { sealPlan } from '../void-live-deploy/lib/void-seal.js';
@@ -77,4 +77,19 @@ test('the word "time" in a title does not pick a clock', () => {
   assert.deepEqual(motifsFor(['happy', 'time', 'harry']), []);
   assert.equal(sealPlan('happy time harry', { nouns: [] }).motif || '', '');
   assert.deepEqual(motifsFor(['clock']), ['clock']);
+});
+
+test('a Did you mean guess is only offered when the ask is a short name and the title is close', () => {
+  const near = [{ title: "Happy Harry's", text: "Happy Harry's was an American drugstore chain founded in 1962." }];
+  const youtube = [{ title: 'YouTube', text: 'YouTube is a video sharing site.' }];
+  const charge = 'antigravity is out say yes if you want to be in charge';
+  assert.equal(isNameAsk('happy time harry'), true);
+  assert.equal(closeGuess('happy time harry', "Happy Harry's"), true);
+  assert.equal(suggestedGuess('happy time harry', near), "Happy Harry's");
+  assert.equal(isNameAsk(charge), false);
+  assert.equal(closeGuess(charge, 'YouTube'), false);
+  assert.equal(suggestedGuess(charge, youtube), '');
+  const nf = notFound(charge, suggestedGuess(charge, youtube));
+  assert.equal(nf.did, '');
+  assert.equal(closeGuess('happy time harry', 'YouTube'), false);
 });

@@ -52,8 +52,8 @@ import { isNote, noteRule, relatedPage, talksLimits, dropLimits, NO_LIMITS_RULE,
 import { telemetryOf } from '../../lib/telemetry.js';
 import { planOf, runBot, routeFree, freeLlm, loadRegistry } from '../../lib/answer-free.js';
 import { beforeOf, points, FOLLOW_RULE, beforeBlock, mergeSources } from '../../lib/follow-ask.js';
-import { askShape, PASSAGE_LINE, fileDirective, DIRECTIVE_SAY, DIRECTIVE_DUP, DIRECTIVE_HELD } from '../../lib/ask-shape.js';
-import { askWords, grounded, isNameAsk, isNoAnswer, sourcesMatch, guessOf, listRedirect, sectionHit, sectionText, linked } from '../../lib/no-answer.js';
+import { askShape, PASSAGE_LINE, fileDirective, DIRECTIVE_SAY, DIRECTIVE_DUP, DIRECTIVE_HELD, TALK_LINE } from '../../lib/ask-shape.js';
+import { askWords, grounded, isNameAsk, isNoAnswer, sourcesMatch, suggestedGuess, listRedirect, sectionHit, sectionText, linked } from '../../lib/no-answer.js';
 const MODEL = models('answer');
 // models are on whenever Workers AI is bound; VOID_ANSWER_MODELS=off (Pages env var) = open-web answers and rules-only fixes
 const modelsOn = (env) => !!(env && env.AI) && String(env.VOID_ANSWER_MODELS || '').trim().toLowerCase() !== 'off';
@@ -483,6 +483,7 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
     const filed = await fileDirective(env, ask);
     return Response.json({ answer: filed.deduped ? DIRECTIVE_DUP : filed.ok ? DIRECTIVE_SAY : DIRECTIVE_HELD, sources: [], at: new Date().toISOString(), route: 'want' });
   }
+  if (shape === 'talk') return Response.json({ answer: TALK_LINE, sources: [], at: new Date().toISOString(), route: 'talk' });
   // an ask about Verse itself is answered from its own facts, which change with every ship: never from the 7-day cache
   // a correction addressed to Verse about one of its own cards is about Verse even when it is long; a passage that only mentions a card is not
   const self = isCardCorrection(ask) || (isSelfAsk(ask) && !isPaste(ask)); // a long paste that mentions Verse is still a paste, not a question about Verse
@@ -734,7 +735,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   if (measure) answer = withMeasure(isNoAnswer(answer) ? '' : answer, measure);
   ({ answer, sources: pub } = supportedOnly(answer, src, pub));
   // a refusal ("I do not have information ...") is not an answer: nothing is cached or labelled as one, and the page gets the closest guess to offer as a question
-  if (!self && !told && isNoAnswer(answer)) return Response.json({ answer: null, sources: [], note: 'nothing on the web', noAnswer: true, ...(guessOf(src) ? { guess: guessOf(src) } : {}), route: route.kind, ...nearOut });
+  if (!self && !told && isNoAnswer(answer)) return Response.json({ answer: null, sources: [], note: 'nothing on the web', noAnswer: true, ...(suggestedGuess(ask, src) ? { guess: suggestedGuess(ask, src) } : {}), route: route.kind, ...nearOut });
   if (sectioned && src[0] && answer) answer = grounded(answer, src[0].text); // a list-page section: only what its text says
   answer = scrubOut(answer, env); // no env value or key shape leaves in a model's words, whatever the model was told (lib/keeper.js)
   if (own) { answer = scrubOut(await ownBody(answer), env); keepCard(answer); } // the lead the note gave reason for, then the lists from my records
