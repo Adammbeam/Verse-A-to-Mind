@@ -262,3 +262,11 @@ Picked living figures (least recently advanced, 2026-11-04 14:15; its next quest
 - Folded: nothing pending; no open forethinkers branches or think-tank PRs.
 - Result: TranslAGE public randomized arms tested; same sign as COSMOS in the B12 + folate placebo trial, flat in DIRECT-PLUS, pooled −0.19 y/y (−0.78 to 0.40); settling trial sized near 1,100 people; new open question 9 (DO-HEALTH).
 - Board: clock response card row gained a "does it hold in open data" part.
+
+## 2026-11-25 14:03 ET
+
+- Track: planet restoration, open questions 8 and 9 (least recently advanced).
+- Folded: nothing pending; #2980 was merged and its branch is gone; no open think-tank PRs.
+- Result: season closed (NOAA alert 0 at all stations, Mote final report 13 Nov 2026); 2026 matched 2023 in DHW but had far fewer days at or above 31.5 °C; Carysfort outplants lived at 10.8 DHW, Eastern Dry Rocks elkhorn died; 2023 deaths kept rising for months after the heat; dose-only baseline corrected to a ceiling; new open question 9 (dose plus peak heat refit).
+- Board: new reef peak heat row; survival odds row corrected.
+
