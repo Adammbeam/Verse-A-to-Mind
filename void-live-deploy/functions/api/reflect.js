@@ -11,7 +11,7 @@ import { track } from '../../lib/actions.js';
 import { models } from '../../lib/models.js';
 import { readSelf, selfFacts } from '../../lib/self-context.js';
 import { recordShortfall, reasonOf } from '../../lib/shortfall.js';
-import { VOICE_SYSTEM, taggedFacts, KEEP, KINDS, questionFor, parseVoice, currentAsks, readVoice, weekFacts, followThrough, followFacts, askRecord, builtAsks, readReplies, replyFacts, askId, holdAsks } from '../../lib/voice.js';
+import { VOICE_SYSTEM, taggedFacts, KEEP, KINDS, questionFor, parseVoice, currentAsks, readVoice, weekFacts, followThrough, followFacts, askRecord, builtAsks, readReplies, replyFacts, askId, holdAsks, releasedHolds } from '../../lib/voice.js';
 const pick = (r) => (r && (r.response || (r.choices && r.choices[0] && r.choices[0].message && r.choices[0].message.content) || r.result && r.result.response)) || '';
 
 export async function onRequestGet({ request, env }) {
@@ -31,7 +31,8 @@ export async function onRequestGet({ request, env }) {
     asked: done.slice(0, 200).map((g) => ({ ask: g.ask, at: g.at, times: g.times })) } : null;
   // the asks still open, every one (the card folds past the first few); without the ledger, the newest reflections' asks as before
   const open = rec ? rec.open : currentAsks(entries, 12);
-  return Response.json({ entries: entries.slice(0, 20).map((e, i) => (i < 2 || !e.given ? e : { ...e, given: undefined })), asks: holdAsks(open, answered && answered.held, tg && tg.id).slice(0, 40), ...(follow ? { follow } : {}) }, { headers: { 'cache-control': 'public, max-age=60' } });
+  const released = tg && tg.id ? releasedHolds(answered && answered.held, tg.id) : []; // a hold the target moved past is said, once, on the self card
+  return Response.json({ entries: entries.slice(0, 20).map((e, i) => (i < 2 || !e.given ? e : { ...e, given: undefined })), asks: holdAsks(open, answered && answered.held, tg && tg.id).slice(0, 40), ...(follow ? { follow } : {}), ...(released.length ? { released } : {}) }, { headers: { 'cache-control': 'public, max-age=60' } });
 }
 
 export async function onRequestPost({ request, env }) {
