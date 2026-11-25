@@ -414,30 +414,30 @@
       "into": "/bots/ (run-replay)",
       "test": "tools/salvaged-bots.test.mjs",
       "pr": null
+    },
+    "outside:ourresearch/openalex-api-tutorials": {
+      "target": "data",
+      "into": "/bots/ (api-openalex-work)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:ncbi/pubchem": {
+      "target": "data",
+      "into": "/bots/ (api-pubchem-compound)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:nih/clinicaltrials-v2": {
+      "target": "data",
+      "into": "/bots/ (api-clinical-trial)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:CrossRef/rest-api-doc": {
+      "target": "data",
+      "into": "/bots/ (api-paper-finder)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
     }
-  },
-  "ourresearch/openalex-api-tutorials": {
-    "target": "bot",
-    "into": "/bots/ (openalex-work)",
-    "test": "tools/api-bots.test.mjs",
-    "pr": null
-  },
-  "ncbi/pubchem": {
-    "target": "bot",
-    "into": "/bots/ (pubchem-compound)",
-    "test": "tools/api-bots.test.mjs",
-    "pr": null
-  },
-  "nih/clinicaltrials-v2": {
-    "target": "bot",
-    "into": "/bots/ (clinical-trial)",
-    "test": "tools/api-bots.test.mjs",
-    "pr": null
-  },
-  "CrossRef/rest-api-doc": {
-    "target": "bot",
-    "into": "/bots/ (paper-finder)",
-    "test": "tools/api-bots.test.mjs",
-    "pr": null
   }
 }

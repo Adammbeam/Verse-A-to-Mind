@@ -98,6 +98,11 @@ export function planOf(ask) {
   if ((m = a.match(/^replay (?:this |my |the |a )?run:? (.{3,})$/i))) return { kind: 'bot', bot: 'run-replay', input: m[1], say: 'Run replay: ' };
   // research: a scholarly ask goes to OpenAlex, the open catalog of papers (keyless, resources/free.json 'openalex')
   if ((m = a.match(/^(?:find |list |search for |search )?(?:some |the )?(?:recent |latest |top |key )?(?:research |scientific |academic |scholarly )?(?:papers|studies|research|articles|journal articles|publications|literature) (?:on|about|regarding|into|for) (.{3,100})$/i))) return { kind: 'api', api: 'search', ids: RESEARCH, query: m[1].trim(), why: 'research ask' };
+  // compounds: PubChem PUG REST, keyless (resources/free.json 'pubchem')
+  if ((m = a.match(/^(?:what is |what's |whats )?(?:the )?(?:molecular )?formula (?:of|for) (.{2,80}?)$/i))) return { kind: 'api', api: 'compound', ids: ['pubchem'], query: m[1].replace(/['’]s$/i, '').trim(), why: 'compound ask' };
+  if ((m = a.match(/^(?:what is |what's |whats )(.{2,80}?)(?:['’]s)? molecular formula$/i))) return { kind: 'api', api: 'compound', ids: ['pubchem'], query: m[1].trim(), why: 'compound ask' };
+  // trials: ClinicalTrials.gov API v2, keyless (resources/free.json 'clinicaltrials')
+  if ((m = a.match(/^(?:find |list |search for |search |show (?:me )?)?(?:some |the )?(?:recent |latest |active )?(?:clinical |registered )?trials (?:for|of|on|about) (.{2,100})$/i))) return { kind: 'api', api: 'trial', ids: ['clinicaltrials'], query: m[1].trim(), why: 'trial ask' };
   return { kind: 'llm', why: 'default' };
 }
 
@@ -122,26 +127,47 @@ export function runBot(plan) {
 
 // OpenAlex (https://docs.openalex.org): /works?search= with only the fields the card shows; an error status the router counts as quota or error
 const UA = { 'user-agent': 'Verse (a-to-mind.com; https://a-to-mind.com/free/)', accept: 'application/json' };
+const SCIENCE_TTL = 3600;
+/** JSON from a keyless science API, kept on the colo (caches.default) so a repeat ask does not hit the origin. */
+async function cachedJson(url, ms = 8000) {
+  const cache = (typeof caches !== 'undefined' && caches && caches.default) || null;
+  let key = null; try { if (cache) key = new Request('https://a-to-mind.com/__void-science/' + encodeURIComponent(url)); } catch (_) { key = null; }
+  if (key) { try { const hit = await cache.match(key); if (hit) return await hit.json(); } catch (_) {} }
+  const res = await fetch(url, { headers: UA, signal: AbortSignal.timeout ? AbortSignal.timeout(ms) : undefined });
+  if (!res.ok) { const e = new Error('http ' + res.status); e.status = res.status; throw e; }
+  const j = await res.json();
+  if (key) { try { await cache.put(key, new Response(JSON.stringify(j), { headers: { 'content-type': 'application/json', 'cache-control': 'max-age=' + SCIENCE_TTL } })); } catch (_) {} }
+  return j;
+}
 const openalex = async (job, r, env) => {
   const keyName = String((r && r.access) || '').split(':')[1], key = keyName && env ? env[keyName] : '';
   const u = 'https://api.openalex.org/works?per-page=5&select=id,display_name,publication_year,doi,cited_by_count,authorships&search=' + encodeURIComponent(job.query) + (key ? '&api_key=' + encodeURIComponent(key) : '');
-  const res = await fetch(u, { headers: UA, signal: AbortSignal.timeout ? AbortSignal.timeout(5000) : undefined });
-  if (!res.ok) { const e = new Error('openalex ' + res.status); e.status = res.status; throw e; }
-  const works = ((await res.json()).results || []).filter((w) => w && w.display_name).slice(0, 5);
+  const works = (((await cachedJson(u, 5000)).results) || []).filter((w) => w && w.display_name).slice(0, 5);
   if (!works.length) throw new Error('openalex: nothing found');
   return works;
 };
 // Crossref (https://api.crossref.org): /works?query= mapped to the same shape OpenAlex gives, so one answer writer serves both
 const crossref = async (job) => {
   const u = 'https://api.crossref.org/works?rows=5&select=DOI,title,issued,author,is-referenced-by-count&query=' + encodeURIComponent(job.query);
-  const res = await fetch(u, { headers: UA, signal: AbortSignal.timeout ? AbortSignal.timeout(6000) : undefined });
-  if (!res.ok) { const e = new Error('crossref ' + res.status); e.status = res.status; throw e; }
-  const items = (((await res.json()).message || {}).items || []).filter((w) => w && w.title && w.title[0] && w.DOI).slice(0, 5);
+  const items = (((((await cachedJson(u, 6000)).message) || {}).items) || []).filter((w) => w && w.title && w.title[0] && w.DOI).slice(0, 5);
   if (!items.length) throw new Error('crossref: nothing found');
   return items.map((w) => ({ id: 'https://doi.org/' + w.DOI, doi: 'https://doi.org/' + w.DOI, display_name: w.title[0], publication_year: w.issued && w.issued['date-parts'] && w.issued['date-parts'][0] && w.issued['date-parts'][0][0] || null,
     cited_by_count: w['is-referenced-by-count'] || 0, authorships: (w.author || []).map((a) => ({ author: { display_name: [a.given, a.family].filter(Boolean).join(' ') || a.name || '' } })) }));
 };
-export const ADAPTERS = { 'openalex-key': openalex, openalex, crossref };
+const pubchem = async (job) => {
+  const q = String(job.query || '').replace(/[\/?#]/g, ' ').trim().slice(0, 80);
+  const u = 'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/' + encodeURIComponent(q) + '/property/MolecularFormula,MolecularWeight,Title/JSON';
+  const p = ((((await cachedJson(u, 8000)).PropertyTable) || {}).Properties || [])[0];
+  if (!p || !p.MolecularFormula) throw new Error('pubchem: nothing found');
+  return p;
+};
+const clinicaltrials = async (job) => {
+  const u = 'https://clinicaltrials.gov/api/v2/studies?query.term=' + encodeURIComponent(job.query) + '&pageSize=5&fields=NCTId,BriefTitle,OverallStatus';
+  const studies = ((await cachedJson(u, 8000)).studies || []).filter((s) => s && s.protocolSection && s.protocolSection.identificationModule && s.protocolSection.identificationModule.nctId);
+  if (!studies.length) throw new Error('clinicaltrials: nothing found');
+  return studies.slice(0, 5);
+};
+export const ADAPTERS = { 'openalex-key': openalex, openalex, crossref, pubchem, clinicaltrials };
 const CATALOG = { 'openalex-key': 'OpenAlex (the open catalog of scholarly works)', openalex: 'OpenAlex (the open catalog of scholarly works)', crossref: 'Crossref (the open registry of scholarly DOIs)' };
 export function openalexAnswer(query, works, from = 'openalex') {
   const lines = works.map((w, i) => {
@@ -151,6 +177,21 @@ export function openalexAnswer(query, works, from = 'openalex') {
   const sources = works.map((w) => ({ title: String(w.display_name).replace(/<[^>]+>/g, '').slice(0, 200), url: /^https:\/\/doi\.org\//.test(String(w.doi || '')) ? w.doi : String(w.id || '').replace(/^https:\/\/openalex\.org\//, 'https://openalex.org/') }));
   return { answer: 'Papers on ' + query + ', from ' + (CATALOG[from] || CATALOG.openalex) + ':\n' + lines.join('\n'), sources };
 }
+export function pubchemAnswer(query, p) {
+  const name = String(p.Title || query).replace(/<[^>]+>/g, '');
+  const cid = p.CID != null ? String(p.CID) : '';
+  const src = { title: name + (cid ? ' (CID ' + cid + ')' : '') + ' on PubChem', url: cid ? 'https://pubchem.ncbi.nlm.nih.gov/compound/' + cid : 'https://pubchem.ncbi.nlm.nih.gov/#query=' + encodeURIComponent(query) };
+  return { answer: name + ' has the molecular formula ' + p.MolecularFormula + (p.MolecularWeight ? ' (' + p.MolecularWeight + ' g/mol)' : '') + ', from PubChem. Not medical advice.', sources: [src] };
+}
+export function trialAnswer(query, studies) {
+  const rows = (studies || []).slice(0, 5).map((s, i) => {
+    const p = s.protocolSection || {}, id = (p.identificationModule || {}).nctId, title = (p.identificationModule || {}).briefTitle, st = (p.statusModule || {}).overallStatus;
+    const status = st ? String(st).replace(/_/g, ' ').toLowerCase() : '';
+    return { line: (i + 1) + '. ' + String(title || id) + (id ? ' (' + id + ')' : '') + (status ? ', ' + status : '') + ' [' + (i + 1) + ']', source: { title: (title || id || 'trial') + (id ? ' (' + id + ')' : ''), url: id ? 'https://clinicaltrials.gov/study/' + id : 'https://clinicaltrials.gov/search?term=' + encodeURIComponent(query) } };
+  });
+  return { answer: 'Registered trials for ' + query + ', from ClinicalTrials.gov:\n' + rows.map((r) => r.line).join('\n') + '\nNot medical advice; a registered trial is not a result.', sources: rows.map((r) => r.source) };
+}
+const FORMATTERS = { search: openalexAnswer, compound: pubchemAnswer, trial: trialAnswer };
 
 /** load resources/free.json the way functions/api/free.js does (the deploy's own asset); null when it can't be read */
 export async function loadRegistry(env, origin) {
@@ -167,7 +208,7 @@ export async function routeFree(ask, { env = {}, registry = null, adapters = ADA
   }
   if (plan.kind === 'api' && registry) {
     const out = await runJob(only(registry, plan.ids), plan.api, { query: plan.query }, { env, adapters, now });
-    if (out.ok && ADAPTERS[out.id]) { const o = openalexAnswer(plan.query, out.result, out.id); return { ...o, source: 'free:' + out.id, route: 'api', tried: out.tried, at: new Date(now).toISOString() }; }
+    if (out.ok && ADAPTERS[out.id]) { const fmt = FORMATTERS[plan.api] || openalexAnswer; const o = fmt(plan.query, out.result, out.id); return { ...o, source: 'free:' + out.id, route: 'api', tried: out.tried, at: new Date(now).toISOString() }; }
     return null; // the API was out, failed or found nothing: the model answers, as for any other ask
   }
   return null;
