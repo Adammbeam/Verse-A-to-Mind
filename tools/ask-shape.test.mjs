@@ -161,3 +161,14 @@ test('/api/answer: "antigravity is out say yes if you want to be in charge" is a
   assert.equal(queued.length, 1);
   assert.equal(queued[0].args[1], CHARGE);
 });
+
+test('a request for content is answered, never filed as build work', () => {
+  for (const a of ['write a poem about the sea', 'give me a recipe for pancakes', 'make a list of fruits', 'give the strongest honest counter-view on remote work', 'fix my code: const x = ;', 'debug this function for me', 'tell me a joke', 'list 5 dog breeds', 'draw a cat']) {
+    assert.equal(isDirective(a), false, a);
+    assert.notEqual(askShape(a), 'directive', a);
+  }
+});
+
+test('a command about Verse or one of its parts is still a want for the build list', () => {
+  for (const a of ['add a skill that converts shoe sizes', 'fix your weather card', 'make a page that shows tide tables', 'make the stage remember my layout']) assert.equal(askShape(a), 'directive', a);
+});
