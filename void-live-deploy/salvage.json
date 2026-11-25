@@ -1,15 +1,63 @@
 {
- "at": "2026-11-17",
- "scanned": 551,
+ "at": "2026-11-25",
+ "scanned": 562,
  "counts": {
   "unified": 69,
   "live": 69,
-  "salvageable": 387,
-  "history": 23,
+  "salvageable": 397,
+  "history": 24,
   "skipped": 3
  },
- "remaining": 387,
+ "remaining": 397,
  "top10": [
+  {
+   "id": "outside:Hopding/pdf-lib",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "tool",
+   "value": 31,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "MIT"
+  },
+  {
+   "id": "outside:ncbi/pubchem",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "data",
+   "value": 31,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "CC0-1.0"
+  },
+  {
+   "id": "outside:ourresearch/openalex-api-tutorials",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "data",
+   "value": 31,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "CC0-1.0"
+  },
+  {
+   "id": "outside:sql-js/sql.js",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "tool",
+   "value": 31,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "MIT"
+  },
   {
    "id": "archive/repos/a-to-mind.com/drafts/025-carbon-weight-badge",
    "kind": "archived part",
@@ -76,54 +124,6 @@
    "status": "salvageable",
    "target": "tool",
    "value": 25.6,
-   "why": "",
-   "into": null,
-   "test": null,
-   "pr": null,
-   "license": null
-  },
-  {
-   "id": "archive/repos/a-to-mind.com/drafts/077-local-notice-lag-bin",
-   "kind": "archived part",
-   "status": "salvageable",
-   "target": "tool",
-   "value": 25.6,
-   "why": "",
-   "into": null,
-   "test": null,
-   "pr": null,
-   "license": null
-  },
-  {
-   "id": "archive/repos/a-to-mind.com/drafts/083-local-dwell-not-select",
-   "kind": "archived part",
-   "status": "salvageable",
-   "target": "tool",
-   "value": 25.6,
-   "why": "",
-   "into": null,
-   "test": null,
-   "pr": null,
-   "license": null
-  },
-  {
-   "id": "archive/repos/a-to-mind.com/drafts/027-default-deny-cookie-notice",
-   "kind": "archived part",
-   "status": "salvageable",
-   "target": "tool",
-   "value": 25.5,
-   "why": "",
-   "into": null,
-   "test": null,
-   "pr": null,
-   "license": null
-  },
-  {
-   "id": "archive/repos/a-to-mind.com/drafts/029-hashed-privacy-policy",
-   "kind": "archived part",
-   "status": "salvageable",
-   "target": "tool",
-   "value": 25.5,
    "why": "",
    "into": null,
    "test": null,
@@ -282,6 +282,86 @@
    "license": "OGL-UK-3.0",
    "link": "https://data.police.uk/docs/",
    "used": "/bots/ (api-uk-police)",
+   "isolated": false
+  },
+  {
+   "name": "ourresearch/openalex-api-tutorials",
+   "author": "OurResearch",
+   "license": "CC0-1.0",
+   "link": "https://docs.openalex.org/",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "ncbi/pubchem",
+   "author": "National Center for Biotechnology Information",
+   "license": "CC0-1.0",
+   "link": "https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "nih/clinicaltrials-v2",
+   "author": "U.S. National Library of Medicine",
+   "license": "CC0-1.0",
+   "link": "https://clinicaltrials.gov/data-api/api",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "CrossRef/rest-api-doc",
+   "author": "Crossref",
+   "license": "MIT",
+   "link": "https://github.com/CrossRef/rest-api-doc",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "dimforge/rapier.js",
+   "author": "dimforge",
+   "license": "Apache-2.0",
+   "link": "https://github.com/dimforge/rapier.js",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "huggingface/transformers.js",
+   "author": "huggingface",
+   "license": "Apache-2.0",
+   "link": "https://github.com/huggingface/transformers.js",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "Hopding/pdf-lib",
+   "author": "Hopding",
+   "license": "MIT",
+   "link": "https://github.com/Hopding/pdf-lib",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "sql-js/sql.js",
+   "author": "sql-js",
+   "license": "MIT",
+   "link": "https://github.com/sql-js/sql.js",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "Poly-Haven/Poly-Haven-API",
+   "author": "Poly Haven",
+   "license": "MIT",
+   "link": "https://github.com/Poly-Haven/Poly-Haven-API",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "Smithsonian/dpo-voyager",
+   "author": "Smithsonian Institution",
+   "license": "CC0-1.0",
+   "link": "https://3d.si.edu/cc0",
+   "used": null,
    "isolated": false
   }
  ],
@@ -5055,7 +5135,7 @@
    "kind": "archive",
    "status": "unified",
    "target": "bot",
-   "value": 31,
+   "value": 31.1,
    "why": "",
    "into": "/bots/ (void-look)",
    "test": "tools/salvaged-bots.test.mjs",
@@ -5081,6 +5161,18 @@
    "target": null,
    "value": 0,
    "why": "a dated, superseded or one-off file",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": null
+  },
+  {
+   "id": "archive/workers",
+   "kind": "archive",
+   "status": "history",
+   "target": null,
+   "value": 0,
+   "why": "nothing left to reuse",
    "into": null,
    "test": null,
    "pr": null,
@@ -6897,6 +6989,126 @@
    "test": "tools/api-bots.test.mjs",
    "pr": null,
    "license": "OGL-UK-3.0"
+  },
+  {
+   "id": "outside:ourresearch/openalex-api-tutorials",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "data",
+   "value": 31,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "CC0-1.0"
+  },
+  {
+   "id": "outside:ncbi/pubchem",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "data",
+   "value": 31,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "CC0-1.0"
+  },
+  {
+   "id": "outside:nih/clinicaltrials-v2",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "data",
+   "value": 25,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "CC0-1.0"
+  },
+  {
+   "id": "outside:CrossRef/rest-api-doc",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "data",
+   "value": 25,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "MIT"
+  },
+  {
+   "id": "outside:dimforge/rapier.js",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "tool",
+   "value": 25,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "Apache-2.0"
+  },
+  {
+   "id": "outside:huggingface/transformers.js",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "tool",
+   "value": 25,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "Apache-2.0"
+  },
+  {
+   "id": "outside:Hopding/pdf-lib",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "tool",
+   "value": 31,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "MIT"
+  },
+  {
+   "id": "outside:sql-js/sql.js",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "tool",
+   "value": 31,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "MIT"
+  },
+  {
+   "id": "outside:Poly-Haven/Poly-Haven-API",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "data",
+   "value": 25,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "MIT"
+  },
+  {
+   "id": "outside:Smithsonian/dpo-voyager",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "data",
+   "value": 25,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "CC0-1.0"
   }
  ]
 }

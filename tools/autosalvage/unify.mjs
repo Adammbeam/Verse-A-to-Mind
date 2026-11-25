@@ -171,8 +171,9 @@ export function docWith(md, s) {
 function main() {
   const args = process.argv.slice(2);
   if (args.includes('--repos-refresh')) {
-    const repos = JSON.parse(execFileSync('gh', ['repo', 'list', 'atomeam', '--limit', '200', '--json', 'name,description,updatedAt,diskUsage,isArchived'], { encoding: 'utf8' }));
-    writeFileSync(resolve(root, REPOS), JSON.stringify({ _: 'the owner\'s GitHub repos, read-only (gh repo list atomeam)', repos: repos.map((r) => ({ name: r.name, description: r.description, updatedAt: r.updatedAt, size: r.diskUsage, archived: r.isArchived })).sort((a, b) => a.name.localeCompare(b.name)) }, null, 2) + '\n');
+    const owner = process.env.VOID_GH_OWNER || 'Adammbeam';
+    const repos = JSON.parse(execFileSync('gh', ['repo', 'list', owner, '--limit', '200', '--json', 'name,description,updatedAt,diskUsage,isArchived'], { encoding: 'utf8' }));
+    writeFileSync(resolve(root, REPOS), JSON.stringify({ _: `the owner's GitHub repos, read-only (gh repo list ${owner})`, repos: repos.map((r) => ({ name: r.name, description: r.description, updatedAt: r.updatedAt, size: r.diskUsage, archived: r.isArchived })).sort((a, b) => a.name.localeCompare(b.name)) }, null, 2) + '\n');
   }
   if (args.includes('--outside-refresh')) {
     const o = readJson(OUTSIDE, { sources: [] });
