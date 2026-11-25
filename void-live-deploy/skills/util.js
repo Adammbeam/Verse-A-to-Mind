@@ -1,0 +1,416 @@
+/**
+ * util skill — small tools: passwords, QR codes, colours, word counts, text case, hashes, diffs, Markdown, CSV, YAML, CSS
+ * Asked by the tool's name with no text yet ("qr code generator", "case converter"), the card is the tool: type and it answers as you type.
+ * Contract: { name, examples, nearMisses, match(lower, text), run(text, api) }
+ * Everything runs in the browser (crypto for passwords, maths for the moon, lib/qr.js for QR codes, lib/hash.js for hashes, lib/textdiff.js
+ * for the diff checker, lib/markdown.js for Markdown, lib/csvjson.js for CSV and JSON,
+ * lib/yamljson.js for YAML and JSON, lib/cssmin.js for CSS); nothing is sent anywhere.
+ */
+import { askColour, parse, toHex, describe, contrast, passes } from '../lib/colour.js';
+import { qrMatrix, qrSvg } from '../lib/qr.js';
+import { barcodeSvg } from '../lib/barcode.js';
+import { ALGOS, algoOf, digestHex } from '../lib/hash.js';
+import { diffTexts, diffCounts, withContext, MAX_LINES } from '../lib/textdiff.js';
+import { mdToHtml } from '../lib/markdown.js';
+import { csvToJson, jsonToCsv } from '../lib/csvjson.js';
+import { yamlToJson, jsonToYaml } from '../lib/yamljson.js';
+import { minifyCss } from '../lib/cssmin.js';
+const CASES = { uppercase: (s) => s.toUpperCase(), 'upper case': (s) => s.toUpperCase(), lowercase: (s) => s.toLowerCase(), 'lower case': (s) => s.toLowerCase(),
+  // title case keeps the small words small unless they open or close the title ("The Lord of the Rings")
+  'title case': (s) => { const w = s.toLowerCase().split(/(\s+)/), last = w.length - 1; return w.map((x, i) => (i && i !== last && SMALL.has(x)) ? x : x.replace(/^\p{L}/u, (c) => c.toUpperCase())).join(''); },
+  'capitalize words': (s) => s.replace(/(^|\s)(\p{L})/gu, (_, a, c) => a + c.toUpperCase()),
+  reverse: (s) => Array.from(s).reverse().join(''), 'reverse words': (s) => s.trim().split(/\s+/).reverse().join(' ') };
+const SMALL = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'nor', 'for', 'so', 'yet', 'at', 'by', 'in', 'of', 'on', 'to', 'up', 'as', 'via', 'vs']);
+// syllables by vowel groups, with the usual English corrections (silent final e, -le, -ed); right for most words, labelled "about"
+import { bandMini } from '../lib/card-mini.js';
+export function syllables(w) {
+  w = String(w).toLowerCase().replace(/[^a-z]/g, ''); if (!w) return 0; if (w.length <= 3) return 1;
+  let s = w.replace(/(?:[^laeiouy]es|[^laeiouy]ed|[^laeiouy]e)$/, '').replace(/^y/, '');
+  const n = (s.match(/[aeiouy]+/g) || []).length + (/[^aeiouy]le$/.test(w) ? 1 : 0) - (/[^aeiouy]le$/.test(w) && /e$/.test(s) ? 1 : 0);
+  return Math.max(1, n);
+}
+const NAMED = { red: '#ff0000', green: '#008000', blue: '#0000ff', teal: '#008080', navy: '#000080', orange: '#ffa500', purple: '#800080', pink: '#ffc0cb', gold: '#ffd700', coral: '#ff7f50', salmon: '#fa8072', turquoise: '#40e0d0', indigo: '#4b0082', violet: '#ee82ee', maroon: '#800000', olive: '#808000', lime: '#00ff00', cyan: '#00ffff', magenta: '#ff00ff', black: '#000000', white: '#ffffff', gray: '#808080', grey: '#808080', brown: '#a52a2a', beige: '#f5f5dc', lavender: '#e6e6fa' };
+export function utilOf(text) {
+  const raw = String(text || '').trim(), t = raw.replace(/[?!.]+$/, '').replace(/\s+/g, ' '), l = t.toLowerCase();
+  let m = l.match(/^(?:generate|make|create|give me|new)\s+(?:me\s+)?(?:a\s+)?(?:strong\s+|secure\s+|random\s+)*password(?:\s+(?:with|of)\s+(\d{1,3})\s+(?:characters|chars|letters))?$|^password\s+generator$/);
+  if (m) return { kind: 'password', n: Math.min(128, Math.max(8, +m[1] || 20)) };
+  // the length or the kind said another way (2026-10-30: "16 character password", "generate a password 16 characters", "strong password" and
+  // "random password generator" fell to an article). password.js keeps "random password", "another password" and "password of 20 characters"
+  const PW_LEAD = '^(?:please\\s+)?(?:(?:generate|make|create|give\\s+me|get\\s+me|i\\s+need|i\\s+want)\\s+(?:me\\s+)?)?(?:an?\\s+)?';
+  const PW_ADJ = '(?:(?:strong|secure|random|safe|complex|long|new)\\s+)*', PW_N = '(\\d{1,3})[\\s-]?(?:characters?|chars?|letters?)(?:\\s+long)?';
+  m = l.match(new RegExp(PW_LEAD + PW_ADJ + PW_N + '\\s+' + PW_ADJ + 'password(?:\\s+generator)?$|' + PW_LEAD + PW_ADJ + 'password\\s+' + PW_N + '$')); // void-review: ok (built from the constants above)
+  if (m) return { kind: 'password', n: Math.min(128, Math.max(8, +(m[1] || m[2]))) };
+  if (/^(?:an?\s+)?(?=(?:\w+\s+)*(?:strong|secure|safe|complex)\s)(?:(?:strong|secure|random|safe|complex|long|new)\s+)+password$|^(?:an?\s+)?(?:free\s+|online\s+)?(?:(?:strong|secure|random|safe|complex)\s+)*password\s+(?:generator|maker|creator)$/.test(l)) return { kind: 'password', n: 20 };
+  m = t.match(/^(?:make\s+(?:me\s+)?|create\s+|generate\s+)?(?:a\s+)?qr(?:\s+code)?\s+(?:for|of|with)\s+(.{1,300})$/i);
+  if (m) return { kind: 'qr', data: m[1].trim() };
+  // the tool asked for by its name, with no text yet (2026-10-30: "qr code generator" and "case converter" fell to an article): a card that does it as you type
+  if (/^(?:(?:an?|the)\s+)?(?:free\s+|online\s+)?qr(?:\s*code)?\s+(?:generator|maker|creator)$|^(?:make|create|generate)\s+(?:me\s+)?(?:an?\s+)?qr(?:\s*code)?$/.test(l)) return { kind: 'qrmaker' };
+  if (/^(?:(?:an?|the)\s+)?(?:free\s+|online\s+)?(?:text\s+)?case\s+(?:converter|changer)$|^(?:convert|change)\s+(?:text\s+)?case$|^(?:upper|lower|title)\s*case\s+(?:converter|generator)$|^(?:upper\s*case\s+to\s+lower\s*case|lower\s*case\s+to\s+upper\s*case)$/.test(l)) return { kind: 'casemaker' };
+  // hashes (2026-10-30: "md5 of hello" and "sha256 generator" fell to an article). The tool by its name, with no text yet, is a card that hashes as you type
+  const ALGO = '(md5|sha-?1|sha-?256|sha-?384|sha-?512)';
+  if (new RegExp('^(?:(?:an?|the)\\s+)?(?:free\\s+|online\\s+)?(?:' + ALGO + '\\s+)?(?:hash|checksum|digest)?\\s*(?:generator|maker|calculator|creator)$|^' + ALGO + '\\s+(?:hash\\s+)?online$|^hash\\s+(?:a\\s+|some\\s+)?text$').test(l) && /md5|sha|hash|checksum|digest/.test(l)) {
+    const a = l.match(/(md5|sha-?1|sha-?256|sha-?384|sha-?512)/); return { kind: 'hashmaker', algo: a ? algoOf(a[1]) : 'sha256' }; }
+  // a diff checker and Markdown to HTML, asked for by name (2026-10-30: "diff checker" and "markdown to html" fell to an article that answered nothing)
+  if (/^(?:(?:an?|the)\s+)?(?:free\s+|online\s+)?(?:text\s+|line\s+)?(?:diff|difference)\s+(?:checker|tool|finder|viewer)$|^(?:(?:an?|the)\s+)?(?:free\s+|online\s+)?(?:text|string)\s+(?:compare|comparison|diff)(?:\s+tool)?$|^(?:compare|diff)\s+(?:two\s+)?(?:texts|text|lists)$/.test(l)) return { kind: 'diffmaker' };
+  if (/^(?:(?:an?|the)\s+)?(?:free\s+|online\s+)?(?:markdown|md)\s+(?:to\s+html(?:\s+converter)?|converter|preview(?:er)?|editor|viewer|renderer)$|^convert\s+markdown(?:\s+to\s+html)?$/.test(l)) return { kind: 'mdmaker' };
+  // with the Markdown after a colon or a new line (2026-11-06, docs/GAPS.md: "convert markdown to html: **bold**" fell to nothing): the same card, filled in
+  m = raw.match(/^(?:please\s+)?(?:convert\s+)?(?:this\s+)?(?:markdown|md)\s+(?:to\s+html|into\s+html|as\s+html)\s*(?::\s*|\n\s*)([\s\S]{1,200000})$/i) || raw.match(/^(?:please\s+)?(?:convert|render|turn)\s+(?:this\s+)?(?:markdown|md)(?:\s+(?:to|into)\s+html)?\s*(?::\s*|\n\s*)([\s\S]{1,200000})$/i);
+  if (m && m[1].trim()) return { kind: 'mdmaker', s: m[1] };
+  // a Code 128 barcode, drawn in the browser (2026-11-06, docs/GAPS.md: "barcode for 12345" fell to an article)
+  if (/^(?:(?:an?|the)\s+)?(?:free\s+|online\s+)?(?:code\s*128\s+)?barcode\s+(?:generator|maker|creator)$|^(?:make|generate|create)\s+(?:me\s+)?an?\s+barcode$/.test(l)) return { kind: 'barcode', s: '' };
+  m = raw.match(/^(?:please\s+)?(?:(?:make|generate|create|draw)\s+(?:me\s+)?)?(?:an?\s+)?(?:code\s*128\s+)?barcode\s+(?:for|of|with|that\s+says)\s+["']?([ -~]{1,80}?)["']?\s*$/i);
+  if (m && m[1].trim()) return { kind: 'barcode', s: m[1].trim() };
+  m = l.match(/^(?:convert\s+(?:this\s+|a\s+|my\s+)?)?(?:(?:an?|the)\s+)?(?:free\s+|online\s+)?(csv|json)\s+(?:file\s+)?to\s+(csv|json)(?:\s+(?:converter|tool|online))?$|^(?:(?:an?|the)\s+)?(?:free\s+|online\s+)?(csv)\s+(?:to\s+)?json\s+converter$/);
+  if (m && (m[3] || m[1] !== m[2])) return { kind: 'csvjson', dir: m[3] || m[1] };
+  // YAML and JSON, both ways, and a YAML check (2026-10-30: "yaml to json" and "json to yaml" fell to an article that answered nothing)
+  m = l.match(/^(?:convert\s+(?:this\s+|a\s+|my\s+)?)?(?:(?:an?|the)\s+)?(?:free\s+|online\s+)?(ya?ml|json)\s+(?:file\s+)?to\s+(ya?ml|json)(?:\s+(?:converter|tool|online))?$|^(?:(?:an?|the)\s+)?(?:free\s+|online\s+)?(ya?ml)\s+(?:to\s+)?json\s+converter$/);
+  if (m && (m[3] || (m[1] === 'json') !== (m[2] === 'json'))) return { kind: 'yamljson', dir: m[1] === 'json' ? 'json' : 'yaml' };
+  if (/^(?:(?:an?|the)\s+)?(?:free\s+|online\s+)?(?:ya?ml\s+(?:validator|linter|lint|checker|parser|viewer)|(?:validate|check|lint|parse)\s+(?:my\s+|this\s+)?ya?ml)$/.test(l)) return { kind: 'yamljson', dir: 'yaml' };
+  if (/^(?:(?:an?|the)\s+)?(?:free\s+|online\s+)?(?:css\s+(?:minifier|minify|minification|compressor|compress|optimizer)(?:\s+tool)?|(?:minify|compress)\s+(?:my\s+|this\s+)?css)$/.test(l)) return { kind: 'cssmin' };
+  // "md5 of hello", "sha256 hash of hello world", "sha1 hello", "hash of hello", 'hash "hello"' (SHA-256 first, the others under it); the text keeps its case.
+  // A bare "hash" takes text only after of/for or in quotes: "hash browns" is food and "hash table" is a data structure
+  m = t.match(new RegExp('^(?:(?:what(?:\\s+is|\'s)\\s+)?the\\s+)?' + ALGO + '(?:\\s+(?:hash|checksum|digest|sum))?\\s+(?:of|for)\\s+(.{1,2000})$|^(?:hash|checksum)\\s+(?:(?:of|for)\\s+(.{1,2000})|(["“\'‘].{1,2000}["”\'’]))$|^' + ALGO + '(?:\\s+hash)?\\s+(?!(?:vs|versus|or|and|is|meaning|decrypt|decoder|decode|reverse|algorithm|collision|length|example)\\b)(.{1,2000})$', 'i'));
+  if (m) { const s = (m[2] ?? m[3] ?? m[4] ?? m[6]).replace(/^["“'‘](.*)["”'’]$/s, '$1'); if (s) return { kind: 'hash', algo: m[1] ? algoOf(m[1]) : m[5] ? algoOf(m[5]) : 'sha256', s }; }
+  m = l.match(/^(?:what\s+colou?r\s+is\s+|show\s+(?:me\s+)?(?:the\s+colou?r\s+)?|colou?r\s+)(#?[0-9a-f]{6}|#?[0-9a-f]{3}|[a-z]{3,12})$/); // void-review: ok (m is declared with let at the top of utilOf)
+  if (l.match(/^(?:(?:monthly|weekly|daily|yearly)\s+(?:electric|water|gas|utility)\s+(?:bill|cost|price))|(?:avg\s+for|average\s+for)\s+\d+sqft|(?:(?:electric|water|gas|utility)\s+)?bill\s+calc\s+\d+\s*(?:kwh|units|kwh)\s+at\s+\d*\.?\d+$/)) return { kind: 'estimate' };
+  if (m && (/^#?[0-9a-f]{3}([0-9a-f]{3})?$/.test(m[1]) || NAMED[m[1]])) return { kind: 'color', c: m[1] };
+  m = l.match(/^(#[0-9a-f]{6}|#[0-9a-f]{3})$/); // a bare hex code, the way people paste one into a colour site
+  if (m) return { kind: 'color', c: m[1] };
+  // the converter forms (tools pack 7, owner 2026-10-18, "Color hex <-> rgb"): "#ff8800 to rgb", "hex to rgb #ff8800", "rgb 255 136 0 to hex", "rgb to hex 255 136 0"; the same colour card
+  m = l.match(/^(?:convert\s+)?(#[0-9a-f]{6}|#[0-9a-f]{3})\s+(?:to|in|into|as)\s+(?:rgb|hsl|hex|colou?r)$/) || l.match(/^(?:convert\s+)?(?:hex|colou?r)\s+(?:code\s+)?(#?[0-9a-f]{6}|#?[0-9a-f]{3})\s+to\s+(?:rgb|hsl)$/) || l.match(/^hex\s+to\s+(?:rgb|hsl)\s*:?\s*(#?[0-9a-f]{6}|#?[0-9a-f]{3})$/);
+  if (m) return { kind: 'color', c: m[1] };
+  m = l.match(/^(?:convert\s+)?rgb\s*\(?\s*(\d{1,3})[\s,]+(\d{1,3})[\s,]+(\d{1,3})\s*\)?\s+to\s+(?:hex|hsl|colou?r)$/) || l.match(/^rgb\s+to\s+(?:hex|hsl)\s*:?\s*\(?\s*(\d{1,3})[\s,]+(\d{1,3})[\s,]+(\d{1,3})\s*\)?$/);
+  if (m && [m[1], m[2], m[3]].every((v) => +v <= 255)) return { kind: 'color', c: '#' + [m[1], m[2], m[3]].map((v) => (+v).toString(16).padStart(2, '0')).join('') };
+  // "what color is rgb 255 0 0", "rgb(0, 128, 255)"
+  m = l.match(/^(?:what\s+colou?r\s+is\s+|show\s+(?:me\s+)?)?rgb\s*\(?\s*(\d{1,3})[\s,]+(\d{1,3})[\s,]+(\d{1,3})\s*\)?$/);
+  if (m && [m[1], m[2], m[3]].every((v) => +v <= 255)) return { kind: 'color', c: '#' + [m[1], m[2], m[3]].map((v) => (+v).toString(16).padStart(2, '0')).join('') };
+  // what the forms above miss, from the colour page's own reader (lib/colour.js): "hsl(11, 100%, 60%)", "ff5733 color", "colour picker", "html color codes"
+  { const c = askColour(t); if (c) return { kind: 'color', c: toHex(parse(c)) }; }
+  // 2026-11-06 (docs/GAPS.md): "contrast ratio between #000000 and #ffffff" fell to nothing. Two colours named around "contrast" are their WCAG 2 ratio.
+  m = l.match(/^(?:(?:what\s+is|what'?s|check|find|show\s+me)\s+)?(?:the\s+)?(?:wcag\s+)?(?:colou?r\s+)?contrast(?:\s+ratio)?(?:\s+(?:between|of|for))?\s+(.+?)\s*(?:\s(?:and|vs\.?|versus|on|against|with)\s|,)\s*(.+)$/);
+  if (m) { const A = parse(m[1].replace(/\s+(?:text|colou?r)$/, '')), B = parse(m[2].replace(/\s+(?:background|bg|colou?r)$/, '')); if (A && B) return { kind: 'contrast', a: toHex(A), b: toHex(B) }; }
+  // counted as typed: the cleaned ask drops a closing "!" or "?", and "word count: ... amused!" came out one character short (the tower gate's
+  // accuracy question for wordcounter.net); "how many words in X?" still loses its question mark, which is the ask's, not the text's
+  const typed = raw.replace(/\s+/g, ' ');
+  // the word counter's card (lib/wordcount.js cardAsk): its text as base64url, read back only when it is that exact code, so a typed "#tag" stays a word
+  m = raw.match(/^count\s+words\s+#([A-Za-z0-9_-]{2,1100})$/);
+  if (m) { try { const b = atob(m[1].replace(/-/g, '+').replace(/_/g, '/')), s = new TextDecoder('utf-8', { fatal: true }).decode(Uint8Array.from(b, (c) => c.charCodeAt(0)));
+    if (s.trim() && btoa(b).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '') === m[1]) return { kind: 'count', s }; } catch (_) { /* not a card code: an ask about a tag */ } }
+  m = typed.match(/^(?:word\s+count|count\s+(?:the\s+)?words)(?:\s+(?:of|in|for)\s+|\s*:\s*)(.+)$/i) || t.match(/^how\s+many\s+words\s+(?:are\s+)?in\s+(.+)$/i);
+  if (m) return { kind: 'count', s: m[1].replace(/^["“]|["”]$/g, '') };
+  // "make it uppercase: hello world", "turn this into title case: ..."
+  m = t.match(/^(?:make|turn|convert|change|put)\s+(?:it|this|that|the\s+text)\s+(?:in(?:to)?\s+|to\s+)?(uppercase|upper case|lowercase|lower case|title case|all caps|caps)\s*:\s*(.+)$/i);
+  if (m) return { kind: 'case', how: /caps/i.test(m[1]) ? 'uppercase' : m[1].toLowerCase(), s: m[2] };
+  // "how many characters in supercalifragilistic", "character count of ..."
+  // "how many vowels in banana", "count the consonants in rhythm"
+  m = t.match(/^(?:how\s+many|count\s+(?:the\s+)?)\s*(vowels|consonants)\s+(?:are\s+)?(?:in|of)\s+(?:the\s+word\s+)?["“]?([\p{L}\p{M}' -]{1,60}?)["”]?$/iu);
+  if (m) return { kind: 'letters', which: m[1].toLowerCase(), s: m[2] };
+  m = t.match(/^(?:how\s+many\s+(?:characters|letters|chars)\s+(?:are\s+)?in|count\s+(?:the\s+)?(?:characters|letters|chars)\s+in|(?:character|letter|char)\s+count\s+(?:of|in|for))\s+(.+)$/i);
+  if (m && /^(?:the\s+)?(?:english\s+)?alphabet$/i.test(m[1])) m = null; // a fact, not a count of the word "alphabet"
+  if (m) return { kind: 'count', s: m[1].replace(/^(?:the\s+)?(?:word|name|phrase)\s+(?=\S)/i, '').replace(/^["“]|["”]$/g, ''), chars: true };
+  // "uuid", "generate a uuid", "uuid generator", "uuid v4 generator", "online uuid generator"; "random uuid" and "generate a random guid" are the uuid skill's
+  if (/^(?:generate|make|give\s+me|create|new)\s+(?:a\s+|an\s+)?(?:uuid|guid|unique\s+id)(?:\s*v?4)?$|^(?:an?\s+)?(?:(?:online|free)\s+)?(?:uuid|guid)(?:\s*v?4)?(?:\s+(?:generator|maker|tool))?$/i.test(t)) return { kind: 'uuid' };
+  m = t.match(/^(?:an?\s+)?emojis?\s+(?:for|of|that\s+means)\s+([a-z ]{2,20})$/i);
+  if (m && EMOJI[m[1].trim().toLowerCase()]) return { kind: 'emoji', w: m[1].trim().toLowerCase() };
+  // "nato alphabet for hello", "spell hello in nato", "morse code for sos", "hello in binary"
+  m = t.match(/^(?:(?:the\s+)?(?:nato|phonetic)\s+(?:alphabet|spelling)\s+(?:for|of)\s+(.{1,40})|spell\s+(.{1,40}?)\s+(?:in|with\s+the)\s+(?:nato|phonetic)(?:\s+alphabet)?)$/i);
+  if (m) return { kind: 'nato', s: (m[1] || m[2]).trim() };
+  // "invisible character", "blank character copy", "zero width space": the blank characters, each with its own copy button (docs/GAPS.md row 59, 2026-11-06: a disambiguation card)
+  if (/^(?:copy\s+(?:and\s+paste\s+)?(?:an?\s+)?)?(?:invisible|blank|empty|hidden)\s+(?:characters?|chars?|text|letters?|symbols?|space|name)(?:\s+(?:copy(?:\s+(?:and\s+)?paste)?|generator|for\s+(?:discord|whatsapp|fortnite|instagram|names?)))?$|^(?:copy\s+(?:an?\s+)?)?zero[\s-]width\s+(?:space|character|joiner|char)s?$/i.test(t)) return { kind: 'blank' };
+  // "phonetic alphabet", "nato alphabet", "icao spelling alphabet chart" named alone: the whole table and a box to spell in (docs/GAPS.md row 61, 2026-11-06: a disambiguation card)
+  if (/^(?:the\s+)?(?:nato|icao|phonetic|nato\s+phonetic|icao\s+phonetic|military|military\s+phonetic|police|pilot|radio)\s+(?:spelling\s+)?alphabet(?:\s+(?:chart|list|table|letters|words|translator|converter|generator))?$/i.test(t)) return { kind: 'nato', s: '' };
+  m = t.match(/^(?:(?:the\s+)?morse(?:\s+code)?\s+(?:for|of)\s+(.{1,60})|(.{1,60}?)\s+in\s+morse(?:\s+code)?)$/i);
+  if (m) return { kind: 'morse', s: (m[1] || m[2]).trim() };
+  m = t.match(/^(?:(?:the\s+)?(?:word|text)\s+)?["“']?([a-z ]{1,24}?)["”']?\s+in\s+binary$/i);
+  if (m && /[a-z]/i.test(m[1]) && !/^\d/.test(m[1])) return { kind: 'textbin', s: m[1] };
+  m = t.match(/^spell\s+(.+?)\s+backwards?$/i);
+  if (m) return { kind: 'case', how: 'reverse', s: m[1] };
+  // "reverse the words in hello big world"
+  m = t.match(/^reverse\s+(?:the\s+)?(?:order\s+of\s+(?:the\s+)?)?words\s+(?:in|of)\s*:?\s+(.+)$/i);
+  if (m) return { kind: 'case', how: 'reverse words', s: m[1] };
+  // "is racecar a palindrome", "is 'never odd or even' a palindrome"
+  m = t.match(/^is\s+["“']?(.+?)["”']?\s+a\s+palindrome$/i);
+  if (m) return { kind: 'palindrome', s: m[1] };
+  // "how many syllables in banana", "syllables in elephant"
+  m = l.match(/^(?:how\s+many\s+)?syllables?\s+(?:are\s+)?(?:in|does)\s+(?:the\s+word\s+)?["“']?([a-z'-]{1,30})["”']?(?:\s+have)?$|^how\s+many\s+syllables\s+does\s+["“']?([a-z'-]{1,30})["”']?\s+have$/);
+  if (m) return { kind: 'syllables', w: m[1] || m[2] };
+  // "capitalize every word in the cat sat on the mat": each word starts with a capital, small words too
+  m = t.match(/^(?:capitali[sz]e|uppercase)\s+(?:every|each|all\s+the|the\s+first\s+letter\s+of\s+(?:every|each))\s+words?\s+(?:in|of)\s*:?\s+(.+)$/i);
+  if (m) return { kind: 'case', how: 'capitalize words', s: m[1] };
+  m = t.match(/^(uppercase|upper case|lowercase|lower case|title case|reverse)\s*:?\s+(?:this:?\s+)?(.+)$/i);
+  // "this" is filler ("uppercase this: hello") only when typed as a word, not when it is part of the text ("lowercase THIS IS LOUD")
+  if (m) { const f = t.match(/^\S+(?:\s+case)?\s*:?\s+(this:?\s+)/i); if (f && f[1].trim().replace(/:$/, '') !== 'this') m[2] = f[1] + m[2]; }
+  if (m && !/^(the\s+)?(list|timer|clock|note|sticky)\b/i.test(m[2]) && !/^(?:\d+(?:\.\d+)?\s*)?(?:percentage|percent|%)/i.test(m[2])) return { kind: 'case', how: m[1].toLowerCase(), s: m[2] }; // "reverse percentage ..." is maths
+  // the moon (phase, next full and new) is skills/moontonight.js now: lib/astro.js, good to minutes; the mean-cycle sum below was off by hours
+  m = l.match(/^(?:give\s+me\s+)?(?:some\s+|(\d{1,2})\s+paragraphs?\s+(?:of\s+)?)?(?:lorem\s+ipsum|placeholder\s+text|dummy\s+text)(?:\s+(?:generator|maker))?(?:\s+(\d{1,2})\s+paragraphs?)?$/);
+  if (m) return { kind: 'lorem', n: Math.max(1, Math.min(10, +(m[1] || m[2]) || 1)) };
+  return null;
+}
+const NATO = { A: 'Alfa', B: 'Bravo', C: 'Charlie', D: 'Delta', E: 'Echo', F: 'Foxtrot', G: 'Golf', H: 'Hotel', I: 'India', J: 'Juliett', K: 'Kilo', L: 'Lima', M: 'Mike', N: 'November', O: 'Oscar', P: 'Papa', Q: 'Quebec', R: 'Romeo', S: 'Sierra', T: 'Tango', U: 'Uniform', V: 'Victor', W: 'Whiskey', X: 'X-ray', Y: 'Yankee', Z: 'Zulu', 0: 'Zero', 1: 'One', 2: 'Two', 3: 'Three', 4: 'Four', 5: 'Five', 6: 'Six', 7: 'Seven', 8: 'Eight', 9: 'Nine' };
+/** each character of s as its NATO word; a space is ·, anything else stays as it is. Pure. */
+export const natoWords = (s) => Array.from(String(s || '').toUpperCase()).map((c) => NATO[c] || (c === ' ' ? '·' : c)).join(' ');
+// the blank characters people copy for an empty name or message: [the character, code point, Unicode name, what it does]
+export const BLANKS = [
+  ['\u200B', 'U+200B', 'Zero width space', 'takes no room, so a line can break there'],
+  ['\u3164', 'U+3164', 'Hangul filler', 'a wide blank that many apps keep in a name'],
+  ['\u2800', 'U+2800', 'Braille pattern blank', 'a blank the width of a letter, not counted as a space by most apps'],
+  ['\u00A0', 'U+00A0', 'No-break space', 'looks like a space, and a line never breaks there'],
+];
+const MORSE = { A: '·−', B: '−···', C: '−·−·', D: '−··', E: '·', F: '··−·', G: '−−·', H: '····', I: '··', J: '·−−−', K: '−·−', L: '·−··', M: '−−', N: '−·', O: '−−−', P: '·−−·', Q: '−−·−', R: '·−·', S: '···', T: '−', U: '··−', V: '···−', W: '·−−', X: '−··−', Y: '−·−−', Z: '−−··', 0: '−−−−−', 1: '·−−−−', 2: '··−−−', 3: '···−−', 4: '····−', 5: '·····', 6: '−····', 7: '−−···', 8: '−−−··', 9: '−−−−·', '.': '·−·−·−', ',': '−−··−−', '?': '··−−··', '!': '−·−·−−', '/': '−··−·', '@': '·−−·−·' };
+const EMOJI = { happy: '😀 😊 😄', sad: '😢 😞 ☹️', love: '❤️ 😍 🥰', laugh: '😂 🤣', angry: '😠 😡', tired: '😴 🥱', cool: '😎', thinking: '🤔', party: '🎉 🥳', fire: '🔥', ok: '👌 👍', yes: '✅ 👍', no: '❌ 👎', thanks: '🙏', heart: '❤️', star: '⭐ 🌟', sun: '☀️', moon: '🌙', rain: '🌧️', snow: '❄️', coffee: '☕', pizza: '🍕', cake: '🎂', dog: '🐶', cat: '🐱', money: '💰 💵', idea: '💡', rocket: '🚀', music: '🎵 🎶', birthday: '🎂 🎉', surprised: '😮 😲', scared: '😱', sick: '🤒', cry: '😭', wink: '😉', kiss: '😘', clap: '👏', strong: '💪', eyes: '👀', skull: '💀', ghost: '👻', robot: '🤖', alien: '👽', earth: '🌍', flower: '🌸', tree: '🌳', car: '🚗', home: '🏠', book: '📚', phone: '📱', time: '⏰', warning: '⚠️', check: '✔️' };
+function hex(c) { c = NAMED[c] || c; c = c.replace('#', ''); if (c.length === 3) c = c.split('').map((x) => x + x).join(''); return '#' + c.toLowerCase(); }
+function hsl(h) { const r = parseInt(h.slice(1, 3), 16) / 255, g = parseInt(h.slice(3, 5), 16) / 255, b = parseInt(h.slice(5, 7), 16) / 255; const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn; let H = 0;
+  if (d) H = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; H = Math.round(H * 60 + 360) % 360; const L = (mx + mn) / 2, S = d ? d / (1 - Math.abs(2 * L - 1)) : 0;
+  return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255), h: H, s: Math.round(S * 100), l: Math.round(L * 100) }; }
+export function moonPhase(d = new Date()) { // kept for the explainer's test (tools/explainers.test.mjs); the moon skill uses lib/astro.js. Days since a known new moon (2000-01-06 18:14 UTC), mean synodic month
+  const syn = 29.530588853, age = ((d.getTime() - Date.UTC(2000, 0, 6, 18, 14)) / 864e5 % syn + syn) % syn, f = age / syn;
+  const names = ['New moon', 'Waxing crescent', 'First quarter', 'Waxing gibbous', 'Full moon', 'Waning gibbous', 'Last quarter', 'Waning crescent'];
+  return { age, name: names[Math.floor(f * 8 + 0.5) % 8], lit: Math.round((1 - Math.cos(2 * Math.PI * f)) / 2 * 100), nextFull: new Date(d.getTime() + ((syn / 2 - age + syn) % syn) * 864e5) };
+}
+const LOREM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+async function run(text, api) {
+  const { showPage, esc } = api;
+  const q = utilOf(text);
+  if (!q) return 'none';
+  const big = (s, size) => '<div class="util-out" style="font-size:' + (size || 30) + 'px;font-weight:300;line-height:1.3;margin:8px 0;word-break:break-all">' + esc(s) + '</div>';
+  const copyBtn = '<button type="button" class="tr-copy util-copy">copy</button>';
+  let el;
+  if (q.kind === 'password') {
+    const set = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*-_=+?';
+    const a = new Uint32Array(q.n); crypto.getRandomValues(a);
+    const pw = Array.from(a, (x) => set[x % set.length]).join('');
+    el = showPage((p) => { p.innerHTML = '<h2>Password</h2>' + big(pw, 26) + copyBtn + '<p style="color:#8a8a8a">' + q.n + ' characters, made in your browser and never sent anywhere · ask again for another</p>'; });
+  } else if (q.kind === 'qr') {
+    // 2026-10-30: drawn here (lib/qr.js), not fetched from goqr.me. The fetched picture was an https image, so the card frame made it the art and
+    // cropped it to 16:10 (lib/card-frame.js), which cut the finder squares off and left a code no phone could scan. An inline SVG stays whole.
+    const code = qrMatrix(q.data, { ecl: 'M' });
+    const svg = code ? qrSvg(code, { margin: 4, label: 'QR code' }) : ''; // void-review: ok (qrSvg is built from numbers and a fixed label only)
+    el = showPage((p) => { p.innerHTML = '<h2>QR code</h2><div class="sub">' + esc(q.data) + '</div>'
+      + (svg ? '<div class="util-qr" style="width:min(240px,100%);aspect-ratio:1;margin:8px 0;border-radius:8px;overflow:hidden;background:#fff">' + svg.replace('<svg ', '<svg width="100%" height="100%" ') + '</div>'
+        + '<p style="color:#8a8a8a">Made in your browser and never sent anywhere · error correction M · scan it with a phone camera</p>'
+        : '<p>That text is too long for one QR code (a version 40 code holds about 2,300 characters).</p>'); });
+  } else if (q.kind === 'qrmaker') {
+    el = showPage((p) => { p.innerHTML = '<h2>QR code maker</h2><textarea class="util-in" rows="2" maxlength="2300" placeholder="a link or any text" aria-label="Text for the QR code" style="display:block;width:100%;max-width:100%;box-sizing:border-box;resize:vertical;font:inherit;color:inherit;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:6px 8px"></textarea>'
+      + '<div class="util-qr" style="width:min(240px,100%);aspect-ratio:1;margin:8px 0;border-radius:8px;overflow:hidden;background:#fff;display:none"></div>'
+      + '<p class="util-qr-say" style="color:#8a8a8a">Type a link or any text and the code draws here. Made in your browser and never sent anywhere · error correction M</p>'; });
+    const box = el && el.querySelector && el.querySelector('.util-in'), pic = el && el.querySelector && el.querySelector('.util-qr'), say = el && el.querySelector && el.querySelector('.util-qr-say');
+    if (box && pic) box.addEventListener('input', () => {
+      const s = box.value.trim(), code = s ? qrMatrix(s, { ecl: 'M' }) : null;
+      pic.innerHTML = code ? qrSvg(code, { margin: 4, label: 'QR code' }).replace('<svg ', '<svg width="100%" height="100%" ') : ''; // void-review: ok (qrSvg is built from numbers and a fixed label only)
+      pic.style.display = code ? '' : 'none';
+      if (say) say.textContent = !s ? 'Type a link or any text and the code draws here. Made in your browser and never sent anywhere · error correction M'
+        : code ? 'Scan it with a phone camera. Made in your browser and never sent anywhere · error correction M' : 'That text is too long for one QR code (a version 40 code holds about 2,300 characters).';
+    });
+  } else if (q.kind === 'casemaker') {
+    const HOWS = ['uppercase', 'lowercase', 'title case', 'capitalize words', 'reverse'];
+    el = showPage((p) => { p.innerHTML = '<h2>Case converter</h2><textarea class="util-in" rows="3" placeholder="your text" aria-label="Text to change" style="display:block;width:100%;max-width:100%;box-sizing:border-box;resize:vertical;font:inherit;color:inherit;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:6px 8px"></textarea>'
+      + '<p>' + HOWS.map((k) => '<button type="button" class="util-case" data-how="' + esc(k) + '">' + esc(k.charAt(0).toUpperCase() + k.slice(1)) + '</button>').join(' ') + '</p>'
+      + '<div class="util-out" style="font-size:20px;line-height:1.4;margin:8px 0;word-break:break-word;white-space:pre-wrap"></div>' + copyBtn
+      + '<p style="color:#8a8a8a">Changed in your browser and never sent anywhere</p>'; });
+    const box = el && el.querySelector && el.querySelector('.util-in'), out = el && el.querySelector && el.querySelector('.util-out');
+    let how = 'uppercase';
+    const paint = () => { if (out && box) out.textContent = CASES[how](box.value); };
+    if (box) box.addEventListener('input', paint);
+    for (const b of (el && el.querySelectorAll ? el.querySelectorAll('.util-case') : [])) b.addEventListener('click', () => { how = b.dataset.how; paint(); });
+  } else if (q.kind === 'hash') {
+    // the asked-for hash first and big, the others under it; every one is the UTF-8 bytes of the text, as `echo -n text | md5sum` gives
+    const order = [q.algo, ...ALGOS.map((a) => a.id).filter((x) => x !== q.algo)], name = (id) => ALGOS.find((a) => a.id === id).name;
+    const sums = await Promise.all(order.map((id) => digestHex(id, q.s).catch(() => '')));
+    el = showPage((p) => { p.innerHTML = '<h2>' + esc(name(q.algo)) + '</h2><div class="sub">of “' + esc(q.s.length > 120 ? q.s.slice(0, 120) + '…' : q.s) + '”</div>' + big(sums[0], 18) + copyBtn // ellipsis-ok: only the shown label is cut, the hash is of the whole text
+      + '<ul style="margin:10px 0 0;padding-left:18px;word-break:break-all;font-size:13px">' + order.slice(1).map((id, i) => '<li><b>' + esc(name(id)) + '</b> <code>' + esc(sums[i + 1]) + '</code></li>').join('') + '</ul>'
+      + '<p style="color:#8a8a8a">The text as UTF-8 bytes, hashed in your browser and never sent anywhere. MD5 and SHA-1 are broken for security: use SHA-256 or longer for anything that must not be forged.</p>'; });
+  } else if (q.kind === 'hashmaker') {
+    const order = [q.algo, ...ALGOS.map((a) => a.id).filter((x) => x !== q.algo)];
+    el = showPage((p) => { p.innerHTML = '<h2>Hash generator</h2><textarea class="util-in" rows="3" placeholder="your text" aria-label="Text to hash" style="display:block;width:100%;max-width:100%;box-sizing:border-box;resize:vertical;font:inherit;color:inherit;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:6px 8px"></textarea>'
+      + '<ul class="util-hashes" style="margin:10px 0 0;padding-left:18px;word-break:break-all;font-size:13px">' + order.map((id) => '<li><b>' + esc(ALGOS.find((a) => a.id === id).name) + '</b> <code data-algo="' + esc(id) + '"></code></li>').join('') + '</ul>'
+      + '<p style="color:#8a8a8a">Type and every hash updates. The text as UTF-8 bytes, hashed in your browser and never sent anywhere. MD5 and SHA-1 are broken for security: use SHA-256 or longer for anything that must not be forged.</p>'; });
+    const box = el && el.querySelector && el.querySelector('.util-in'), codes = el && el.querySelectorAll ? [...el.querySelectorAll('code[data-algo]')] : [];
+    let turn = 0;
+    const paint = async () => { const mine = ++turn, v = box ? box.value : ''; const sums = await Promise.all(codes.map((c) => digestHex(c.dataset.algo, v).catch(() => '')));
+      if (mine === turn) codes.forEach((c, i) => { c.textContent = sums[i]; }); }; // a slower answer for older text never overwrites a newer one
+    if (box) box.addEventListener('input', paint);
+    paint();
+  } else if (q.kind === 'diffmaker') {
+    // every character counts: a space, a blank line or a changed case is a difference (lib/textdiff.js)
+    const box = (cls, label) => '<label style="display:block;font-size:13px;color:#8a8a8a">' + label + '<textarea class="' + cls + '" rows="5" maxlength="200000" aria-label="' + label + ' text" style="display:block;width:100%;max-width:100%;box-sizing:border-box;resize:vertical;font:inherit;color:inherit;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:6px 8px;font-family:ui-monospace,monospace;font-size:13px"></textarea></label>';
+    el = showPage((p) => { p.innerHTML = '<h2>Diff checker</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px">' + box('util-a', 'Original') + box('util-b', 'Changed') + '</div>' // void-review: ok (static markup; box() takes fixed labels, and typed text goes to textarea values only)
+      + '<p class="util-say" aria-live="polite" style="margin:8px 0 4px">Paste a text on each side</p>'
+      + '<pre class="util-diff" style="margin:0;max-height:260px;overflow:auto;font-size:13px;line-height:1.45;white-space:pre-wrap;word-break:break-word"></pre>'
+      + '<p style="color:#8a8a8a">Line by line: removed lines are red with −, added lines green with +. Compared in your browser and never sent anywhere.</p>'; });
+    const A = el && el.querySelector && el.querySelector('.util-a'), B = el && el.querySelector && el.querySelector('.util-b'), say = el && el.querySelector && el.querySelector('.util-say'), pre = el && el.querySelector && el.querySelector('.util-diff');
+    const paint = () => {
+      if (!A || !B || !say || !pre) return;
+      if (!A.value && !B.value) { say.textContent = 'Paste a text on each side'; pre.innerHTML = ''; return; }
+      const rows = diffTexts(A.value, B.value);
+      if (rows.tooLong) { say.textContent = 'Up to ' + MAX_LINES + ' lines a side'; pre.innerHTML = ''; return; }
+      const c = diffCounts(rows), n = (k, w) => k + ' ' + w + (k === 1 ? '' : 's');
+      say.textContent = !c.del && !c.add ? 'The two texts are the same' : n(c.del, 'line') + ' removed, ' + n(c.add, 'line') + ' added, ' + c.same + ' the same';
+      const num = (r) => String(r.t === 'add' ? r.b : r.a).padStart(4, ' ');
+      pre.innerHTML = c.del || c.add ? withContext(rows).map((r) => r.t === 'skip' ? '<span style="color:#8a8a8a">   ⋯ ' + r.n + ' unchanged line' + (r.n === 1 ? '' : 's') + '</span>'
+        : '<span style="' + (r.t === 'del' ? 'color:#ff8a8a;background:rgba(255,80,80,.12)' : r.t === 'add' ? 'color:#7fd6a0;background:rgba(80,220,140,.12)' : 'color:#9a9a9a') + '">'
+          + num(r) + ' ' + (r.t === 'del' ? '−' : r.t === 'add' ? '+' : ' ') + ' ' + esc(r.s) + '</span>').join('\n') : '';
+    };
+    for (const t of [A, B]) if (t) t.addEventListener('input', paint);
+  } else if (q.kind === 'csvjson') {
+    // one card both ways: CSV to JSON, or JSON to CSV after a press on the arrow (lib/csvjson.js); cells that are plain numbers, true, false or null become those values
+    let dir = q.dir;
+    const title = () => (dir === 'csv' ? 'CSV to JSON' : 'JSON to CSV');
+    const hint = () => (dir === 'csv' ? 'name,age&#10;Ann,30&#10;Bo,25' : '[{&quot;name&quot;: &quot;Ann&quot;, &quot;age&quot;: 30}]');
+    el = showPage((p) => { p.innerHTML = '<h2>' + title() + '</h2><textarea class="util-in" rows="6" maxlength="2000000" placeholder="' + hint() + '" aria-label="' + (dir === 'csv' ? 'CSV' : 'JSON') + '" style="display:block;width:100%;max-width:100%;box-sizing:border-box;resize:vertical;font:inherit;color:inherit;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:6px 8px;font-family:ui-monospace,monospace;font-size:13px"></textarea>' // void-review: ok (title() is one of two fixed headings; typed text goes to the textarea value only)
+      + '<p style="margin:8px 0 4px"><button type="button" class="util-flip" aria-label="Swap the direction">⇄ swap</button> <span class="util-say" aria-live="polite">Paste ' + (dir === 'csv' ? 'CSV with a header row' : 'a JSON array') + '</span></p>'
+      + '<pre class="util-out" style="margin:0;max-height:260px;overflow:auto;font-size:12px;white-space:pre-wrap;word-break:break-word"></pre>' + copyBtn
+      + '<p style="color:#8a8a8a">Commas, semicolons or tabs, with quotes kept. The first row names the fields. Converted in your browser and never sent anywhere.</p>'; });
+    const box = el && el.querySelector && el.querySelector('.util-in'), out = el && el.querySelector && el.querySelector('.util-out'), say = el && el.querySelector && el.querySelector('.util-say'), flip = el && el.querySelector && el.querySelector('.util-flip'), head = el && el.querySelector && el.querySelector('h2');
+    const n = (k, w) => k + ' ' + w + (k === 1 ? '' : 's');
+    const paint = () => {
+      if (!box || !out || !say) return;
+      if (!box.value.trim()) { out.textContent = ''; say.textContent = 'Paste ' + (dir === 'csv' ? 'CSV with a header row' : 'a JSON array'); return; }
+      const r = dir === 'csv' ? csvToJson(box.value) : jsonToCsv(box.value);
+      if (r.error) { out.textContent = ''; say.textContent = r.error; return; }
+      out.textContent = dir === 'csv' ? r.json : r.csv;
+      say.textContent = n(r.rows, 'row') + ', ' + n(r.cols, dir === 'csv' ? 'field' : 'column');
+    };
+    if (box) box.addEventListener('input', paint);
+    if (flip) flip.addEventListener('click', () => {
+      // the output becomes the new input, so a round trip is one press
+      dir = dir === 'csv' ? 'json' : 'csv';
+      if (head) head.textContent = title();
+      if (box) { if (out && out.textContent) box.value = out.textContent; box.setAttribute && box.setAttribute('aria-label', dir === 'csv' ? 'CSV' : 'JSON'); }
+      paint();
+    });
+  } else if (q.kind === 'yamljson') {
+    // one card both ways: YAML to JSON, or JSON to YAML after a press on the arrow (lib/yamljson.js); a fault in the YAML names its line
+    let dir = q.dir;
+    const title = () => (dir === 'yaml' ? 'YAML to JSON' : 'JSON to YAML');
+    const hint = () => (dir === 'yaml' ? 'name: Ann&#10;tags: [a, b]&#10;address:&#10;  city: Oslo' : '{&quot;name&quot;: &quot;Ann&quot;, &quot;tags&quot;: [&quot;a&quot;, &quot;b&quot;]}');
+    el = showPage((p) => { p.innerHTML = '<h2>' + title() + '</h2><textarea class="util-in" rows="7" maxlength="2000000" placeholder="' + hint() + '" aria-label="' + (dir === 'yaml' ? 'YAML' : 'JSON') + '" style="display:block;width:100%;max-width:100%;box-sizing:border-box;resize:vertical;font:inherit;color:inherit;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:6px 8px;font-family:ui-monospace,monospace;font-size:13px"></textarea>' // void-review: ok (title() is one of two fixed headings; typed text goes to the textarea value only)
+      + '<p style="margin:8px 0 4px"><button type="button" class="util-flip" aria-label="Swap the direction">⇄ swap</button> <span class="util-say" aria-live="polite">Paste ' + (dir === 'yaml' ? 'YAML' : 'JSON') + '</span></p>'
+      + '<pre class="util-out" style="margin:0;max-height:260px;overflow:auto;font-size:12px;white-space:pre-wrap;word-break:break-word"></pre>' + copyBtn
+      + '<p style="color:#8a8a8a">Maps, lists, quotes, | and > blocks, comments, anchors and several documents. Words like yes and no stay text, and the YAML it writes quotes them. Converted in your browser and never sent anywhere.</p>'; });
+    const box = el && el.querySelector && el.querySelector('.util-in'), out = el && el.querySelector && el.querySelector('.util-out'), say = el && el.querySelector && el.querySelector('.util-say'), flip = el && el.querySelector && el.querySelector('.util-flip'), head = el && el.querySelector && el.querySelector('h2');
+    const paint = () => {
+      if (!box || !out || !say) return;
+      if (!box.value.trim()) { out.textContent = ''; say.textContent = 'Paste ' + (dir === 'yaml' ? 'YAML' : 'JSON'); return; }
+      const r = dir === 'yaml' ? yamlToJson(box.value) : jsonToYaml(box.value);
+      if (r.error) { out.textContent = ''; say.textContent = r.error; return; }
+      out.textContent = dir === 'yaml' ? r.json : r.yaml;
+      say.textContent = (dir === 'yaml' ? 'Valid YAML: ' : '') + r.what;
+    };
+    if (box) box.addEventListener('input', paint);
+    if (flip) flip.addEventListener('click', () => {
+      // the output becomes the new input, so a round trip is one press
+      dir = dir === 'yaml' ? 'json' : 'yaml';
+      if (head) head.textContent = title();
+      if (box) { if (out && out.textContent) box.value = out.textContent; box.setAttribute && box.setAttribute('aria-label', dir === 'yaml' ? 'YAML' : 'JSON'); }
+      paint();
+    });
+  } else if (q.kind === 'cssmin') {
+    // safe only: comments and spaces go, nothing is renamed, merged or moved (lib/cssmin.js)
+    el = showPage((p) => { p.innerHTML = '<h2>CSS minifier</h2><textarea class="util-in" rows="6" maxlength="2000000" placeholder="a {&#10;  color: red;&#10;}" aria-label="CSS" style="display:block;width:100%;max-width:100%;box-sizing:border-box;resize:vertical;font:inherit;color:inherit;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:6px 8px;font-family:ui-monospace,monospace;font-size:13px"></textarea>' // void-review: ok (static markup; typed text goes to the textarea value only)
+      + '<p class="util-say" aria-live="polite" style="margin:8px 0 4px">Paste CSS</p>'
+      + '<pre class="util-out" style="margin:0;max-height:220px;overflow:auto;font-size:12px;white-space:pre-wrap;word-break:break-all"></pre>' + copyBtn
+      + '<p style="color:#8a8a8a">Removes comments (a /*! note stays) and the spaces CSS does not need. Rules are never renamed, merged or moved, so the page looks the same. Minified in your browser and never sent anywhere.</p>'; });
+    const box = el && el.querySelector && el.querySelector('.util-in'), out = el && el.querySelector && el.querySelector('.util-out'), say = el && el.querySelector && el.querySelector('.util-say');
+    const paint = () => {
+      if (!box || !out || !say) return;
+      if (!box.value.trim()) { out.textContent = ''; say.textContent = 'Paste CSS'; return; }
+      const r = minifyCss(box.value);
+      out.textContent = r.css;
+      say.textContent = r.before + ' bytes to ' + r.after + ' bytes (' + Math.round((1 - r.after / r.before) * 100) + '% smaller)';
+    };
+    if (box) box.addEventListener('input', paint);
+  } else if (q.kind === 'mdmaker') {
+    el = showPage((p) => { p.innerHTML = '<h2>Markdown to HTML</h2><textarea class="util-in" rows="6" maxlength="200000" placeholder="# A heading&#10;&#10;Some **bold** text and a [link](https://a-to-mind.com)" aria-label="Markdown" style="display:block;width:100%;max-width:100%;box-sizing:border-box;resize:vertical;font:inherit;color:inherit;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:6px 8px;font-family:ui-monospace,monospace;font-size:13px"></textarea>' // void-review: ok (static markup; typed text goes to the textarea value only)
+      + '<div style="font-size:13px;color:#8a8a8a;margin:8px 0 2px">Preview</div><div class="util-md" style="max-height:220px;overflow:auto;border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:2px 10px"></div>'
+      + '<div style="font-size:13px;color:#8a8a8a;margin:8px 0 2px">HTML</div><pre class="util-out" style="margin:0;max-height:160px;overflow:auto;font-size:12px;white-space:pre-wrap;word-break:break-word"></pre>' + copyBtn
+      + '<p style="color:#8a8a8a">Headings, bold, italic, links, images, lists, quotes, code and rules. Tables and raw HTML are not converted: HTML you type shows as text. Converted in your browser and never sent anywhere.</p>'; });
+    const box = el && el.querySelector && el.querySelector('.util-in'), view = el && el.querySelector && el.querySelector('.util-md'), out = el && el.querySelector && el.querySelector('.util-out');
+    // the preview is the converter's own HTML: every text is escaped and a link keeps only an http, https, mailto or relative address (lib/markdown.js)
+    const paint = () => { if (!box || !view || !out) return; const h = mdToHtml(box.value); view.innerHTML = h; out.textContent = h; }; // void-review: ok (mdToHtml escapes every text and keeps only http, https, mailto or relative addresses)
+    if (box) box.addEventListener('input', paint);
+    if (box && q.s) { box.value = q.s; paint(); }
+  } else if (q.kind === 'barcode') {
+    el = showPage((p) => { p.innerHTML = '<h2>Barcode</h2><input class="util-in" maxlength="80" placeholder="Text or digits" aria-label="Barcode text" style="display:block;width:100%;max-width:100%;box-sizing:border-box;font:inherit;color:inherit;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:6px 8px">' // void-review: ok (static markup; typed text goes to the input value only)
+      + '<div class="util-bc" style="margin:10px 0;overflow:auto"></div><p class="util-say" style="color:#8a8a8a"></p><p style="color:#8a8a8a">Code 128, the barcode most shipping labels and shelf tags use. Drawn in your browser and never sent anywhere. Print it at full size so a scanner can read it.</p>'; });
+    const box = el && el.querySelector && el.querySelector('.util-in'), view = el && el.querySelector && el.querySelector('.util-bc'), say = el && el.querySelector && el.querySelector('.util-say');
+    const paint = () => { if (!box || !view || !say) return; const v = box.value; if (!v) { view.innerHTML = ''; say.textContent = 'Type the text to encode'; return; } const svg = barcodeSvg(v, { esc }); view.innerHTML = svg || ''; say.textContent = svg ? 'Code 128 for ' + v : 'Code 128 takes plain letters, digits and symbols, up to 80'; }; // void-review: ok (barcodeSvg escapes the text it prints)
+    if (box) { box.addEventListener('input', paint); if (q.s) box.value = q.s; paint(); }
+  } else if (q.kind === 'contrast') {
+    const A = parse(q.a), B = parse(q.b), r = contrast(A, B), R = Math.round(r * 100) / 100, ok = passes(r), yn = (v) => (v ? 'passes' : 'fails');
+    el = showPage((p) => { p.innerHTML = '<h2>Contrast ' + R + ':1</h2><div style="padding:14px 16px;border-radius:12px;margin:8px 0;background:' + esc(q.b) + ';color:' + esc(q.a) + ';border:1px solid rgba(255,255,255,.15)"><div style="font-size:24px;font-weight:600">Large text</div><div>Normal text, ' + esc(q.a) + ' on ' + esc(q.b) + '</div></div>'
+      + '<ul><li><b>AA normal text</b> ' + yn(ok.aa) + ' (needs 4.5:1)</li><li><b>AA large text</b> ' + yn(ok.aaLarge) + ' (needs 3:1)</li><li><b>AAA normal text</b> ' + yn(ok.aaa) + ' (needs 7:1)</li><li><b>AAA large text</b> ' + yn(ok.aaaLarge) + ' (needs 4.5:1)</li></ul>'
+      + '<p style="color:#8a8a8a">The WCAG 2 contrast ratio, from 1:1 (the same colour) to 21:1 (black on white). Large text is 24px, or 18.7px bold.</p><p><a class="cc-open" href="/color/?c=' + esc(q.a.slice(1)) + '">' + esc(q.a) + ' in every model</a></p>'; });
+  } else if (q.kind === 'color') {
+    const h = hex(q.c), v = hsl(h), rgb = parse(h), d = rgb ? describe(rgb) : null;
+    el = showPage((p) => { p.innerHTML = '<h2>' + esc(NAMED[q.c] ? q.c : h) + '</h2><div style="height:110px;border-radius:12px;margin:8px 0;background:' + esc(h) + ';border:1px solid rgba(255,255,255,.15)"></div>'
+      + '<ul><li><b>Hex</b> ' + esc(h) + '</li><li><b>RGB</b> ' + v.r + ', ' + v.g + ', ' + v.b + '</li><li><b>HSL</b> ' + v.h + '°, ' + v.s + '%, ' + v.l + '%</li>'
+      + (d ? '<li><b>Nearest name</b> ' + esc(d.name.name) + (d.name.exact ? '' : ' (' + esc(d.name.hex) + ')') + '</li><li><b>Text on it</b> ' + (d.contrast.text === '#000000' ? 'black, ' + d.contrast.black : 'white, ' + d.contrast.white) + ':1' + (Math.max(d.contrast.black, d.contrast.white) >= 4.5 ? ' (passes AA)' : ' (large text only)') + '</li>' : '') + '</ul>'
+      + '<p><a class="cc-open" href="/color/?c=' + esc(h.slice(1)) + '">Every model, shades, tones and schemes</a></p>'; });
+  } else if (q.kind === 'letters') {
+    // a, e, i, o, u are vowels (y is counted as a consonant, the usual school answer)
+    const ls = Array.from(q.s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()).filter((c) => /[a-z]/.test(c)), v = ls.filter((c) => 'aeiou'.includes(c)).length, n = q.which === 'vowels' ? v : ls.length - v;
+    el = showPage((p) => { p.innerHTML = '<h2>' + esc(q.which.charAt(0).toUpperCase() + q.which.slice(1)) + ' in ' + esc(q.s) + '</h2>' + big(n + ' ' + (n === 1 ? q.which.slice(0, -1) : q.which), 44) + '<p style="color:#8a8a8a">' + v + ' vowels (a e i o u) · ' + (ls.length - v) + ' consonants</p>'; });
+  } else if (q.kind === 'count') {
+    const words = (q.s.match(/[\p{L}\p{N}'’-]+/gu) || []).length, chars = Array.from(q.s).length, noSp = Array.from(q.s.replace(/\s/g, '')).length;
+    el = q.chars
+      ? showPage((p) => { p.innerHTML = '<h2>Characters</h2>' + big(chars + (chars === 1 ? ' character' : ' characters'), 44) + '<p style="color:#8a8a8a">' + noSp + ' without spaces · ' + words + (words === 1 ? ' word' : ' words') + '</p>'; })
+      : showPage((p) => { p.innerHTML = '<h2>Word count</h2>' + big(words + (words === 1 ? ' word' : ' words'), 44) + '<p style="color:#8a8a8a">' + chars + ' characters (' + noSp + ' without spaces)</p>'
+        + (q.s.length <= 4000 ? '<p><a class="wc-open" href="/word-count/?t=' + encodeURIComponent(q.s) + '">Sentences, reading time and keywords, counted as you type</a></p>' : ''); });
+  } else if (q.kind === 'uuid') {
+    const id = (crypto.randomUUID && crypto.randomUUID()) || 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => { const r = crypto.getRandomValues(new Uint8Array(1))[0] % 16; return (c === 'x' ? r : (r & 3) | 8).toString(16); });
+    el = showPage((p) => { p.innerHTML = '<h2>UUID</h2>' + big(id, 22) + copyBtn + '<p style="color:#8a8a8a">version 4, random, made in your browser · ask again for another</p>'; });
+  } else if (q.kind === 'emoji') {
+    el = showPage((p) => { p.innerHTML = '<h2>Emoji for “' + esc(q.w) + '”</h2>' + big(EMOJI[q.w], 44) + copyBtn; });
+  } else if (q.kind === 'case') {
+    const out = CASES[q.how](q.s);
+    el = showPage((p) => { p.innerHTML = '<h2>' + esc(q.how.charAt(0).toUpperCase() + q.how.slice(1)) + '</h2>' + big(out, 28) + copyBtn; });
+  } else if (q.kind === 'palindrome') {
+    const k = Array.from(q.s.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '')), yes = k.length > 1 && k.join('') === k.slice().reverse().join('');
+    el = showPage((p) => { p.innerHTML = '<h2>Palindrome?</h2>' + big(yes ? 'Yes' : 'No', 44) + '<p style="color:#8a8a8a">“' + esc(q.s) + '” ' + (yes ? 'reads the same backwards' : 'backwards is “' + esc(Array.from(q.s).reverse().join('')) + '”') + ' (ignoring spaces, punctuation and case)</p>'; });
+  } else if (q.kind === 'syllables') {
+    const n = syllables(q.w);
+    el = showPage((p) => { p.innerHTML = '<h2>Syllables</h2>' + big(n + (n === 1 ? ' syllable' : ' syllables'), 44) + '<p style="color:#8a8a8a">“' + esc(q.w) + '”, counted by its vowel sounds; a few words break the rules</p>'; });
+  } else if (q.kind === 'blank') {
+    el = showPage((p) => { p.innerHTML = '<h2>Invisible characters</h2><ul style="list-style:none;padding:0;margin:0">' + BLANKS.map(([ch, code, name, note], i) => '<li style="margin:8px 0"><button type="button" class="util-blank" data-i="' + i + '">copy</button> <b>' + esc(code) + '</b> ' + esc(name) + ' <span style="color:#8a8a8a">· ' + esc(note) + '</span></li>').join('') + '</ul>'
+      + '<p class="util-say" aria-live="polite" style="min-height:1.4em;color:#8a8a8a"></p><div class="src">Names and code points from the Unicode Standard. Each button copies one character and nothing else. Some apps remove blanks from names or messages</div>'; });
+    const say = el && el.querySelector && el.querySelector('.util-say');
+    for (const b of (el && el.querySelectorAll ? el.querySelectorAll('.util-blank') : [])) b.addEventListener('click', async () => { const [ch, code] = BLANKS[+b.dataset.i]; let ok = false; try { await navigator.clipboard.writeText(ch); ok = true; } catch (_) {} if (say) say.textContent = ok ? code + ' copied. Paste it where you want the blank.' : 'Your browser did not allow the copy.'; });
+  } else if (q.kind === 'nato' && !q.s) {
+    const cell = (k) => '<tr><td style="padding:1px 10px 1px 0"><b>' + esc(k) + '</b></td><td>' + esc(NATO[k]) + '</td></tr>';
+    const keys = Object.keys(NATO).sort((a, b) => (/\d/.test(a) - /\d/.test(b)) || (a < b ? -1 : 1));
+    el = showPage((p) => { p.innerHTML = '<h2>NATO phonetic alphabet</h2><input class="util-in" type="text" placeholder="spell a word" aria-label="Word to spell" style="display:block;width:100%;box-sizing:border-box;font:inherit;color:inherit;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:6px 8px">'
+      + '<div class="util-out" style="font-size:20px;line-height:1.4;margin:8px 0;word-break:break-word;min-height:1.4em"></div>' + copyBtn
+      + '<div style="columns:2;column-gap:24px;margin-top:8px"><table style="border-collapse:collapse">' + keys.map(cell).join('') + '</table></div>'
+      + '<div class="src">The ICAO radiotelephony spelling alphabet (ICAO Annex 10), used by NATO. Radio operators also say Niner for 9 and Fower for 4. Spelled in your browser</div>'; });
+    const box = el && el.querySelector && el.querySelector('.util-in'), out = el && el.querySelector && el.querySelector('.util-out');
+    if (box && out) box.addEventListener('input', () => { out.textContent = natoWords(box.value); });
+  } else if (q.kind === 'nato') {
+    const words = natoWords(q.s);
+    el = showPage((p) => { p.innerHTML = '<h2>NATO alphabet</h2>' + big(words, 24) + copyBtn + '<p style="color:#8a8a8a">“' + esc(q.s) + '” letter by letter</p>'; });
+  } else if (q.kind === 'morse') {
+    const code = Array.from(q.s.toUpperCase()).map((c) => (c === ' ' ? '/' : MORSE[c] || '')).filter(Boolean).join(' ');
+    el = showPage((p) => { p.innerHTML = '<h2>Morse code</h2>' + big(code, 28) + copyBtn + '<p style="color:#8a8a8a">“' + esc(q.s) + '” · letters split by spaces, words by /</p>'; });
+  } else if (q.kind === 'textbin') {
+    const bin = Array.from(new TextEncoder().encode(q.s)).map((b) => b.toString(2).padStart(8, '0')).join(' ');
+    el = showPage((p) => { p.innerHTML = '<h2>In binary</h2>' + big(bin, 20) + copyBtn + '<p style="color:#8a8a8a">“' + esc(q.s) + '” as 8-bit UTF-8 bytes</p>'; });
+  } else if (q.kind === 'lorem') {
+    el = showPage((p) => { p.innerHTML = '<h2>Lorem ipsum</h2><div class="util-out">' + Array.from({ length: q.n || 1 }, () => '<p>' + esc(LOREM) + '</p>').join('\n\n') + '</div>' + copyBtn; });
+  }
+  // the card links to the tool page that does the same thing in full (lib/card-frame.js pageOfCard; owner, 2026-10-25: "why are you not linking the cards to the pages?")
+  const page = { password: '/password/', color: '/color/', count: '/word-count/' }[q.kind];
+  if (el && el.dataset && page) el.dataset.page = q.kind === 'password' ? page + '?len=' + q.n : page; /* the password page opens on the same length, never the password */
+  // and a 3D figure of the thing (owner, 2026-10-25: "3d figure if possible"): a paint-chip fan in the colour, a padlock rated by lib/pwcheck.js
+  if (el && q.kind === 'color') { const hx = (el.querySelector('ul li') || {}).textContent || ''; const m = /#[0-9a-f]{6}/i.exec(hx); if (m) bandMini(api, el, 'swatch', { hex: m[0] }, '3D paint-chip fan in ' + m[0]); }
+  if (el && q.kind === 'count' && !q.chars) bandMini(api, el, 'page', { words: (q.s.match(/[\p{L}\p{N}'’-]+/gu) || []).length }, '3D page of writing, ' + (q.s.match(/[\p{L}\p{N}'’-]+/gu) || []).length + ' words');
+  if (el && q.kind === 'password') { const pw = (el.querySelector('.util-out') || el.querySelector('.big') || {}).textContent || ''; import('../lib/pwcheck.js').then((P) => bandMini(api, el, 'padlock', { score: P.check(pw).score }, '3D padlock: ' + P.check(pw).label.toLowerCase())).catch(() => {}); }
+  const b = el && el.querySelector && el.querySelector('.util-copy');
+  if (b) b.addEventListener('click', async () => { const s = (el.querySelector('.util-out') || el.querySelector('p')).textContent; let ok = false; try { await navigator.clipboard.writeText(s); ok = true; } catch (_) {} b.textContent = ok ? 'copied' : 'select it to copy'; setTimeout(() => { b.textContent = 'copy'; }, 1600); });
+  return 'util';
+}
+export default {
+  name: 'util',
+  examples: ['generate a password', '16 character password', 'strong password', 'csv to json', 'yaml to json', 'json to yaml', 'yaml validator', 'minify css', 'qr code for a-to-mind.com', 'what color is #ff8800', 'word count of hello world', 'lorem ipsum', 'qr code generator', 'case converter', 'lorem ipsum generator', 'md5 of hello', 'sha256 hash generator', 'hash of hello world', 'diff checker', 'markdown to html', 'uuid generator', 'monthly electric bill avg for 1500sqft', 'contrast ratio between #000000 and #ffffff', 'convert markdown to html: **bold**', 'make a barcode for 12345', 'barcode generator'],
+  nearMisses: ['what is csv', 'csv vs json', 'what is yaml', 'yaml vs json', 'yaml syntax', 'what is css', 'minify js', 'what is a palindrome', 'reset my password', 'strong password tips', 'password manager', 'what is a qr code', 'make my void blue', 'what is the moon made of', 'moon phase tonight', 'qr code scanner', 'what is a case converter', 'md5 vs sha256', 'what is md5', 'md5 decrypt', 'hash browns', 'what is a diff', 'git diff', 'what is markdown', 'markdown syntax', 'what is a uuid', 'uuid vs guid', 'contrast in photography', 'high contrast mode', 'what is a barcode', 'barcode scanner'],
+  match(lower, text) { return !!utilOf(text); },
+  run
+};

@@ -1,0 +1,206 @@
+// Test the pull request as it will be after main is merged in (owner, 2026-11-04: the code is perfect
+// going in). A conflict in a build output is regenerated; any other conflict fails and names the files.
+// The fast checks then run on that tree. The full suite still runs on main after the merge.
+// A merge-policy failure names the rule and the file, branch or label that broke it. The check used to
+// print only "FAIL merge-policy" and a duration (2026-11-05, #2315).
+//   node tools/merge-gate.mjs
+import { spawnSync } from 'node:child_process';
+import { existsSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { BUILD_OUTPUTS } from './generated.mjs';
+import { APPEND_JSON, APPEND_TEXT, keyOf } from './records.mjs';
+import { settleText } from './shared-merge.mjs';
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const build = new Set(BUILD_OUTPUTS);
+// the append-mostly text files: a conflict there is two branches appending at the same spot, settled by keeping
+// both sides' new lines (the same rule tools/merge-main.mjs applies); anything else still needs a person
+const APPEND_MOSTLY = new Set([...APPEND_TEXT, ...APPEND_JSON, 'tools/families.mjs']);
+
+/** the npm packages a red run could not find ("Cannot find package 'playwright-core'", ERR_MODULE_NOT_FOUND on a bare name), with
+ *  their scope; relative and absolute paths are a real missing file, not a missing install. Pure. (closed PR #2335's leftover, lists run 25) */
+export function missingPackages(report) {
+  const out = new Set();
+  for (const m of String(report || '').matchAll(/Cannot find (?:package|module) '([^']+)'/g)) {
+    const spec = m[1];
+    if (/^(?:\.|\/|[a-z]:\\|file:|node:)/i.test(spec)) continue;
+    out.add(spec.startsWith('@') ? spec.split('/').slice(0, 2).join('/') : spec.split('/')[0]);
+  }
+  return [...out].sort();
+}
+
+/** true when every conflicted path is a file the deploy rewrites. Pure. */
+export function onlyBuildConflicts(files) {
+  return files.length > 0 && files.every((f) => build.has(f));
+}
+
+// an assertion that names no file still belongs to the source it was written against
+const POLICY_FILE = [
+  [/enablePullRequestAutoMerge|mergeMethod:SQUASH|merge_method=squash|disablePullRequestAutoMerge|update-branch/, 'file tools/automerge.mjs'],
+  [/pull-requests: write|17 \\?\* \\?\*|STUCK:/, 'file .github/workflows/automerge.yml'],
+];
+
+/** the first line of a node:test error, without the source dump that follows "Input:". Pure. */
+function policyError(block) {
+  const quoted = String(block || '').match(/\n  error: '([^'\n]*)'/);
+  if (quoted) return quoted[1];
+  const multi = String(block || '').match(/\n  error: \|-\n([\s\S]*?)\n  [A-Za-z]/);
+  if (!multi) return '';
+  const line = multi[1].split('\n').map((l) => l.replace(/^ {4}/, '')).join('\n').split(/\n\s*\n/)[0].split('\n')[0].trim();
+  return line.replace(/\s*Input:\s*$/, '').trim();
+}
+
+/** the file, branch or label a failure is about. The earliest one the message names wins. Pure. */
+function policyOffender(msg) {
+  const text = String(msg || '');
+  const marks = [];
+  const take = (re, kind) => { const m = re.exec(text); if (m) marks.push({ at: m.index, text: kind + ' ' + m[1].replace(/[.,;:)]+$/, '') }); };
+  take(/\bfile\s+(\S+)/, 'file');
+  take(/\bbranch\s+(\S+)/, 'branch');
+  take(/\blabel\s+["']?([A-Za-z0-9][\w.-]*)/, 'label');
+  take(/((?:tools|void-live-deploy|\.github)\/[\w./-]+\.\w+)/, 'file');
+  take(/\b((?:helper|loop|lab|cursor)\/[\w./-]+)\b/, 'branch');
+  if (marks.length) return marks.sort((a, b) => a.at - b.at)[0].text;
+  for (const [re, who] of POLICY_FILE) if (re.test(text)) return who;
+  return '';
+}
+
+/**
+ * One line per failed merge-policy test. The rule is the test's name. The offender is the file, branch
+ * or label the failure names (a bare auto-merge assertion is tools/automerge.mjs). `tap` is what
+ * `node --test tools/merge-policy.test.mjs` prints. Pure.
+ */
+export function explainPolicyFailure(tap) {
+  const out = [];
+  for (const block of String(tap || '').split(/\n(?=not ok \d+ - )/)) {
+    const head = block.match(/^not ok \d+ - (.+)$/m);
+    if (!head) continue;
+    const rule = head[1].trim();
+    const why = policyError(block);
+    const who = policyOffender(why);
+    out.push('merge-policy rule "' + rule + '" violated' + (who ? ' by ' + who : '') + (why ? ': ' + why : ''));
+  }
+  return out;
+}
+
+function git(args, cwd) {
+  return spawnSync('git', args, { cwd, encoding: 'utf8', maxBuffer: 20e6 });
+}
+
+function main() {
+  const dir = mkdtempSync(resolve(tmpdir(), 'merge-gate-'));
+  const rm = () => git(['worktree', 'remove', '--force', dir], root);
+  const add = git(['worktree', 'add', '--detach', '-q', dir, 'HEAD'], root);
+  if (add.status !== 0) { console.error('merge-gate: ' + (add.stderr || add.stdout)); process.exit(2); }
+  try {
+    const base = process.env.MERGE_GATE_BASE || 'origin/main';
+    git(['config', 'user.email', 'merge-gate@users.noreply.github.com'], dir);
+    git(['config', 'user.name', 'merge-gate'], dir);
+    const merged = git(['merge', '--no-commit', '--no-ff', base], dir);
+    let conflicted = []; // the paths the merge could not take whole: their settles stay as committed, never put back from ours
+    if (merged.status !== 0) {
+      const files = String(git(['diff', '--name-only', '--diff-filter=U'], dir).stdout || '').split('\n').map((s) => s.trim()).filter(Boolean);
+      conflicted = files;
+      const merging = git(['rev-parse', '-q', '--verify', 'MERGE_HEAD'], dir).status === 0;
+      if (!files.length && merging) console.log('merge-gate: main is in, nothing left unmerged');
+      else if (!onlyBuildConflicts(files)) {
+        // the append-mostly files settle the same way merge-main.mjs settles them (both sides' new lines), so a
+        // branch that only appended does not need a person here either; anything else still stops below
+        const shared = files.filter((f) => settleText(f, git(['show', `:3:${f}`], dir).stdout || '', git(['show', `:2:${f}`], dir).stdout || '') != null);
+        const settled = files.filter((f) => (APPEND_MOSTLY.has(f) || shared.includes(f)));
+        const rest = files.filter((f) => !settled.includes(f));
+        for (const f of shared) {
+          const text = settleText(f, git(['show', `:3:${f}`], dir).stdout || '', git(['show', `:2:${f}`], dir).stdout || '');
+          writeFileSync(resolve(dir, f), text);
+          git(['add', '--', f], dir);
+          console.log('merge-gate: settled ' + f + ' by skill id or inbox row');
+        }
+        for (const f of settled.filter((f) => !shared.includes(f))) {
+          if (APPEND_JSON.includes(f)) {
+            const theirs = JSON.parse(git(['show', `:3:${f}`], dir).stdout || '[]');
+            const ours = JSON.parse(git(['show', `:2:${f}`], dir).stdout || '[]');
+            const seen = new Set(theirs.map((x) => keyOf(f, x)));
+            const mine = ours.filter((x) => !seen.has(keyOf(f, x)) && seen.add(keyOf(f, x)));
+            writeFileSync(resolve(dir, f), JSON.stringify(theirs.concat(mine), null, 2) + '\n');
+            git(['add', '--', f], dir);
+            console.log('merge-gate: settled the append-collision in ' + f + ' (main entries plus ' + mine.length + ' new entries)');
+            continue;
+          }
+          const base = git(['show', `:1:${f}`], dir).stdout || '';
+          const ours = git(['show', `:2:${f}`], dir).stdout || '';
+          const theirs = git(['show', `:3:${f}`], dir).stdout || '';
+          const added = (s) => s.startsWith(base) ? s.slice(base.length) : s.split('\n').filter((l) => !base.split('\n').includes(l)).join('\n');
+          const text = base + added(theirs).replace(/^\n+/, '') + (added(theirs).endsWith('\n') ? '' : '\n') + added(ours).replace(/^\n+/, '');
+          writeFileSync(resolve(dir, f), text);
+          git(['add', '--', f], dir);
+          console.log('merge-gate: settled the append-collision in ' + f + ' (both sides\' new lines)');
+        }
+        if (rest.length) {
+          console.error('merge-gate: conflicts with main in ' + (rest.join(', ') || '(none)'));
+          console.error(String(merged.stderr || merged.stdout || (merged.error && merged.error.message) || '').slice(0, 800));
+          console.error('A build output is regenerated here. These files still conflict: run node tools/merge-main.mjs on the branch. Verse\'s coder resolves what that leaves.');
+          process.exit(1);
+        }
+      } else {
+        for (const f of files) git(['checkout', '--ours', '--', f], dir);
+        git(['add', '--', ...files], dir);
+        console.log('merge-gate: regenerated through the conflict in ' + files.join(', '));
+      }
+    }
+    // commit the merge so the checks see this pull request's files, not every file main just brought in
+    const committed = git(['commit', '-q', '--no-edit'], dir);
+    if (committed.status === 0) console.log('merge-gate: committed the merge');
+    // the generators, so a build output that conflicted is rewritten before we put the tree back. The files the
+    // merge itself rewrote (the append-mostly settles, and build outputs taken from ours) stay as committed in the
+    // merge commit: resetting them would drop the settle and re-break the very files this branch appends to.
+    const keep = new Set([...APPEND_MOSTLY, ...conflicted]);
+    for (const args of [
+      ['tools/skills-index.mjs', '--write'],
+      ['tools/deps.mjs'],
+      ['tools/families.mjs'],
+      ['tools/guide.mjs'],
+      ['tools/what-skills.mjs'],
+      ['tools/incident-log.mjs', 'assemble'],
+      ['tools/tower-files.mjs', 'assemble'],
+    ]) {
+      const r = spawnSync(process.execPath, [resolve(dir, args[0]), ...args.slice(1)], { cwd: dir, encoding: 'utf8' });
+      if (r.status !== 0) console.log('merge-gate: ' + args[0] + ' exited ' + r.status + ' (the check below says if that matters)');
+    }
+    // put the regenerated build outputs back so a rewritten file does not pull a pre-existing red check into this
+    // pull request — but never the conflicted paths: those carry this branch's settle and stay as merged
+    const changed = String(git(['diff', '--name-only'], dir).stdout || '').split('\n').map((s) => s.trim()).filter(Boolean);
+    const restore = changed.filter((f) => !keep.has(f));
+    if (restore.length) git(['checkout', '--', ...restore], dir);
+    git(['clean', '-fd'], dir);
+    const runChecks = () => spawnSync(process.execPath, [resolve(dir, 'tools/checks.mjs'), '--changed', '--skip-browser'], {
+      cwd: dir, encoding: 'utf8', maxBuffer: 20e6,
+      env: { ...process.env, VOID_ALLOW_CHANGED: '1', VOID_SKIP_BENCH: '1', VOID_GATE: '1', CI: '', GITHUB_ACTIONS: '' },
+    });
+    let checks = runChecks();
+    // a red run that only lacked an installed package: install the lockfile once (no install scripts) and run the checks again, so a
+    // missing package does not fail every pull request; a second red run is the real answer
+    const missing = (checks.status ?? 1) !== 0 ? missingPackages(String(checks.stdout || '') + String(checks.stderr || '')) : [];
+    if (missing.length && existsSync(resolve(dir, 'package-lock.json'))) {
+      console.log('merge-gate: the checks could not find ' + missing.join(', ') + '; installing the lockfile once and running them again');
+      const ci = spawnSync('npm', ['ci', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: dir, encoding: 'utf8', maxBuffer: 20e6, timeout: 300000 });
+      if (ci.status === 0) checks = runChecks();
+      else console.error('merge-gate: npm ci exited ' + ci.status + ': ' + String(ci.stderr || (ci.error && ci.error.message) || '').split('\n').slice(-3).join(' ').slice(0, 300));
+    }
+    if (checks.stdout) process.stdout.write(checks.stdout);
+    if (checks.stderr) process.stderr.write(checks.stderr);
+    if (checks.error) console.error('merge-gate: ' + checks.error.message);
+    const report = String(checks.stdout || '') + String(checks.stderr || '');
+    // the check keeps two lines. The test's own output names the rule, and that output was thrown away (2026-11-05, #2315).
+    if ((checks.status ?? 1) !== 0 && /FAIL\s+merge-policy\b/.test(report)) {
+      const again = spawnSync(process.execPath, ['--test', resolve(dir, 'tools/merge-policy.test.mjs')], { cwd: dir, encoding: 'utf8', maxBuffer: 20e6 });
+      const lines = explainPolicyFailure(String(again.stdout || '') + '\n' + String(again.stderr || ''));
+      if (lines.length) for (const line of lines) console.error('merge-gate: ' + line);
+      else console.error('merge-gate: merge-policy failed and named no rule');
+    }
+    process.exit(checks.status ?? 1);
+  } finally { rm(); }
+}
+
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

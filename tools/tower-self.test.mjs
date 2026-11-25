@@ -1,0 +1,199 @@
+// tests for tools/tower-self.mjs (Versus by itself): the families a site can join, the pick, the row's words, the page, the offline list, the judge,
+// the page guard, and that the loop runs without Claude: neither its workflow nor any file it runs or imports mentions Anthropic or the Claude brain.
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { sentences, parseAnswer, familiesOf, pickCandidates, validTexts, fallbackTexts, brandTokens, slugFor, variantHtml, keepSeo, swWith, judgeRows, guardOf, reportLine, causeOfLap, isNoop, nextOf, sharesWords, textOf, MARK, RETRY_DAYS } from './tower-self.mjs';
+import { FLOORS, LANES, LANE_PAGES, passingRows } from '../void-live-deploy/lib/tower.js';
+import { SELF_SITES } from '../void-live-deploy/lib/self-sites.js';
+import { SITE_PAGES } from '../void-live-deploy/lib/tool-sites.js';
+import { probeFor } from './tower-probes.mjs';
+
+const root = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
+const colour = () => familiesOf().find((f) => f.id === 'colour');
+
+test('the loop runs without Claude: its workflow and every file it runs or imports name neither Anthropic nor the Claude brain', () => {
+  // any mention counts, except a key pattern the secret scan looks for (it finds such keys; it never calls anyone)
+  const seen = new Set(['tools/tower-self.test.mjs']), bad = [], CLAUDE = /anthropic|claude-brain/i;
+  const visit = (rel0) => {
+    const rel = rel0.replace(/\\/g, '/'); if (seen.has(rel)) return; seen.add(rel); const file = path.join(root, rel); if (!fs.existsSync(file)) return;
+    const src = fs.readFileSync(file, 'utf8'), lines = src.split('\n').filter((l) => CLAUDE.test(l) && !(rel === 'tools/secret-scan.mjs' && /\bsk-|style sk-|key/i.test(l))); if (lines.length) bad.push(rel + ': ' + lines[0].trim().slice(0, 80));
+    if (/\.(?:mjs|js)$/.test(rel)) for (const m of src.matchAll(/(?:import\s[^'"]*?from\s*|import\s*\(\s*|^import\s*)['"](\.{1,2}\/[^'"]+)['"]/gm)) visit(path.normalize(path.join(path.dirname(rel), m[1])));
+  };
+  visit('tools/tower-self.mjs');
+  for (const rel of ['tools/tower-self-land.sh', 'tools/tower-self-live.mjs', 'tools/tower-self-report.sh', 'tools/tower-gate.mjs']) visit(rel);
+  for (const sh of [...seen].filter((r) => r.endsWith('.sh'))) for (const m of fs.readFileSync(path.join(root, sh), 'utf8').matchAll(/tools\/[\w.-]+\.mjs/g)) visit(m[0]);
+  assert.ok(seen.size > 10, 'the import graph was walked (' + seen.size + ' files)');
+  assert.deepEqual(bad, [], 'files of the tower-self loop that mention Anthropic or the Claude brain');
+});
+
+test('a family is a floor with a page that can be copied and a probe that knows the answer on that page', () => {
+  const fams = familiesOf(), ids = fams.map((f) => f.id);
+  for (const id of ['colour', 'calculator', 'unit converter', 'word count', 'emoji combos']) assert.ok(ids.includes(id), id);
+  // the gradient page is the colour page's gradient mode since the pages were combined (#2100: /gradient/ 301s to /color/gradient/), so its sites go to colour
+  assert.ok(!ids.includes('gradient') && fams.some((f) => f.id === 'colour' && f.base === '/color/'), 'gradient is a mode of the colour floor');
+  for (const id of ['is it', 'image boards', 'codebase', 'shopping', 'pdf', 'travel']) assert.ok(!ids.includes(id), id + ' is not a family');
+  for (const f of fams) { assert.match(f.base, /^\/[a-z0-9-]+\/$/); assert.ok(f.does.length > 20, f.id + ' says what its page does'); }
+  assert.ok(sharesWords(colour(), 'ANYCOLOR ID: find any color by hex code'));
+  assert.ok(!sharesWords(colour(), 'Web hosting and domains in Norway'));
+});
+
+test('the pick: easiest frontier sites first, never a floor, a blocked site or one tried lately; a site no floor covered comes back later', () => {
+  const frontier = { sites: [{ site: 'b.test', hardness: 30 }, { site: 'a.test', hardness: 10 }, { site: 'c.test', hardness: 20, blocked: 'wall' }, { site: 'colorzilla.com', hardness: 1 }, { site: 'd.test', hardness: 40 }] };
+  const at = Date.parse('2026-10-26T00:00:00Z');
+  assert.deepEqual(pickCandidates(frontier, {}, { at }).map((x) => x.host), ['a.test', 'b.test', 'd.test']);
+  const state = { sites: { 'a.test': { at: '2026-10-25T00:00:00Z', outcome: 'built' }, 'b.test': { at: '2026-10-25T00:00:00Z', outcome: 'no-family' }, 'd.test': { at: '2026-01-01T00:00:00Z', outcome: 'no-family' } } };
+  assert.deepEqual(pickCandidates(frontier, { sites: { 'a.test': { at: '2026-10-25T00:00:00Z', outcome: 'not-judged' } } }, { at }).map((x) => x.host)[0], 'a.test', 'a site the model never judged is read again');
+  assert.deepEqual(pickCandidates(frontier, state, { at }).map((x) => x.host), ['d.test'], 'no-family comes back after ' + RETRY_DAYS + ' days');
+  assert.equal(pickCandidates(frontier, {}, { at, max: 1 }).length, 1);
+});
+
+test('the row\'s words: never the site, never what the page does not do, never markup or a key; the family page\'s own words otherwise', () => {
+  const fam = colour(), baseText = textOf(fs.readFileSync(path.join(root, 'void-live-deploy/color/index.html'), 'utf8')) + ' ' + fam.does;
+  const good = { name: 'Colour names and codes', h1: 'Colour names and codes', intro: 'Type a colour as hex, RGB or a name and get its nearest name, every model, tints and shades.', does: 'Type a colour as hex, RGB, HSL or a name and get its nearest name, every model, tints and shades.', asks: ['color name finder', 'hex color names', 'what color is this'], slug: 'hex-names' };
+  const ok = validTexts(good, { host: 'anycolorid.com', baseText, fam }); assert.ok(!ok.problem, ok.problem); assert.equal(ok.slug, 'hex-names');
+  assert.match(validTexts({ ...good, name: 'AnyColorID clone' }, { host: 'anycolorid.com', baseText, fam }).problem, /names anycolorid/);
+  assert.match(validTexts({ ...good, intro: good.intro + ' Better than colorhexa.com.' }, { host: 'anycolorid.com', baseText, fam }).problem, /names a site/);
+  assert.match(validTexts({ ...good, does: 'Upload photographs, translate subtitles, schedule meetings and invoices automatically.' }, { host: 'x.com', baseText, fam }).problem, /does not do/);
+  assert.match(validTexts({ ...good, intro: good.intro + ' <script>x</script>' }, { host: 'x.com', baseText, fam }).problem, /markup/);
+  assert.deepEqual(brandTokens('www.any-color-id.com'), ['www', 'any-color-id', 'any', 'color'].filter((w) => w !== 'www'));
+  const fb = fallbackTexts(fam); assert.ok(fb.intro.length > 30 && fb.name.length > 3);
+  assert.equal(slugFor('hex-names', fam, () => false), '/color/hex-names/');
+  assert.equal(slugFor('hex-names', fam, (p) => p === '/color/hex-names/'), null);
+  assert.equal(slugFor('Not A Slug!', fam, () => false), '/color/colour-picker-tool/');
+});
+
+test('the page is its family\'s page with its own title, preview words, headline and intro; the offline list gains it once', () => {
+  const base = '<!doctype html>\n<html><head><title>Colour · Verse</title>\n<meta name="description" content="old">\n<meta property="og:url" content="https://a-to-mind.com/color/">\n<!-- seo -->\nX\n<!-- /seo -->\n</head><body><h1>Colour</h1>\n<p class="intro">old intro</p><!-- asks -->\nY\n<!-- /asks --></body></html>';
+  const row = { path: '/color/hex-names/', name: 'Colour names & codes', h1: 'Colour names', intro: 'Find a name.', does: 'Names for colours.' };
+  const h = variantHtml(base, row);
+  assert.ok(h.includes(MARK)); assert.match(h, /<title>Colour names &amp; codes · Verse<\/title>/); assert.match(h, /name="description" content="Names for colours\."/);
+  assert.match(h, /og:url" content="https:\/\/a-to-mind\.com\/color\/hex-names\/"/); assert.match(h, /<h1>Colour names<\/h1>\n  <p class="intro">Find a name\.<\/p>/);
+  assert.ok(!h.includes('old intro') && !h.includes('<!-- seo -->') && !h.includes('<!-- asks -->')); assert.match(h, /og:title/);
+  assert.equal(variantHtml(h, row), h, 'written again it is the same page');
+  // a base on the legacy hand-off list has no tag; its variant carries the family's (handoff-scan: new pages ship with one), once
+  const tagged = variantHtml(base, row, 'in: color; out: color');
+  assert.match(tagged, /<meta name="verse-handoff" content="in: color; out: color">/); assert.equal(variantHtml(tagged, row, 'in: color; out: color'), tagged);
+  assert.equal((variantHtml(tagged, row, 'in: text; out: text').match(/verse-handoff/g) || []).length, 1, 'a tag already there is kept, never doubled');
+  const sw = "const TOOLS = ['/a/', '/b/'];\nconst X = 1;";
+  assert.equal(swWith(sw, '/c/'), "const TOOLS = ['/a/', '/b/', '/c/'];\nconst X = 1;"); assert.equal(swWith(swWith(sw, '/c/'), '/c/'), swWith(sw, '/c/'));
+  assert.match(fs.readFileSync(path.join(root, 'void-live-deploy/sw.js'), 'utf8'), /const TOOLS = \[[^\]]*\];/, 'sw.js still holds its offline list on one line');
+});
+
+test('the judge: offline and sharing have templates, every other lost or unmeasured row becomes a job with the gate\'s evidence', () => {
+  const f = { id: 'colour: x.test', page: '/color/x/?c=ff5733', extra: [] };
+  const ev = { speed: { verdict: 'better', evidence: 'e' }, offline: { verdict: 'worse', evidence: 'Verse 0 vs 1' }, sharing: { verdict: 'worse', evidence: 'Verse 3 of 4' }, mobile: { verdict: 'worse', evidence: 'Verse 12 px' } };
+  const j = judgeRows(f, ev, "const TOOLS = ['/a/'];");
+  assert.deepEqual(j.fixes, ['offline', 'sharing']); assert.ok(j.jobs.some((x) => x.aspect === 'mobile' && /12 px/.test(x.evidence))); assert.ok(j.jobs.some((x) => x.aspect === 'accuracy' && /not measured/.test(x.evidence)));
+  assert.ok(!judgeRows(f, ev, "const TOOLS = ['/color/x/'];").fixes.includes('offline'), 'a page already in the list is not fixed again');
+  assert.match(reportLine([{ host: 'x.test', family: 'colour', page: '/color/x/', n: 8, m: 12 }], 'y.test'), /^Versus: took on x\.test \(colour, \/color\/x\/\), surpassed 8 of 12 rows; next y\.test$/);
+});
+
+test('the page guard flags a frontier site at the front of the queue with no page, and nothing else', () => {
+  const ev = Object.fromEntries(FLOORS.map((f) => [f.id, passingRows(f, { evidence: 'e' })])); // every aspect, journeys with their steps and controls
+  assert.deepEqual(guardOf(ev, { sites: [{ site: 'easy.test', hardness: 1 }] }), ['easy.test'], 'every floor beaten: the frontier site is at the front and has no page');
+  const real = JSON.parse(fs.readFileSync(path.join(root, 'void-live-deploy/tower.evidence.json'), 'utf8')).floors;
+  assert.deepEqual(guardOf(real, { sites: [{ site: 'easy.test', hardness: 99 }] }, 1), [], 'the current fight is a floor');
+});
+
+test('every self-built site is a lane site with its own page, the page its probe measures, a row in the tool table and a folder', () => {
+  for (const r of SELF_SITES) {
+    const f = FLOORS.find((x) => x.id === r.lane); assert.ok(f, r.lane + ' is a floor'); assert.equal(f.lane, r.family); assert.equal(f.page, r.page); assert.equal(LANE_PAGES[r.lane], r.page);
+    assert.ok(LANES[r.family].includes(r.url)); assert.ok(SITE_PAGES.some((p) => p.path === r.path)); assert.equal(probeFor(r.lane).verse, r.page);
+    if (r.ask) assert.equal(probeFor(r.lane).ask.verse, r.ask);
+    const html = fs.readFileSync(path.join(root, 'void-live-deploy', r.path, 'index.html'), 'utf8'); assert.ok(html.includes(MARK), r.path); assert.ok(html.includes('<h1') && html.includes(r.h1.replace(/&/g, '&amp;')), r.path);
+    assert.doesNotMatch(r.name + r.h1 + r.intro + r.does + r.asks.join(' ') + r.path, /\.(?:com|org|net|io)\b/i, r.path + ' names no site');
+  }
+});
+
+test('the loop\'s model route takes the owner\'s questions only in shape: system and user messages, bounded', async () => {
+  const { bodyOf } = await import('../void-live-deploy/functions/api/tower-self.js');
+  assert.equal(bodyOf({ messages: [{ role: 'user', content: 'which floor?' }] }).max, 900);
+  assert.equal(bodyOf({ messages: [{ role: 'assistant', content: 'x' }] }), null);
+  assert.equal(bodyOf({ messages: [{ role: 'user', content: 'x'.repeat(24001) }] }), null);
+  assert.equal(bodyOf({ messages: Array(5).fill({ role: 'user', content: 'x' }) }), null);
+  assert.equal(bodyOf({ messages: [{ role: 'user', content: 'x' }], max_tokens: 99999 }).max, 2000);
+});
+
+test('the model\'s answer is found however it is wrapped', () => {
+  assert.equal(parseAnswer('{"family":"colour","why":"x"}').family, 'colour');
+  assert.equal(parseAnswer('Thinking {about} it.\n```json\n{"family":"none","why":"a shop"}\n```').family, 'none');
+  assert.equal(parseAnswer(JSON.stringify({ response: { family: 'calculator' } })).family, 'calculator');
+  assert.equal(parseAnswer('no json here'), null);
+});
+
+test('words are cut at a sentence, and an ask meets its family by the stem of its words', () => {
+  assert.equal(sentences('One two three. Four five six seven eight nine ten eleven twelve.', 30), 'One two three.');
+  assert.ok(!/,$/.test(sentences('a, '.repeat(200), 50)));
+  assert.equal(sentences('Type a value and every unit updates at once,', 320), 'Type a value and every unit updates at once.'); // a row cut before the sentence ended (/convert/unit-converter/)
+  const conv = familiesOf().find((f) => f.id === 'unit converter'); assert.ok(sharesWords(conv, 'convert km to miles'));
+});
+
+test('a reason is cut at a whole word, never mid-word (Versus job mvoxd09y: "a niche professional servic")', async () => {
+  const { clipWords } = await import('./tower-self.mjs');
+  const why = 'The website is a B2B service for protecting digital marketing campaigns from bad traffic and spy tools, which is a niche professional service';
+  assert.equal(clipWords(why, 160), why);
+  assert.equal(clipWords(why, 140), why.replace(/ service$/, ''));
+  assert.equal(clipWords('one, two, three', 9), 'one, two');
+  assert.equal(clipWords('  short  ', 140), 'short');
+});
+
+test('a lap names the tower target as next, says why nothing was judged, and a lap with no growth stays out of the ledger (owner review)', () => {
+  const pick = { host: 'randomarea.com' }, target = { id: 'onlineconverter.com' };
+  assert.equal(nextOf(target, pick), 'onlineconverter.com (the target)'); assert.equal(nextOf(null, pick), 'randomarea.com'); assert.equal(nextOf({}, null), '');
+  const st = { 'a.test': { outcome: 'not-judged', why: 'the model answered 401' }, 'b.test': { outcome: 'not-judged', why: 'the model answered 401' } };
+  assert.equal(causeOfLap(st), 'the model answered 401 on every read, so no site was judged');
+  assert.equal(causeOfLap({ ...st, 'c.test': { outcome: 'no-family' } }), 'the model answered 401 on 2 of 3 reads, so those were not judged'); assert.equal(causeOfLap({ 'c.test': { outcome: 'no-family' } }), ''); assert.equal(causeOfLap({ 'a.test': { outcome: 'not-judged', why: 'x' }, 'b.test': { outcome: 'not-judged', why: 'y' } }), ''); assert.equal(causeOfLap({}), '');
+  const line = reportLine([], nextOf(target, pick), { 'not-judged': 2 }, causeOfLap(st));
+  assert.equal(line, 'Versus: took on no site (also read: 2 not-judged); the model answered 401 on every read, so no site was judged; next onlineconverter.com (the target)');
+  assert.ok(!line.includes('randomarea'));
+  assert.equal(isNoop({ line, built: 0, queued: 0, fixed: [] }), true);
+  assert.equal(isNoop({ line, built: 0, queued: 1, fixed: [] }), false);
+  assert.equal(isNoop({ line: reportLine([{ host: 'x.test', family: 'f', page: '/p/', n: 1, m: 2 }], 'y'), built: 0, queued: 0, fixed: [] }), false);
+  const sh = fs.readFileSync(new URL('./tower-self-report.sh', import.meta.url), 'utf8');
+  assert.match(sh, /if \[ -z "\$NOOP" \]; then\n\s+printf[^\n]+void\.agents\.log\.md\n\s+node tools\/grow\.mjs build/);
+});
+
+test('the guard lets the largest body /api/tower-self accepts reach it (a 413 left every site unjudged)', async () => {
+  const { LIMITS } = await import('../void-live-deploy/lib/guard.js'), { bodyOf } = await import('../void-live-deploy/functions/api/tower-self.js');
+  const big = { messages: [{ role: 'system', content: 'x'.repeat(4000) }, { role: 'user', content: '\u5316'.repeat(20000) }], schema: { name: 's', schema: { type: 'object', description: 'd'.repeat(3900) } }, max_tokens: 1400 };
+  assert.ok(bodyOf(big), 'the route accepts it');
+  assert.ok(Buffer.byteLength(JSON.stringify(big)) <= LIMITS['tower-self'].body, 'the guard lets it through');
+});
+
+import { easeOf, withDeadline, SITE_DEADLINE_MS, BUILD_BUDGET_MS } from './tower-self.mjs';
+test('every pick carries its ease, from the scan\'s own numbers, easiest first (owner, 2026-11-03: "goes after the easiest site automatically")', () => {
+  const small = easeOf({ controls: 4, bytes: 20000, hardness: 10, rank: 500000 }), big = easeOf({ controls: 80, bytes: 3e6, hardness: 10, rank: 900 });
+  assert.ok(small.score > big.score, 'fewer controls and fewer bytes are easier');
+  assert.match(small.why, /4 controls, 20 KB, Tranco 500000/);
+  const unsized = easeOf({ controls: null, bytes: null, hardness: 73, rank: null });
+  assert.match(unsized.why, /not sized yet, hardness 73, outside the Tranco list/);
+  assert.ok(easeOf({ controls: null, bytes: null, hardness: 20 }).score > unsized.score, 'a lower hardness is easier');
+  const at = Date.parse('2026-11-03T00:00:00Z'), frontier = { sites: [{ site: 'a.test', hardness: 1 }, { site: 'b.test', hardness: 2 }] };
+  const picked = pickCandidates(frontier, {}, { at, floors: [] });
+  assert.deepEqual(picked.map((x) => x.ease.place), [1, 2]);
+  assert.ok(picked[0].ease.score >= picked[1].ease.score);
+});
+test('a read that never returns is cut off and recorded, so the next run moves on (2026-11-03: four runs cancelled on one stuck site)', async () => {
+  assert.ok(SITE_DEADLINE_MS > 0 && BUILD_BUDGET_MS + 3 * SITE_DEADLINE_MS <= 45 * 60000, 'the reading ends with time left in the job\'s 75 minutes for the push, deploy and gate');
+  // a read far slower than its deadline (its own timer keeps the event loop up: the deadline's timer is unref'd, and Node 20/22 end a test
+  // whose only pending work is an unref'd timer, which held #2076 at the automerge safety-check)
+  let slow; await assert.rejects(withDeadline(new Promise((r) => { slow = setTimeout(r, 2000); }), 20, 'the read'), (e) => e.late === true && /the read did not finish/.test(e.message));
+  clearTimeout(slow);
+  assert.equal(await withDeadline(Promise.resolve(7), 1000, 'x'), 7);
+  const at = Date.parse('2026-11-03T00:00:00Z'), frontier = { sites: [{ site: 'stuck.test', hardness: 1 }, { site: 'next.test', hardness: 2 }] };
+  const state = { sites: { 'stuck.test': { at: '2026-11-03T00:00:00Z', outcome: 'walled', why: 'not read (the read did not finish in 240 s)' } } };
+  assert.deepEqual(pickCandidates(frontier, state, { at, floors: [] }).map((x) => x.host), ['next.test']);
+});
+
+test('a rewritten page keeps the seo block the page had, and a page with none gets none', () => {
+  const seo = '<!-- seo -->\n<link rel="canonical" href="https://a-to-mind.com/news/x/">\n<!-- /seo -->\n';
+  const have = '<html><head><title>a</title>\n' + seo + '</head><body>old</body></html>', want = '<html><head><title>a</title>\n</head><body>new</body></html>';
+  const out = keepSeo(have, want);
+  assert.ok(out.includes('rel="canonical" href="https://a-to-mind.com/news/x/"') && out.includes('<body>new</body>'), out);
+  assert.equal(keepSeo(null, want), want);
+  assert.equal(keepSeo('<head></head>', want), want);
+  const own = want.replace('</head>', '<!-- seo -->mine<!-- /seo -->\n</head>');
+  assert.equal(keepSeo(have, own), own);
+});

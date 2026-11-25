@@ -1,0 +1,78 @@
+# GitHub merges ready PRs by itself, so no session sits and watches CI (tools/automerge.mjs, tools/pr-ready.mjs).
+# Only PRs labelled "automerge" from this repository (never forks). Verse's review must be clean, and the full browser
+# suite must have passed on that pull request merged with current main (suite-gate.yml). One pull request merges per run.
+# The suite still runs on main after the merge and reverts a commit that fails it, filing a heal job (verify.yml). It looks again whenever anything that could change the answer happens, and once an hour.
+# A PR that conflicts with main gets no pull_request runs at all (GitHub skips them), so a labelled one would sit silently forever
+# (2026-10-10). For such a PR the bot merges main into the branch itself (tools/merge-main.mjs from main's checkout settles the
+# append-only records), pushes the merge commit (never forced) and starts Verse's review on the new head; a conflict outside those
+# records comes back as one comment on the PR naming the files.
+name: Verse automerge
+
+on:
+  workflow_run:
+    workflows: ["Verse deploy", "Verse review", "Verse bench", "Merge gate", "Suite on main", "Verse verify"] # a suite gate result merges the green PR or queues the next; a green verify on main lifts the red-main hold (2026-11-09)
+    types: [completed]
+  pull_request_review:
+    types: [submitted] # job guards against bot-submitted reviews below (Verse review posts APPROVE; workflow_run: Verse review already wakes automerge)
+  # no issue_comment / pull_request_review_comment (2026-11-04): a comment never changes whether a PR is ready (pr-ready.mjs reads
+  # checks only; CodeRabbit is an extra), and 29 of 100 runs were comment wakes spending the repository's shared API quota.
+  pull_request:
+    types: [labeled, opened, synchronize, reopened, ready_for_review] # every PR merges by itself (owner, 2026-10-15: "automerge everything always")
+  schedule:
+    - cron: "17 * * * *" # a check or review that finished without waking this workflow
+    - cron: "17 11 * * *" # once a day, the stuck-pull-request sweep (STUCK=1 below)
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Look at this pull request only (void-review.yml and merge-gate.yml pass the one they checked). Empty = sweep every open PR.
+        required: false
+        default: ""
+
+# One group. The sweep in progress finishes: cancel-in-progress is false, so a new event does not kill it.
+# A second event waits, and a third replaces that waiting run. The sweep reads every open pull request, so a
+# waiting run that never started is not a missed merge. A group per run id queued a sweep for every event
+# (15 were waiting on 2026-11-04). That queue was the backlog. The in-progress sweep is never cancelled.
+# Since the bot looks only at the PR an event is about (tools/automerge.mjs, scopedPr), the group is per PR: events about one PR
+# share one running and one waiting run, so a burst about PR A never replaces the waiting run for PR B. Sweeps share "sweep".
+# A run on main that is about no pull request (a deploy or a review of main) does no work (the job "if" below), so it gets a group
+# of its own. In "sweep" it replaced the waiting full sweep every few minutes, and on 2026-11-06 only 2 of 300 runs were full sweeps:
+# the suite gate got no new batch and nothing merged. "Suite on main" is about no pull request too, but its result is a real sweep.
+concurrency:
+  group: void-automerge-${{ github.event.pull_request.number || inputs.pr || (github.event.workflow_run && github.event.workflow_run.pull_requests[0].number) || (github.event.workflow_run && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.name != 'Suite on main' && github.event.workflow_run.name != 'Verse verify' && format('idle-{0}', github.run_id)) || 'sweep' }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write # merge; push the merge of main to a conflicted PR's branch
+  pull-requests: write # mark a draft ready; the one conflict comment; arm auto-merge
+  checks: read
+  actions: write # start the deploy of main after a merge; start Verse's review on a head the bot pushed
+  issues: write # the stall alarm: one merge-stall issue when no pull request merged for 2 hours (tools/merge-stall.mjs)
+
+jobs:
+  automerge:
+    # a run on main that is not about a pull request (a deploy, the review of main) changes no PR: no runner at all.
+    # The suite gate runs on main for a batch of pull requests, so its result is the exception: it merges the green one or queues the next.
+    # A Verse (github-actions[bot]) PR review already wakes automerge via workflow_run: ["Verse review"]; ignore the duplicate review event.
+    # "Verse verify" on main (no PR) also wakes a sweep so a green verify can lift a red-main hold.
+    if: (github.event_name != 'workflow_run' || github.event.workflow_run.head_branch != 'main' || github.event.workflow_run.pull_requests[0] || github.event.workflow_run.name == 'Suite on main' || github.event.workflow_run.name == 'Verse verify') && (github.event_name != 'pull_request_review' || github.event.review.user.login != 'github-actions[bot]')
+    runs-on: ubuntu-latest
+    # 15, not 5 (2026-11-06): the sweep reads for 200 s at most (AUTOMERGE_SWEEP_MS), then runs the safety-check on the batch
+    # the suite gate chose. One check took 134 s that morning, so 5 minutes cut a sweep off before it started the gate.
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0 # merging main into a conflicted PR's branch needs the history on both sides
+      - name: The bot's name on the merge commits it pushes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Merge what is ready (and main into what conflicts)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          VOID_OWNER_TOKEN: ${{ secrets.VOID_OWNER_TOKEN }} # the merged PR's `Job: <id>` line moves that queue job to live (tools/job-link.mjs)
+          # the 11:17 UTC run also names the blocker on a pull request open more than 6 hours. The hourly run still merges; it does not slow anything.
+          STUCK: ${{ github.event.schedule == '17 11 * * *' && '1' || '' }}
+        run: node tools/automerge.mjs

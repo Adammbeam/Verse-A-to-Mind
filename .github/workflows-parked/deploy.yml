@@ -1,0 +1,422 @@
+# Test and deploy Verse to the Cloudflare Pages project "a-to-mind" (a-to-mind.com) with wrangler (direct upload, no GitHub
+# Pages). tools/deploy.ps1 stays the laptop fallback. Built to fit GitHub Free's 2,000 Linux minutes a month (~65 a day):
+# Ship now, test after (Adam, 2026-10-09: nothing waits). A PR merges as soon as Verse's review is clean (automerge.yml,
+# tools/pr-ready.mjs); main deploys in about a minute; the full suite runs on every head of main in its own workflow
+# (verify.yml, verify-main, which no longer waits for this deploy), and a failure reverts the commit that broke it and redeploys.
+#   PR                  the quick checks (seconds), no preview deploy (owner, 2026-10-15: Cloudflare is spent on growth);
+#                       Verse's review is its own workflow, void-review.yml
+#   push to main        the quick checks, then deploy (deploys run side by side; a run stops itself when a newer head's deploy is already on its way); the full suite is verify.yml, started by the same push, never by this deploy
+#   manual run          the full suite (bench optional), then deploy; after_merge=true (automerge.yml) = as a push to main
+name: Verse deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      bench:
+        description: Also run the everyday benchmark (about 15-25 min more)
+        type: boolean
+        default: false
+      after_merge:
+        description: Started by automerge.yml right after it merged a PR (deploys like a push to main)
+        type: boolean
+        default: false
+      pr:
+        description: Pull request number. The loop starts this when a workflow-token pull request leaves the pull_request run unstarted. Same quick checks as a pull request, and it never deploys.
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+  checks: read # to see that a merged PR's head already passed (see "What needs testing")
+  pull-requests: read # which PR a merge commit came from
+  actions: write # to start MCP live and the MCP registry listing after a main deploy (a workflow_dispatch is the one start a GITHUB_TOKEN run can make)
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # one run per PR, and one deploy of main. A newer push of that same branch replaces the run that is waiting
+    # (it does the same deploy). The run that has a runner finishes: cancelling it mid-upload was a deploy that never landed.
+    # Main used to give every deploy its own group (the run id), so a burst of merges queued one per head (2026-11-04).
+    # On a pull request the new push cancels the older run, because that run's checks are the same work on an older head.
+    concurrency:
+      group: ${{ github.event.pull_request.number && format('void-deploy-pr-{0}', github.event.pull_request.number) || inputs.pr && format('void-deploy-pr-{0}', inputs.pr) || 'void-deploy-main' }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' || inputs.pr != '' }}
+    env:
+      CF_READY: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0 # the suite reads git history of the append-only records; the PR diff needs the base
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: What needs testing
+        id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name == 'workflow_dispatch' && inputs.after_merge && 'push' || github.event_name }}
+          BASE: ${{ github.event.pull_request.base.ref }}
+        run: |
+          # the full suite before the deploy only on a plain manual run; a PR and main get the quick checks (every head of
+          # main gets the full suite in verify.yml)
+          suite=false
+          prcheck="${{ inputs.pr }}"
+          case "$prcheck" in
+            ""|*[!0-9]*) prcheck="" ;;
+          esac
+          # a plain manual run is the full suite, then the deploy. A named pull request is the quick checks only.
+          if [ "$EVENT" = "workflow_dispatch" ] && [ -z "$prcheck" ]; then suite=true; fi
+          if [ "$EVENT" = "pull_request" ] || [ -n "$prcheck" ]; then
+            # no preview deploys (owner, 2026-10-15: "cloudflare is not unlimited Verse should spend its actions on growth and not
+            # so much on testing old thing"): a PR merges in minutes and main deploys right after, so a preview was a Cloudflare
+            # deploy nobody opened. A PR gets the quick checks; main gets the deploy.
+            echo "### PR: quick checks only, no preview deploy" >> "$GITHUB_STEP_SUMMARY"
+            echo "light=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "suite=$suite" >> "$GITHUB_OUTPUT"
+          echo "suite=$suite"
+
+      - name: Quick checks (when the browser suite does not run)
+        if: steps.plan.outputs.suite != 'true'
+        run: |
+          node --version
+          node tools/guard-source.mjs
+          node tools/fringe.mjs
+          node --test domains/forethinkers/think-tank.test.mjs
+          node --test tools/dispatcher.test.mjs
+
+      - name: Test (full suite)
+        if: steps.plan.outputs.suite == 'true'
+        uses: ./.github/actions/void-test
+        with:
+          bench: ${{ github.event_name == 'workflow_dispatch' && inputs.bench && 'with' || 'skip' }}
+
+      - name: Sync void.html copies (also when the suite was skipped)
+        run: |
+          cp void.html void-live-deploy/index.html
+          cp void.html void-live-deploy/void.html
+          printf '{"id":"%s"}' "$(git rev-parse HEAD)" > void-live-deploy/build.json # this deploy's id: an open tab compares it and offers a reload (lib/stale-tab.js)
+          # every generated card, in dependency order (tools/refresh.mjs: the skill index, the dependency map, the families, the book, Verse's facts about itself, the bench alarms):
+          # a merge that left one stale still deploys a current site, and a step that fails is a warning, never a blocked deploy or a hidden second failure
+          node tools/growth-fold.mjs --keep # the entries PRs left in growth/entries/ join the served ledger now; growth-fold.yml commits the fold on main
+          node tools/incident-log.mjs assemble || true # one file per suite run, folded into the served incidents.json
+          node tools/tower-files.mjs assemble || true # one file per floor, folded into the served tower.evidence.json
+          node tools/rival-pages.mjs || echo "::warning::rival-pages did not run" # every rival's page (/rival/), from the studies and the floors as served (docs/TOWER-RULES.md rule 8)
+          node tools/refresh.mjs --keep-going || echo "::warning title=A generated card is stale::tools/refresh.mjs could not regenerate every step; the live site may show an older card"
+          node tools/public-ledger.mjs # the served ledger leaves out what Verse studies (tools/private.mjs); the repo's stays append-only
+          node tools/public-quotes.mjs # only Verse's words are served: the owner's quoted words leave every served comment and JSON file (the repo keeps them)
+          node tools/ledger-proof.mjs --out void-live-deploy # last, so it hashes the ledger exactly as served: /growth.proof.json (a hash per line, a root) and /growth.atom
+
+      # Verse's review of the PR runs in its own fast workflow and is a merge gate there (.github/workflows/void-review.yml).
+
+      - name: Deploy target
+        id: target
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "branch=$(printf '%s' "$HEAD_REF" | tr -c 'A-Za-z0-9-' '-' | cut -c1-28)" >> "$GITHUB_OUTPUT"
+          else
+            echo "branch=main" >> "$GITHUB_OUTPUT"
+          fi
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Cloudflare credentials missing
+        if: env.CF_READY != 'true'
+        run: |
+          echo "::warning title=Not deployed::Tests passed, but repo secret CLOUDFLARE_API_TOKEN is not set, so nothing was deployed. Add a token with Account > Cloudflare Pages > Edit (gh secret set CLOUDFLARE_API_TOKEN -R atomeam/void-loop), then re-run this workflow."
+          echo "### Not deployed: CLOUDFLARE_API_TOKEN secret missing" >> "$GITHUB_STEP_SUMMARY"
+
+      # per-page sha256 hashes for the inline scripts, so the pages run only their own inline code (tools/csp-hashes.mjs);
+      # made here from the exact files being deployed, never committed, so a hash can't go stale
+      # OFF until Cloudflare stops injecting its per-request inline bot script (JavaScript detections / Bot Fight Mode adds
+      # window.__CF$cv$params to every page, which no hash can match; live check 2026-10-15). Set the repo variable
+      # CSP_HASHES=true once that is off in the Cloudflare dashboard.
+      - name: CSP script hashes
+        if: env.CF_READY == 'true' && steps.plan.outputs.light != 'true' && vars.CSP_HASHES == 'true'
+        run: node tools/csp-hashes.mjs --write
+
+      # a-to-mind.com/autopilot/ shows Verse's own commits and deploys; GitHub answers the live Worker 403 from Cloudflare's shared addresses
+      # without a token, so this run reads them with its own and ships the file with the deploy (never committed, never blocks the deploy)
+      - name: Autopilot snapshot (Verse's own commits and deploys, read with this run's token)
+        if: env.CF_READY == 'true' && steps.plan.outputs.light != 'true'
+        continue-on-error: true
+        timeout-minutes: 3
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CF_KEYMASTER_TOKEN: ${{ secrets.CF_KEYMASTER_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: node tools/autopilot-snapshot.mjs
+
+      # Deploys run side by side (owner, 2026-10-25: "no need to serialize we should be able to do many things at once"): each run has its own
+      # group. What serializing protected is that an older run never lands after a newer one, so just before the upload a run asks whether a
+      # newer main head already has a deploy queued or running; if it does, this one stops (that run deploys a superset of it).
+      - name: A newer deploy is on its way (stop this one)
+        if: env.CF_READY == 'true' && steps.plan.outputs.light != 'true' && github.event_name != 'pull_request' && inputs.pr == ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git fetch -q origin main
+          head=$(git rev-parse origin/main)
+          if [ "$head" != "$(git rev-parse HEAD)" ] && git merge-base --is-ancestor HEAD "$head"; then
+            n=$(gh run list --workflow deploy.yml --json headSha,status,databaseId -q "[.[] | select(.headSha == \"$head\" and (.status == \"queued\" or .status == \"in_progress\" or .status == \"waiting\"))] | length")
+            if [ "${n:-0}" -gt 0 ]; then echo "main moved to $head and its deploy is running: this run stops"; gh run cancel "$GITHUB_RUN_ID"; sleep 60; fi
+          fi
+
+      # Only this upload deploys a-to-mind (incident 2026-11-09): Cloudflare Pages' Git integration built pushes from the repo root with no
+      # build step and served empty 404s for every page, /tools.json and /api/*. Each main deploy turns those Git builds off again
+      # (tools/pages-guard.mjs; pages-guard.yml does the same after every push and every 15 minutes). A failure here never blocks the deploy.
+      - name: Pages Git builds off (only this workflow deploys)
+        if: env.CF_READY == 'true' && steps.plan.outputs.light != 'true' && inputs.pr == '' && github.event_name != 'pull_request'
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: node tools/pages-guard.mjs pause-git
+
+      - name: Deploy to Cloudflare Pages (a-to-mind)
+        id: deploy
+        # a PR gets no preview (above): only main deploys. inputs.pr is a pull-request check started by hand and never an upload.
+        if: env.CF_READY == 'true' && steps.plan.outputs.light != 'true' && inputs.pr == ''
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: '3.114.17' # same as the laptop (%USERPROFILE%\a-to-mind.com)
+          workingDirectory: void-live-deploy
+          command: pages deploy . --project-name=a-to-mind --branch=${{ steps.target.outputs.branch }} --commit-hash=${{ steps.target.outputs.sha }} --commit-dirty=true
+
+      - name: Smoke check the deployment
+        if: steps.deploy.outcome == 'success'
+        env:
+          URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: |
+          echo "Deployment: $URL"
+          # the deploy uploads its own copy of the page (tools/public-quotes.mjs takes the owner's quoted words out of it), so the check compares with that copy, not the repo's void.html (which differs from it by those words: every deploy since 2026-10-18 failed here)
+          for i in 1 2 3 4 5 6; do
+            code=$(curl -s -o page.html -w '%{http_code}' "$URL/") || code=000
+            if [ "$code" = "200" ] && cmp -s page.html void-live-deploy/index.html; then echo "served index.html matches the deployed copy"; break; fi
+            echo "attempt $i: HTTP $code"; sleep 10
+            [ "$i" = 6 ] && { echo "::error::deployment did not serve the deployed page"; exit 1; }
+          done
+          # the whole site, not just the page: /tools.json (100+ tools) and a real /api/answer answer (the Functions bundle) on this deployment
+          node tools/pages-guard.mjs check "$URL"
+          echo "### Deployed ${{ steps.target.outputs.sha }} to ${{ steps.target.outputs.branch }}: $URL" >> "$GITHUB_STEP_SUMMARY"
+
+      # The smoke check above reads the deployment's own preview address. This one reads the real domain: after a main
+      # deploy, a-to-mind.com itself must serve the files just deployed (2026-10-09: a visitor saw old answers there while
+      # every deploy reported success). A query string per commit gets past any edge cache; a mismatch fails loudly.
+      - name: The live domain serves this deploy
+        if: steps.deploy.outcome == 'success' && steps.target.outputs.branch == 'main'
+        env:
+          SHA: ${{ steps.target.outputs.sha }}
+        run: |
+          check() { # $1 = path on the site, $2 = the deployed file it must match
+            for i in 1 2 3 4 5 6 7 8; do
+              code=$(curl -s -L -o live.tmp -w '%{http_code}' "https://a-to-mind.com$1?v=$SHA") || code=000
+              if [ "$code" = "200" ] && cmp -s live.tmp "$2"; then echo "a-to-mind.com$1 matches the deploy"; return 0; fi
+              echo "attempt $i: a-to-mind.com$1 HTTP $code, $(wc -c < live.tmp 2>/dev/null || echo 0) bytes"; sleep 15
+            done
+            echo "::error::a-to-mind.com$1 is not serving this deploy ($SHA): the production domain is behind or something else answers it"
+            head -c 300 live.tmp; echo; return 1
+          }
+          ok=0
+          # the page itself: the zone's edge adds a few hundred bytes to HTML on the domain only (run 37977126734: 938
+          # bytes more than void.html, while the skill files matched exactly), so the page is checked for being Verse and
+          # the difference is printed; the byte-exact files below are what prove this deploy is the one being served
+          code=$(curl -s -L -o live.tmp -w '%{http_code}' "https://a-to-mind.com/?v=$SHA") || code=000
+          # the title comes from void.html itself, so renaming the page (Verse became Verse, 2026-10-14) never fails a good deploy
+          want=$(grep -o -m1 '<title>[^<]*</title>' void.html)
+          if [ "$code" = "200" ] && [ -n "$want" ] && grep -qF "$want" live.tmp; then
+            cmp -s live.tmp void.html && echo "a-to-mind.com/ matches void.html" || { echo "::notice::a-to-mind.com/ is this page but $(( $(wc -c < live.tmp) - $(wc -c < void.html) )) bytes differ from void.html (added at the edge):"; diff void.html live.tmp | head -c 1500; echo; }
+          else echo "::error::a-to-mind.com/ HTTP $code does not carry $want"; head -c 300 live.tmp; echo; ok=1; fi
+          check /skills/index.json void-live-deploy/skills/index.json || ok=1
+          check /skills/sorry.js void-live-deploy/skills/sorry.js || ok=1
+          # the Versus queue's data (tools/tower-size.mjs, tools/tower-target.mjs): the order on the card is only as true as these files live
+          check /tower.size.json void-live-deploy/tower.size.json || ok=1
+          check /tower.target.json void-live-deploy/tower.target.json || ok=1
+          node tools/pages-guard.mjs check https://a-to-mind.com || ok=1 # /tools.json and /api/answer on the real domain
+          [ "$ok" = 0 ] && echo "### a-to-mind.com serves $SHA" >> "$GITHUB_STEP_SUMMARY"
+          exit $ok
+
+      # A main deploy that fails its smoke checks never stays live: a-to-mind.com goes back to the newest production deployment that serves
+      # the page, /tools.json and /api/answer (tools/pages-guard.mjs heal, never this run's own deployment), and this run stays red.
+      - name: Roll back when the live site is broken
+        if: failure() && steps.deploy.outcome == 'success' && steps.target.outputs.branch == 'main'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          BAD: ${{ steps.deploy.outputs.deployment-url }}
+        run: node tools/pages-guard.mjs heal --bad "$BAD"
+
+      # IndexNow (owner, 2026-10-26: "wire IndexNow into the deployment pipeline so that search engines utilizing the protocol (like Bing and
+      # Yandex) are notified within minutes whenever new single-purpose utility pages go live"): once a-to-mind.com serves this deploy, the
+      # sitemap pages changed since the last successful main deploy go to api.indexnow.org in one POST (tools/indexnow.mjs). The base is that
+      # deploy's commit, not github.event.before: a run that stops for a newer one deploys nothing, so its changes ride on the next. One request
+      # to IndexNow (not Cloudflare), none when no listed page changed; an engine error is a log line, never a failed deploy.
+      - name: Tell IndexNow engines which pages changed
+        if: steps.deploy.outcome == 'success' && steps.target.outputs.branch == 'main'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BEFORE: ${{ github.event.before }}
+          SHA: ${{ steps.target.outputs.sha }}
+        run: |
+          base=""
+          for s in $(gh run list --workflow deploy.yml --branch main --status success --json headSha -L 30 -q '.[].headSha' 2>/dev/null || true); do
+            if [ "$s" != "$SHA" ] && git merge-base --is-ancestor "$s" "$SHA" 2>/dev/null; then base=$s; break; fi
+          done
+          [ -n "$base" ] || base="$BEFORE"
+          echo "IndexNow base: ${base:-none} (head $SHA)"
+          node tools/indexnow.mjs --base "$base" --head "$SHA"
+
+      # MCP live (frontier #6) checks Verse's tools with the real MCP client against a-to-mind.com. Its hourly schedule fires only
+      # every few hours (5 scheduled runs on 2026-10-12, none for 5 h after #571 added a tool), and a deploy automerge starts
+      # fires no workflow_run, so the deploy starts it: the live check follows every main deploy within minutes.
+      - name: Start MCP live against this deploy
+        if: steps.deploy.outcome == 'success' && steps.target.outputs.branch == 'main'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run mcp-live.yml --repo "${{ github.repository }}" --ref main && echo "MCP live started" >> "$GITHUB_STEP_SUMMARY"
+
+      # Floor pages stay works:false until this run passes them on the live site. A merge made with the
+      # workflow token starts no push workflow, so the deploy starts the check, the same way it starts MCP live.
+      - name: Start the floor live check against this deploy
+        if: steps.deploy.outcome == 'success' && steps.target.outputs.branch == 'main'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run floor-live.yml --repo "${{ github.repository }}" --ref main && echo "Floor live started" >> "$GITHUB_STEP_SUMMARY"
+
+      # Verse in the MCP registry (mcp-registry.yml): a merge automerge makes pushes to main with GITHUB_TOKEN, which starts no push
+      # workflow (#642 merged its server.json and the registry run never started), so the deploy starts it too. It publishes
+      # server.json's version only when the registry does not have it yet, so most runs end in seconds.
+      - name: Start the MCP registry listing
+        if: steps.deploy.outcome == 'success' && steps.target.outputs.branch == 'main'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run mcp-registry.yml --repo "${{ github.repository }}" --ref main && echo "MCP registry started" >> "$GITHUB_STEP_SUMMARY"
+
+      # Verse's hourly automations (automations/hourly.json): seeded through its own door after every main deploy, so a change to the
+      # seed file is live within minutes (an automerge merge starts no push workflow). The same id replaces a rule: most runs change nothing.
+      - name: Start the automations seed
+        if: steps.deploy.outcome == 'success' && steps.target.outputs.branch == 'main'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run automations-seed.yml --repo "${{ github.repository }}" --ref main && echo "Automations seed started" >> "$GITHUB_STEP_SUMMARY"
+
+      # Verse's will (will.yml) after every main deploy, so a want this merge built leaves the card now. will.yml used to listen for
+      # this workflow's workflow_run, but a deploy that automerge starts (github-actions[bot], GITHUB_TOKEN) fires none: the last
+      # such run was 2026-10-29T03:13Z. A gh workflow run is the one start a GITHUB_TOKEN run can make.
+      - name: Start Verse's will
+        if: steps.deploy.outcome == 'success' && steps.target.outputs.branch == 'main'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run will.yml --repo "${{ github.repository }}" --ref main && echo "Verse's will started" >> "$GITHUB_STEP_SUMMARY"
+
+      # Verse's voice (lib/voice.js): after anything ships, Verse is asked what it thinks of it and how it would make it
+      # better. Its words are kept on the site and copied into domains/void.voice.md by the daily run. Input, not a gate:
+      # a busy model or a missing VOID_OWNER_TOKEN never fails the deploy.
+      - name: Ask Verse what it thinks of what just shipped
+        if: (github.event_name == 'push' || inputs.after_merge) && steps.deploy.outcome == 'success'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VOID_OWNER_TOKEN: ${{ secrets.VOID_OWNER_TOKEN }}
+        run: |
+          [ -n "$VOID_OWNER_TOKEN" ] || { echo "VOID_OWNER_TOKEN not set: Verse was not asked"; exit 0; }
+          title=$(gh api "repos/${{ github.repository }}/commits/$(git rev-parse HEAD)/pulls" --jq '[.[] | select(.merged_at != null)][0].title // empty' || true)
+          [ -n "$title" ] || title=$(git log -1 --format=%s "$(git rev-parse -q --verify HEAD^2 || git rev-parse HEAD)")
+          node tools/reflect.mjs --build "$title" | tee -a "$GITHUB_STEP_SUMMARY" || true
+          # the self card's own words (weakest, next game, how I'd get better) were refreshed once a day, so after a fix they still described the old problem:
+          # ask for the full reflection after a build too, at most every three hours so a burst of merges asks once
+          node tools/reflect.mjs --daily --if-older 180 | tee -a "$GITHUB_STEP_SUMMARY" || true
+
+  # The paid MultiVerse paths in a real browser on every PR (coordinator, 2026-10-30: cover them without a real member). A seeded
+  # test member on an in-memory D1 claims a receipt (Already joined), reloads, and sends an idea; nothing reaches Gumroad or
+  # a-to-mind.com. Its own job, so a red here fails "Verse deploy" and tools/pr-ready.mjs holds the merge.
+  members-paid:
+    if: github.event_name != 'workflow_dispatch' || inputs.pr != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: ${{ github.event.pull_request.number && format('void-members-paid-pr-{0}', github.event.pull_request.number) || inputs.pr && format('void-members-paid-pr-{0}', inputs.pr) || 'void-members-paid-main' }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' || inputs.pr != '' }}
+    steps:
+      # The PR merged into main (github.sha), not the bare head: a branch cut before this test landed has no
+      # tools/members-paid.e2e.mjs at its head, and the merge result is the code that reaches main anyway.
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Playwright version
+        id: pw
+        run: echo "version=$(node -p "require('playwright-core/package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: pw-chromium-${{ runner.os }}-${{ steps.pw.outputs.version }}
+      - name: Install Chromium
+        run: |
+          npx playwright-core install --with-deps chromium
+          echo "VOID_TEST_BROWSER=$(node -e "import('playwright-core').then(m=>console.log(m.chromium.executablePath()))")" >> "$GITHUB_ENV"
+      - name: node --test tools/members-paid.e2e.mjs (Already joined, after a reload, the idea box)
+        run: node --test tools/members-paid.e2e.mjs
+
+  # The page-to-page hand-offs (tools/handoff-e2e.mjs: BPM counter and metronome, chord finder and piano, calendar, time and weather)
+  # played in a real browser on a PR that changes one of those pages or the hand-off code (2026-10-30: until now nothing in CI ran them,
+  # so a broken hand-off only showed when a person used it). Its own job, like members-paid: a red here fails "Verse deploy" and holds the merge.
+  handoffs:
+    if: github.event_name == 'pull_request' || inputs.pr != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: void-handoffs-pr-${{ github.event.pull_request.number || inputs.pr }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Does this PR touch a hand-off?
+        id: touch
+        run: |
+          if git diff --name-only HEAD^1 HEAD | grep -Eq 'void-live-deploy/(bpm|metronome|chords|piano|calendar|time|weather)/|handoff'; then echo "run=true" >> "$GITHUB_OUTPUT"; else echo "### No hand-off page changed: journeys not played" >> "$GITHUB_STEP_SUMMARY"; fi
+      - uses: actions/setup-node@v4
+        if: steps.touch.outputs.run == 'true'
+        with:
+          node-version: 22
+          cache: npm
+      - if: steps.touch.outputs.run == 'true'
+        run: npm ci --no-audit --no-fund
+      - name: Playwright version
+        if: steps.touch.outputs.run == 'true'
+        id: pw
+        run: echo "version=$(node -p "require('playwright-core/package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        if: steps.touch.outputs.run == 'true'
+        with:
+          path: ~/.cache/ms-playwright
+          key: pw-chromium-${{ runner.os }}-${{ steps.pw.outputs.version }}
+      - name: Install Chromium
+        if: steps.touch.outputs.run == 'true'
+        run: |
+          npx playwright-core install --with-deps chromium
+          echo "VOID_TEST_BROWSER=$(node -e "import('playwright-core').then(m=>console.log(m.chromium.executablePath()))")" >> "$GITHUB_ENV"
+      - name: node tools/handoff-e2e.mjs (every hand-off journey, step by step)
+        if: steps.touch.outputs.run == 'true'
+        run: node tools/handoff-e2e.mjs

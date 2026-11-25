@@ -1,0 +1,69 @@
+{
+ "id": "team chat",
+ "rows": {
+  "speed": {
+   "verdict": "equal-and-better",
+   "verse": 156,
+   "best": 1323,
+   "evidence": "Verse (/team/) 156 ms to the load event (median of 3, phone width) vs Slack 1323 ms to the load event (median of 3, phone width)",
+   "at": "2026-11-12T15:48:55.599Z",
+   "siteRead": true
+  },
+  "reliability": {
+   "verdict": "equal-and-better",
+   "verse": 3,
+   "best": 3,
+   "evidence": "Verse (/team/) 3 of 3 loads answered vs Slack 3 of 3 loads answered",
+   "at": "2026-11-12T15:48:55.599Z",
+   "siteRead": true
+  },
+  "mobile": {
+   "verdict": "equal-and-better",
+   "verse": 0,
+   "best": 0,
+   "evidence": "Verse (/team/) 0 px sideways overflow at 390 px vs Slack 0 px sideways overflow at 390 px",
+   "at": "2026-11-12T15:48:55.599Z",
+   "siteRead": true
+  },
+  "accessibility": {
+   "verdict": "equal-and-better",
+   "verse": 0,
+   "best": 0,
+   "evidence": "Verse (/team/) 0 unnamed controls or images vs Slack 0 unnamed controls or images",
+   "at": "2026-11-12T15:48:55.599Z",
+   "siteRead": true
+  },
+  "offline": {
+   "verdict": "better",
+   "verse": 1,
+   "best": 0,
+   "evidence": "Verse (/team/) 1 (1: the page shows itself again with the network cut) vs Slack 0 (1: the page shows itself again with the network cut)",
+   "at": "2026-11-12T15:48:55.599Z",
+   "siteRead": true
+  },
+  "sharing": {
+   "verdict": "worse",
+   "verse": 3,
+   "best": 4,
+   "evidence": "Verse (/team/) 3 of 4 (link-preview title, image, description; a share or copy-link control) vs Slack 4 of 4 (link-preview title, image, description; a share or copy-link control)",
+   "at": "2026-11-12T15:48:55.599Z",
+   "siteRead": true
+  },
+  "wider use": {
+   "verdict": "better",
+   "verse": 6.5,
+   "best": 6,
+   "evidence": "Verse (/team/) 6.5 of 11 wider-use points (docs/WIDER-USE.md) vs Slack 6 of 11 wider-use points (docs/WIDER-USE.md)",
+   "at": "2026-11-12T15:48:55.599Z",
+   "siteRead": true
+  },
+  "design polish": {
+   "verdict": "better",
+   "verse": 12,
+   "best": 21,
+   "evidence": "Verse (/team/) 12 design defects vs Slack 21 design defects: Verse (0 low-contrast texts, 11 small tap targets, layout shift 1.23), Slack (0 low-contrast texts, 21 small tap targets, layout shift 0.04)",
+   "at": "2026-11-12T15:48:55.599Z",
+   "siteRead": true
+  }
+ }
+}

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en" class="vs-tool"><link rel="stylesheet" href="/verse.css" media="screen">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Verse Bookshelf · Verse</title>
+<meta name="description" content="A sovereign book studio: every chapter is compiled from Verse's own lap inventory, so the book is always what the site holds now. No subscriptions, no credits, works offline.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Verse">
+<meta property="og:title" content="Verse Bookshelf · Verse">
+<meta property="og:description" content="A book compiled from Verse's own lap inventory: every chapter is what the site holds now. No subscriptions, no credits, works offline.">
+<meta property="og:url" content="https://a-to-mind.com/books/">
+<meta property="og:image" content="https://a-to-mind.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://a-to-mind.com/books/">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<style>
+  :root { color-scheme: dark; --ink:#ecebf5; --soft:#9a9aa8; --quiet:#b9b9c8; --line:#2a2a35; --card:#12111c; --accent:#8b7bff; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; min-height:100%; background:radial-gradient(ellipse at 50% 0%, #1d1830, #07060b 70%); color:var(--ink); font:16px/1.45 system-ui,-apple-system,sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:20px 14px 40px; }
+  h1 { font-size:22px; margin:6px 0 2px; }
+  h2 { font-size:16px; margin:0 0 8px; }
+  .sub { color:var(--quiet); margin:0 0 14px; font-size:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin:12px 0; }
+  .note { color:var(--quiet); font-size:13px; margin:8px 0 0; }
+  .chapter { border-left:3px solid var(--accent); padding-left:12px; margin:12px 0; }
+  .chapter h3 { margin:0 0 4px; font-size:15px; }
+  .chapter p { margin:6px 0; color:var(--soft); font-size:14px; }
+  .siblings { display:flex; flex-wrap:wrap; gap:0 14px; margin:10px 0 0; }
+  .siblings a { display:inline-block; padding:8px 4px; min-height:24px; min-width:24px; }
+  .chapter-nav { display:flex; flex-wrap:wrap; gap:4px 12px; margin:0 0 10px; }
+  .chapter-nav a { color:#cfc6ff; padding:6px 2px; }
+  .chapter .count { color:var(--soft); font-size:12px; font-weight:400; }
+  .chapter h3 { scroll-margin-top:12px; }
+  #bookbox { white-space:pre-wrap; overflow-wrap:anywhere; max-height:320px; overflow:auto; }
+  footer { margin-top:22px; color:var(--soft); font-size:12px; border-top:1px solid #1c1c26; padding-top:12px; }
+  footer a, .siblings a, .note a { color:#cfc6ff; }
+  [hidden] { display:none !important; }
+  #chapters:empty { min-height: 100svh; } /* the chapters fill in from the ledger: hold their space so the cards below do not jump */
+</style><style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}</style>
+<script src="/visit.js" defer></script>
+
+<!-- modulepreload: tools/preload.mjs -->
+<link rel="modulepreload" href="/lib/books-shelf.js">
+<!-- /modulepreload -->
+</head>
+<body>
+<main>
+  <h1>Verse Bookshelf</h1>
+  <p class="sub">A sovereign book studio: every chapter is compiled from Verse's own lap inventory, so the volume is always what the site holds now. No subscriptions, no credits, no API keys, works offline.</p><!-- void-review: ok (prose: the page compiles with no API keys, not an identifier) -->
+  <p class="note">New here? Type <a data-not-studio href="/?ask=open%20the%20book">open the book</a> on the stage for the 3D edition, or start with a chapter below. Every number below is read from the site's own ledger; nothing here is written by hand.</p>
+
+  <section class="card" aria-labelledby="h-chapters">
+    <h2 id="h-chapters">Chapters</h2>
+    <p class="note" id="chaptersay">Reading the ledger.</p>
+    <nav class="chapter-nav" id="chapternav" aria-label="Jump to a chapter"></nav>
+    <div id="chapters"></div>
+  </section>
+
+  <section class="card" aria-labelledby="h-export">
+    <h2 id="h-export">Export or copy</h2>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button type="button" id="copymd" aria-label="Copy the whole book as Markdown">Copy Markdown</button>
+      <button type="button" id="exportmd" aria-label="Export book as Markdown">Export Markdown</button>
+      <button type="button" id="exporttxt" aria-label="Export book as text">Export text</button>
+    </div>
+    <pre id="bookbox" aria-label="Compiled book" style="min-height:120px;"></pre>
+  </section>
+
+  <p class="note">No credits, no subscriptions, no API keys. Everything compiled on this device from the ledger, with no page load of its own beyond the one small inventory file.</p><!-- void-review: ok (prose: the page compiles with no API keys, not an identifier) -->
+
+  <nav class="siblings" aria-label="Use together with">
+    <a href="/g/">Gist creator</a>
+    <a href="/word-count/">Word counter</a>
+    <a href="/notes/">Notes</a>
+    <a href="/translate/">Translate a chapter</a>
+    <a href="/?ask=verse%20bookshelf">See it as a card on the stage</a>
+    <a href="/">Back to Verse</a>
+  </nav>
+</main>
+<script type="module">
+  import { compileBook, bookText } from '/lib/books-shelf.js';
+  const $ = (id) => document.getElementById(id);
+  const get = (u) => fetch(u, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  async function draw() {
+    const book = compileBook(await get('/lap.items.json'));
+    const md = bookText(book);
+    const box = $('chapters'), nav = $('chapternav');
+    box.textContent = ''; nav.textContent = '';
+    if (!book.ok) $('chaptersay').textContent = 'The ledger did not answer just now. The chapters are still here; their numbers will be again when the ledger does.';
+    else $('chaptersay').textContent = book.totals.items + ' items in ' + book.totals.groups + ' chapters, read from the live lap inventory.';
+    for (const c of book.chapters) {
+      const a = document.createElement('a'); a.href = '#' + c.id; a.textContent = c.title; nav.appendChild(a);
+      const div = document.createElement('div'); div.className = 'chapter'; div.id = c.id;
+      const h = document.createElement('h3'); h.textContent = c.title;
+      if (book.ok && c.count) { const s = document.createElement('span'); s.className = 'count'; s.textContent = ' ' + c.count + (c.count === 1 ? ' item' : ' items'); h.appendChild(s); }
+      const plain = document.createElement('p'); plain.className = 'tome-sub'; plain.textContent = c.plain || '';
+      const p = document.createElement('p'); p.textContent = c.body;
+      div.append(h, plain, p); box.appendChild(div);
+    }
+    $('bookbox').textContent = md;
+    $('exportmd').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown' })); a.download = 'verse-book.md'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); };
+    $('exporttxt').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([md], { type: 'text/plain' })); a.download = 'verse-book.txt'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); };
+    $('copymd').onclick = async () => { const b = $('copymd'), was = b.textContent; try { await navigator.clipboard.writeText(md); b.textContent = 'Copied'; } catch (_) { b.textContent = 'Press Ctrl+C to copy'; } setTimeout(() => { b.textContent = was; }, 1500); };
+  }
+  draw();
+</script>
+<script>if ('serviceWorker' in navigator) addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => {}); });</script>
+<style>
+/* verse design loop: kept by tools/design-loop.mjs, measured before and after */
+#copymd { appearance:none;border:0;border-radius:12px;background:#1c2030;color:#f2f4fb }
+#exportmd { appearance:none;border:0;border-radius:12px;background:#1c2030;color:#f2f4fb }
+#exporttxt { appearance:none;border:0;border-radius:12px;background:#1c2030;color:#f2f4fb }
+/* end verse design loop */
+</style>
+</body>
+</html>

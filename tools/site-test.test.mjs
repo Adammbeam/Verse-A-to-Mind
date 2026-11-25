@@ -1,0 +1,112 @@
+// tools/site-test.mjs: the verdicts, the never-twice rules and the one-improvement-per-run choice, on fakes (no browser).
+import assert from 'node:assert/strict';
+import { judge, changedText, onceEach, robotsAllows, checkSteps, improve, inventory, variants, plan, remember, heldFpsFloor } from './site-test.mjs';
+
+let n = 0; const t = (name, f) => { f(); n++; };
+t('a refusal fails', () => assert.equal(judge({ ask: 'x' }, { text: "I don't know this yet" }).ok, false));
+t('an ask no skill caught fails', () => assert.match(judge({ ask: 'x' }, { text: 'x\nthinking…' }).why[0], /no skill/));
+t('a good answer passes', () => assert.equal(judge({ ask: 'what are you?', expect: { text: 'Verse' } }, { text: 'I am Verse' }).ok, true));
+t('console errors fail', () => assert.match(judge({ ask: 'x' }, { text: 'hi', errors: ['boom'] }).why[0], /console/));
+t('fps floor', () => assert.equal(judge({ ask: 'x', fps: true }, { text: 'hi', fps: 12 }, { fpsMin: 20 }).ok, false));
+t('missing selector', () => assert.equal(judge({ ask: 'x', expect: { selector: '.c' } }, { text: 'hi', selector: false }).ok, false));
+t('same key for same failure', () => assert.equal(judge({ ask: 'x', fps: true }, { text: 'a', fps: 12 }, { fpsMin: 20 }).key, judge({ ask: 'x', fps: true }, { text: 'a', fps: 9 }, { fpsMin: 20 }).key));
+t('never the same ask twice', () => assert.deepEqual(onceEach([{ ask: 'A' }, { ask: 'a ' }, { ask: 'b' }]).map((c) => c.ask), ['A', 'b']));
+t('robots', () => { const r = 'User-agent: *\nDisallow: /api/\nAllow: /api/ok'; assert.equal(robotsAllows(r, '/api/x'), false); assert.equal(robotsAllows(r, '/api/ok'), true); assert.equal(robotsAllows(r, '/'), true); assert.equal(robotsAllows('', '/x'), true);
+  assert.equal(robotsAllows('User-agent: other\nDisallow: /', '/'), true); });
+t('steps refuse submit and unknown kinds', () => { assert.match(checkSteps([{ do: 'press' }]), /one of/); assert.match(checkSteps([{ do: 'click', selector: 'button[type=submit]' }]), /never/); assert.equal(checkSteps([{ do: 'goto', url: '/' }, { do: 'expect', text: 'hi' }]), ''); });
+
+const suite = { limits: { fpsMin: 20, loadMs: 15000 }, cases: [{ ask: 'a' }], candidates: ['b'] };
+const ok = (ask, x = {}) => ({ ask, ok: true, why: [], key: ask + ' | ', chars: 50, ...x });
+t('a new failure is filed once', () => { const r = [{ ask: 'a', ok: false, why: ['refused'], key: 'a | refused' }];
+  assert.equal(improve(r, suite).kind, 'file'); assert.notEqual(improve(r, suite, ['a | refused']).kind, 'file'); });
+t('a missed new wording is taught first, once', () => { const r = [{ ask: 'yo calculator', ok: false, why: ['refused'], key: 'k', probe: true, variant: true, base: 'calculator', feature: 'skill:calc' }];
+  const a = improve(r, suite); assert.equal(a.kind, 'teach'); assert.equal(a.suite.teach[0].means, 'calculator'); assert.notEqual(improve(r, suite, [a.key]).kind, 'teach'); });
+t('a console error on a new wording is a fix, not a teach', () => assert.equal(improve([{ ask: 'yo x', ok: false, why: ['console: boom'], key: 'k2', probe: true, variant: true, base: 'x', feature: 'skill:x' }], suite).kind, 'file'));
+t('new ground that passed becomes a regression case', () => { const a = improve([ok('a'), ok('pull up calculator', { probe: true, feature: 'skill:calc' })], suite); assert.equal(a.kind, 'grow'); assert.equal(a.suite.cases.at(-1).ask, 'pull up calculator'); });
+t('all green grows by a candidate', () => { const a = improve([ok('a')], suite); assert.equal(a.kind, 'grow'); assert.deepEqual(a.suite.candidates, []); });
+t('then tightens fps, one step at a time', () => { const a = improve([ok('a', { fps: 60 })], { ...suite, candidates: [] }); assert.equal(a.kind, 'tighten'); assert.equal(a.suite.limits.fpsMin, 21); });
+t('with no floor yet, the first one is 90% of the slowest', () => assert.equal(improve([ok('a', { fps: 60 })], { ...suite, candidates: [], limits: {} }).suite.limits.fpsMin, 54));
+t('then load', () => { const a = improve([ok('a', { loadMs: 2000 })], { ...suite, candidates: [] }); assert.equal(a.suite.limits.loadMs, 2500); });
+t('then files the weakest answer once', () => { const s = { limits: {}, cases: [], candidates: [] }; const a = improve([ok('a', { chars: 9 }), ok('b')], s); assert.equal(a.key, 'weak | a');
+  assert.equal(improve([ok('a', { chars: 9 }), ok('b')], s, [a.key]).key, 'weak | b'); });
+
+const inv = inventory([{ name: 'calc', examples: ['open a calculator'] }, { name: 'none' }]);
+t('inventory has skills with examples and pages', () => assert.deepEqual(inv.map((f) => f.id), ['skill:calc', 'page:/store/', 'page:/films/']));
+t('variants are new wordings', () => { const v = variants('play voidquest', { solarquest: 'voidquest' }); assert.ok(v.includes("let's play voidquest")); assert.ok(v.includes('play solarquest')); assert.ok(!v.includes('play voidquest')); });
+t('plan takes least recently tested, untried asks, and never loops', () => {
+  let seen = {}; const asks = [];
+  for (let i = 0; i < 40; i++) { const p = plan(inv, seen, 2); if (!p.length) break; asks.push(...p.map((x) => x.ask)); seen = remember(seen, p, '2026-10-' + String(10 + i).padStart(2, '0') + 'T00:00:00Z'); }
+  assert.equal(new Set(asks).size, asks.length); assert.equal(plan(inv, seen, 2).length, 0); assert.ok(asks.includes('open a calculator') && asks.includes('/store/'));
+  const s2 = { features: { 'skill:calc': '2026-10-01T00:00:00Z', 'page:/store/': '2026-10-09T00:00:00Z' }, asks: [] }; assert.equal(plan(inv, s2, 1)[0].feature, 'page:/films/'); });
+t('priority skills go first', () => { const inv2 = inventory([{ name: 'a', examples: ['x a'] }, { name: 'b', examples: ['x b'] }, { name: 'c', examples: ['x c'] }], []);
+  assert.deepEqual(plan(inv2, {}, 2, {}, ['skill:c', 'skill:b']).map((p) => p.feature), ['skill:c', 'skill:b']); });
+t('a console error on two asks is one failure', () => assert.equal(judge({ ask: 'a' }, { text: 'x', errors: ['boom 1'] }).key, judge({ ask: 'b' }, { text: 'y', errors: ['boom 2'] }).key));
+t('a wording keeps the example it came from', () => { const inv3 = inventory([{ name: 'v', examples: ['play despacito', 'watch the moon landing'] }], []);
+  const p = plan(inv3, { asks: ['play despacito', 'watch the moon landing'] }, 1)[0]; assert.equal(p.base, 'play despacito');
+  const all = variants('play despacito'); const q = plan(inv3, { asks: ['play despacito', 'watch the moon landing', ...all] }, 1)[0]; assert.equal(q.base, 'watch the moon landing'); });
+t('an answer that replaces a status line in the middle of the page counts as something appearing', () => {
+t('a card-stats idle wait over the limit is flagged, never failed (asked by Verse: flag an idle wait over 500 ms)', () => {
+  const c = { ask: 'what are you?', expect: { text: 'Verse' } }, r = { text: 'I am Verse', errors: [] }, lim = { statsIdleMs: 500 };
+  const slow = judge(c, { ...r, statsIdleMs: 812 }, lim), quick = judge(c, { ...r, statsIdleMs: 120 }, lim), none = judge(c, { ...r, statsIdleMs: null }, lim);
+  assert.deepEqual(slow.flags, ['stats idle 812 ms > 500']); assert.equal(slow.ok, true, 'a flag is not a failure');
+  assert.deepEqual(quick.flags, []); assert.deepEqual(none.flags, [], 'no measure (stats not loaded yet) is no flag'); assert.deepEqual(judge(c, { ...r, statsIdleMs: 9000 }, {}).flags, [], 'no limit, no flag');
+});
+  const before = 'Verse\n↵\ntype anything\nsupport Verse', after = 'Verse\n↵\nthe void is empty · summon something first\nsupport Verse';
+  assert.match(changedText(before, after), /void is empty/); assert.equal(judge({ ask: 'bring it to the front' }, { text: changedText(before, after) }).ok, true);
+  assert.equal(changedText(before, before), ''); assert.equal(changedText('a', 'a then more'), ' then more'); });
+// issues #2222 #2225 #2228: on a loaded runner the first ask showed nothing for 4 s, then the answer; the page now says "waking up" at once,
+// and that line alone is never an answer: only the real card or text passes
+{ const { placeholderOnly } = await import('./site-test.mjs');
+  t('a working line alone is not an answer', () => { for (const a of ['yo play despacito', 'films by kurosawa pls', 'keep this idea: a stage that remembers | why: it makes coming back feel like home']) {
+    assert.match(judge({ ask: a }, { text: 'waking up' }).why[0], /only "waking up" appeared/); assert.match(judge({ ask: a }, { text: ' thinking… \n' }).why[0], /only/);
+    assert.equal(judge({ ask: a }, { text: 'waking up', newThings: 1 }).ok, true, 'a new card on the stage is the answer');
+    assert.equal(judge({ ask: a }, { text: 'waking up\nDespacito · Luis Fonsi' }).ok, true); assert.match(judge({ ask: a }, { text: '' }).why[0], /nothing appeared/); } });
+  t('placeholderOnly reads every line', () => { assert.equal(placeholderOnly('waking up\n…'), true); assert.equal(placeholderOnly('waking up\nfilms by Akira Kurosawa'), false); assert.equal(placeholderOnly(''), false); }); }
+console.log('site-test: ' + n + ' checks passed');
+
+// failedOf names the asks that failed and the first reason each, at most 12 (owner, 2026-10-19: the tester card only counted them)
+{ const { failedOf } = await import('./site-test.mjs');
+  const r = [{ ask: 'what are you?', ok: false, why: ['missing text /Verse/', 'slow'] }, { ask: 'play chess', ok: true, why: [] }];
+  assert.deepEqual(failedOf(r), [{ ask: 'what are you?', why: 'missing text /Verse/' }]);
+  assert.equal(failedOf(Array.from({ length: 20 }, (_, i) => ({ ask: 'a' + i, ok: false, why: [] }))).length, 12); }
+
+// issue #2328: a load over the ceiling is timed again alone, after the pool; the faster load counts, and a slow site stays slow twice
+{ const { recheckSlowLoads, judge: j } = await import('./site-test.mjs');
+  const lim = { loadMs: 1200 }, c = { ask: 'yo new automation' }, r = { text: 'Your automations\nnew automation', errors: [], loadMs: 1309 };
+  const slow = { ...j(c, r, lim), loadMs: 1309, chars: 30, loadRecheck: { c, r } };
+  assert.equal(slow.ok, false);
+  const asked = [], fast = await recheckSlowLoads([slow, null, { ...j({ ask: 'ok' }, { text: 'hi', loadMs: 400 }, lim), loadMs: 400 }], lim, async (p) => { asked.push(p); return 380; });
+  assert.deepEqual(asked, [undefined], 'only the slow one is loaded again');
+  assert.equal(fast[0].ok, true); assert.equal(fast[0].loadMs, 380); assert.equal(fast[0].chars, 30); assert.equal('loadRecheck' in fast[0], false);
+  assert.equal(fast[2].loadMs, 400);
+  const still = await recheckSlowLoads([{ ...slow }], lim, async () => 1500);
+  assert.equal(still[0].ok, false); assert.equal(still[0].loadMs, 1309); assert.match(still[0].why.join(), /load 1309 ms > 1200/);
+  // #2364: one ask's home page load slow twice while the run's median home page load is fast is the network's tail, not a slow page
+  const many = [{ ...slow, loadRecheck: { c, r: { ...r, loadMs: 1233 } } }, ...[300, 420, 380, 500].map((ms) => ({ ...j({ ask: 'x' + ms }, { text: 'hi', loadMs: ms }, lim), loadMs: ms }))];
+  const tail = await recheckSlowLoads(many, lim, async () => 1240);
+  assert.equal(tail[0].ok, true, 'a fast page across the run is not filed for one slow load'); assert.equal(tail[0].loadMs, 420);
+  const slowPage = await recheckSlowLoads([{ ...slow }, { ...slow }, { ...slow }], lim, async () => 1300);
+  assert.equal(slowPage.every((x) => !x.ok), true, 'a page slow across the run and alone still fails');
+  const { medianLoads } = await import('./site-test.mjs');
+  assert.deepEqual(medianLoads([{ loadMs: 100 }, { loadMs: 300 }, { path: '/films/', loadMs: 900 }, null]), { '/': 300, '/films/': 900 }, 'each page has its own median');
+  const broke = await recheckSlowLoads([{ ...slow }], lim, async () => { throw new Error('timeout'); });
+  assert.equal(broke[0].ok, false, 'a second load that fails keeps the first verdict');
+  const src = (await import('node:fs')).readFileSync(new URL('./site-test.mjs', import.meta.url), 'utf8');
+  assert.equal((src.match(/loadMs = Math\.min\(loadMs, Date\.now\(\) - t1\)/g) || []).length, 0, 'the second load is not timed inside the pool');
+  assert.match(src, /await Promise\.all\(running\);\n[^\n]*\n\s*await recheckSlowLoads\(slots, suite\.limits/, 'the recheck runs after every case is done'); }
+// lists run 15 (2026-11-09): the frame floor follows what the runner holds, never one lucky run
+const runRow = (fails) => ({ at: 'x', passed: 1, of: 2, failed: fails.map((f) => ({ ask: 'play chess', why: 'fps ' + f + ' < 7' })) });
+t('a floor that failed in 8 of the last 10 runs comes down to what the slow cases keep', () => {
+  const h = [...Array(8)].map((_, i) => runRow([2 + (i % 3), 1 + (i % 2)])).concat([runRow([]), runRow([])]);
+  assert.equal(heldFpsFloor(h, 7), 1);
+  const a = improve([ok('a', { fps: 30 })], { ...suite, candidates: [], limits: { fpsMin: 7 } }, [], h);
+  assert.equal(a.kind, 'tighten'); assert.equal(a.suite.limits.fpsMin, 1); });
+t('a floor that mostly holds stays, fewer than 10 runs never move it, and a run with the site down counts for nothing', () => {
+  assert.equal(heldFpsFloor([...Array(8)].map(() => runRow([2])).concat([...Array(6)].map(() => ({ at: 'x', passed: 0, of: 100, failed: [] }))), 7), null);
+  assert.equal(heldFpsFloor([...Array(10)].map((_, i) => runRow(i < 3 ? [2] : [])), 7), null);
+  assert.equal(heldFpsFloor([...Array(9)].map(() => runRow([2])), 7), null); });
+t('the floor rises one step, and only after 10 steady runs', () => {
+  const steady = [...Array(10)].map(() => runRow([]));
+  assert.equal(improve([ok('a', { fps: 60 })], { ...suite, candidates: [], limits: { fpsMin: 5 } }, [], steady).suite.limits.fpsMin, 6);
+  const shaky = steady.slice(0, 9).concat(runRow([3]));
+  assert.notEqual(improve([ok('a', { fps: 60 })], { ...suite, candidates: [], limits: { fpsMin: 5 } }, [], shaky).kind, 'tighten'); });

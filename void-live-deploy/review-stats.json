@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-11T16:31:07.324Z",
+  "since": "30d",
+  "from": 1,
+  "to": 520,
+  "prs": 495,
+  "rulesFlagged": 10,
+  "closerFound": 266,
+  "unplaced": 36,
+  "empty": 236,
+  "bySymbol": 52,
+  "falseDropped": 7,
+  "learned": 3,
+  "learnedFromExtras": 3,
+  "extrasFindings": 85,
+  "extrasRate": 37
+}

@@ -1,0 +1,306 @@
+{
+ "at": "2026-11-18T14:01Z",
+ "source": "verse",
+ "note": "Verse's own count (/api/visit, a beacon per page load on the stage); Cloudflare unreadable: CLOUDFLARE_API_TOKEN: cannot look up the zone (HTTP 200; needs Zone > Zone > Read or CLOUDFLARE_ZONE_ID)",
+ "week": {
+  "since": "2026-11-12",
+  "unique": true,
+  "people": 81,
+  "views": 370,
+  "ours": 6651,
+  "bots": 0
+ },
+ "days": [
+  {
+   "day": "2026-10-26",
+   "all": 1100,
+   "people": 54,
+   "ours": 1046,
+   "bots": 0,
+   "uniquePeople": 10
+  },
+  {
+   "day": "2026-10-27",
+   "all": 947,
+   "people": 11,
+   "ours": 936,
+   "bots": 0,
+   "uniquePeople": 9
+  },
+  {
+   "day": "2026-10-28",
+   "all": 2217,
+   "people": 121,
+   "ours": 2096,
+   "bots": 0,
+   "uniquePeople": 9
+  },
+  {
+   "day": "2026-10-29",
+   "all": 3453,
+   "people": 45,
+   "ours": 3408,
+   "bots": 0,
+   "uniquePeople": 3
+  },
+  {
+   "day": "2026-10-30",
+   "all": 3853,
+   "people": 99,
+   "ours": 3754,
+   "bots": 0,
+   "uniquePeople": 27
+  },
+  {
+   "day": "2026-10-31",
+   "all": 2750,
+   "people": 29,
+   "ours": 2721,
+   "bots": 0,
+   "uniquePeople": 4
+  },
+  {
+   "day": "2026-11-01",
+   "all": 2479,
+   "people": 11,
+   "ours": 2468,
+   "bots": 0,
+   "uniquePeople": 8
+  },
+  {
+   "day": "2026-11-02",
+   "all": 2595,
+   "people": 32,
+   "ours": 2562,
+   "bots": 1,
+   "uniquePeople": 4
+  },
+  {
+   "day": "2026-11-03",
+   "all": 2734,
+   "people": 10,
+   "ours": 2723,
+   "bots": 1,
+   "uniquePeople": 9
+  },
+  {
+   "day": "2026-11-04",
+   "all": 4147,
+   "people": 87,
+   "ours": 4060,
+   "bots": 0,
+   "uniquePeople": 30
+  },
+  {
+   "day": "2026-11-05",
+   "all": 4154,
+   "people": 262,
+   "ours": 3892,
+   "bots": 0,
+   "uniquePeople": 22
+  },
+  {
+   "day": "2026-11-06",
+   "all": 5906,
+   "people": 204,
+   "ours": 5702,
+   "bots": 0,
+   "uniquePeople": 40
+  },
+  {
+   "day": "2026-11-07",
+   "all": 3356,
+   "people": 57,
+   "ours": 3299,
+   "bots": 0,
+   "uniquePeople": 5
+  },
+  {
+   "day": "2026-11-08",
+   "all": 824,
+   "people": 17,
+   "ours": 807,
+   "bots": 0,
+   "uniquePeople": 2
+  },
+  {
+   "day": "2026-11-09",
+   "all": 4180,
+   "people": 28,
+   "ours": 4152,
+   "bots": 0,
+   "uniquePeople": 4
+  },
+  {
+   "day": "2026-11-10",
+   "all": 3466,
+   "people": 55,
+   "ours": 3411,
+   "bots": 0,
+   "uniquePeople": 23
+  },
+  {
+   "day": "2026-11-11",
+   "all": 3511,
+   "people": 93,
+   "ours": 3418,
+   "bots": 0,
+   "uniquePeople": 10
+  },
+  {
+   "day": "2026-11-12",
+   "all": 3536,
+   "people": 58,
+   "ours": 3478,
+   "bots": 0,
+   "uniquePeople": 27
+  },
+  {
+   "day": "2026-11-13",
+   "all": 1024,
+   "people": 51,
+   "ours": 973,
+   "bots": 0,
+   "uniquePeople": 15
+  },
+  {
+   "day": "2026-11-14",
+   "all": 519,
+   "people": 53,
+   "ours": 466,
+   "bots": 0,
+   "uniquePeople": 5
+  },
+  {
+   "day": "2026-11-15",
+   "all": 485,
+   "people": 29,
+   "ours": 456,
+   "bots": 0,
+   "uniquePeople": 11
+  },
+  {
+   "day": "2026-11-16",
+   "all": 397,
+   "people": 13,
+   "ours": 384,
+   "bots": 0,
+   "uniquePeople": 7
+  },
+  {
+   "day": "2026-11-17",
+   "all": 850,
+   "people": 138,
+   "ours": 712,
+   "bots": 0,
+   "uniquePeople": 11
+  },
+  {
+   "day": "2026-11-18",
+   "all": 210,
+   "people": 28,
+   "ours": 182,
+   "bots": 0,
+   "uniquePeople": 5
+  }
+ ],
+ "pages": [
+  {
+   "k": "/",
+   "n": 752
+  },
+  {
+   "k": "/lab/",
+   "n": 242
+  },
+  {
+   "k": "/team/",
+   "n": 126
+  },
+  {
+   "k": "/brain/",
+   "n": 44
+  },
+  {
+   "k": "/films/",
+   "n": 44
+  },
+  {
+   "k": "/tools/",
+   "n": 33
+  },
+  {
+   "k": "/conquered/",
+   "n": 28
+  },
+  {
+   "k": "/treasury/",
+   "n": 21
+  },
+  {
+   "k": "/starboard/",
+   "n": 20
+  },
+  {
+   "k": "/podcasts/",
+   "n": 18
+  }
+ ],
+ "referrers": [
+  {
+   "k": "google.com",
+   "n": 34
+  },
+  {
+   "k": "bing.com",
+   "n": 25
+  },
+  {
+   "k": "github.com",
+   "n": 24
+  }
+ ],
+ "countries": [
+  {
+   "k": "US",
+   "n": 1509
+  },
+  {
+   "k": "TR",
+   "n": 11
+  },
+  {
+   "k": "BR",
+   "n": 10
+  },
+  {
+   "k": "CN",
+   "n": 9
+  },
+  {
+   "k": "NL",
+   "n": 5
+  },
+  {
+   "k": "GB",
+   "n": 4
+  },
+  {
+   "k": "CA",
+   "n": 3
+  },
+  {
+   "k": "DE",
+   "n": 3
+  },
+  {
+   "k": "EG",
+   "n": 2
+  },
+  {
+   "k": "FR",
+   "n": 2
+  }
+ ],
+ "line": "People this week: 81 (370 visits; counted by Verse itself, no cookies, our own runs and bots taken out)"
+}

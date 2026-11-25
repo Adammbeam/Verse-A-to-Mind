@@ -1,0 +1,443 @@
+{
+  "_": "pieces autosalvage has migrated into Verse: id -> where it landed, the test that proves it, the PR",
+  "pieces": {
+    "archive/repos/hold/apps/bridge": {
+      "target": "bot",
+      "into": "/bots/ (cra-clock)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/ALPHA/packages/alpha-core": {
+      "target": "bot",
+      "into": "/bots/ (change-curator)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/fire-ember-mountain-cabin/src/lib": {
+      "target": "bot",
+      "into": "/bots/ (retry-backoff)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/the-void/src/lib": {
+      "target": "bot",
+      "into": "/bots/ (wiki-links)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com": {
+      "target": "bot",
+      "into": "/bots/ (header-grader)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/adventure-lab": {
+      "target": "bot",
+      "into": "/bots/ (atari-playfield)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/HomeBase-/lib/kraken": {
+      "target": "bot",
+      "into": "/bots/ (secret-sniffer)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/the-void": {
+      "target": "bot",
+      "into": "/bots/ (journal-day)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "outside:public-apis/public-apis": {
+      "target": "bot",
+      "into": "/bots/ (free-api-finder)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/ALPHA": {
+      "target": "bot",
+      "into": "/bots/ (proposal-checker)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/the-void/src/components": {
+      "target": "bot",
+      "into": "/bots/ (note-search)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/hold/apps/void": {
+      "target": "bot",
+      "into": "/bots/ (intent-router)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/021-pwa-install-and-offline-ledger": {
+      "target": "bot",
+      "into": "/bots/ (pwa-manifest-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/028-attested-security-txt": {
+      "target": "bot",
+      "into": "/bots/ (security-txt-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/atomarcade-bridge": {
+      "target": "bot",
+      "into": "/bots/ (ollama-call)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/ALPHA/apps/alpha-orchestrator": {
+      "target": "bot",
+      "into": "/bots/ (agent-transition)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/auto-deploy-action": {
+      "target": "bot",
+      "into": "/bots/ (deploy-command)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/023-agentic-personalization-with-hold-gate": {
+      "target": "bot",
+      "into": "/bots/ (facet-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/030-attested-contact-channel": {
+      "target": "bot",
+      "into": "/bots/ (contact-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/039-attested-permissions-policy": {
+      "target": "bot",
+      "into": "/bots/ (permissions-policy-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "outside:lineofflight/frankfurter": {
+      "target": "data",
+      "into": "/bots/ (currency pairs)",
+      "test": "tools/open-data.test.mjs",
+      "pr": null
+    },
+    "outside:nager/Nager.Date": {
+      "target": "data",
+      "into": "/bots/ (public holidays)",
+      "test": "tools/open-data.test.mjs",
+      "pr": null
+    },
+    "outside:wikimedia/wikidata-data": {
+      "target": "data",
+      "into": "/bots/ (country facts)",
+      "test": "tools/open-data.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/041-attested-open-graph-cards": {
+      "target": "bot",
+      "into": "/bots/ (og-card-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/044-attested-referrer-policy": {
+      "target": "bot",
+      "into": "/bots/ (referrer-policy-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/045-attested-strict-transport-security": {
+      "target": "bot",
+      "into": "/bots/ (hsts-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/046-attested-cross-origin-isolation": {
+      "target": "bot",
+      "into": "/bots/ (isolation-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/042-attested-subresource-integrity": {
+      "target": "bot",
+      "into": "/bots/ (sri-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/037-attested-api-catalog": {
+      "target": "bot",
+      "into": "/bots/ (api-catalog-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "outside:jsdelivr/jsdelivr": {
+      "target": "tool",
+      "into": "/bots/ (jsdelivr-url)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/047-attested-heading-permalinks": {
+      "target": "bot",
+      "into": "/bots/ (permalink-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/007-attested-status-page": {
+      "target": "bot",
+      "into": "/bots/ (status-seal-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/043-attested-subprocessors": {
+      "target": "bot",
+      "into": "/bots/ (subprocessors-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/057-local-weak-signal-ledger": {
+      "target": "bot",
+      "into": "/bots/ (weak-signal-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "outside:simple-icons/simple-icons": {
+      "target": "data",
+      "into": "/bots/ (simple-icon-url)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "outside:tabler/tabler-icons": {
+      "target": "data",
+      "into": "/bots/ (tabler-icon-url)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "outside:open-meteo/open-meteo": {
+      "target": "tool",
+      "into": "/bots/ (api-weather-now)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "archive/script_0.js": {
+      "target": "bot",
+      "into": "/bots/ (void-look)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "outside:dwyl/english-words": {
+      "target": "data",
+      "into": "/bots/ (english-words-url)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "outside:mledoze/countries": {
+      "target": "data",
+      "into": "/bots/ (countries-url)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/034-attested-atom-feed": {
+      "target": "bot",
+      "into": "/bots/ (atom-feed-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/035-attested-gpc-well-known": {
+      "target": "bot",
+      "into": "/bots/ (gpc-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/036-attested-tdm-reservation": {
+      "target": "bot",
+      "into": "/bots/ (tdm-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/ALPHA/apps/frontend": {
+      "target": "bot",
+      "into": "/bots/ (provider-status)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/051-attested-redirect-catalog": {
+      "target": "bot",
+      "into": "/bots/ (redirect-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/033-attested-humans-txt": {
+      "target": "bot",
+      "into": "/bots/ (humans-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/094-local-gap-not-handoff": {
+      "target": "bot",
+      "into": "/bots/ (gap-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "outside:ideal-postcodes/postcodes.io": {
+      "target": "data",
+      "into": "/bots/ (api-uk-postcode)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:art-institute-of-chicago/api": {
+      "target": "data",
+      "into": "/bots/ (api-artic-artwork)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:metmuseum/open-access": {
+      "target": "data",
+      "into": "/bots/ (api-met-object)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:metabrainz/musicbrainz": {
+      "target": "data",
+      "into": "/bots/ (api-musicbrainz-artist)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:jacebrowning/memegen": {
+      "target": "tool",
+      "into": "/bots/ (api-meme-template)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:worldbank/open-data": {
+      "target": "data",
+      "into": "/bots/ (api-world-country)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:fda/openfda": {
+      "target": "data",
+      "into": "/bots/ (api-drug-label)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:nlm/rxnorm": {
+      "target": "data",
+      "into": "/bots/ (api-drug-rxcui)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:police-uk/data.police.uk": {
+      "target": "data",
+      "into": "/bots/ (api-uk-police)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/glassbox": {
+      "target": "bot",
+      "into": "/bots/ (glassbox-claim)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/glassbox/github-inert/workflows/promote-on-merge.yml": {
+      "target": "bot",
+      "into": "/bots/ (glassbox-promote)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/wix/src/backend": {
+      "target": "bot",
+      "into": "/bots/ (velo-endpoint)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/049-attested-external-link-policy": {
+      "target": "bot",
+      "into": "/bots/ (external-link-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/048-attested-breadcrumb-trail": {
+      "target": "bot",
+      "into": "/bots/ (breadcrumb-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/050-attested-canonical-identity": {
+      "target": "bot",
+      "into": "/bots/ (canonical-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/005-copy-clipboard-with-attested-toast": {
+      "target": "bot",
+      "into": "/bots/ (copy-receipt)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/022-voice-query-to-plan": {
+      "target": "bot",
+      "into": "/bots/ (voice-plan)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/024-functional-3d-run-graph": {
+      "target": "bot",
+      "into": "/bots/ (run-graph-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/073-local-bin-not-arrow": {
+      "target": "bot",
+      "into": "/bots/ (same-bin)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/072-local-pair-recall-gap": {
+      "target": "bot",
+      "into": "/bots/ (recall-gap)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/020-answer-ready-modular-blocks": {
+      "target": "bot",
+      "into": "/bots/ (answer-block-check)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "archive/repos/a-to-mind.com/drafts/018-live-readonly-run-preview": {
+      "target": "bot",
+      "into": "/bots/ (run-replay)",
+      "test": "tools/salvaged-bots.test.mjs",
+      "pr": null
+    },
+    "outside:ourresearch/openalex-api-tutorials": {
+      "target": "data",
+      "into": "/bots/ (api-openalex-work)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:ncbi/pubchem": {
+      "target": "data",
+      "into": "/bots/ (api-pubchem-compound)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:nih/clinicaltrials-v2": {
+      "target": "data",
+      "into": "/bots/ (api-clinical-trial)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:CrossRef/rest-api-doc": {
+      "target": "data",
+      "into": "/bots/ (api-paper-finder)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    }
+  }
+}

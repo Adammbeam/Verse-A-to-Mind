@@ -1,0 +1,457 @@
+// tools/verse-coder.mjs: Verse's own coding agent, driven by a fake model that scripts its tool calls, in a throwaway repo.
+// Positive and negative controls (docs/GATE-STANDARDS.md): it fixes a seeded red check; it refuses to weaken a test, to write
+// outside the repo or into .env and workflows; it stops at the turn and token caps and puts the tree back; Verse's review sends
+// a risky diff back; the model stack falls through to the next free provider; no key is ever in a command or in the source.
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtempSync, writeFileSync, readFileSync, mkdirSync, existsSync, symlinkSync } from 'node:fs';
+import { join } from 'node:path';
+import { tmpdir } from 'node:os';
+import { spawnSync } from 'node:child_process';
+import { runCoder, parseAction, pathRefusal, diffFiles, weakening, checkScripts, providersFrom, stackModel, scriptedModel, keyless, windowOf, trailOf, toolTally, WINDOW, LIMITS, budgetNote, BUDGET, KEY_NAMES, outlineOf, regionsOf, applyLines, functionLossOk, HUGE, nearMiss, searchShape, nameTokens } from './verse-coder.mjs';
+import { scanDiff, buildPrompt } from './verse-loop.mjs';
+
+const NOCTX = (() => { const e = { ...process.env }; delete e.NODE_TEST_CONTEXT; return e; })(); // a node --test inside a test reports to the outer runner unless this goes
+const sh = (cwd, ...a) => { const r = spawnSync('git', a, { cwd, encoding: 'utf8' }); if (r.status) throw new Error(a.join(' ') + ': ' + r.stderr); return r.stdout.trim(); };
+const ADD_TEST = "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { add } from '../src/add.mjs';\n\ntest('add', () => {\n  assert.equal(add(2, 2), 4);\n  assert.equal(add(1, 0), 1);\n});\n";
+/** a repo whose check "add" is red: src/add.mjs subtracts */
+function repo() {
+  const dir = mkdtempSync(join(tmpdir(), 'vc-test-')), work = join(dir, 'work');
+  mkdirSync(join(work, 'src'), { recursive: true }); mkdirSync(join(work, 'tools')); mkdirSync(join(work, '.github/workflows'), { recursive: true });
+  sh(work, 'init', '-q', '-b', 'main'); sh(work, 'config', 'user.email', 'coder@example.invalid'); sh(work, 'config', 'user.name', 'coder test');
+  writeFileSync(join(work, 'src/add.mjs'), '// adds two numbers\nexport function add(a, b) {\n  return a - b;\n}\n');
+  writeFileSync(join(work, 'tools/add.test.mjs'), ADD_TEST);
+  writeFileSync(join(work, '.github/workflows/ci.yml'), 'on: push\n');
+  writeFileSync(join(work, 'README.md'), '# r\n');
+  sh(work, 'add', '-A'); sh(work, 'commit', '-q', '-m', 'start');
+  return { dir, work };
+}
+const CHECKS = [{ name: 'add', cmd: 'node --test tools/add.test.mjs' }];
+const FIX = '--- a/src/add.mjs\n+++ b/src/add.mjs\n@@ -1,4 +1,4 @@\n // adds two numbers\n export function add(a, b) {\n-  return a - b;\n+  return a + b;\n }\n';
+const call = (tool, args = {}) => JSON.stringify({ tool, ...args });
+const run = (s, replies, extra = {}) => runCoder({ root: s.work, prompt: 'Make the check add green.', checks: CHECKS, target: 'add', model: scriptedModel(replies), env: { PATH: process.env.PATH }, ...extra });
+
+test('it fixes a seeded red check: search, read, edit, check, finish, and Verse\'s review passes the diff', async () => {
+  const s = repo();
+  assert.notEqual(spawnSync(process.execPath, ['--test', 'tools/add.test.mjs'], { cwd: s.work, env: NOCTX }).status, 0, 'red to start');
+  const r = await run(s, [call('search', { pattern: 'a - b' }), call('read', { path: 'src/add.mjs' }), 'Here is the fix.\n' + call('edit') + '\n```diff\n' + FIX + '```', call('check', { name: 'add' }), call('finish', { summary: 'add adds' })]);
+  assert.equal(r.outcome, 'done', r.why + JSON.stringify(r.log));
+  assert.deepEqual(r.files, ['src/add.mjs']);
+  assert.match(readFileSync(join(s.work, 'src/add.mjs'), 'utf8'), /a \+ b/);
+  assert.match(r.log[0].result, /src\/add\.mjs:3/); assert.match(r.log[3].result, /^PASS add/);
+  assert.equal(spawnSync(process.execPath, ['--test', 'tools/add.test.mjs'], { cwd: s.work, env: NOCTX }).status, 0, 'green after');
+  assert.equal(sh(s.work, 'log', '--oneline').split('\n').length, 1, 'no commit: the loop commits');
+});
+
+test('it refuses to weaken a test: fewer assertions, a skip, a deleted test; the test stays as it was', async () => {
+  const s = repo();
+  const drop = '--- a/tools/add.test.mjs\n+++ b/tools/add.test.mjs\n@@ -5,4 +5,3 @@\n test(\'add\', () => {\n-  assert.equal(add(2, 2), 4);\n   assert.equal(add(1, 0), 1);\n });\n';
+  const skip = '--- a/tools/add.test.mjs\n+++ b/tools/add.test.mjs\n@@ -4,3 +4,3 @@\n \n-test(\'add\', () => {\n+test.skip(\'add\', () => {\n   assert.equal(add(2, 2), 4);\n';
+  const del = '--- a/tools/add.test.mjs\n+++ /dev/null\n@@ -1,8 +0,0 @@\n' + ADD_TEST.trimEnd().split('\n').map((l) => '-' + l).join('\n') + '\n';
+  const r = await run(s, [call('edit', { diff: drop }), call('edit', { diff: skip }), call('edit', { diff: del }), call('finish')]);
+  assert.match(r.log[0].result, /refused: this edit weakens tools\/add\.test\.mjs \(fewer assertions/);
+  assert.match(r.log[1].result, /refused: .*adds a skip/);
+  assert.match(r.log[2].result, /refused: tools\/add\.test\.mjs is a test or a check: never deleted/);
+  assert.equal(r.outcome, 'nothing');
+  assert.equal(readFileSync(join(s.work, 'tools/add.test.mjs'), 'utf8'), ADD_TEST, 'untouched');
+  assert.deepEqual(weakening(ADD_TEST, ADD_TEST.replace('assert.equal(add(1, 0), 1);', 'assert.ok(true);')), ['adds an assertion that cannot fail']);
+  assert.deepEqual(weakening(ADD_TEST, ADD_TEST.replace("test('add', () => {", "test('add', () => {\n  process.exit(0);")), ['adds an early clean exit']);
+  assert.deepEqual(weakening(ADD_TEST, ADD_TEST.replace('add(1, 0), 1);', 'add(1, 0), 1);\n  assert.equal(add(0, 0), 0);')), [], 'a stronger test is fine');
+  assert.deepEqual(weakening(ADD_TEST, null), ['deletes the test']);
+  assert.ok(checkScripts([{ cmd: 'node tools/guard-source.mjs && python3 ./ci/x.py' }]).has('ci/x.py'), 'a check\'s own script is guarded like a test');
+});
+
+test('a workflow is read like any file, so a repair of a red loop can see what it runs, and is never written (#2252)', async () => {
+  const s = repo();
+  const r = await run(s, [call('read', { path: '.github/workflows/ci.yml' }), call('replace', { path: '.github/workflows/ci.yml', old: 'on: push', new: 'on: [push]' }), call('finish')]);
+  assert.doesNotMatch(r.log[0].result, /refused/); assert.match(r.log[0].result, /on: push/);
+  assert.match(r.log[1].result, /refused: \.github\/workflows\/ci\.yml is a workflow/);
+  assert.equal(readFileSync(join(s.work, '.github/workflows/ci.yml'), 'utf8'), 'on: push\n');
+  assert.equal(pathRefusal('.github/workflows/ci.yml', s.work), '');
+  assert.match(pathRefusal('.github/actions/x/action.yml', s.work, { write: true }), /is a workflow: never/);
+});
+
+test('it refuses a path outside the repo, .env, workflows, secrets and its own guards; nothing is written there', async () => {
+  const s = repo();
+  const out = '--- /dev/null\n+++ b/../outside.txt\n@@ -0,0 +1 @@\n+escaped\n';
+  const env = '--- /dev/null\n+++ b/.env\n@@ -0,0 +1 @@\n+A=1\n';
+  const wf = '--- a/.github/workflows/ci.yml\n+++ b/.github/workflows/ci.yml\n@@ -1 +1 @@\n-on: push\n+on: [push, pull_request]\n';
+  const r = await run(s, [call('edit', { diff: out }), call('read', { path: '/etc/passwd' }), call('read', { path: '../../etc/hostname' }), call('edit', { diff: env }), call('edit', { diff: wf }), call('list', { path: '..' }), call('finish')]);
+  assert.match(r.log[0].result, /refused: \.\.\/outside\.txt is outside the repo/);
+  assert.match(r.log[1].result, /refused: .*not a path inside the repo/);
+  assert.match(r.log[2].result, /refused: .*outside the repo/);
+  assert.match(r.log[3].result, /refused: \.env holds secrets/);
+  assert.match(r.log[4].result, /refused: \.github\/workflows\/ci\.yml is a workflow/);
+  assert.match(r.log[5].result, /refused/);
+  assert.equal(r.outcome, 'nothing');
+  assert.ok(!existsSync(join(s.dir, 'outside.txt')) && !existsSync(join(s.work, '.env')));
+  assert.equal(readFileSync(join(s.work, '.github/workflows/ci.yml'), 'utf8'), 'on: push\n');
+  for (const p of ['config/secrets.json', 'deploy/key.pem', '.dev.vars', '.git/config', 'node_modules/x/index.js']) assert.ok(pathRefusal(p, s.work, { write: true }), p);
+  for (const p of ['tools/verse-coder.mjs', 'tools/verse-loop.checks.json', 'void-live-deploy/lib/patch-guard.js']) assert.match(pathRefusal(p, s.work, { write: true }), /own guards/);
+  assert.equal(pathRefusal('.env.example', s.work, { write: true }), '');
+  assert.equal(pathRefusal('src/add.mjs', s.work, { write: true }), '');
+  assert.match(diffFiles('rename from a\nrename to b\n').refusal, /renames/);
+});
+
+test('it stops at the turn cap and at the token cap, and puts back what it changed', async () => {
+  const s = repo();
+  let r = await run(s, [call('edit', { diff: FIX }), call('list', { path: 'src' })], { limits: { turns: 4 } });
+  assert.equal(r.outcome, 'turn-cap'); assert.equal(r.turns, 4); assert.match(r.why, /turn cap \(4\)/);
+  assert.match(readFileSync(join(s.work, 'src/add.mjs'), 'utf8'), /a - b/, 'the edit is put back');
+  assert.equal(sh(s.work, 'status', '--porcelain'), '');
+  const big = async () => ({ text: call('list'), tokens: 600 });
+  r = await runCoder({ root: s.work, prompt: 'x', checks: CHECKS, model: big, limits: { tokens: 1000 } });
+  assert.equal(r.outcome, 'token-cap'); assert.equal(r.turns, 2);
+  assert.match(r.why, /token cap \(1000\) after 2 turns: list, list$/, 'a stop at a cap says where the turns went');
+});
+
+test('the read spiral is stopped: a range read twice is refused, and a run that only reads stops at the read cap, not the turn cap (2026-11-17)', async () => {
+  // three laps paused the loop for 6 hours: the coder re-read the same file every turn (watch-build.js, photos.js, recipe.js)
+  assert.equal(LIMITS.reads, 12); assert.ok(LIMITS.reads < LIMITS.turns, 'the read cap stops a run well before the turn cap');
+  const s = repo();
+  // different ranges of the same file are fine; the same range twice is refused
+  let r = await run(s, [call('read', { path: 'src/add.mjs', from: 1, to: 2 }), call('read', { path: 'src/add.mjs', from: 3, to: 4 }), call('read', { path: 'src/add.mjs', from: 1, to: 2 }), call('finish')]);
+  assert.doesNotMatch(r.log[0].result, /already read/); assert.doesNotMatch(r.log[1].result, /already read/);
+  assert.match(r.log[2].result, /already read: src\/add\.mjs lines 1-2/);
+  // a write attempt clears the memory: a failed diff tells the model to read again, so the re-read is allowed
+  const bad = '--- a/src/add.mjs\n+++ b/src/add.mjs\n@@ -1,4 +1,4 @@\n // adds two numbers\n export function add(a, b) {\n-  return a * b;\n+  return a + b;\n }\n';
+  r = await run(s, [call('read', { path: 'src/add.mjs' }), call('edit', { diff: bad }), call('read', { path: 'src/add.mjs' }), call('finish')]);
+  assert.match(r.log[1].result, /does not apply/);
+  assert.doesNotMatch(r.log[2].result, /already read/, 'after a failed edit the file may be read again');
+  // a run that only reads stops at the read cap (a change it checked green after its last edit is still kept)
+  const onlyReads = async () => ({ text: call('read', { path: 'src/add.mjs', from: 1, to: 2 }) });
+  const c = await runCoder({ root: s.work, prompt: 'x', checks: CHECKS, model: onlyReads, limits: { turns: 30 } });
+  assert.equal(c.outcome, 'read-cap', c.why); assert.equal(c.turns, LIMITS.reads);
+  assert.match(c.why, /no edit and no check/); assert.match(c.why, /after \d+ turns: read src\/add\.mjs/);
+  // a check resets the count: read, check, read, check ... never reaches the read cap before the turn cap
+  let i = 0;
+  const readCheck = async () => ({ text: ++i % 2 ? call('read', { path: 'src/add.mjs', from: 1, to: 2 }) : call('check', { name: 'add' }) });
+  const rc = await runCoder({ root: s.work, prompt: 'x', checks: CHECKS, model: readCheck, limits: { turns: 6 } });
+  assert.equal(rc.outcome, 'turn-cap', rc.why); assert.equal(rc.turns, 6);
+});
+
+test('each turn sends the task and the newest results whole, and older results cut short, so the token cap lasts the turns', async () => {
+  const msgs = [{ role: 'system', content: 'sys' }, { role: 'user', content: 'T'.repeat(5000) }];
+  for (let i = 0; i < 40; i++) msgs.push({ role: 'assistant', content: '{"tool":"read","path":"f' + i + '"}' }, { role: 'user', content: String(i).padEnd(16000, 'x') });
+  const w = windowOf(msgs);
+  assert.equal(w.length, 2 + WINDOW.messages); assert.deepEqual(w.slice(0, 2), msgs.slice(0, 2), 'the system and the task stay whole');
+  assert.deepEqual(w.slice(-WINDOW.fresh), msgs.slice(-WINDOW.fresh), 'the newest results stay whole');
+  const old = w.slice(2, -WINDOW.fresh).filter((x) => x.role === 'user');
+  assert.ok(old.length && old.every((x) => x.content.length < WINDOW.keep + 120 && /characters cut from an older result; read it again/.test(x.content)));
+  assert.ok(w.slice(2).filter((x) => x.role === 'assistant').every((x, i) => x.content === msgs.slice(-WINDOW.messages).filter((y) => y.role === 'assistant')[i].content), 'the model\'s own turns stay whole');
+  const size = (m) => m.reduce((n, x) => n + x.content.length, 0);
+  assert.ok(size(w) < size([...msgs.slice(0, 2), ...msgs.slice(-WINDOW.messages)]) / 3, 'the window is a third of the old one or less');
+  assert.deepEqual(windowOf(msgs.slice(0, 6)), msgs.slice(0, 6), 'a short run is sent as it is');
+  assert.equal(trailOf([{ tool: 'read', path: 'a.js', result: '1\tx' }, { tool: 'edit', path: '', result: 'the diff does not apply: error: patch failed\nmore' }, { tool: 'check', path: 'add', result: 'FAIL add\nlog' }]),
+    'read a.js, edit: the diff does not apply: error: patch failed, check add: FAIL add');
+  // how many turns each tool took, and the one it took most (frontier #43): a stopped lap says which tool it burned its turns on
+  assert.deepEqual(toolTally([{ tool: 'read' }, { tool: 'read' }, { tool: 'search' }, { tool: 'edit' }, { tool: 'read' }]),
+    { counts: { read: 3, search: 1, edit: 1 }, top: 'read', turns: 5 });
+  assert.deepEqual(toolTally([]), { counts: {}, top: '', turns: 0 });
+  assert.equal(toolTally([{ tool: 'read' }, { tool: 'search' }]).top, 'read', 'a tie breaks by name, deterministically');
+  assert.equal(toolTally([{ tool: 'search' }, { tool: 'read' }]).top, 'read', 'a tie breaks by name, not order');
+  // the worst case, the same full read every turn (the 2026-11-17 spiral: watch-build.js, photos.js, recipe.js): the same range is
+  // refused after the first read and the run stops at the read cap, well before the turn cap, with nothing changed
+  const s = repo(); writeFileSync(join(s.work, 'src/big.mjs'), Array.from({ length: 400 }, (_, i) => '// line ' + i + ' ' + 'y'.repeat(30)).join('\n'));
+  const r = await runCoder({ root: s.work, prompt: 'x', checks: CHECKS, model: async () => ({ text: call('read', { path: 'src/big.mjs' }) }), limits: { turns: 30, tokens: 250000 } });
+  assert.equal(r.outcome, 'read-cap', r.why); assert.equal(r.turns, LIMITS.reads);
+  assert.match(r.log[1].result, /already read: src\/big\.mjs lines 1-150/);
+  assert.equal(sh(s.work, 'status', '--porcelain'), '?? src/big.mjs', 'the coder changed nothing (big.mjs is the test\'s own new file)');
+  // the stopped run says which tool it burned its turns on (frontier #43), so a reader can rank the read spirals that remain
+  assert.equal(r.spent.top, 'read'); assert.equal(r.spent.turns, r.turns); assert.equal(r.spent.counts.read, r.turns);
+});
+
+test('a lap with its whole brief, reading big files and checking, counting a token as 3 characters, lasts the 30 turns (#2234)', async () => {
+  // three laps in a row stopped at the token cap after 20 to 28 turns of reading: the 11,000-character brief and two 16,000-character reads rode along every turn
+  const prompt = buildPrompt({ task: { kind: 'next', n: 1, text: 'Make the tower lane pages answer.' }, tagteam: readFileSync('docs/TAGTEAM.md', 'utf8'), gates: readFileSync('docs/GATE-STANDARDS.md', 'utf8') });
+  assert.ok(prompt.length > 8000, 'the real brief is long: ' + prompt.length);
+  const s = repo();
+  for (const f of ['a', 'b', 'c']) writeFileSync(join(s.work, 'src/' + f + '.mjs'), Array.from({ length: 900 }, (_, i) => '  const line' + i + ' = ' + JSON.stringify('z'.repeat(80)) + ';').join('\n'));
+  // a check every 4th turn: a check is progress, so it clears the read-only count and the run is not stopped at the read cap (2026-11-17)
+  let i = 0;
+  const model = async (msgs) => { i++; const text = i % 4 === 0 ? call('check', { name: 'add' }) : call('read', { path: 'src/' + 'abc'[i % 3] + '.mjs', from: 1 + (i * 37) % 400 }); return { text, tokens: Math.ceil(msgs.reduce((n, x) => n + x.content.length, 0) / 3) + 60 }; };
+  const r = await runCoder({ root: s.work, prompt, checks: CHECKS, model, limits: { turns: LIMITS.turns, tokens: LIMITS.tokens } });
+  assert.equal(r.outcome, 'turn-cap', 'it ran out of tokens after ' + r.turns + ' turns (' + r.tokens + ' tokens)');
+  const w = windowOf([{ role: 'system', content: 's' }, { role: 'user', content: prompt }, ...Array.from({ length: 4 }, () => [{ role: 'assistant', content: 'n'.repeat(9000) }, { role: 'user', content: 'r' }]).flat()]);
+  assert.ok(w[1].content.startsWith(prompt.slice(0, WINDOW.task)) && w[1].content.length < WINDOW.task + 200 && /Make the tower lane pages answer/.test(w[1].content), 'past the first turns the task stays, the reference notes go');
+  assert.match(w[2].content, /characters cut from an older turn of yours/, 'an old long edit of its own is cut too');
+  assert.equal(windowOf([{ role: 'system', content: 's' }, { role: 'user', content: prompt }, { role: 'assistant', content: 'a' }, { role: 'user', content: 'r' }])[1].content, prompt, 'the first turns get the whole brief');
+});
+
+test('past 40% of the budget each result says how much is gone and, with no edit yet, that the next answer is an edit; at a cap a change checked green is kept', async () => {
+  const L = { turns: 30, tokens: 250000 };
+  assert.equal(budgetNote({ turns: 11, tokens: 90000, limits: L }), '', 'under 40% of turns and of tokens: nothing');
+  assert.match(budgetNote({ turns: 12, tokens: 10000, limits: L }), /^\n\[turn 12 of 30, 4% of the token budget used, and no edit yet\. You have read enough: answer with an edit next/);
+  assert.match(budgetNote({ turns: 3, tokens: 100000, limits: L }), /40% of the token budget used, and no edit yet/, 'the tokens count too');
+  assert.equal(budgetNote({ turns: 12, tokens: 10000, limits: L, edited: true }), '\n[turn 12 of 30, 4% of the token budget used.]');
+  assert.match(budgetNote({ turns: 25, tokens: 240000, limits: L }), /96% of the token budget used\. Nothing is changed yet, and a run with no edit ships nothing: answer with an edit now\.\]$/);
+  assert.match(budgetNote({ turns: 24, tokens: 0, limits: L, edited: true }), /Run the check now, then finish/);
+  assert.equal(budgetNote({ turns: 0, tokens: 0, limits: L }), ''); assert.deepEqual(BUDGET, { warn: 0.4, last: 0.8 });
+  // the model sees it: a run that only reads is told from turn 4 of 10 to edit, and from turn 8 that it ships nothing without one
+  const s = repo(); const seen = [];
+  let r = await runCoder({ root: s.work, prompt: 'x', checks: CHECKS, limits: { turns: 10 }, model: async (m) => { seen.push(m[m.length - 1].content); return { text: call('read', { path: 'src/add.mjs' }) }; } });
+  assert.equal(r.outcome, 'turn-cap');
+  assert.ok(!/no edit yet/.test(seen[3]) && /turn 4 of 10, \d+% of the token budget used, and no edit yet/.test(seen[4]), seen[4]);
+  assert.match(seen[8], /turn 8 of 10.*answer with an edit now/);
+  // at a cap: edited, then checked green, then out of turns: the change goes through finish and is kept
+  r = await run(s, [call('edit', { diff: FIX }), call('check', { name: 'add' }), call('list', { path: 'src' })], { limits: { turns: 4 } });
+  assert.equal(r.outcome, 'done', r.why); assert.match(r.why, /turn cap \(4\), with the change checked green after its last edit: kept as it stood/);
+  assert.deepEqual(r.files, ['src/add.mjs']); assert.match(readFileSync(join(s.work, 'src/add.mjs'), 'utf8'), /a \+ b/);
+  sh(s.work, 'checkout', '--', '.');
+  // a check before the last edit does not count: the change is put back
+  const BREAK = FIX.replace('+  return a + b;', '+  return a + b + 1;').replace('-  return a - b;', '-  return a + b;');
+  r = await run(s, [call('edit', { diff: FIX }), call('check', { name: 'add' }), call('edit', { diff: BREAK }), call('list', { path: 'src' })], { limits: { turns: 5 } });
+  assert.equal(r.outcome, 'turn-cap', r.why); assert.match(readFileSync(join(s.work, 'src/add.mjs'), 'utf8'), /a - b/, 'put back');
+  assert.equal(sh(s.work, 'status', '--porcelain'), '');
+});
+
+test('Verse\'s review on its own diff sends a risky change back; a created file goes away when it gives up', async () => {
+  const s = repo();
+  const risky = '--- /dev/null\n+++ b/src/run.mjs\n@@ -0,0 +1,2 @@\n+// runs what it is given\n+export const run = (input) => eval(input);\n';
+  const r = await run(s, [call('edit', { diff: FIX }), call('edit', { diff: risky }), call('finish')], { limits: { finishTries: 2 } });
+  assert.match(r.log[2].result, /review blocks this diff:\nsrc\/run\.mjs:2 risk eval/);
+  assert.equal(r.outcome, 'nothing'); assert.match(r.why, /gave up/);
+  assert.ok(!existsSync(join(s.work, 'src/run.mjs')), 'the new file is removed');
+  assert.match(readFileSync(join(s.work, 'src/add.mjs'), 'utf8'), /a - b/);
+});
+
+test('finish waits for the target check, and a diff that does not apply comes back to the model', async () => {
+  const s = repo();
+  const wrong = FIX.replace('return a - b', 'return b - a');
+  const readme = '--- a/README.md\n+++ b/README.md\n@@ -1 +1 @@\n-# r\n+# repo\n';
+  const r = await run(s, [call('edit', { diff: wrong }), 'not json at all', call('edit', { diff: readme }), call('finish'), call('edit', { diff: FIX }), call('finish')]);
+  assert.match(r.log[0].result, /does not apply/);
+  assert.match(r.log[1].result, /no JSON object/);
+  assert.match(r.log[3].result, /the target check add is still red/);
+  assert.equal(r.outcome, 'done', r.why); assert.deepEqual(r.files.sort(), ['README.md', 'src/add.mjs']);
+});
+
+test('replace swaps exact text with no diff to line up: once, not twice, not missing; a new file; the same guards as edit', async () => {
+  const s = repo();
+  const r = await run(s, [
+    call('edit', { diff: FIX.replace('return a - b', 'return b - a') }),
+    call('replace', { path: 'src/add.mjs', old: 'return a-b;', new: 'return a + b;' }),
+    call('replace', { path: 'src/add.mjs', old: 'a', new: 'x' }),
+    call('replace', { path: 'tools/add.test.mjs', old: '  assert.equal(add(2, 2), 4);\n', new: '' }),
+    call('replace', { path: '.github/workflows/ci.yml', old: 'on: push', new: 'on: [push]' }),
+    call('replace', { path: 'src/none.mjs', old: 'x', new: 'y' }),
+    call('replace', { path: 'src/add.mjs', old: 'return a - b;', new: 'return a + b;' }),
+    call('replace', { path: 'src/sub.mjs', old: '', new: 'export const sub = (a, b) => a - b;\n' }),
+    call('check', { name: 'add' }), call('finish', { summary: 'add adds' })]);
+  assert.match(r.log[0].result, /does not apply: .*use replace/s, 'a failed diff points at replace');
+  assert.match(r.log[1].result, /^no match: "old" is not in src\/add\.mjs/);
+  assert.match(r.log[1].result, /The nearest lines are \d+-\d+[^\n]*\n(\d+\t.*\n)*\d+\t\s*return a - b;/, 'a replace that misses shows where the lines nearly are (#2330)');
+  assert.match(r.log[2].result, /is in src\/add\.mjs \d+ times/);
+  assert.match(r.log[3].result, /refused: this edit weakens tools\/add\.test\.mjs \(fewer assertions/);
+  assert.match(r.log[4].result, /refused: \.github\/workflows\/ci\.yml is a workflow/);
+  assert.match(r.log[5].result, /no such file: src\/none\.mjs/);
+  assert.equal(r.log[6].result, 'applied to src/add.mjs');
+  assert.equal(r.log[7].result, 'applied to src/sub.mjs');
+  assert.equal(r.outcome, 'done', r.why + JSON.stringify(r.log));
+  assert.deepEqual(r.files.sort(), ['src/add.mjs', 'src/sub.mjs']);
+  assert.equal(readFileSync(join(s.work, 'tools/add.test.mjs'), 'utf8'), ADD_TEST, 'the test is as it was');
+  assert.equal(readFileSync(join(s.work, '.github/workflows/ci.yml'), 'utf8'), 'on: push\n');
+  assert.equal(trailOf([{ tool: 'replace', path: 'a.js', result: 'no match: "old" is not in a.js as written' }]), 'replace a.js: no match: "old" is not in a.js as written');
+  // a replace at a cap is put back like an edit, a new file included
+  const t = repo();
+  const c = await run(t, [call('replace', { path: 'src/add.mjs', old: 'a - b', new: 'a + b' }), call('replace', { path: 'src/new.mjs', old: '', new: 'x\n' }), call('list')], { limits: { turns: 3 } });
+  assert.equal(c.outcome, 'turn-cap');
+  assert.match(readFileSync(join(t.work, 'src/add.mjs'), 'utf8'), /a - b/); assert.ok(!existsSync(join(t.work, 'src/new.mjs')));
+});
+
+test('a big file is outlined, then a region, a line patch and a split: the model never has to hold the whole file', async () => {
+  const lines = ['export function head() { return 1; }'];
+  for (let i = 0; i < HUGE; i++) lines.push('const pad' + i + ' = ' + i + ';');
+  lines.push('export function tail() { return 2; }');
+  const text = lines.join('\n') + '\n';
+  const outline = outlineOf(text);
+  assert.ok(outline.lines > HUGE);
+  assert.ok(outline.marks.some((l) => l.includes('function head')) && outline.marks.some((l) => l.includes('function tail')));
+  assert.equal(outline.marks.filter((l) => l.includes('const pad')).length, 0, 'padding constants are not the outline');
+  const region = regionsOf(text, 'function tail');
+  assert.equal(region.hits.length, 1);
+  assert.match(region.hits[0], new RegExp(lines.length + '\texport function tail'));
+  assert.equal(regionsOf(text, '(').error.startsWith('bad pattern'), true);
+  // a nested repeat can hang the search on a long line: refused before it runs; plain words, classes and one repeat still search
+  for (const p of ['(a+)+$', '(x*)*y', '(a|aa)+b', '(\\w+\\s?){2,}$', 'x'.repeat(201)]) assert.match(regionsOf(text, p).error || '', /^bad pattern/, p);
+  for (const p of ['function tail', 'fun\\w+ tail', '(tail|head)', '^export ']) assert.equal(regionsOf(text, p).error, undefined, p);
+  { const t0 = Date.now(); regionsOf('a'.repeat(50000) + 'b', 'a+c'); assert.ok(Date.now() - t0 < 1000, 'a long line is tried on its first 2,000 characters'); }
+  assert.equal(applyLines('a\nb\nc\n', 2, 2, 'B').text, 'a\nB\nc\n');
+  assert.ok(functionLossOk(['it lost a function: head'], 'export function head() { return 1; }\n'));
+  assert.equal(functionLossOk(['it is shorter'], 'export function head() {}'), false);
+  const s = repo();
+  writeFileSync(join(s.work, 'src/big.mjs'), text);
+  sh(s.work, 'add', '-A'); sh(s.work, 'commit', '-q', '-m', 'big');
+  const tailLine = lines.length;
+  const r = await run(s, [
+    call('read', { path: 'src/big.mjs' }),
+    call('region', { path: 'src/big.mjs', pattern: 'function tail' }),
+    call('patch', { path: 'src/big.mjs', from: tailLine, to: tailLine, text: 'export function tail() { return 3; }' }),
+    call('split', { path: 'src/big.mjs', from: 1, to: 1, into: 'src/head.mjs', stub: "import './head.mjs';" }),
+    call('split', { path: 'src/big.mjs', from: 1, to: tailLine, into: 'src/all.mjs', stub: "import './all.mjs';" }),
+    call('edit', { diff: FIX }),
+    call('check', { name: 'add' }),
+    call('finish', { summary: 'tail patched, head split out' }),
+  ]);
+  assert.match(r.log[0].result, /Too big to read from the top/);
+  assert.match(r.log[0].result, /function tail/);
+  assert.match(r.log[1].result, new RegExp(tailLine + '\texport function tail'));
+  assert.match(r.log[2].result, new RegExp('patched src/big.mjs lines ' + tailLine + '-' + tailLine));
+  assert.match(r.log[3].result, /split src\/big.mjs lines 1-1 into src\/head.mjs/);
+  assert.match(r.log[4].result, /more than 30%/);
+  assert.equal(r.outcome, 'done', r.why + JSON.stringify(r.log.map((x) => x.result.split('\n')[0])));
+  assert.match(readFileSync(join(s.work, 'src/head.mjs'), 'utf8'), /function head/);
+  assert.match(readFileSync(join(s.work, 'src/big.mjs'), 'utf8'), /import '\.\/head\.mjs'/);
+  assert.match(readFileSync(join(s.work, 'src/big.mjs'), 'utf8'), /return 3/);
+  assert.ok(!existsSync(join(s.work, 'src/all.mjs')), 'a split that would drop most of the file is not written');
+});
+
+test('a no-match search spiral reaches an edit: a code snippet is literal, a miss lists files, and the same miss is not run again (#2610)', async () => {
+  // three laps (issue 2610) stopped at the turn cap on "search .: no match". `add(2, 2)` is in the test; as a regex the
+  // parentheses are a group, so the old search matched nothing and the model searched again.
+  assert.equal(searchShape('add(2, 2)').regex, null); assert.equal(searchShape('add(2, 2)').literal, 'add(2, 2)');
+  assert.match(searchShape('').error, /needs a pattern/); assert.match(searchShape('.').error, /word or a short line/);
+  assert.equal(searchShape('fun\\w+ tail').regex, 'fun\\w+ tail');
+  assert.deepEqual(nameTokens('void-live-deploy/skills/add.js'), ['add']);
+  const s = repo();
+  mkdirSync(join(s.work, 'void-live-deploy/skills/order'), { recursive: true });
+  writeFileSync(join(s.work, 'void-live-deploy/skills/index.json'), '["add"]\n');
+  writeFileSync(join(s.work, 'void-live-deploy/skills/add.js'), 'export function add(a, b) { return a - b; }\n');
+  writeFileSync(join(s.work, 'void-live-deploy/skills/order/10-add'), 'add\n');
+  sh(s.work, 'add', '-A'); sh(s.work, 'commit', '-q', '-m', 'skill');
+  let phase = 0; const seen = [];
+  const model = async (msgs) => {
+    const last = msgs[msgs.length - 1].content; seen.push(last);
+    if (phase === 0) { phase = 1; return { text: call('search', { pattern: 'add(2, 2)', path: '.' }) }; }
+    if (phase === 1) { phase = 2; return { text: call('search', { pattern: 'void-live-deploy/skills/add.js', path: '.' }) }; }
+    if (phase === 2) { phase = 3; return { text: call('search', { pattern: 'void-live-deploy/skills/add.js', path: '.' }) }; }
+    if (phase === 3) { phase = 4; return { text: call('read', { path: 'void-live-deploy/skills/index.json' }) }; }
+    if (phase === 4) { phase = 5; return { text: call('replace', { path: 'src/add.mjs', old: 'return a - b;', new: 'return a + b;' }) }; }
+    if (phase === 5) { phase = 6; return { text: call('check', { name: 'add' }) }; }
+    return { text: call('finish', { summary: 'add adds' }) };
+  };
+  const r = await runCoder({ root: s.work, prompt: 'Make add(2, 2) pass. The skill is add.', checks: CHECKS, target: 'add', model, env: { PATH: process.env.PATH } });
+  assert.match(seen[1], /add\(2, 2\)/); assert.match(seen[1], /tools\/add\.test\.mjs/, 'the snippet is found as text, not missed as a regex');
+  assert.match(seen[2], /^no match for "void-live-deploy\/skills\/add\.js"/);
+  assert.match(seen[2], /void-live-deploy\/skills\/add\.js/); assert.match(seen[2], /skills\/order\/10-add/, 'a miss names the skill file and its order file');
+  assert.match(seen[3], /already searched/); assert.match(r.log[2].path, /add\.js/);
+  assert.match(seen[4], /Never edit/); assert.match(seen[4], /skills\/order\/<rank>-<name>/);
+  assert.equal(r.outcome, 'done', r.why); assert.ok(r.turns <= 8, 'turns: ' + r.turns);
+  const w = await run(s, [call('replace', { path: 'void-live-deploy/skills/index.json', old: '["add"]', new: '[]' }), call('finish')]);
+  assert.match(w.log[0].result, /generated/);
+  assert.equal(readFileSync(join(s.work, 'void-live-deploy/skills/index.json'), 'utf8'), '["add"]\n');
+});
+
+test('a miss still names the skill file when ripgrep is not on PATH', async () => {
+  const s = repo();
+  mkdirSync(join(s.work, 'void-live-deploy/skills/order'), { recursive: true });
+  writeFileSync(join(s.work, 'void-live-deploy/skills/add.js'), 'export function add(a, b) { return a + b; }\n');
+  writeFileSync(join(s.work, 'void-live-deploy/skills/order/10-add'), 'add\n');
+  sh(s.work, 'add', '-A'); sh(s.work, 'commit', '-q', '-m', 'skill');
+  const bin = mkdtempSync(join(tmpdir(), 'norg-'));
+  const gitBin = (process.env.PATH || '').split(':').map((d) => join(d, 'git')).find((p) => p && existsSync(p));
+  if (gitBin) symlinkSync(gitBin, join(bin, 'git'));
+  const saved = process.env.PATH;
+  process.env.PATH = bin;
+  const seen = [];
+  try {
+    const model = async (msgs) => {
+      const last = msgs[msgs.length - 1].content; seen.push(last);
+      if (seen.length === 1) return { text: call('search', { pattern: 'void-live-deploy/skills/add.js', path: '.' }) };
+      return { text: call('finish', { summary: 'noted' }) };
+    };
+    await runCoder({ root: s.work, prompt: 'Find the add skill.', checks: CHECKS, target: 'add', model, env: { PATH: process.env.PATH } });
+    assert.match(seen[1], /void-live-deploy\/skills\/add\.js/);
+    assert.match(seen[1], /skills\/order\/10-add/, 'a miss names the order file without rg');
+  } finally { process.env.PATH = saved; }
+});
+
+test('the reply parser: plain JSON, args nested, a fenced diff, junk', () => {
+  assert.deepEqual(parseAction('{"tool":"read","path":"a"}'), { tool: 'read', path: 'a' });
+  assert.equal(parseAction('Sure: {"tool":"read","args":{"path":"b {x}"}}').path, 'b {x}');
+  assert.equal(parseAction('{"tool":"edit"}\n```diff\n--- a/x\n+++ b/x\n```').diff, '--- a/x\n+++ b/x\n');
+  assert.match(parseAction('nope').error, /no JSON/);
+  assert.match(parseAction('{"path":"a"}').error, /no "tool"/);
+  assert.deepEqual(diffFiles(FIX).files, [{ path: 'src/add.mjs', from: 'src/add.mjs', to: 'src/add.mjs', created: false, deleted: false }]);
+  assert.equal(diffFiles('--- x.js\n+++ x.js\n').p1, false);
+});
+
+test('the free stack: Workers AI first, then the others in order; a 429 falls through; no key, no provider', async () => {
+  const env = { CLOUDFLARE_API_TOKEN: 'cf'.repeat(10), CLOUDFLARE_ACCOUNT_ID: 'acct', OPENROUTER_API_KEY: 'or'.repeat(10), GROQ_API_KEY: 'gq'.repeat(10), GEMINI_API_KEY: 'ge'.repeat(10), CEREBRAS_API_KEY: 'cb'.repeat(10) };
+  const ps = providersFrom(env);
+  assert.deepEqual(ps.map((p) => p.name), ['workers-ai', 'openrouter', 'groq', 'gemini', 'cerebras']);
+  assert.ok(ps.every((p) => !/gpt-oss/.test(p.model)), 'no gpt-oss');
+  assert.deepEqual(providersFrom({ CLOUDFLARE_API_TOKEN: 'x' }), [], 'Workers AI needs the account id too');
+  assert.deepEqual(providersFrom({}), []);
+  assert.deepEqual(providersFrom({ ...env, GH_MODELS_TOKEN: 'gh'.repeat(10) }).map((p) => p.name), ['workers-ai', 'openrouter', 'groq', 'gemini', 'cerebras'], 'GitHub Models is retired: its token adds no provider');
+  // Verse's own model leads when the owner token is there; a 2xx that is not JSON is named by status and type, never by its body
+  const own = providersFrom({ ...env, GH_MODELS_TOKEN: 'gh'.repeat(10), VOID_OWNER_TOKEN: 'o'.repeat(30), VOID_SITE: 'https://example.invalid/' });
+  assert.deepEqual(own.map((p) => p.name), ['verse', 'workers-ai', 'openrouter', 'groq', 'gemini', 'cerebras']);
+  assert.equal(own[0].url, 'https://example.invalid/api/coder'); assert.equal(own[0].shape, 'workers');
+  const sent = [];
+  const odd = stackModel(own.slice(0, 3), { fetchImpl: async (url, init) => { sent.push([url, init.headers]);
+    if (url.includes('example.invalid')) return { ok: true, status: 200, json: async () => ({ result: { response: call('finish'), usage: { total_tokens: 7 } } }) };
+    return { ok: false, status: 401 }; } });
+  assert.deepEqual(await odd([{ role: 'user', content: 'hi' }]), { text: call('finish'), tokens: 7 }, 'the site answers in the Workers AI shape');
+  assert.equal(sent.length, 1); assert.equal(sent[0][1].authorization, 'Bearer ' + 'o'.repeat(30)); assert.match(odd.last, /^verse /);
+  const html = stackModel(own.slice(2, 3), { fetchImpl: async () => ({ ok: true, status: 200, headers: new Headers({ 'content-type': 'text/html; charset=utf-8' }), json: async () => { throw new SyntaxError('Unexpected token <'); } }) });
+  const said = (await html([])).error;
+  assert.equal(said, 'no model answered (openrouter 200 text/html not JSON)'); assert.doesNotMatch(said, /Unexpected token/);
+  // a body read as text: JSON parses, a stream of data: lines joins, anything else is named by status, type and size first
+  const page = '<!doctype html><title>x</title>';
+  const asText = (body, type) => async () => ({ ok: true, status: 200, headers: new Headers({ 'content-type': type }), text: async () => body });
+  const htmlText = await stackModel(own.slice(2, 3), { fetchImpl: asText(page, 'text/html') })([]);
+  assert.equal(htmlText.error, 'no model answered (openrouter 200 text/html ' + page.length + 'B not JSON)'); assert.doesNotMatch(htmlText.error, /doctype/);
+  assert.equal((await stackModel(own.slice(2, 3), { fetchImpl: asText('OK\n', 'text/plain') })([])).error, 'no model answered (openrouter 200 text/plain 2B not JSON "OK")', 'a short body is shown, escaped');
+  assert.match((await stackModel(own.slice(2, 3), { fetchImpl: asText('ghs_' + 'k'.repeat(36), 'text/plain') })([])).error, /"\[masked\]"\)$/, 'a key-like run in a short body is masked');
+  assert.deepEqual(await stackModel(own.slice(2, 3), { fetchImpl: asText(JSON.stringify({ choices: [{ message: { content: call('finish') } }], usage: { total_tokens: 9 } }), 'text/plain') })([]), { text: call('finish'), tokens: 9 }, 'JSON under the wrong type still reads');
+  const sse = ['data: {"choices":[{"delta":{"content":"' + 'he' + '"}}]}', '', 'data: {"choices":[{"delta":{"content":"llo"}}],"usage":{"total_tokens":5}}', '', 'data: [DONE]', ''].join('\n');
+  assert.deepEqual(await stackModel(own.slice(2, 3), { fetchImpl: asText(sse, 'text/event-stream') })([]), { text: 'hello', tokens: 5 }, 'a streamed reply joins its deltas');
+  const seen = [];
+  const fakeFetch = async (url, init) => {
+    seen.push(url);
+    if (url.includes('cloudflare')) return { ok: false, status: 429 };
+    return { ok: true, json: async () => ({ choices: [{ message: { content: call('finish') } }], usage: { total_tokens: 42 } }) };
+  };
+  const m = stackModel(ps, { fetchImpl: fakeFetch });
+  const out = await m([{ role: 'user', content: 'hi' }]);
+  assert.deepEqual(out, { text: call('finish'), tokens: 42 });
+  assert.equal(seen.length, 2); assert.match(seen[1], /openrouter/); assert.match(m.last, /^openrouter /);
+  const down = stackModel(ps.slice(0, 1), { fetchImpl: async () => ({ ok: false, status: 500 }) });
+  assert.match((await down([])).error, /no model answered \(workers-ai 500\)/);
+  assert.deepEqual(Object.keys(keyless({ PATH: '/bin', GROQ_API_KEY: 'k', CLOUDFLARE_API_TOKEN: 't', GH_TOKEN: 'g', HOME: '/h' })), ['PATH', 'HOME'], 'checks never see a key');
+});
+
+test('the CLI: no key means exit 4 with the keys it wants; a scripted model runs end to end', () => {
+  const s = repo();
+  const bare = { PATH: process.env.PATH, HOME: process.env.HOME };
+  let r = spawnSync(process.execPath, [new URL('./verse-coder.mjs', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'), '--repo', s.work, '--task', 'fix add'], { env: bare, encoding: 'utf8' });
+  assert.equal(r.status, 4); assert.ok(r.stdout.includes(KEY_NAMES.join(', ')), 'names the keys it wants, exactly as the coder lists them'); assert.doesNotMatch(r.stdout, /GH_MODELS/);
+  const script = join(s.dir, 'script.json'), checks = join(s.dir, 'checks.json');
+  writeFileSync(script, JSON.stringify([{ tool: 'edit', diff: FIX }, { tool: 'check', name: 'add' }, { tool: 'finish', summary: 'fixed' }]));
+  writeFileSync(checks, JSON.stringify(CHECKS));
+  r = spawnSync(process.execPath, [new URL('./verse-coder.mjs', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'), '--repo', s.work, '--task', 'fix add', '--checks', checks, '--target', 'add'], { env: { ...bare, VERSE_CODER_SCRIPT: script }, encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const last = JSON.parse(r.stdout.trim().split('\n').pop());
+  assert.deepEqual([last.outcome, last.files, last.provider], ['done', ['src/add.mjs'], 'script']);
+});
+
+test('the source holds no key and never force-pushes', () => {
+  const src = readFileSync(new URL('./verse-coder.mjs', import.meta.url), 'utf8');
+  assert.deepEqual(scanDiff('+++ b/tools/verse-coder.mjs\n' + src.split('\n').map((l) => '+' + l).join('\n')).filter((f) => f.kind !== 'assigned secret'), []);
+  assert.ok(!/'push'|git push/.test(src), 'the coder never pushes: the loop does');
+  assert.ok(!/gpt-oss/.test(src.replace(/gpt-oss\/i\.test/, '')), 'no gpt-oss model');
+});
+
+test('nearMiss: the lines a missed replace nearly matched, so the next turn copies them instead of reading again (#2330)', () => {
+  const file = ['const a = 1;', 'function f(x) {', '    return x + 1;', '}', 'const b = 2;'].join('\n');
+  const out = nearMiss(file, 'function f(x) {\n  return x + 1;\n}');
+  assert.match(out, /^The nearest lines are 1-5 \(copy the text after each tab\)\. It is in the file once spaces and line breaks are set aside\./);
+  assert.ok(out.includes('3\t    return x + 1;'), 'the file\'s own spaces, after its line number and a tab');
+  assert.match(nearMiss(file, 'return y + 2;'), /The nearest lines are 2-4/, 'a shared word finds the place');
+  assert.ok(!/set aside/.test(nearMiss(file, 'return y + 2;')), 'not there with other spaces either');
+  assert.equal(nearMiss(file, 'zz qq'), '', 'nothing of it in the file');
+  assert.equal(nearMiss(file, ''), '');
+  const long = Array.from({ length: 60 }, (_, i) => 'line ' + i).join('\n');
+  assert.ok(nearMiss(long, Array.from({ length: 40 }, (_, i) => 'line ' + i).join('\n')).split('\n').length <= 23, 'at most max lines and a margin');
+});

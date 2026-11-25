@@ -1,0 +1,2572 @@
+{
+ "note": "tools/tower-self.mjs: every site Verse took on by itself, what came of it, and one line per run. Written by the loop.",
+ "sites": {
+  "anycolorid.com": {
+   "at": "2026-10-26T07:10:49Z",
+   "outcome": "gone",
+   "why": "a sign-in wall"
+  },
+  "vcalc.com": {
+   "at": "2026-10-26T07:10:49Z",
+   "outcome": "gone",
+   "why": "robots.txt asks robots not to read it"
+  },
+  "colorcanon.com": {
+   "at": "2026-10-26T07:26:03Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "The Color Canon — Official Registry of Hex Color Names"
+  },
+  "heycolor.com": {
+   "at": "2026-10-26T16:55:31Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a digital paint-by-number game. None of the available Verse pages provide gaming, art creation, or coloring tools.)",
+   "title": "Hey Color: Paint by Number Art"
+  },
+  "emojitracker.com": {
+   "at": "2026-10-26T16:55:38Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "emojitracker: realtime emoji use"
+  },
+  "yunite.xyz": {
+   "at": "2026-10-26T16:55:46Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides a specialized Discord bot and dashboard service for managing Fortnite tournaments, player registration, and custom game)",
+   "title": "Yunite"
+  },
+  "thunit.com": {
+   "at": "2026-10-26T16:55:53Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a web hosting service provider. Verse does not have a page for web hosting or server services.)",
+   "title": "THUNIT™ | A Lianudom Co.,ltd Company"
+  },
+  "cpantesters.org": {
+   "at": "2026-10-26T16:55:56Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a specialized community network for testing Perl software modules. Verse has no tool for software testing, package management)",
+   "title": "Recent - CPAN Testers"
+  },
+  "nameunit.com": {
+   "at": "2026-10-26T07:17:42Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a web hosting and domain registration service, which Verse does not offer any pages for.)",
+   "title": "Name Unit: \"Webhotell og domene\""
+  },
+  "wheelofgold.com": {
+   "at": "2026-10-26T07:17:49Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a crypto rewards and gambling platform, which is a game/service that Verse does not provide a tool for.)",
+   "title": "Wheel of Gold"
+  },
+  "magicchecker.com": {
+   "at": "2026-10-26T07:17:59Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a B2B service for protecting digital marketing campaigns from bad traffic and spy tools, which is a niche professional service)",
+   "title": "MagicChecker.com: Protect your digital campaigns"
+  },
+  "colornames.org": {
+   "at": "2026-10-26T07:26:09Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a collaborative project to name colors in the RGB space through community voting and proposals. While Verse has 'colour' and )",
+   "title": "Name all the colors @ colornames.org"
+  },
+  "convertlive.com": {
+   "at": "2026-10-26T07:26:26Z",
+   "outcome": "surpassed",
+   "family": "unit converter",
+   "id": "unit converter: convertlive.com",
+   "page": "/convert/unit-converter/",
+   "words": "the family page's own (the model's were refused: no ask is about its job)",
+   "rows": "11/11",
+   "gated": "2026-10-26T07:29:33Z"
+  },
+  "online-calculator.com": {
+   "at": "2026-10-26T07:26:38Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a multi-purpose collection of calculators (scientific, BMI, darts) and unit converters. While Verse has specific pages for 'c)",
+   "title": "Online Calculator"
+  },
+  "mycolor.space": {
+   "at": "2026-10-26T07:34:10Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (72 characters: a redirect stub, or a page that draws itself with no text)"
+  },
+  "colormind.io": {
+   "at": "2026-10-26T07:34:15Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is an AI-powered color palette generator. The existing Verse page 'colour' provides color conversions, tints, shades, and scheme)",
+   "title": "Colormind - the AI powered color palette generator"
+  },
+  "brandcolors.net": {
+   "at": "2026-10-26T07:34:21Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "BrandColors - official brand color hex codes"
+  },
+  "convertunits.com": {
+   "at": "2026-10-26T07:34:33Z",
+   "outcome": "surpassed",
+   "family": "unit converter",
+   "id": "unit converter: convertunits.com",
+   "page": "/convert/unit-converter-2/",
+   "words": "the family page's own (the model's were refused: says what the page does not do (measurement, across, physics, chemistry, daily); no ask is about its job)",
+   "rows": "11/11",
+   "gated": "2026-10-26T07:42:05Z"
+  },
+  "tallycount.app": {
+   "at": "2026-10-26T07:34:52Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "Tally Count App - The Best Online Tally Counter"
+  },
+  "hexonet.net": {
+   "at": "2026-10-26T16:56:01Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a domain registrar and reseller service, which is a business service, not a utility tool or informational page provided by Ve)",
+   "title": "Hexonet is now CentralNic Reseller"
+  },
+  "emojicombos.com": {
+   "at": "2026-10-26T16:56:08Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website emojicombos.com is a database for searching and discovering combinations of emojis, whereas the existing Verse pages focus on ut)",
+   "title": "Emoji Combos"
+  },
+  "supercolorapp.com": {
+   "at": "2026-10-26T22:52:46Z",
+   "outcome": "discarded",
+   "family": "paint",
+   "why": "failed tests"
+  },
+  "colorzilla.com": {
+   "at": "2026-10-26T22:52:46Z",
+   "outcome": "discarded",
+   "family": "colour",
+   "why": "failed tests"
+  },
+  "c-united.co.jp": {
+   "at": "2026-10-26T22:51:41Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a corporate site for a coffee company that manages various cafe brands and operates an online store. Verse does not have a pa)",
+   "title": "C-United株式会社"
+  },
+  "hexdb.io": {
+   "at": "2026-10-27T08:19:04Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides an API for aircraft ADS-B data lookup (ICAO hex and registration to aircraft details). Verse does not have a page for a)",
+   "title": "hexdb.io | Mode-S Hex ADS-B API"
+  },
+  "notepad-plus-plus.org": {
+   "at": "2026-10-26T22:52:20Z",
+   "outcome": "assimilated",
+   "family": "text editor",
+   "id": "text editor: notepad-plus-plus.org",
+   "page": "/text-editor/notepad-plus-plus/",
+   "title": "Notepad++"
+  },
+  "font.im": {
+   "at": "2026-10-26T22:52:28Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides a way to browse, preview, and get embed codes for Google Fonts, but Verse does not have a font library, typography tool)",
+   "title": "Google Fonts | 谷歌字体中文版 | GoogleFonts",
+   "family": "typography"
+  },
+  "processchecker.com": {
+   "at": "2026-10-26T22:52:33Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "Processchecker.com"
+  },
+  "uptimer.dev": {
+   "at": "2026-10-30T00:00:00Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "Uptimer.dev"
+  },
+  "communitydragon.org": {
+   "at": "2026-10-30T10:00:00Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "CommunityDragon"
+  },
+  "speedtest.org": {
+   "at": "2026-10-27T08:19:24Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a speed test tool for measuring internet connection performance, and Verse does not have a page that performs network diagnos)",
+   "title": "SpeedTest.org - Internet Speed Test"
+  },
+  "unitedworx.com": {
+   "at": "2026-10-27T08:19:29Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a professional web development and SEO agency offering custom services. Verse provides individual utility tools (calculators,)",
+   "title": "Quality web design in, Paphos, Cyprus with SEO and social media plans"
+  },
+  "randomarea.com": {
+   "at": "2026-10-30T22:36:40Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a collection of translated AI research papers and technical guides. Verse does not have a page for research paper translation, a scientific)",
+   "title": "AI 研究报告中文翻译合集"
+  },
+  "urdufonts.net": {
+   "at": "2026-10-27T08:19:42Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides a library of Urdu fonts for download, which is a specific service for font files. Verse has tools for photo editing, co)",
+   "title": "Urdu Fonts: Download Free Urdu Fonts : Urdu Fonts"
+  },
+  "wheelockweb.net": {
+   "at": "2026-10-27T08:19:45Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a service offering web development, design, hosting, and database management. Verse does not have a page for hiring professio)",
+   "title": "Wheelock Web Works: Web Development, Design, and Hosting"
+  },
+  "wheelockweb.com": {
+   "at": "2026-10-27T08:19:49Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a professional service business offering web development, hosting, and database management. Verse provides individual utility)",
+   "title": "Wheelock Web Works: Web Development, Design, and Hosting"
+  },
+  "diffuse.tools": {
+   "at": "2026-10-27T15:59:13Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides a collection of web widgets and code snippets for developers to enhance their own sites, such as cookie notices, store )",
+   "title": "Diffuse Tools - Widgets & Code Snippets to Enhance Your Website"
+  },
+  "localconditions.com": {
+   "at": "2026-10-27T16:00:00Z",
+   "outcome": "discarded",
+   "family": "weather",
+   "why": "failed tests"
+  },
+  "sketchersunited.org": {
+   "at": "2026-10-27T15:59:34Z",
+   "outcome": "walled",
+   "why": "a sign-in wall"
+  },
+  "drawspace.com": {
+   "at": "2026-10-27T15:59:38Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is an online drawing school/platform providing lessons and curriculum. Verse has a 'paint' tool, but it is a coloring game (pain)",
+   "title": "Everyone Can Draw | Drawspace"
+  },
+  "hexo.io": {
+   "at": "2026-10-27T15:59:46Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a static site generator and blog framework. Verse offers a 'docs and notes' tool, but that is for personal note-taking and do)",
+   "title": "Hexo"
+  },
+  "ajsonline.org": {
+   "at": "2026-10-27T15:59:52Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a scientific journal providing peer-reviewed research articles and author guidelines, which is a publishing service and not a)",
+   "title": "American Journal of Science"
+  },
+  "facemojikeyboard.com": {
+   "at": "2026-10-27T15:59:58Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides a suite of text styling tools (fonts, text art, emojis) and AI social media generators. While Verse has an 'emojis' pag)",
+   "title": "Facemoji – Free Font & Emoji Generator, Hashtags, Captions & Bio Tools | Facemoj"
+  },
+  "greenwichcommunitydirectory.org.uk": {
+   "at": "2026-10-27T22:33:35Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a local community directory providing services and support information for residents of a specific borough. Verse does not ha)",
+   "title": "Home | Greenwich Community Directory"
+  },
+  "sycophanthex.com": {
+   "at": "2026-10-27T22:33:36Z",
+   "outcome": "gone",
+   "why": "answered 403"
+  },
+  "unitedbrands.wine": {
+   "at": "2026-10-27T22:33:43Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a corporate business site for a wine and spirits distributor. Verse does not have a page for corporate business directories o)",
+   "title": "UNITED BRANDS"
+  },
+  "vtuner.com": {
+   "at": "2026-10-27T22:33:51Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a service for internet radio station aggregation and a B2B technology provider for radio integration. While Verse has a 'podc)",
+   "title": "vTuner Internet Radio"
+  },
+  "racetimer.se": {
+   "at": "2026-10-27T22:34:06Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides professional event timing services, race registration, and logistics for sports organizers, which is a specialized B2B )",
+   "title": "Racetimer – Ditt lopp din tid"
+  },
+  "bouldercolorado.gov": {
+   "at": "2026-10-27T22:34:21Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a municipal government portal providing news, services, and local information for a specific city; Verse does not have a page)",
+   "title": "Home | City of Boulder"
+  },
+  "hyperunit.xyz": {
+   "at": "2026-10-27T22:34:26Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a specialized asset tokenization layer for a specific blockchain ecosystem (Hyperliquid), which involves complex liquidity, b)",
+   "title": "Unit | Asset tokenization layer on Hyperliquid"
+  },
+  "email-checker.net": {
+   "at": "2026-10-30T22:36:48Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides an email verification service and email-related educational content, but Verse does not have a page for verifying email addresses or an)",
+   "title": "Email Checker - Verify Email Address Online"
+  },
+  "besslerwheel.com": {
+   "at": "2026-10-28T22:47:19Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a historical and mystery-focused informational site about a specific mechanical invention. Verse does not have a page for his)",
+   "title": "Johann Bessler - Orffyreus"
+  },
+  "getconverter.org": {
+   "at": "2026-10-30T22:37:08Z",
+   "outcome": "built",
+   "family": "finance",
+   "id": "finance: getconverter.org",
+   "page": "/markets/currency-converter/?s=SPX&r=5y&on=2024-12-31",
+   "words": "the family page's own (the model's were refused: says what the page does not do (between, global, accurate, custom, built))",
+   "rows": "12/15",
+   "gated": "2026-10-30T22:44:35Z"
+  },
+  "freefonts.co": {
+   "at": "2026-10-28T22:47:31Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides a library of downloadable font files. Verse does not have a page for browsing, previewing, or downloading font files/ty)",
+   "title": "FreeFonts : Download Thousands of Fonts for Free : Free Fonts"
+  },
+  "copyemojio.com": {
+   "at": "2026-10-30T22:37:18Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a financial news and educational blog providing articles on investing, loans, and wealth management. Verse has a 'finance' tool for looking up)",
+   "title": "ShortFinance"
+  },
+  "syncsketch.com": {
+   "at": "2026-10-30T22:37:24Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a professional visual collaboration and media review platform for animation and VFX teams, offering synchronous presentation and annotation)",
+   "title": "SyncSketch"
+  },
+  "nnamdicenter.org": {
+   "at": "2026-10-28T22:47:47Z",
+   "outcome": "gone",
+   "why": "answered 508"
+  },
+  "colorjigsaw.com": {
+   "at": "2026-10-29T08:50:42Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a company page for a software and game development studio that offers various products including a color puzzle game, device )",
+   "title": "Jigsaw Color Game Technology - Expert in Software and Game Development"
+  },
+  "qunitjs.com": {
+   "at": "2026-10-30T22:37:33Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a documentation and landing page for a JavaScript testing framework. While Verse has a tool for Perl test reports (cpan), it does not have a tool)",
+   "title": "QUnit"
+  },
+  "top-password.com": {
+   "at": "2026-10-30T22:37:42Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides software services and guides for recovering lost passwords and product keys. Verse has no page that offers password recovery services or)",
+   "title": "Password Recovery Software - Recover Lost Password, Reset Windows Password"
+  },
+  "kingdraw.com": {
+   "at": "2026-10-30T08:55:53Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "KingDraw官网_化学结构式编辑器"
+  },
+  "diffen.com": {
+   "at": "2026-10-30T22:37:52Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "Diffen - Compare Anything. Diffen. Discern. Decide."
+  },
+  "kingdraw.cn": {
+   "at": "2026-10-31T08:45:56Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a specialized chemical structure editor and scientific drawing tool. While Verse has a 'formula calculators' page, that tool is for performing)",
+   "title": "KingDraw官网_化学结构式编辑器"
+  },
+  "zoopicker.com": {
+   "at": "2026-10-31T08:46:03Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a niche birdwatching social platform and utility for logging sightings and finding locations. Verse does not have a page for biological)",
+   "title": "Enjoy Birding more with ZooPicker | ZooPicker"
+  },
+  "convertytmp3.org": {
+   "at": "2026-10-31T08:46:10Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a YouTube to MP3/MP4 converter. None of the available Verse pages provide video-to-audio or video-to-video conversion services. While there is a)",
+   "title": "YTMP3 - YouTube to MP3 Converter"
+  },
+  "communitydns.net": {
+   "at": "2026-10-31T08:46:20Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides professional DNS resolution and anycast network services, which is a specialized infrastructure service that Verse does not have a page)",
+   "title": "Commumity DNS - Anycast Leaders"
+  },
+  "syncsketch.dev": {
+   "at": "2026-10-31T15:55:35Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a specialized visual collaboration and media review platform for creative professionals (animation, VFX, gaming) that includes real-time)",
+   "title": "SyncSketch"
+  },
+  "speedtest.ru": {
+   "at": "2026-10-31T08:47:03Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is an internet speed test tool, which measures network performance parameters like download/upload speed, ping, and jitter. None of the provided)",
+   "title": "Проверка скорости интернета - speedtest онлайн"
+  },
+  "unit.no": {
+   "at": "2026-10-31T08:47:08Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "Sikt – Kunnskapssektorens tjenesteleverandør"
+  },
+  "wheeloutlet.com": {
+   "at": "2026-10-31T08:47:12Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is an e-commerce portal for automotive wheels. Verse does not have a page for a shop or a service that sells physical products.)",
+   "title": "wheeloutlet.com - Select your country & onlineshop"
+  },
+  "hexen.ai": {
+   "at": "2026-10-31T15:55:43Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a service provider offering custom AI development, consulting, and infrastructure solutions. Verse is a collection of individual utility tools)",
+   "title": "Hexen"
+  },
+  "ai-consulting": {
+   "at": "2026-10-31T15:55:43Z",
+   "outcome": "pending",
+   "why": "new floor for hexen.ai",
+   "title": "AI Consulting"
+  },
+  "fakemailgenerator.com": {
+   "at": "2026-10-31T15:55:48Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "Fake Mail Generator - Free temporary email addresses"
+  },
+  "opentimestamps.org": {
+   "at": "2026-10-31T15:55:52Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "OpenTimestamps"
+  },
+  "searchexpertfind.com": {
+   "at": "2026-10-31T15:55:52Z",
+   "outcome": "walled",
+   "why": "robots.txt asks robots not to read it"
+  },
+  "sketch.io": {
+   "at": "2026-10-31T15:55:57Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "Sketch.IO - The Maker of Sketchpad"
+  },
+  "gmgcolor.com": {
+   "at": "2026-10-31T15:56:29Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a commercial enterprise providing professional color management and proofing software for the printing industry. Verse does not have a tool for)",
+   "title": "GMG Color - Color Management Software & Proofing Solution"
+  },
+  "convertcart.com": {
+   "at": "2026-10-31T15:56:38Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides professional B2B e-commerce growth, CRO, and email marketing services. Verse is a collection of individual utility tools for end-users)",
+   "title": "eCommerce Growth Platform and Consulting | Convertcart"
+  },
+  "mail-tester.com": {
+   "at": "2026-10-31T21:49:59Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a service for testing email spam scores and deliverability, which involves receiving emails on a remote server to analyze them. None of the)",
+   "title": "Newsletters spam test by mail-tester.com"
+  },
+  "koanruler.com": {
+   "at": "2026-11-01T09:36:50Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a company profile and product catalog for a medical device manufacturer and telemedicine service provider. Verse does not have a page for)",
+   "title": "重庆康如来科技有限公司-医疗器械生产企业/远程医疗运营和服务企业/医疗健康产品/远程心电/心电监护/动态心电血压/多参数监护/遥测/神经康复/生物反馈/高压氧舱"
+  },
+  "duniter.org": {
+   "at": "2026-10-31T21:50:58Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a project landing page for a specific decentralized monetary system (Duniter/G1). While Verse has a 'finance' page, that page is for looking up)",
+   "title": "Duniter | Home"
+  },
+  "openspeedtest.com": {
+   "at": "2026-10-31T21:51:09Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides a network speed test service. While Verse has 'hosting' and 'nameunit' which deal with server sizing and bandwidth capacity, those are)",
+   "title": "SpeedTest by OpenSpeedTest™ HTML5 Internet Speed Test."
+  },
+  "ecommunity.com": {
+   "at": "2026-10-31T21:51:18Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a healthcare provider network offering medical services, patient portals, and billing information. Verse does not have a medical service, doctor)",
+   "title": "Home | Community Health Network"
+  },
+  "dafont.com": {
+   "at": "2026-10-31T21:51:27Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website dafont.com is a font repository for downloading various typefaces. None of the existing Verse pages provide a service for searching, previewing, or)",
+   "title": "DaFont - Download fonts"
+  },
+  "videounit.net": {
+   "at": "2026-10-31T21:51:32Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a service for downloading videos from various social media platforms via a browser extension, which does not match any of the specialized tools)",
+   "title": "Video Downloader for U - Download Videos with Ease"
+  },
+  "communityos.org": {
+   "at": "2026-10-31T21:51:38Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a complex B2B enterprise software platform for community service management, disaster relief, and 2-1-1 systems. Verse provides small)",
+   "title": "Visionlink"
+  },
+  "speedchecker.com": {
+   "at": "2026-11-01T09:36:53Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides B2B telecommunications infrastructure insights, crowdsourced network performance datasets, and SDKs for mobile operators and regulators.)",
+   "title": "Crowdsourcing for Telecoms & Regulators"
+  },
+  "drawnames.com": {
+   "at": "2026-11-01T09:37:04Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "drawnames | Wish Lists, Secret Santa, Gift Finder"
+  },
+  "illicitencounters.com": {
+   "at": "2026-11-01T09:37:14Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a dating service for married individuals, which is a specialized social/service platform. Verse provides utility tools, calculators, and)",
+   "title": "Married Dating UK | Discreet Dating Site | Illicit Encounters"
+  },
+  "speedcheckerapi.com": {
+   "at": "2026-11-01T09:37:20Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides professional B2B/B2G telecommunications crowdsourcing data, network quality insights, and SDKs for mobile/fixed operators and regulators.)",
+   "title": "Crowdsourcing for Telecoms & Regulators"
+  },
+  "resizepixel.com": {
+   "at": "2026-11-01T09:37:50Z",
+   "outcome": "discarded",
+   "family": "photos",
+   "why": "failed tests"
+  },
+  "fasterwheeler.com": {
+   "at": "2026-11-01T09:37:39Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides a database of motorcycle prices and specifications, which does not match any of the specific utility or media tools provided by Verse.)",
+   "title": "Bike, Motorbike, Motorcycle Prices And Specifications - Fasterwheeler"
+  },
+  "responsivedesignchecker.com": {
+   "at": "2026-11-01T09:37:44Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a tool for checking website responsiveness across different screen sizes. None of the provided Verse pages offer a web design preview, viewport)",
+   "title": "Responsive Website Design Tester | Media Genesis"
+  },
+  "seriouswheels.com": {
+   "at": "2026-11-01T16:54:18Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a car encyclopedia and wallpaper site. Verse does not have a page for browsing vehicle specifications, car photography, or automotive news.)",
+   "title": "Serious Wheels, Car Information, Car Comparison"
+  },
+  "hexasoftware.dev": {
+   "at": "2026-11-01T16:54:24Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a professional services company providing software development, mobile app development, and UI/UX design. None of the Verse tools offer)",
+   "title": "Hexa Software – Hexa Software Technology Company"
+  },
+  "wheelroot.com": {
+   "at": "2026-11-01T16:54:29Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a commercial course for learning drawing fundamentals. Verse is a collection of functional tools and apps, not a platform for hosting educational)",
+   "title": "Drawing Fundamentals | Slate Studio"
+  },
+  "coloringnation.com": {
+   "at": "2026-11-01T16:54:33Z",
+   "outcome": "no-family",
+   "why": "the model chose paint but the site says none of its words",
+   "title": "Coloring Nation - Tons of Free Coloring Pages - Coloring Nation"
+  },
+  "zischexpress.de": {
+   "at": "2026-11-01T16:54:38Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a beverage delivery service for specific German locations. Verse does not have a tool for shopping, local services, or beverage delivery.)",
+   "title": "ZischExpress Getränke - Lieferservice"
+  },
+  "coloringhome.com": {
+   "at": "2026-11-01T22:16:53Z",
+   "outcome": "no-family",
+   "why": "the model chose paint but the site says none of its words",
+   "title": "Coloring Nation - Tons of Free Coloring Pages - Coloring Nation"
+  },
+  "slackcommunity.com": {
+   "at": "2026-11-01T16:55:04Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a community platform for a specific software product, focused on local meetups and professional networking. None of the available Verse tools)",
+   "title": "Slack Community | Slack Community"
+  },
+  "ndscalc.ru": {
+   "at": "2026-11-01T16:55:26Z",
+   "outcome": "discarded",
+   "family": "formula calculators",
+   "why": "failed tests"
+  },
+  "ww2incolor.com": {
+   "at": "2026-11-01T22:16:59Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a curated historical archive of colorized World War II photographs. While Verse has a 'photos' tool, that tool is for image processing (editing)",
+   "title": "World War II In Color"
+  },
+  "justfont.com": {
+   "at": "2026-11-01T22:17:07Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (the website is a specialized font design studio and educational service that sells proprietary typefaces and offers design courses; Verse does not have a page)",
+   "title": "justfont｜新世代中文字型設計與字體教育團隊"
+  },
+  "streamingunity.dog": {
+   "at": "2026-11-01T22:17:14Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a streaming service for movies and TV shows, which is a commercial content platform. Verse does not have a tool for streaming video content or a)",
+   "title": "StreamingUnity"
+  },
+  "streamingunity.fun": {
+   "at": "2026-11-01T22:17:20Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "StreamingUnity"
+  },
+  "streamingunity.win": {
+   "at": "2026-11-01T22:17:26Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "StreamingUnity"
+  },
+  "colorfulbox.jp": {
+   "at": "2026-11-01T22:17:44Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a commercial web hosting service provider offering server plans, domain registration, and AI website builders. Verse's 'hosting' tool is a)",
+   "title": "レンタルサーバー ColorfulBox（カラフルボックス）｜ 30日間無料お試し"
+  },
+  "communitycollegejobs.com": {
+   "at": "2026-11-01T22:17:46Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (44 characters: a redirect stub, or a page that draws itself with no text)"
+  },
+  "calculoexato.com.br": {
+   "at": "2026-11-03T23:37:16Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a comprehensive collection of specialized calculators for finance, labor, rent, and more. Verse's 'formula calculators' is too general and)",
+   "title": "Cálculo Exato - Menu",
+   "ease": {
+    "score": 6,
+    "place": 1,
+    "why": "not sized yet, hardness 73, Tranco 75661"
+   }
+  },
+  "emojigraph.org": {
+   "at": "2026-11-03T23:37:24Z",
+   "outcome": "built",
+   "family": "emoji combos",
+   "id": "emoji combos: emojigraph.org",
+   "page": "/emoji-combos/emoji-dictionary/",
+   "ease": {
+    "score": 6,
+    "place": 2,
+    "why": "not sized yet, hardness 73, Tranco 68841"
+   },
+   "words": "the family page's own (the model's were refused: says what the page does not do (extensive, encyclopedia, discover, their, meanings))",
+   "rows": "12/15",
+   "gated": "2026-11-03T23:45:42Z"
+  },
+  "serverdiscounter.com": {
+   "at": "2026-11-03T23:37:29Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a commercial web hosting and server provider offering various paid infrastructure services like VPS, Dedicated Servers, and Domains. Verse is a)",
+   "title": "Serverdiscounter | Cloud und Bare-Metal Anbieter in Deutschland",
+   "ease": {
+    "score": 6,
+    "place": 3,
+    "why": "not sized yet, hardness 74, Tranco 367380"
+   }
+  },
+  "colorpop.ai": {
+   "at": "2026-11-03T23:37:37Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a coloring application and AI generator, which is a creative game/app service. Verse does not have a page for digital coloring tools or AI art)",
+   "title": "Color Pop - Free Color App & Coloring Games",
+   "ease": {
+    "score": 6,
+    "place": 4,
+    "why": "not sized yet, hardness 74, Tranco 238104"
+   }
+  },
+  "arkencounter.com": {
+   "at": "2026-11-03T23:38:04Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a theme park/attraction website. Verse has no page for attractions, theme parks, or travel planning services.)",
+   "title": "Life-size Noah’s Ark | Ark Encounter",
+   "ease": {
+    "score": 6,
+    "place": 5,
+    "why": "not sized yet, hardness 74, Tranco 182002"
+   }
+  },
+  "epoch.com": {
+   "at": "2026-11-03T23:38:09Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provided is a merchant services and billing platform for accepting online payments and managing customer transactions. Verse does not have a page)",
+   "title": "Epoch.com - Accept Payments Online Worldwide",
+   "ease": {
+    "score": 6,
+    "place": 6,
+    "why": "not sized yet, hardness 74, Tranco 138737"
+   }
+  },
+  "distancescalculator.com": {
+   "at": "2026-11-03T23:38:14Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a distance calculator for cities. While Verse has a 'unit converter' and 'formula calculators', neither is a dedicated tool for calculating)",
+   "title": "Distance calculator",
+   "ease": {
+    "score": 6,
+    "place": 7,
+    "why": "not sized yet, hardness 74, Tranco 73325"
+   }
+  },
+  "worldsmostethicalcompanies.com": {
+   "at": "2026-11-03T23:38:20Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides a corporate recognition program and certification for ethical business practices. Verse does not have a page for business ethics)",
+   "title": "World's Most Ethical Companies - World's Most Ethical Companies",
+   "ease": {
+    "score": 5.8,
+    "place": 8,
+    "why": "not sized yet, hardness 76, Tranco 397940"
+   }
+  },
+  "unitingchurch.org.au": {
+   "at": "2026-11-04T09:45:56Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a church organization page and the provided subpage is a specific web hosting login/support portal. Neither is a tool that matches the)",
+   "title": "controlhosting.net - Powered by Electricity",
+   "ease": {
+    "score": 5.8,
+    "place": 1,
+    "why": "not sized yet, hardness 76, Tranco 296786"
+   }
+  },
+  "hexler.net": {
+   "at": "2026-11-04T09:46:04Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a company page for a developer of multimedia tools (TouchOSC, KodeLife, etc.). Verse does not have a page for a company or a product)",
+   "title": "hexler.net",
+   "ease": {
+    "score": 5.8,
+    "place": 2,
+    "why": "not sized yet, hardness 76, Tranco 221709"
+   }
+  },
+  "deadlinkchecker.com": {
+   "at": "2026-11-04T09:46:11Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides a service for checking broken links on websites, which does not match any of the existing Verse tools (which are primarily calculators)",
+   "title": "Free Broken Link Checking Tool - Dead Link Checker",
+   "ease": {
+    "score": 5.7,
+    "place": 3,
+    "why": "not sized yet, hardness 77, Tranco 318566"
+   }
+  },
+  "testandcalc.com": {
+   "at": "2026-11-04T09:46:18Z",
+   "outcome": "covered",
+   "page": "/calculators/",
+   "topic": "formula calculators",
+   "title": "Software and Solutions for Teaching and learning Drug Calculations, On-line Test",
+   "why": "its job is formula calculators, which /calculators/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 5.7,
+    "place": 4,
+    "why": "not sized yet, hardness 78, Tranco 465927"
+   }
+  },
+  "portchecker.co": {
+   "at": "2026-11-04T09:46:22Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "Port Checker - Check Open Ports Online",
+   "ease": {
+    "score": 5.7,
+    "place": 5,
+    "why": "not sized yet, hardness 78, Tranco 244512"
+   }
+  },
+  "custompricecalculator.com": {
+   "at": "2026-11-04T09:46:28Z",
+   "outcome": "covered",
+   "page": "/calculators/",
+   "topic": "formula calculators",
+   "title": "AI Custom Price Calculator for Shopify | Apippa",
+   "why": "its job is formula calculators, which /calculators/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 5.7,
+    "place": 6,
+    "why": "not sized yet, hardness 78, Tranco 104213"
+   }
+  },
+  "regexone.com": {
+   "at": "2026-11-04T09:46:36Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is an interactive learning platform for regular expressions, while Verse currently has no tool for teaching programming concepts or language syntax.)",
+   "title": "RegexOne - Learn Regular Expressions - Lesson 1: An Introduction, and the ABCs",
+   "ease": {
+    "score": 5.6,
+    "place": 7,
+    "why": "not sized yet, hardness 79, Tranco 405240"
+   }
+  },
+  "ehex.de": {
+   "at": "2026-11-04T09:46:42Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides specialized software solutions and infrastructure for the German telematics infrastructure (eHealth). Verse does not have a page for)",
+   "title": "ehex | Die eHealth Experten",
+   "ease": {
+    "score": 5.6,
+    "place": 8,
+    "why": "not sized yet, hardness 79, Tranco 345776"
+   }
+  },
+  "agechecker.net": {
+   "at": "2026-11-04T18:12:19Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "Secure Online Age Verification • AgeChecker.Net",
+   "ease": {
+    "score": 5.6,
+    "place": 1,
+    "why": "not sized yet, hardness 79, Tranco 202665"
+   }
+  },
+  "onlinepasswordgenerator.ru": {
+   "at": "2026-11-04T18:12:24Z",
+   "outcome": "covered",
+   "page": "/password/",
+   "topic": "password generator",
+   "title": "Онлайн генератор паролей",
+   "why": "its job is password generator, which /password/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 5.6,
+    "place": 2,
+    "why": "not sized yet, hardness 80, Tranco 445639"
+   }
+  },
+  "watercalculator.org": {
+   "at": "2026-11-04T18:12:37Z",
+   "outcome": "covered",
+   "page": "/calculators/",
+   "topic": "formula calculators",
+   "title": "What's Your Water Footprint: Water Footprint Calculator Home Page",
+   "why": "its job is formula calculators, which /calculators/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 5.6,
+    "place": 3,
+    "why": "not sized yet, hardness 80, Tranco 350398"
+   }
+  },
+  "autoconvert.co.uk": {
+   "at": "2026-11-04T18:12:48Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a B2B SaaS platform for automotive finance, insurance, and compliance management. Verse does not have a page for enterprise-level CRM, F&I)",
+   "title": "Home | AutoConvert",
+   "ease": {
+    "score": 5.5,
+    "place": 4,
+    "why": "not sized yet, hardness 81, Tranco 82577"
+   }
+  },
+  "emojiall.com": {
+   "at": "2026-11-04T18:12:50Z",
+   "outcome": "covered",
+   "page": "/emojis/",
+   "topic": "emoji",
+   "title": "Emoji Dictionary,Copy,Image,Leaderboard...EMOJIALL.com",
+   "why": "its job is emoji, which /emojis/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 5.5,
+    "place": 5,
+    "why": "not sized yet, hardness 81, Tranco 47216"
+   }
+  },
+  "hexlet.io": {
+   "at": "2026-11-04T18:12:58Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is an online programming school providing educational courses and career training. Verse does not have a page for educational platforms or online)",
+   "title": "Hexlet — Learn Programming Online: Python, JavaScript, Java",
+   "ease": {
+    "score": 5.4,
+    "place": 6,
+    "why": "not sized yet, hardness 82, Tranco 228778"
+   }
+  },
+  "igfonts.io": {
+   "at": "2026-11-04T18:13:03Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a font generator for social media bios using Unicode characters. While Verse has an 'emoji combos' page for text art and kaomoji, it does not)",
+   "title": "Instagram Fonts Generator (𝓬𝓸𝓹𝔂 𝕒𝕟𝕕 𝓅𝒶𝓈𝓉𝑒) ― IGFonts.io",
+   "ease": {
+    "score": 5.4,
+    "place": 7,
+    "why": "not sized yet, hardness 82, Tranco 168903"
+   }
+  },
+  "coloradosos.gov": {
+   "at": "2026-11-04T18:13:07Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a government agency portal for state-level services like elections, business filings, and notary public information. Verse does not have a page)",
+   "title": "Colorado Secretary of State",
+   "ease": {
+    "score": 5.4,
+    "place": 8,
+    "why": "not sized yet, hardness 82, Tranco 98161"
+   }
+  },
+  "bestfonts.pro": {
+   "at": "2026-11-04T23:54:25Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a catalog for downloading fonts, but Verse does not have a page for browsing or downloading fonts/typography assets. The existing tools focus on)",
+   "title": "Каталог качественных шрифтов для Web — BestFonts.pro",
+   "ease": {
+    "score": 5.4,
+    "place": 1,
+    "why": "not sized yet, hardness 83, Tranco 407199"
+   }
+  },
+  "speedtest.sg": {
+   "at": "2026-11-04T23:54:31Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is an internet speed test tool. While Verse has a 'hosting' tool for calculating server capacity and traffic, it does not have a tool for end-users)",
+   "title": "Speedtest Singapore — Free Broadband & Internet Speed Test | speedtest.sg",
+   "ease": {
+    "score": 5.4,
+    "place": 2,
+    "why": "not sized yet, hardness 83, Tranco 327511"
+   }
+  },
+  "ofont.ru": {
+   "at": "2026-11-04T23:54:52Z",
+   "outcome": "gone",
+   "why": "did not load (page.goto: Timeout 20000ms exceeded.)",
+   "ease": {
+    "score": 5.4,
+    "place": 3,
+    "why": "not sized yet, hardness 83, Tranco 182726"
+   }
+  },
+  "speedtest.com.sg": {
+   "at": "2026-11-04T23:55:00Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "Speedtest Singapore — Free Broadband & Internet Speed Test | speedtest.sg",
+   "ease": {
+    "score": 5.4,
+    "place": 4,
+    "why": "not sized yet, hardness 83, Tranco 145374"
+   }
+  },
+  "jsonline.com": {
+   "at": "2026-11-04T23:55:26Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a news organization (Milwaukee Journal Sentinel). The only news-related Verse page available is 'news', but that page is a curated aggregator of)",
+   "title": "Milwaukee Journal Sentinel",
+   "ease": {
+    "score": 5.3,
+    "place": 5,
+    "why": "not sized yet, hardness 84, Tranco 10263"
+   }
+  },
+  "icalculator.com": {
+   "at": "2026-11-04T23:55:30Z",
+   "outcome": "covered",
+   "page": "/calculators/",
+   "topic": "formula calculators",
+   "title": "iCalculator™ | Free Online Tax, Salary, Mortgage & Business Calculators",
+   "why": "its job is formula calculators, which /calculators/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 5.3,
+    "place": 6,
+    "why": "not sized yet, hardness 84, Tranco 8446"
+   }
+  },
+  "epochteca.com": {
+   "at": "2026-11-04T23:55:33Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a professional IT services and software development company. Verse provides specialized tools and utility pages, but does not offer a page for)",
+   "title": "Epochteca - La solución está en TI",
+   "ease": {
+    "score": 5.3,
+    "place": 7,
+    "why": "not sized yet, hardness 85, Tranco 272125"
+   }
+  },
+  "realtimerental.com": {
+   "at": "2026-11-04T23:55:40Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a B2B software-as-a-service (SaaS) platform for property management and vacation rental businesses. Verse does not have a page that provides)",
+   "title": "RealTimeRental — Vacation Rental & Property Management Software",
+   "ease": {
+    "score": 5.3,
+    "place": 8,
+    "why": "not sized yet, hardness 85, Tranco 198688"
+   }
+  },
+  "coreldrawdesign.com": {
+   "at": "2026-11-05T09:47:42Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a resource hub for graphic design assets like CDR files, vectors, and templates, as well as design tutorials. Verse does not have a page)",
+   "title": "Home - CorelDraw Design (Download Free CDR, Vector, Stock Images, Tutorials, Tip",
+   "ease": {
+    "score": 5.3,
+    "place": 1,
+    "why": "not sized yet, hardness 85, Tranco 192094"
+   }
+  },
+  "coloradoan.com": {
+   "at": "2026-11-05T09:48:22Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a local news outlet. Verse has a 'news' page, but it is limited to specific global sources like the BBC and Guardian, whereas this website is a)",
+   "title": "The Coloradoan | Fort Collins news, community, entertainment, and classifieds. S",
+   "ease": {
+    "score": 5.3,
+    "place": 2,
+    "why": "not sized yet, hardness 85, Tranco 50211"
+   }
+  },
+  "uphex.com": {
+   "at": "2026-11-05T09:48:30Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a B2B service for marketing agencies to deploy proven Facebook ad campaigns for local niches. Verse does not have a page for marketing agency)",
+   "title": "UpHex — Proven Facebook Ads for Every Client, Built in Minutes",
+   "ease": {
+    "score": 5.2,
+    "place": 3,
+    "why": "not sized yet, hardness 87, Tranco 365294"
+   }
+  },
+  "timer365.com": {
+   "at": "2026-11-05T09:48:31Z",
+   "outcome": "covered",
+   "page": "/stopwatch/",
+   "topic": "stopwatch and timer",
+   "title": "Online Countdown Timer - Timer365",
+   "why": "its job is stopwatch and timer, which /stopwatch/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 5.2,
+    "place": 4,
+    "why": "not sized yet, hardness 87, Tranco 221328"
+   }
+  },
+  "loanwisecalculatoreasy.com": {
+   "at": "2026-11-05T09:48:34Z",
+   "outcome": "covered",
+   "page": "/calculators/",
+   "topic": "formula calculators",
+   "title": "Everyday Utilities | Mobile apps for what matters",
+   "why": "its job is formula calculators, which /calculators/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 5.2,
+    "place": 5,
+    "why": "not sized yet, hardness 87, Tranco 213650"
+   }
+  },
+  "drawio.com": {
+   "at": "2026-11-05T09:48:44Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "Security-first diagramming for teams | draw.io",
+   "ease": {
+    "score": 5.2,
+    "place": 6,
+    "why": "not sized yet, hardness 87, Tranco 46779"
+   }
+  },
+  "dentally.com": {
+   "at": "2026-11-05T09:48:55Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provided is for a professional dental practice management software service. Verse is a collection of individual utility tools (calculators)",
+   "title": "Dentally: Dental Software",
+   "ease": {
+    "score": 5.1,
+    "place": 7,
+    "why": "not sized yet, hardness 88, Tranco 303542"
+   }
+  },
+  "hexcolorpicker.io": {
+   "at": "2026-11-05T09:48:57Z",
+   "outcome": "gone",
+   "why": "answered 403",
+   "ease": {
+    "score": 5.1,
+    "place": 8,
+    "why": "not sized yet, hardness 88, Tranco 158748"
+   }
+  },
+  "sipcalculator.in": {
+   "at": "2026-11-05T18:13:42Z",
+   "outcome": "covered",
+   "page": "/calculators/",
+   "topic": "formula calculators",
+   "title": "SIP Calculator - Calculate returns for SIP investment",
+   "why": "its job is formula calculators, which /calculators/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 5.1,
+    "place": 1,
+    "why": "not sized yet, hardness 89, Tranco 218725"
+   }
+  },
+  "colordrop.io": {
+   "at": "2026-11-05T18:13:46Z",
+   "outcome": "covered",
+   "page": "/color/",
+   "topic": "colour codes",
+   "title": "Color Palettes with Hex Codes - ColorDrop",
+   "why": "its job is colour codes, which /color/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 5,
+    "place": 2,
+    "why": "not sized yet, hardness 90, Tranco 482468"
+   }
+  },
+  "colourlab.ai": {
+   "at": "2026-11-05T18:13:52Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a professional software service for AI-driven color grading in film and video production. Verse does not have any tools for video editing, color)",
+   "title": "The intelligence behind the image — Colourlab",
+   "ease": {
+    "score": 5,
+    "place": 3,
+    "why": "not sized yet, hardness 90, Tranco 431000"
+   }
+  },
+  "heritageunits.com": {
+   "at": "2026-11-05T18:13:55Z",
+   "outcome": "walled",
+   "why": "a sign-in wall",
+   "ease": {
+    "score": 5,
+    "place": 4,
+    "why": "not sized yet, hardness 91, Tranco 482020"
+   }
+  },
+  "cube.community": {
+   "at": "2026-11-05T18:14:02Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a non-profit community organization that hosts VR rhythm game tournaments, archives videos, and offers project hosting services. Verse has no)",
+   "title": "Cube Community",
+   "ease": {
+    "score": 5,
+    "place": 5,
+    "why": "not sized yet, hardness 91, Tranco 439487"
+   }
+  },
+  "doublecounter.gg": {
+   "at": "2026-11-05T18:14:07Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "Double Counter — Discord Security Bot · Block Alts, VPNs & Raids",
+   "ease": {
+    "score": 5,
+    "place": 6,
+    "why": "not sized yet, hardness 91, Tranco 76312"
+   }
+  },
+  "colorscheme.ru": {
+   "at": "2026-11-05T18:14:24Z",
+   "outcome": "built",
+   "family": "colour",
+   "id": "colour: colorscheme.ru",
+   "page": "/color/colour-picker-tool/?c=ff5733",
+   "ease": {
+    "score": 4.9,
+    "place": 7,
+    "why": "not sized yet, hardness 92, Tranco 342989"
+   },
+   "words": "the family page's own (the model's were refused: names colorscheme; names colorscheme; says what the page does not do (generate, harmonious, explore, relationships, visu)",
+   "rows": "12/15",
+   "gated": "2026-11-05T18:22:12Z"
+  },
+  "base64.guru": {
+   "at": "2026-11-05T18:14:26Z",
+   "outcome": "covered",
+   "page": "/base64/",
+   "topic": "base64",
+   "title": "Base64",
+   "why": "its job is base64, which /base64/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 4.9,
+    "place": 8,
+    "why": "not sized yet, hardness 92, Tranco 294125"
+   }
+  },
+  "tm.community": {
+   "at": "2026-11-05T23:49:12Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is for a specific meditation technique and its official app, which is a branded service/organization. Verse does not have a page for meditation)",
+   "title": "The official mobile app for Transcendental Meditation",
+   "ease": {
+    "score": 4.9,
+    "place": 1,
+    "why": "not sized yet, hardness 93, Tranco 475627"
+   }
+  },
+  "diffusionbee.com": {
+   "at": "2026-11-05T23:49:16Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a software download page for a local AI art application. Verse does not have a page for software downloads or a dedicated AI image generation)",
+   "title": "DiffusionBee - Stable Diffusion App for AI Art",
+   "ease": {
+    "score": 4.9,
+    "place": 2,
+    "why": "not sized yet, hardness 93, Tranco 464589"
+   }
+  },
+  "ti84calc.com": {
+   "at": "2026-11-05T23:49:34Z",
+   "outcome": "covered",
+   "page": "/calculators/",
+   "topic": "formula calculators",
+   "title": "TI 84 Calculator Online - Free Graphing Calculator Simulator",
+   "why": "its job is formula calculators, which /calculators/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 4.9,
+    "place": 3,
+    "why": "not sized yet, hardness 93, Tranco 410433"
+   }
+  },
+  "color-register.org": {
+   "at": "2026-11-05T23:49:36Z",
+   "outcome": "covered",
+   "page": "/color/",
+   "topic": "colour codes",
+   "title": "The Official Register of Color Names – Name a Digital Color",
+   "why": "its job is colour codes, which /color/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 4.9,
+    "place": 4,
+    "why": "not sized yet, hardness 93, Tranco 136492"
+   }
+  },
+  "zcashcommunity.com": {
+   "at": "2026-11-05T23:49:44Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a community hub and information portal for a specific cryptocurrency. Verse provides general-purpose tools (finance, news, calculators, etc.))",
+   "title": "Homepage - Zcash Community",
+   "ease": {
+    "score": 4.8,
+    "place": 5,
+    "why": "not sized yet, hardness 94, Tranco 352210"
+   }
+  },
+  "suncommunitynews.com": {
+   "at": "2026-11-05T23:50:07Z",
+   "outcome": "built",
+   "family": "news",
+   "id": "news: suncommunitynews.com",
+   "page": "/news/global-headlines/?sec=world",
+   "ease": {
+    "score": 4.7,
+    "place": 6,
+    "why": "not sized yet, hardness 96, Tranco 70651"
+   },
+   "words": "the family page's own (the model's were refused: says what the page does not do (informed, organized, breaking, around, aggregates))",
+   "rows": "13/15",
+   "gated": "2026-11-05T23:58:16Z"
+  },
+  "united-kiosk.de": {
+   "at": "2026-11-05T23:50:14Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a digital newsstand and magazine subscription shop. While Verse has a 'news' page, that page is a curated aggregator of headlines from specific)",
+   "title": "Weil Vielfalt mehr ist als Meinung | United Kiosk",
+   "ease": {
+    "score": 4.7,
+    "place": 7,
+    "why": "not sized yet, hardness 97, Tranco 316209"
+   }
+  },
+  "graphjson.com": {
+   "at": "2026-11-05T23:50:26Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "GraphJSON - Event analytics without the analytics stack",
+   "ease": {
+    "score": 4.7,
+    "place": 8,
+    "why": "not sized yet, hardness 97, Tranco 304708"
+   }
+  },
+  "firefox-portal-detection.com": {
+   "at": "2026-11-06T09:46:15Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (7 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 100,
+    "place": 1,
+    "why": "0 controls, 0 KB, Tranco 204"
+   }
+  },
+  "id5-sync.com": {
+   "at": "2026-11-06T09:46:19Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (12 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 100,
+    "place": 2,
+    "why": "0 controls, 0 KB, Tranco 1268"
+   }
+  },
+  "mega.co.nz": {
+   "at": "2026-11-06T09:46:40Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a cloud storage and encrypted file sharing service. Verse does not have a page for cloud storage, file hosting, or secure data synchronization)",
+   "title": "MEGA: Protect your Online Privacy",
+   "ease": {
+    "score": 99.9,
+    "place": 3,
+    "why": "0 controls, 1 KB, Tranco 572"
+   }
+  },
+  "example.com": {
+   "at": "2026-11-06T09:46:42Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides a placeholder domain for documentation examples and explicitly states it is not a service for testing or monitoring. Since Verse is a)",
+   "title": "Example Domain",
+   "ease": {
+    "score": 99.9,
+    "place": 4,
+    "why": "0 controls, 1 KB, Tranco 177"
+   }
+  },
+  "uisp.com": {
+   "at": "2026-11-06T09:46:45Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides ISP network management software and hardware, including billing, monitoring, and network design tools. Verse has no tool for network)",
+   "title": "UISP Overview - Ubiquiti",
+   "ease": {
+    "score": 99.9,
+    "place": 5,
+    "why": "0 controls, 1 KB, Tranco 2905"
+   }
+  },
+  "feednews.com": {
+   "at": "2026-11-06T09:46:46Z",
+   "outcome": "walled",
+   "why": "robots.txt asks robots not to read it",
+   "ease": {
+    "score": 99.9,
+    "place": 6,
+    "why": "0 controls, 1 KB, Tranco 4672"
+   }
+  },
+  "samsunghealth.com": {
+   "at": "2026-11-06T09:46:50Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a health and wellness platform providing services like activity tracking and fitness monitoring. Verse does not have a page that offers health)",
+   "title": "Samsung Health",
+   "ease": {
+    "score": 99.9,
+    "place": 7,
+    "why": "0 controls, 1 KB, Tranco 3263"
+   }
+  },
+  "netcraze.io": {
+   "at": "2026-11-06T09:46:51Z",
+   "outcome": "walled",
+   "why": "robots.txt asks robots not to read it",
+   "ease": {
+    "score": 99.9,
+    "place": 8,
+    "why": "0 controls, 1 KB, Tranco 444"
+   }
+  },
+  "bttrack.com": {
+   "at": "2026-11-06T17:39:40Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides a tracking API and technical dashboard for advertising/audience data infrastructure, which is a specialized backend service. Verse's)",
+   "title": "Tracking API",
+   "ease": {
+    "score": 99.8,
+    "place": 1,
+    "why": "0 controls, 2 KB, Tranco 3268"
+   }
+  },
+  "archive.org": {
+   "at": "2026-11-06T17:39:42Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (0 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 99.8,
+    "place": 2,
+    "why": "0 controls, 2 KB, Tranco 153"
+   }
+  },
+  "slideshare.net": {
+   "at": "2026-11-06T17:39:44Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (82 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 99.7,
+    "place": 3,
+    "why": "0 controls, 3 KB, Tranco 557"
+   }
+  },
+  "dalyfeds.com": {
+   "at": "2026-11-06T17:39:51Z",
+   "outcome": "no-family",
+   "why": "the model chose news but the site says none of its words",
+   "title": "H5 Center",
+   "ease": {
+    "score": 99.7,
+    "place": 4,
+    "why": "0 controls, 3 KB, Tranco 2875"
+   }
+  },
+  "disqus.com": {
+   "at": "2026-11-06T17:40:04Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides a complex B2B SaaS platform for community engagement, moderation, and monetization, which does not match any of the simple utility-based)",
+   "title": "#1 in audience engagement and community growth | Disqus",
+   "ease": {
+    "score": 99.4,
+    "place": 5,
+    "why": "0 controls, 6 KB, Tranco 922"
+   }
+  },
+  "myfritz.net": {
+   "at": "2026-11-06T17:40:09Z",
+   "outcome": "walled",
+   "why": "a sign-in wall",
+   "ease": {
+    "score": 99.3,
+    "place": 6,
+    "why": "0 controls, 7 KB, Tranco 59"
+   }
+  },
+  "kahoot.it": {
+   "at": "2026-11-06T17:40:14Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a game platform entry point (PIN entry for players), which does not match any of the tool-based services provided by Verse. Verse has a)",
+   "title": "Enter Game PIN - Kahoot!",
+   "ease": {
+    "score": 99.3,
+    "place": 7,
+    "why": "0 controls, 7 KB, Tranco 3202"
+   }
+  },
+  "gosuslugi.ru": {
+   "at": "2026-11-06T17:40:18Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (0 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 99.1,
+    "place": 8,
+    "why": "0 controls, 9 KB, Tranco 662"
+   }
+  },
+  "everycom.store": {
+   "at": "2026-11-06T23:26:31Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is an e-commerce shop selling electronics and accessories, and Verse does not have a shop or a page for a consumer goods retailer.)",
+   "title": "EveryCom Store",
+   "ease": {
+    "score": 99.9,
+    "place": 1,
+    "why": "0 controls, 1 KB, Tranco 40053"
+   }
+  },
+  "opentv.com": {
+   "at": "2026-11-06T23:26:34Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (105 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 99.8,
+    "place": 2,
+    "why": "0 controls, 2 KB, Tranco 40107"
+   }
+  },
+  "adnext.mobi": {
+   "at": "2026-11-06T23:26:40Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a B2B programmatic advertising platform (DSP/SSP/AdX) for advertisers and publishers. Verse does not have a tool for managing digital advertising)",
+   "title": "ADNEXT",
+   "ease": {
+    "score": 99.5,
+    "place": 3,
+    "why": "0 controls, 5 KB, Tranco 40050"
+   }
+  },
+  "juicychat.ai": {
+   "at": "2026-11-07T09:10:01Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a service for NSFW AI character chatting, and Verse does not have a page for AI chat or roleplay services.)",
+   "title": "NSFW Character AI Chat - JuicyChat.AI",
+   "ease": {
+    "score": 99.4,
+    "place": 1,
+    "why": "0 controls, 6 KB, Tranco 40015"
+   }
+  },
+  "protopage.com": {
+   "at": "2026-11-06T23:26:54Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a personalized start page service with widgets and news feeds. While Verse has 'news' and 'docs and notes', it does not have a tool that combines)",
+   "title": "Protopage - Free Personalized Start Pages",
+   "ease": {
+    "score": 99,
+    "place": 5,
+    "why": "0 controls, 10 KB, Tranco 40011"
+   }
+  },
+  "skybridge.click": {
+   "at": "2026-11-06T23:26:54Z",
+   "outcome": "walled",
+   "why": "robots.txt asks robots not to read it",
+   "ease": {
+    "score": 98.7,
+    "place": 6,
+    "why": "0 controls, 13 KB, Tranco 141"
+   }
+  },
+  "tinyurl.com": {
+   "at": "2026-11-06T23:27:13Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "URL Shortener, Branded Short Links & Analytics | TinyURL",
+   "ease": {
+    "score": 98.6,
+    "place": 7,
+    "why": "0 controls, 14 KB, Tranco 296"
+   }
+  },
+  "adsco.re": {
+   "at": "2026-11-06T23:27:13Z",
+   "outcome": "walled",
+   "why": "robots.txt asks robots not to read it",
+   "ease": {
+    "score": 90.9,
+    "place": 8,
+    "why": "1 controls, 0 KB, Tranco 1949"
+   }
+  },
+  "cloudflareinsights.com": {
+   "at": "2026-11-07T09:10:02Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (41 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 90.9,
+    "place": 2,
+    "why": "1 controls, 0 KB, Tranco 315"
+   }
+  },
+  "1ts21.top": {
+   "at": "2026-11-07T09:10:02Z",
+   "outcome": "walled",
+   "why": "robots.txt asks robots not to read it",
+   "ease": {
+    "score": 90.9,
+    "place": 3,
+    "why": "1 controls, 1 KB, Tranco 80022"
+   }
+  },
+  "oneyeard.com": {
+   "at": "2026-11-07T09:10:06Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provided is a 403 Forbidden error page, which contains no functional tools or content to match against Verse's services.)",
+   "title": "Sorry, This Page Can't Be Accessed",
+   "ease": {
+    "score": 90.8,
+    "place": 4,
+    "why": "1 controls, 2 KB, Tranco 40056"
+   }
+  },
+  "registrar-servers.com": {
+   "at": "2026-11-07T09:10:06Z",
+   "outcome": "walled",
+   "why": "robots.txt asks robots not to read it",
+   "ease": {
+    "score": 90.7,
+    "place": 5,
+    "why": "1 controls, 2 KB, Tranco 127"
+   }
+  },
+  "onetag-sys.com": {
+   "at": "2026-11-07T09:10:07Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (106 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 83.3,
+    "place": 6,
+    "why": "2 controls, 1 KB, Tranco 890"
+   }
+  },
+  "astrumu.io": {
+   "at": "2026-11-07T09:10:28Z",
+   "outcome": "gone",
+   "why": "did not load (page.goto: Timeout 20000ms exceeded.)",
+   "ease": {
+    "score": 83.3,
+    "place": 7,
+    "why": "2 controls, 1 KB, Tranco 179"
+   }
+  },
+  "google.cn": {
+   "at": "2026-11-07T09:10:29Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (41 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 83.2,
+    "place": 8,
+    "why": "2 controls, 1 KB, Tranco 377"
+   }
+  },
+  "milkie.cc": {
+   "at": "2026-11-07T16:40:23Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (60 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 99.9,
+    "place": 1,
+    "why": "0 controls, 1 KB, Tranco 120104"
+   }
+  },
+  "digitalsogame.com": {
+   "at": "2026-11-07T16:40:26Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (103 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 90.8,
+    "place": 2,
+    "why": "1 controls, 1 KB, Tranco 120024"
+   }
+  },
+  "share.google": {
+   "at": "2026-11-07T16:40:29Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a URL shortener and redirect service for a specific company's app, which does not match any of the functional tool pages provided in the Verse)",
+   "title": "share.google",
+   "ease": {
+    "score": 76.8,
+    "place": 3,
+    "why": "3 controls, 2 KB, Tranco 523"
+   }
+  },
+  "g.co": {
+   "at": "2026-11-07T16:40:36Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a URL shortening service for a specific company. Verse does not have a page for URL shorteners or link management tools.)",
+   "title": "g.co",
+   "ease": {
+    "score": 76.8,
+    "place": 4,
+    "why": "3 controls, 2 KB, Tranco 770"
+   }
+  },
+  "amazon.co.uk": {
+   "at": "2026-11-07T16:40:41Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a massive e-commerce marketplace. Verse does not have a page for a general shopping service or retail store.)",
+   "title": "Amazon.co.uk",
+   "ease": {
+    "score": 76.7,
+    "place": 5,
+    "why": "3 controls, 4 KB, Tranco 329"
+   }
+  },
+  "amazon.de": {
+   "at": "2026-11-07T16:40:47Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a major e-commerce marketplace. Verse does not have a general shopping or retail page.)",
+   "title": "Amazon.de: Low Prices in Electronics, Books, Sports Equipment & more",
+   "ease": {
+    "score": 76.7,
+    "place": 6,
+    "why": "3 controls, 4 KB, Tranco 379"
+   }
+  },
+  "live-video.net": {
+   "at": "2026-11-07T16:40:51Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a landing page for Amazon Interactive Video Service (IVS), which is a cloud-based live video streaming service. Verse does not have a tool for)",
+   "title": "Amazon.com Property",
+   "ease": {
+    "score": 71.3,
+    "place": 7,
+    "why": "4 controls, 2 KB, Tranco 401"
+   }
+  },
+  "dns.google": {
+   "at": "2026-11-07T16:40:55Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (none)",
+   "title": "Google Public DNS",
+   "ease": {
+    "score": 66.6,
+    "place": 8,
+    "why": "5 controls, 1 KB, Tranco 384"
+   }
+  },
+  "vivoglobal.com": {
+   "at": "2026-11-07T22:14:19Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (82 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 66.6,
+    "place": 1,
+    "why": "5 controls, 2 KB, Tranco 887"
+   }
+  },
+  "uniteforliteracy.com": {
+   "at": "2026-11-08T16:46:44Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a digital library of children's books with narration, but Verse does not have a page for a digital book library or a children's reading service.)",
+   "title": "Unite for Literacy",
+   "ease": {
+    "score": 4.6,
+    "place": 4,
+    "why": "not sized yet, hardness 98, Tranco 284167"
+   }
+  },
+  "ldraw.org": {
+   "at": "2026-11-08T16:47:05Z",
+   "outcome": "gone",
+   "why": "did not load (page.goto: Timeout 20000ms exceeded.)",
+   "ease": {
+    "score": 4.6,
+    "place": 5,
+    "why": "not sized yet, hardness 99, Tranco 291274"
+   }
+  },
+  "caffmoscommunity.com": {
+   "at": "2026-11-07T22:14:34Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (51 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 4.6,
+    "place": 4,
+    "why": "not sized yet, hardness 99, Tranco 215170"
+   }
+  },
+  "radicenter.ee": {
+   "at": "2026-11-08T16:47:12Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provided is a commercial web hosting and domain registration service. Verse does not have a page for a service that sells web hosting or domains)",
+   "title": "Radicenter – Radicenter – Veebimajutus ja domeenid",
+   "ease": {
+    "score": 4.6,
+    "place": 6,
+    "why": "not sized yet, hardness 99, Tranco 102900"
+   }
+  },
+  "testerhome.com": {
+   "at": "2026-11-08T16:47:33Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a community forum and professional social network for software testing engineers. Verse does not have a forum or social networking tool for)",
+   "title": "测试之家",
+   "ease": {
+    "score": 4.5,
+    "place": 7,
+    "why": "not sized yet, hardness 101, Tranco 441708"
+   }
+  },
+  "keydifferences.com": {
+   "at": "2026-11-08T16:47:43Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is an educational resource focused on comparing and contrasting various concepts, terms, and definitions. None of the existing Verse tools provide a)",
+   "title": "Key Differences - Know the Differences & Comparisons",
+   "ease": {
+    "score": 4.5,
+    "place": 8,
+    "why": "not sized yet, hardness 101, Tranco 306443"
+   }
+  },
+  "randomvideochat.me": {
+   "at": "2026-11-08T22:23:42Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides a random 1v1 video chat service for meeting strangers, which is a social networking/communication service that Verse does not have a page)",
+   "title": "Free 1v1 Video Chat with Girls | Random Video Calls, No Sign-Up",
+   "ease": {
+    "score": 4.5,
+    "place": 1,
+    "why": "not sized yet, hardness 101, Tranco 278950"
+   }
+  },
+  "aurashinehub.com": {
+   "at": "2026-11-08T16:46:29Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is an e-commerce shop selling jewelry. Verse does not have a page for shops or retail services.)",
+   "title": "aurashinehub-Fashionable choices.",
+   "ease": {
+    "score": 98.6,
+    "place": 2,
+    "why": "0 controls, 14 KB, Tranco 200044"
+   }
+  },
+  "maphill.com": {
+   "at": "2026-11-08T09:25:24Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (110 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 90.8,
+    "place": 2,
+    "why": "1 controls, 1 KB, Tranco 160023"
+   }
+  },
+  "250free.com": {
+   "at": "2026-11-08T09:25:27Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (0 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 83.3,
+    "place": 3,
+    "why": "2 controls, 1 KB, Tranco 200013"
+   }
+  },
+  "zpecloud.com": {
+   "at": "2026-11-08T16:46:24Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides enterprise-level cloud-based IT device provisioning and deployment services for branch offices. This is a specialized B2B hardware)",
+   "title": "ZPE Systems®, Inc.",
+   "ease": {
+    "score": 99.8,
+    "place": 1,
+    "why": "0 controls, 2 KB, Tranco 240020"
+   }
+  },
+  "pokupon.ua": {
+   "at": "2026-11-08T16:46:39Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a marketplace for discounted services and products (coupons/deals), which is a commercial service/shop. Verse does not have a marketplace or a)",
+   "title": "Акції та знижки ✔️ Pokupon - Маркетплейс послуг",
+   "ease": {
+    "score": 98.5,
+    "place": 3,
+    "why": "0 controls, 15 KB, Tranco 240006"
+   }
+  },
+  "typo3.community": {
+   "at": "2026-11-08T22:23:50Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a community hub and support portal for a specific open-source CMS, which is a service/community site rather than a standalone utility tool like)",
+   "title": "Home of the TYPO3 Community — Collaboration, Sharing, and Open Source - TYPO3 Co",
+   "ease": {
+    "score": 4.5,
+    "place": 2,
+    "why": "not sized yet, hardness 101, Tranco 142287"
+   }
+  },
+  "counterscope.ae": {
+   "at": "2026-11-08T22:23:52Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (46 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 4.5,
+    "place": 3,
+    "why": "not sized yet, hardness 102, Tranco 353394"
+   }
+  },
+  "calculatorian.com": {
+   "at": "2026-11-08T22:23:55Z",
+   "outcome": "covered",
+   "page": "/calculators/",
+   "topic": "formula calculators",
+   "title": "Calculatorian - It Starts Here!",
+   "why": "its job is formula calculators, which /calculators/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 4.5,
+    "place": 4,
+    "why": "not sized yet, hardness 102, Tranco 275560"
+   }
+  },
+  "freevisitorcounters.com": {
+   "at": "2026-11-08T22:24:01Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides visitor counters for websites, which is a web development widget/service. None of the Verse pages offered are designed to generate or)",
+   "title": "100% Free Visitor Counter for your Homepage / Website",
+   "ease": {
+    "score": 4.5,
+    "place": 5,
+    "why": "not sized yet, hardness 102, Tranco 175641"
+   }
+  },
+  "younit.kr": {
+   "at": "2026-11-08T22:24:05Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a professional IT services and maintenance company specializing in server management, PHP upgrades, and emergency troubleshooting. Verse provides)",
+   "title": "IT문제를 빠르게 해결하는 유엔아이티",
+   "ease": {
+    "score": 4.4,
+    "place": 6,
+    "why": "not sized yet, hardness 103, Tranco 292609"
+   }
+  },
+  "colorbook.io": {
+   "at": "2026-11-08T22:24:14Z",
+   "outcome": "built",
+   "family": "colour",
+   "id": "colour: colorbook.io",
+   "page": "/color/colour-management/?c=ff5733",
+   "ease": {
+    "score": 4.4,
+    "place": 7,
+    "why": "not sized yet, hardness 103, Tranco 197059"
+   },
+   "words": "the family page's own (the model's were refused: says what the page does not do (discover, analyze, manage, precision, create))",
+   "rows": "13/15",
+   "gated": "2026-11-08T22:31:42Z"
+  },
+  "ex-unit.nagoya": {
+   "at": "2026-11-08T22:24:33Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a product page for a WordPress plugin that provides various website management and enhancement features. Verse does not have a page for web)",
+   "title": "VK All in One Expansion Unit | WordPress Plugin",
+   "ease": {
+    "score": 4.4,
+    "place": 8,
+    "why": "not sized yet, hardness 104, Tranco 158733"
+   }
+  },
+  "tsundere.pw": {
+   "at": "2026-11-09T10:12:52Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides a silent musical tracklist/album playback experience, which does not match any of the provided Verse tool pages (utility, productivity, or)",
+   "title": "Fripp Don't Interact",
+   "ease": {
+    "score": 99.9,
+    "place": 1,
+    "why": "0 controls, 1 KB, Tranco 320058"
+   }
+  },
+  "man.fyi": {
+   "at": "2026-11-09T10:12:54Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (92 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 90.4,
+    "place": 2,
+    "why": "1 controls, 6 KB, Tranco 320043"
+   }
+  },
+  "trafflink.xyz": {
+   "at": "2026-11-09T10:12:59Z",
+   "outcome": "gone",
+   "why": "did not load (page.goto: net::ERR_SSL_PROTOCOL_ERROR at https://trafflink.xyz/)",
+   "ease": {
+    "score": 83.3,
+    "place": 3,
+    "why": "2 controls, 1 KB, Tranco 320010"
+   }
+  },
+  "arcticfoxhaircolor.com": {
+   "at": "2026-11-09T10:13:09Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a brand shop and content hub for hair dye products. Verse does not have a page for an e-commerce shop or a brand-specific service.)",
+   "title": "Homepage | Arctic Fox - Dye For A Cause",
+   "ease": {
+    "score": 4.3,
+    "place": 4,
+    "why": "not sized yet, hardness 105, Tranco 318028"
+   }
+  },
+  "hexcol.com": {
+   "at": "2026-11-09T10:13:11Z",
+   "outcome": "covered",
+   "page": "/color/",
+   "topic": "colour codes",
+   "title": "Hexcol.com - Color codes",
+   "why": "its job is colour codes, which /color/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 4.3,
+    "place": 5,
+    "why": "not sized yet, hardness 105, Tranco 308739"
+   }
+  },
+  "junit.org": {
+   "at": "2026-11-09T10:13:16Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a project page for a Java testing framework (JUnit). Verse provides tools for developers (like an encoder or a Perl test report viewer), but it)",
+   "title": "JUnit",
+   "ease": {
+    "score": 4.3,
+    "place": 6,
+    "why": "not sized yet, hardness 105, Tranco 49979"
+   }
+  },
+  "ipcalc.co": {
+   "at": "2026-11-09T10:13:17Z",
+   "outcome": "gone",
+   "why": "did not load (page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://ipcalc.co/)",
+   "ease": {
+    "score": 4.3,
+    "place": 7,
+    "why": "not sized yet, hardness 106, Tranco 96102"
+   }
+  },
+  "cashconverters.co.uk": {
+   "at": "2026-11-09T10:13:28Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a retail and pawnbroking service for buying and selling second-hand goods and providing personal finance solutions. Verse does not have a page)",
+   "title": "Buy & Sell Second-hand Goods | Pawnbroking | Cash Converters",
+   "ease": {
+    "score": 4.3,
+    "place": 8,
+    "why": "not sized yet, hardness 106, Tranco 72465"
+   }
+  },
+  "timeclockwizard.com": {
+   "at": "2026-11-09T21:01:23Z",
+   "outcome": "covered",
+   "page": "/calculators/",
+   "topic": "formula calculators",
+   "title": "Free Online Time Clock: Time Tracking & Scheduling App for Employees",
+   "why": "its job is formula calculators, which /calculators/ already does: extend that page, not a new one",
+   "ease": {
+    "score": 4.3,
+    "place": 1,
+    "why": "not sized yet, hardness 106, Tranco 69704"
+   }
+  },
+  "slightlydifferent.co.nz": {
+   "at": "2026-11-09T21:01:34Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a professional service offering web design, ecommerce, and hosting. Verse does not have a page for professional services like web development or)",
+   "title": "Slightly Different · Websites that work, built in New Zealand",
+   "ease": {
+    "score": 4.3,
+    "place": 2,
+    "why": "not sized yet, hardness 107, Tranco 159096"
+   }
+  },
+  "hexrom.com": {
+   "at": "2026-11-09T21:01:41Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a repository for downloading ROMs and emulators, which is a service for digital content distribution/piracy that Verse does not provide a page)",
+   "title": "Download Roms - HexRom",
+   "ease": {
+    "score": 4.3,
+    "place": 3,
+    "why": "not sized yet, hardness 107, Tranco 108207"
+   }
+  },
+  "colorlib.com": {
+   "at": "2026-11-09T21:01:47Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a marketplace/repository for WordPress themes and HTML website templates. Verse does not have a tool for browsing, searching, or providing)",
+   "title": "WordPress Themes & Website Templates - Colorlib",
+   "ease": {
+    "score": 4.3,
+    "place": 4,
+    "why": "not sized yet, hardness 107, Tranco 3744"
+   }
+  },
+  "steamcommunity.com": {
+   "at": "2026-11-09T21:01:51Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a gaming community platform for social interaction, game reviews, and player guides. None of the available Verse pages provide social networking)",
+   "title": "Steam Community",
+   "ease": {
+    "score": 4.3,
+    "place": 5,
+    "why": "not sized yet, hardness 107, Tranco 421"
+   }
+  },
+  "unitpay.ru": {
+   "at": "2026-11-10T10:18:28Z",
+   "outcome": "gone",
+   "why": "answered 502",
+   "ease": {
+    "score": 4.2,
+    "place": 5,
+    "why": "not sized yet, hardness 108, Tranco 176282"
+   }
+  },
+  "united-hoster.de": {
+   "at": "2026-11-09T21:02:46Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a commercial web hosting and cloud service provider for SMEs. Verse does not have a page that offers cloud hosting, server infrastructure, or)",
+   "title": "Cloud für kleine & mittelständische Unternehmen (KMU) - united hoster GmbH",
+   "ease": {
+    "score": 4.2,
+    "place": 7,
+    "why": "not sized yet, hardness 109, Tranco 337143"
+   }
+  },
+  "confirmation.community": {
+   "at": "2026-11-09T21:03:14Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a knowledge base and support community for a specific financial auditing service. Verse has no page for providing specialized business support)",
+   "title": "",
+   "ease": {
+    "score": 4.2,
+    "place": 8,
+    "why": "not sized yet, hardness 109, Tranco 279084"
+   }
+  },
+  "telegram.services": {
+   "at": "2026-11-10T10:17:51Z",
+   "outcome": "walled",
+   "why": "a nearly empty page (2 characters: a redirect stub, or a page that draws itself with no text)",
+   "ease": {
+    "score": 100,
+    "place": 1,
+    "why": "0 controls, 0 KB, Tranco 400033"
+   }
+  },
+  "studiowaterarts.com": {
+   "at": "2026-11-10T10:17:51Z",
+   "outcome": "walled",
+   "why": "robots.txt asks robots not to read it",
+   "ease": {
+    "score": 100,
+    "place": 2,
+    "why": "0 controls, 0 KB, Tranco 360134"
+   }
+  },
+  "rightarion.ru": {
+   "at": "2026-11-10T10:17:56Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (the website is a personal portfolio and CV, which is a service for individual identity presentation that Verse does not have a specific page for; while)",
+   "title": "Rightarion | Personal Website",
+   "ease": {
+    "score": 99.5,
+    "place": 3,
+    "why": "0 controls, 5 KB, Tranco 360129"
+   }
+  },
+  "cavea.plus": {
+   "at": "2026-11-10T10:18:04Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website is a video streaming service for movies and series. Verse does not have a tool for streaming media content, only for tools like podcasts or music)",
+   "title": "CaveaPlus - კავეა პლუსი",
+   "ease": {
+    "score": 99.4,
+    "place": 4,
+    "why": "0 controls, 6 KB, Tranco 360120"
+   }
+  },
+  "informunity.ru": {
+   "at": "2026-11-10T10:19:00Z",
+   "outcome": "not-judged",
+   "why": "the answer was not JSON",
+   "ease": {
+    "score": 4.2,
+    "place": 6,
+    "why": "not sized yet, hardness 110, Tranco 313243"
+   }
+  },
+  "whatismyip.org": {
+   "at": "2026-11-10T10:19:05Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides IP address lookup and geolocation services, which does not match any of the existing Verse tool pages provided in the list.)",
+   "title": "What is My IP Address? Find Public IPv4 & IPv6",
+   "ease": {
+    "score": 4.2,
+    "place": 7,
+    "why": "not sized yet, hardness 110, Tranco 113980"
+   }
+  },
+  "w3counter.com": {
+   "at": "2026-11-10T10:19:09Z",
+   "outcome": "no-family",
+   "why": "no floor does its job (The website provides website analytics and visitor tracking services. None of the available Verse pages offer web traffic analysis, visitor behavior tracking)",
+   "title": "Simple Website Analytics & Live Visitor Tracking · W3Counter",
+   "ease": {
+    "score": 4.2,
+    "place": 8,
+    "why": "not sized yet, hardness 110, Tranco 58060"
+   }
+  }
+ },
+ "runs": [
+  {
+   "at": "2026-11-01T22:17:52Z",
+   "line": "Versus: took on no site (also read: 7 no-family, 1 walled); next ndscalc.ru (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "calculoexato.com.br",
+   "noop": true
+  },
+  {
+   "at": "2026-11-01T22:20:26Z",
+   "line": "Versus: took on no site; next ndscalc.ru (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "calculoexato.com.br",
+   "noop": true
+  },
+  {
+   "at": "2026-11-03T23:42:07Z",
+   "line": "Versus: took on emojigraph.org (emoji combos, /emoji-combos/emoji-dictionary/), surpassed 11 of 15 rows (also read: 7 no-family); next ndscalc.ru (the target)",
+   "built": 1,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "unitingchurch.org.au"
+  },
+  {
+   "at": "2026-11-03T23:45:42Z",
+   "line": "Versus: took on emojigraph.org (emoji combos, /emoji-combos/emoji-dictionary/), surpassed 12 of 15 rows; next ndscalc.ru (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "unitingchurch.org.au"
+  },
+  {
+   "at": "2026-11-04T09:47:50Z",
+   "line": "Versus: took on no site (also read: 6 no-family, 2 covered); next  (the target)",
+   "built": 0,
+   "queued": 6,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "agechecker.net"
+  },
+  {
+   "at": "2026-11-04T09:50:45Z",
+   "line": "Versus: took on no site; next  (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "agechecker.net",
+   "noop": true
+  },
+  {
+   "at": "2026-11-04T18:13:16Z",
+   "line": "Versus: took on no site (also read: 5 no-family, 3 covered); next  (the target)",
+   "built": 0,
+   "queued": 1,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "bestfonts.pro"
+  },
+  {
+   "at": "2026-11-04T18:15:51Z",
+   "line": "Versus: took on no site; next  (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "bestfonts.pro",
+   "noop": true
+  },
+  {
+   "at": "2026-11-04T23:55:48Z",
+   "line": "Versus: took on no site (also read: 6 no-family, 1 gone, 1 covered); next  (the target)",
+   "built": 0,
+   "queued": 4,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "coreldrawdesign.com"
+  },
+  {
+   "at": "2026-11-04T23:58:23Z",
+   "line": "Versus: took on no site; next  (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "coreldrawdesign.com",
+   "noop": true
+  },
+  {
+   "at": "2026-11-05T09:49:10Z",
+   "line": "Versus: took on no site (also read: 5 no-family, 2 covered, 1 gone); next  (the target)",
+   "built": 0,
+   "queued": 6,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "sipcalculator.in"
+  },
+  {
+   "at": "2026-11-05T09:51:45Z",
+   "line": "Versus: took on no site; next  (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "sipcalculator.in",
+   "noop": true
+  },
+  {
+   "at": "2026-11-05T18:18:36Z",
+   "line": "Versus: took on colorscheme.ru (colour, /color/colour-picker-tool/?c=ff5733), surpassed 12 of 15 rows (also read: 3 covered, 3 no-family, 1 walled); next  (the target)",
+   "built": 1,
+   "queued": 6,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "tm.community"
+  },
+  {
+   "at": "2026-11-05T18:22:12Z",
+   "line": "Versus: took on colorscheme.ru (colour, /color/colour-picker-tool/?c=ff5733), surpassed 12 of 15 rows; next  (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "tm.community"
+  },
+  {
+   "at": "2026-11-05T23:54:27Z",
+   "line": "Versus: took on suncommunitynews.com (news, /news/global-headlines/?sec=world), surpassed 13 of 15 rows (also read: 5 no-family, 2 covered); next  (the target)",
+   "built": 1,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 2,
+   "reads_next": "uniteforliteracy.com"
+  },
+  {
+   "at": "2026-11-05T23:58:16Z",
+   "line": "Versus: took on suncommunitynews.com (news, /news/global-headlines/?sec=world), surpassed 13 of 15 rows; next  (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 2,
+   "reads_next": "uniteforliteracy.com"
+  },
+  {
+   "at": "2026-11-06T09:47:01Z",
+   "line": "Versus: took on no site (also read: 4 walled, 4 no-family); next id5-sync.com (the target)",
+   "built": 0,
+   "queued": 4,
+   "fixed": [],
+   "pages_per_day": 2,
+   "reads_next": "bttrack.com"
+  },
+  {
+   "at": "2026-11-06T09:49:35Z",
+   "line": "Versus: took on no site; next id5-sync.com (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 2,
+   "reads_next": "bttrack.com",
+   "noop": true
+  },
+  {
+   "at": "2026-11-06T17:40:27Z",
+   "line": "Versus: took on no site (also read: 4 no-family, 4 walled); next id5-sync.com (the target)",
+   "built": 0,
+   "queued": 2,
+   "fixed": [],
+   "pages_per_day": 2,
+   "reads_next": "skybridge.click"
+  },
+  {
+   "at": "2026-11-06T17:43:01Z",
+   "line": "Versus: took on no site; next id5-sync.com (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 2,
+   "reads_next": "skybridge.click",
+   "noop": true
+  },
+  {
+   "at": "2026-11-06T23:27:20Z",
+   "line": "Versus: took on no site (also read: 4 no-family, 3 walled, 1 not-judged); the model answered 401 on 1 of 8 reads, so those were not judged; next dalyfeds.com (the target)",
+   "built": 0,
+   "queued": 4,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "juicychat.ai"
+  },
+  {
+   "at": "2026-11-06T23:29:54Z",
+   "line": "Versus: took on no site; next dalyfeds.com (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "juicychat.ai",
+   "noop": true
+  },
+  {
+   "at": "2026-11-07T09:10:37Z",
+   "line": "Versus: took on no site (also read: 2 no-family, 5 walled, 1 gone); next protopage.com (the target)",
+   "built": 0,
+   "queued": 2,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "share.google"
+  },
+  {
+   "at": "2026-11-07T09:13:12Z",
+   "line": "Versus: took on no site; next protopage.com (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "share.google",
+   "noop": true
+  },
+  {
+   "at": "2026-11-07T16:41:03Z",
+   "line": "Versus: took on no site (also read: 2 walled, 6 no-family); next oneyeard.com (the target)",
+   "built": 0,
+   "queued": 5,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "vivoglobal.com"
+  },
+  {
+   "at": "2026-11-07T16:43:37Z",
+   "line": "Versus: took on no site; next oneyeard.com (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "vivoglobal.com",
+   "noop": true
+  },
+  {
+   "at": "2026-11-07T22:15:11Z",
+   "line": "Versus: took on no site (also read: 2 walled, 6 not-judged); the model answered 401 on 6 of 8 reads, so those were not judged; next oneyeard.com (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "uniteforliteracy.com",
+   "noop": true
+  },
+  {
+   "at": "2026-11-07T22:17:45Z",
+   "line": "Versus: took on no site; next oneyeard.com (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "uniteforliteracy.com",
+   "noop": true
+  },
+  {
+   "at": "2026-11-08T09:26:10Z",
+   "line": "Versus: took on no site (also read: 6 not-judged, 2 walled); the model answered 401 on 6 of 8 reads, so those were not judged; next opentv.com (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "aurashinehub.com",
+   "noop": true
+  },
+  {
+   "at": "2026-11-08T09:28:43Z",
+   "line": "Versus: took on no site; next opentv.com (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "aurashinehub.com",
+   "noop": true
+  },
+  {
+   "at": "2026-11-08T16:47:52Z",
+   "line": "Versus: took on no site (also read: 7 no-family, 1 gone); next digitalsogame.com (the target)",
+   "built": 0,
+   "queued": 4,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "randomvideochat.me"
+  },
+  {
+   "at": "2026-11-08T16:50:26Z",
+   "line": "Versus: took on no site; next digitalsogame.com (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "randomvideochat.me",
+   "noop": true
+  },
+  {
+   "at": "2026-11-08T22:28:20Z",
+   "line": "Versus: took on colorbook.io (colour, /color/colour-management/?c=ff5733), surpassed 13 of 15 rows (also read: 5 no-family, 1 walled, 1 covered); next digitalsogame.com (the target)",
+   "built": 1,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "arcticfoxhaircolor.com"
+  },
+  {
+   "at": "2026-11-08T22:31:42Z",
+   "line": "Versus: took on colorbook.io (colour, /color/colour-management/?c=ff5733), surpassed 13 of 15 rows; next digitalsogame.com (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "arcticfoxhaircolor.com"
+  },
+  {
+   "at": "2026-11-09T10:13:36Z",
+   "line": "Versus: took on no site (also read: 4 no-family, 1 walled, 2 gone, 1 covered); next tsundere.pw (the target)",
+   "built": 0,
+   "queued": 4,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "timeclockwizard.com"
+  },
+  {
+   "at": "2026-11-09T10:16:10Z",
+   "line": "Versus: took on no site; next tsundere.pw (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "timeclockwizard.com",
+   "noop": true
+  },
+  {
+   "at": "2026-11-09T21:03:24Z",
+   "line": "Versus: took on no site (also read: 1 covered, 6 no-family, 1 not-judged); the answer was not JSON on 1 of 8 reads, so those were not judged; next  (the target)",
+   "built": 0,
+   "queued": 6,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "unitpay.ru"
+  },
+  {
+   "at": "2026-11-09T21:06:00Z",
+   "line": "Versus: took on no site; next  (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 1,
+   "reads_next": "unitpay.ru",
+   "noop": true
+  },
+  {
+   "at": "2026-11-10T10:19:17Z",
+   "line": "Versus: took on no site (also read: 2 walled, 4 no-family, 1 gone, 1 not-judged); the answer was not JSON on 1 of 8 reads, so those were not judged; next  (the target)",
+   "built": 0,
+   "queued": 4,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "informunity.ru"
+  },
+  {
+   "at": "2026-11-10T10:21:52Z",
+   "line": "Versus: took on no site; next  (the target)",
+   "built": 0,
+   "queued": 0,
+   "fixed": [],
+   "pages_per_day": 0,
+   "reads_next": "informunity.ru",
+   "noop": true
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+# Self-critique before ship (docs/LOOP-GAPS.md): tools/loop-critic.mjs reads the lines a pull request adds to what visitors
+# see and annotates cut-off text, vague counts, roleplay and unverified claims. A finding fails the check, so a pull
+# request with one does not merge (grow-self's lines are refined by tools/loop-refine.mjs first).
+name: Loop critic
+on:
+  pull_request:
+    paths: ['void-live-deploy/**', 'void.html']
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Pull request number. The loop starts this when a workflow-token pull request leaves the pull_request run unstarted.
+        required: true
+        type: string
+concurrency:
+  group: loop-critic-${{ github.event.pull_request.number || inputs.pr }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+  pull-requests: write # a finding comments the reason and files a fix job; the check still fails
+jobs:
+  critic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0, persist-credentials: false }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - id: critic
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE_REF: ${{ github.base_ref }}
+          PR: ${{ github.event.pull_request.number || inputs.pr }}
+          REPO: ${{ github.repository }}
+        run: |
+          base="$BASE_REF"
+          if [ -z "$base" ]; then
+            case "$PR" in ''|*[!0-9]*) echo "::error::no pull request number"; exit 1 ;; esac
+            base=$(gh api "repos/$REPO/pulls/$PR" --jq .base.ref)
+          fi
+          git fetch -q origin "$base"
+          node tools/loop-critic.mjs "origin/$base" | tee critic.txt | tee -a "$GITHUB_STEP_SUMMARY"
+          exit "${PIPESTATUS[0]}"
+      - name: A finding files a fix job
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number || inputs.pr }}
+          VOID_OWNER_TOKEN: ${{ secrets.VOID_OWNER_TOKEN }}
+        run: |
+          why=$(tr '\n' ' ' < critic.txt | head -c 180)
+          node tools/review-fix-job.mjs --pr "$PR" --action fix --why "Loop critic: ${why:-a finding on the lines visitors see}"

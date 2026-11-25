@@ -1,0 +1,121 @@
+/*
+  Referrer-Policy: no-referrer
+  X-Content-Type-Options: nosniff
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: wss: blob: data:; frame-src https:; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self' chrome-extension: moz-extension:; form-action 'self' https://gumroad.com https://*.gumroad.com https://checkout.stripe.com; upgrade-insecure-requests
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  Strict-Transport-Security: max-age=63072000
+  Permissions-Policy: camera=(), usb=(), serial=(), hid=(), midi=(self), payment=(self "https://gumroad.com"), geolocation=(self), microphone=(self), accelerometer=(), gyroscope=(), magnetometer=(), browsing-topics=()
+  Speculation-Rules: "/speculation-rules.json"
+
+
+# the boards: Turnstile, Cloudflare's bot check on every post, loads its own script (functions/api/boards/[[path]].js); only these pages allow it
+/boards/*
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: https://static.cloudflareinsights.com https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: wss: blob: data:; frame-src https:; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self' chrome-extension: moz-extension:; form-action 'self' https://gumroad.com https://*.gumroad.com https://checkout.stripe.com; upgrade-insecure-requests
+
+# the fan fiction archive (fanfic/) posts through the boards, so it loads the same Turnstile check.
+/fanfic/*
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: https://static.cloudflareinsights.com https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: wss: blob: data:; frame-src https:; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self' chrome-extension: moz-extension:; form-action 'self' https://gumroad.com https://*.gumroad.com https://checkout.stripe.com; upgrade-insecure-requests
+
+# the calendar embed (calendar/embed/): a read-only list of a calendar shared by its view link, made to sit in another site's page.
+# It is the one page other sites may frame, and it has no inline script, no form and no picture; it can only read the calendar its link names (functions/api/calshare.js)
+/calendar/embed/*
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; connect-src 'self'; img-src data:; base-uri 'none'; form-action 'none'; frame-ancestors *; upgrade-insecure-requests
+
+# the lab (/lab/*, tools/lab-import.mjs): small experiments that read the device's tilt and motion (deviceorientation, devicemotion); the site policy
+# blocks those sensors, so here, and only here, the page itself may use them. Nothing else in the policy changes.
+/lab/*
+  ! Permissions-Policy
+  Permissions-Policy: camera=(), usb=(), serial=(), hid=(), midi=(self), payment=(self "https://gumroad.com"), geolocation=(self), microphone=(self), accelerometer=(self), gyroscope=(self), magnetometer=(self), browsing-topics=()
+
+/sw.js
+  Cache-Control: no-cache
+  Service-Worker-Allowed: /
+
+/build.json
+  Cache-Control: no-cache
+
+# the visit beacon (functions/api/visit.js): one small file every page loads deferred; a day in the cache, so a returning visitor never fetches it again
+/visit.js
+  Cache-Control: public, max-age=86400
+
+/vendor/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/models/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/skills/*
+  Cache-Control: public, max-age=60, must-revalidate
+
+# shared card code: re-checked like the skills, so a deploy (the evolved badge gone, owner 2026-10-18) reaches a returning browser within a minute
+/lib/*
+  Cache-Control: public, max-age=60, must-revalidate
+
+# Speculation rules (sent on every page by the /* rule above): Chrome prefetches a same-origin page on hover and prerenders it on pointer down,
+# so it opens instantly. The browser reads the rules only with this type. What they leave out (the API, Functions, feeds, home) is in the file.
+/speculation-rules.json
+  Content-Type: application/speculationrules+json
+  Cache-Control: public, max-age=3600
+
+# /under-the-hood/: no-transform asks Cloudflare not to rewrite the page (no injected bot-check script, no analytics beacon). Measured on this
+# one page first: does compression survive, and does Lighthouse best practices reach 100? If both, the rule can widen (docs/MAP.md).
+/under-the-hood/*
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+
+# every web app manifest (/manifest.webmanifest, /converter/manifest.webmanifest): one rule, so the CSP page rules made at deploy
+# (tools/csp-hashes.mjs) and these stay inside Cloudflare's 100 (2026-11-04: 71 + 30 = 101 failed privacy-guard on main)
+/*.webmanifest
+  Content-Type: application/manifest+json
+
+/opensearch.xml
+  Content-Type: application/opensearchdescription+xml
+
+/openapi.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=300
+
+/.well-known/security.txt
+  Content-Type: text/plain; charset=utf-8
+
+/humans.txt
+  Content-Type: text/plain; charset=utf-8
+
+# gpc.json and agent-card.json share one rule (lists run 14, 2026-11-09: /journal/'s CSP rule took the total to 101 of
+# Cloudflare's 100); gpc.json's cache drops from a day to five minutes, which only means fresher
+/.well-known/*.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=300
+
+/.well-known/api-catalog
+  Content-Type: application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=300
+
+/podcast/rss.xml
+  Content-Type: application/rss+xml; charset=utf-8
+  Cache-Control: public, max-age=600
+
+/podcast/*.mp3
+  Content-Type: audio/mpeg
+  Access-Control-Allow-Origin: *
+
+# every instrument sample (drums/808, drums/kit, piano, guitar, bass): one rule for the .wav files, a week in the cache. The
+# CREDITS.md beside them keeps its own type. Three rules were one each for 808, kit and piano, and guitar and bass had none.
+/sounds/*.wav
+  Content-Type: audio/wav
+  Cache-Control: public, max-age=604800
+
+# The tool pages are HTML, and HTML is the one thing this site never caches: every stylesheet, script and image comes back REVALIDATED
+# or HIT, while a page comes back DYNAMIC at max-age=0 and pays a fresh round trip on every load. A benchmark that loads the page three
+# times and takes the median pays it three times. A minute of life fixes the repeats, and a deploy is at most a minute stale
+# (owner, 2026-10-31: /converter/ at 243 ms against 59 ms is the last failing aspect of the floor).
+# an exact path, never /converter/*: that would also match /converter/app.js and drop its four hours to one minute, which makes a
+# repeat load slower, not faster. No /converter/index.html rule: Pages answers that address with a redirect to /converter/, so the
+# rule never reached a page and only spent one of the 100 (2026-11-06: the CSP rules plus these were 101)
+/converter/
+  Cache-Control: public, max-age=60, stale-while-revalidate=300

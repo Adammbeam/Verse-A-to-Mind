@@ -1,0 +1,63 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { recorded, due, targetOf, askOf, text, DAYS } from './flakes.mjs';
+import { keyOf, APPEND_JSON } from './records.mjs';
+import { decide, namesOf } from './flake-rerun.mjs';
+
+const here = dirname(fileURLToPath(import.meta.url));
+
+const now = new Date('2026-10-11T12:00:00Z'), day = (d) => new Date(now.getTime() - d * 864e5).toISOString();
+
+test('one heal queues nothing; two in a week queue exactly one job', () => {
+  let e = recorded([], 'aaaaaaa', ['chess / pixels'], day(1));
+  assert.deepEqual(due(e, now), [], 'once is not a pattern');
+  e = recorded(e, 'bbbbbbb', ['chess / pixels', 'sky / still'], day(0));
+  const jobs = due(e, now);
+  assert.equal(jobs.length, 1);
+  assert.equal(jobs[0].check, 'chess / pixels'); assert.equal(jobs[0].times, 2); assert.equal(jobs[0].target, 'flake:chess-pixels');
+});
+
+test('an old heal falls out of the week, and the same check on the same commit counts once', () => {
+  let e = recorded([], 'aaaaaaa', ['x'], day(DAYS + 1));
+  e = recorded(e, 'bbbbbbb', ['x'], day(0));
+  assert.deepEqual(due(e, now), []);
+  assert.equal(recorded(e, 'bbbbbbb', ['x']).length, e.length, 'recorded twice by two runs of the same head is one');
+});
+
+test('the job says fix it, never skip it, and fits the queue', () => {
+  const g = { check: 'a'.repeat(300), times: 2, shas: ['aaaaaaa', 'bbbbbbb'] };
+  assert.ok(targetOf(g.check).length <= 40 && targetOf(g.check).startsWith('flake:'));
+  assert.ok(askOf(g).length <= 200);
+  assert.match(askOf({ check: 'sky / still', times: 2, shas: ['a', 'b'] }), /never skip, quarantine or retry/);
+  assert.match(askOf({ check: 'paste any size and read aloud: a 3,000-line pasted log reaches the server under 20 kB', times: 2, shas: ['a'] }), /^make "paste any size and read aloud" robust/, 'the check by the head of its name, whole');
+});
+
+test('the file is one entry per line, and merge-main and revert-records treat it as an append-only record', () => {
+  const t = text(recorded([], 'aaaaaaa', ['x', 'y'], day(0)));
+  assert.equal(t.split('\n').length, 5);
+  assert.deepEqual(JSON.parse(t).map((x) => x.check), ['x', 'y']);
+  assert.equal(text([]), '[]\n');
+  assert.ok(APPEND_JSON.includes('tools/flakes.json'));
+  assert.equal(keyOf('tools/flakes.json', { check: 'X', sha: 'A' }), 'x|a');
+});
+
+test('a failed shard is rerun once; a pass stays green; a second fail reverts', () => {
+  assert.equal(decide({ failed: true }).action, 'rerun');
+  const pass = JSON.parse(execFileSync(process.execPath, [join(here, 'flake-rerun.mjs'), 'decide', '--failed', '--rerun', 'pass'], { encoding: 'utf8' }));
+  assert.deepEqual(pass, { action: 'record', green: true, record: true });
+  const again = JSON.parse(execFileSync(process.execPath, [join(here, 'flake-rerun.mjs'), 'decide', '--failed', '--rerun', 'fail'], { encoding: 'utf8' }));
+  assert.equal(again.action, 'revert');
+  assert.equal(again.green, false);
+  const text = 'FAIL walker: a slow drag lifts the figure and sets it back on the floor  -> gone\n';
+  assert.deepEqual(namesOf(text, 'browser-suite shard 8'), ['walker: a slow drag lifts the figure and sets it back on the floor']);
+  const verify = readFileSync(new URL('../.github/workflows/verify.yml', import.meta.url), 'utf8');
+  const rerun = verify.indexOf('Rerun this shard once');
+  assert.ok(rerun > 0 && verify.indexOf('node tools/flake-rerun.mjs land', rerun) > rerun);
+  assert.ok(verify.indexOf('node tools/revert-target.mjs --pick') > verify.indexOf('node tools/flake-rerun.mjs land', rerun));
+  assert.match(verify, /steps\.rerun\.outcome == 'failure'/);
+  assert.match(verify, /steps\.rerun\.outcome == 'success'/);
+});

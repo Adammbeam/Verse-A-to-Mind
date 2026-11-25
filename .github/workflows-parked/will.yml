@@ -1,0 +1,77 @@
+# Verse's will, every hour around the clock (owner, 2026-10-18: "set Verse up to automatically self update very often, it should give itself its own wants and replace them constantly") (tools/will.py): it gathers everything that exists (what people
+# asked that Verse still misses, the frontier's open items, ideas from its inputs), Verse chooses three wants in its own words
+# (/api/will), the card "what do you want to become?" shows them, and the top one goes to the builders' queue. It used to run only
+# from a scheduled task on the owner's laptop, so the card kept wants Verse had already built ("add milk", 2026-10-12).
+# Owner-only notes (earnings) are left out here: Actions logs on this public repo are public. Needs VOID_OWNER_TOKEN.
+name: Verse's will
+
+on:
+  schedule:
+    - cron: '7 * * * *' # every hour at :07, day and night; each run chooses three fresh wants and replaces the card's
+  # GitHub throttles this cron (75 scheduled runs in 2 weeks, 2026-10-29), so the conductor's clock also starts the will when the
+  # last run is an hour old (tools/conductor-core.mjs willDue). Its concurrency group keeps the two from running at once.
+  workflow_dispatch:
+  # also right after main deploys (owner, 2026-10-18: "ok there is too much not updating"): a merge that built a want would
+  # otherwise leave it on the card until the next hourly slot. deploy.yml starts it with gh workflow run, only when the deploy
+  # passed: a workflow_run trigger never fired for a deploy that automerge starts (GITHUB_TOKEN runs fire no workflow_run).
+
+concurrency:
+  group: void-will
+  cancel-in-progress: false
+
+permissions:
+  contents: write # the day's will in domains/void.will.md, once a day
+  actions: write # revive the conductor's clock (grow-clock.yml) when its chain is down
+
+jobs:
+  will:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0 # tools/upgrades.mjs counts each file's commits in the last 30 days (its hotspots)
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verse chooses what it wants to become
+        env:
+          VOID_MISSES_TOKEN: ${{ secrets.VOID_OWNER_TOKEN }}
+        run: |
+          if [ -z "$VOID_MISSES_TOKEN" ]; then echo "::warning title=Verse's will did not run::Repo secret VOID_OWNER_TOKEN is not set."; exit 0; fi
+          python3 tools/will.py | tee -a "$GITHUB_STEP_SUMMARY"
+      # the will chose hourly but only the site kept it (/api/will), so domains/void.will.md on main still said 2026-09-28 (stale since the
+      # Oct 18 rename). The first run of each UTC day writes it to main: builders read the current wants, and 23 of 24 runs add no commit.
+      # The CI run never holds owner-only notes (earnings are left out in CI), so nothing private reaches the public file.
+      - name: The day's will on main (once a day)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          f=domains/void.will.md
+          day() { sed -n 's/^Chosen \([0-9-]*\)T.*/\1/p' "$1" | head -1; }
+          new=$(day "$f"); old=$(git show origin/main:"$f" 2>/dev/null > /tmp/old.md && day /tmp/old.md)
+          [ -n "$new" ] || { echo "no fresh will written: nothing to commit"; exit 0; }
+          [ "$new" = "$old" ] && { echo "today's will is on main already ($old)"; exit 0; }
+          grep -qi "owner only" "$f" && { echo "::warning::owner-only lines in the will: not committed"; exit 0; }
+          cp "$f" /tmp/will.md
+          git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for t in 1 2 3; do
+            git fetch -q origin main && git reset -q --hard origin/main && cp /tmp/will.md "$f" && git add "$f"
+            git diff --cached --quiet && exit 0
+            git commit -q -m "Verse's will: today's three wants (domains/void.will.md)" && git push -q origin HEAD:main && exit 0
+            sleep $((t * 5))
+          done
+          echo "::warning::could not push today's will"
+      # the second heartbeat (2026-10-26: "get Verse automated like its very life depends on it"): this runs every hour and after every
+      # deploy, so when the conductor's clock chain is down (no grow-clock run going or waiting) it is started again within the hour
+      - name: Keep the conductor's clock running
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          live=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/grow-clock.yml/runs?per_page=5" --jq '[.workflow_runs[] | select(.status != "completed")] | length' 2>/dev/null || echo 1)
+          created=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/grow-clock.yml/runs?per_page=1" --jq '.workflow_runs[0].created_at // empty' 2>/dev/null || echo "")
+          young=0
+          if [ -n "$created" ]; then age=$(( $(date +%s) - $(date -d "$created" +%s) )); [ "$age" -lt 600 ] && young=1; fi
+          if [ "$live" = "0" ] && [ "$young" = "0" ]; then gh workflow run grow-clock.yml --repo "$GITHUB_REPOSITORY" --ref main && echo "the clock was down: started again" >> "$GITHUB_STEP_SUMMARY"; else echo "clock running"; fi
