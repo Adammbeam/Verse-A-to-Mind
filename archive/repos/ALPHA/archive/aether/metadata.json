@@ -1,8 +1,0 @@
-{
-  "name": "aether",
-  "description": "A self-evolving generative UI ecosystem that builds itself through natural language prompts.",
-  "buildCommand": "npm run build --filter=@aether/backend",
-  "installCommand": "npm install",
-  "publicDirectory": "apps/backend/dist",
-  "framework": "static"
-}

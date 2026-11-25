@@ -1,5 +1,0 @@
-[
-  { "do": "goto", "url": "/films/" },
-  { "do": "expect", "selector": "body", "text": "film|V01D" },
-  { "do": "shot" }
-]
