@@ -5068,7 +5068,7 @@ say('nothing selected to remove');
     // still read the typed words. The ask is logged as it was typed (typoFix, loopLog), the corrected one is routed.
     // a first ask on a slow link waits at most this long for skills still loading: the fuzzy layer's vocabulary below, and the routing of
     // an ask the page's own calc can answer (handle: watchdog #110, 309 skills no longer all arrive inside the bench's 4 s window)
-    const FIRST_ASK_WAIT = 2500;
+    const FIRST_ASK_WAIT = 1500;
     let fuzzy = null, fuzzyVocab = null, fuzzyVocabN = -1; const fuzzyReady = lazyImport(() => import('/lib/fuzzy.js').then((m) => { fuzzy = m; return m; }).catch(() => null));
     async function fuzzyFix(t) {
       if (!t || t.length > 160 || /[\n⏎{};=<>()\[\]]/.test(t) || /^(review|check|lint|audit|critique|fix|unlock)\b/i.test(t) || MY_BACKDROP_OFF.test(t.toLowerCase().trim())) return t; // the page's own ask, word for word (#2220)
@@ -5139,7 +5139,7 @@ say('nothing selected to remove');
     // card-share and every module it reaches, all asked for at once at page start: imported level by level, its four levels queued behind the
     // skill files the lanes had in flight, and every ask waits for it before it is routed (watchdog #110: on a busy page it arrived 5 to 6 s in)
     // share-libs: tools/preload.mjs /lib/card-share.js
-    const SHARE_LIB_GRAPH = ['/lib/card-share.js', '/lib/card-image.js', '/lib/art-source.js', '/lib/card-art.js', '/lib/card-subject.js', '/lib/guide.js', '/lib/rule-registry.js', '/lib/art-rules.js', '/lib/merge-rules.js', '/lib/keeper.js', '/lib/qr.js'];
+    const SHARE_LIB_GRAPH = ['/lib/card-share.js', '/lib/card-image.js', '/lib/art-source.js', '/lib/card-art.js', '/lib/card-subject.js', '/lib/guide.js', '/lib/rule-registry.js', '/lib/art-rules.js', '/lib/merge-rules.js', '/lib/keeper.js', '/lib/qr.js', '/lib/card-custom-art.js'];
     for (const p of SHARE_LIB_GRAPH.slice(1)) import(p).catch(() => null);
     const shareReady = lazyImport(() => import('/lib/card-share.js').catch(() => null));
     const pasteReady = lazyImport(() => import('/lib/paste-kind.js').catch(() => null)); // what a paste is: report, card, note, ask or unclear (docs/RULES.md)
@@ -6135,8 +6135,8 @@ say('nothing selected to remove');
       for (const p of ASK_LIB_GRAPH) import(p).catch(() => null);
       const libs = Promise.allSettled([approvalReady(), storeReady(), fixReady(), reviewReady()]);
       if (!skillsLoaded && !askLibsHold) askLibsHold = Promise.race([libs, new Promise((r) => setTimeout(r, 1500))]).then(() => { askLibsHold = null; });
-      for (const ev of ['keydown', 'pointerdown', 'touchstart']) document.removeEventListener(ev, warmLibs, true); };
-    for (const ev of ['keydown', 'pointerdown', 'touchstart']) document.addEventListener(ev, warmLibs, { capture: true, passive: true });
+      for (const ev of ['keydown', 'pointerdown', 'touchstart', 'focusin', 'input']) document.removeEventListener(ev, warmLibs, true); };
+    for (const ev of ['keydown', 'pointerdown', 'touchstart', 'focusin', 'input']) document.addEventListener(ev, warmLibs, { capture: true, passive: true });
     { const sp = new URLSearchParams(location.search); if (sp.get('q') || sp.get('ask')) warmLibs(); else skillsReady.then(warmLibs); }
     let pendingReview = null;
     const REVIEW_KIND = { bug: ['bug', '#ff8a8a'], risk: ['risk', '#ffc46b'], style: ['style', '#8ab4ff'], note: ['note', '#9a9a9a'] };
