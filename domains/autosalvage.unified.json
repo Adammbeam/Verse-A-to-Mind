@@ -415,5 +415,29 @@
       "test": "tools/salvaged-bots.test.mjs",
       "pr": null
     }
+  },
+  "ourresearch/openalex-api-tutorials": {
+    "target": "bot",
+    "into": "/bots/ (openalex-work)",
+    "test": "tools/api-bots.test.mjs",
+    "pr": null
+  },
+  "ncbi/pubchem": {
+    "target": "bot",
+    "into": "/bots/ (pubchem-compound)",
+    "test": "tools/api-bots.test.mjs",
+    "pr": null
+  },
+  "nih/clinicaltrials-v2": {
+    "target": "bot",
+    "into": "/bots/ (clinical-trial)",
+    "test": "tools/api-bots.test.mjs",
+    "pr": null
+  },
+  "CrossRef/rest-api-doc": {
+    "target": "bot",
+    "into": "/bots/ (paper-finder)",
+    "test": "tools/api-bots.test.mjs",
+    "pr": null
   }
 }
