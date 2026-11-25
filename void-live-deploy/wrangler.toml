@@ -40,3 +40,10 @@ binding = "AI"
 [[r2_buckets]]
 binding = "FILMS"
 bucket_name = "void-films"
+
+# void-share: the Durable Object host for "invite someone" (frontier #11). Deployed as the void-share Worker;
+# bound here so Pages Functions can reach ShareRoom. See share-worker/wrangler.toml.
+[[durable_objects.bindings]]
+name = "SHARE"
+class_name = "ShareRoom"
+script_name = "void-share"
