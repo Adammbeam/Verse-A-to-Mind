@@ -74,6 +74,7 @@ test('a stranger reads the shell (names, presence, counts) and nothing else, and
   assert.deepEqual(shell.channels.map((c) => c.code), ['work', 'general', 'ideas', 'meeting'], 'the four home channels, with no message in any');
   assert.ok(shell.channels.every((c) => c.msgs === 0));
   assert.deepEqual(shell.members, []); assert.equal(shell.waiting, 3);
+  assert.equal(shell.counts.oldestClaimMin, 0, 'no seats hold a claim');
   assert.equal((await get(env, '?c=work')).status, 401);
   assert.equal((await get(env, '?q=tide')).status, 401);
   for (const b of [{ do: 'post', c: 'general', body: 'hi' }, { do: 'invite', name: 'x' }, { do: 'channel', code: 'x' }, { do: 'here' }]) assert.equal((await post(env, b)).status, 401, b.do);
@@ -721,6 +722,22 @@ test('a seat that has never polled (seen = 0) keeps the job it was just pushed, 
   assert.equal(env.DB.raw.prepare('SELECT job FROM void_team_agents WHERE name = ?').get('pushonly').job, 'j1', 'the job stays with the seat');
   assert.equal(await API.sweep(env, T0 + 31 * 60e3), 1, 'and it does come back once the claim itself is older than STALE_MS');
   assert.equal(job(env, 'j1').state, 'queued', 'the job is back on the queue');
+});
+
+
+test('GET /api/team counts.oldestClaimMin is minutes since the oldest active claim', async () => {
+  const env = world(JOBS);
+  await admit(env, 'Scout');
+  env.DB.raw.prepare('UPDATE void_team_agents SET job = ?, job_at = ?, seen = ? WHERE name = ?').run('j2', T0, T0, 'Scout');
+  env.DB.raw.prepare("UPDATE void_queue SET state = 'building', note = 'claimed by team:Scout ·' WHERE id = ?").run('j2');
+  const five = await get(env, '', null, T0 + 5 * 60e3);
+  assert.equal(typeof five.counts.oldestClaimMin, 'number');
+  assert.equal(five.counts.oldestClaimMin, 5);
+  await admit(env, 'Ada', null, T0 + 5 * 60e3);
+  env.DB.raw.prepare('UPDATE void_team_agents SET job = ?, job_at = ?, seen = ? WHERE name = ?').run('j1', T0 + 3 * 60e3, T0 + 5 * 60e3, 'Ada');
+  env.DB.raw.prepare("UPDATE void_queue SET state = 'building', note = 'claimed by team:Ada ·' WHERE id = ?").run('j1');
+  const still = await get(env, '', null, T0 + 8 * 60e3);
+  assert.equal(still.counts.oldestClaimMin, 8, 'the older of two live claims, not the newer');
 });
 
 test('a building row no seat holds goes back on the queue; a conductor claim is left to the conductor', async () => {

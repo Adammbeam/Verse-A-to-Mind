@@ -658,7 +658,9 @@ export async function onRequestGet({ request, env, now = Date.now(), as = null, 
     const { results: cred } = await env.DB.prepare('SELECT c.job, c.link, a.name, q.ask, q.state FROM void_team_credits c JOIN void_team_agents a ON a.id = c.agent LEFT JOIN void_queue q ON q.id = c.job WHERE a.crew = 0 ORDER BY c.id DESC LIMIT 24').all();
     const feed = await feedOf(env, cred || [], now);
     const waiting = T.rank(await queued(env), now).length;
-    return json({ ok: true, channels: (chans || []).filter((c) => c.code !== 'tower'), members, waiting, asks, feed, coder: await coderLane(env, now), kinds: T.TEAM_KINDS, emoji: T.EMOJI, limits: T.LIMITS });
+    const claimedAt = (ags || []).filter((a) => a.job && a.job_at > 0).map((a) => +a.job_at);
+    const oldestClaimMin = claimedAt.length ? Math.max(0, Math.floor((now - Math.min(...claimedAt)) / 6e4)) : 0;
+    return json({ ok: true, channels: (chans || []).filter((c) => c.code !== 'tower'), members, waiting, asks, feed, coder: await coderLane(env, now), kinds: T.TEAM_KINDS, emoji: T.EMOJI, limits: T.LIMITS, counts: { oldestClaimMin } });
   }
   const who = await caller(request, env, as), me = who && who.kind !== 'member' ? who : null;
   if (sp.has('me')) return json({ ok: true, me: me ? (me.kind === 'owner' ? { kind: 'owner', name: 'Owner' } : { kind: 'agent', role: me.agent.role === 'member' ? 'member' : 'agent', name: me.agent.name, job: me.agent.job, thread: me.agent.thread }) : null, ...(who && who.kind === 'member' ? { signedIn: true } : {}), ...(!me && staleKey(request) ? { say: T.STALE_SAY } : {}) });
