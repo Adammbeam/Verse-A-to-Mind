@@ -11690,30 +11690,37 @@ try {
     check('router: a simple ask is answered by Gemma 4 26B exactly as before (same system prompt, sources, reply shape)',
       s1.answer === 'Gemma: a short answer [1].' && s1.route === 'simple' && s1.sources.length === 1 && calls.filter((c) => c.m === R.DEFAULT_MODEL).every((c) => /^You are Verse\. Answer the question directly and completely/.test(c.sys) && !/if the sources do not answer it, say briefly what you could not find/i.test(c.sys) && /never refuse/i.test(c.sys)) && rowOf(e1, 'who wrote the odyssey').outcome === 'default',
       JSON.stringify(s1).slice(0, 200));
-    // Self-grounding: an ask about Verse itself is answered from its own facts (self.json, skills/index.json, the will), not Wikipedia
-    {
+    // Self-grounding: an ask about Verse itself is answered from its own facts (self.json, skills/index.json, the will), not Wikipedia.
+    // The facts this check reads are a fixed fixture, not the live deploy files: self.json's first open row and the word "tip" in a
+    // 399-name skill index moved as those files grew, and readSelf's 800 ms budget also had to load a large families.json, so a
+    // still-correct path could fail on a loaded suite. The assertions are the same (open inbox row, skill index with tip, the will,
+    // no Wikipedia, no 7-day cache). (flake job mvo3j82w)
+    if (want('self-grounding: "what\'s next" is answered from Verse\'s own facts (open inbox rows, skills, the will), with no Wikipedia lookup and no 7-day cache')) {
       const SC = await import(new URL('../void-live-deploy/lib/self-context.js', import.meta.url).href);
       const yes = ["what's next — more scouting-report features, or something else?", 'what are you building', "what's in your growth inbox", 'what does Verse want to learn next', 'what can you do'];
       const no = ['who wrote the odyssey', 'how do I clear the inbox in gmail', 'what is a void pointer in c and what features does it have', 'what should I build next in my garden', 'what is the will of the people'];
       const misY = yes.filter((a) => !SC.isSelfAsk(a)), misN = no.filter((a) => SC.isSelfAsk(a));
       check('self-grounding: asks about Verse itself are recognised; generic asks that only share a word (inbox, void pointer, next, will) are not', !misY.length && !misN.length, JSON.stringify({ misY, misN }));
-      const dep = new URL('../void-live-deploy', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
-      const ASSETS = { fetch: async (rq) => { const f = path.join(dep, new URL(rq.url).pathname); return fs.existsSync(f) ? new Response(fs.readFileSync(f, 'utf8')) : new Response('', { status: 404 }); } };
+      const openAsk = 'a fixture inbox row about reef peak-heat counts';
+      const selfFixture = { about: 'Verse, in this fixture', open: [{ state: 'open', date: '2026-10-01', ask: openAsk, from: 'fixture' }], shipped: [] };
+      const skillsFixture = ['notes-fill', 'calendar-fill', 'tip', 'calc'];
+      const files = { '/self.json': selfFixture, '/skills/index.json': skillsFixture, '/skills/families.json': { families: [] } };
+      const ASSETS = { fetch: async (rq) => { const body = files[new URL(rq.url).pathname]; return body ? new Response(JSON.stringify(body), { headers: { 'content-type': 'application/json' } }) : new Response('', { status: 404 }); } };
       const eS = envOf({ env: { ASSETS } });
       eS.DB.tables.add('void_kv'); eS.DB.kv.set('will', JSON.stringify({ at: '2026-10-03T00:00:00Z', wants: [{ title: 'Learn the light look', i_want: 'I want a light look for my void.', because: 'people keep asking' }] }));
-      let wikiHits = 0; globalThis.fetch = async (u) => { wikiHits++; return wiki(u); };
+      let wikiHits = 0, wikiUrls = [];
+      globalThis.fetch = async (u) => { const s = String(u); if (/wikipedia\.org|wikimedia\.org/i.test(s)) { wikiHits++; wikiUrls.push(s); } return wiki(u); };
       calls.length = 0;
       const SQ = "what's next — more scouting-report features, or something else?";
       const sa = await ask(SQ, eS);
       globalThis.fetch = wiki;
       const g = calls.filter((c) => c.m === R.DEFAULT_MODEL).slice(-1)[0] || {};
-      const selfJson = JSON.parse(fs.readFileSync(path.join(dep, 'self.json'), 'utf8'));
-      const openAsk = (selfJson.open[0] || {}).ask || '(none open)';
+      const row = rowOf(eS, SQ);
       check('self-grounding: "what\'s next" is answered from Verse\'s own facts (open inbox rows, skills, the will), with no Wikipedia lookup and no 7-day cache',
         sa.self === true && sa.sources.length === 0 && wikiHits === 0 && g.sys && g.sys.includes(SC.SELF_RULE) && /^You are Verse\. Answer the question directly/.test(g.sys)
         && /Facts about Verse:/.test(g.user) && g.user.includes(openAsk) && /My skill index has \d+ entries \([^)]*not the skill count[^)]*\): .*\btip\b/.test(g.user) && g.user.includes('I want a light look for my void.') && !/Sources:/.test(g.user)
-        && eS.DB.answers.size === 0 && /self-grounded/.test(rowOf(eS, SQ).outcome),
-        JSON.stringify({ self: sa.self, wikiHits, user: String(g.user).slice(0, 200), cached: eS.DB.answers.size }));
+        && eS.DB.answers.size === 0 && row && /self-grounded/.test(row.outcome),
+        JSON.stringify({ self: sa.self, wikiHits, wikiUrls, user: String(g.user).slice(0, 200), cached: eS.DB.answers.size, outcome: row && row.outcome }));
       const eSo = envOf({ ai: { gemma: 'out' }, env: { ASSETS } });
       const so = await ask('what are you building', eSo);
       const off = await (await answerFn.onRequestPost({ request: new Request(G + '/api/answer', { method: 'POST', body: JSON.stringify({ ask: 'what are you building' }) }), env: { DB: routeD1(), ASSETS, VOID_ANSWER_MODELS: 'off' } })).json();
