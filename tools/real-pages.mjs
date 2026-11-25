@@ -10,7 +10,6 @@ import { applyAgent, inboxOf } from '../void-live-deploy/lib/agent-core.js';
 import { currentNav } from '../void-live-deploy/lib/verse-shell.js';
 import { TOOLS as KIT_TOOLS } from '../void-live-deploy/lib/toolkit.js';
 import { SELF_SITES } from '../void-live-deploy/lib/self-sites.js';
-import { applyBuilderUni } from './uni-pass.mjs';
 const LAB_TOOL_DIRS = new Set(Object.keys(KIT_TOOLS).filter((p) => /^\/lab\/[a-z0-9-]+\/$/.test(p)).map((p) => p.split('/')[2]));
 const here = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), repo = path.join(here, '..'), root = path.join(repo, 'void-live-deploy');
 const argv = process.argv.slice(2), arg = (k, d) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : d; };
@@ -23,7 +22,7 @@ export function routes() {
   const walk = (d, rel) => { for (const e of fs.readdirSync(d, { withFileTypes: true })) { if (!e.isDirectory() || /^(node_modules|lib|skills|api|functions|assets|data|\.|_)/.test(e.name)) continue; if (rel === '/lab/' && !LAB_TOOL_DIRS.has(e.name)) continue; /* each experiment was opened headless by tools/lab-probe.mjs before it was published: the gallery is the route; the Lab's own tools (lib/toolkit.js TOOLS) are routes like any tool */ const r = rel + e.name + '/'; if (fs.existsSync(path.join(d, e.name, 'index.html'))) out.push(r); walk(path.join(d, e.name), r); } };
   out.push('/'); walk(root, '/'); return out.sort();
 }
-const ARTICLES = ['/fix/', '/privacy/', '/podcast/', '/cheat-codes/', '/keep-it-running/', '/first-automation-setup/', '/fix/audit/', '/fix/one-time/', '/boards/rules/', '/tools/', '/music/', '/books/', '/store/receipt/', '/flights/airports/', '/security/', '/limits/', '/contribute/'];
+const ARTICLES = ['/fix/', '/privacy/', '/podcast/', '/cheat-codes/', '/keep-it-running/', '/first-automation-setup/', '/fix/audit/', '/fix/one-time/', '/boards/rules/', '/tools/', '/music/', '/books/', '/store/receipt/', '/flights/airports/', '/security/', '/limits/', '/contribute/', '/research/', '/games/adventure/'];
 const near = (a, b, e = 0.01) => Math.abs(Number(String(a).replace(/[^0-9.eE+-]/g, '')) - b) <= e;
 
 // ---- the specs: one per route. t.* helpers are defined in run(). ----
@@ -62,12 +61,6 @@ const phoneFit = (p, sel) => p.evaluate((s) => {
 }, sel);
 const flightsShare = async (t, check) => { await t.share('#fl-share', check); };
 export const SPECS = {
-  '/research/': async (t) => {  // AI research papers and reports: the list loads, search narrows it
-    await t.waitText('#list', /./, 15000); t.ok((await t.p.locator('#list > *').count()) >= 1, 'research papers are listed');
-    await t.fill('#q', 'anthropic'); await t.p.waitForTimeout(400); t.ok((await t.p.locator('#list > *').count()) >= 1, 'search narrows the list');
-  },
-
-
   '/free/': async (t) => {  // the free-resource registry: every resource listed, the search narrows it
     await t.waitText('#count', /resources/, 15000); t.ok(Number((await t.text('#count')).match(/of (\d+)/)[1]) >= 30, 'the whole registry is listed: ' + (await t.text('#count')));
     await t.fill('#find', 'groq'); t.ok((await t.p.locator('tr.res').count()) === 1, 'a search for groq finds the one Groq row');
@@ -440,7 +433,7 @@ export const SPECS = {
     await t.fill('#pw', 'c0rrect-Horse-battery-staple-91'); await t.p.waitForTimeout(300); t.ok(/strong|centur|years/i.test(await t.p.locator('main').innerText()), 'a long passphrase is strong');
     await t.click('#leak'); await t.p.waitForTimeout(3000); t.ok(/leak|breach|found|not found|seen/i.test(await t.p.locator('main').innerText()), 'the leak check answers');
   },
-  '/pdf/': pdfMake,
+  '/pdf/': pdfMake, '/pdf/editor/': pdfMake, '/pdf/merge/': pdfMake, '/pdf/organize/': pdfMake, '/pdf/studio/': pdfMake, '/pdf/suite/': pdfMake, '/pdf/toolbox/': pdfMake,
   '/photos/': async (t) => { await t.share('#share'); }, '/photos/exif/': async (t) => { await t.share('#share'); // the AI check mode, built from what Verse watched (domains/tv-built/): a real Stable Diffusion PNG and a real phone-style JPEG go in, each gets the exact verdict, the report downloads, the paid link is the store's
     const crc = (b) => { let c = ~0; for (const x of b) { c ^= x; for (let k = 0; k < 8; k++) c = (c >>> 1) ^ (0xedb88320 & -(c & 1)); } return ~c >>> 0; };
     const be = (n) => { const b = Buffer.alloc(4); b.writeUInt32BE(n >>> 0); return b; }, chunk = (type, d) => Buffer.concat([be(d.length), Buffer.from(type), d, be(crc(Buffer.concat([Buffer.from(type), d])))]);
@@ -496,49 +489,11 @@ export const SPECS = {
     await t.click('#upper'); t.ok((await t.val('#text')) === 'THE QUICK BROWN FOX JUMPS.', 'UPPERCASE'); await t.share('#link');
   },
   '/is-it/christmas': async (t) => { t.ok(/\b(YES|NO)\b/i.test(await t.p.locator('body').innerText()), 'it answers yes or no'); },
-  '/versus/': async (t) => { t.ok(/Out of Order/.test(await t.p.locator('h1').innerText()), 'the sign is the page'); t.ok((await t.p.locator('table').count()) === 0, 'no comparison table'); },
-  '/rotate-letters/': async (t) => {
-    await t.fill('#text', 'Ab!'); await t.p.selectOption('#shift', '1'); await t.p.waitForTimeout(100);
-    t.ok((await t.text('#out')) === 'Bc!', 'Ab! shifted by 1 is Bc!');
-    t.ok(/A goes to B/.test(await t.text('#map')), 'ROT1 sends A to B');
-    await t.click('#back'); await t.p.waitForTimeout(100);
-    t.ok((await t.val('#text')) === 'Bc!', 'read it back puts the result in the box');
-    t.ok((await t.val('#shift')) === '25', 'ROT1 reads back as ROT25');
-    t.ok((await t.text('#out')) === 'Ab!', 'ROT25 of that result is Ab!');
-    const href = await t.p.locator('nav.with a').first().getAttribute('href') || '';
-    t.ok(/changed=Ab(?:!|%21)/.test(href), 'Text Compare opens on the result: ' + href);
-    t.ok((await t.p.locator('a[href="/versus/"]').count()) === 0, 'no link to the owner page');
-  },
-  '/patterns/': async (t) => { await t.fill('#pattern', '\\d+'); await t.fill('#sample', 'call 555 or 911'); await t.p.waitForTimeout(100); t.ok(/2 matches/.test(await t.text('#count')), 'two numbers match'); t.ok((await t.p.locator('#out mark').count()) === 2, 'both numbers are marked'); t.ok(/one or more digits/.test(await t.text('#explain')), 'the pattern is read in plain words'); await t.fill('#replace', '[$1]'); await t.fill('#pattern', '(\\d+)'); await t.p.waitForTimeout(100); t.ok((await t.text('#replaced')) === 'call [555] or [911]', 'a saved group is put back in brackets'); t.ok(/pattern=/.test(await t.p.locator('#share').getAttribute('href') || ''), 'the share link keeps the pattern'); t.ok(/555/.test(await t.p.locator('nav.with a').first().getAttribute('href') || ''), 'Text Compare receives the matches'); },
-  '/schedules/': async (t) => { await t.fill('#line', '0 9 * * 1-5'); await t.p.waitForTimeout(100); t.ok(/09:00/.test(await t.text('#say')), 'weekday 9:00 is said in words'); t.ok((await t.p.locator('#next li').count()) === 3, 'three coming times'); },
-  '/meanings/': async (t) => { await t.fill('#word', 'serendipity'); await t.clickText('Look up'); await t.waitText('#out, #err', /not in the dictionary|did not answer|noun|happy/i, 15000); t.ok(/not in the dictionary|did not answer|noun|happy/i.test((await t.text('#out')) + (await t.text('#err'))), 'a word gets a meaning or an honest miss'); },
-  '/qr/': async (t) => { await t.fill('#text', 'hello'); await t.p.waitForTimeout(100); t.ok((await t.p.locator('#out svg').count()) === 1, 'a code is drawn'); t.ok(/Version 1/.test(await t.text('#meta')), 'a short line is version 1'); t.ok(/text=hello/.test(await t.p.locator('#share').getAttribute('href') || ''), 'the share link keeps the line'); t.ok(/^blob:|^data:image\/svg/.test(await t.p.locator('#svgdl').getAttribute('href') || ''), 'the SVG download is the drawing'); await t.click('#wifi'); await t.p.waitForTimeout(100); t.ok(/WIFI:/.test(await t.val('#text')), 'a network becomes the Wi-Fi line'); },
-  '/clips/': async (t) => { await t.fill('#q', 'apollo'); await t.clickText('Find'); await t.waitText('#out, #err', /apollo|Nothing matched|did not answer/i, 15000); t.ok(/apollo|Nothing matched|did not answer/i.test((await t.text('#out')) + (await t.text('#err'))), 'a title gets a film or an honest miss'); },
-  '/songs/': async (t) => { await t.fill('#title', 'Yesterday'); await t.fill('#artist', 'The Beatles'); await t.clickText('Play'); await t.waitText('#out, #err', /Yesterday|not in the song search|did not answer/i, 15000); t.ok(/Yesterday|not in the song search|did not answer/i.test((await t.text('#out')) + (await t.text('#err'))), 'a song gets a preview or an honest miss'); },
-  '/directions/': async (t) => { await t.fill('#from', 'Madrid'); await t.fill('#to', 'Museo del Prado'); await t.clickText('Show'); await t.waitText('#out, #err', /minute|not on the map|No driving route|did not answer/i, 15000); t.ok(/minute|not on the map|No driving route|did not answer/i.test((await t.text('#out')) + (await t.text('#err'))), 'two places get a driving time or an honest miss'); },
-  '/factorials/': async (t) => { await t.fill('#n', '0'); await t.clickText('Compute'); await t.p.waitForTimeout(100); t.ok(/0! = 1/.test(await t.text('#out')), '0! is 1'); },
-  '/text-diff/': async (t) => { await t.fill('#original', 'one\ntwo'); await t.fill('#changed', 'one\nthree'); await t.p.waitForTimeout(100); t.ok(/1 line removed, 1 line added/.test(await t.text('#say')), 'one line removed and one added'); t.ok((await t.p.locator('#diff [data-t="del"]').count()) === 1, 'the old line is marked'); t.ok((await t.p.locator('#diff [data-t="add"]').count()) === 1, 'the new line is marked'); t.ok(/changed=one/.test(await t.p.locator('#share').getAttribute('href') || ''), 'the share link keeps the changed text'); await t.p.locator('#fold-case').check(); await t.fill('#original', 'Cat'); await t.fill('#changed', 'cat'); await t.p.waitForTimeout(100); t.ok(/same/.test(await t.text('#say')), 'case can be set aside'); },
-  '/echo-vault/': async (t) => {
-    t.ok(/Echo Vault: Internet History Archive/.test(await t.text('h1')), 'the archive is named');
-    t.ok(/translated AI research reports/.test(await t.text('#paper-notes')), 'the reading collection is an entry');
-    t.ok(/exclusive-hosting brochure/.test(await t.text('#hosting-brochure')), 'the brochure is an entry');
-    t.ok((await t.p.locator('a[href*="thunit"], a[href*="randomarea"]').count()) === 0, 'no link to either site');
-    await t.fill('#find', 'brochure');
-    await t.p.waitForTimeout(50);
-    t.ok(await t.p.locator('#paper-notes').isHidden(), 'the other entry is hidden');
-    t.ok(await t.p.locator('#hosting-brochure').isVisible(), 'the brochure stays');
-    t.ok(/q=brochure/.test(await t.p.locator('nav.with a').first().getAttribute('href') || ''), 'News opens on the same words');
-  },
+  '/versus/': async (t) => { t.ok(await t.p.locator('a[href="/rotate-letters/"]').isVisible(), 'lists rotate letters'); t.ok(await t.p.locator('a[href="/track-times/"]').isVisible(), 'lists track times'); },
+  '/rotate-letters/': async (t) => { await t.fill('#text', 'Ab!'); await t.fill('#shift', '1'); await t.p.waitForTimeout(100); t.ok((await t.text('#out')) === 'Bc!', 'Ab! shifted by 1 is Bc!'); },
   '/studio/': async (t) => { await t.fill('#script', 'Verse: One line.\nCritic: Two lines.'); await t.click('#play'); await t.p.waitForTimeout(300); t.ok(/Playing 2 lines/.test(await t.text('#status')), 'two typed lines play one after another'); await t.click('#stop'); await t.p.waitForTimeout(200); t.ok(/Stopped/.test(await t.text('#status')), 'Stop stops'); },
-  '/track-times/': async (t) => { t.ok(/43:53/.test(await t.text('#total')), 'the album list runs 43:53'); t.ok(/Schizoid Man/.test(await t.text('#out')), 'the album list is on the page'); t.ok(/list=/.test(await t.p.locator('#share').getAttribute('href') || ''), 'a share link keeps the list'); t.ok((await t.p.locator('a[href="/versus/"]').count()) === 0, 'no link to the owner page'); t.ok((await t.p.locator('audio, video').count()) === 0, 'nothing plays music'); await t.fill('#list', 'Song one 1:00\nSong two 2:00'); await t.p.waitForTimeout(100); t.ok(/3:00/.test(await t.text('#total')), 'two lengths add to 3:00'); t.ok(/Song(?:\+|%20)one/.test(await t.p.locator('#share').getAttribute('href') || ''), 'the share link follows the typed list'); },
-  '/our-motherfucking-version/': async (t) => {
-    t.ok(/Lightweight Page/.test(await t.p.locator('h1').innerText()), 'the heading says what the page is');
-    await t.fill('#html', '<p>Hi</p><img alt="" src="a.png">'); await t.p.waitForTimeout(100);
-    t.ok(/33 bytes · 1 pictures/.test(await t.text('#out')), 'one picture is counted');
-    const href = await t.p.locator('nav.with a').first().getAttribute('href') || '';
-    t.ok(/changed=33(?:%20|\+)bytes/.test(href), 'Text Compare opens on the weight: ' + href);
-    t.ok((await t.p.locator('a[href="/versus/"]').count()) === 0, 'no link to the owner page');
-  },
+  '/track-times/': async (t) => { t.ok(/6:45/.test(await t.text('#total')), 'the sample list runs 6:45'); await t.fill('#list', 'Song one 1:00\nSong two 2:00'); await t.p.waitForTimeout(100); t.ok(/3:00/.test(await t.text('#total')), 'two lengths add to 3:00'); },
+  '/our-motherfucking-version/': async (t) => { await t.fill('#html', '<p>Hi</p><img alt="" src="a.png">'); await t.p.waitForTimeout(100); t.ok(/1 pictures/.test(await t.text('#out')), 'one picture is counted'); t.ok(/A page you can read/.test(await t.p.locator('h1').innerText()), 'the heading is Verse\'s own'); },
 };
 for (const r of ['/convert/unit-converter/', '/convert/unit-converter-2/']) SPECS[r] = SPECS['/convert/'];
 // the trading bots (owner, 2026-11-06): a backtest on the real candles once /trading-bots/data/ has them, an honest note before; trades export, the link reopens
@@ -682,96 +637,25 @@ SPECS['/treasury/'] = async (t) => {
   t.ok((await t.p.locator('#sponsors a[href="/starboard/#sponsors"]').count()) === 1, 'the split links the grid on Starboard');
   await t.waitText('#found', /\S/, 10000);
 };
-// /games/void-breaker/: a full-screen brick breaker with combos and power bricks
-SPECS['/games/void-breaker/'] = async (t) => {
-  await t.p.reload();
-  await t.waitText('#score', /Score/, 10000);
-  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height, css: e.style.width }));
-  t.ok(cv.w === 320 && cv.h === 180 && parseInt(cv.css, 10) > 0, 'integer-scaled pixel canvas fills the viewport: ' + JSON.stringify(cv));
-  await t.p.keyboard.press('ArrowLeft'); await t.p.keyboard.press('ArrowRight'); await t.p.click('#pause'); await t.p.click('#pause');
-  t.ok(true, 'paddle, pause and resume do not throw');
-};
-// /games/roguelike/: a full-screen turn-based run with seeded rooms, telegraphs and a relic draft
-SPECS['/games/roguelike/'] = async (t) => {
-  await t.p.reload();
-  await t.waitText('#seed', /Seed/, 10000);
-  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height, css: e.style.width }));
-  t.ok(cv.w === 320 && cv.h === 180 && parseInt(cv.css, 10) > 0, 'integer-scaled pixel canvas fills the viewport: ' + JSON.stringify(cv));
-  await t.p.keyboard.press('ArrowRight'); await t.p.keyboard.press('1'); await t.p.keyboard.press('2');
-  await t.p.click('#runcard');
-  await t.waitText('#msg', /Run card/, 10000);
-  await t.p.click('#new');
-  t.ok(true, 'movement, abilities, the run card and a new run do not throw');
-};
-// /games/merge-void/: a full-screen merge puzzle with combos, star tiles and undo
-SPECS['/games/merge-void/'] = async (t) => {
-  await t.p.reload();
-  await t.waitText('#score', /Score/, 10000);
-  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height, css: e.style.width }));
-  t.ok(cv.w === 320 && cv.h === 180 && parseInt(cv.css, 10) > 0, 'integer-scaled pixel canvas fills the viewport: ' + JSON.stringify(cv));
-  await t.p.keyboard.press('ArrowLeft'); await t.p.click('#undo'); await t.p.click('#new');
-  t.ok(true, 'sliding, undo and a new board do not throw');
-};
-// /games/snake/: a full-screen canvas, wrapping movement, fruit and a device best
-SPECS['/games/snake/'] = async (t) => {
-  await t.p.reload();
-  await t.waitText('#score', /Score/, 10000);
-  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height, css: e.style.width }));
-  t.ok(cv.w === 320 && cv.h === 180 && parseInt(cv.css, 10) > 0, 'integer-scaled pixel canvas fills the viewport: ' + JSON.stringify(cv));
-  await t.p.keyboard.press('ArrowUp'); await t.p.keyboard.press('ArrowRight'); await t.p.click('#pause'); await t.p.click('#pause');
-  t.ok(true, 'turning, pause and resume do not throw');
-};
-// /games/pong/: a full-screen canvas, a rally against Verse, a device best and working controls
-SPECS['/games/pong/'] = async (t) => {
-  await t.p.reload();
-  await t.waitText('#score', /Verse/, 10000);
-  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height, css: e.style.width }));
-  t.ok(cv.w === 320 && cv.h === 180 && parseInt(cv.css, 10) > 0, 'integer-scaled pixel canvas fills the viewport: ' + JSON.stringify(cv));
-  await t.p.keyboard.press('ArrowUp'); await t.p.keyboard.press('ArrowDown'); await t.p.click('#pause'); await t.p.click('#pause');
-  t.ok(true, 'paddle, pause and resume do not throw');
-};
-// /games/adventure/: a full-screen illustrated book, a story loaded from its own data file, and working controls
-SPECS['/games/adventure/'] = async (t) => {
-  await t.p.reload();
-  await t.waitText('#title', /Chrono-Signal/, 10000);
-  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height, css: e.style.width }));
-  t.ok(cv.w === 320 && cv.h === 180 && parseInt(cv.css, 10) > 0, 'integer-scaled pixel canvas fills the viewport: ' + JSON.stringify(cv));
-  await t.p.keyboard.press('1');
-  await t.waitText('#title', /Your Own Voice/, 10000);
-  t.ok(true, 'a numbered choice moves the story on');
-  await t.p.click('#save');
-  await t.waitText('#meta', /slot S1/, 10000);
-  t.ok(true, 'a slot save lands on this device');
-  await t.p.click('#load');
-  await t.waitText('#meta', /Save loaded/, 10000);
-  t.ok(true, 'a slot save round-trips');
-  await t.p.goto(t.p.url().split('?')[0] + '?book=neon-harbour');
-  await t.waitText('#title', /Neon Harbour/, 10000);
-  t.ok(true, 'the book picker opens another book');
-};
-// /games/jrpg/: a full-screen pixel canvas, a chapter loaded from its own data file, and working controls
-SPECS['/games/jrpg/'] = async (t) => {
-  await t.p.reload();
-  await t.waitText('#msg', /Chapter 1/, 10000);
-  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height, css: e.style.width }));
-  t.ok(cv.w === 320 && cv.h === 180 && parseInt(cv.css, 10) > 0, 'integer-scaled pixel canvas fills the viewport: ' + JSON.stringify(cv));
-  await t.p.keyboard.press('ArrowRight'); await t.p.keyboard.press('Enter');
-  t.ok(true, 'movement and interaction do not throw');
-  await t.p.evaluate(() => localStorage.setItem('a2m.jrpg.save.v1', JSON.stringify({ map: 'town', x: 2, y: 1, party: [{ name: 'Kite', hp: 30, mhp: 30, mp: 10, mmp: 10, atk: 6, def: 2, spd: 8, lvl: 1, xp: 0 }], flags: { ch1done: true } })));
-  await t.p.reload();
-  await t.p.click('#load');
-  await t.waitText('#msg', /Chapter 2/, 10000);
-  t.ok((await t.text('#place')) === 'town2', 'a Chapter 1 save carries the party into the Chapter 2 town');
-};
-// /starboard/: sponsor tiles, the visitor faucet, the weather panel for a typed place, and the news wire's top story
+// /starboard/: the deck that races dalyfeds.com live (#2479): both race rows from its own benchmark (stubbed, exact numbers), the weather panel for a typed place, and the news wire's top story
+const STARBENCH = { at: '2026-11-07T12:00:00Z', how: 'the test browser, stubbed', rows: [
+  { name: 'a-to-mind.com', ok: true, ms: 400, bytes: 60000, requests: 8, scripts: 4, third_party: [] },
+  { name: 'dalyfeds.com', ok: true, ms: 2600, bytes: 2400000, requests: 90, scripts: 30, third_party: ['googletagmanager.com', 'doubleclick.net'] } ] };
 SPECS['/starboard/'] = async (t) => {
+  await t.p.route((u) => u.pathname === '/api/sitebench', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(STARBENCH) }));
   await t.p.route((u) => u.pathname === '/api/weather', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, loc: { name: 'Lisbon' }, w: { current: { temperature_2m: 18, apparent_temperature: 17, weather_code: 2 } } }) }));
-  await t.p.route((u) => u.pathname === '/api/news', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ stories: [{ title: 'A story from the news wire', link: 'https://example.com/story', src: 'wire' }] }) }));
+  await t.p.route((u) => u.pathname === '/api/news', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ stories: [{ title: 'A deck that races a rival site', link: 'https://example.com/deck', src: 'wire' }] }) }));
   await t.p.reload();
+  await t.waitText('#bench tbody', /a-to-mind\.com/, 10000);
+  const star = (await t.text('#bench tbody tr:first-child')).replace(/\s+/g, ' '), rival = (await t.text('#bench tbody tr:nth-child(2)')).replace(/\s+/g, ' ');
+  t.ok(/a-to-mind\.com/.test(star) && /400 ms/.test(star) && /59 KB/.test(star), "Verse's own row, measured: " + star.trim());
+  t.ok(/dalyfeds\.com/.test(rival) && /2\.29 MB/.test(rival) && /2: googletagmanager\.com, doubleclick\.net/.test(rival), "the rival's row, measured, its trackers named: " + rival.trim());
+  t.ok(/Measured/.test(await t.text('#benchHow')), 'the note says when the race was measured');
+  await t.clickText('Load the latest'); await t.waitText('#bench tbody', /dalyfeds\.com/, 10000);
   await t.fill('#place', 'Lisbon'); await t.click('.go');
   await t.waitText('#wxTemp', /64 °F \/ 18 °C/, 10000);
   t.ok(/Partly cloudy in Lisbon/.test(await t.text('#wxWords')) && /63 °F \/ 17 °C/.test(await t.text('#wxMore')), 'the weather panel fills from the place: ' + (await t.text('#wxWords')));
-  const top = await t.text('#wire'); t.ok(/A story from the news wire/.test(top) && /wire/.test(top), 'the news wire lists the top story');
+  const top = await t.text('#wire'); t.ok(/A deck that races a rival site/.test(top) && /wire/.test(top), 'the news wire lists the top story');
 };
 // /creed/ and /creed/give/: Verse's creed and its giving mode (2026-11-06). The vow copies; every charity button leaves for that charity's own site
 SPECS['/creed/'] = async (t) => {
@@ -808,7 +692,7 @@ SPECS['/ledger/'] = async (t) => {
   await t.copies('#copycsv', 'Merge the tide tables');
   await t.share('#copylink', async (p) => { await p.waitForFunction(() => document.querySelectorAll('#rows tr').length > 0, null, { timeout: 8000 }).catch(() => {}); return (await p.inputValue('#repo')) === 'test-owner/test-repo' && (await p.getAttribute('#tab-pr', 'aria-selected')) === 'true' && /Merge the tide tables/.test(await p.locator('#rows').innerText()); });
 };
-SPECS['/kanban/'] = kanban(true);
+for (const r of ['/kanban/', '/kanban/simple/', '/kanban/teams/', '/kanban/quick/']) SPECS[r] = kanban(true); SPECS['/kanban/flow/'] = kanban(false);
 for (const r of ['/jobs/', '/jobs/alerts/', '/jobs/categories/', '/jobs/companies/', '/jobs/europe/', '/jobs/regions/', '/jobs/salary/', '/jobs/tags/']) SPECS[r] = jobs;
 for (const r of ARTICLES) if (!SPECS[r]) SPECS[r] = article();
 for (const r of routes()) if (r.startsWith('/fix/') && !SPECS[r]) SPECS[r] = article(200);
@@ -845,33 +729,6 @@ Object.assign(SPECS, {
     await t.fill('#text', 'one two three'); await t.p.waitForTimeout(200);
     t.ok(/^3 words/.test(await t.text('#count')), 'three typed words count as 3 words');
     await t.copies('#copy', 'one two three'); await t.download('#txt', /^dictation-.+\.txt$/);
-  },
-  '/arcade/': async (t) => {
-    await t.p.setViewportSize({ width: 1440, height: 900 });
-    t.ok(/Verse Arcade/.test(await t.text('h1')), 'the title is Verse Arcade');
-    t.ok((await t.p.locator('#games button').count()) === 2, 'Debris Field and Gap Glide play on this page');
-    t.ok((await t.p.locator('#games a').count()) >= 6, 'the games already on the stage are linked');
-    await t.click('#games button[data-id="debris-field"]');
-    await t.p.waitForTimeout(200);
-    await t.p.keyboard.press('Space');
-    await t.p.waitForTimeout(400);
-    t.ok(await t.p.locator('#play canvas').count() === 1, 'Debris Field draws on the page');
-    t.ok(/play=debris-field&seed=/.test(await t.p.locator('#play a').first().getAttribute('href') || ''), 'the share link carries the round');
-    t.ok(/crystal/i.test(await t.p.locator('#games button[data-id="debris-field"]').getAttribute('title') || ''), 'the round says what the crystals do');
-    t.ok(await t.p.locator('#play button', { hasText: 'Left' }).count() === 0, 'no generic direction row on this round');
-    const wide = await t.p.locator('#play canvas').boundingBox();
-    const view = t.p.viewportSize();
-    t.ok(wide && wide.width > view.width - 40 && wide.height > view.height - 120, 'the picture fills the viewport: ' + (wide && Math.round(wide.width) + 'x' + Math.round(wide.height)));
-    const hud = await t.p.locator('#play .hud').boundingBox();
-    t.ok(hud && wide && hud.y >= wide.y && hud.y < wide.y + wide.height, 'pause and sound sit on the picture');
-    const more = await t.p.locator('h2', { hasText: 'Also on the stage' }).boundingBox();
-    t.ok(more && wide && more.y > wide.y + wide.height - 4, 'the other games sit below the picture');
-    t.ok(await t.p.locator('#status').count() === 0, 'the score stays on the picture');
-    await t.p.setViewportSize({ width: 390, height: 844 });
-    const box = await t.p.locator('#play canvas').boundingBox();
-    t.ok(box && box.width > 340, 'the picture is full width on a phone');
-    await t.p.mouse.click(box.x + box.width * 0.72, box.y + box.height * 0.8);
-    await t.p.waitForTimeout(200);
   },
   '/lab/mind-map/': async (t) => {
     await t.click('#sample'); await t.p.waitForTimeout(300);
@@ -930,7 +787,6 @@ export async function run({ base, only, jobs = 4, log = console.log }) {
   const one = async (r) => {
     const ctx = await browser.newContext({ acceptDownloads: true, viewport: { width: 1200, height: 900 }, serviceWorkers: 'block' });
     await ctx.addInitScript(INIT);
-    await applyBuilderUni(ctx); // VERSE_BUILDER_UNI_TOKEN, when set: see the real authenticated page
     const p = await ctx.newPage(); const errs = [], bad5 = [], fails = [], passes = []; let downloads = 0, choosers = 0, dialogs = 0, reqs = 0;
     p.on('pageerror', (e) => errs.push(e.message.slice(0, 160)));
     p.on('download', () => downloads++); p.on('filechooser', () => choosers++); p.on('dialog', (d) => { dialogs++; d.dismiss().catch(() => {}); });

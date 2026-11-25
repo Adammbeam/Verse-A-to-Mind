@@ -3,7 +3,7 @@
 // with "no spec", because a handed job carried only its short ask: no repository, no playbook, no way to deliver. Pure.
 
 import { tvSpec } from './watch-build.js';
-export const REPO = 'https://github.com/atomeam/void-loop';
+export const REPO = 'https://github.com/Adammbeam/Verse-A-to-Mind';
 
 // what each kind of job asks of the coder, beyond the job's own words
 export const GUIDE = Object.freeze({
@@ -111,6 +111,6 @@ export function briefOf(job, kind) {
     'This kind (' + k + '): ' + (GUIDE[k] || 'Do this, small and tested.'),
     (k === 'versus' && versusSpec(job)) || (k === 'will' && willSpec(job)) || (k === 'tv' && tvSpec(job)) || START[k] || START[k.split('-')[0]] || '',
     note && 'Note: ' + note.slice(0, 400),
-    'Deliver: a pull request to atomeam/void-loop main with the label automerge (Verse reviews it and merges it on green), then close the job with its link (node agent.mjs done --link <pull request>). Verse checks it after the merge: the job is done only when the pull request changes the page itself (not only notes), takes nothing away from main, and the live page answers; otherwise it comes back on the queue with why. Give it back only if you cannot do it at all, and say why.',
+    'Deliver: a pull request to Adammbeam/Verse-A-to-Mind main with the label automerge (Verse reviews it and merges it on green), then close the job with its link (node agent.mjs done --link <pull request>). Verse checks it after the merge: the job is done only when the pull request changes the page itself (not only notes), takes nothing away from main, and the live page answers; otherwise it comes back on the queue with why. Give it back only if you cannot do it at all, and say why.',
   ].filter(Boolean).join('\n');
 }

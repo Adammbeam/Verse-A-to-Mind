@@ -8,7 +8,7 @@
 // my deployed commits and the repo's pull requests; and sorts the Fixed list newest first. Pure, except fetchPulls (takes the fetch to use).
 import { clean } from './repo-look.js';
 
-export const REPO = 'atomeam/void-loop';
+export const REPO = 'Adammbeam/Verse-A-to-Mind';
 const ORD = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
 const NUM = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
 

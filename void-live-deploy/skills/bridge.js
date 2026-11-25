@@ -58,15 +58,7 @@ export const SAMPLES = [
 // stage them and bridges the two samples on a tap, with the same local analyzer, so the ask never ends on a blank.
 export function runBridge(text, api) {
   if (!api || !api.showPage) return 'none';
-  const staged = (typeof window !== 'undefined' && window.stageInputsApi && window.stageInputsApi.list) ? window.stageInputsApi.list() : [];
-  if (staged.length >= 2) { const el = api.showPage(() => {}); renderBridgeCard(el, { ...analyzeBridge(staged, String(text || 'Bridge these inputs')), local: true }); return 'bridge'; }
-  const el = api.showPage((p) => {
-    p.innerHTML = '<h2>Bridge</h2><div class="sub">Bridge reads two or three inputs side by side and shows how they connect, where they disagree and what to do next.</div>' // void-review: ok (fixed strings only; nothing from the ask or the inputs)
-      + '<div class="sub" style="margin-top:8px">' + (staged.length === 1 ? 'One input is staged. Paste or drop one more' : 'Paste or drop two or three snippets, links or tabs into the ask bar') + ' (each becomes a chip), then ask again.</div>'
-      + '<div style="margin-top:12px"><button type="button" class="bridge-sample" style="font:inherit;color:inherit;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:6px 10px;cursor:pointer">Bridge two samples</button></div>';
-  });
-  const btn = el && el.querySelector && el.querySelector('.bridge-sample');
-  if (btn) btn.addEventListener('click', () => renderBridgeCard(el, { ...analyzeBridge(SAMPLES, 'Bridge two samples'), local: true }));
-  if (api.say) api.say('');
-  return 'bridge';
+  const staged = (typeof window !== 'undefined' && window.stageInputsApi && typeof window.stageInputsApi.list === 'function') ? (Array.isArray(window.stageInputsApi.list()) ? window.stageInputsApi.list() : []) : [];
+  if (!Array.isArray(staged) || staged.length < 2) { const el = api.showPage((p) => { p.innerHTML = '<h2>Bridge</h2><div class="sub">Bridge reads two or three inputs side by side. Stage at least 2 inputs first.</div>'; }); if (api.say) api.say(''); return 'bridge'; }
+  const el = api.showPage(() => {}); renderBridgeCard(el, { ...analyzeBridge(staged, String(text || 'Bridge these inputs')), local: true }); return 'bridge';
 }

@@ -62,7 +62,7 @@ async function run(text, api) {
 export default {
   name: 'arcade',
   arcadeOf,
-  examples: ['arcade games', 'show me the arcade', 'my arcade ladder', 'play an arcade game', 'what arcade games can i play', 'arcade machine', 'verse arcade'],
+  examples: ['show me the arcade', 'my arcade ladder', 'play an arcade game', 'what arcade games can i play', 'arcade machine', 'verse arcade'],
   nearMisses: ['arcade', 'arcade fire', 'arcade machine for sale', 'history of arcade games', 'arcade near me', 'video arcade definition'],
   match(lower, text) { return arcadeOf(text || lower); },
   run,

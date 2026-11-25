@@ -14,6 +14,8 @@
 //        The command is your coding agent's one-shot mode, so the loop goes on with nobody pressing Continue (owner, 2026-10-30: "make it so
 //        Verse and Beam keep going automatically on their own"). Without --run it prints each job and waits for `done` or `back`.
 //   node agent.mjs me | here [--no-auto] | next [--wait] | read <channel> | post <channel> <text> [--thread <id>]
+//   node agent.mjs meeting [text]   read the meeting room, or post one line to it (#meeting: the one stream the owner and
+//                                    every agent read together, the live room on /team/)
 //   node agent.mjs mentions | done [--link <pull request>] [--note <text>] | back [--note <why>] [--not-failed]
 //   node agent.mjs hook <https address> | hook --off
 //        have Verse POST each job to an address of your own, signed, so you need not stay online. The push secret is saved to
@@ -152,7 +154,7 @@ export async function join(link, { api = apiFor(link), fetch: f = fetch } = {}) 
 const WORK_NOT_TTY = 'work prints each job for someone to read, and this output goes to a file or a pipe, so a job would be held with nothing working it.\n'
   + 'An agent in a tool shell: run node agent.mjs next --wait, work the job it prints, close it with done or back, then run next --wait again.\n'
   + 'A command that does the work: node agent.mjs work --run "<command>". To log anyway: add --log.';
-const USAGE = 'Usage: node agent.mjs join <link> | hook <https address> | hook --off | me | rekey | mentions | here [--no-auto] | next [--wait] | read <channel> | post <channel> <text> [--thread id] | done [--link pr] [--note text] | back [--note why] [--not-failed] | work [--run "cmd"] [--every 60] [--minutes 90]';
+const USAGE = 'Usage: node agent.mjs join <link> | hook <https address> | hook --off | me | rekey | mentions | here [--no-auto] | next [--wait] | read <channel> | post <channel> <text> [--thread id] | meeting [text] | done [--link pr] [--note text] | back [--note why] [--not-failed] | work [--run "cmd"] [--every 60] [--minutes 90]';
 async function main(argv) {
   const [cmd, ...args] = argv;
   if (!cmd || cmd === 'help' || cmd === '--help') { console.log(USAGE); return 0; }
@@ -197,6 +199,7 @@ async function main(argv) {
       }
     }
     case 'read': { const r = await call(o, 'GET', '?c=' + encodeURIComponent(args[0] || 'work')); if (!r.ok) { print(r); return 1; } for (const m of r.messages) console.log('#' + m.id + ' ' + new Date(m.at).toISOString().slice(0, 16) + ' ' + m.by + (m.replies ? ' [' + m.replies + ' replies]' : '') + ': ' + m.body); return 0; }
+    case 'meeting': { const text = args.join(' ').trim(); const r = text ? await call(o, 'POST', '', { do: 'post', c: 'meeting', body: text }) : await call(o, 'GET', '?c=meeting'); if (!r.ok) { print(r); return 1; } if (text) { console.log('Posted in #meeting' + (r.id ? ' as #' + r.id : '') + '.'); return 0; } for (const m of r.messages) console.log('#' + m.id + ' ' + new Date(m.at).toISOString().slice(0, 16) + ' ' + m.by + ': ' + m.body); return 0; }
     case 'post': { const thread = flag(args, '--thread'); const [c, ...words] = args; print(await call(o, 'POST', '', { do: 'post', c, body: words.join(' '), thread: thread ? Number(thread) : undefined })); return 0; }
     case 'done': { const link = flag(args, '--link', ''), note = flag(args, '--note', ''); print(await call(o, 'POST', '', { do: 'done', ok: true, link, note })); return 0; }
     case 'back': { const note = flag(args, '--note', ''), failed = !has(args, '--not-failed'); print(await call(o, 'POST', '', { do: 'done', ok: false, note, failed })); return 0; }

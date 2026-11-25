@@ -3,7 +3,7 @@
 // "On its own" = a commit on main whose author is one of Verse's own loops (github-actions[bot] running a Verse workflow, or verse-loop),
 // minus housekeeping (merge commits, regenerated files, the conductor's hourly record). Nothing here estimates: every count is of real records.
 
-export const REPO = 'atomeam/void-loop';
+export const REPO = 'Adammbeam/Verse-A-to-Mind';
 export const OWN_EMAILS = ['41898282+github-actions[bot]@users.noreply.github.com', 'verse-loop@users.noreply.github.com'];
 
 // subject -> kind; the first match wins. null = housekeeping, not shown and not counted

@@ -36,7 +36,7 @@
  *   { action: 'team.post', c?, body }                           Verse says body in a channel of its own team chat (#general unless c
  *                                                               names another), as Verse: the owner's rules only, @here never pages
  * What a rule can reach is fenced here, not trusted to the rule: GitHub only in the repos the owner allows
- * (AUTOMATION_REPOS, default atomeam/void-loop), branches only under void/, never workflow files, and http only to
+ * (AUTOMATION_REPOS, default Adammbeam/Verse-A-to-Mind), branches only under void/, never workflow files, and http only to
  * public https hosts. Event data can fill text in but never chooses the repo, the branch prefix or a file path's root.
  */
 import { validateWatch, describe, fingerprint, TELLS, DEFAULT_EVERY } from './watch.js';
@@ -55,7 +55,7 @@ export const ACTIONS = ['note', 'queue.add', 'github.comment', 'github.pr', 'htt
 // a watch in an owner's rule may also tell the team chat (a member's own watches, functions/api/watch.js, keep lib/watch.js TELLS)
 export const RULE_TELLS = [...TELLS, 'team'];
 export const MAX_STEPS = 5, MAX_FILES = 20, MAX_FILE_BYTES = 100000, MAX_TEXT = 4000, MAX_NAME = 60, MAX_EVENT = 64000; // a GitHub webhook body is often 20 to 40 KB
-export const DEFAULT_REPOS = ['atomeam/void-loop'];
+export const DEFAULT_REPOS = ['Adammbeam/Verse-A-to-Mind'];
 export const BRANCH_PREFIX = 'void/';
 
 export const repoList = (env) => String((env && env.AUTOMATION_REPOS) || DEFAULT_REPOS.join(',')).split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
@@ -249,11 +249,11 @@ export function githubEvent(name, delivery, b) {
 /** rules to start from (the card offers them; each is valid as it stands) */
 export const TEMPLATES = [
   { name: 'Webhook to the build queue', when: { on: 'webhook' }, do: [{ action: 'queue.add', ask: 'from a webhook: {{event.ask}}', target: 'hook' }] },
-  { name: 'Comment on a pull request', when: { on: 'webhook', match: { action: 'labeled' } }, do: [{ action: 'github.comment', repo: 'atomeam/void-loop', issue: '{{event.pull_request.number}}', body: 'Verse saw this pull request labelled {{event.label.name}}.' }] },
+  { name: 'Comment on a pull request', when: { on: 'webhook', match: { action: 'labeled' } }, do: [{ action: 'github.comment', repo: 'Adammbeam/Verse-A-to-Mind', issue: '{{event.pull_request.number}}', body: 'Verse saw this pull request labelled {{event.label.name}}.' }] },
   { name: 'Every morning, a note', when: { on: 'schedule', every: 1440 }, do: [{ action: 'note', text: 'Verse was here at {{event.at}}' }] },
   { name: 'A Gumroad sale to the team chat', when: { on: 'gumroad', match: { resource: 'sale' } }, do: [{ action: 'team.post', c: 'general', body: 'A sale on Gumroad: {{event.product}} for {{event.price}} {{event.currency}}.' }] },
   { name: 'A merged pull request to the team chat', when: { on: 'github', match: { event: 'pull_request', action: 'closed', 'pull_request.merged': true } }, do: [{ action: 'team.post', c: 'general', body: 'Merged: #{{event.pull_request.number}} {{event.pull_request.title}} {{event.pull_request.url}}' }] },
   { name: 'An owner #work message to a note', when: { on: 'team', match: { channel: 'work', by: 'owner' } }, do: [{ action: 'note', text: 'The owner said in #work: {{event.text}}' }] },
   { name: 'Webhook to the team chat', when: { on: 'webhook' }, do: [{ action: 'team.post', c: 'general', body: 'From a webhook: {{event.text}}' }] },
-  { name: 'Open a pull request with a file', when: { on: 'manual' }, do: [{ action: 'github.pr', repo: 'atomeam/void-loop', base: 'main', branch: 'void/automation-note', title: 'A note from Verse', body: 'Opened by a Verse automation.', files: [{ path: 'domains/automation-note.md', content: 'Written by a Verse automation.\n' }] }] },
+  { name: 'Open a pull request with a file', when: { on: 'manual' }, do: [{ action: 'github.pr', repo: 'Adammbeam/Verse-A-to-Mind', base: 'main', branch: 'void/automation-note', title: 'A note from Verse', body: 'Opened by a Verse automation.', files: [{ path: 'domains/automation-note.md', content: 'Written by a Verse automation.\n' }] }] },
 ];

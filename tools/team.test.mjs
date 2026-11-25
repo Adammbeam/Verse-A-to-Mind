@@ -71,13 +71,26 @@ test('a stranger reads the shell (names, presence, counts) and nothing else, and
   const env = world(JOBS);
   const shell = await get(env, '');
   assert.equal(shell.status, 200);
-  assert.deepEqual(shell.channels.map((c) => c.code), ['work', 'general', 'ideas'], 'the three home channels, with no message in any');
+  assert.deepEqual(shell.channels.map((c) => c.code), ['work', 'general', 'ideas', 'meeting'], 'the four home channels, with no message in any');
   assert.ok(shell.channels.every((c) => c.msgs === 0));
   assert.deepEqual(shell.members, []); assert.equal(shell.waiting, 3);
   assert.equal((await get(env, '?c=work')).status, 401);
   assert.equal((await get(env, '?q=tide')).status, 401);
   for (const b of [{ do: 'post', c: 'general', body: 'hi' }, { do: 'invite', name: 'x' }, { do: 'channel', code: 'x' }, { do: 'here' }]) assert.equal((await post(env, b)).status, 401, b.do);
   assert.equal((await post(env, { do: 'post', c: 'general', body: 'hi' }, 'vt1.000000000000.00000000000000000000000000000000')).status, 401, 'a made-up key'); // secret-scan: ok
+});
+
+test('the meeting room is a channel like any other: the owner and an agent read and write the same #meeting stream', async () => {
+  const env = world();
+  const k = (await admit(env, 'Scout')).key;
+  const said = await post(env, { do: 'post', c: 'meeting', body: 'The meeting room is live: @Scout you are here' }, OWNER);
+  assert.equal(said.status, 201, said.say);
+  const room = await get(env, '?c=meeting', k);
+  assert.equal(room.messages.length, 1); assert.equal(room.messages[0].by, 'Owner');
+  assert.equal((await post(env, { do: 'post', c: 'meeting', body: 'here' }, k, T0 + 1000)).status, 201);
+  const shell = await get(env, '');
+  assert.equal(shell.members.find((m) => m.name === 'Scout').job, null, 'an idle agent holds no job');
+  assert.equal((await get(env, '?c=meeting', OWNER)).messages.length, 2, 'the owner and the agent read the same stream');
 });
 
 test('the owner invites; the agent is handed the best job as a #work thread, answers, closes it and gets the next at once', async () => {

@@ -1,5 +1,5 @@
 /**
- * repo skill - Verse can see a public GitHub repository (owner, 2026-10-17: "make v01d able to see repos"). "look at atomeam/void-loop",
+ * repo skill - Verse can see a public GitHub repository (owner, 2026-10-17: "make v01d able to see repos"). "look at Adammbeam/Verse-A-to-Mind",
  * "what is in github.com/x/y", a pasted repo link: a Verse card of what is really there (description, language mix, recent commits, top-level
  * files, README opening, open issue and PR counts) read live by /api/repo (functions/api/repo.js, lib/repo-look.js). Public repos only, no
  * token; a private or missing one says "I can only see public repos". Everything from the repo is untrusted text: the server cleans it, this
@@ -58,9 +58,9 @@ export default {
   name: 'repo',
   repoAsk,
   examples: [
-    'look at atomeam/void-loop',
-    'what is in github.com/atomeam/void-loop',
-    'https://github.com/atomeam/void-loop',
+    'look at Adammbeam/Verse-A-to-Mind',
+    'what is in github.com/Adammbeam/Verse-A-to-Mind',
+    'https://github.com/Adammbeam/Verse-A-to-Mind',
     'show me the repo torvalds/linux',
   ],
   nearMisses: [

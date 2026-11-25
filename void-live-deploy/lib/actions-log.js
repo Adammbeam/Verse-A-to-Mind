@@ -47,7 +47,7 @@ export function sliceStep(text, step) {
 const API = 'https://api.github.com';
 
 /** failed jobs for one commit of a public repo. fetchImpl(url) returns a Response. Throws nothing: a refusal is { error }. */
-export async function failuresFor(sha, { repo = 'atomeam/void-loop', fetchImpl = fetch, logs = false, tail = 30 } = {}) {
+export async function failuresFor(sha, { REPO = 'Adammbeam/Verse-A-to-Mind', fetchImpl = fetch, logs = false, tail = 30 } = {}) {
   const get = async (path) => {
     try {
       const res = await fetchImpl(API + path, { headers: { accept: 'application/vnd.github+json', 'user-agent': 'verse-actions-log' } });

@@ -7,6 +7,7 @@
 // A tick never fails the clock: every error is a warning in the summary and the tick ends with exit 0. Playbook: docs/playbooks/conductor.md.
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
+import { pathToFileURL } from 'node:url';
 import { plan, probeDue, growDue, designDue, willDue, lapDue, dailyDue, sweepDue, blueprintsDue, coderShort, DAILY, kindOf, triesOf, withTries, streakOf, ROUTES, AGENT, LAP } from './conductor-core.mjs';
 import { wantsOf } from './visitor-pass.mjs';
 import { queueBlueprints } from './watch-build.mjs'; // every blueprint Verse wrote becomes a tv: build job, a few an hour
@@ -14,7 +15,7 @@ import { composeAsk } from './skill-compose.mjs'; // Tower does not write skill 
 import { pauseState, PAUSE_TITLE, LOOP_CODE } from './verse-loop.mjs'; // the coder's own back-off rule, so the conductor and the loop agree
 
 const API = process.env.VOID_API || 'https://a-to-mind.com/api/queue';
-const REPO = process.env.GITHUB_REPOSITORY || 'atomeam/void-loop';
+const REPO = process.env.GITHUB_REPOSITORY || 'Adammbeam/Verse-A-to-Mind';
 const args = process.argv.slice(2), DRY = args.includes('--dry');
 const STATE = (() => { const i = args.indexOf('--state'); return i >= 0 ? args[i + 1] : 'domains/conductor.json'; })();
 // the loops watched for health: every executor, plus the loops the rest stand on (a broken one gets a heal: job)
@@ -226,4 +227,6 @@ function finish(state, now, t) {
   return out;
 }
 
-if (import.meta.url === `file://${process.argv[1]}` && args[0] === 'tick') tick().catch((e) => { warn('tick: ' + String(e.message || e).slice(0, 160)); finish({}, Date.now(), null); }).finally(() => process.exit(0));
+// pathToFileURL, not `file://${process.argv[1]}`: on Windows that is file://C:\... against file:///C:/..., so the guard never matched
+// and the conductor printed nothing and exited 0 (found 2026-11-24, the same shape openapi-check.mjs had).
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href && args[0] === 'tick') tick().catch((e) => { warn('tick: ' + String(e.message || e).slice(0, 160)); finish({}, Date.now(), null); }).finally(() => process.exit(0));

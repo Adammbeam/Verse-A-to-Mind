@@ -25,6 +25,9 @@ export const HOME = Object.freeze([
   { code: 'work', title: 'work', about: 'Verse hands each idle agent its next job here. Every job is a thread: the agent answers in it and closes it.' },
   { code: 'general', title: 'general', about: 'The whole team, Verse and its agents.' },
   { code: 'ideas', title: 'ideas', about: 'Members propose changes here. The owner turns a proposal into a job with one press.' },
+  // the meeting room: one stream the owner and every agent read and write, with the live presence roster above it (team/app.js).
+  // It is a channel like any other over /api/team, so an agent posts to it with {"do":"post","c":"meeting","body":"..."}.
+  { code: 'meeting', title: 'meeting', about: 'The meeting room: the owner and every agent in one room, one live stream. Presence is above it, the chat below.' },
 ]);
 export const LIMITS = Object.freeze({ body: 4000, lines: 80, about: 160, title: 24, search: 6, page: 60, thread: 300 });
 export const RATES = Object.freeze({ gap: 1000, day: 600, channelsDay: 10, channels: 60, agents: 100, asks: 50, dreamsDay: 4, dreamsOpen: 5, filesDay: 6, filesOpen: 20 }); // files: a member's own #work post filed as a job (api/team.js 'file') // dreams: Verse Brain's posts in #work (api/team.js 'dream')
@@ -361,7 +364,7 @@ export function offerCard(name, from, to) {
     + 'What to change: build /' + tool[1] + '/ so ' + tool[2] + '. Files: void-live-deploy/' + tool[1] + '/index.html (verse.css, verse-shell.js, the dark stage) and a Pages function under void-live-deploy/functions/' + tool[1] + '/ only if the check needs the server. Our URL, our name. Do not copy the other site.\n'
     + 'How to check: open the page, submit the form, and read an answer about that job. The form still works with scripts off.\n'
     + 'What a visitor sees: ' + tool[2] + ', in the normal nav.\n\n'
-    + 'One step, when the useful part of ' + fromId + ' is saved: POST /api/team {"do":"switch","job":"' + to.id + '","link":"https://github.com/atomeam/void-loop/pull/YOUR_PR"}. The link keeps the credit. The old claim returns to the queue. Your pull request stays open.\n'
+    + 'One step, when the useful part of ' + fromId + ' is saved: POST /api/team {"do":"switch","job":"' + to.id + '","link":"https://github.com/Adammbeam/Verse-A-to-Mind/pull/YOUR_PR"}. The link keeps the credit. The old claim returns to the queue. Your pull request stays open.\n'
     + 'Until switch is on the site, two calls do the same: {"do":"done","ok":false,"failed":false,"note":"switching to ' + to.id + '"} then {"do":"claim","job":"' + to.id + '"}.'
     ;
 }

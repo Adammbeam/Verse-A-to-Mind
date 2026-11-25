@@ -1,6 +1,6 @@
 {
  "note": "Who imports whom under void-live-deploy/ (tools/deps.mjs, from the import lines; asked by Verse). libs: each lib file with the skills that depend on it, directly or through another file (skills), directly (direct), and every dependant of any kind (dependants). files: each file's imports, the files that import it (importedBy) and the ones that reach it through them (reachedBy).",
- "counted": 1350,
+ "counted": 1361,
  "libs": [
   {
    "file": "lib/stage-pack.js",
@@ -41,21 +41,21 @@
    "file": "lib/keeper.js",
    "skills": 31,
    "direct": 0,
-   "dependants": 177,
+   "dependants": 178,
    "tests": 1
   },
   {
    "file": "lib/merge-rules.js",
    "skills": 31,
    "direct": 1,
-   "dependants": 177,
+   "dependants": 178,
    "tests": 1
   },
   {
    "file": "lib/art-rules.js",
    "skills": 31,
    "direct": 0,
-   "dependants": 176,
+   "dependants": 177,
    "tests": 6
   },
   {
@@ -428,13 +428,6 @@
    "direct": 1,
    "dependants": 12,
    "tests": 5
-  },
-  {
-   "file": "lib/card-custom-art.js",
-   "skills": 7,
-   "direct": 0,
-   "dependants": 11,
-   "tests": 1
   },
   {
    "file": "lib/card-share.js",
@@ -941,6 +934,13 @@
    "tests": 2
   },
   {
+   "file": "lib/tome-banner.js",
+   "skills": 3,
+   "direct": 0,
+   "dependants": 5,
+   "tests": 1
+  },
+  {
    "file": "lib/arena-say.js",
    "skills": 3,
    "direct": 2,
@@ -1056,7 +1056,7 @@
    "file": "lib/image-gen.js",
    "skills": 2,
    "direct": 1,
-   "dependants": 117,
+   "dependants": 118,
    "tests": 3
   },
   {
@@ -1085,7 +1085,7 @@
    "skills": 2,
    "direct": 0,
    "dependants": 40,
-   "tests": 1
+   "tests": 2
   },
   {
    "file": "lib/store-db.js",
@@ -1113,7 +1113,7 @@
    "skills": 2,
    "direct": 1,
    "dependants": 37,
-   "tests": 6
+   "tests": 7
   },
   {
    "file": "lib/proposal.js",
@@ -2498,14 +2498,14 @@
    "file": "lib/owner-accounts.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 113,
+   "dependants": 114,
    "tests": 0
   },
   {
    "file": "lib/guard.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 112,
+   "dependants": 113,
    "tests": 36
   },
   {
@@ -2894,6 +2894,13 @@
    "tests": 4
   },
   {
+   "file": "lib/openrouter-free.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 7,
+   "tests": 0
+  },
+  {
    "file": "lib/translate-langs.js",
    "skills": 0,
    "direct": 0,
@@ -3108,7 +3115,7 @@
    "skills": 0,
    "direct": 0,
    "dependants": 2,
-   "tests": 1
+   "tests": 0
   },
   {
    "file": "lib/used.js",
@@ -3336,6 +3343,13 @@
   },
   {
    "file": "lib/progress-chart.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 1,
+   "tests": 1
+  },
+  {
+   "file": "lib/proposals.js",
    "skills": 0,
    "direct": 0,
    "dependants": 1,
@@ -3587,6 +3601,20 @@
    "tests": 2
   },
   {
+   "file": "lib/canvas-layout.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 1
+  },
+  {
+   "file": "lib/card-custom-art.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 1
+  },
+  {
    "file": "lib/card-reply.js",
    "skills": 0,
    "direct": 0,
@@ -3620,6 +3648,13 @@
    "direct": 0,
    "dependants": 0,
    "tests": 2
+  },
+  {
+   "file": "lib/counterfactual.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 1
   },
   {
    "file": "lib/denoise.js",
@@ -3802,6 +3837,13 @@
    "direct": 0,
    "dependants": 0,
    "tests": 1
+  },
+  {
+   "file": "lib/memory-preview.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
   },
   {
    "file": "lib/memory-vault.js",
@@ -4068,6 +4110,13 @@
    "direct": 0,
    "dependants": 0,
    "tests": 1
+  },
+  {
+   "file": "lib/synth-graph.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
   },
   {
    "file": "lib/term-card.js",
@@ -4733,6 +4782,7 @@
     "functions/api/studio.js",
     "lib/image-gen.js",
     "lib/http.js",
+    "lib/openrouter-free.js",
     "lib/db.js"
    ],
    "importedBy": [
@@ -4977,6 +5027,13 @@
   "functions/api/productsearch.js": {
    "imports": [
     "functions/api/catalog.js"
+   ],
+   "importedBy": []
+  },
+  "functions/api/proposals.js": {
+   "imports": [
+    "lib/guard.js",
+    "lib/proposals.js"
    ],
    "importedBy": []
   },
@@ -6185,6 +6242,7 @@
     "functions/api/probe-asks.js",
     "functions/api/probe-log.js",
     "functions/api/productsearch.js",
+    "functions/api/proposals.js",
     "functions/api/propose-fix.js",
     "functions/api/publish.js",
     "functions/api/queue.js",
@@ -7803,6 +7861,10 @@
     "functions/api/rsvp.js"
    ]
   },
+  "lib/canvas-layout.js": {
+   "imports": [],
+   "importedBy": []
+  },
   "lib/card-art.js": {
    "imports": [
     "lib/card-subject.js",
@@ -7879,21 +7941,7 @@
   },
   "lib/card-custom-art.js": {
    "imports": [],
-   "importedBy": [
-    "lib/card-share.js"
-   ],
-   "reachedBy": [
-    "lib/card-frame.js",
-    "lib/duel-rules.js",
-    "lib/term-card.js",
-    "skills/about-skill.js",
-    "skills/collectible.js",
-    "skills/duel.js",
-    "skills/forge-table.js",
-    "skills/merge.js",
-    "skills/oracle.js",
-    "skills/rally.js"
-   ]
+   "importedBy": []
   },
   "lib/card-deck.js": {
    "imports": [
@@ -8101,7 +8149,6 @@
   "lib/card-share.js": {
    "imports": [
     "lib/card-image.js",
-    "lib/card-custom-art.js",
     "lib/card-deck.js"
    ],
    "importedBy": [
@@ -8711,6 +8758,10 @@
    "importedBy": [
     "skills/veto-council.js"
    ]
+  },
+  "lib/counterfactual.js": {
+   "imports": [],
+   "importedBy": []
   },
   "lib/credits.js": {
    "imports": [
@@ -9916,6 +9967,7 @@
     "functions/api/passkey.js",
     "functions/api/probe-asks.js",
     "functions/api/probe-log.js",
+    "functions/api/proposals.js",
     "functions/api/propose-fix.js",
     "functions/api/queue.js",
     "functions/api/react.js",
@@ -10436,6 +10488,7 @@
     "functions/api/probe-asks.js",
     "functions/api/probe-log.js",
     "functions/api/productsearch.js",
+    "functions/api/proposals.js",
     "functions/api/propose-fix.js",
     "functions/api/publish.js",
     "functions/api/queue.js",
@@ -10832,6 +10885,7 @@
     "functions/api/probe-asks.js",
     "functions/api/probe-log.js",
     "functions/api/productsearch.js",
+    "functions/api/proposals.js",
     "functions/api/propose-fix.js",
     "functions/api/publish.js",
     "functions/api/queue.js",
@@ -11631,6 +11685,10 @@
     "skills/memory-preview.js"
    ]
   },
+  "lib/memory-preview.js": {
+   "imports": [],
+   "importedBy": []
+  },
   "lib/memory-scope.js": {
    "imports": [
     "lib/guard.js",
@@ -11742,6 +11800,7 @@
     "functions/api/probe-asks.js",
     "functions/api/probe-log.js",
     "functions/api/productsearch.js",
+    "functions/api/proposals.js",
     "functions/api/propose-fix.js",
     "functions/api/publish.js",
     "functions/api/queue.js",
@@ -12517,6 +12576,20 @@
     "skills/quiz.js"
    ]
   },
+  "lib/openrouter-free.js": {
+   "imports": [],
+   "importedBy": [
+    "functions/api/image.js"
+   ],
+   "reachedBy": [
+    "functions/api/card-art.js",
+    "functions/api/clip.js",
+    "functions/api/daily-art.js",
+    "functions/api/gallery.js",
+    "functions/api/mcp.js",
+    "functions/api/x402/[service].js"
+   ]
+  },
   "lib/opposite-era.js": {
    "imports": [
     "lib/field-kit.js"
@@ -12659,6 +12732,7 @@
     "functions/api/probe-asks.js",
     "functions/api/probe-log.js",
     "functions/api/productsearch.js",
+    "functions/api/proposals.js",
     "functions/api/propose-fix.js",
     "functions/api/publish.js",
     "functions/api/queue.js",
@@ -13556,6 +13630,12 @@
     "functions/meanings/index.js",
     "lib/bench-asks.js",
     "skills/proposals.js"
+   ]
+  },
+  "lib/proposals.js": {
+   "imports": [],
+   "importedBy": [
+    "functions/api/proposals.js"
    ]
   },
   "lib/propose-fix.js": {
@@ -15838,6 +15918,10 @@
    ],
    "importedBy": []
   },
+  "lib/synth-graph.js": {
+   "imports": [],
+   "importedBy": []
+  },
   "lib/table-tools.js": {
    "imports": [],
    "importedBy": [
@@ -16293,6 +16377,18 @@
     "skills/date-math.js"
    ]
   },
+  "lib/tome-banner.js": {
+   "imports": [],
+   "importedBy": [
+    "lib/tome.js"
+   ],
+   "reachedBy": [
+    "lib/about-skill.js",
+    "skills/about-skill.js",
+    "skills/guide.js",
+    "skills/own-parts.js"
+   ]
+  },
   "lib/tome-search.js": {
    "imports": [],
    "importedBy": [
@@ -16308,6 +16404,7 @@
    "imports": [
     "lib/guide.js",
     "lib/card-art.js",
+    "lib/tome-banner.js",
     "lib/rule-registry.js",
     "lib/book-news.js"
    ],
@@ -17677,6 +17774,10 @@
     "functions/api/aurora.js"
    ]
   },
+  "skills/automation-handoff.js": {
+   "imports": [],
+   "importedBy": []
+  },
   "skills/automation-pack.js": {
    "imports": [],
    "importedBy": []
@@ -18190,6 +18291,10 @@
     "lib/mcp.js",
     "lib/team-mcp.js"
    ]
+  },
+  "skills/crew.js": {
+   "imports": [],
+   "importedBy": []
   },
   "skills/cross-bus-rules.js": {
    "imports": [],
@@ -20278,6 +20383,10 @@
    "importedBy": []
   },
   "skills/my-device.js": {
+   "imports": [],
+   "importedBy": []
+  },
+  "skills/n8n-bridge.js": {
    "imports": [],
    "importedBy": []
   },

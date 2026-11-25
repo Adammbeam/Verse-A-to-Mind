@@ -19,7 +19,11 @@ test('every kind draws a valid, safe SVG under 12 KB with its own plate', () => 
     assert.ok(![...s.matchAll(/href="([^"]*)"/g)].some((m) => !m[1].startsWith('#')), kind + ': no external href');
     assert.ok(s.length < (season === 'off' ? 12000 : 15000), kind + ' ' + season + ' ' + s.length + ' bytes');
     assert.equal((s.match(/<svg/g) || []).length, 1);
-    if (season === 'off' && rarity === 'Common') seen.add(s.replace(/id="[^"]*"/g, '').slice(300, 900));
+    if (season === 'off' && rarity === 'Common') {
+      const norm = s.replace(/id="[^"]*"/g, '');
+      const p = norm.indexOf('<g transform=');
+      seen.add(p > 0 ? norm.slice(p, p + 600) : norm.slice(300, 900));
+    }
   }
   assert.ok(seen.size >= 12, 'plates differ by kind');
 });

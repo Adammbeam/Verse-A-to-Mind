@@ -1,4 +1,4 @@
-// The repo activity ledger (owner, 2026-10-28: Verse takes over the two Zaps that logged atomeam/void-loop's pull requests and issues into a
+// The repo activity ledger (owner, 2026-10-28: Verse takes over the two Zaps that logged Adammbeam/Verse-A-to-Mind's pull requests and issues into a
 // Zapier table). Everything here is pure: the page (/ledger/) does the fetching, this file turns GitHub's issues list into rows, filters,
 // searches, exports and the link that restores a view. One endpoint carries both kinds: /repos/{owner}/{repo}/issues?state=all lists issues
 // and pull requests together, a pull request is the item with a `pull_request` field, and its merge time is pull_request.merged_at.
@@ -11,7 +11,7 @@ export const PER_PAGE = 100;
 export const FIRST_PAGES = 20; // the first look at a repo reads at most 2,000 of its newest items; "Load older" reads on
 export const MAX_REPOS = 6; // repos kept on this device, the least recently opened dropped first
 export const MAX_ROWS = 6000; // rows kept per repo
-export const DEFAULT_REPO = 'atomeam/void-loop';
+export const DEFAULT_REPO = 'Adammbeam/Verse-A-to-Mind';
 export const COLUMNS = Object.freeze(['kind', 'number', 'title', 'url', 'author', 'state', 'created_at', 'closed_at', 'merged_at', 'updated_at', 'labels', 'comments']);
 const NAME = /^[A-Za-z0-9_.-]{1,100}$/;
 

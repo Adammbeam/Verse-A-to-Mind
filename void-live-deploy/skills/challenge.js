@@ -119,7 +119,7 @@ async function run(text, api) {
   }
   let src = sourceOf(things, kinds, api.stage.selected && api.stage.selected(), q.missed ? { kind: 'quiz' } : {}), cold = '';
   // nothing to work from (a fresh visit): with no missed questions yet, the five minutes go to what is on the stage, or to a pair of gears put
-  // up for it, and it says so (site-test, atomeam/void-loop#1196)
+  // up for it, and it says so (site-test, Adammbeam/Verse-A-to-Mind#1196)
   if (!src && q.missed) { src = sourceOf(things, kinds, api.stage.selected && api.stage.selected()); if (src) cold = 'No missed questions yet, so the challenge is on the ' + (src.kind === 'moon' ? 'Moon' : src.kind) + ' · '; }
   if (!src) { src = starter(api); if (src) cold = (q.missed ? 'No missed questions yet' : 'Nothing was on the stage') + ', so here are two gears · '; }
   if (!src) { api.say(q.missed ? 'No quiz on the stage · say "quiz me on this" beside an explainer first' : NONE); return 'challenge'; }

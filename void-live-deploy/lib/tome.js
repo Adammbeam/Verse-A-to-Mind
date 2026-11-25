@@ -7,6 +7,7 @@
 // leaves. The content is the same skills/guide.json page data the generator writes (lib/guide.js), so nothing is left out.
 import { glyphSvg, openerSvg, TIERS, TIER_MEANING } from './guide.js';
 import { artSvg, seasonOf } from './card-art.js';
+import { howToAskBanner } from './tome-banner.js';
 import { rulesPageHtml, RULES_CSS } from './rule-registry.js';
 import { dayLabel } from './book-news.js';
 
@@ -55,6 +56,7 @@ export const TOME_CSS = [
   '.tome-try{margin:0;padding:0;list-style:none}.tome-try li{margin:.5cqh 0;font-style:italic;padding-left:2.2cqh;text-indent:-2.2cqh}.tome-try li::before{content:"\\2014  ";font-style:normal;color:#7a4a22}',
   '.tome a{color:#3a2412;text-decoration:none;border-bottom:1px dotted rgba(90,50,20,.6);cursor:pointer}.tome a:hover{color:#7a2a12;border-bottom-color:currentColor}',
   '.tome-art{margin:0 0 1.2cqh;border:1px solid rgba(74,46,22,.5);border-radius:3px;overflow:hidden;background:#150d07;box-shadow:inset 0 0 0 1px rgba(0,0,0,.4)}.tome-art svg{display:block;width:100%;height:auto}',
+  '.tome-art.tome-portal{margin:.1cqh 0 1.7cqh;width:100%;aspect-ratio:3 / 1;display:block;border:0;border-radius:0;background:none;box-shadow:none;overflow:visible}.tome-art.tome-portal svg{display:block;width:100%;height:auto}',
   '.tome-plate{float:right;margin:0 0 1cqh 2cqh;shape-outside:margin-box}.tome .gglyph{color:#4a2e16!important;filter:sepia(1) saturate(.55) brightness(.72);opacity:.9}',
   '.tome .gopener{display:flex;flex-wrap:wrap;justify-content:center;gap:.6cqh;margin:1.5cqh 0}.tome .gopener a{border:0;display:flex}',
   '.tome-list{margin:0;padding:0;list-style:none;columns:2;column-gap:4cqh;font-size:2cqh}.tome-list li{display:flex;align-items:baseline;margin:.35cqh 0;break-inside:avoid}.tome-list li a{border:0}.tome-list .lead-dots{flex:1;border-bottom:1px dotted rgba(90,50,20,.55);margin:0 .6cqh;transform:translateY(-.5cqh)}.tome-list .n{color:#6d4c2a}',
@@ -186,7 +188,11 @@ export function pageHtml(p, book, esc) {
       + openerSvg({ skills: firsts.map((x) => x.name) }, book, 10) + '<p class="tome-sub">' + t.skills + ' skills · ' + t.games + ' games · ' + t.minis + ' miniatures<br>' + t.pages + ' pages</p></div>';
   }
   if (p.kind === 'how') {
-    return '<div class="tome-kicker">Start here</div><h3 class="tome-title">' + esc(p.title) + '</h3><div class="tome-rule"></div><div class="tome-body">' + (p.part === 2 ? '<p class="lead">More of the first things to say. Each line of ink below is an ask: touch it and the book closes to do it.</p>' : pageArt(p, 100) + '<p class="lead">The stage is the dark space behind this book. The box at the bottom is where you ask, in plain words. '
+    // page 2's banner is the stage itself (lib/tome-banner.js). The pages sit where the running head already says
+    // "Start here" (page 2 on the right of the spread, every page on a phone), so the centered eyebrow would only
+    // repeat it above the title; on the left of the spread it fought the title it sits over.
+    const banner = p.part === 1 ? '<div class="tome-art tome-portal">' + howToAskBanner() + '</div>' : '';
+    return '<h3 class="tome-title">' + esc(p.title) + '</h3><div class="tome-rule"></div><div class="tome-body">' + (p.part === 2 ? '<p class="lead">More of the first things to say. Each line of ink below is an ask: touch it and the book closes to do it.</p>' : banner + '<p class="lead">The stage is the dark space behind this book. The box at the bottom is where you ask, in plain words. '
       + 'Say what you want and it appears on the stage: a card you can read, a thing you can drag, a board you can play on.</p><p>Esc or a tap on the void closes a card. Any line of ink in this book that reads like an ask can be touched, and the book closes to do it.</p>')
       + (p.core || []).map((c) => '<p class="tome-note"><b>' + esc(c.name) + '</b> · ' + esc(c.line) + '</p><ul class="tome-try gb-try">' + c.examples.map((a) => '<li><a href="#" data-ask="' + esc(a) + '">' + esc(a) + '</a></li>').join('') + '</ul>').join('')
       // the store, named where a first visit reads (owner, 2026-10-18: the corner "support Verse" link is gone, "but make the store easy to find")

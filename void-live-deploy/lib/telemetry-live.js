@@ -3,7 +3,7 @@
 // closed, and how the checks on a commit ended. Main's newest commit and its checks come first, because "is it live and green?" is the question
 // behind every report. Read-only, no key: GitHub's unauthenticated API (60 calls an hour per visitor), at most 11 calls a card.
 //   prLine(pr), checksLine(sha, runs), mainLine(commit, runs) are pure; liveLines(t, fetch) does the calls.
-export const REPO = 'atomeam/void-loop';
+export const REPO = 'Adammbeam/Verse-A-to-Mind';
 const API = 'https://api.github.com/repos/' + REPO;
 const SUITE = /deploy|verify|browser-suite|python-tests/i; // the checks that say whether main is live and green
 const short = (s) => String(s || '').slice(0, 8);

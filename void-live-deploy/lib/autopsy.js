@@ -262,7 +262,7 @@ export function remediationOf(i) {
   else if ((i && i.checks || []).some((c) => c && c.meta)) steps.push('Only the runner stalled here; re-run the suite on main before changing any skill.');
   if (open.length) steps.push('Open first: ' + open.map((f) => f.replace(/^void-live-deploy\//, '')).join(', ') + '.');
   if (likely.length && s8) steps.push('If it still fails, put ' + likely[0].replace(/^void-live-deploy\//, '') + ' back as it was before ' + s8 + ' (git checkout ' + s8 + '~1 -- ' + likely[0] + '), re-run, and open a PR with the fix.');
-  if (sha) steps.push('Read the change: https://github.com/atomeam/void-loop/commit/' + sha);
+  if (sha) steps.push('Read the change: https://github.com/Adammbeam/Verse-A-to-Mind/commit/' + sha);
   return steps;
 }
 /** the brief a builder agent gets from the root-cause button: the incident, its failing checks and the draft, one plain text. Pure. */
@@ -281,7 +281,7 @@ export function culpritHtml(i, esc) {
  *  prefilled issue the visitor files themselves (nothing is sent for them). Pure. */
 export function remedyHtml(i, esc) {
   const steps = remediationOf(i); if (!steps.length) return '';
-  const brief = builderBrief(i), issue = 'https://github.com/atomeam/void-loop/issues/new?labels=builder&title=' + encodeURIComponent('Incident ' + String(i.sha || '').slice(0, 8) + ': fix the failing checks') + '&body=' + encodeURIComponent(brief.slice(0, 6000));
+  const brief = builderBrief(i), issue = 'https://github.com/Adammbeam/Verse-A-to-Mind/issues/new?labels=builder&title=' + encodeURIComponent('Incident ' + String(i.sha || '').slice(0, 8) + ': fix the failing checks') + '&body=' + encodeURIComponent(brief.slice(0, 6000));
   return '<div class="sub" data-remediation="' + esc(steps.length) + '"><b>Remediation draft:</b><ol style="margin:2px 0 4px 18px;padding:0">' + steps.map((x) => '<li style="white-space:normal;overflow-wrap:anywhere">' + esc(x) + '</li>').join('') + '</ol>'
     + '<span role="button" tabindex="0" data-builder-brief="' + esc(brief) + '" style="display:inline-block;cursor:pointer;border:1px solid #ffd45e;border-radius:12px;padding:3px 10px;margin:0 6px 4px 0">Send to builders: copy the brief</span>'
     + '<a href="' + esc(issue) + '" target="_blank" rel="noopener" data-builder-issue="1">or file it as an issue for the builder agents</a></div>';

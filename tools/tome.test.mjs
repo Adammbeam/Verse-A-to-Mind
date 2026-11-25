@@ -49,6 +49,19 @@ test('the front matter and the back: a title page, how to ask with the built-in 
   assert.match(coverHtml(book, esc), /The Book of Verse/);
 });
 
+test('how to ask opens on its own banner: the stage, above the drop-cap intro, with no eyebrow repeating the running head', () => {
+  const how = book.pages.find((p) => p.kind === 'how' && p.part === 1), h = pageHtml(how, book, esc);
+  assert.match(h, /class="tome-art tome-portal"/);
+  assert.match(h, /tome-portal-svg/); assert.match(h, /viewBox="0 0 1200 400"/);
+  assert.match(h, /aria-label="How to ask:/, 'a schematic of how to ask, not a decorative plate');
+  assert.ok(h.indexOf('tome-portal') < h.indexOf('class="lead"'), 'the banner sits above the intro');
+  assert.doesNotMatch(h, /tome-kicker">Start here/, 'the top-right running head already says Start here');
+  assert.doesNotMatch(h, /<div class="tome-art">/, 'not the generic Idea plate with the crossed triangles and the eye');
+  const more = pageHtml(book.pages.find((p) => p.kind === 'how' && p.part === 2), book, esc);
+  assert.doesNotMatch(more, /tome-kicker">Start here/, 'the same eyebrow above More to ask');
+  assert.doesNotMatch(more, /tome-portal/, 'one banner, on the page that opens the chapter');
+});
+
 test('the stacks of unread leaves grow and shrink with the page you are on', () => {
   assert.deepEqual(stacks(1, 200), { left: 0, right: 0.995 });
   const mid = stacks(100, 200); assert.ok(Math.abs(mid.left - 0.495) < 0.01 && Math.abs(mid.right - 0.5) < 0.01);

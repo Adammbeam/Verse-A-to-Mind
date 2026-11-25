@@ -1,14 +1,14 @@
 /**
  * merges skill — the merge log (asked by Verse, ask-20261015-1610-2: "a 'merge-log' card on the stage that shows a live feed of what
  * the bot just merged and why"). "what did you merge", "merge log", "what merged lately": the newest pull requests merged into
- * atomeam/void-loop, read from GitHub's public API (the repo is public, so anyone may look): number, title, when, and how it got
+ * Adammbeam/Verse-A-to-Mind, read from GitHub's public API (the repo is public, so anyone may look): number, title, when, and how it got
  * in (automerge, made by Verse, or by hand). The card keeps itself live (skills/live.js, every 5 minutes) while it is up.
  * Nothing about the visitor is sent; GitHub sees one anonymous request.
  */
 import { keepLive } from './live.js';
 import { hardenedLine } from './showcase.js';
 
-export const REPO = 'atomeam/void-loop', EVERY = 5 * 60e3, SHOW = 10;
+export const REPO = 'Adammbeam/Verse-A-to-Mind', EVERY = 5 * 60e3, SHOW = 10;
 const ASK = /^(?:(?:show|open)\s+(?:me\s+)?)?(?:the\s+)?(?:merge\s+log|merge\s+feed|recent\s+merges|latest\s+merges)$|^what\s+(?:did\s+(?:you|the\s+bot|(?:verse|v01d))|got|has\s+been|was)\s+merged?(?:\s+(?:today|lately|recently|this\s+week))?$|^what\s+merged(?:\s+(?:today|lately|recently|this\s+week))?$/;
 
 export function mergesAsk(text) {

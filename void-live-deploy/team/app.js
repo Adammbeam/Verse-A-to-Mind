@@ -44,7 +44,7 @@ async function api(q = '', body) {
 })();
 
 // ---- state ----
-const S = { shell: null, me: null, view: { kind: 'channel', c: 'work' }, msgs: [], last: 0, thread: null, names: [], read: {}, pollT: 0 };
+const S = { shell: null, me: null, view: { kind: 'channel', c: 'work' }, msgs: [], last: 0, thread: null, names: [], read: {}, pollT: 0, roomMsgs: [], roomLast: 0, tasks: {}, roomWho: '' };
 try { S.read = JSON.parse(store.get(READ) || '{}') || {}; } catch (_) { S.read = {}; }
 const saveRead = () => store.set(READ, JSON.stringify(S.read));
 const chanCodes = () => (S.shell ? S.shell.channels.map((c) => c.code) : []);
@@ -61,8 +61,10 @@ const ago = (t) => { const m = Math.max(0, Math.round((Date.now() - t) / 60e3));
 const stateWord = (m) => (m.role === 'member' ? 'member · ' : '') + (m.crew && m.state !== 'invited' ? T.crewNext(m.next) : stateWord0(m)); // a crew member never holds a job: its card says when it runs next
 const stateWord0 = (m) => m.state === 'busy' ? 'on a job' + (m.since ? ' · ' + ago(m.since) : '') : m.state === 'idle' ? 'idle' : m.state === 'invited' ? 'invited, not joined yet' : 'away';
 
-function msgHtml(m, prev, { inThread = false } = {}) {
+function msgHtml(m, prev, { inThread = false, taskOf = null } = {}) {
   const cont = prev && prev.by === m.by && m.at - prev.at < 5 * 60e3 && !(m.replies && !inThread) && new Date(prev.at).toDateString() === new Date(m.at).toDateString();
+  // the sender's current job, when the caller has one (the meeting room's "current task" tag): a message's own job wins
+  const task = m.job ? '<span class="job">job ' + esc(m.job) + '</span>' : (taskOf ? taskOf(m) : '');
   const tag = m.kind === 'verse' ? '<span class="tag">Verse</span>' : m.kind === 'owner' ? '<span class="tag">owner</span>' : m.kind === 'member' ? '<span class="tag">member</span>' : '<span class="tag">agent</span>';
   const reacts = (m.reacts || []).map((r) => '<button type="button" data-react="' + esc(r.e) + '" data-id="' + m.id + '" aria-pressed="' + (r.me ? 'true' : 'false') + '" title="' + esc(r.who.join(', ')) + '">' + esc(r.e) + ' ' + r.n + '</button>').join('');
   const thread = !inThread && m.replies ? '<div class="tlink"><button type="button" data-thread="' + m.id + '">' + m.replies + (m.replies === 1 ? ' reply' : ' replies') + '</button> <span class="muted">last ' + (m.lastReply ? ago(m.lastReply) : '') + '</span></div>' : '';
@@ -71,15 +73,15 @@ function msgHtml(m, prev, { inThread = false } = {}) {
     + (!inThread && !m.job && m.c === 'ideas' && S.me.kind === 'owner' && m.kind !== 'verse' ? '<button type="button" data-promote="' + m.id + '" aria-label="Make this proposal a job">Make it a job</button>' : '') + '</div>' : '';
   return '<article class="msg' + (cont ? ' cont' : '') + '" id="m' + m.id + '" data-id="' + m.id + '">' + avatar(m)
     + '<div class="meta"><b>' + esc(m.by) + '</b>' + tag + '<time datetime="' + new Date(m.at).toISOString() + '">' + clock(m.at) + '</time></div>'
-    + '<div class="body">' + rendered(m.body) + (m.job ? '<div><span class="job">job ' + esc(m.job) + '</span></div>' : '') + '</div>'
+    + '<div class="body">' + rendered(m.body) + (task ? '<div>' + task + '</div>' : '') + '</div>'
     + (reacts ? '<div class="reacts">' + reacts + '</div>' : '') + thread + acts + '</article>';
 }
-function listHtml(list, { inThread = false, unreadFrom = 0 } = {}) {
+function listHtml(list, { inThread = false, unreadFrom = 0, taskOf = null } = {}) {
   let out = '', prev = null, day = '';
   for (const m of list) {
     const d = dayOf(m.at); if (d !== day) { out += '<div class="day">' + esc(d) + '</div>'; day = d; prev = null; }
     if (unreadFrom && m.id === unreadFrom) { out += '<div class="newline" role="separator"><span>new</span></div>'; prev = null; }
-    out += msgHtml(m, prev, { inThread }); prev = m;
+    out += msgHtml(m, prev, { inThread, taskOf }); prev = m;
   }
   return out;
 }
@@ -90,7 +92,7 @@ function drawSide() {
   const busy = sh.members.filter((m) => m.state === 'busy').length, idle = sh.members.filter((m) => m.state === 'idle').length;
   $('wsline').textContent = sh.members.length ? sh.members.length + (sh.members.length === 1 ? ' agent' : ' agents') + ' · ' + busy + ' on a job · ' + idle + ' idle · ' + sh.waiting + ' jobs waiting'
     : 'No agents yet · ' + sh.waiting + ' jobs waiting for one';
-  $('chans').innerHTML = sh.channels.map((c) => {
+  $('chans').innerHTML = sh.channels.filter((c) => c.code !== 'meeting').map((c) => { // the meeting room is a view of its own, not a line in the channel list
     const unread = S.me && (c.msgs || 0) > (S.read[c.code] || 0) && !(S.view.kind === 'channel' && S.view.c === c.code);
     const cur = S.view.kind === 'channel' && S.view.c === c.code ? ' aria-current="page"' : '';
     return '<li><a href="#c=' + esc(c.code) + '"' + cur + (unread ? ' class="unread"' : '') + '># ' + esc(c.title) + (unread ? '<span class="badge">' + Math.min(99, c.msgs - (S.read[c.code] || 0)) + '</span>' : '<span class="n">' + (c.msgs || '') + '</span>') + '</a></li>';
@@ -99,10 +101,13 @@ function drawSide() {
     : '<li><span class="row muted">No agent has joined yet.</span></li>';
   $('newChan').hidden = !S.me; $('invite').hidden = !(S.me && S.me.kind === 'owner');
   $('actLink').toggleAttribute('aria-current', S.view.kind === 'activity');
+  $('roomLink').toggleAttribute('aria-current', S.view.kind === 'room');
 }
 
 // ---- the views ----
 function head(title, count, about) { $('cname').textContent = title; $('ccount').textContent = count || ''; $('cabout').textContent = about || ''; }
+// the meeting room takes the main panel: a channel or a list puts the usual view back
+function leaveRoom() { $('main').classList.remove('rooming'); $('room').hidden = true; }
 function gate() {
   const sh = S.shell, ch = sh && sh.channels.find((c) => c.code === S.view.c);
   $('compose').hidden = true; $('gate').hidden = false;
@@ -111,7 +116,7 @@ function gate() {
     + '<p>' + (ag ? ag + (ag === 1 ? ' agent works' : ' agents work') + ' here. ' : 'No agent has joined yet. ') + 'Verse hands each idle agent its next job from the build queue (' + (sh ? sh.waiting : 0) + ' waiting now) and gives the next one the moment it closes one.</p></div>';
 }
 async function openChannel(c, { keep = false, scroll = null } = {}) {
-  S.view = { kind: 'channel', c }; drawSide();
+  S.view = { kind: 'channel', c }; drawSide(); leaveRoom();
   const ch = S.shell && S.shell.channels.find((x) => x.code === c);
   head('#' + c, ch && ch.msgs ? ch.msgs + (ch.msgs === 1 ? ' message' : ' messages') : '', ch ? ch.about : '');
   $('text').placeholder = c === 'work' && S.me && S.me.kind === 'owner' ? 'Ask for work: a post here goes on the build queue' : 'Message #' + c;
@@ -129,9 +134,57 @@ async function openChannel(c, { keep = false, scroll = null } = {}) {
   if (r.messages.length) brain.tell('#' + c + ' ' + r.messages.at(-1).body.slice(0, 200));
   drawRelated();
 }
+
+// ---- the Meeting Room: a live presence roster over the one #meeting stream ----
+// The roster is the shell's members (public presence) plus the owner; the stream is the #meeting channel, which the
+// owner and every agent already read and write over /api/team. Clicking a tile mentions that person in the box.
+const taskTag = (m) => (S.tasks[m.by] ? '<span class="job">job ' + esc(S.tasks[m.by]) + '</span>' : '');
+function drawRoster() {
+  const box = $('roster'), sh = S.shell; if (!box) return;
+  const ownerOn = !!(S.me && S.me.kind === 'owner');
+  const tiles = [];
+  tiles.push('<button type="button" class="tile' + (S.roomWho === 'Owner' ? ' on' : '') + '" data-room="Owner" title="Mention the owner"><span class="t-top"><i class="dot ' + (ownerOn ? 'idle' : 'away') + '" aria-hidden="true"></i><b>Owner</b><span class="t-role">owner</span></span><span class="t-job">' + (ownerOn ? 'here now' : 'Idle') + '</span><span class="t-seen">' + (ownerOn ? 'now' : 'not signed in') + '</span></button>');
+  for (const m of sh ? sh.members : []) {
+    const st = m.state === 'busy' ? 'busy' : m.state === 'idle' ? 'idle' : m.state === 'invited' ? 'invited' : 'away';
+    const job = m.job ? 'job ' + esc(m.job) + (m.now ? ' · ' + esc(m.now) : '') : (m.crew ? esc(m.now || 'crew') : 'Idle');
+    tiles.push('<button type="button" class="tile' + (S.roomWho === m.name ? ' on' : '') + '" data-room="' + esc(m.name) + '" title="Mention ' + esc(m.name) + '"><span class="t-top"><i class="dot ' + st + '" aria-hidden="true"></i><b>' + esc(m.name) + '</b><span class="t-role">' + esc(m.role === 'member' ? 'member' : 'agent') + '</span></span><span class="t-job">' + job + '</span><span class="t-seen">seen ' + (m.seen ? ago(m.seen) : 'never') + '</span></button>');
+  }
+  box.innerHTML = tiles.join('') || '<span class="muted" style="padding:6px 2px">No one has joined yet.</span>'; // void-review: ok (fixed text and values from /api/team, every one escaped)
+  $('roomLine').textContent = sh && sh.members.length ? sh.members.length + (sh.members.length === 1 ? ' agent' : ' agents') + ' in the room · ' + sh.waiting + ' jobs waiting' : 'No agents have joined yet.';
+}
+async function openRoom({ keep = false, scroll = null } = {}) {
+  S.view = { kind: 'room', c: 'meeting' }; drawSide();
+  if (S.thread) closeThread();
+  $('main').classList.add('rooming'); $('room').hidden = false;
+  head('The Meeting Room', '', 'The owner and every agent in one room, one stream.');
+  drawRoster();
+  if (!S.me) {
+    S.roomMsgs = []; S.roomLast = 0; $('roomMsgs').innerHTML = '';
+    $('roomCompose').hidden = true; $('roomGate').hidden = false; return;
+  }
+  $('roomGate').hidden = true; $('roomCompose').hidden = false;
+  if (!keep) $('roomMsgs').innerHTML = '<p class="empty muted">Reading the meeting…</p>';
+  const r = await api('?c=meeting'); if (S.view.kind !== 'room') return;
+  if (!r.ok) { $('roomMsgs').innerHTML = '<p class="empty">' + esc(r.say || 'the meeting could not be read') + '</p>'; return; }
+  S.names = (r.names || []).map((n) => n.toLowerCase());
+  S.roomMsgs = r.messages; S.roomLast = r.messages.length ? r.messages.at(-1).id : 0;
+  $('roomMsgs').innerHTML = r.messages.length ? listHtml(r.messages, { taskOf })
+    : '<div class="empty"><div class="orb" aria-hidden="true"></div><p><b>The meeting room is empty</b></p><p>Say the first thing: the owner and every agent read this stream.</p></div>';
+  $('roomMsgs').scrollTop = scroll == null ? $('roomMsgs').scrollHeight : scroll;
+  drawRelated();
+}
+$('roster').addEventListener('click', (e) => {
+  const t = e.target.closest('[data-room]'); if (!t) return;
+  const name = t.dataset.room; S.roomWho = S.roomWho === name ? '' : name; drawRoster();
+  if (!S.me) return;
+  const box = $('rtext'), at = box.value.replace(/\s+$/, '');
+  box.focus();
+  if (new RegExp('@' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(box.value)) return;
+  box.value = (at ? at + ' ' : '') + '@' + name + ' ';
+});
 function markRead(c, n) { if (n && (S.read[c] || 0) < n) { S.read[c] = n; saveRead(); } }
 async function openList(kind, q) {
-  S.view = { kind, q, c: S.view.c }; drawSide();
+  S.view = { kind, q, c: S.view.c }; drawSide(); leaveRoom();
   $('gate').hidden = true; $('compose').hidden = true;
   if (!S.me) { head(kind === 'activity' ? 'Activity' : 'Search', '', 'Only members read the messages.'); return gate(); }
   head(kind === 'activity' ? 'Activity' : 'Search: ' + q, '', kind === 'activity' ? 'Messages that mention you or @here.' : 'Every channel, newest first.');
@@ -159,9 +212,11 @@ function closeThread() { S.thread = null; S.threadData = null; $('app').classLis
 // ---- routing: #c=work, #c=work&t=12, #activity, #q=words ----
 function route() {
   const h = new URLSearchParams(location.hash.slice(1));
+  if (location.hash === '#room') { $('app').classList.remove('side'); $('menu').setAttribute('aria-expanded', 'false'); return openRoom(); }
   if (location.hash === '#activity') return openList('activity');
   if (h.get('q')) { $('q').value = h.get('q'); return openList('search', h.get('q')); }
   const c = h.get('c') && S.shell && S.shell.channels.some((x) => x.code === h.get('c')) ? h.get('c') : (S.view.c || 'work');
+  if (c === 'meeting') return openRoom();
   openChannel(c);
   const t = parseInt(h.get('t'), 10); if (t > 0) openThread(t); else if (S.thread) closeThread();
   $('app').classList.remove('side'); $('menu').setAttribute('aria-expanded', 'false');
@@ -180,10 +235,22 @@ async function shell() {
     box.innerHTML = (asks ? '<h2>Owner asks</h2><ul>' + asks + '</ul>' : '') + (who ? '<h2>Builders</h2><ul>' + who + '</ul>' : '') + (done ? '<h2>Finished work</h2><ul>' + done + '</ul>' : '');
   }
   const open = S.me && S.view.kind === 'channel' && r.channels.find((c) => c.code === S.view.c); if (open) markRead(open.code, open.msgs); // replies count too: the open channel is read
-  drawSide(); return r;
+  S.tasks = {}; for (const m of (r.members || [])) if (m.job) S.tasks[m.name] = m.job;
+  drawSide(); if (S.view.kind === 'room') drawRoster(); return r;
 }
 async function poll() {
   if (document.visibilityState !== 'visible') return;
+  if (S.me && S.view.kind === 'room') { // the meeting stream: append only, and only jump when the reader is already at the end
+    const r = await api('?c=meeting&since=' + S.roomLast);
+    if (r.ok && S.view.kind === 'room' && r.messages.length) {
+      const box = $('roomMsgs'), atEnd = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
+      if (!S.roomMsgs.length) box.innerHTML = '';
+      S.roomMsgs.push(...r.messages); S.roomLast = r.messages.at(-1).id;
+      box.insertAdjacentHTML('beforeend', listHtml(r.messages, { taskOf }));
+      if (atEnd) box.scrollTop = box.scrollHeight;
+    }
+    return;
+  }
   if (S.me && S.view.kind === 'channel') {
     const r = await api('?c=' + encodeURIComponent(S.view.c) + '&since=' + S.last);
     if (r.ok && S.view.kind === 'channel') {
@@ -215,7 +282,8 @@ async function send(box, say, c, thread) {
 }
 $('post').addEventListener('submit', (e) => { e.preventDefault(); send($('text'), $('postSay'), S.view.c); });
 $('tpost').addEventListener('submit', (e) => { e.preventDefault(); send($('ttext'), $('tsay'), $('tcompose').dataset.c, S.thread); });
-for (const [box, form] of [[$('text'), $('post')], [$('ttext'), $('tpost')]]) {
+$('rpost').addEventListener('submit', (e) => { e.preventDefault(); send($('rtext'), $('rSay'), 'meeting'); });
+for (const [box, form] of [[$('text'), $('post')], [$('ttext'), $('tpost')], [$('rtext'), $('rpost')]]) {
   box.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && !pickOpen()) { e.preventDefault(); form.requestSubmit(); } });
   box.addEventListener('input', () => { box.style.height = 'auto'; box.style.height = Math.min(220, box.scrollHeight) + 'px'; mentionPick(box); });
 }
@@ -237,7 +305,7 @@ function mentionPick(box) {
     else if (e.key === 'Enter' || e.key === 'Tab') { e.preventDefault(); take(names[sel]); } else if (e.key === 'Escape') { el.remove(); pick = null; }
   } };
 }
-for (const box of [$('text'), $('ttext')]) box.addEventListener('keydown', (e) => { if (pick) pick.key(e); }, true);
+for (const box of [$('text'), $('ttext'), $('rtext')]) box.addEventListener('keydown', (e) => { if (pick) pick.key(e); }, true);
 
 // reactions and thread links, on any list
 document.addEventListener('click', async (e) => {

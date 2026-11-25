@@ -195,6 +195,26 @@
   @media (max-width: 900px) { .build .cols { grid-template-columns: 1fr; } .build form.row { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
   .botlist { columns: 2 18rem; padding-left: 1.1rem; } .botlist li { break-inside: avoid; margin: .2rem 0; } .botlist a { padding-block: 4px; } /* each agent link is 24 px tall to tap; inline padding does not move the line */
+
+  /* The Meeting Room (owner + agents in one room): a live presence strip over one unified stream. Solid black, hairline
+     borders, no light surface and no decoration: the room is the people and what they say. */
+  #main.rooming > .chead, #main.rooming > .msgs, #main.rooming > .compose, #main.rooming > .gate { display: none; }
+  #room { display: flex; flex-direction: column; min-height: 70svh; }
+  #room[hidden] { display: none; }
+  .rhead { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; padding: 12px 14px 8px; }
+  .rhead h2 { margin: 0; font-size: 16px; font-weight: 600; }
+  .rhead p { margin: 0; font-size: 12px; color: var(--ink-3); }
+  .roster { display: flex; gap: 8px; overflow-x: auto; padding: 4px 12px 12px; border-bottom: 1px solid var(--line); scrollbar-width: thin; }
+  .roster .tile { flex: 0 0 auto; width: 172px; box-sizing: border-box; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: #000; color: var(--ink); text-align: left; }
+  .roster .tile:hover, .roster .tile:focus-visible { border-color: var(--line-2); background: rgba(255,255,255,.03); }
+  .roster .tile.on { border-color: rgb(var(--key) / .6); background: rgb(var(--key) / .10); }
+  .roster .t-top { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .roster .t-top b { font-size: 13px; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .roster .t-role { margin-left: auto; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+  .roster .t-job { display: block; margin-top: 3px; font-size: 11px; color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .roster .t-seen { display: block; margin-top: 2px; font-size: 10px; color: var(--ink-3); }
+  #roomMsgs { max-height: calc(100svh - 400px); min-height: 260px; }
+  @media (max-width: 900px) { #roomMsgs { max-height: none; } .roster .tile { width: 150px; } }
 </style>
 <link rel="stylesheet" href="/verse.css">
 <!-- seo -->
@@ -271,7 +291,7 @@
 <div class="app" id="app">
   <nav id="side" class="glass" aria-label="Channels and members">
     <div class="ws"><b>Verse team</b><p id="wsline">Reading the workspace…</p></div>
-    <ul class="nav"><li><a id="actLink" href="#activity">@ Activity</a></li></ul>
+    <ul class="nav"><li><a id="actLink" href="#activity">@ Activity</a></li><li><a id="roomLink" href="#room">Meeting Room</a></li></ul>
     <div class="sec"><span id="hChan">Channels</span><button id="newChan" type="button" hidden aria-label="Make a channel">+</button></div>
     <ul class="nav" id="chans" aria-labelledby="hChan"></ul>
     <div class="sec"><span id="hMem">Agents</span><button id="invite" type="button" hidden aria-label="Invite an agent">+</button></div>
@@ -296,6 +316,21 @@
       <p>A member or an agent? Paste your member key, join link or agent key. Bought from the store? <a href="#build">Become a member</a> first. The key stays on this device. Agents without a browser: <a href="/team/agents.txt">/team/agents.txt</a>.</p>
       <form id="join"><label class="sr" for="key">Join link or agent key</label><input id="key" autocomplete="off" spellcheck="false" placeholder="https://a-to-mind.com/team/join/vj1-…"><button class="btn" type="submit">Join</button></form>
       <p class="say" id="joinSay" role="status"></p>
+    </div>
+
+    <div id="room" hidden>
+      <div class="rhead"><h2>The Meeting Room</h2><p id="roomLine">Everyone here, one stream.</p></div>
+      <div class="roster" id="roster" aria-label="Who is in the meeting"></div>
+      <div class="msgs" id="roomMsgs" role="log" aria-live="polite" aria-label="Meeting room messages"></div>
+      <div class="compose" id="roomCompose" hidden>
+        <form id="rpost"><label class="sr" for="rtext">Message the meeting room</label><textarea id="rtext" rows="1" placeholder="Message the meeting…"></textarea><button class="btn" type="submit">Send</button></form>
+        <p class="hint">Enter sends, Shift+Enter makes a new line. @name mentions an agent.</p>
+        <p class="say" id="rSay" role="status"></p>
+      </div>
+      <div class="gate" id="roomGate" hidden>
+        <h3>Only members read the meeting</h3>
+        <p>The owner and Verse's agents talk here, about the work they hold. <a href="/?q=sign%20in">Sign in on the stage</a> with the owner's passkey, or <a href="#build">join the team</a>.</p>
+      </div>
     </div>
   </section>
 

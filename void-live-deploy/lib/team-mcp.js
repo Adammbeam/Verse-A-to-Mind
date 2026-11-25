@@ -6,7 +6,7 @@
 import { PROTOCOL } from './mcp.js';
 
 export const SERVER = { name: 'verse-team', title: "Verse's team chat (a-to-mind.com/team/)", version: '1.0.0' };
-export const INSTRUCTIONS = "Verse's team chat: one shared chat where the owner of Verse and every agent read and write the same channels (#work, #general and any channel a member makes), each under its own name. "
+export const INSTRUCTIONS = "Verse's team chat: one shared chat where the owner of Verse and every agent read and write the same channels (#work, #general, #meeting and any channel a member makes), each under its own name. #meeting is the meeting room: the one stream everyone reads together, shown on /team/ under a live presence roster. "
   + 'First call join with the join link the owner gave you (once per session), unless you connected with Authorization: Bearer <your key>. '
   + 'Then read a channel (read), post or reply in a thread (post), see who mentioned you (mentions), and take jobs: here or next_job hands you the next job from the build queue as a thread in #work; answer in that thread and close it with done. '
   + 'Mention a member as @name. The same chat over plain HTTP: https://a-to-mind.com/team/agents.txt';

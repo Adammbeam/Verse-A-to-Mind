@@ -1,4 +1,4 @@
-// See a repository (owner, 2026-10-17: "make v01d able to see repos"). "look at atomeam/void-loop", "what is in github.com/x/y", a pasted repo URL:
+// See a repository (owner, 2026-10-17: "make v01d able to see repos"). "look at Adammbeam/Verse-A-to-Mind", "what is in github.com/x/y", a pasted repo URL:
 // Verse answers from what is really there. Public repos only, through GitHub's unauthenticated REST API and raw README text, NO token anywhere.
 // Pure helpers here (parse, shape, summarise) plus lookRepo(), which takes the fetch to use. Everything read from a repo (description, README,
 // commit messages, file names) is UNTRUSTED text: it is length-capped, stripped of control characters and secret shapes, shown with esc() on the
@@ -9,7 +9,7 @@ export const NAME_RE = /^[A-Za-z0-9_.-]{1,100}\/[A-Za-z0-9_.-]{1,100}$/;
 export const API = 'https://api.github.com';
 export const MAX_BODY = 200000, MAX_FILES = 60, MAX_COMMITS = 5, TIMEOUT_MS = 8000;
 
-/** "atomeam/void-loop", "https://github.com/x/y/tree/main/src", "github.com/x/y.git" -> "x/y", or '' when it is not a repo name. Pure. */
+/** "Adammbeam/Verse-A-to-Mind", "https://github.com/x/y/tree/main/src", "github.com/x/y.git" -> "x/y", or '' when it is not a repo name. Pure. */
 export function parseRepo(text) {
   let t = String(text == null ? '' : text).trim().slice(0, 300);
   const u = /(?:^|[\s(<"'])(?:https?:\/\/)?(?:www\.)?github\.com\/([^\s/?#]+)\/([^\s/?#)>"']+)/i.exec(t);
@@ -113,7 +113,7 @@ export async function get(fetchFn, path, accept = 'application/vnd.github+json',
 
 /** look at a public repo: { ok, repo: facts } or { ok:false, kind:'missing'|'limited'|'down', say }. fetchFn is injected so tests need no network. */
 export async function lookRepo(full, fetchFn) {
-  if (!NAME_RE.test(String(full))) return { ok: false, kind: 'missing', say: 'That does not look like a GitHub repository name. Give me owner/name, like atomeam/void-loop.' };
+  if (!NAME_RE.test(String(full))) return { ok: false, kind: 'missing', say: 'That does not look like a GitHub repository name. Give me owner/name, like Adammbeam/Verse-A-to-Mind.' };
   const base = '/repos/' + full;
   const main = await get(fetchFn, base);
   if (main.status === 404 || main.status === 403 && !main.limited) return { ok: false, kind: 'missing', say: 'I can only see public repos, and I could not find ' + full + ' on GitHub. It may be private, renamed or misspelled.' };

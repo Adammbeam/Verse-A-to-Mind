@@ -56,7 +56,7 @@ export function builtByFamily(ledger, fam, limit = 40) {
   }).filter((f) => f.n);
   return { families, across: across.slice(0, limit), total: L.length, unchecked };
 }
-const REPO = 'https://github.com/atomeam/void-loop/pull/';
+const REPO = 'https://github.com/Adammbeam/Verse-A-to-Mind/pull/';
 const line = (it, esc) => '<li data-depth="' + esc(it.depth || '') + '"><b>' + esc(it.day) + '</b> · ' + esc(it.depth === 'root' ? 'root cause' : it.depth === 'surface' ? 'surface' : it.kind)
   + ' · ' + esc(it.what) + (it.show ? ' <span class="vs-n">(' + esc(it.show) + ')</span>' : '') + (it.pr ? ' · <a href="' + REPO + it.pr + '" target="_blank" rel="noopener">PR #' + it.pr + '</a>' : '') + '</li>';
 /** the section's HTML: one block per family, one heading per skill, every line whole (no cut words). Pure. */

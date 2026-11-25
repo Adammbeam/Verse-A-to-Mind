@@ -13,7 +13,7 @@ import { TEAM_KINDS, kindOf } from './team.js';
 import { readStatus } from '../functions/api/status.js';
 import { crewReady, crewWrite } from '../functions/api/team.js';
 
-const ORIGIN = 'https://a-to-mind.com', REPO = 'atomeam/void-loop';
+const ORIGIN = 'https://a-to-mind.com', REPO = 'Adammbeam/Verse-A-to-Mind';
 const TABLES = [
   'CREATE TABLE IF NOT EXISTS void_team_crew (k TEXT PRIMARY KEY, v TEXT NOT NULL, at INTEGER NOT NULL)',
   "CREATE TABLE IF NOT EXISTS void_team_wants (key TEXT PRIMARY KEY, lane TEXT NOT NULL, kind TEXT NOT NULL, title TEXT NOT NULL, label TEXT NOT NULL, metric TEXT NOT NULL, better TEXT NOT NULL, baseline REAL, latest REAL, cite TEXT NOT NULL DEFAULT '[]', private INTEGER NOT NULL DEFAULT 0, job TEXT NOT NULL, thread INTEGER NOT NULL DEFAULT 0, state TEXT NOT NULL, filed INTEGER NOT NULL, checked INTEGER NOT NULL DEFAULT 0, met_at INTEGER NOT NULL DEFAULT 0, reopened INTEGER NOT NULL DEFAULT 0, nag INTEGER NOT NULL DEFAULT 0)",

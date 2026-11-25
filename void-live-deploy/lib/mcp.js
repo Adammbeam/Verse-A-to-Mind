@@ -36,7 +36,7 @@ export function serverCard(origin = 'https://a-to-mind.com') {
     title: SERVER.title,
     description: 'Ask Verse anything with sources, plus code review, SEO audit, readability, contrast and sky facts.',
     websiteUrl: origin,
-    repository: { url: 'https://github.com/atomeam/void-loop', source: 'github' },
+    repository: { url: 'https://github.com/Adammbeam/Verse-A-to-Mind', source: 'github' },
     icons: [{ src: origin + '/icon-512.png', mimeType: 'image/png', sizes: ['512x512'] }],
     remotes: [{ type: 'streamable-http', url: origin + '/api/mcp', supportedProtocolVersions: [PROTOCOL] }],
   };

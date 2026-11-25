@@ -102,7 +102,7 @@ export function checkBrowser(w = typeof window !== 'undefined' ? window : {}) {
 // card automatically"; "make the results of verify-main visible to me as a status card"): the newest run on main of the checks and
 // of the deploy, from GitHub's public API (the repository is public; no key, 60 reads an hour per address). The owner chose
 // (2026-10-13) that the card opens by itself only for the owner: visitors keep the blank stage (autoOpen below).
-export const REPO = 'atomeam/void-loop';
+export const REPO = 'Adammbeam/Verse-A-to-Mind';
 export const BUILD = [{ name: 'Checks on main', file: 'verify.yml' }, { name: 'Deploy', file: 'deploy.yml' }];
 // The live check (mcp-live.yml): after every main deploy a real MCP client calls Verse's tools at a-to-mind.com. It is the one record
 // that a commit answers on the live domain, so it is the only evidence for "verified live"; it is read with the build, not shown as a row.

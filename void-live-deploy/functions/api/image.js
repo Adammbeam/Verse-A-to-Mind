@@ -36,6 +36,7 @@ import { cleanLine, refusalOf, promptOf, pollUrl, styleOf, shapeOf, seedOf, SHAP
 
 export const AI_MS = 25000, POLL_MS = 30000; // both inside the gate's 60 s wait for a first picture (2026-10-25: 40 + 40 s let a slow painter hold a picture past it)
 import { jsonNoStore as json } from '../../lib/http.js'; // one copy (lib/http.js, convergence step 3)
+import { generateImage as openrouterImage, loadOpenRouterFree } from '../../lib/openrouter-free.js';
 const isSecret = (t) => redact(t) !== t || scrubOut(t) !== t;
 import { tablesReady } from '../../lib/db.js'; // one copy (lib/db.js, convergence step 3)
 const say = (why, de) => (SAYS[why] || SAYS.busy)[de ? 1 : 0];
@@ -123,9 +124,15 @@ export async function onRequestPost({ request, env }, fetchFn) {
     if (!img) try { img = await paintAi(env, full, size, seed); } catch (e) { await noteMiss(env, 'workers-ai', e); if (!/slow/.test(String(e && e.message))) { try { img = await paintAi(env, full, size, seed, false); } catch (e2) { await noteMiss(env, 'workers-ai without seed', e2); img = ''; } } } // a model that refuses the seed field paints without it
     if (img) painter = 'workers-ai';
   }
+  if (!img && pollRoom && env && env.OPENROUTER_API_KEY) {
+    try {
+      const or = await openrouterImage({ env, payload: await loadOpenRouterFree(env, here), prompt: full, size: size[0] + 'x' + size[1] });
+      if (or && or.ok && or.url) { img = or.url; painter = 'openrouter'; }
+    } catch (_) { img = ''; }
+  }
   if (!img && pollRoom) { img = await paintFree(env, full, size, seed, fetchFn); if (img) painter = 'pollinations'; }
   if (!img) return resting('busy', de);
-  try { await tick(env, painter === 'workers-ai' ? 'ai' : 'poll', day); await tick(env, 'c:' + conn, day); } catch (_) {}
+  try { await tick(env, painter === 'workers-ai' ? 'ai' : 'poll', day); await tick(env, 'c:' + conn, day); } catch (_) {} // openrouter counts as a free painter slot (poll budget) for now
   const out = { state: 'art', img, seed, style, shape, painter, w: size[0], h: size[1], ref: refOf(key) };
   try { await caches.default.put(key, new Response(JSON.stringify(out), { headers: { 'content-type': 'application/json', 'cache-control': 'max-age=86400' } })); } catch (_) {}
   return json(out);

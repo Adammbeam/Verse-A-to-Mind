@@ -17,7 +17,7 @@ export const CLAIM_MS = 45 * 1000; // a request that is writing a line holds the
 export const PER_DAY = 240; // model calls a day for this, one D1 counter (lib/daily-cap.js)
 export const SAY_MAX = 320;
 export const SITE = 'https://a-to-mind.com';
-export const REPO = 'https://github.com/atomeam/void-loop';
+export const REPO = 'https://github.com/Adammbeam/Verse-A-to-Mind';
 
 const one = (s, n = 200) => { const t = String(s == null ? '' : s).replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim(); return t.length <= n ? t : t.slice(0, n).replace(/\s+\S*$/, ''); }; // cut at a word, no ellipsis: these are the model's inputs
 const msOf = (at) => (typeof at === 'number' ? at : Date.parse(at || ''));

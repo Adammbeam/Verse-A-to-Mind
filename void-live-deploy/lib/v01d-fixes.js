@@ -3,7 +3,7 @@
 // the lines they change in their body. They merge themselves when the review is clean (Atom, 2026-11-04). A PR still carrying the
 // retired confidence label (WAITS: no PR has been given it since, nothing waits for a person) is relabelled automerge by
 // tools/automerge.mjs. The card (skills/v01d-fixes.js) shows each open one. Pure.
-export const REPO = 'atomeam/void-loop';
+export const REPO = 'Adammbeam/Verse-A-to-Mind';
 // LABEL is the GitHub label's name, an identifier the workflows make (people see Verse)
 // WAITS is the retired label's name, kept only so old PRs are found and relabelled (tools/no-human-wait.mjs reads this one line as that)
 export const LABEL = 'made by Verse', WAITS = 'waits for owner', MERGES = 'automerge'; // no-human-wait: retired label

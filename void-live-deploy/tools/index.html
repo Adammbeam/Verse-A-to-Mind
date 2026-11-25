@@ -99,6 +99,7 @@
   for (const p of (new URLSearchParams(location.search).get('open') || '').split(',').map((x) => x.trim()).filter(Boolean)) { const q = '/' + p.replace(/^\//, '').replace(/\/$/, ''); add(names[q + '/'] ? q + '/' : q); }
   addEventListener("load", () => { import('/lib/toolkit.js').then((m) => m.mountRelated(document.getElementById('related'), '/tools/', [], { card: () => benchAsk(m.CARD_ASK) })).catch(() => {}); });</script>
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => { navigator.serviceWorker.register("/sw.js").catch(() => {}); });</script>
+<p style="margin:12px 0 0"><a href="/games/adventure/">Adventure</a></p>
 <script type="module" src="/verse-shell.js"></script>
 </body>
 </html>

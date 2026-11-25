@@ -2,7 +2,7 @@
 // payments, the model invented AI payment providers with fee and settlement scores, told the asker to make real one-cent charges
 // and log in to dashboards, and said Cash App and crypto already work). Nothing here names a provider, a fee or a live feature
 // that the store data (lib/store.js) and the live check do not confirm; the steps point to the verified doc instead.
-export const PAY_DOC = 'https://github.com/atomeam/void-loop/blob/main/docs/payments.md';
+export const PAY_DOC = 'https://github.com/Adammbeam/Verse-A-to-Mind/blob/main/docs/payments.md';
 const PAY = /\b(?:pay(?:ment|ments|ing)?|checkout|charge|charges|refunds?|stripe|gumroad|paypal|cash\s?app|venmo|crypto(?:currency)?|bitcoin|settlement|processor|payment\s+providers?)\b/i;
 const ABOUT_US = /\b(?:can\s+i\s+pay|test(?:ing)?|try|set\s*up|accept|take|work|works|working|support|supported|enable|live|integrat\w*|which|best|options?|providers?|fees?)\b/i;
 /** an ask about how payments work or are tested here. Pure. */

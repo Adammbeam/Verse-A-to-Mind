@@ -40,8 +40,8 @@ async function run(text, api) {
 
 export default {
   name: 'gh-file',
-  examples: ['https://github.com/atomeam/void-loop/blob/main/README.md', 'https://github.com/nodejs/node/blob/main/README.md#L1-L10', 'https://raw.githubusercontent.com/nodejs/node/main/README.md'],
-  nearMisses: ['https://github.com/atomeam/void-loop', 'look at atomeam/void-loop', 'github.com/nodejs/node/issues/1'],
+  examples: ['https://github.com/Adammbeam/Verse-A-to-Mind/blob/main/README.md', 'https://github.com/nodejs/node/blob/main/README.md#L1-L10', 'https://raw.githubusercontent.com/nodejs/node/main/README.md'],
+  nearMisses: ['https://github.com/Adammbeam/Verse-A-to-Mind', 'look at Adammbeam/Verse-A-to-Mind', 'github.com/nodejs/node/issues/1'],
   match(lower, text) { return !!ghFileOf(text || lower); },
   run
 };

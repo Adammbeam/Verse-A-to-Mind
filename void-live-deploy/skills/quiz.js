@@ -28,7 +28,7 @@ export function sourceOf(things, kinds, selectedId, opts = {}) {
 }
 
 /** with nothing on the stage to ask about, a pair of gears goes up first (an explainer every quiz can read), so "test me on that" in a
- *  fresh visit starts a quiz instead of a hint line nobody sees (site-test, atomeam/void-loop#1029 and #1196). The gears, or null. */
+ *  fresh visit starts a quiz instead of a hint line nobody sees (site-test, Adammbeam/Verse-A-to-Mind#1029 and #1196). The gears, or null. */
 export function starter(api) {
   const kinds = api.stage.kinds ? api.stage.kinds() : {};
   if (!kinds.gears) return null;

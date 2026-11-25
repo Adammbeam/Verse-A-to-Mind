@@ -75,7 +75,7 @@ export function failuresOf(text) {
 
 /** a pasted developer log, or null. Pure. */
 // a link to one of this repo's own pull requests or commits is evidence enough on its own: a builder's short status update ("Two more bot notices on
-// [atomeam/void-loop#1176](…/pull/1176), neither actionable …") carries one signal and fell through to the article lookup, which answered with an empty
+// [Adammbeam/Verse-A-to-Mind#1176](…/pull/1176), neither actionable …") carries one signal and fell through to the article lookup, which answered with an empty
 // card (owner, 2026-10-19: "i pasted yor reply got nothing but line"). An instruction about the link ("review this PR …") is another skill's.
 const OURS = /github\.com\/atomeam\/void-loop\/(?:pull|commit)\/[0-9a-f]+|\batomeam\/void-loop#\d+/i;
 const ASKS_ABOUT_LINK = /^(?:please\s+)?(?:review|check|look(?:\s+at)?|summari[sz]e|explain|read|open|merge|close|approve|analy[sz]e|fix|show(?:\s+me)?|tell\s+me|what|why|how|can|could|is|does)\b/i;

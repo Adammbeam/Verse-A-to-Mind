@@ -31,7 +31,7 @@ const META = new RegExp('^(?:(?:show|give|get|export|list)\\s+(?:me\\s+)?)?(?:th
 export const wantsFilmMeta = (lower) => META.test(String(lower || '').trim().replace(/[?!.]+$/, '').replace(/\s+/g, ' '));
 export function filmMeta(f) {
   const m = String(f.id || '').match(/^(\d{8})-(.+?)-r\d+$/), exp = m ? m[2] : '';
-  const src = (String(f.description || '').match(/How it is built: (https:\/\/github\.com\/\S+)/) || [])[1] || (exp ? 'https://github.com/atomeam/void-loop/blob/main/void-live-deploy/fringe/' + exp + '.html' : '');
+  const src = (String(f.description || '').match(/How it is built: (https:\/\/github\.com\/\S+)/) || [])[1] || (exp ? 'https://github.com/Adammbeam/Verse-A-to-Mind/blob/main/void-live-deploy/fringe/' + exp + '.html' : '');
   const day = m ? m[1].slice(0, 4) + '-' + m[1].slice(4, 6) + '-' + m[1].slice(6) : String(f.at || '').slice(0, 10);
   const tags = Array.isArray(f.tags) ? f.tags : String(f.tags || '').split(',').map((x) => x.trim()).filter(Boolean);
   return { id: f.id, day, experiment: exp, title: f.title || '', tags, source: src, watch: 'https://a-to-mind.com/films/' };
