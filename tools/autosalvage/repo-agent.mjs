@@ -15,6 +15,7 @@ export const AGENT_NAME = 'autosalvage-repo-agent';
 export const HARD_QUERY_CAP = 5;
 export const COOLDOWN_MS = 24 * 3600 * 1000;
 export const STATE_FILE = 'domains/autosalvage.repo-agent.state.json';
+export const WRITE_PATHS = [OUTSIDE, STATE_FILE];
 
 const STOP = new Set([
   'the', 'and', 'for', 'with', 'that', 'this', 'from', 'into', 'when', 'what', 'where', 'which', 'while', 'your',
@@ -229,6 +230,8 @@ async function cli() {
 
   const res = await runRepoAgent({ gaps, frontierMd, outsideDoc, state, maxQueries, minStars, lookupRepo });
   if (write) {
+    // only these two files: this agent never commits a tree, and it must not write anywhere else
+    for (const rel of [OUTSIDE, STATE_FILE]) if (!WRITE_PATHS.includes(rel)) throw new Error('repo-agent will not write ' + rel);
     writeFileSync(resolve(root, OUTSIDE), JSON.stringify(res.outsideDoc, null, 2) + '\n');
     writeFileSync(resolve(root, STATE_FILE), JSON.stringify(res.state, null, 2) + '\n');
   }

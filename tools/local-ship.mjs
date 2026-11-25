@@ -15,6 +15,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { wipeRefusal, deletedNames, allowWipe } from './wipe-guard.mjs';
 
 const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 && process.argv[i + 1] && !process.argv[i + 1].startsWith('--') ? process.argv[i + 1] : d; };
 const has = (k) => process.argv.includes(k);
@@ -49,6 +50,10 @@ export async function prove(p, { root = process.cwd(), run = sh } = {}) {
     if (!add.ok) return { ok: false, why: 'no such branch here: ' + p.branch, gates };
     const apply = run('git', ['apply', '--index', '-'], { cwd: dir, input: p.diff });
     if (!apply.ok) return { ok: false, why: 'the patch does not apply: ' + apply.out.trim().split('\n')[0], gates };
+    const del = run('git', ['diff', '--cached', '--name-only', '--diff-filter=D'], { cwd: dir });
+    const tree = run('git', ['ls-tree', '-r', '--name-only', 'HEAD'], { cwd: dir });
+    const wipe = wipeRefusal({ deleted: deletedNames(del.ok ? del.out : '').length, treeSize: tree.ok ? String(tree.out || '').split('\n').filter(Boolean).length : 0, allow: allowWipe() });
+    if (wipe) return { ok: false, why: wipe, gates };
     for (const [name, cmd, args] of [
       ['review', 'node', ['tools/review-pr.mjs', '--gate']],
       ['merge-gate', 'node', ['tools/merge-gate.mjs']],
