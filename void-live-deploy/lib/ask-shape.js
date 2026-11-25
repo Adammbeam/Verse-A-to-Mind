@@ -9,12 +9,14 @@ export const PASSAGE_LINE = 'That looks like a passage, not a question. I can su
 export const DIRECTIVE_SAY = "I'll take that as a want and put it on the build list.";
 export const DIRECTIVE_DUP = "That's already on the build list.";
 export const DIRECTIVE_HELD = "I'll take that as a want, and I'll put it on the build list when the queue is available.";
+export const TALK_LINE = "That sounds like you're talking to me, not looking something up. Say what you'd like me to do, or ask a question.";
 
 const LEAD = /^(?:(?:ok(?:ay)?|now|and|then|also|so|hey|verse|please|pls|yes|yeah)\b[\s,!.]*)*/i;
 const QUESTION_OPEN = /^(?:what|who|where|when|why|how|which|whose|whom|is|are|am|was|were|do|does|did|can|could|should|would|will|may|might)\b/i;
 const TEACH_SKILL = /\bteach\s+(?:my|your|the)\s+\w[\w-]*\s+skill\b/i;
 const DIRECT_OPEN = /^(?:please\s+)?(?:fix|debug|handle|repair)\b/i;
-const IN_CHARGE = /\b(?:you(?:'re| are)|verse is)\s+in charge\b|\btake (?:charge|over|the lead)\b|\byou decide\b/i;
+const IN_CHARGE = /\b(?:you(?:'re| are)|verse is)\s+in charge\b|\btake (?:charge|over|the lead)\b|\byou decide\b|\b(?:if you |do you )?want to be in charge\b|\bwanna be in charge\b/i;
+const TALK = /\bsay yes if you\b/i;
 const WANT_YOU = /\b(?:i want|i need|i(?:'|’)d like)\s+you\s+to\b/i;
 
 const tidy = (s) => String(s || '').trim();
@@ -31,13 +33,23 @@ export function isQuestion(raw) {
   return bare.length <= 280 && QUESTION_OPEN.test(bare);
 }
 
-/** an instruction to Verse: a command, "teach my X skill", "you're in charge now", "I want you to …". Not a long analysis that only mentions those words. Pure. */
+/** an instruction or offer to Verse: a command, "teach my X skill", "you're in charge now", "say yes if you want to be in charge", "I want you to …". An in-charge offer still counts when it is phrased as a question. Not a long analysis that only mentions those words. Pure. */
 export function isDirective(raw) {
   const t = tidy(raw);
-  if (!t || isQuestion(t) || isCardCorrection(t)) return false;
-  if (isLongProse(t) && !opensWithCommand(t) && !TEACH_SKILL.test(bareOf(t).slice(0, 80)) && !IN_CHARGE.test(t) && !WANT_YOU.test(t)) return false;
+  if (!t || isCardCorrection(t)) return false;
   const bare = bareOf(t);
-  return opensWithCommand(t) || asksToMake(t) || TEACH_SKILL.test(bare) || DIRECT_OPEN.test(bare) || IN_CHARGE.test(t) || WANT_YOU.test(t);
+  const toVerse = TEACH_SKILL.test(bare) || IN_CHARGE.test(t) || WANT_YOU.test(t);
+  if (toVerse) return true;
+  if (isQuestion(t)) return false;
+  if (isLongProse(t) && !opensWithCommand(t) && !DIRECT_OPEN.test(bare)) return false;
+  return opensWithCommand(t) || asksToMake(t) || DIRECT_OPEN.test(bare);
+}
+
+/** a line talking to Verse ("say yes if you …") that is not already a directive, a question to look up, or a passage. Pure. */
+export function isConversational(raw) {
+  const t = tidy(raw);
+  if (!t || isCardCorrection(t) || isDirective(t)) return false;
+  return TALK.test(t);
 }
 
 /** a pasted passage: long prose with no interrogative and no instruction, and not a correction addressed to Verse. Pure. */
@@ -47,11 +59,12 @@ export function isPassage(raw) {
   return isPasteText(t) || isLongProse(t) || asksSomething(t) === false && (t.length > 220);
 }
 
-/** 'question' | 'directive' | 'passage'. Short remarks that are none of those stay 'question' so they route as they do now. Pure. */
+/** 'question' | 'directive' | 'talk' | 'passage'. Short remarks that are none of those stay 'question' so they route as they do now. Pure. */
 export function askShape(raw) {
   if (isCardCorrection(raw)) return 'question';
-  if (isQuestion(raw)) return 'question';
   if (isDirective(raw)) return 'directive';
+  if (isQuestion(raw)) return 'question';
+  if (isConversational(raw)) return 'talk';
   if (isPassage(raw)) return 'passage';
   return 'question';
 }

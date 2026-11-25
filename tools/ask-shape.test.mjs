@@ -4,7 +4,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { askShape, isQuestion, isDirective, isPassage, PASSAGE_LINE, DIRECTIVE_SAY, DIRECTIVE_DUP, fileDirective } from '../void-live-deploy/lib/ask-shape.js';
+import { askShape, isQuestion, isDirective, isPassage, isConversational, PASSAGE_LINE, DIRECTIVE_SAY, DIRECTIVE_DUP, TALK_LINE, fileDirective } from '../void-live-deploy/lib/ask-shape.js';
 import { isOwnCardNote, isCardCorrection } from '../void-live-deploy/lib/self-context.js';
 import { dropErrataVoice } from '../void-live-deploy/lib/answer-honesty.js';
 
@@ -131,4 +131,33 @@ test('an ordinary question is still a question', () => {
   assert.match(src, /const shape = askShape\(ask\)/);
   assert.match(src, /if \(shape === 'passage'\) return Response\.json\(\{ answer: PASSAGE_LINE/);
   assert.match(src, /if \(shape === 'directive'\)/);
+});
+
+const CHARGE = 'antigravity is out say yes if you want to be in charge';
+
+test('a conversational in-charge offer is a directive, not a lookup', () => {
+  assert.equal(isDirective(CHARGE), true);
+  assert.equal(isQuestion(CHARGE), false);
+  assert.equal(isPassage(CHARGE), false);
+  assert.equal(askShape(CHARGE), 'directive');
+  assert.equal(askShape('how do i make a timer'), 'question', 'an ordinary how-to stays a question');
+  assert.equal(isConversational('say yes if you like the new stage'), true);
+  assert.equal(askShape('say yes if you like the new stage'), 'talk');
+});
+
+test('/api/answer: "antigravity is out say yes if you want to be in charge" is a want, never a not-found YouTube guess', async () => {
+  const queued = [];
+  const stmt = (sql) => { let args = []; const st = { bind: (...a) => { args = a; return st; }, first: async () => null, run: async () => { if (/INSERT INTO void_queue/.test(sql)) queued.push({ sql, args }); return {}; } }; return st; };
+  let ran = 0;
+  const env = { DB: { prepare: stmt }, AI: { run: async () => { ran++; return { response: 'I do not have information about that. The sources discuss YouTube.' }; } } };
+  const res = await post(CHARGE, env);
+  assert.equal(res.route, 'want');
+  assert.notEqual(res.self, true);
+  assert.notEqual(res.noAnswer, true);
+  assert.equal(res.guess, undefined);
+  assert.equal(res.answer, DIRECTIVE_SAY);
+  assert.doesNotMatch(res.answer, /could not find|Did you mean|YouTube/i);
+  assert.equal(ran, 0, 'the find path is not used');
+  assert.equal(queued.length, 1);
+  assert.equal(queued[0].args[1], CHARGE);
 });
