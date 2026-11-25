@@ -14,6 +14,7 @@ import { spawnSync, execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import { conflictMarkers } from '../void-live-deploy/lib/code-review.js';
+import { wipeRefusal, deletedNames, allowWipe } from './wipe-guard.mjs';
 
 // problems in [{ path, text }]: strings like "tools/x.mjs: does not parse (line 3: SyntaxError: ...)"; binary files are skipped
 export function problemsIn(files) {
@@ -64,6 +65,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     catch (e) { console.error(`precommit: cannot list the staged files: ${String(e.stderr || e.message).split('\n')[0]}`); process.exit(1); }
     const files = names.map((path) => { try { return { path, text: git('show', ':' + path) }; } catch (_) { return { path, text: null }; } });
     const problems = problemsIn(files);
+    const deleted = deletedNames(git('diff', '--cached', '--name-only', '--diff-filter=D'));
+    let treeSize = 0; try { treeSize = git('ls-tree', '-r', '--name-only', 'HEAD').split('\n').filter(Boolean).length; } catch (_) {}
+    const wipe = wipeRefusal({ deleted: deleted.length, treeSize, allow: allowWipe() });
+    if (wipe) problems.push(wipe);
     if (problems.length) { console.error(`precommit: ${problems.length} problem(s) in what is staged:\n  ` + problems.join('\n  ') + '\nprecommit: nothing committed. Settle it (node tools/merge-main.mjs), stage again, commit again.'); process.exit(1); }
     console.log(`precommit: ${names.length} staged file(s): no conflict markers, every script and JSON file parses`);
     process.exit(0);
@@ -77,6 +82,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const files = names.map((path) => { try { return { path, text: git('show', 'HEAD:' + path) }; } catch (_) { return { path, text: null }; } });
   const problems = problemsIn(files);
   for (const f of files) if (LEDGERS.includes(f.path)) { let before = null; try { before = git('show', base + ':' + f.path); } catch (_) {} const why = ledgerShrinks(f.path, before, f.text); if (why) problems.push(why); }
+  const deleted = deletedNames(git('diff', '--name-only', '--diff-filter=D', base, 'HEAD'));
+  let treeSize = 0; try { treeSize = git('ls-tree', '-r', '--name-only', base).split('\n').filter(Boolean).length; } catch (_) {}
+  const wipe = wipeRefusal({ deleted: deleted.length, treeSize, allow: allowWipe() });
+  if (wipe) problems.push(wipe);
   if (problems.length) { console.error(`prepush: ${problems.length} problem(s) in what this push would send (${names.length} changed file(s) against ${base}):\n  ` + problems.join('\n  ')); process.exit(1); }
   console.log(`prepush: ${names.length} changed file(s) against ${base}: no conflict markers, every script and JSON file parses`);
 }
