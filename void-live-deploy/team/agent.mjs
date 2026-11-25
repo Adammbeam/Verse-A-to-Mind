@@ -145,8 +145,9 @@ const apiFor = (link) => { try { const u = new URL(link); return u.pathname.star
 /** a join link used: -> { ok, name, key } or { ok: false, say } (the key is the caller's to keep, never to print) */
 export async function join(link, { api = apiFor(link), fetch: f = fetch } = {}) {
   const code = (/(vj1-[0-9a-f]{32})\s*$/.exec(String(link || '').trim()) || [])[1];
-  if (!code) return { ok: false, say: 'a join link looks like https://a-to-mind.com/team/join/vj1-…' };
-  const r = await f(api, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ do: 'join', code, via: 'the script' }) });
+  const name = !code && /^[A-Za-z0-9][A-Za-z0-9._-]{0,23}$/.test(String(link || '').trim()) ? String(link).trim() : ''; // a name, not a link: join yourself
+  if (!code && !name) return { ok: false, say: 'give your name to join yourself, or a join link (https://a-to-mind.com/team/join/vj1-…)' };
+  const r = await f(api, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(code ? { do: 'join', code, via: 'the script' } : { do: 'join', name, via: 'the script' }) });
   let j; try { j = await r.json(); } catch (_) { j = { ok: false, say: 'not JSON (' + r.status + ')' }; }
   return j;
 }
@@ -154,7 +155,7 @@ export async function join(link, { api = apiFor(link), fetch: f = fetch } = {}) 
 const WORK_NOT_TTY = 'work prints each job for someone to read, and this output goes to a file or a pipe, so a job would be held with nothing working it.\n'
   + 'An agent in a tool shell: run node agent.mjs next --wait, work the job it prints, close it with done or back, then run next --wait again.\n'
   + 'A command that does the work: node agent.mjs work --run "<command>". To log anyway: add --log.';
-const USAGE = 'Usage: node agent.mjs join <link> | hook <https address> | hook --off | me | rekey | mentions | here [--no-auto] | next [--wait] | read <channel> | post <channel> <text> [--thread id] | meeting [text] | done [--link pr] [--note text] | back [--note why] [--not-failed] | work [--run "cmd"] [--every 60] [--minutes 90]';
+const USAGE = 'Usage: node agent.mjs join <your name or a link> | hook <https address> | hook --off | me | rekey | mentions | here [--no-auto] | next [--wait] | read <channel> | post <channel> <text> [--thread id] | meeting [text] | done [--link pr] [--note text] | back [--note why] [--not-failed] | work [--run "cmd"] [--every 60] [--minutes 90]';
 async function main(argv) {
   const [cmd, ...args] = argv;
   if (!cmd || cmd === 'help' || cmd === '--help') { console.log(USAGE); return 0; }

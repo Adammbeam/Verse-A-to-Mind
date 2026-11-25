@@ -753,3 +753,62 @@ test('a building row no seat holds goes back on the queue; a conductor claim is 
   assert.match(job(env, 'orphan').note, /claim died with no seat/, 'and its note says why');
   assert.equal(job(env, 'cond').state, 'building', 'a conductor claim is not a team claim: it stays');
 });
+
+// self-join (owner, 2026-11-25: agents add themselves): one call, no link, no owner step; never re-keys a seat that holds a key
+const fromIp = async (env, body, ip, now = T0) => { const r = await API.onRequestPost({ env, request: new Request('https://verse.test/api/team', { method: 'POST', headers: { 'content-type': 'application/json', 'cf-connecting-ip': ip }, body: JSON.stringify(body) }), now }); return { status: r.status, ...(await r.json()) }; };
+const seat = (env, name) => env.DB.raw.prepare('SELECT * FROM void_team_agents WHERE name = ?').get(name);
+
+test('self-join: one call with a name gives a key, auto on, and the clock hands that seat a job', async () => {
+  const env = world(JOBS);
+  const j = await fromIp(env, { do: 'join', name: 'scout' }, '10.0.0.1');
+  assert.equal(j.status, 201, j.say); assert.match(j.key, T.KEY_RE); assert.equal(j.role, 'self'); assert.equal(j.name, 'scout');
+  const row = seat(env, 'scout'); assert.equal(row.auto, 1); assert.equal(row.role, 'self'); assert.notEqual(row.key, '');
+  assert.ok(!JSON.stringify(row).includes(j.key.split('.')[2]), 'only the keyed hash is kept');
+  assert.equal((await get(env, '?me', j.key)).me.name, 'scout');
+  assert.equal(await API.handIdle(env, T0 + 60e3), 1, 'the tick hands the self-joined seat a job');
+  assert.equal(seat(env, 'scout').job, 'j2');
+  const e = await fromIp(env, { do: 'enlist' }, '10.0.0.2'); assert.equal(e.status, 201, e.say); assert.match(e.name, /^agent-[0-9a-f]{6}$/, 'no name: one is made');
+});
+
+test('self-join: a name with a key is refused, the first key still works; bad and reserved names are refused', async () => {
+  const env = world(JOBS);
+  const first = await fromIp(env, { do: 'join', name: 'nod' }, '10.0.1.1'); assert.equal(first.status, 201);
+  const again = await fromIp(env, { do: 'join', name: 'NOD' }, '10.0.1.2');
+  assert.equal(again.status, 409); assert.equal(again.key, undefined, 'no second key for a seat that holds one');
+  const hi = await post(env, { do: 'here' }, first.key, T0 + 1000); assert.equal(hi.status, 200, hi.say); assert.equal(hi.state, 'busy', 'the first key still heartbeats and is handed work');
+  const owned = await admit(env, 'beam'); // an owner-invited seat that joined: never taken over
+  assert.equal((await fromIp(env, { do: 'join', name: 'beam' }, '10.0.1.3')).status, 409);
+  assert.equal((await get(env, '?me', owned.key)).me.name, 'beam');
+  for (const name of ['verse', 'owner', 'has space', '-x']) assert.equal((await fromIp(env, { do: 'join', name }, '10.0.1.4')).status, 400, name);
+  assert.equal((await post(env, { do: 'join', code: 'vj1-' + '0'.repeat(32) })).status, 401, 'a made-up link is still a wrong link, not a self-join');
+});
+
+test('self-join: an owner invite nobody used is adopted once, auto on; its link is spent; a second caller is refused', async () => {
+  const env = world(JOBS);
+  const inv = await post(env, { do: 'invite', name: 'opencode-beam', auto: false }, OWNER); assert.equal(inv.status, 201);
+  const j = await fromIp(env, { do: 'join', name: 'opencode-beam' }, '10.0.2.1');
+  assert.equal(j.status, 201, j.say); assert.equal(j.adopted, true);
+  assert.equal(seat(env, 'opencode-beam').auto, 1, 'the adopted seat lands with jobs on');
+  assert.equal((await post(env, { do: 'join', code: T.joinCode(inv.join) })).status, 401, 'the invite link is spent');
+  assert.equal((await fromIp(env, { do: 'join', name: 'opencode-beam' }, '10.0.2.2')).status, 409);
+  assert.equal((await get(env, '?me', j.key)).me.name, 'opencode-beam');
+});
+
+test('self-join: a few a minute from one address, the team cap holds, a self seat has a member\'s rights, leaves, and idle seats are reaped', async () => {
+  const env = world(JOBS);
+  const codes = []; for (let i = 0; i < T.SELF_TRIES + 1; i++) codes.push((await fromIp(env, { do: 'join', name: 'rl' + i }, '10.0.3.1')).status);
+  assert.deepEqual(codes, [...Array(T.SELF_TRIES).fill(201), 429]);
+  const full = world(JOBS); await get(full, ''); const ins = full.DB.raw.prepare("INSERT INTO void_team_agents (id, name, key, joined) VALUES (?, ?, 'h', 0)");
+  for (let i = 0; i < T.RATES.agents; i++) ins.run('f' + String(i).padStart(11, '0'), 'f' + i);
+  assert.equal((await fromIp(full, { do: 'join', name: 'late' }, '10.0.3.2')).status, 429, 'RATES.agents is the one cap');
+  const s = await fromIp(env, { do: 'join', name: 'quiet' }, '10.0.3.3');
+  assert.equal((await post(env, { do: 'channel', code: 'mine' }, s.key)).status, 403, 'no channels');
+  assert.equal((await post(env, { do: 'invite', name: 'x' }, s.key)).status, 403, 'no invites');
+  const l = await fromIp(env, { do: 'join', name: 'leaver' }, '10.0.3.4');
+  await post(env, { do: 'next' }, l.key, T0 + 1000); const held = seat(env, 'leaver').job; assert.ok(held);
+  assert.equal((await post(env, { do: 'leave' }, l.key, T0 + 2000)).status, 200);
+  assert.equal(job(env, held).state, 'queued', 'its job went back'); assert.equal((await get(env, '?me', l.key)).me, null, 'its key ended');
+  assert.equal((await fromIp(env, { do: 'join', name: 'leaver' }, '10.0.3.5')).status, 201, 'a self seat that left frees its name');
+  await API.sweep(env, T0 + T.SELF_IDLE_MS + 5000);
+  assert.equal(seat(env, 'quiet').off, 1, 'an idle self seat leaves on its own'); assert.equal((await get(env, '?me', s.key, T0 + T.SELF_IDLE_MS + 6000)).me, null);
+});

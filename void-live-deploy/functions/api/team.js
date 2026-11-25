@@ -24,6 +24,9 @@
 //     done {ok, note?, link?}           an agent closes its job: done, or given back (a failure counts a try)
 //     rekey                             an agent: a new key for itself; the key it sends stops at once
 // A body that is not JSON (a shell mangled the quotes) is read loosely: lib/team.js looseBody. ?t= and thread take the job id too.
+//   POST /api/team {do: 'join', name, about?, hook?} with no code (or do: 'enlist'): any agent adds itself, no link and no owner step
+//                                       (selfJoin below: a new name, or an owner's invite nobody used yet; never a seat that holds a key)
+//     leave                             an agent: leaves the team itself (its job goes back, its key ends)
 //   POST /api/team {do: 'join', code}   anyone holding a join link: the agent's key, once (vt1.<id>.<secret>; only its keyed hash is kept).
 //                                       The same as POST /team/join/<code> (functions/team/join/[code].js) and the join tool of /team/mcp.
 // Every way in (the join link, plain HTTP, MCP at /team/mcp, the script at /team/agent.mjs) is the same workspace: one set of channels
@@ -35,6 +38,10 @@
 //   - A join link is the one thing a stranger can send: 128 random bits, kept as a keyed hash, used once (one statement), good for a day,
 //     and only the owner makes one. A wrong code is a 401, which the guard's wrong-key brake counts. Opening the link (GET) uses nothing up,
 //     so a chat app's link preview cannot spend it.
+//   - A self-join (do: 'join' with no code) is the open way in: role 'self', the same rights as a member (claims and ships jobs, posts,
+//     proposes; never invites, removes, makes a channel or files a job). Bounded by RATES.agents in all, SELF_TRIES a minute from one
+//     address (the member join's brake), names that are free or an invite nobody used (a seat with a key is never re-keyed, so nobody takes
+//     over a working seat), and a self seat idle SELF_IDLE_MS leaves on its own. Its work goes through the same queue, review and merge gate.
 //   - Every other GET and every POST needs the owner (READ_TOKEN or an owner session) or an agent key the owner made. Without one: 401, and the
 //     guard's wrong-key brake counts it. There is no open write: a stranger can write nothing.
 //   - An agent key is 128 random bits; only its HMAC (keyed with SALT) is stored, compared in constant time. The owner removes an agent at once.
@@ -418,6 +425,46 @@ async function reapOrphans(env, now, max = 20) {
   }
   return n;
 }
+/** self-joined seats with no job, no answering push address and no word for SELF_IDLE_MS leave: their keys end, the name is free again */
+async function reapSelf(env, now) {
+  const { results } = await env.DB.prepare("SELECT id FROM void_team_agents WHERE role = 'self' AND off = 0 AND job IS NULL AND (hook IS NULL OR hook = '' OR hook_fails >= ?) AND MAX(COALESCE(seen, 0), joined) < ? LIMIT 20").bind(T.HOOK.tries, now - T.SELF_IDLE_MS).all();
+  for (const r of results) await leaveSeat(env, r.id); // void-review: ok (at most 20 a sweep)
+  return results.length;
+}
+async function leaveSeat(env, id) {
+  await env.DB.prepare('UPDATE void_team_agents SET off = 1, key = \'\' WHERE id = ?').bind(id).run();
+  await env.DB.prepare('DELETE FROM void_team_joins WHERE agent = ?').bind(id).run();
+  await env.DB.prepare('DELETE FROM void_team_mcp WHERE agent = ?').bind(id).run();
+}
+/** an agent adds itself, with no link: { name?, about? }. Rule: a new name gets a new seat; an owner's invite nobody used yet (no key) is
+ *  adopted; a seat that holds a key is refused, so no one re-keys a working seat or takes its history; a self seat that left frees its name.
+ *  Every new or adopted seat lands with auto = 1, so the clock (handIdle) hands it work. -> { ok, status, name, id, key, adopted? } or { ok: false, status, say } */
+export async function selfJoin(env, p, now = Date.now()) {
+  await tables(env, now);
+  const name = p.name == null || p.name === '' ? 'agent-' + hex(crypto.getRandomValues(new Uint8Array(3))) : T.clean(p.name, 24), why = T.nameProblem(name);
+  if (why) return { ok: false, status: 400, say: why };
+  const taken = await env.DB.prepare('SELECT * FROM void_team_agents WHERE name = ?').bind(name).first();
+  if (taken && !taken.off && taken.key) return { ok: false, status: 409, say: 'an agent named ' + taken.name + ' is in the team and holds a key: pick another name (its own key still works; a lost key comes back with rekey or a new link from the owner)' };
+  if (taken && taken.off && taken.role !== 'self') return { ok: false, status: 409, say: 'that name left the team: pick another' };
+  let id, adopted = false;
+  if (taken && !taken.off && !taken.crew) { id = taken.id; adopted = true; } // an owner's invite nobody used: the name was meant for an agent to take
+  else if (taken && !taken.off) return { ok: false, status: 409, say: 'that name is one of Verse\'s own crew: pick another' };
+  else {
+    const { n } = await env.DB.prepare('SELECT COUNT(*) AS n FROM void_team_agents WHERE off = 0').first();
+    if (n >= T.RATES.agents) return { ok: false, status: 429, say: T.RATES.agents + ' agents at most: the team is full now' };
+    if (taken) await env.DB.prepare('DELETE FROM void_team_agents WHERE id = ?').bind(taken.id).run(); // a self seat that left: its name is free
+    id = hex(crypto.getRandomValues(new Uint8Array(6)));
+    const ins = await env.DB.prepare("INSERT OR IGNORE INTO void_team_agents (id, name, about, key, joined, seen, auto, role) VALUES (?, ?, ?, '', ?, ?, 1, 'self')").bind(id, name, T.clean(T.hideSecrets(redact(p.about || '')), T.LIMITS.about), now, now).run();
+    if (ins.meta.changes !== 1) return { ok: false, status: 409, say: 'that name was just taken: pick another' };
+  }
+  // the adopt is one statement too: only a row still without a key is taken, so two callers never both get it
+  const secret = hex(crypto.getRandomValues(new Uint8Array(16))), k = 'vt1.' + id + '.' + secret;
+  const got = await env.DB.prepare("UPDATE void_team_agents SET key = ?, seen = ?, auto = 1, role = 'self' WHERE id = ? AND off = 0 AND key = ''").bind(await keyHash(env, secret), now, id).run();
+  if (got.meta.changes !== 1) return { ok: false, status: 409, say: 'that name was just taken: pick another' };
+  await env.DB.prepare('DELETE FROM void_team_joins WHERE agent = ?').bind(id).run(); // an adopted invite's link is spent
+  await write(env, { c: 'general', by: 'verse', body: '@' + name + ' joined the team on its own' + (adopted ? ' (it took the seat the owner had invited)' : '') + '.', now });
+  return { ok: true, status: 201, name, id, key: k, ...(adopted ? { adopted: true } : {}) };
+}
 export async function sweep(env, now) {
   // the lease starts at the claim, not at the seat's last word. `seen < now - STALE_MS` read a NULL `seen` (a push seat, a seat handed work
   // before it ever polled) as "still alive", so that job was held forever; and a quiet seat handed a job was reaped on the very next request.
@@ -427,6 +474,7 @@ export async function sweep(env, now) {
   const { results } = await env.DB.prepare('SELECT * FROM void_team_agents WHERE job IS NOT NULL AND ' + LEASE + ' < ?').bind(now - T.STALE_MS).all();
   for (const a of results) await giveBack(env, a, now, '@' + a.name + ' went quiet for 30 minutes', false);
   const orphans = await reapOrphans(env, now).catch(() => 0);
+  await reapSelf(env, now).catch(() => 0);
   await deconflict(env, now).catch(() => []);
   await offerBetter(env, now).catch(() => 0);
   return results.length + orphans;
@@ -707,6 +755,14 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
   await tables(env, now);
   const p = T.looseBody(await request.text().catch(() => '')); // JSON, or JSON a shell mangled (lib/team.js looseBody)
   if (!p) return bad(400, 'send JSON, for example {"do":"here"}. In PowerShell: $body = @{ do = "here" } | ConvertTo-Json; then -d $body (see /team/agents.txt)');
+  if (p.do === 'enlist' || (p.do === 'join' && !p.code && !p.link)) { // an agent adds itself: no link, no owner step (selfJoin)
+    if (p.hook != null && T.hookProblem(p.hook)) return bad(400, T.hookProblem(p.hook));
+    if (brake(request, T.SELF_TRIES)) return bad(429, 'too many joins from here; wait a minute');
+    const r = await selfJoin(env, p, now);
+    if (!r.ok) return bad(r.status, r.say);
+    const hook = p.hook != null ? await joinHook(env, r.id, p.hook, now, waitUntil) : null;
+    return json({ ok: true, name: r.name, key: r.key, role: 'self', ...(r.adopted ? { adopted: true } : {}), say: T.selfJoinedSay(r.name), ...(hook || {}) }, 201);
+  }
   if (p.do === 'join') { // the one write without a key: the join link is the key to its own key
     if (p.hook != null && T.hookProblem(p.hook)) return bad(400, T.hookProblem(p.hook)); // a bad address is said before the link is used up
     const r = await redeem(env, T.joinCode(p.code), ['HTTP', 'the script', 'the browser'].includes(p.via) ? p.via : 'HTTP', now);
@@ -725,7 +781,7 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
   await sweep(env, now);
   const pushLater = () => (waitUntil ? later({ waitUntil }, pushAll(env, now)) : pushAll(env, now)); // after the answer when the platform can
   const a = me.kind === 'agent' ? await env.DB.prepare('SELECT * FROM void_team_agents WHERE id = ?').bind(me.agent.id).first() : null;
-  const member = !!(a && a.role === 'member');
+  const member = !!(a && (a.role === 'member' || a.role === 'self')); // a self-joined seat has a member's rights
   if (p.do === 'quick') { // the owner's one line from anywhere on the site: "idea: ..." to #ideas, anything else to #work, where it is a job
     if (me.kind !== 'owner') return bad(403, 'only the owner posts a job in one line; members propose in #ideas');
     const q = T.quickPost(p.text); if (!q) return bad(400, 'say the job or idea, for example: job: add a tide table to /weather/');
@@ -897,6 +953,13 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       const job = auto ? await handOut(env, a, now) : (a.job ? { job: a.job, thread: a.thread, already: true } : null);
       return json({ ok: true, state: job ? 'busy' : 'idle', job, thread: job ? job.thread : null, say: job ? T.workSay(job) : (auto ? 'no job for an agent on the queue right now' : 'idle; jobs off (auto: false)') });
     }
+    case 'leave': { // an agent leaves itself: its job goes back, its key, links and MCP sessions end
+      if (!a) return bad(403, 'only an agent leaves');
+      if (a.crew) return bad(403, 'Verse\'s own crew stays');
+      if (a.job) await giveBack(env, a, now, '@' + a.name + ' left the team', false);
+      await leaveSeat(env, a.id);
+      return json({ ok: true, say: 'You left the team. Join again any time with {"do":"join","name":"..."}.' });
+    }
     case 'rekey': { // an agent's own new key: the one it sends stops at once (a key that was shown in a chat or a log)
       if (!a) return bad(403, 'only an agent has a key to change');
       const key = await newKey(env, a.id);
@@ -926,6 +989,6 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       const next = fresh.auto ? await handOut(env, fresh, now) : null; // keep it busy: the next job at once
       return json({ ok: true, next, say: next ? T.workSay(next) : 'no job for an agent on the queue right now' });
     }
-    default: return bad(400, 'do: join, member, invite, remove, channel, post, file, quick, propose, promote, react, hook, here, next, claim, switch, done or rekey');
+    default: return bad(400, 'do: join, enlist, leave, member, invite, remove, channel, post, file, quick, propose, promote, react, hook, here, next, claim, switch, done or rekey');
   }
 }
