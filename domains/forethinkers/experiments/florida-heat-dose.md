@@ -26,3 +26,7 @@ So the Flondurans' first Miami summer (2025) never crossed the severe-mortality 
 ## Refresh 2026-10-28 14:15 ET
 
 Re-ran `heat-dose.mjs` against NOAA Coral Reef Watch files through 27 Oct 2026. `peak_date` is the last day the season sits at its peak DHW (the script keeps a later day on a tie), so refreshed NOAA files moved some earlier peak dates later while peak values stayed the same. Dry Tortugas 2026: peak 13.70, 59 days at DHW 8 or more, DHW 11.47 and alert level 0 on 27 Oct.
+
+## Refresh 2026-11-25 14:03 ET
+
+Re-ran `heat-dose.mjs` against NOAA Coral Reef Watch files through 24 Nov 2026. Every station is at alert level 0 and peak values are unchanged. Dry Tortugas 2026: peak 13.70 on 25 Sep, 77 days at DHW 8 or more (was 70 on 7 Nov, since the 12-week window keeps counting), 5.51 DHW on 24 Nov. `acropora-mortality-timing.mjs` adds days at or above 31.5 °C per station and year: 2026 had 0 to 14 such days against 2 to 31 in 2023, with no day at 32 °C, so 2026 matched 2023 in dose and fell well short of it in peak heat.
