@@ -23,5 +23,8 @@
   "void-live-deploy/brain/knows.json",
   "void-live-deploy/churn.json",
   "void-live-deploy/self.json"
+ ],
+ "passed": [
+  3
  ]
 }
