@@ -21,12 +21,12 @@ export function aboutTopic(list, topic) {
   return (Array.isArray(list) ? list : []).filter((j) => j && typeof j.joke === 'string' && re.test(j.joke));
 }
 // knock-knock jokes are their own shape (the dad-joke service doesn't do them), so a few classics live here
-const KNOCK = [['Lettuce', 'Lettuce in, it\'s cold out here!'], ['Boo', 'Don\'t cry, it\'s only a joke.'], ['Interrupting cow', 'Mo— (moo!)'],
+export const KNOCK = [['Lettuce', 'Lettuce in, it\'s cold out here!'], ['Boo', 'Don\'t cry, it\'s only a joke.'], ['Interrupting cow', 'Mo— (moo!)'],
   ['Atch', 'Bless you!'], ['Olive', 'Olive you too.'], ['Cow says', 'No, a cow says moo!'], ['Tank', 'You\'re welcome.'], ['Nobel', 'No bell, that\'s why I knocked.']];
 const RIDDLES = [['What has keys but can’t open locks?', 'A piano.'], ['What gets wetter the more it dries?', 'A towel.'], ['What has hands but can’t clap?', 'A clock.'],
   ['What can you catch but not throw?', 'A cold.'], ['What has a neck but no head?', 'A bottle.'], ['What goes up but never comes down?', 'Your age.'], ['What has many teeth but can’t bite?', 'A comb.'],
   ['I’m tall when I’m young and short when I’m old. What am I?', 'A candle.'], ['What runs but never walks?', 'Water (or your nose).'], ['What has one eye but can’t see?', 'A needle.']];
-const TWISTERS = ['She sells seashells by the seashore.', 'Peter Piper picked a peck of pickled peppers.', 'How much wood would a woodchuck chuck if a woodchuck could chuck wood?',
+export const TWISTERS = ['She sells seashells by the seashore.', 'Peter Piper picked a peck of pickled peppers.', 'How much wood would a woodchuck chuck if a woodchuck could chuck wood?',
   'Red lorry, yellow lorry.', 'Unique New York.', 'Fuzzy Wuzzy was a bear. Fuzzy Wuzzy had no hair.', 'Six slippery snails slid slowly seaward.', 'Toy boat, toy boat, toy boat.'];
 export function isRiddle(text) { return /^(?:tell\s+me\s+|give\s+me\s+)?(?:a\s+|another\s+)?riddle$/i.test(String(text || '').trim().replace(/[?!.]+$/, '')); }
 export function isTwister(text) { return /^(?:tell\s+me\s+|give\s+me\s+|say\s+)?(?:a\s+|another\s+)?tongue[\s-]*twisters?$/i.test(String(text || '').trim().replace(/[?!.]+$/, '')); }
