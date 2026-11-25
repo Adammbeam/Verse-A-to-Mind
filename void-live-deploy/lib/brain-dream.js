@@ -9,12 +9,13 @@
 // rules of the work. Its key is the same each time the same memory makes it, so a dream is posted once (functions/api/team.js 'dream').
 // Pure: no fetch, no DOM, no storage. /brain/ shows the dreams of the brain in the visitor's browser (nothing sent); tools/brain-dream.mjs
 // makes them from what the server side can read and posts at most one a run to /team/ #work, where it is a job on the build queue.
+import { ownRepoUrl } from './verse-repo.js';
 
 export const KINDS = ['fix', 'job', 'idea'];
 export const MAX = 12, ORGAN_GENS = 500;
 const s = (x, n = 160) => String(x == null ? '' : x).replace(/\s+/g, ' ').trim().slice(0, n);
 const clip = (x, n = 90) => { const t = s(x, 800); if (t.length <= n) return t; const c = t.slice(0, n - 3), at = c.lastIndexOf(' '); return (at > n / 2 ? c.slice(0, at) : c).replace(/[\s,;:.]+$/, '') + '...'; };
-const gh = (u) => (/^https:\/\/github\.com\/atomeam\/void-loop\/(pull|issues|actions\/runs)\/\d+/.test(u || '') ? s(u, 200) : '');
+const gh = (u) => s(ownRepoUrl(u), 200);
 /** a short stable key from text (FNV-1a, base 36): the same memory gives the same key. */
 export const hash = (t) => { let h = 0x811c9dc5; for (const c of String(t)) { h ^= c.codePointAt(0); h = Math.imul(h, 0x01000193) >>> 0; } return h.toString(36); };
 export const KEY = /^[a-z0-9][a-z0-9-]{2,60}$/;

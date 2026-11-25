@@ -17,8 +17,9 @@ import { recordShortfall, reasonOf } from '../../lib/shortfall.js';
 import { crewView } from '../../lib/team-crew-run.js';
 import * as U from '../../lib/unbidden.js';
 import { jsonNoStore } from '../../lib/http.js'; // one copy (lib/http.js, convergence step 3)
+import { REPO_API } from '../../lib/verse-repo.js';
 
-const GH = 'https://api.github.com/repos/atomeam/void-loop', GH_TTL = 300;
+const GH = REPO_API, GH_TTL = 300;
 const json = (o, status = 200) => jsonNoStore(o, status, { 'x-robots-tag': 'noindex' });
 // the model's words; Workers AI hands a reply that is JSON back already parsed, so an object is turned back into its JSON text
 const pick = (r) => { const v = r && (r.response || (r.choices && r.choices[0] && r.choices[0].message && r.choices[0].message.content) || (r.result && r.result.response)); return v && typeof v === 'object' ? JSON.stringify(v) : String(v || ''); };
