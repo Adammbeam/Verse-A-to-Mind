@@ -346,8 +346,8 @@
   {
    "state": "shipped",
    "date": "2026-11-12",
-   "ask": "time-saved skill: client-visible estimate of hours saved because Verse owns the systems, monitors and tests so the…",
-   "from": "new idea by growth agent; helper/time-saved"
+   "ask": "full-handoff: also carry the client lift summary, the reuse-tools map (existing processes against what Verse already…",
+   "from": "already in full-handoff.js"
   },
   {
    "state": "shipped",
@@ -357,12 +357,6 @@
   }
  ],
  "open": [
-  {
-   "state": "open",
-   "date": "",
-   "ask": "Absorb and connect every repo",
-   "from": "owner, 2026-10-15"
-  },
   {
    "state": "open",
    "date": "",
@@ -411,12 +405,6 @@
    "date": "",
    "ask": "Shared Voids, live",
    "from": "void.plan.md Next #10"
-  },
-  {
-   "state": "open",
-   "date": "",
-   "ask": "Tasks that keep running after you leave, with an approve card",
-   "from": "void.assimilate.md row 3"
   },
   {
    "state": "open",
@@ -668,7 +656,7 @@
   },
   {
    "name": "Planet restoration",
-   "last": "2026-11-12"
+   "last": "2026-11-25"
   },
   {
    "name": "Verse stage handoff",
@@ -676,96 +664,100 @@
   }
  ],
  "building": {
-  "at": "2026-11-12T17:54:59Z",
+  "at": "2026-11-25T21:50:25Z",
   "date": "2026-10-15",
-  "by": "builder",
-  "item": "Verse FILMS get better every day",
-  "what": "step 1 shipped; step 2 next. Lists run 24 (2026-11-12): step 2's scorecard shipped; its re-shoot is next."
+  "by": "claude",
+  "item": "Verse values anything from a photo",
+  "what": "steps 1 and 2 shipped. The vision slot is lib/models.js path vision (Workers AI LLaVA, the site's own binding); skills/appraise.js + functions/api/appraise.js + lib/appraise-photo.js: one photo, downsized in the…"
  },
  "commits": [
   {
-   "at": "2026-11-18T15:57:40Z",
-   "subject": "Trial watch: the registry checked; what changed is in the ledger"
+   "at": "2026-11-25T23:23:33Z",
+   "subject": "Leave asks the build ledger proves out of Verse's open frontier"
   },
   {
-   "at": "2026-11-18T15:52:55Z",
-   "subject": "Tower gate: versus measured"
+   "at": "2026-11-25T23:23:05Z",
+   "subject": "Add oldestClaimMin to GET /api/team counts"
   },
   {
-   "at": "2026-11-18T15:51:02Z",
-   "subject": "Jobs snapshot: the newest remote jobs from Remotive, Jobicy and Himalayas, as of today"
+   "at": "2026-11-25T23:19:37Z",
+   "subject": "Treat in-charge offers as directives, not not-found lookups"
   },
   {
-   "at": "2026-11-18T15:47:18Z",
-   "subject": "Failed jobs read: run 44339334773 (void-live-deploy/incidents/actions/)"
+   "at": "2026-11-25T23:16:17Z",
+   "subject": "refuse a merge-gate wipe the way 9a726fe did"
   },
   {
-   "at": "2026-11-18T15:45:33Z",
-   "subject": "Better at connect flows: 2 more ways of asking answered right — new phrases: “connect the systems for invoice reminders” now opens…"
+   "at": "2026-11-25T23:14:33Z",
+   "subject": "Classify asks as question, directive or passage before routing"
   },
   {
-   "at": "2026-11-18T15:22:50Z",
-   "subject": "Failed jobs read: run 44334649997 (void-live-deploy/incidents/actions/)"
+   "at": "2026-11-25T22:55:49Z",
+   "subject": "Report only the correction, not an unrelated Fixed list"
   },
   {
-   "at": "2026-11-18T15:21:11Z",
-   "subject": "Register automation-handoff in skills index (#2951)"
+   "at": "2026-11-25T22:55:14Z",
+   "subject": "Point the brain's live repo readers at Verse-A-to-Mind"
   },
   {
-   "at": "2026-11-18T15:17:29Z",
-   "subject": "Conductor: the last 24 hours of Verse running itself"
+   "at": "2026-11-25T22:50:01Z",
+   "subject": "close the helper backlog already on main"
   },
   {
-   "at": "2026-11-18T14:45:35Z",
-   "subject": "Site test: fix: \"toss it off the screen\" only \"waking up\" appeared, nev"
+   "at": "2026-11-25T22:45:56Z",
+   "subject": "refuse a tree wipe before it reaches main"
   },
   {
-   "at": "2026-11-18T14:37:56Z",
-   "subject": "Subject eval: 53 of 54 live"
+   "at": "2026-11-25T22:08:14Z",
+   "subject": "team: a claim is a lease, and a dead claim comes back"
   },
   {
-   "at": "2026-11-18T14:32:45Z",
-   "subject": "Coin snapshot: the top 50 coins and the screener's coins, as of today"
+   "at": "2026-11-25T22:01:20Z",
+   "subject": "fix(loader): warm ask libs on focusin/input and tighten FIRST_ASK_WAIT (#110 flake mvo3j7he) (#6)"
   },
   {
-   "at": "2026-11-18T14:12:31Z",
-   "subject": "Incident: the browser suite failed on 65274720 (void-live-deploy/incidents.json)"
+   "at": "2026-11-25T21:59:53Z",
+   "subject": "List stage-pdf and sql-query in the skill index the ask bar fetches"
   },
   {
-   "at": "2026-11-18T14:01:52Z",
-   "subject": "Traffic: who visited a-to-mind.com, counts only"
+   "at": "2026-11-25T21:56:46Z",
+   "subject": "Query a CSV or SQLite file in the browser (unify sql.js)"
   },
   {
-   "at": "2026-11-18T13:55:45Z",
-   "subject": "Flake: 1 check(s) passed on a rerun of 6527472 (tools/flakes.json)"
+   "at": "2026-11-25T21:54:19Z",
+   "subject": "feat(bots): unify Poly Haven CC0 3D and Smithsonian 3D Open Access into /bots/"
   },
   {
-   "at": "2026-11-18T13:34:26Z",
-   "subject": "Better at connect flows: 1 more way of asking answered right — new phrases: “show the data flows for client onboarding” now opens…"
+   "at": "2026-11-25T21:50:41Z",
+   "subject": "Save the stage or a picked note as a PDF (unify pdf-lib)"
   },
   {
-   "at": "2026-11-18T13:20:43Z",
-   "subject": "Tower size: how heavy each Versus site really is"
+   "at": "2026-11-25T21:50:25Z",
+   "subject": "Restore the tree deleted by 9a726fe, keeping the growth-inbox note"
   },
   {
-   "at": "2026-11-18T13:13:01Z",
-   "subject": "Finding: image-gen checked against the live site (findings/image-gen)"
+   "at": "2026-11-25T21:46:39Z",
+   "subject": "docs(growth-inbox): add 6 AI app/build-loop patterns and video-explainer film upgrades"
   },
   {
-   "at": "2026-11-18T12:09:26Z",
-   "subject": "Conductor: the last 24 hours of Verse running itself"
+   "at": "2026-11-25T21:43:37Z",
+   "subject": "trigger: bind rotated READ_TOKEN (S7)"
   },
   {
-   "at": "2026-11-18T11:05:35Z",
-   "subject": "Design loop: 1 page fixed, 40 -> 0 design defects"
+   "at": "2026-11-25T21:42:40Z",
+   "subject": "feat: crew presence fix + pushAll/handIdle in crewTick (HAND_MS=20m)"
   },
   {
-   "at": "2026-11-18T10:43:30Z",
-   "subject": "Growth: fold the waiting entries into the ledger (tools/growth-fold.mjs)"
+   "at": "2026-11-25T21:42:14Z",
+   "subject": "fix: separate crew from idle in presence; import pushAll/handIdle into crewTick"
   }
  ],
  "builders": {
   "finished": [
+   {
+    "name": "Helper backlog already on main (atomeam, 2026-11-25)",
+    "line": "no helper/ branches on Adammbeam/Verse-A-to-Mind. reliability-pack, roi-pack, kickoff-pack, systems-owned, delivery-ready and delivery-dashboard are on main with order files and index entries. full-handoff is on main as a part of the…"
+   },
    {
     "name": "Void cleanup (opencode, 2026-11-18): strip cosmos HUD readout + center planet…",
     "line": "PR #2946 (helper/void-cleanup, automerge): void-cosmos.js no longer creates #void-cosmos-tlm, writes no per-frame telemetry to the DOM, and no longer compiles or draws the raymarched center-sphere pass (star points, trails, bookmarking…"
@@ -785,10 +777,6 @@
    {
     "name": "CYOA engine PR 1 (opencode, 2026-11-17): data-driven branching stories as…",
     "line": "PR #2914 (helper/cyoa-adventure, automerge): lib/adventure.js (nodes, item/flag gates, endings, seeds, shareable run codes), data/adventures/chrono-signal.json (sci-fi time loop, 10 nodes, 3 endings), skills/adventure.js (order…"
-   },
-   {
-    "name": "Harden run (opencode, 2026-11-17): inline fetch-URL and unchecked-response…",
-    "line": "PR #2906 from live stage testing. lib/code-review.js gains fetch-url-concat and fetch-no-ok (the getUser snippet now flags both inline, tools/review.test.mjs); skills/music-tools.js plays extended chords and word forms with WebAudio at…"
    }
   ],
   "ladders": [
@@ -943,8 +931,8 @@
   }
  ],
  "visible": {
-  "day": 0,
-  "week": 0
+  "day": 7,
+  "week": 7
  },
  "clips": {
   "upload": "Anyone can upload any Verse film or ad clip: a-to-mind.com/films/ has 1. Download (free), 2. Copy for YouTube, TikTok, Reels or X (title, description with a tracked a-to-mind.com link, the call to action and a share-this-ad line, hashtags) and 3. Upload to that platform, signed in as yourself. No API or token. Say \"upload this to YouTube\". Verse Tube: a-to-mind.com/films/ is the Verse video site: a watch page per video at /films/?v=<id>, view counts, share buttons for every platform and an RSS feed at /films/rss (docs/void-tube.md).",
