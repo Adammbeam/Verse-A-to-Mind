@@ -15,7 +15,7 @@
 //     inflate "people" by 300 views and one unique visitor per address per day; the ceilings bound how fast. The count is a curiosity that tells
 //     the builders whether anyone comes, never a number that decides or pays anything;
 //   - fill the table: at most 50 distinct pages, 50 referrer hosts and 50 countries a day (the rest count as "other"), plus 6 class rows.
-// With no D1 or no SALT the route is off (503) rather than unguarded. No model, no KV, no third party. Same-origin writes only (lib/guard.js and
+// With no D1 the route is off (503) rather than unguarded; with no SALT it salts with a random per-day value kept only in D1 (daySalt). No model, no KV, no third party. Same-origin writes only (lib/guard.js and
 // the Origin check below); no CORS header.
 import { bump } from '../../lib/guard.js';
 import { dayOf, secondsToMidnight, clientKey } from '../../lib/reactions.js';
@@ -31,7 +31,24 @@ const ready = tablesReady([ // made once per isolate (lib/db.js, convergence ste
   'CREATE TABLE IF NOT EXISTS void_visit_seen (k TEXT PRIMARY KEY, day TEXT NOT NULL, n INTEGER NOT NULL)', // k: a hashed daily key or "all"; no address
 ]);
 async function ensure(env) { await ready(env); }
-export const resetReady = () => ready.reset(); // tests: a new fake database needs its tables made again
+// The SALT secret is the salt when the deployment has one. Without it (2026-11-25: the secret is listed for production but the runtime
+// read none, and every beacon got 503 from early that day), the salt is 32 random bytes made here for each UTC day and kept only in D1
+// (void_visit_salt); the day's first beacon deletes the earlier days' salts, so a key cannot be linked across days or recomputed from an
+// address without the database. Made once per day per isolate.
+const salts = new Map();
+const saltReady = tablesReady(['CREATE TABLE IF NOT EXISTS void_visit_salt (day TEXT PRIMARY KEY, s TEXT NOT NULL)']);
+export async function daySalt(env, day) {
+  if (salts.has(day)) return salts.get(day);
+  await saltReady(env);
+  const fresh = [...crypto.getRandomValues(new Uint8Array(32))].map((b) => b.toString(16).padStart(2, '0')).join('');
+  await env.DB.prepare('INSERT OR IGNORE INTO void_visit_salt (day, s) VALUES (?, ?)').bind(day, fresh).run();
+  const row = await env.DB.prepare('SELECT s FROM void_visit_salt WHERE day = ?').bind(day).first();
+  if (!row || !row.s) throw new Error('no salt row');
+  await env.DB.prepare('DELETE FROM void_visit_salt WHERE day < ?').bind(day).run();
+  salts.clear(); salts.set(day, String(row.s));
+  return String(row.s);
+}
+export const resetReady = () => { ready.reset(); saltReady.reset(); salts.clear(); }; // tests: a new fake database needs its tables made again
 
 const seen = async (env, k) => { const r = await env.DB.prepare('SELECT n, day FROM void_visit_seen WHERE k = ?').bind(k).first(); return r ? { n: Number(r.n) || 0, day: r.day } : null; };
 const tick = (env, k, day) => env.DB.prepare('INSERT INTO void_visit_seen (k, day, n) VALUES (?, ?, 1) ON CONFLICT(k) DO UPDATE SET n = CASE WHEN day = excluded.day THEN n + 1 ELSE 1 END, day = excluded.day').bind(k, day).run();
@@ -59,7 +76,9 @@ export async function onRequestGet({ request, env }) {
 export async function onRequestPost({ request, env }) {
   const here = new URL(request.url), from = request.headers.get('origin');
   if (from && from !== here.origin) return json({ ok: false, error: 'same-origin only' }, 403);
-  if (!env || !env.DB || !env.SALT) { console.error('visit: off: ' + (!env || !env.DB ? 'no DB binding' : 'no SALT')); return off(); } // closed, not open: no way to hash the address or keep the day's count
+  if (!env || !env.DB) { console.error('visit: off: no DB binding'); return off(); } // closed, not open: no way to keep the day's count
+  let salt = env.SALT;
+  if (!salt) { try { salt = await daySalt(env, dayOf(Date.now())); } catch (e) { console.error('visit: off: no salt: ' + String((e && e.message) || e).slice(0, 200)); return off(); } }
   const len = Number(request.headers.get('content-length'));
   if (Number.isFinite(len) && len > LIMITS.body) return json({ ok: false, error: 'too big' }, 413);
   const p = parseBeacon(request.headers.get('content-type'), (await request.text()).slice(0, LIMITS.body + 1), here.hostname.replace(/^www\./, ''));
@@ -67,7 +86,7 @@ export async function onRequestPost({ request, env }) {
   const ua = request.headers.get('user-agent') || '';
   const cls = classify({ ua, test: request.headers.get('x-void-test'), webdriver: p.webdriver });
   const now = Date.now(), day = dayOf(now);
-  const key = await clientKey((request.headers.get('cf-connecting-ip') || 'unknown') + '|' + ua, day, env.SALT);
+  const key = await clientKey((request.headers.get('cf-connecting-ip') || 'unknown') + '|' + ua, day, salt);
   if ((await bump(here.origin, 'visit:c:' + key)) > LIMITS.perMinute) return slow(60); // the cheap limit first (edge cache, no D1)
   try {
     await ensure(env);

@@ -86,8 +86,8 @@ test('the route: a person is counted once a day as unique, ours and bots apart, 
   assert.doesNotMatch(dump, /203\.0\.113|198\.51|iPhone|Googlebot|a2m-probe/);
 });
 
-test('the route: off without D1 or SALT, refuses other origins and wrong bodies, rate-limits', async () => {
-  assert.equal((await post({ DB: d1() }, { p: '/' })).status, 503);
+test('the route: off without D1, refuses other origins and wrong bodies, rate-limits', async () => {
+  assert.equal((await post({}, { p: '/' })).status, 503);
   const env = world();
   assert.equal((await post(env, { p: '/' }, { headers: { origin: 'https://evil.example' } })).status, 403);
   assert.equal((await post(env, { p: '/' }, { type: 'text/html' })).status, 415);
@@ -140,4 +140,19 @@ test('the growth card line: escaped, and nothing without a count', () => {
   const esc = (x) => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;');
   assert.equal(peopleHtml(esc, { line: 'People this week: 3 <b>' }), '<div class="sub growth-people">People this week: 3 &lt;b></div>');
   assert.equal(peopleHtml(esc, null), ''); assert.equal(peopleHtml(esc, { line: '' }), '');
+});
+
+test('the route without SALT: counted with a random salt made for the day and kept only in D1; no address kept; earlier days\' salts deleted', async () => {
+  const env = world({ SALT: '' });
+  env.DB.raw.prepare('CREATE TABLE IF NOT EXISTS void_visit_salt (day TEXT PRIMARY KEY, s TEXT NOT NULL)').run();
+  env.DB.raw.prepare("INSERT INTO void_visit_salt (day, s) VALUES ('2000-01-01', 'old')").run();
+  assert.equal((await post(env, { p: '/' })).status, 204);
+  assert.equal((await post(env, { p: '/' })).status, 204); // the same person again: one unique
+  assert.equal((await post(env, { p: '/' }, { ip: '198.51.100.7' })).status, 204);
+  const j = await read(env);
+  assert.equal(j.days[0].views.person, 3); assert.equal(j.days[0].uniq.person, 2);
+  const salts = env.DB.raw.prepare('SELECT day, s FROM void_visit_salt').all();
+  assert.equal(salts.length, 1, 'only today\'s salt is kept'); assert.match(salts[0].s, /^[0-9a-f]{64}$/); assert.equal(salts[0].day, new Date().toISOString().slice(0, 10));
+  const dump = JSON.stringify(env.DB.raw.prepare('SELECT * FROM void_visit_seen').all());
+  assert.doesNotMatch(dump, /203\.0\.113|198\.51/);
 });
