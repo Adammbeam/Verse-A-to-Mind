@@ -1,0 +1,55 @@
+{
+ "at": "2026-11-25T05:29:42Z",
+ "sha": "24b33f185342c31af6784ecfc89a76e562de7840",
+ "runId": 45550473327,
+ "run": "https://github.com/Adammbeam/Verse-A-to-Mind/actions/runs/45550473327",
+ "workflow": "Site test",
+ "event": "workflow_run",
+ "branch": "main",
+ "conclusion": "failure",
+ "jobs": [
+  {
+   "name": "test",
+   "id": 138990199530,
+   "url": "https://github.com/Adammbeam/Verse-A-to-Mind/actions/runs/45550473327/job/138990199530",
+   "conclusion": "failure",
+   "step": {
+    "number": 10,
+    "name": "Keep the suite, seen-set and run log"
+   },
+   "fails": [],
+   "tail": [
+    "shell: /usr/bin/bash -e {0}",
+    "wrote void-live-deploy/tester-log.json",
+    "[main c811358] Site test: visitor pass 14/15",
+    " 3 files changed, 66 insertions(+), 90 deletions(-)",
+    "To https://github.com/Adammbeam/Verse-A-to-Mind",
+    " ! [rejected]        HEAD -> main (fetch first)",
+    "error: failed to push some refs to 'https://github.com/Adammbeam/Verse-A-to-Mind'",
+    "hint: Updates were rejected because the remote contains work that you do not",
+    "hint: have locally. This is usually caused by another repository pushing to",
+    "hint: the same ref. If you want to integrate the remote changes, use",
+    "hint: 'git pull' before pushing again.",
+    "hint: See the 'Note about fast-forwards' in 'git push --help' for details.",
+    "From https://github.com/Adammbeam/Verse-A-to-Mind",
+    " * branch                main       -> FETCH_HEAD",
+    "   29cd9290f..727d4e7d7  main       -> origin/main",
+    "Auto-merging tools/site-test.log.json",
+    "CONFLICT (content): Merge conflict in tools/site-test.log.json",
+    "Auto-merging void-live-deploy/claims-verified.json",
+    "CONFLICT (content): Merge conflict in void-live-deploy/claims-verified.json",
+    "Auto-merging void-live-deploy/tester-log.json",
+    "CONFLICT (content): Merge conflict in void-live-deploy/tester-log.json",
+    "Rebasing (1/1)",
+    "error: could not apply c811358c6... Site test: visitor pass 14/15",
+    "hint: Resolve all conflicts manually, mark them as resolved with",
+    "hint: \"git add/rm <conflicted_files>\", then run \"git rebase --continue\".",
+    "hint: You can instead skip this commit: run \"git rebase --skip\".",
+    "hint: To abort and get back to the state before \"git rebase\", run \"git rebase --abort\".",
+    "hint: Disable this message with \"git config set advice.mergeConflict false\"",
+    "Could not apply c811358c6... # Site test: visitor pass 14/15",
+    "Error: Process completed with exit code 1."
+   ]
+  }
+ ]
+}
