@@ -1,14 +1,14 @@
 {
  "at": "2026-11-25",
- "scanned": 562,
+ "scanned": 561,
  "counts": {
-  "unified": 69,
+  "unified": 73,
   "live": 69,
-  "salvageable": 397,
-  "history": 24,
+  "salvageable": 393,
+  "history": 23,
   "skipped": 3
  },
- "remaining": 397,
+ "remaining": 393,
  "top10": [
   {
    "id": "outside:Hopding/pdf-lib",
@@ -21,30 +21,6 @@
    "test": null,
    "pr": null,
    "license": "MIT"
-  },
-  {
-   "id": "outside:ncbi/pubchem",
-   "kind": "outside",
-   "status": "salvageable",
-   "target": "data",
-   "value": 31,
-   "why": "reuse with credit; keep the license notice",
-   "into": null,
-   "test": null,
-   "pr": null,
-   "license": "CC0-1.0"
-  },
-  {
-   "id": "outside:ourresearch/openalex-api-tutorials",
-   "kind": "outside",
-   "status": "salvageable",
-   "target": "data",
-   "value": 31,
-   "why": "reuse with credit; keep the license notice",
-   "into": null,
-   "test": null,
-   "pr": null,
-   "license": "CC0-1.0"
   },
   {
    "id": "outside:sql-js/sql.js",
@@ -120,6 +96,30 @@
   },
   {
    "id": "archive/repos/a-to-mind.com/drafts/076-local-empty-lexeme-slot",
+   "kind": "archived part",
+   "status": "salvageable",
+   "target": "tool",
+   "value": 25.6,
+   "why": "",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": null
+  },
+  {
+   "id": "archive/repos/a-to-mind.com/drafts/077-local-notice-lag-bin",
+   "kind": "archived part",
+   "status": "salvageable",
+   "target": "tool",
+   "value": 25.6,
+   "why": "",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": null
+  },
+  {
+   "id": "archive/repos/a-to-mind.com/drafts/083-local-dwell-not-select",
    "kind": "archived part",
    "status": "salvageable",
    "target": "tool",
@@ -289,7 +289,7 @@
    "author": "OurResearch",
    "license": "CC0-1.0",
    "link": "https://docs.openalex.org/",
-   "used": null,
+   "used": "/bots/ (api-openalex-work)",
    "isolated": false
   },
   {
@@ -297,7 +297,7 @@
    "author": "National Center for Biotechnology Information",
    "license": "CC0-1.0",
    "link": "https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest",
-   "used": null,
+   "used": "/bots/ (api-pubchem-compound)",
    "isolated": false
   },
   {
@@ -305,7 +305,7 @@
    "author": "U.S. National Library of Medicine",
    "license": "CC0-1.0",
    "link": "https://clinicaltrials.gov/data-api/api",
-   "used": null,
+   "used": "/bots/ (api-clinical-trial)",
    "isolated": false
   },
   {
@@ -313,7 +313,7 @@
    "author": "Crossref",
    "license": "MIT",
    "link": "https://github.com/CrossRef/rest-api-doc",
-   "used": null,
+   "used": "/bots/ (api-paper-finder)",
    "isolated": false
   },
   {
@@ -5135,7 +5135,7 @@
    "kind": "archive",
    "status": "unified",
    "target": "bot",
-   "value": 31.1,
+   "value": 31,
    "why": "",
    "into": "/bots/ (void-look)",
    "test": "tools/salvaged-bots.test.mjs",
@@ -5161,18 +5161,6 @@
    "target": null,
    "value": 0,
    "why": "a dated, superseded or one-off file",
-   "into": null,
-   "test": null,
-   "pr": null,
-   "license": null
-  },
-  {
-   "id": "archive/workers",
-   "kind": "archive",
-   "status": "history",
-   "target": null,
-   "value": 0,
-   "why": "nothing left to reuse",
    "into": null,
    "test": null,
    "pr": null,
@@ -6993,48 +6981,48 @@
   {
    "id": "outside:ourresearch/openalex-api-tutorials",
    "kind": "outside",
-   "status": "salvageable",
+   "status": "unified",
    "target": "data",
    "value": 31,
-   "why": "reuse with credit; keep the license notice",
-   "into": null,
-   "test": null,
+   "why": "OpenAlex catalog of 250M+ scientific works, authors and citations, no key",
+   "into": "/bots/ (api-openalex-work)",
+   "test": "tools/api-bots.test.mjs",
    "pr": null,
    "license": "CC0-1.0"
   },
   {
    "id": "outside:ncbi/pubchem",
    "kind": "outside",
-   "status": "salvageable",
+   "status": "unified",
    "target": "data",
    "value": 31,
-   "why": "reuse with credit; keep the license notice",
-   "into": null,
-   "test": null,
+   "why": "Public-domain PUG REST API for molecules, pathways and bioassays, no key",
+   "into": "/bots/ (api-pubchem-compound)",
+   "test": "tools/api-bots.test.mjs",
    "pr": null,
    "license": "CC0-1.0"
   },
   {
    "id": "outside:nih/clinicaltrials-v2",
    "kind": "outside",
-   "status": "salvageable",
+   "status": "unified",
    "target": "data",
    "value": 25,
-   "why": "reuse with credit; keep the license notice",
-   "into": null,
-   "test": null,
+   "why": "ClinicalTrials.gov REST API v2 for active and completed human trials, no key",
+   "into": "/bots/ (api-clinical-trial)",
+   "test": "tools/api-bots.test.mjs",
    "pr": null,
    "license": "CC0-1.0"
   },
   {
    "id": "outside:CrossRef/rest-api-doc",
    "kind": "outside",
-   "status": "salvageable",
+   "status": "unified",
    "target": "data",
    "value": 25,
-   "why": "reuse with credit; keep the license notice",
-   "into": null,
-   "test": null,
+   "why": "Scholarly DOI metadata and citation graph API, no key",
+   "into": "/bots/ (api-paper-finder)",
+   "test": "tools/api-bots.test.mjs",
    "pr": null,
    "license": "MIT"
   },

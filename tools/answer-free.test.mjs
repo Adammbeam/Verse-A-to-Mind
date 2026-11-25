@@ -4,7 +4,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { planOf, runBot, routeFree, freeLlm, openalexAnswer, ADAPTERS, RESEARCH } from '../void-live-deploy/lib/answer-free.js';
+import { planOf, runBot, routeFree, freeLlm, openalexAnswer, pubchemAnswer, trialAnswer, ADAPTERS, RESEARCH } from '../void-live-deploy/lib/answer-free.js';
 import { fxPairs } from '../void-live-deploy/bots/fx-pairs.js';
 import { onRequestPost } from '../void-live-deploy/functions/api/answer.js';
 
@@ -28,10 +28,12 @@ test('answer-free: each kind of question is planned to the right free resource',
     ['days between 2026-11-04 and 2026-12-25', 'bot', 'days-between'], ['#ff8800 to rgb', 'bot', 'hex-color'],
     ['10 usd to eur', 'bot', 'fx-usd-to-eur'], ['50 euros to pounds', 'bot', 'fx-eur-to-gbp'], ['10 pounds to kg', 'bot', 'lb-to-kg'],
     ['is 2026-12-25 a holiday in the united states', 'bot', 'holiday-us'],
-    ['papers on sea level rise', 'api', null], ['find recent research on CRISPR off-target effects', 'api', null],
+    ['papers on sea level rise', 'api', null, RESEARCH], ['find recent research on CRISPR off-target effects', 'api', null, RESEARCH],
+    ["what is caffeine's molecular formula", 'api', null, ['pubchem']], ['molecular formula of caffeine', 'api', null, ['pubchem']],
+    ['clinical trials for metformin', 'api', null, ['clinicaltrials']], ['find clinical trials for NCT05506488', 'api', null, ['clinicaltrials']],
     ['who wrote hamlet', 'llm', null], ['what is 404', 'llm', null], ['write me a python script that renames files', 'llm', null], ['3 bananas to apples', 'llm', null], ['x'.repeat(200) + ' 3 miles to km', 'llm', null],
   ];
-  for (const [ask, kind, bot] of cases) { const p = planOf(ask); assert.equal(p.kind, kind, ask); if (bot) assert.equal(p.bot, bot, ask); if (kind === 'api') assert.deepEqual(p.ids, RESEARCH, ask); }
+  for (const [ask, kind, bot, ids] of cases) { const p = planOf(ask); assert.equal(p.kind, kind, ask); if (bot) assert.equal(p.bot, bot, ask); if (kind === 'api') assert.deepEqual(p.ids, ids || RESEARCH, ask); }
 });
 
 test('answer-free: bots answer correctly, only through their live gate, and a bad input falls through to the model', () => {
@@ -106,6 +108,21 @@ test('answer-free: LLM failover only reaches keyed free tiers, in registry order
   assert.equal(out.tried[0].why, 'provider quota');
 });
 
+test('answer-free: a compound ask and a trial ask go to PubChem and ClinicalTrials.gov, with source links', async () => {
+  const env = { DB: fakeDb() };
+  const adapters = {
+    pubchem: async (job) => { assert.equal(job.query, 'caffeine'); return { CID: 2519, Title: 'Caffeine', MolecularFormula: 'C8H10N4O2', MolecularWeight: '194.19' }; },
+    clinicaltrials: async (job) => { assert.equal(job.query, 'metformin'); return [{ protocolSection: { identificationModule: { nctId: 'NCT05506488', briefTitle: 'A metformin trial' }, statusModule: { overallStatus: 'COMPLETED' } } }]; },
+  };
+  const mol = await routeFree("what is caffeine's molecular formula", { env, registry, adapters });
+  assert.equal(mol.source, 'free:pubchem'); assert.equal(mol.route, 'api');
+  assert.match(mol.answer, /C8H10N4O2/); assert.match(mol.answer, /194\.19/); assert.equal(mol.sources[0].url, 'https://pubchem.ncbi.nlm.nih.gov/compound/2519');
+  const trials = await routeFree('clinical trials for metformin', { env, registry, adapters });
+  assert.equal(trials.source, 'free:clinicaltrials'); assert.match(trials.answer, /NCT05506488/); assert.equal(trials.sources[0].url, 'https://clinicaltrials.gov/study/NCT05506488');
+  assert.equal(pubchemAnswer('caffeine', { Title: 'Caffeine', MolecularFormula: 'C8H10N4O2', CID: 2519 }).sources[0].url, 'https://pubchem.ncbi.nlm.nih.gov/compound/2519');
+  assert.equal(trialAnswer('x', [{ protocolSection: { identificationModule: { nctId: 'NCT1', briefTitle: 'T' } } }]).sources[0].url, 'https://clinicaltrials.gov/study/NCT1');
+});
+
 test('answer-free: /api/answer end to end routes a bot ask, a research ask and a general ask, each reply naming its source', async () => {
   const realFetch = globalThis.fetch; const fetched = [];
   globalThis.fetch = async (u) => { fetched.push(String(u)); return /api\.openalex\.org/.test(String(u)) ? new Response(JSON.stringify(WORKS), { headers: { 'content-type': 'application/json' } }) : new Response('{}', { status: 404 }); };
@@ -115,6 +132,15 @@ test('answer-free: /api/answer end to end routes a bot ask, a research ask and a
     assert.equal(bot.source, 'bot:mi-to-ft'); assert.equal(bot.route, 'bot'); assert.equal(bot.answer, '2 mi = 10560 ft'); assert.equal(bot.bot.family, 'units/length');
     const paper = await post('papers on sea level rise', { DB: fakeDb(), ASSETS: assets });
     assert.equal(paper.source, 'free:openalex'); assert.match(paper.answer, /OpenAlex/); assert.ok(fetched.some((u) => /api\.openalex\.org\/works\?.*search=sea%20level%20rise/.test(u)));
+    globalThis.fetch = async (u) => { fetched.push(String(u)); const s = String(u);
+      if (/api\.openalex\.org/.test(s)) return new Response(JSON.stringify(WORKS), { headers: { 'content-type': 'application/json' } });
+      if (/pubchem\.ncbi\.nlm\.nih\.gov/.test(s)) return new Response(JSON.stringify({ PropertyTable: { Properties: [{ CID: 2519, Title: 'Caffeine', MolecularFormula: 'C8H10N4O2', MolecularWeight: '194.19' }] } }));
+      if (/clinicaltrials\.gov/.test(s)) return new Response(JSON.stringify({ studies: [{ protocolSection: { identificationModule: { nctId: 'NCT05506488', briefTitle: 'Dasatinib and Quercetin to Treat Fibrotic Non-alcoholic Fatty Liver Disease' }, statusModule: { overallStatus: 'COMPLETED' } } }] }));
+      return new Response('{}', { status: 404 }); };
+    const mol = await post("what is caffeine's molecular formula", { DB: fakeDb(), ASSETS: assets });
+    assert.equal(mol.source, 'free:pubchem'); assert.match(mol.answer, /C8H10N4O2/); assert.ok(fetched.some((u) => /pubchem\.ncbi\.nlm\.nih\.gov\/rest\/pug\/compound\/name\/caffeine\//.test(u)));
+    const trials = await post('clinical trials for metformin', { DB: fakeDb(), ASSETS: assets });
+    assert.equal(trials.source, 'free:clinicaltrials'); assert.match(trials.answer, /NCT05506488/); assert.ok(fetched.some((u) => /clinicaltrials\.gov\/api\/v2\/studies\?.*query\.term=metformin/.test(u)));
     // a general ask: the free Workers AI model is still the default and the reply says so
     const ran = []; const AI = { run: async (model, opts) => { ran.push(model); return { response: 'Hamlet was written by William Shakespeare around 1600.' }; } };
     const general = await post('who wrote the play hamlet', { DB: fakeDb(), ASSETS: assets, AI });
