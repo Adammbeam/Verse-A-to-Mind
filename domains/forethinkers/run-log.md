@@ -255,3 +255,10 @@ Picked living figures (least recently advanced, 2026-11-04 14:15; its next quest
 - Folded: nothing pending; #2717 and #2726 were merged and their branches are gone.
 - Result: drift over 1,000 slips bounded on paper; fatigue and wear small, friction (0.2 to 0.5 published) decides; ring re-centred at 0.78 N per lobe; new open question 10.
 - Board: clutch sizer card row updated with the friction band.
+
+## 2026-11-25 14:03 ET
+
+- Track: planet restoration, open questions 8 and 9 (least recently advanced).
+- Folded: nothing pending; #2980 was merged and its branch is gone; no open think-tank PRs.
+- Result: season closed (NOAA alert 0 at all stations, Mote final report 13 Nov 2026); 2026 matched 2023 in DHW but had far fewer days at or above 31.5 °C; Carysfort outplants lived at 10.8 DHW, Eastern Dry Rocks elkhorn died; 2023 deaths kept rising for months after the heat; dose-only baseline corrected to a ceiling; new open question 9 (dose plus peak heat refit).
+- Board: new reef peak heat row; survival odds row corrected.
