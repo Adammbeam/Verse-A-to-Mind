@@ -19,6 +19,7 @@ const TABLES = [
   "CREATE TABLE IF NOT EXISTS void_team_wants (key TEXT PRIMARY KEY, lane TEXT NOT NULL, kind TEXT NOT NULL, title TEXT NOT NULL, label TEXT NOT NULL, metric TEXT NOT NULL, better TEXT NOT NULL, baseline REAL, latest REAL, cite TEXT NOT NULL DEFAULT '[]', private INTEGER NOT NULL DEFAULT 0, job TEXT NOT NULL, thread INTEGER NOT NULL DEFAULT 0, state TEXT NOT NULL, filed INTEGER NOT NULL, checked INTEGER NOT NULL DEFAULT 0, met_at INTEGER NOT NULL DEFAULT 0, reopened INTEGER NOT NULL DEFAULT 0, nag INTEGER NOT NULL DEFAULT 0)",
 ];
 const KEEP_MET_MS = 7 * 864e5; // a met want is kept a week, then the same evidence may file it again
+const HAND_MS = 20 * 60e3; // how long a job offer stays open before the next hand-out window
 const SETTLE = { tower: 48 * 3600e3, exam: 24 * 3600e3, miss: 72 * 3600e3, revenue: 7 * 864e5 }; // how long a handed-in job gets before its number counts
 const hex = (n) => [...crypto.getRandomValues(new Uint8Array(n))].map((b) => b.toString(16).padStart(2, '0')).join('');
 
@@ -294,6 +295,9 @@ export async function crewTick(env, now = Date.now()) {
   await crewReady(env, now);
   for (const t of TABLES) await env.DB.prepare(t).run();
   const bots = await seat(env, now), run = ((await getState(env, 'run')) || 0) + 1;
+  // hand out queued jobs to idle agents on the clock too, so the build queue drains even when nobody reads /api/team
+  try { await pushAll(env, now); } catch (_) { /* a push that fails is not fatal to the crew run */ }
+  try { await handIdle(env, now); } catch (_) { /* an idle agent that cannot be handed a job is not fatal */ }
   await setState(env, 'run', run, now);
   const next = (await getState(env, 'next')) || {}, due = bots.filter((b) => !(next[b.slug] > now));
   const isDue = (slug) => due.some((b) => b.slug === slug);
