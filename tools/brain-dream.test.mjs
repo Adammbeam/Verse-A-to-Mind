@@ -92,7 +92,7 @@ test('the loop reads only what the server side can read, sends its GitHub token 
   const s = read('tools/brain-dream.mjs');
   assert.match(s, /startsWith\('https:\/\/api\.github\.com\/'\)/);
   assert.match(s, /no VOID_OWNER_TOKEN: nothing to do/);
-  const y = read('.github/workflows/brain-dream.yml');
+  const y = read('.github/workflows-parked/brain-dream.yml');
   assert.match(y, /schedule:/); assert.match(y, /node tools\/brain-dream\.mjs/); assert.match(y, /VOID_OWNER_TOKEN/);
 });
 
