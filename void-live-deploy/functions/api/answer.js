@@ -653,12 +653,16 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
       try { await recordShortfall(env, 'answer', 'would escalate'); } catch (_) {}
     }
   }
+  // a later rewrite of outcome (a hard ask that would escalate, a Clef merge) used to drop "; self-grounded", so the
+  // "what's next" check failed whenever the classifier called that ask hard (flake job mvo3j82w)
+  const markSelf = (s) => (self && !/; self-grounded/.test(String(s || '')) ? (s ? s + '; self-grounded' : 'self-grounded') : s);
   const log = async (extra) => { if (isPass(request)) return; try { await clefP.then((c) => { // a visitor pass's own ask is never logged (lib/pass-mark.js)
     const r = mergeRoute(route, c), rec = { ask, masked, route: r.kind, skill: r.skill, score: r.score, scores: r.scores, ms: route.ms, waited, model, outcome, would, ...extra };
     if (r.by === 'clef' && !(extra && extra.outcome)) rec.outcome = r.kind === 'skill' ? String(outcome).replace(/^(default|skill missed: \w+)/, 'skill missed: ' + r.skill + ' (Clef)') : String(outcome).replace(/^skill missed: \w+/, 'default (Clef: no skill)');
     if (r.unsure) rec.outcome = String(rec.outcome) + '; Clef unsure: ' + r.unsure + ' ' + r.clefP;
+    rec.outcome = markSelf(rec.outcome);
     return logRoute(env, rec);
-  }, () => logRoute(env, { ask, masked, route: route.kind, skill: route.skill, score: route.score, scores: route.scores, ms: route.ms, waited, model, outcome, would, ...extra })); } catch (_) {} };
+  }, () => { const rec = { ask, masked, route: route.kind, skill: route.skill, score: route.score, scores: route.scores, ms: route.ms, waited, model, outcome, would, ...extra }; rec.outcome = markSelf(rec.outcome); return logRoute(env, rec); }); } catch (_) {} };
   // Plan asks ("make a plan to learn guitar"): the planner answers with steps, never Gemma + Wikipedia
   // (these fell through the router and answered nothing; bench.misses w46). Any model trouble falls through.
   const planGoal = planAskOf(ask);
