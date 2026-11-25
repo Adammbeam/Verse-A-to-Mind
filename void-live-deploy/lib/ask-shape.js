@@ -18,6 +18,10 @@ const DIRECT_OPEN = /^(?:please\s+)?(?:fix|debug|handle|repair)\b/i;
 const IN_CHARGE = /\b(?:you(?:'re| are)|verse is)\s+in charge\b|\btake (?:charge|over|the lead)\b|\byou decide\b|\b(?:if you |do you )?want to be in charge\b|\bwanna be in charge\b/i;
 const TALK = /\bsay yes if you\b/i;
 const WANT_YOU = /\b(?:i want|i need|i(?:'|’)d like)\s+you\s+to\b/i;
+// a command is a want for Verse's own build only when it names Verse or a part of it (a skill, a card, a page, the stage). "write a poem
+// about the sea", "give me a recipe for pancakes" and "make a list of fruits" are asks to answer, not build work (2026-11-25: all three
+// came back "I'll take that as a want" and were filed on the build queue)
+const ABOUT_VERSE = /\b(?:you|your|yourself|verse|void|a-to-mind|site|skills?|cards?|pages?|stage|build list|queue|features?|tools?|router|routing)\b/i;
 
 const tidy = (s) => String(s || '').trim();
 const bareOf = (s) => tidy(s).replace(LEAD, '');
@@ -33,7 +37,7 @@ export function isQuestion(raw) {
   return bare.length <= 280 && QUESTION_OPEN.test(bare);
 }
 
-/** an instruction or offer to Verse: a command, "teach my X skill", "you're in charge now", "say yes if you want to be in charge", "I want you to …". An in-charge offer still counts when it is phrased as a question. Not a long analysis that only mentions those words. Pure. */
+/** an instruction or offer to Verse: a command about Verse or a part of it, "teach my X skill", "you're in charge now", "say yes if you want to be in charge", "I want you to …". An in-charge offer still counts when it is phrased as a question. Not a long analysis that only mentions those words. Pure. */
 export function isDirective(raw) {
   const t = tidy(raw);
   if (!t || isCardCorrection(t)) return false;
@@ -42,7 +46,7 @@ export function isDirective(raw) {
   if (toVerse) return true;
   if (isQuestion(t)) return false;
   if (isLongProse(t) && !opensWithCommand(t) && !DIRECT_OPEN.test(bare)) return false;
-  return opensWithCommand(t) || asksToMake(t) || DIRECT_OPEN.test(bare);
+  return (opensWithCommand(t) || asksToMake(t) || DIRECT_OPEN.test(bare)) && ABOUT_VERSE.test(bare);
 }
 
 /** a line talking to Verse ("say yes if you …") that is not already a directive, a question to look up, or a passage. Pure. */
