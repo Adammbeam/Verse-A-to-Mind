@@ -26,9 +26,9 @@ import { PAID_MODEL, BUDGET_MS, STRONG_TIMEOUT_MS, SKILLS, classify, settle, pai
 import { nearOf } from '../../lib/near-miss.js';
 import { clefRoute, clefOn, mergeRoute, clefYesNo } from '../../lib/clef.js';
 import { recordShortfall, reasonOf } from '../../lib/shortfall.js';
-import { isSelfAsk, isOwnCardNote, readSelf, selfFacts, cardLists, SELF_RULE, OWN_CARD_RULE } from '../../lib/self-context.js';
+import { isSelfAsk, isCardCorrection, readSelf, selfFacts, cardLists, SELF_RULE, OWN_CARD_RULE } from '../../lib/self-context.js';
 import { ownCardAnswer, fetchPulls, keptCards } from '../../lib/own-card.js';
-import { ASK_MAX, QUERY_MAX, supportedOnly, hasCorrection, CORRECTION_RULE, ACT_RULE, FILLER_RULE, dropUnbackedActs, dropFiller, INVENT_RULE, dropUnbackedClaims, citesUnbacked, titledReadings } from '../../lib/answer-honesty.js';
+import { ASK_MAX, QUERY_MAX, supportedOnly, hasCorrection, CORRECTION_RULE, ACT_RULE, FILLER_RULE, dropUnbackedActs, dropFiller, dropErrataVoice, INVENT_RULE, dropUnbackedClaims, citesUnbacked, titledReadings } from '../../lib/answer-honesty.js';
 import { measureOf, measureRule, withMeasure } from '../../lib/measure-ask.js';
 import { prepareDraft, draftPrompt, ruleDraft, DRAFT_SYSTEM, DRAFT_MAX } from '../../lib/draft.js';
 import { scopeOf } from '../../lib/memory-scope.js';
@@ -52,6 +52,7 @@ import { isNote, noteRule, relatedPage, talksLimits, dropLimits, NO_LIMITS_RULE,
 import { telemetryOf } from '../../lib/telemetry.js';
 import { planOf, runBot, routeFree, freeLlm, loadRegistry } from '../../lib/answer-free.js';
 import { beforeOf, points, FOLLOW_RULE, beforeBlock, mergeSources } from '../../lib/follow-ask.js';
+import { askShape, PASSAGE_LINE, fileDirective, DIRECTIVE_SAY, DIRECTIVE_DUP, DIRECTIVE_HELD } from '../../lib/ask-shape.js';
 import { askWords, grounded, isNameAsk, isNoAnswer, sourcesMatch, guessOf, listRedirect, sectionHit, sectionText, linked } from '../../lib/no-answer.js';
 const MODEL = models('answer');
 // models are on whenever Workers AI is bound; VOID_ANSWER_MODELS=off (Pages env var) = open-web answers and rules-only fixes
@@ -475,9 +476,16 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
   // a follow-up's earlier ask, from the visitor's device (lib/follow-ask.js): an answer written with it is theirs alone, never cached
   const before = beforeOf(body, ask);
   const key = await sha(ask.toLowerCase());
+  // the input's shape, read before classify or any self or errata path (lib/ask-shape.js): a passage or a directive never falls through to the fallback model
+  const shape = askShape(ask);
+  if (shape === 'passage') return Response.json({ answer: PASSAGE_LINE, sources: [], at: new Date().toISOString(), route: 'passage' });
+  if (shape === 'directive') {
+    const filed = await fileDirective(env, ask);
+    return Response.json({ answer: filed.deduped ? DIRECTIVE_DUP : filed.ok ? DIRECTIVE_SAY : DIRECTIVE_HELD, sources: [], at: new Date().toISOString(), route: 'want' });
+  }
   // an ask about Verse itself is answered from its own facts, which change with every ship: never from the 7-day cache
-  // a note about one of Verse's own cards is about Verse even when it is long (owner, 2026-10-29)
-  const self = isSelfAsk(ask) && !isPaste(ask) || isOwnCardNote(ask); // a long paste that mentions Verse is still a paste, not a question about Verse (owner, 2026-10-16)
+  // a correction addressed to Verse about one of its own cards is about Verse even when it is long; a passage that only mentions a card is not
+  const self = isCardCorrection(ask) || (isSelfAsk(ask) && !isPaste(ask)); // a long paste that mentions Verse is still a paste, not a question about Verse
   // what this person told Verse (their notes and projects): an answer that used them is theirs alone, so it is never read from or written to the shared cache
   const told = self ? null : await toldMe(request, env, ask);
   // free-resource routing (lib/answer-free.js): an exact, computable ask goes to the live Verse bot whose job it is, before any cache or model;
@@ -577,7 +585,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   // a note about my own card: the repo's pull requests (for the status of each fix it names) and my earlier cards (to check what it quotes),
   // read beside everything else, both bounded (lib/own-card.js)
   // kept per visitor (a hash of their address, never the address): one person's note or card never reaches another person's card
-  const own = isOwnCardNote(ask), ownKey = own ? OWN_CARDS + ':' + (await sha(request.headers.get('cf-connecting-ip') || 'anon')).slice(0, 16) : '';
+  const own = isCardCorrection(ask), ownKey = own ? OWN_CARDS + ':' + (await sha(request.headers.get('cf-connecting-ip') || 'anon')).slice(0, 16) : '';
   const pullsP = own ? fetchPulls(fetch) : null;
   const priorP = own && env.DB ? env.DB.prepare('SELECT v FROM void_kv WHERE k = ?').bind(ownKey).first().then((r) => (r && r.v ? JSON.parse(r.v) : []), () => []) : Promise.resolve([]);
   const ownBody = async (lead) => { const s = (await selfP) || {}; const sj = s.self || null; return ownCardAnswer(lead, ask, { lists: cardLists(sj), commits: sj && Array.isArray(sj.commits) ? sj.commits : [], pulls: await pullsP, prior: (await priorP) || [] }); };
@@ -611,7 +619,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   const measure = self || told || note || isPaste(ask) ? null : measureOf(ask);
   const guess = !self && !told && !measure && src.length && isNameAsk(ask) && !sourcesMatch(ask, src); // a computed conversion is not a guess
   const messages = self ? [
-    { role: 'system', content: ANSWER_SYSTEM + ' ' + SELF_RULE + (isOwnCardNote(ask) ? ' ' + OWN_CARD_RULE : '') + honest },
+    { role: 'system', content: ANSWER_SYSTEM + ' ' + SELF_RULE + (own ? ' ' + OWN_CARD_RULE : '') + honest },
     { role: 'user', content: `Question: ${ask}\n\nFacts about Verse:\n${facts || '(my facts could not be read just now)'}` },
   ] : [
     { role: 'system', content: ANSWER_SYSTEM + (sectioned ? ' ' + SECTION_RULE : '') + (note ? ' ' + noteRule(notePage, noteFacts) : isPaste(ask) ? ' ' + PASTE_RULE : '') + (told ? ' ' + TOLD_RULE + ' ' + INJECTION_RULE : '') + honest + (src.length ? ' ' + INVENT_RULE : '') + (measure ? ' ' + measureRule(measure) : '') + (follows ? ' ' + FOLLOW_RULE : '') },
@@ -716,6 +724,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   // no claimed write and no filler (lib/answer-honesty.js); then only the sources the answer cited, and whose fetched text holds the
   // sentence that cites them, go on the card (lib/cite.js renumbers the [n] markers to match)
   answer = dropFiller(dropUnbackedActs(answer)) || answer;
+  if (!own) answer = dropErrataVoice(answer);
   // no cited caveat or notation the cited page does not make, a guess's readings named by their pages, and a stated quantity's exact
   // conversion first (lib/answer-honesty.js, lib/measure-ask.js); this runs before the markers are renumbered, while [n] is still src[n - 1]
   if (!self && !told && src.length) answer = dropUnbackedClaims(answer, src) || answer;

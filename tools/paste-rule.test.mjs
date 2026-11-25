@@ -12,7 +12,7 @@ test('a long pasted discussion is a paste; a question is not', () => {
 
 test('the initial self route keeps a paste off the ask-about-Void path', async () => {
   const src = (await import('node:fs')).readFileSync(new URL('../void-live-deploy/functions/api/answer.js', import.meta.url), 'utf8');
-  assert.match(src, /const self = isSelfAsk\(ask\) && !isPaste\(ask\)/);
+  assert.match(src, /const self = isCardCorrection\(ask\) \|\| \(isSelfAsk\(ask\) && !isPaste\(ask\)\)/);
 });
 
 test('the semantic self route also keeps a paste off the ask-about-Void path', async () => {

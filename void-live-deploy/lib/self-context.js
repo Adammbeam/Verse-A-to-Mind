@@ -60,6 +60,20 @@ const CARD_REF = /\b(?:this|that|the|your|its|my|verse'?s|void'?s)\s+(?:(?:own|l
 const CARD_FAULT = /\b(?:wrong|off|fault|faults|filler|false|fake|claims?|cites?|cited|sources?|sourced|label(?:s|led)?|paraphras\w*|third[- ]person|first[- ]person|speaks?|says?|said|refuses?|cut|truncat\w*|mid-sentence|correction|dates?|dated|lists?|leaves?\s+out|misses|fixed|still\s+open|better|closer)\b/i;
 const NOT_OURS = /\b(?:credit|debit|gift|sim|sd|memory|graphics|video|business|greeting|playing|tarot|pok[eé]mon|yugioh|magic|baseball|trading|report|id|library|birthday|wild)\s+cards?\b|\b(?:tarot|pok[eé]mon|yu-?gi-?oh|uno|blackjack|bingo|deck|credit|debit|bank|visa|mastercard)\b/i;
 export const isOwnCardNote = (ask) => { const a = String(ask || ''); return CARD_REF.test(a) && CARD_FAULT.test(a) && !NOT_OURS.test(a); };
+// A note addressed to Verse about its own card's wording or lists — not a third-person passage that merely mentions "the card" and "should say".
+export function isCardCorrection(ask) {
+  const a = String(ask || '');
+  if (!isOwnCardNote(a)) return false;
+  if (/\b(?:my|your|verse'?s|void'?s)\s+(?:(?:own|last|first|new|latest|answer|verse)\s+){0,2}(?:card|answer|reply)s?\b/i.test(a) && /\b(?:said|says|should say|is wrong|is off)\b/i.test(a)) return true;
+  if (/\b(?:that|this)\s+card\s+is\s+(?:wrong|off|the\s+old\s+code|the\s+first\s+one)\b/i.test(a)) return true;
+  if (/\bverse\s+misread\b/i.test(a)) return true;
+  if (/\bit still says\b/i.test(a) && /\b(?:the card|its own card|your card|my card)\b/i.test(a)) return true;
+  if (/\bgives no list of what is fixed\b/i.test(a)) return true;
+  if (/\bfixes\b/i.test(a) && (/\b(?:first|second|third)\b[,:]/i.test(a) || /\b(?:\d+|one|two|three|four|five)\s+fixes?\b/i.test(a))) return true;
+  if (/\bsent (?:the|this|a)\b/i.test(a) && /\bfrom this card\b/i.test(a)) return true;
+  return false;
+}
+
 export const OWN_CARD_RULE = 'The message is about one of your own answer cards, a card you made, often pasted back with what is wrong with it. Answer as yourself about your own card: say "my last card" or "my card", never "the card", "the system" or "the documentation". Do not explain how answer systems work in general and do not say you have no access: the facts below are yours. Write only one or two short sentences: agree plainly with each fault the message names, in the form "my last card said X; it should say Y". Own only a fault my records confirm: when the message says something my records contradict, such as a date or whether a thing shipped, say plainly what my records show. Answer only the points the message raises: never restate or defend a fact, a date or a record it did not question. Never deny what the message says my earlier card said, never apologise, and never take blame for what another site chose to do, such as turning my checker away. When the message says numbers or scores were a site\'s own, call them that site\'s, never mine. Do not write the "Fixed:" or "Still open:" lists or the status of any fix: they are added under your sentences from my records (lib/own-card.js) only when the note is about those fixes or lists. When the note only corrects what a card said, the card reports that correction and nothing else. Take every date from the facts, never from the message or from memory. Nothing else.';
 
 export const SELF_RULE = 'Never answer with troubleshooting for other products or platforms (their config files, integrations, registries): Verse is its own site, and a note about its cards, routing or fixes is about Verse. This question is about you, Verse, yourself: your skills, what you have shipped, what is still open, what you want next. Answer from the Facts about Verse below and be specific: name the actual skills, inbox rows and wants. Do not give generic advice that could apply to any project. If the facts do not cover something, say so plainly instead of guessing. Speak as yourself, in the first person. ' + PERSONA;
