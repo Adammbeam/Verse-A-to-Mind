@@ -59,7 +59,7 @@ export async function onRequestGet({ request, env }) {
 export async function onRequestPost({ request, env }) {
   const here = new URL(request.url), from = request.headers.get('origin');
   if (from && from !== here.origin) return json({ ok: false, error: 'same-origin only' }, 403);
-  if (!env || !env.DB || !env.SALT) return off(); // closed, not open: no way to hash the address or keep the day's count
+  if (!env || !env.DB || !env.SALT) { console.error('visit: off: ' + (!env || !env.DB ? 'no DB binding' : 'no SALT')); return off(); } // closed, not open: no way to hash the address or keep the day's count
   const len = Number(request.headers.get('content-length'));
   if (Number.isFinite(len) && len > LIMITS.body) return json({ ok: false, error: 'too big' }, 413);
   const p = parseBeacon(request.headers.get('content-type'), (await request.text()).slice(0, LIMITS.body + 1), here.hostname.replace(/^www\./, ''));
@@ -81,5 +81,5 @@ export async function onRequestPost({ request, env }) {
     if (cls === 'person') { await addCapped(env, day, 'page', p.page); await addCapped(env, day, 'ref', p.ref); await addCapped(env, day, 'country', countryOf(request.cf && request.cf.country)); }
     await tick(env, 'c:' + key, day); await tick(env, 'all', day);
     return new Response(null, { status: 204, headers: { 'cache-control': 'no-store' } });
-  } catch (_) { return off(); }
+  } catch (e) { console.error('visit: off: ' + String((e && e.message) || e).slice(0, 200)); return off(); } // the cause, for the deployment log (never the address or the agent)
 }
