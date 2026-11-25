@@ -4,11 +4,13 @@
 //   node tools/visitor-pass.mjs --full --only desktop
 // Writes one JSON report (--out, default tools/visitor-pass.json is not written unless --write).
 // It only reads the site. Posts to Verse's own /api are answered here with an empty 204, so a pass
-// never lands in the miss board, the answer log or a view count. Outside GETs (the weather, the
+// never lands in the miss board, the answer log or a view count. The one exception is POST /api/answer, sent marked
+// (lib/pass-mark.js) so an answered ask is timed for real; the answer engine leaves a marked ask out of its route log. Outside GETs (the weather, the
 // dictionary, a price) go through, because that is how the card gets its answer.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { passLets, PASS_HEADER } from '../void-live-deploy/lib/pass-mark.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const SITE = process.env.VOID_SITE || 'https://a-to-mind.com';
@@ -209,9 +211,11 @@ export async function pass({ asks, profiles, site = SITE, shots, axe = '' } = {}
       const spec = PROFILES[name]; if (!spec) continue;
       const ctx = await browser.newContext(spec.mobile ? { viewport: { width: spec.width, height: spec.height }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 } : { viewport: { width: spec.width, height: spec.height } });
       // a pass never writes to Verse: posts stay in the browser. The card's own GETs (weather, dictionary, prices) go out.
+      // the answer engine's POST goes through, marked, so an answered ask is timed as a visitor meets it (lib/pass-mark.js); it is left out of the route log
       await ctx.route('**/*', (route) => {
         const req = route.request();
-        if (req.method() !== 'GET' && req.method() !== 'HEAD') return route.fulfill({ status: 204, body: '' });
+        if (!passLets(req.method(), req.url(), site)) return route.fulfill({ status: 204, body: '' });
+        if (req.method() === 'POST') return route.continue({ headers: { ...req.headers(), [PASS_HEADER]: '1' } });
         return route.continue();
       });
       const page = await ctx.newPage();

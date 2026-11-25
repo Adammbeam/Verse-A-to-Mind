@@ -50,6 +50,7 @@ import * as FP from '../../lib/free-pics.js';
 import { edgeCache, edgeGate, buildId, edgeKeyUrl, edgeGet, edgePut, edgeTtl, marked, storable, HIT, MISS, BYPASS, REFRESH } from '../../lib/answer-edge.js';
 import { isNote, noteRule, relatedPage, talksLimits, dropLimits, NO_LIMITS_RULE, noteReading, setupFacts, noteFinish } from '../../lib/note-ask.js';
 import { telemetryOf } from '../../lib/telemetry.js';
+import { isPass } from '../../lib/pass-mark.js';
 import { planOf, runBot, routeFree, freeLlm, loadRegistry } from '../../lib/answer-free.js';
 import { beforeOf, points, FOLLOW_RULE, beforeBlock, mergeSources } from '../../lib/follow-ask.js';
 import { askShape, PASSAGE_LINE, fileDirective, DIRECTIVE_SAY, DIRECTIVE_DUP, DIRECTIVE_HELD, TALK_LINE } from '../../lib/ask-shape.js';
@@ -652,7 +653,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
       try { await recordShortfall(env, 'answer', 'would escalate'); } catch (_) {}
     }
   }
-  const log = async (extra) => { try { await clefP.then((c) => {
+  const log = async (extra) => { if (isPass(request)) return; try { await clefP.then((c) => { // a visitor pass's own ask is never logged (lib/pass-mark.js)
     const r = mergeRoute(route, c), rec = { ask, masked, route: r.kind, skill: r.skill, score: r.score, scores: r.scores, ms: route.ms, waited, model, outcome, would, ...extra };
     if (r.by === 'clef' && !(extra && extra.outcome)) rec.outcome = r.kind === 'skill' ? String(outcome).replace(/^(default|skill missed: \w+)/, 'skill missed: ' + r.skill + ' (Clef)') : String(outcome).replace(/^skill missed: \w+/, 'default (Clef: no skill)');
     if (r.unsure) rec.outcome = String(rec.outcome) + '; Clef unsure: ' + r.unsure + ' ' + r.clefP;
