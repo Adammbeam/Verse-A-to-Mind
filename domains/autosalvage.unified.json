@@ -456,6 +456,12 @@
       "into": "/bots/ (api-smithsonian-3d)",
       "test": "tools/api-bots.test.mjs",
       "pr": null
+    },
+    "outside:sql-js/sql.js": {
+      "target": "tool",
+      "into": "skills/sql-query.js (lib/sql-query.js, sql.js 1.17.0 from jsDelivr)",
+      "test": "tools/sql-query.test.mjs",
+      "pr": null
     }
   }
 }
