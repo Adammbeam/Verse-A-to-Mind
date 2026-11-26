@@ -3,7 +3,7 @@
 // Prints status names only. Never prints a key, a token, or a join code.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
-import { readySources, keepPatch } from '../void-live-deploy/lib/recruit.js';
+import { readySources, keepPatch, note, pasteOf } from '../void-live-deploy/lib/recruit.js';
 
 const args = process.argv.slice(2);
 const flag = (name) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : ''; };
@@ -34,10 +34,19 @@ export async function ask(source, messages, env, fetchImpl = fetch) {
 }
 
 /** a test job is published only after its command exits 0. A page of model prose is never published. */
-export async function once({ state = { sources: {} }, log = () => {} } = {}) {
-  const source = readySources(process.env, state, Date.now())[0];
-  log('source ' + (source ? source.id : 'none') + '; no test job, nothing written');
-  return { state, html: '', replies: [], skipped: true, how: '' };
+export async function once({ env = process.env, state = { sources: {} }, log = () => {}, fetchImpl = fetch, now = Date.now() } = {}) {
+  // Every free agent that is ready, not just the first: one throttled clock run still calls all of them.
+  const ready = readySources(env, state, now);
+  if (!ready.length) { log('source none; every free agent is parked, dropped, or has no key'); return { state, html: '', replies: [], skipped: true, how: '' }; }
+  const askLine = 'Reply with one line: yes, and the helper/ branch you will use.';
+  const replies = await Promise.all(ready.map(async (source) => {
+    const r = await ask(source, [{ role: 'system', content: pasteOf(source) }, { role: 'user', content: askLine }], env, fetchImpl);
+    return { source: source.id, ok: !!r.ok, limited: !!r.limited, retryAfter: r.retryAfter || 0, status: r.status || 0, say: r.say || '', text: r.ok ? String(r.text || '').slice(0, 400) : '' };
+  }));
+  for (const r of replies) state = note(state, r.source, now, { limited: r.limited, retryAfter: r.retryAfter });
+  const answered = replies.filter((r) => r.ok).length;
+  log('called ' + ready.length + ' free agents (' + replies.map((r) => r.source + ' ' + (r.ok ? 'ok' : r.limited ? 'parked' : 'miss')).join(', ') + '); ' + answered + ' answered');
+  return { state, html: '', replies, skipped: answered === 0, how: 'free agents' };
 }
 
 async function main() {

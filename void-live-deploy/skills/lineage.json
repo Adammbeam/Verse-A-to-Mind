@@ -1,7 +1,11 @@
 {
  "note": "Which skills were built by calling other skills (export const builtWith in the skill file). Written by tools/skills-index.mjs beside skills/index.json. Do not edit by hand.",
- "count": 27,
+ "count": 31,
  "skills": {
+  "working-on": [
+   "will-card",
+   "wants"
+  ],
   "experiments": [
    "toolkit"
   ],
@@ -66,6 +70,14 @@
    "client-intake",
    "progress-report"
   ],
+  "process-lift-pack": [
+   "client-intake",
+   "reuse-pack",
+   "ownership-pack",
+   "monitor-pack",
+   "verify-pack",
+   "full-handoff"
+  ],
   "progress-report": [
    "system-status",
    "handoff-checklist",
@@ -101,15 +113,6 @@
    "delivery-board",
    "monitor-pack",
    "full-handoff"
-  ],
-  "delivery-ready": [
-   "systems-owned",
-   "ownership-pack",
-   "monitor-pack",
-   "verify-pack",
-   "full-handoff",
-   "kickoff-pack",
-   "reliability-pack"
   ],
   "systems-owned": [
    "ownership-pack",
@@ -147,13 +150,6 @@
    "verify-pack",
    "ownership"
   ],
-  "handoff-ready": [
-   "ownership-pack",
-   "system-status",
-   "monitor-pack",
-   "verify-pack",
-   "full-handoff"
-  ],
   "summon-pack": [
    "delivery-board",
    "status-digest",
@@ -166,6 +162,29 @@
    "handoff-checklist",
    "systems-monitor",
    "client-status"
+  ],
+  "automation-status-pack": [
+   "monitor-pack",
+   "system-status",
+   "reliability-pack",
+   "status-digest",
+   "full-handoff"
+  ],
+  "before-after-pack": [
+   "client-intake",
+   "idea-to-system",
+   "process-lift-pack",
+   "lift-summary",
+   "full-handoff"
+  ],
+  "delivery-status-pack": [
+   "delivery-pack",
+   "monitor-receipt",
+   "ownership-pack",
+   "handoff-checklist"
+  ],
+  "verse-runs": [
+   "verse-runs"
   ]
  }
 }

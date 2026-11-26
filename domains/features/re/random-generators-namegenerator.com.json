@@ -1,0 +1,310 @@
+{
+ "site": "namegen.com",
+ "url": "https://namegen.com/",
+ "scanned": "2026-11-22",
+ "status": 301,
+ "assets": [
+  {
+   "f": "ep2.adtrafficquality.google/sodar2.js",
+   "t": "js",
+   "b": 22418,
+   "ext": true
+  },
+  {
+   "f": "fonts.googleapis.com/css",
+   "t": "css",
+   "b": 10736,
+   "ext": true
+  },
+  {
+   "f": "fundingchoicesmessages.google.[token]",
+   "t": "js",
+   "b": 7925,
+   "ext": true
+  },
+  {
+   "f": "fundingchoicesmessages.google.com/showadcode2.",
+   "t": "js",
+   "b": 54,
+   "ext": true
+  },
+  {
+   "f": "fundingchoicesmessages.google.[token]",
+   "t": "js",
+   "b": 1978,
+   "ext": true
+  },
+  {
+   "f": "fundingchoicesmessages.google.[token]",
+   "t": "js",
+   "b": 2520,
+   "ext": true
+  },
+  {
+   "f": "fundingchoicesmessages.google.com/ca-pub-",
+   "t": "js",
+   "b": 228729,
+   "ext": true
+  },
+  {
+   "f": "begin.css",
+   "t": "css",
+   "b": 64438
+  },
+  {
+   "f": "end.css",
+   "t": "css",
+   "b": 17471
+  },
+  {
+   "f": "begin.js",
+   "t": "js",
+   "b": 7586
+  },
+  {
+   "f": "common.js",
+   "t": "js",
+   "b": 52976
+  },
+  {
+   "f": "custom-select.js",
+   "t": "js",
+   "b": 10552
+  },
+  {
+   "f": "simple-scrollbar.js",
+   "t": "js",
+   "b": 3550
+  },
+  {
+   "f": "pagead2.googlesyndication.[token].js",
+   "t": "js",
+   "b": 63587,
+   "ext": true
+  },
+  {
+   "f": "pagead2.googlesyndication.com/adsbygoogle.js",
+   "t": "js",
+   "b": 163896,
+   "ext": true
+  },
+  {
+   "f": "pagead2.googlesyndication.com/adsbygoogle.js",
+   "t": "js",
+   "b": 163904,
+   "ext": true
+  },
+  {
+   "f": "pagead2.googlesyndication.com/abg_lite_fy2021.js",
+   "t": "js",
+   "b": 21781,
+   "ext": true
+  },
+  {
+   "f": "pagead2.googlesyndication.[token].js",
+   "t": "js",
+   "b": 1712,
+   "ext": true
+  },
+  {
+   "f": "pagead2.googlesyndication.com/qs_click_protection_fy2021.js",
+   "t": "js",
+   "b": 20933,
+   "ext": true
+  },
+  {
+   "f": "pagead2.googlesyndication.com/window_focus_fy2021.js",
+   "t": "js",
+   "b": 2746,
+   "ext": true
+  },
+  {
+   "f": "pagead2.googlesyndication.[token].js",
+   "t": "js",
+   "b": 26907,
+   "ext": true
+  },
+  {
+   "f": "pagead2.googlesyndication.com/ufs_web_display.js",
+   "t": "js",
+   "b": 248191,
+   "ext": true
+  },
+  {
+   "f": "pagead2.googlesyndication.com/reactive_library_fy2021.js",
+   "t": "js",
+   "b": 166943,
+   "ext": true
+  },
+  {
+   "f": "pagead2.googlesyndication.com/show_ads_impl_fy2021.js",
+   "t": "js",
+   "b": 519336,
+   "ext": true
+  },
+  {
+   "f": "pagead2.googlesyndication.[token].js",
+   "t": "js",
+   "b": 16765,
+   "ext": true
+  },
+  {
+   "f": "stats.monohost.com/matomo.js",
+   "t": "js",
+   "b": 68294,
+   "ext": true
+  },
+  {
+   "f": "www.googletagmanager.com/js",
+   "t": "js",
+   "b": 545290,
+   "ext": true
+  },
+  {
+   "f": "www.gstatic.[token].js",
+   "t": "js",
+   "b": 31902,
+   "ext": true
+  },
+  {
+   "f": "www.gstatic.[token].js",
+   "t": "js",
+   "b": 45204,
+   "ext": true
+  }
+ ],
+ "assetCount": 29,
+ "bytes": 2538324,
+ "html": {
+  "mobile": {
+   "title": "Name Generator - Powered by AI",
+   "lang": "en",
+   "manifest": null,
+   "canonical": true,
+   "share": {
+    "og": 7,
+    "twitter": true,
+    "themeColor": false,
+    "appleCapable": false
+   },
+   "iframes": [
+    "googleads.g.doubleclick.net",
+    "googleads.g.doubleclick.net",
+    "googleads.g.doubleclick.net",
+    "namegen.com",
+    "www.google.com",
+    "googleads.g.doubleclick.net",
+    "googleads.g.doubleclick.net"
+   ],
+   "ariaLabels": [
+    "Advertisement",
+    "Menu",
+    "NameGenerator logotype",
+    "Saved"
+   ],
+   "noscript": true
+  },
+  "desktop": {}
+ },
+ "controls": [
+  {
+   "l": "Menu",
+   "w": "md"
+  },
+  {
+   "l": "NameGenerator logotype",
+   "w": "md"
+  },
+  {
+   "l": "Saved",
+   "w": "md"
+  },
+  {
+   "l": "Terms and Privacy Policy",
+   "w": "md"
+  },
+  {
+   "l": "facebook",
+   "w": "md"
+  },
+  {
+   "l": "pinterest",
+   "w": "md"
+  },
+  {
+   "l": "reddit",
+   "w": "md"
+  },
+  {
+   "l": "twitter",
+   "w": "md"
+  },
+  {
+   "l": "whatsapp",
+   "w": "md"
+  }
+ ],
+ "serviceWorker": {
+  "url": "icons-worker.js",
+  "bytes": 2881,
+  "workbox": false,
+  "precache": false,
+  "fetchHandler": true,
+  "skipWaiting": true,
+  "sync": false,
+  "periodicSync": false,
+  "push": false,
+  "notificationClick": false,
+  "cacheNames": []
+ },
+ "robots": {
+  "disallow": [],
+  "sitemaps": [],
+  "crawlDelay": null
+ },
+ "thirdParty": [
+  "ep1.adtrafficquality.google",
+  "ep2.adtrafficquality.google",
+  "fonts.googleapis.com",
+  "fundingchoicesmessages.google.com",
+  "googleads.g.doubleclick.net",
+  "pagead2.googlesyndication.com",
+  "stats.monohost.com",
+  "www.google-analytics.com",
+  "www.googletagmanager.com",
+  "www.gstatic.com"
+ ],
+ "services": [
+  "Ads",
+  "Google Analytics",
+  "Web fonts"
+ ],
+ "requests": [
+  "https://ep1.adtrafficquality.google/getconfig/sodar?sjk&st&sv&tid&tv",
+  "https://fundingchoicesmessages.google.[token]",
+  "https://googleads.g.doubleclick.net/btr/view?ai&ibtr&sigh&template_id&uach_m",
+  "https://googleads.g.doubleclick.net/pagead/adview?ai&ebtr&sigh&template_id&uach_m&vis",
+  "https://pagead2.googlesyndication.com/pagead/gen_204?d&id",
+  "https://pagead2.googlesyndication.com/pagead/gen_204?id&name&type",
+  "https://pagead2.googlesyndication.com/pagead/gen_204?id&proto&type",
+  "https://pagead2.googlesyndication.com/pagead/gen_204?id&type",
+  "https://pagead2.googlesyndication.com/pcs/activeview?adk&app&avms&bin&bs&co&cr&ffslot",
+  "https://www.google-analytics.com/g/collect?_ee&_fv&_nsi&_p&_s&_ss&cid&dl"
+ ],
+ "storage": {
+  "local": [
+   "google_adsense_settings",
+   "google_ama_config"
+  ],
+  "session": [],
+  "idb": []
+ },
+ "candidates": [
+  {
+   "name": "Works offline (service worker)",
+   "kind": "pwa",
+   "tag": "observed",
+   "evidence": "service worker icons-worker.js"
+  }
+ ]
+}

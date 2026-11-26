@@ -1,0 +1,24 @@
+{
+ "at": "2026-11-21T22:14:18.881Z",
+ "sha": "e7a9907d720317eb087cb9aecd3b5c728c3609c4",
+ "run": "https://github.com/atomeam/void-loop/actions/runs/44951484286",
+ "suite": "browser suite on main",
+ "checks": [
+  "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer",
+  "poster wins: on a skill card (phone) the stats chip touches no text, the rarity and collector row included",
+  "will: Verse says what it wants",
+  "router: models are on by default whenever Workers AI is bound; VOID_ANSWER_MODELS=off = the open-web answer and rules-only fixes (no Workers AI call, no D1 write, no route)",
+  "suite ran to the end"
+ ],
+ "touched": [
+  "void-live-deploy/progress/loops/fresh.json",
+  "void-live-deploy/progress/loops/revenue-runs/2026-11-21T1818.json"
+ ],
+ "shards": [
+  1,
+  3
+ ],
+ "passed": [
+  3
+ ]
+}

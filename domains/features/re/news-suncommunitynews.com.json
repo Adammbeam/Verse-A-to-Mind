@@ -1,0 +1,401 @@
+{
+ "site": "suncommunitynews.com",
+ "url": "https://suncommunitynews.com/",
+ "scanned": "2026-11-22",
+ "status": 200,
+ "assets": [
+  {
+   "f": "fonts.googleapis.com/css",
+   "t": "css",
+   "b": 33474,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/css",
+   "t": "css",
+   "b": 616,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/css",
+   "t": "css",
+   "b": 0,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/css",
+   "t": "css",
+   "b": 158127,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/css",
+   "t": "css",
+   "b": 5902,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/common.css",
+   "t": "css",
+   "b": 55479,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/mts-consent.css",
+   "t": "css",
+   "b": 11357,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/style.css",
+   "t": "css",
+   "b": 11888,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/brands.min.css",
+   "t": "css",
+   "b": 19373,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/fontawesome.min.css",
+   "t": "css",
+   "b": 174407,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/owfont-regular.min.css",
+   "t": "css",
+   "b": 6429,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/portal.css",
+   "t": "css",
+   "b": 18359,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/smartBanner.css",
+   "t": "css",
+   "b": 3439,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/js",
+   "t": "js",
+   "b": 583256,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/js",
+   "t": "js",
+   "b": 9788,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/mts-banner.js",
+   "t": "js",
+   "b": 27024,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/mts-consent-init.js",
+   "t": "js",
+   "b": 8767,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/mts-firewall.js",
+   "t": "js",
+   "b": 8316,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/script.js",
+   "t": "js",
+   "b": 730,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/jquery.js",
+   "t": "js",
+   "b": 86663,
+   "ext": true
+  },
+  {
+   "f": "media.myteamscoop.com/main.js",
+   "t": "js",
+   "b": 63147,
+   "ext": true
+  },
+  {
+   "f": "p.typekit.net/p.css",
+   "t": "css",
+   "b": 5,
+   "ext": true
+  },
+  {
+   "f": "use.typekit.net/fkc3eoz.css",
+   "t": "css",
+   "b": 6274,
+   "ext": true
+  }
+ ],
+ "assetCount": 23,
+ "bytes": 1292820,
+ "html": {
+  "mobile": {
+   "title": "Sun Community News | Sun Community News",
+   "lang": "en",
+   "manifest": null,
+   "appleTouch": true,
+   "share": {
+    "og": 3,
+    "twitter": false,
+    "themeColor": false,
+    "appleCapable": false
+   },
+   "iframes": [
+    "suncommunitynews.whatsopensolution.com"
+   ],
+   "accepts": [
+    "image/jpeg, image/png, image/bmp, image/gif, image/tiff"
+   ],
+   "inputTypes": {
+    "checkbox": 8,
+    "file": 2,
+    "number": 1,
+    "radio": 3,
+    "text": 12
+   },
+   "selects": 2,
+   "textareas": 1,
+   "forms": 1,
+   "ariaLabels": [
+    "Accept all tracking to use the site",
+    "Decline secondary tracking options",
+    "Open layout priority panel"
+   ],
+   "noscript": true
+  },
+  "desktop": {
+   "inputTypes": {
+    "checkbox": 8,
+    "file": 2,
+    "number": 1,
+    "radio": 3,
+    "text": 14
+   },
+   "ariaLabels": [
+    "Accept all tracking to use the site",
+    "Decline secondary tracking options",
+    "Dropdown search input",
+    "Open layout priority panel"
+   ]
+  }
+ },
+ "controls": [
+  {
+   "l": "Accept all tracking to use the site",
+   "w": "md"
+  },
+  {
+   "l": "Decline secondary tracking options",
+   "w": "md"
+  },
+  {
+   "l": "Family",
+   "w": "md"
+  },
+  {
+   "l": "Food",
+   "w": "md"
+  },
+  {
+   "l": "Football",
+   "w": "md"
+  },
+  {
+   "l": "Open layout priority panel",
+   "w": "md"
+  }
+ ],
+ "robots": {
+  "disallow": [
+   "/custom/",
+   "/images/",
+   "/mce/",
+   "/multifileupload/",
+   "/oauth/",
+   "/support/",
+   "/typefaces/",
+   "/zeroclipboard/",
+   "/user/login/",
+   "/user/register/"
+  ],
+  "sitemaps": [],
+  "crawlDelay": null
+ },
+ "thirdParty": [
+  "fonts.googleapis.com",
+  "media.myteamscoop.com",
+  "mynewsonthego.com",
+  "p.typekit.net",
+  "use.typekit.net"
+ ],
+ "services": [
+  "Web fonts"
+ ],
+ "requests": [
+  "https://mynewsonthego.com/denton/free/getpubfront.aspx?fmt&freeid",
+  "https://suncommunitynews.[token]?category&filter_id&filter_type&from&portal_id&to",
+  "https://suncommunitynews.com/api/createEvent.aspx?",
+  "https://suncommunitynews.com/api/getEventCalendar.aspx?",
+  "https://suncommunitynews.com/api/v1/weather/info/get/?portal_id&zip_code",
+  "https://suncommunitynews.com/api/v3/portal/news/all/?category&filter_id&filter_type&from&portal_id&to",
+  "https://suncommunitynews.com/api/v4/portal/news/all/?category&filter_id&filter_type&from&portal_id&subcategory&to",
+  "https://suncommunitynews.com/api/v4/portal/news/all/?category&filter_id&filter_type&from&portal_id&to",
+  "https://suncommunitynews.com/api/widget/getWidget.aspx?callback&loggedIn",
+  "https://suncommunitynews.com/apps/common/ping.aspx"
+ ],
+ "storage": {
+  "local": [],
+  "session": [
+   "back",
+   "histLength",
+   "history",
+   "lastPg"
+  ],
+  "idb": []
+ },
+ "candidates": [
+  {
+   "name": "Opens files: image/jpeg, image/png, image/bmp, image/gif, image/tiff",
+   "kind": "import",
+   "tag": "observed",
+   "evidence": "input[type=file][accept]"
+  },
+  {
+   "name": "Several files at once",
+   "kind": "import",
+   "tag": "observed",
+   "evidence": "input[type=file][multiple]"
+  },
+  {
+   "name": "Embeds suncommunitynews.whatsopensolution.com",
+   "kind": "embed",
+   "tag": "observed",
+   "evidence": "iframe"
+  },
+  {
+   "name": "API call suncommunitynews.com/api/createEvent.aspx?",
+   "kind": "api",
+   "tag": "observed",
+   "evidence": "network"
+  },
+  {
+   "name": "API call suncommunitynews.com/api/getEventCalendar.aspx?",
+   "kind": "api",
+   "tag": "observed",
+   "evidence": "network"
+  },
+  {
+   "name": "API call suncommunitynews.com/api/v1/weather/info/get/?portal_id&zip_code",
+   "kind": "api",
+   "tag": "observed",
+   "evidence": "network"
+  },
+  {
+   "name": "API call suncommunitynews.com/api/v3/portal/news/all/?category&filter_id&filter_",
+   "kind": "api",
+   "tag": "observed",
+   "evidence": "network"
+  },
+  {
+   "name": "API call suncommunitynews.com/api/v4/portal/news/all/?category&filter_id&filter_",
+   "kind": "api",
+   "tag": "observed",
+   "evidence": "network"
+  },
+  {
+   "name": "API call suncommunitynews.com/api/v4/portal/news/all/?category&filter_id&filter_",
+   "kind": "api",
+   "tag": "observed",
+   "evidence": "network"
+  },
+  {
+   "name": "API call suncommunitynews.com/api/widget/getWidget.aspx?callback&loggedIn",
+   "kind": "api",
+   "tag": "observed",
+   "evidence": "network"
+  },
+  {
+   "name": "Input of type number",
+   "kind": "input",
+   "tag": "observed",
+   "evidence": "input[type=number] x1"
+  },
+  {
+   "name": "Path kept from crawlers /custom/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /images/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /mce/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /multifileupload/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /oauth/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /support/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /typefaces/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /user/login/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /user/register/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /zeroclipboard/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  }
+ ]
+}

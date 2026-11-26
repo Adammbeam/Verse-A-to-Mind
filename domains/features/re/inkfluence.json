@@ -1,0 +1,547 @@
+{
+ "site": "www.inkfluenceai.com",
+ "url": "https://www.inkfluenceai.com/",
+ "scanned": "2026-11-22",
+ "status": 200,
+ "assets": [
+  {
+   "f": "analytics.ahrefs.com/analytics.js",
+   "t": "js",
+   "b": 7274,
+   "ext": true
+  },
+  {
+   "f": "bzrcdn.openai.com/oaiq.min.js",
+   "t": "js",
+   "b": 118496,
+   "ext": true
+  },
+  {
+   "f": "cdn.jsdelivr.net/psl.min.js",
+   "t": "js",
+   "b": 157794,
+   "ext": true
+  },
+  {
+   "f": "files.tlt-cdn.com/tlt.js",
+   "t": "js",
+   "b": 4256,
+   "ext": true
+  },
+  {
+   "f": "fonts.googleapis.com/css2",
+   "t": "css",
+   "b": 4392,
+   "ext": true
+  },
+  {
+   "f": "scripts.clarity.ms/clarity.js",
+   "t": "js",
+   "b": 73892,
+   "ext": true
+  },
+  {
+   "f": "www.clarity.ms/vmqg6hx4b8",
+   "t": "js",
+   "b": 772,
+   "ext": true
+  },
+  {
+   "f": "www.googletagmanager.com/js",
+   "t": "js",
+   "b": 457107,
+   "ext": true
+  },
+  {
+   "f": "www.googletagmanager.com/js",
+   "t": "js",
+   "b": 609913,
+   "ext": true
+  },
+  {
+   "f": "index.[token].tnZA2lr7.js",
+   "t": "js",
+   "b": 11217
+  }
+ ],
+ "assetCount": 10,
+ "bytes": 1445113,
+ "html": {
+  "mobile": {
+   "title": "AI Book Writer & Ebook Creator | Inkflue",
+   "lang": "en",
+   "manifest": "https://www.inkfluenceai.com/site.webmanifest",
+   "canonical": true,
+   "appleTouch": true,
+   "share": {
+    "og": 6,
+    "twitter": true,
+    "themeColor": false,
+    "appleCapable": false
+   },
+   "inputTypes": {
+    "text": 1
+   },
+   "textareas": 2,
+   "details": 6,
+   "ariaLabels": [
+    "95,109",
+    "Book topic",
+    "Close menu",
+    "Describe the book you want to create",
+    "Describe your book idea",
+    "Genre",
+    "Inkfluence AI home",
+    "Instagram",
+    "LinkedIn",
+    "Main",
+    "Menu",
+    "Open menu",
+    "Play voice sample",
+    "X (Twitter)",
+    "YouTube"
+   ],
+   "roles": {
+    "dialog": 1
+   },
+   "live": true
+  },
+  "desktop": {}
+ },
+ "controls": [
+  {
+   "l": "About",
+   "w": "md"
+  },
+  {
+   "l": "Affiliates",
+   "w": "md"
+  },
+  {
+   "l": "Bahasa Indonesia",
+   "w": "md"
+  },
+  {
+   "l": "Blog",
+   "w": "md"
+  },
+  {
+   "l": "Business",
+   "w": "md"
+  },
+  {
+   "l": "Can I cancel anytime?",
+   "w": "md"
+  },
+  {
+   "l": "Can I use what I create commercially?",
+   "w": "md"
+  },
+  {
+   "l": "Contact",
+   "w": "md"
+  },
+  {
+   "l": "Cookie Policy",
+   "w": "md"
+  },
+  {
+   "l": "D Danielle Warm · US",
+   "w": "md"
+  },
+  {
+   "l": "Deutsch",
+   "w": "md"
+  },
+  {
+   "l": "E Emma British",
+   "w": "md"
+  },
+  {
+   "l": "English",
+   "w": "md"
+  },
+  {
+   "l": "Español",
+   "w": "md"
+  },
+  {
+   "l": "Explore the App",
+   "w": "d"
+  },
+  {
+   "l": "FAQ",
+   "w": "md"
+  },
+  {
+   "l": "Features",
+   "w": "md"
+  },
+  {
+   "l": "Français",
+   "w": "md"
+  },
+  {
+   "l": "Free Tools",
+   "w": "md"
+  },
+  {
+   "l": "G Gregory Deep · US",
+   "w": "md"
+  },
+  {
+   "l": "Google Privacy Policy",
+   "w": "md"
+  },
+  {
+   "l": "Help Center",
+   "w": "md"
+  },
+  {
+   "l": "How-to guide",
+   "w": "md"
+  },
+  {
+   "l": "Inkfluence AI",
+   "w": "md"
+  },
+  {
+   "l": "Inkfluence AI home",
+   "w": "md"
+  },
+  {
+   "l": "Instagram",
+   "w": "md"
+  },
+  {
+   "l": "Is my content private?",
+   "w": "md"
+  },
+  {
+   "l": "Learn",
+   "w": "md"
+  },
+  {
+   "l": "LinkedIn",
+   "w": "md"
+  },
+  {
+   "l": "Manage Cookies",
+   "w": "md"
+  },
+  {
+   "l": "Open menu",
+   "w": "m"
+  },
+  {
+   "l": "Outline my book",
+   "w": "md"
+  },
+  {
+   "l": "Play voice sample",
+   "w": "md"
+  },
+  {
+   "l": "Português",
+   "w": "md"
+  },
+  {
+   "l": "Press",
+   "w": "md"
+  },
+  {
+   "l": "Pricing",
+   "w": "md"
+  },
+  {
+   "l": "Privacy Policy",
+   "w": "md"
+  },
+  {
+   "l": "Product",
+   "w": "d"
+  },
+  {
+   "l": "Resources",
+   "w": "d"
+  },
+  {
+   "l": "Self-help",
+   "w": "md"
+  },
+  {
+   "l": "Sign In",
+   "w": "md"
+  },
+  {
+   "l": "Start my book free",
+   "w": "md"
+  },
+  {
+   "l": "Terms of Service",
+   "w": "md"
+  },
+  {
+   "l": "Tools",
+   "w": "d"
+  },
+  {
+   "l": "Try Free",
+   "w": "md"
+  },
+  {
+   "l": "What can I export?",
+   "w": "md"
+  },
+  {
+   "l": "What do you want to create?",
+   "w": "md"
+  },
+  {
+   "l": "What is included in the free plan?",
+   "w": "md"
+  },
+  {
+   "l": "X (Twitter)",
+   "w": "md"
+  },
+  {
+   "l": "YouTube",
+   "w": "md"
+  },
+  {
+   "l": "iOS App",
+   "w": "md"
+  },
+  {
+   "l": "العربية",
+   "w": "md"
+  },
+  {
+   "l": "हिन्दी",
+   "w": "md"
+  }
+ ],
+ "manifest": {
+  "name": "InkFluence AI - AI-Powered Ebook Creator",
+  "display": "standalone",
+  "displayOverride": [],
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": 2,
+  "screenshots": 0,
+  "categories": [
+   "productivity",
+   "business",
+   "writing"
+  ],
+  "shortcuts": [],
+  "shareTarget": null,
+  "fileHandlers": [],
+  "protocolHandlers": [],
+  "launchHandler": false,
+  "widgets": 0,
+  "relatedApps": 0,
+  "lang": ""
+ },
+ "robots": {
+  "disallow": [
+   "/api/",
+   "/dashboard",
+   "/projects",
+   "/profile",
+   "/app$",
+   "/app/",
+   "/__/"
+  ],
+  "sitemaps": [
+   "https://www.inkfluenceai.com/sitemap.xml"
+  ],
+  "crawlDelay": "1"
+ },
+ "sitemap": {
+  "urls": 11,
+  "index": true,
+  "sections": [
+   {
+    "s": "sitemap-affiliate.xml",
+    "n": 1
+   },
+   {
+    "s": "sitemap-blog.xml",
+    "n": 1
+   },
+   {
+    "s": "sitemap-books.xml",
+    "n": 1
+   },
+   {
+    "s": "sitemap-compare.xml",
+    "n": 1
+   },
+   {
+    "s": "sitemap-for.xml",
+    "n": 1
+   },
+   {
+    "s": "sitemap-help.xml",
+    "n": 1
+   },
+   {
+    "s": "sitemap-learn.xml",
+    "n": 1
+   },
+   {
+    "s": "sitemap-pages.xml",
+    "n": 1
+   },
+   {
+    "s": "sitemap-tools.xml",
+    "n": 1
+   },
+   {
+    "s": "sitemap-videos.xml",
+    "n": 1
+   },
+   {
+    "s": "sitemap-write.xml",
+    "n": 1
+   }
+  ],
+  "langs": []
+ },
+ "code": [
+  {
+   "file": "index.[token].tnZA2lr7.js",
+   "own": true,
+   "apis": [
+    "Respects the reduced-motion setting"
+   ],
+   "media": [
+    "reduced"
+   ]
+  }
+ ],
+ "thirdParty": [
+  "ad.doubleclick.net",
+  "analytics.ahrefs.com",
+  "analytics.google.com",
+  "bzr.openai.com",
+  "bzrcdn.openai.com",
+  "cdn.jsdelivr.net",
+  "files.tlt-cdn.com",
+  "fonts.googleapis.com",
+  "i.clarity.ms",
+  "scripts.clarity.ms",
+  "t.clarity.ms",
+  "www.clarity.ms",
+  "www.google.com",
+  "www.googletagmanager.com"
+ ],
+ "services": [
+  "AI model API",
+  "Ads",
+  "Google Analytics",
+  "Product analytics",
+  "Web fonts"
+ ],
+ "requests": [
+  "https://ad.doubleclick.net/ccm/s/collect?auid&fmt&gtm",
+  "https://analytics.google.com/g/collect?_ee&_eu&_fv&_gaz&_nsi&_p&_s&_ss",
+  "https://bzr.openai.com/v1/sdk/events?ec&pid&st&sv&t",
+  "https://bzrcdn.openai.[token].json",
+  "https://i.clarity.ms/collect",
+  "https://t.clarity.ms/collect",
+  "https://www.google.com/ccm/collect?apvc&auid&dl&dma&dt&en&fmt&frm"
+ ],
+ "storage": {
+  "local": [
+   "_gcl_ls"
+  ],
+  "session": [
+   "_cltk",
+   "oaiq_cs:3s4FXw5vNwQJeQG7ngMqxy"
+  ],
+  "idb": []
+ },
+ "candidates": [
+  {
+   "name": "Installable web app (standalone)",
+   "kind": "pwa",
+   "tag": "observed",
+   "evidence": "manifest"
+  },
+  {
+   "name": "API call bzr.openai.com/v1/sdk/events?ec&pid&st&sv&t",
+   "kind": "api",
+   "tag": "observed",
+   "evidence": "network"
+  },
+  {
+   "name": "Remembers a setting in the browser: _gcl_ls",
+   "kind": "storage",
+   "tag": "observed",
+   "evidence": "localStorage"
+  },
+  {
+   "name": "Uses AI model API",
+   "kind": "service",
+   "tag": "read",
+   "evidence": "script hosts"
+  },
+  {
+   "name": "Respects the reduced-motion setting",
+   "kind": "a11y",
+   "tag": "read",
+   "evidence": "index.[token].tnZA2lr7.js@385"
+  },
+  {
+   "name": "Screen reader announcements (aria-live)",
+   "kind": "a11y",
+   "tag": "observed",
+   "evidence": "[aria-live]"
+  },
+  {
+   "name": "Path kept from crawlers /__/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /api/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /app$",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /app/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /dashboard",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /profile",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /projects",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  }
+ ]
+}

@@ -1,5 +1,6 @@
 // Versus measurements and the owner elevator. Pure. A floor is a Verse page that exists and works.
 // Measurements are kept and never decide a floor. A card is never a floor. Visitors see a sign.
+import { SIGN_CSS, visitorHtml } from './versus-sign.js';
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 export const ASPECTS = Object.freeze([
@@ -12,8 +13,9 @@ export const ASPECTS = Object.freeze([
 
 /** the three Versus pages. A floor only once the rebuilt page is live and does the job. The gate still measures them. */
 export const TOOLS = Object.freeze([
-  { id: 'readable', name: 'Lightweight Page', page: '/our-motherfucking-version/', rival: 'motherfuckingwebsite.com', url: 'https://motherfuckingwebsite.com/', kind: 'page', works: true, checked: true, features: ['plain page', 'weigh markup'] },
-  { id: 'tracks', name: 'Album Track Time Adder', page: '/track-times/', rival: 'tsundere.pw', url: 'https://tsundere.pw/', kind: 'page', works: true, checked: true, features: ['track list', 'start times'] },
+  // A one-page manifesto and a silent album track list had nothing to use, so their stories are Echo Vault entries
+  // (/echo-vault/?entry=light-page and ?entry=album-list). The page-weight tool and the track-time adder stay as
+  // ordinary Verse tools, the way the hosting calculator stayed when its brochure moved. Comparisons stay owner-only.
   { id: 'letters', name: 'ROT13 Text Scrambler', page: '/rotate-letters/', rival: 'rot13.com', url: 'https://rot13.com/', kind: 'page', works: true, checked: true, features: ['letter shift'], extras: ['share link', 'read it back', 'scripts off'] },
 ]);
 
@@ -148,12 +150,7 @@ const num = (a, n) => {
   return n + (a.unit ? ' ' + a.unit : '');
 };
 
-const SIGN_CSS = '<style>.elv{position:relative;max-width:100%}.elv-doors{display:grid;grid-template-columns:1fr 2px 1fr;height:14rem;border-radius:14px;overflow:hidden;background:#10141c;border:1px solid #2a2a2a}.elv-door{background:linear-gradient(180deg,#242a38,#12151c 55%,#1a1e28)}.elv-seam{background:rgb(var(--d-key) / .4)}.elv-sign{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%) rotate(-3deg);margin:0;padding:1.15rem 1.3rem .9rem;width:min(14rem,78%);text-align:center;background:#f3efe6;color:#161616;font-family:ui-serif,Georgia,serif;font-size:clamp(1.5rem,6vw,1.85rem);font-weight:700;line-height:1.15;box-shadow:0 12px 28px rgba(0,0,0,.38)}.elv-tape{position:absolute;left:50%;top:-11px;width:4.4rem;height:.95rem;transform:translateX(-50%) rotate(4deg);background:rgb(var(--d-key) / .42)}</style>';
-/** the taped sign. Nothing else. Pure. */
-export function visitorHtml() {
-  return SIGN_CSS + '<div class="elv" data-owner="0"><div class="elv-doors" aria-hidden="true"><span class="elv-door"></span><span class="elv-seam"></span><span class="elv-door"></span></div>'
-    + '<h1 class="elv-sign"><span class="elv-tape" aria-hidden="true"></span>Out of Order</h1></div>';
-}
+export { visitorHtml };
 
 /** the working elevator for the owner: floor, current fight, comparison numbers. No sign. Pure. */
 export function ownerHtml(model) {

@@ -137,5 +137,126 @@
     "id": "mw4nofaq"
    }
   ]
+ },
+ "re": {
+  "scanned": "2026-11-22",
+  "sites": {
+   "isitchristmas.com": {
+    "url": "https://isitchristmas.com/",
+    "scanned": "2026-11-22",
+    "features": [
+     {
+      "name": "Installable web app (standalone)",
+      "detail": "pwa, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "manifest"
+     },
+     {
+      "name": "Works offline (service worker)",
+      "detail": "pwa, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "service worker sw.js"
+     },
+     {
+      "name": "RSS or Atom feed",
+      "detail": "share, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "link[type$=xml]"
+     },
+     {
+      "name": "Path kept from crawlers /boys/",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "robots.txt"
+     },
+     {
+      "name": "Path kept from crawlers /elves/",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "robots.txt"
+     },
+     {
+      "name": "Path kept from crawlers /girls/",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "robots.txt"
+     },
+     {
+      "name": "Path kept from crawlers /lies/",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "robots.txt"
+     },
+     {
+      "name": "Path kept from crawlers /secrets/",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "robots.txt"
+     },
+     {
+      "name": "Path kept from crawlers /spies/",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "robots.txt"
+     },
+     {
+      "name": "Path kept from crawlers /toys/",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "robots.txt"
+     },
+     {
+      "name": "Path kept from crawlers /truth/",
+      "detail": "route, observed",
+      "paid": false,
+      "verse": "missing",
+      "verse_evidence": "unbuilt (found by reverse engineering)",
+      "found_by": "re",
+      "tag": "observed",
+      "evidence": "robots.txt"
+     }
+    ]
+   }
+  }
  }
 }

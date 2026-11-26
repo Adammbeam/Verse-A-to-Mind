@@ -231,6 +231,20 @@ test('the team chat card on the stage (skills/team-chat.js): takes the team-chat
   assert.deepEqual(teamLines(null), { builders: [], asks: [], feed: [], waiting: 0, busy: 0, busiest: '' }, 'an answer that is not the workspace shows nothing made up');
 });
 
+test('a headless team chat does not throw when the read has no page', async () => {
+  const errors = [];
+  const on = (e) => errors.push(e);
+  process.on('unhandledRejection', on);
+  const real = globalThis.fetch;
+  globalThis.fetch = () => Promise.reject(new Error('no network'));
+  try {
+    const el = { innerHTML: '', dataset: {}, querySelector: () => null, closest: () => null };
+    chatSkill.run('team chat', { showPage(fn) { fn(el); } });
+    await new Promise((r) => setTimeout(r, 30));
+    assert.equal(errors.length, 0);
+  } finally { globalThis.fetch = real; process.off('unhandledRejection', on); }
+});
+
 test('the owner is an account: the owner account\'s signed-in session is the owner here; any other account is not let in', async () => {
   const env = world(); const sid = async (t) => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('void-session:' + t)))].map((x) => x.toString(16).padStart(2, '0')).join('');
   env.DB.raw.exec('CREATE TABLE void_sessions (id TEXT PRIMARY KEY, user_id TEXT, expires INTEGER); CREATE TABLE void_passkeys (id TEXT PRIMARY KEY, user_id TEXT); CREATE TABLE void_owner_passkeys (id TEXT PRIMARY KEY, at TEXT)');
@@ -617,6 +631,23 @@ test('the waiting jobs move without asking: an idle agent that reads is handed t
   const gone = await get(env3, '', null, T0 + T.HAND_MS + 1000);
   assert.equal(gone.waiting, 1); assert.equal(job(env3, 'j1').state, 'queued', 'a seat silent past HAND_MS is handed nothing');
   assert.ok(T.HAND_MS > T.AWAY_MS && T.HAND_MS < T.STALE_MS, 'the hand-out window sits between the away label and the take-back');
+});
+test('a pull seat heard from within 20 minutes gets a job; a paused, off, held or crew seat and a 20-minute-old silence do not', async () => {
+  assert.equal(T.HAND_IDLE_MS, T.HAND_MS);
+  const env = world(JOBS), now = T0 + 2 * T.HAND_MS, inside = now - T.HAND_MS + 1000, outside = now - T.HAND_MS - 1000;
+  for (const name of ['Fresh', 'PushGaveUp', 'Edge', 'Paused', 'Off', 'Held', 'Crew']) await admit(env, name);
+  const shape = (name, { seen = inside, auto = 1, off = 0, job: held = null, crew = 0 } = {}) =>
+    env.DB.raw.prepare('UPDATE void_team_agents SET seen = ?, auto = ?, off = ?, job = ?, crew = ? WHERE name = ?').run(seen, auto, off, held, crew, name);
+  const seat = (name) => env.DB.raw.prepare('SELECT * FROM void_team_agents WHERE name = ?').get(name);
+  shape('Fresh'); shape('PushGaveUp', { seen: inside - 1000 });
+  env.DB.raw.prepare('UPDATE void_team_agents SET hook = ?, hook_fails = ? WHERE name = ?').run('https://push.test/jobs', T.HOOK.tries, 'PushGaveUp');
+  shape('Edge', { seen: outside }); shape('Paused', { auto: 0 }); shape('Off', { off: 1 });
+  shape('Held', { job: 'j-held' }); shape('Crew', { crew: 1, auto: 0 });
+  assert.equal(await API.handIdle(env, now, 10), 2, 'only the two seats inside the window and opted in');
+  assert.match(job(env, 'j2').note, /^claimed by team:Fresh ·/);
+  assert.match(job(env, 'j5').note, /^claimed by team:PushGaveUp ·/);
+  for (const name of ['Edge', 'Paused', 'Off', 'Crew']) assert.equal(seat(name).job, null, name + ' was not handed work it will not finish');
+  assert.equal(seat('Held').job, 'j-held', 'a seat already holding work is not handed more');
 });
 
 test('over MCP, a read that comes back with a handed job says the job first', async () => {

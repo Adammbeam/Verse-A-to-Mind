@@ -42,7 +42,7 @@ export function cartoonOf(text) {
   if (selfPortraitAsk(text)) return { subject: SELF_SUBJECT, self: true };
   const m = CLEAN(text).match(LEAD);
   if (!m) return null;
-  const subject = m[1].replace(/^(?:a|an|the|my|your|some)\s+/, '').replace(/^hard subject$/, 'shipwreck').replace(/\s+(?:please|for me)$/, '').trim();
+  const subject = m[1].replace(/^(?:a|an|the|my|your|some)\s+/, '').replace(/^hard subject$/, 'shipwreck').replace(/\s+(?:please|pls|plz|for me)$/, '').trim();
   if (!subject || SHAPE.test(subject) || NOT_A_SUBJECT.test(subject) || subject.length > 60) return null;
   return { subject };
 }
@@ -152,7 +152,7 @@ async function run(text, api) {
 
 export default {
   name: 'cartoon',
-  examples: ['draw a cartoon cat', 'cartoon version of a dog', 'make a cartoon of a dragon', 'draw a toon cat', 'cartoon version of a plague', 'draw me a robot', 'make a 2d toon dog', 'create a toon style bird', 'funny cartoon dog', 'render a cartoon dragon', 'render a low poly dog', 'style like mickey mouse', 'generate a toon style dog', 'draw yourself', 'what do you look like', 'paint a self portrait'],
+  examples: ['draw a cartoon cat', 'cartoon version of a dog', 'make a cartoon of a dragon', 'draw a toon cat', 'cartoon version of a plague', 'draw me a robot', 'make a 2d toon dog', 'make a 2d toon dog pls', 'create a toon style bird', 'funny cartoon dog', 'render a cartoon dragon', 'render a low poly dog', 'style like mickey mouse', 'generate a toon style dog', 'draw yourself', 'what do you look like', 'paint a self portrait'],
   nearMisses: ['what is a cartoon', 'cartoon network', 'make a clock', 'draw a red square', 'let me draw', 'draw a card', 'who are you', 'what are you'],
   cartoonOf,
   cartoonTake,
@@ -163,7 +163,7 @@ export default {
   suite() {
     const hit = cartoonOf('draw a cartoon cat');
     const take = cartoonTake(hit && hit.subject);
-    const ok = !!hit && hit.subject === 'cat' && take.emoji === '🐱' && take.name === 'Cartoon cat' && cartoonOf('') === null && cartoonOf('what is a cartoon') === null && cartoonOf('draw a red square') === null;
+    const ok = !!hit && hit.subject === 'cat' && cartoonOf('make a 2d toon dog pls')?.subject === 'dog' && take.emoji === '🐱' && take.name === 'Cartoon cat' && cartoonOf('') === null && cartoonOf('what is a cartoon') === null && cartoonOf('draw a red square') === null;
     return { ok, got: take && take.name };
   }
 };

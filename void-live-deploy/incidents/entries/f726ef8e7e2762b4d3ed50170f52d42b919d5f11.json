@@ -1,0 +1,20 @@
+{
+ "at": "2026-11-22T22:17:12.660Z",
+ "sha": "f726ef8e7e2762b4d3ed50170f52d42b919d5f11",
+ "run": "https://github.com/atomeam/void-loop/actions/runs/45072718396",
+ "suite": "browser suite on main",
+ "checks": [
+  "poster wins: on a skill card (phone) the stats chip touches no text, the rarity and collector row included",
+  "will: Verse says what it wants",
+  "router: models are on by default whenever Workers AI is bound; VOID_ANSWER_MODELS=off = the open-web answer and rules-only fixes (no Workers AI call, no D1 write, no route)",
+  "coin: /flip/ shows all 7 things a full answer shows — the flip counter named, the tap and the result said in words (the gate's own rule, the 3 the tower sat at 4 of 7 on)",
+  "suite ran to the end"
+ ],
+ "touched": [
+  "void-live-deploy/skills/families.json",
+  "void-live-deploy/skills/guide.json"
+ ],
+ "shards": [
+  1
+ ]
+}

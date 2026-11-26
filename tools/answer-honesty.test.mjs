@@ -150,9 +150,13 @@ test('the card 5 note, end to end: self route, whole note, my own facts, no clai
   assert.match(all, /smallest-first order behind sycophanthex\.com/, 'the note reached the model whole');
   assert.match(all, /my last card/); assert.match(all, /2026-10-25, commit 630e666fb/); assert.match(all, /The kind of work I am taking on next/);
   assert.match(all, /do not copy them/); assert.match(all, /my record stands/);
-  // the Fixed list opens on my newest shipped row, read from the record (it said 2026-10-29 until rows shipped after that day)
-  const newest = selfJson.shipped.map((r) => r.date).filter((d) => /^\d{4}-\d\d-\d\d$/.test(d)).sort().pop();
-  assert.match(res.answer, new RegExp('\\n\\nFixed:\\n' + newest + ': [\\s\\S]*\\n\\nStill open:\\n'), 'the lists come from my records, under the lead');
+  // the Fixed list opens on a dated row, and the date is one my record carries: self.json is regenerated on deploy, so
+  // shipped rows come and go and the row can be a fixed fact instead (2026-11-21: shipped was empty and the list led
+  // with the gemma switch from the record's facts)
+  const fixed = /\n\nFixed:\n(\d{4}-\d\d-\d\d): [\s\S]*\n\nStill open:\n/.exec(res.answer);
+  assert.ok(fixed, 'the lists come from my records, under the lead');
+  const dates = new Set(String(JSON.stringify(selfJson)).match(/\d{4}-\d\d-\d\d/g) || []);
+  assert.ok(dates.has(fixed[1]), 'the first Fixed row is dated by my record: ' + fixed[1]);
   assert.ok(res.answer.slice(res.answer.indexOf('\n\nStill open:\n')).startsWith('\n\nStill open:\n' + selfJson.tower.target), 'Still open starts with the tower target from my record');
   assert.equal(res.self, true);
   assert.deepEqual(res.sources, []);

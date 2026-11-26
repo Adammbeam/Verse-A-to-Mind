@@ -2143,6 +2143,27 @@
     "host": "flightconnections.com",
     "at": "2026-11-16",
     "id": "mwja5vst"
+   },
+   {
+    "target": "feature:flightconnections-co-f798b366",
+    "feature": "Remembers a setting in the browser: [token]",
+    "host": "flightconnections.com",
+    "at": "2026-11-23",
+    "id": "mwtf1bcn"
+   },
+   {
+    "target": "feature:flightconnections-co-987151e7",
+    "feature": "Remembers a setting in the browser: aws_waf_referrer",
+    "host": "flightconnections.com",
+    "at": "2026-11-23",
+    "id": "mwtf1bsj"
+   },
+   {
+    "target": "feature:flightconnections-co-1ea371d9",
+    "feature": "Remembers a setting in the browser: awswaf_token_refresh_timestamp",
+    "host": "flightconnections.com",
+    "at": "2026-11-23",
+    "id": "mwtf1c84"
    }
   ]
  },
@@ -3081,6 +3102,7 @@
        "section cho n mo t go i di ch vu",
        "button đa ng nha p",
        "button tra tie n",
+       "button privacy manager",
        "button hu y",
        "button lu u",
        "button đo ng y xo a",
@@ -3128,6 +3150,7 @@
        "section 请选择一个套餐",
        "button 登录",
        "button 支付",
+       "button privacy manager",
        "button 取消",
        "button 保存",
        "button 是 删除",
@@ -3175,6 +3198,7 @@
        "section 請選擇一個套餐",
        "button 登入",
        "button 支付",
+       "button privacy manager",
        "button 取消",
        "button 保存",
        "button 是 刪除",
@@ -3654,6 +3678,7 @@
        "section password",
        "section choose your premium plan",
        "button pay",
+       "button privacy manager",
        "button cancel",
        "button save",
        "button yes delete",
@@ -3682,8 +3707,7 @@
        "section to algeria",
        "section to algeria with a stopover",
        "section to tunisia",
-       "section to tunisia with a stopover",
-       "button privacy manager"
+       "section to tunisia with a stopover"
       ]
      },
      {
@@ -6596,6 +6620,9 @@
       "kind": "button",
       "templates": [
        "home",
+       "page:/vn",
+       "page:/cn",
+       "page:/tw",
        "page:/airports-by-country",
        "page:/airlines",
        "page:/airport-codes",
@@ -14228,9 +14255,9 @@
      "/flights/routes/",
      "/members/"
     ],
-    "crawled": "2026-11-18"
+    "crawled": "2026-11-19"
    }
   },
-  "updated": "2026-11-18"
+  "updated": "2026-11-19"
  }
 }

@@ -22,7 +22,7 @@ test('"edit" is a word, not a substring: credit and edited are not edit asks', (
 });
 test('which tab or page each ask opens', () => {
   assert.deepEqual(photoAsk('crop a photo'), { slug: '', tab: 'crop' }); assert.equal(photoHref({ slug: '', tab: 'crop' }), '/photos/?tab=crop');
-  const want = { 'crop a photo': '/photos/?tab=crop', 'view the exif of a photo': '/photos/details/?tab=info', squoosh: '/photos/?tab=out', tinypng: '/photos/?tab=out', 'tiny png': '/photos/?tab=out', photopea: '/photos/?tab=adj', iloveimg: '/photos/?tab=crop', exifeditor: '/photos/?tab=info', 'exif tools': '/photos/details/', 'convert png to webp': '/photos/', 'compress an image': '/photos/',
+  const want = { 'crop a photo': '/photos/?tab=crop', 'view the exif of a photo': '/photos/?tab=info', squoosh: '/photos/?tab=out', tinypng: '/photos/?tab=out', 'tiny png': '/photos/?tab=out', photopea: '/photos/?tab=draw', iloveimg: '/photos/?tab=out', 'i love img': '/photos/?tab=out', 'convert png to webp': '/photos/', 'compress an image': '/photos/',
     'add text to a photo': '/photos/?tab=text', 'filter my selfie': '/photos/?tab=fil', 'annotate a screenshot': '/photos/?tab=draw', 'photo cropper': '/photos/?tab=crop', 'image compressor': '/photos/?tab=out', 'brighten my photo': '/photos/?tab=adj' };
   for (const [a, h] of Object.entries(want)) assert.equal(href(a), h, a);
   assert.equal(photoAsk('compress my image to 100kb'), null); assert.equal(photoAsk('strip the exif from a photo'), null);
@@ -30,9 +30,9 @@ test('which tab or page each ask opens', () => {
 });
 test('the card: heading, the tools it names, the on-device line, its kind', () => {
   const el = card('photo editor');
-  assert.equal(el.dataset.cardKind, 'Photo tools');
-  assert.match(el.innerHTML, /^<h2>Photo tools<\/h2>/);
+  assert.equal(el.dataset.cardKind, 'Photo Editor');
+  assert.match(el.innerHTML, /^<h2>Photo Editor<\/h2>/);
   assert.match(el.innerHTML, /Compress and convert a photo \(JPEG, PNG, WebP, AVIF\)/);
-  assert.match(el.innerHTML, />Open the photo tools<\/a>/);
+  assert.match(el.innerHTML, />Open the photo editor<\/a>/);
   assert.match(el.innerHTML, /the picture is never uploaded, and the page opens offline/);
 });

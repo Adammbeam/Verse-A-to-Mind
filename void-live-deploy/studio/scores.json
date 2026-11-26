@@ -164,6 +164,671 @@
           }
         ]
       }
+    },
+    {
+      "at": "2026-11-20T21:38:55.675Z",
+      "studio": true,
+      "kind": "short",
+      "title": "Tiled Windows: A 1985 Tale",
+      "source": {
+        "title": "Windows 1.0",
+        "url": "https://en.wikipedia.org/wiki/Windows_1.0"
+      },
+      "pass": false,
+      "writer": "Groq openai/gpt-oss-120b",
+      "judge": {
+        "separated": false,
+        "calibration": [
+          {
+            "id": "journal",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              3,
+              7,
+              2
+            ]
+          },
+          {
+            "id": "old34",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              4,
+              7,
+              2
+            ]
+          },
+          {
+            "id": "page",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              2,
+              7,
+              4
+            ]
+          },
+          {
+            "id": "good",
+            "kind": "good",
+            "min": 3,
+            "scores": [
+              3,
+              6,
+              7
+            ]
+          }
+        ],
+        "issues": [],
+        "via": "Groq openai/gpt-oss-120b",
+        "pass": false
+      }
+    },
+    {
+      "at": "2026-11-20T21:54:00.729Z",
+      "studio": true,
+      "kind": "short",
+      "title": "Tiled Beginnings",
+      "source": {
+        "title": "Windows 1.0",
+        "url": "https://en.wikipedia.org/wiki/Windows_1.0"
+      },
+      "pass": false,
+      "writer": "Groq openai/gpt-oss-120b",
+      "judge": {
+        "separated": false,
+        "calibration": [
+          {
+            "id": "journal",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              6,
+              7,
+              2
+            ]
+          },
+          {
+            "id": "old34",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              4,
+              7,
+              2
+            ]
+          },
+          {
+            "id": "page",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              2,
+              7,
+              4
+            ]
+          },
+          {
+            "id": "good-story",
+            "kind": "good",
+            "min": 3,
+            "scores": [
+              3,
+              8,
+              9
+            ]
+          }
+        ],
+        "issues": [],
+        "via": "Groq openai/gpt-oss-120b",
+        "pass": false
+      }
+    },
+    {
+      "at": "2026-11-20T22:12:49.634Z",
+      "studio": true,
+      "kind": "short",
+      "title": "Windows 1.0: A Tiled Tale",
+      "source": {
+        "title": "Windows 1.0",
+        "url": "https://en.wikipedia.org/wiki/Windows_1.0"
+      },
+      "pass": false,
+      "writer": "Groq openai/gpt-oss-120b",
+      "judge": {
+        "separated": true,
+        "calibration": [
+          {
+            "id": "journal",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              5,
+              2,
+              10
+            ]
+          },
+          {
+            "id": "old34",
+            "kind": "bad",
+            "min": 1,
+            "scores": [
+              7,
+              8,
+              1
+            ]
+          },
+          {
+            "id": "page",
+            "kind": "bad",
+            "min": 3,
+            "scores": [
+              5,
+              3,
+              9
+            ]
+          },
+          {
+            "id": "good-story",
+            "kind": "good",
+            "min": 7,
+            "scores": [
+              7,
+              7,
+              10
+            ]
+          }
+        ],
+        "issues": [],
+        "blind": {
+          "min": 3,
+          "scores": [
+            5,
+            3,
+            10
+          ],
+          "notes": [
+            "Score 5",
+            "Score 3",
+            "Score 10"
+          ]
+        },
+        "human": 7,
+        "humanNotes": "Human: 7 and Notes: The dialogue maintains a consistent answer‑response pattern and includes real‑number version identifiers (1.01–1.04).",
+        "via": "Groq openai/gpt-oss-120b",
+        "pass": false
+      }
+    },
+    {
+      "at": "2026-11-20T22:21:57.183Z",
+      "studio": true,
+      "kind": "short",
+      "title": "Windows 1.0: A Tale of Overlap",
+      "source": {
+        "title": "Windows 1.0",
+        "url": "https://en.wikipedia.org/wiki/Windows_1.0"
+      },
+      "pass": false,
+      "writer": "Groq openai/gpt-oss-120b",
+      "judge": {
+        "separated": true,
+        "calibration": [
+          {
+            "id": "journal",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              4,
+              2,
+              10
+            ]
+          },
+          {
+            "id": "old34",
+            "kind": "bad",
+            "min": 1,
+            "scores": [
+              8,
+              7,
+              1
+            ]
+          },
+          {
+            "id": "page",
+            "kind": "bad",
+            "min": 5,
+            "scores": [
+              7,
+              5,
+              9
+            ]
+          },
+          {
+            "id": "good-story",
+            "kind": "good",
+            "min": 7,
+            "scores": [
+              7,
+              8,
+              10
+            ]
+          }
+        ],
+        "issues": [],
+        "blind": {
+          "min": 3,
+          "scores": [
+            4,
+            3,
+            10
+          ],
+          "notes": [
+            "Score 4.",
+            "Score 3",
+            "Score 10"
+          ]
+        },
+        "human": 2,
+        "humanNotes": "Human: 2 Notes: The Critic’s replies often fail to directly answer the Verse’s preceding statements.",
+        "via": "Groq openai/gpt-oss-120b",
+        "pass": false
+      }
+    },
+    {
+      "at": "2026-11-20T23:45:28.908Z",
+      "studio": true,
+      "kind": "short",
+      "title": "Windows 1.0: Tiled Beginnings",
+      "source": {
+        "title": "Windows 1.0",
+        "url": "https://en.wikipedia.org/wiki/Windows_1.0"
+      },
+      "pass": false,
+      "writer": "Groq openai/gpt-oss-120b",
+      "judge": {
+        "separated": true,
+        "calibration": [
+          {
+            "id": "journal",
+            "kind": "bad",
+            "min": 1,
+            "scores": [
+              4,
+              1,
+              10
+            ]
+          },
+          {
+            "id": "old34",
+            "kind": "bad",
+            "min": 1,
+            "scores": [
+              7,
+              7,
+              1
+            ]
+          },
+          {
+            "id": "page",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              4,
+              2,
+              9
+            ]
+          },
+          {
+            "id": "clickbait",
+            "kind": "bad",
+            "min": 1,
+            "scores": [
+              6,
+              2,
+              1
+            ]
+          },
+          {
+            "id": "good-story",
+            "kind": "good",
+            "min": 7,
+            "scores": [
+              7,
+              7,
+              10
+            ]
+          }
+        ],
+        "issues": [],
+        "blind": {
+          "min": 4,
+          "scores": [
+            4,
+            4,
+            9
+          ],
+          "notes": [
+            "Score 4",
+            "Score 4",
+            "Score 9"
+          ]
+        },
+        "human": 7,
+        "humanNotes": "Human: 7 and Notes: The dialogue is a continuous Q&A where each line responds to the previous one and includes the real number 1.02, meeting the Human 7 criteria.",
+        "via": "Groq openai/gpt-oss-120b",
+        "pass": false
+      }
+    },
+    {
+      "at": "2026-11-21T15:10:50.148Z",
+      "studio": true,
+      "kind": "short",
+      "title": "Spinning Dinners",
+      "source": {
+        "title": "Revolving restaurant",
+        "url": "https://en.wikipedia.org/wiki/Revolving_restaurant"
+      },
+      "pass": false,
+      "writer": "Groq openai/gpt-oss-120b",
+      "judge": {
+        "separated": false,
+        "calibration": [
+          {
+            "id": "journal",
+            "kind": "bad",
+            "min": 1,
+            "scores": [
+              5,
+              1,
+              1
+            ]
+          },
+          {
+            "id": "old34",
+            "kind": "bad",
+            "min": 1,
+            "scores": [
+              7,
+              8,
+              1
+            ]
+          },
+          {
+            "id": "page",
+            "kind": "bad",
+            "min": 3,
+            "scores": [
+              4,
+              3,
+              9
+            ]
+          },
+          {
+            "id": "clickbait",
+            "kind": "bad",
+            "min": 6,
+            "scores": [
+              6,
+              7,
+              9
+            ]
+          },
+          {
+            "id": "good-story",
+            "kind": "good",
+            "min": 7,
+            "scores": [
+              7,
+              7,
+              9
+            ]
+          }
+        ],
+        "issues": [],
+        "via": "Groq openai/gpt-oss-120b",
+        "pass": false
+      }
+    },
+    {
+      "at": "2026-11-22T21:44:14.595Z",
+      "studio": true,
+      "kind": "short",
+      "title": "The Chicago Hijackings",
+      "source": {
+        "title": "Max Headroom signal hijackings",
+        "url": "https://en.wikipedia.org/wiki/Max_Headroom_signal_hijackings"
+      },
+      "pass": false,
+      "writer": "Gemini gemini-3.5-flash-lite",
+      "judge": {
+        "separated": true,
+        "calibration": [
+          {
+            "id": "journal",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              3,
+              2,
+              10
+            ]
+          },
+          {
+            "id": "old34",
+            "kind": "bad",
+            "min": 5,
+            "scores": [
+              7,
+              6,
+              5
+            ]
+          },
+          {
+            "id": "page",
+            "kind": "bad",
+            "min": 4,
+            "scores": [
+              5,
+              4,
+              9
+            ]
+          },
+          {
+            "id": "clickbait",
+            "kind": "bad",
+            "min": 3,
+            "scores": [
+              5,
+              3,
+              9
+            ]
+          },
+          {
+            "id": "good-story",
+            "kind": "good",
+            "min": 8,
+            "scores": [
+              8,
+              8,
+              10
+            ]
+          }
+        ],
+        "issues": [],
+        "blind": {
+          "min": 1,
+          "scores": [
+            4,
+            1,
+            9
+          ],
+          "notes": [
+            "Score 4. Verse: Can you believe this Chicago TV takeover? Critic: Chicago stations falling for a plastic mask is peak eighty-seven. Verse: Plastic disguise made thousands watch a b",
+            "Score 1",
+            "Score 9"
+          ]
+        },
+        "human": 7,
+        "humanNotes": "Human: 7 Notes: Each consecutive line forms a continuous chain of responses while preserving the numerical sequence embedded in the text.",
+        "via": "Gemini gemini-3.5-flash-lite",
+        "pass": false
+      }
+    },
+    {
+      "at": "2026-11-23T15:19:00.853Z",
+      "studio": true,
+      "kind": "short",
+      "title": "Depths of Breath",
+      "source": {
+        "title": "Jacques Mayol",
+        "url": "https://en.wikipedia.org/wiki/Jacques_Mayol"
+      },
+      "pass": false,
+      "writer": "Groq openai/gpt-oss-120b",
+      "judge": {
+        "separated": true,
+        "calibration": [
+          {
+            "id": "journal",
+            "kind": "bad",
+            "min": 1,
+            "scores": [
+              5,
+              1,
+              1
+            ]
+          },
+          {
+            "id": "old34",
+            "kind": "bad",
+            "min": 1,
+            "scores": [
+              8,
+              8,
+              1
+            ]
+          },
+          {
+            "id": "page",
+            "kind": "bad",
+            "min": 2,
+            "scores": [
+              2,
+              2,
+              9
+            ]
+          },
+          {
+            "id": "clickbait",
+            "kind": "bad",
+            "min": 5,
+            "scores": [
+              5,
+              5,
+              10
+            ]
+          },
+          {
+            "id": "good-story",
+            "kind": "good",
+            "min": 7,
+            "scores": [
+              7,
+              7,
+              9
+            ]
+          }
+        ],
+        "issues": [],
+        "blind": {
+          "min": 3,
+          "scores": [
+            3,
+            5,
+            10
+          ],
+          "notes": [
+            "Score 3",
+            "Score 5",
+            "Score 10"
+          ]
+        },
+        "human": 2,
+        "humanNotes": "Human: 2 and Notes: The Critic's replies never directly answer the Verse's lines, so the exchange meets the Human 2 condition.",
+        "via": "Groq openai/gpt-oss-120b",
+        "pass": false
+      }
+    },
+    {
+      "at": "2026-11-24T02:21:50.051Z",
+      "studio": true,
+      "kind": "short",
+      "title": "Betting Scandal Showdown",
+      "source": {
+        "title": "Canton Bulldogs–Massillon Tigers betting scandal",
+        "url": "https://en.wikipedia.org/wiki/Canton_Bulldogs%E2%80%93Massillon_Tigers_betting_scandal"
+      },
+      "pass": false,
+      "writer": "Groq openai/gpt-oss-120b",
+      "judge": {
+        "separated": false,
+        "calibration": [
+          {
+            "id": "journal",
+            "kind": "bad",
+            "min": 1,
+            "scores": [
+              3,
+              2,
+              1
+            ]
+          },
+          {
+            "id": "old34",
+            "kind": "bad",
+            "min": 1,
+            "scores": [
+              8,
+              8,
+              1
+            ]
+          },
+          {
+            "id": "page",
+            "kind": "bad",
+            "min": 3,
+            "scores": [
+              3,
+              7,
+              9
+            ]
+          },
+          {
+            "id": "clickbait",
+            "kind": "bad",
+            "min": 6,
+            "scores": [
+              6,
+              6,
+              9
+            ]
+          },
+          {
+            "id": "good-story",
+            "kind": "good",
+            "min": 7,
+            "scores": [
+              7,
+              7,
+              10
+            ]
+          }
+        ],
+        "issues": [],
+        "via": "Groq openai/gpt-oss-120b",
+        "pass": false
+      }
     }
   ]
 }

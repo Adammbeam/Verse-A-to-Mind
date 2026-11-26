@@ -1,5 +1,6 @@
 /** Glyph Verse: six guesses of a five-letter word from Verse's own list. Verse guesses from the same list, one guess behind. */
 export const id = 'glyph-verse', W = 260, H = 220, CAP = 8000;
+export const whatsNew = 'Update 1: Every word feels within reach as Verse plays right alongside you.';
 export const WORDS = ['amber', 'brine', 'cedar', 'drift', 'ember', 'flint', 'grove', 'haven', 'ivory', 'jewel', 'knoll', 'lunar', 'maple', 'noble', 'orbit', 'prism'];
 const LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 export function mark(secret, guess) {

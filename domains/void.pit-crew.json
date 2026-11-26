@@ -1,12 +1,17 @@
 {
-  "at": "2026-11-17T16:30:21.404Z",
+  "at": "2026-11-24T07:29:39.121Z",
   "mode": "dry-run",
   "max_per_run": 3,
   "selected": [
     {
-      "id": "ask-20261117-0226-2",
-      "ask": "Fix the factorial(0) code exam to ensure it returns 1.",
-      "target": "voice:ask-20261117-0226-2"
+      "id": "ask-20261124-0416-1",
+      "ask": "Reduce the 20 probes causing the 12042 ms visitor pass delay.",
+      "target": "voice:ask-20261124-0416-1"
+    },
+    {
+      "id": "ask-20261124-0407-1",
+      "ask": "Reduce the number of probes during the visitor pass.",
+      "target": "voice:ask-20261124-0407-1"
     }
   ],
   "note": "Small reversible Verse asks only. No spend. Owner confirm still required for bridge delivery."

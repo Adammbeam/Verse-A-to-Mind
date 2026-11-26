@@ -1,0 +1,19 @@
+{
+ "at": "2026-11-22T22:39:23.340Z",
+ "sha": "de3c5717544dbca9a9eb4dbda921426299ee98f2",
+ "run": "https://github.com/atomeam/void-loop/actions/runs/45073945509",
+ "suite": "browser suite on main",
+ "checks": [
+  "poster wins: on a skill card (phone) the stats chip touches no text, the rarity and collector row included",
+  "coin: /flip/ shows all 7 things a full answer shows — the flip counter named, the tap and the result said in words (the gate's own rule, the 3 the tower sat at 4 of 7 on)",
+  "suite ran to the end"
+ ],
+ "touched": [
+  "tools/test_void.mjs",
+  "tools/will.py",
+  "void-live-deploy/lib/searches.js"
+ ],
+ "shards": [
+  1
+ ]
+}

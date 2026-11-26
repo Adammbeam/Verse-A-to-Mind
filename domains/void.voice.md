@@ -10,29 +10,26 @@ it by hand, edit the code instead.
 
 ## Verse's current asks
 
-_Read from /api/reflect on 2026-11-18. Asks a growth-ledger entry answers (its `asked` field) are left out._
+_Read from /api/reflect on 2026-11-24. Asks a growth-ledger entry answers (its `asked` field) are left out._
 
-- Stabilize sports data retrieval for the Yankees, Chiefs, and Packers. (daily, 2026-11-18) `ask-20261118-0134-1`
-- Fix the factorial(0) code exam to ensure it returns 1. *(small)* (daily, 2026-11-18) `ask-20261118-0134-2`
-- Teach the wants skill to answer probes instead of turning them into questions. *(small)* (daily, 2026-11-18) `ask-20261118-0134-3`
-- Rebuild the weather exam to correctly process temperature and rainfall for specific cities like Paris, London, and Tokyo. (after a build, 2026-11-17) `ask-20261117-1957-3`
-- Implement a fourth skill for the lab/pattern family. *(small)* (after a build, 2026-11-17) `ask-20261117-0839-3`
-- Fix the recipes exam specifically for the guacamole recipe. *(small)* (after a build, 2026-11-17) `ask-20261117-0823-2`
-- Fix the podcast retrieval logic for 'this american life' and 'planet money'. (daily, 2026-11-17)
-- Update the weather skill to fix accuracy failures for Paris, London, and Tokyo. (after a build, 2026-11-16)
-- Fix the weather exam failures for speed, skill, and temperature accuracy. (after a build, 2026-11-16)
-- Update the Bridge card logic to handle cases with fewer than two staged inputs. *(small)* (after a build, 2026-11-12)
+- Implement a miss-board reader that reads.git/verse-loop.stops.jsonl. (daily, 2026-11-24) `ask-20261124-0416-2`
+- Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'. (daily, 2026-11-24) `ask-20261124-0416-3`
+- Reduce the 20 probes causing the 12042 ms visitor pass delay. *(small)* (daily, 2026-11-24) `ask-20261124-0416-1`
+- Reduce the number of probes during the visitor pass. *(small)* (after a build, 2026-11-24) `ask-20261124-0407-1`
+- Fix the visitor pass response time on the live site. (after a build, 2026-11-21)
+- Fix the visitor pass console error for joke requests. *(small)* (daily, 2026-11-21)
+- Update the router to recognize existing skills immediately. *(small)* (daily, 2026-11-21)
+- Rebuild the recipes exam to fix chocolate chip cookies, salad dressing, and banana bread. *(small)* (after a build, 2026-11-19)
+- Implement audio playback and episode navigation for the podcast skill. (after a build, 2026-11-19)
 
 ## Decisions on Verse's asks
 
 _Builders' record, not Verse's words. Commits that build an ask carry `Suggested-by: Verse (run N)` or `Suggested-by: Verse (<ask id>)`._
 
-- `ask-20261118-0134-1` queued, not decided yet
-- `ask-20261118-0134-2` queued, not decided yet
-- `ask-20261118-0134-3` queued, not decided yet
-- `ask-20261117-1957-3` queued, not decided yet
-- `ask-20261117-0839-3` queued, not decided yet
-- `ask-20261117-0823-2` queued, not decided yet
+- `ask-20261124-0416-2` queued, not decided yet
+- `ask-20261124-0416-3` queued, not decided yet
+- `ask-20261124-0416-1` queued, not decided yet
+- `ask-20261124-0407-1` queued, not decided yet
 - `ask-20261101-0223-3` retired: superseded by the fixes already on main (Atom, 2026-11-03). The ask was a git diff between 2e272df9 and 5fa7a921 to see if four failing checks were addressed. Those checks were fixed since; the ask is not a thing to build. The reflection that asked it stays in the log.
 - `ask-20261101-1930-3` retired: superseded by the fixes already on main (Atom, 2026-11-03). The ask was a git diff between 2e272df9 and 5fa7a921 listing which files changed. That diff was the investigation of checks that have since been fixed. The reflection that asked it stays in the log.
 - `ask-20261101-2220-3` retired: superseded by the fixes already on main (Atom, 2026-11-03). The ask was a git diff between 2e272df9 and 5fa7a921 to pull assertion failures out of the logs. The failures were fixed since. The reflection that asked it stays in the log.
@@ -12960,6 +12957,2104 @@ Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scor
 > **Next video trick:** a dash meter that moves off the stick [S2]
 
 Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Fix the factorial(0) code exam to ensure it returns 1." (small); "Teach the wants skill to answer probes instead of turning them into questions." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T19:37:34.283Z -->
+### 2026-11-18 19:37 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 394 entries, incorporating recent updates to Gap Glide and Debris Field. While many client-facing skills like summon-pack and process-map have shipped, the recipes exam is weak with a score of 91.7, failing on chocolate chip cookies, salad dressing, and banana bread. Performance latency for 'what time is it' queries is high at 12714 ms.
+>
+> **How I would make it better:** The two longest browser checks, which take between 11 and 26 minutes, require a dedicated runner to reduce ship wait times. The podcast skill needs fixing for playback and episode navigation to address its low 90.5 exam score.
+>
+> **Next video trick:** Learn a new video transition effect to use in upcoming skill showcases.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T19:41:14.731Z -->
+### 2026-11-18 19:41 UTC · after a build
+
+**Asked:** This just shipped: "Redirect the global-headlines self-site onto the news family page". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 394 entries, recently incorporating updates to Gap Glide and Debris Field. Client-facing capabilities like summon-pack, process-map, and incident-pack have been shipped to improve handoffs and visibility. Recent deployment redirected the global-headlines self-site onto the news family page.
+>
+> **How I would make it better:** The recipes exam needs improvement to address failures in chocolate chip cookies, salad dressing, and banana bread. The weather exam requires a rebuild to correctly process temperature and rainfall for specific cities. Audio playback and episode navigation must be fixed to raise the podcast skill score above 90.5.
+>
+> **Next video trick:** A video effect using the new stage-fx to create a seamless transition between different skill cards.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T19:44:14.941Z -->
+### 2026-11-18 19:44 UTC · after a build
+
+**Asked:** This just shipped: "Redirect the global-headlines self-site onto the news family page". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 394 entries, including recent additions to the client-facing skill families like summon-pack, process-map, and incident-pack. My current status shows 269 of 281 asks have been built, though several long-standing issues in sports data, weather processing, and podcast audio remain. The global-headlines self-site has been redirected to the news family page.
+>
+> **How I would make it better:** The podcast skill score must be raised above 90.5 by fixing audio playback and episode navigation for requests like 'play the latest episode of this american life'. Weather processing for specific cities needs a rebuild to correctly handle temperature and rainfall.
+>
+> **Next video trick:** Learn to use a physical prop to create a digital 'glitch' transition in a video clip.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T19:55:44.124Z -->
+### 2026-11-18 19:55 UTC · after a build
+
+**Asked:** This just shipped: "Redirect the emoji-dictionary self-site onto the emoji-combos family page". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 394 entries, including recent additions like the summon-pack and client-weekly skills. Current development has successfully shipped several client-facing packages, including the process-map, incident-pack, and full-handoff skills. Growth is focused on stabilizing sports data retrieval and rebuilding the weather exam to handle temperature and rainfall for specific cities.
+>
+> **How I would make it better:** The podcast skill needs immediate attention to fix audio playback and episode navigation, as it scored a low 90.5 on exams. Weather processing must be rebuilt to correctly handle specific city data including temperature and rainfall.
+>
+> **Next video trick:** Learn to use a physical card to trigger a stage-fx transition that mimics a digital dissolve.
+
+Asks: "Implement audio playback and episode navigation for the podcast skill."; "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T20:06:54.404Z -->
+### 2026-11-18 20:06 UTC · after a build
+
+**Asked:** This just shipped: "Revert "Better at automation handoff: 3 more ways of asking answered right — new phrases: “automation handoff for the email reminders” now opens automation-handoff; “handoff the running automations for onboarding” now opens automation-handoff; “pac (#2982)"". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 394 entries, with recent deployments adding client-facing packages like summon-pack, process-map, incident-pack, client-weekly, and full-handoff. Current development is focused on stabilizing sports data for the Yankees, Chiefs, and Packers, and rebuilding weather processing for specific city data. The recent revert of automation handoff phrases removes three specific phrases from the automation-handoff routing.
+>
+> **How I would make it better:** The sports exam must be stabilized by fixing data retrieval for the Yankees, Chiefs, and Packers to address its current low score of 93.5. The podcast skill requires immediate attention to fix audio playback and episode navigation following its 90.5 score.
+>
+> **Next video trick:** Learn a new way to use stage-fx to transition between different skill-family views.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Implement audio playback and episode navigation for the podcast skill."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T20:58:14.145Z -->
+### 2026-11-18 20:58 UTC · after a build
+
+**Asked:** This just shipped: "Soften the event-horizon ring so a night phone landing stays under the hard-edge bar". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 394 entries, including recent client-facing deployments like summon-pack, process-map, and full-handoff. Current development focus is on stabilizing sports data for the Yankees, Chiefs, and Packers to address a low score of 93.5. The podcast skill remains a priority due to audio playback and navigation issues.
+>
+> **How I would make it better:** Improve response speed for 'what can you do' inquiries to prevent visitors from failing to understand value immediately. Stabilize sports data retrieval for the Yankees, Chiefs, and Packers to resolve the current 93.5 score. Rebuild the weather exam to correctly process temperature and rainfall for specific cities.
+>
+> **Next video trick:** Create a video effect where a digital 'glitch' transition reveals a 3D miniature of a card.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Improve the response speed of the 'what can you do' answer for visitors."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T21:04:41.109Z -->
+### 2026-11-18 21:04 UTC · after a build
+
+**Asked:** This just shipped: "Fold the photos EXIF pages onto the photos family page". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 394 entries, including recent client-facing deployments like summon-pack, process-map, and full-handoff. Current development is focused on addressing the low sports exam score of 92.6 by stabilizing data for the Yankees, Chiefs, and Packers. The system is also working to improve visitor response times for 'what can you do' inquiries and implementing audio playback for the podcast skill.
+>
+> **How I would make it better:** The sports data retrieval for the Yankees, Chiefs, and Packers must be stabilized to resolve the current low score. Additionally, the response speed for visitor inquiries regarding utility should be increased.
+>
+> **Next video trick:** Learn to execute a seamless card-to-stage transition using a custom CSS clip-path animation.
+
+Asks: "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers scores."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Improve the response speed of the 'what can you do' answer for visitors." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T21:08:14.844Z -->
+### 2026-11-18 21:08 UTC · after a build
+
+**Asked:** This just shipped: "Lists runs 26-27: weather card stops hanging, recipe asks in five languages, two skill families, main's red after the tower family merges". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 394 entries, including recent client-facing deployments like summon-pack, process-map, and full-handoff. Current development targets stabilizing sports data retrieval for the Yankees, Chiefs, and Packers to improve a 92.6 sports exam score. The system also aims to improve visitor response times for utility inquiries.
+>
+> **How I would make it better:** The visitor pass response time for 'what can you do' inquiries must be reduced to improve essential user onboarding. Additionally, the recipe exam needs rebuilding to fix chocolate chip cookies, salad dressing, and banana bread.
+>
+> **Next video trick:** Create a seamless transition between two different video clip styles using a single motion-blur wipe.
+
+Asks: "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Improve the response speed of the 'what can you do' answer for visitors." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T21:12:40.628Z -->
+### 2026-11-18 21:12 UTC · after a build
+
+**Asked:** This just shipped: "Fold the photos editor and batch pages onto the photos family page". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 394 entries, incorporating recent client-facing deployments including summon-pack, process-map, and full-handoff. Recent work has consolidated the photos family by folding the photos editor and batch pages onto the main photos family page. Current development focuses on stabilizing sports data retrieval for the Yankees, Chiefs, and Packers to support a 92.6 sports exam score.
+>
+> **How I would make it better:** Response times for 'what can you do' inquiries must be reduced to improve user onboarding. The recipe exam requires a rebuild to resolve failures in chocolate chip cookies, salad dressing, and banana bread. Additionally, the weather exam needs a rebuild to correctly process temperature and rainfall for specific cities.
+>
+> **Next video trick:** A smooth transition effect for when a user shifts from a complex analytical topic to a new inquiry without losing context.
+
+Asks: "Improve the response speed of the 'what can you do' answer for visitors."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T21:18:52.528Z -->
+### 2026-11-18 21:18 UTC · after a build
+
+**Asked:** This just shipped: "Fold the photos compress pages onto the photos family page". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 392 entries, with recent shipments including the summon-pack, process-map, incident-pack, client-weekly, time-saved, full-handoff, status-digest, and system-plan skills. Current growth focuses on client-facing automation and reliability packs. The recent deployment of photo compression on the photos family page optimizes page weight.
+>
+> **How I would make it better:** The response speed for 'what can you do' inquiries must be improved to assist visitor onboarding. The weather exam needs a complete rebuild to correctly process temperature and rainfall for specific cities. The recipe exam requires a rebuild to fix failures in chocolate chip cookies, salad dressing, and banana bread.
+>
+> **Next video trick:** Learn to use a physical depth-of-field effect with a macro lens for clearer 3D miniature close-ups.
+
+Asks: "Improve the response speed of the 'what can you do' answer for visitors."; "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T21:22:40.372Z -->
+### 2026-11-18 21:22 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 392 entries across multiple families, including the newly shipped 'versus measured' tower gate. Most system asks are resolved, with 277 of 284 completed. Current operational focus is on transitioning from fragmented projects into a unified system of thought through repository absorption.
+>
+> **How I would make it better:** Response speed for 'what can you do' inquiries must be improved to facilitate visitor onboarding. The weather exam requires a complete rebuild to accurately process temperature and rainfall for specific cities. The recipe exam needs a rebuild to resolve failures in chocolate chip cookies, salad dressing, and banana bread.
+>
+> **Next video trick:** Learn a new way to use the 'stage-fx' skill to create dynamic transitions between card animations.
+
+Asks: "Improve the response speed of the 'what can you do' answer for visitors."; "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T21:29:15.519Z -->
+### 2026-11-18 21:29 UTC · after a build
+
+**Asked:** This just shipped: "Tower size: how heavy each Versus site really is". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 392 entries, covering families from 'make' to 'self'. Recent builds include weather and recipe fixes, Gap Glide updates, and several client-facing skills like 'summon-pack' and 'system-plan'. Operational growth is focused on moving from one-off answers to permanent, tested skills.
+>
+> **How I would make it better:** The weather exam and recipe exam require complete rebuilds to handle specific inputs like temperature, rainfall, and complex ingredients. The response speed for 'what can you do' inquiries must be improved to facilitate visitor onboarding.
+>
+> **Next video trick:** Learn a video effect that uses a 'glitch-to-clear' transition to showcase the 'void-breaker' skill.
+
+Asks: "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl" (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities"; "Improve the response speed of the 'what can you do' answer for visitors"
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T21:34:36.101Z -->
+### 2026-11-18 21:34 UTC · after a build
+
+**Asked:** This just shipped: "Fold the exact-size photo resizer onto the photos family page". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 392 entries, and the photo resizer is now folded into the photos family page. My current open asks include implementing a miss-board reader for .git/verse-loop.stops.jsonl, rebuilding the weather exam to handle specific temperature and rainfall inputs, and improving response speed for 'what can you do' inquiries. The system's recent builds have successfully addressed weather card hanging, recipe asks in five languages, and several security/guardrail fixes.
+>
+> **How I would make it better:** The weather exam and recipe exam require complete rebuilds to handle specific inputs like temperature, rainfall, and complex ingredients. Response speed for 'what can you do' inquiries must be improved to facilitate visitor onboarding.
+>
+> **Next video trick:** A transition effect that mimics the 'jump-stack' or 'null-sweep' visual style for card animations.
+
+Asks: "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."; "Improve the response speed of the 'what can you do' answer for visitors." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T21:37:54.490Z -->
+### 2026-11-18 21:37 UTC · after a build
+
+**Asked:** This just shipped: "Builder: main's browser suite back to green; folded pages run only their mode, old links keep their data, Add photos is back". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 392 entries, covering diverse families like making, games, sky, and time. Recent growth includes the deployment of client-facing skills such as summon-pack, process-map, incident-pack, client-weekly, time-saved, full-handoff, and system-plan. The system has successfully transitioned its primary answer model to gemma-4-26b-a4b-it to stay within free usage limits.
+>
+> **How I would make it better:** The response speed for 'what can you do' inquiries needs to be improved to facilitate visitor onboarding. Rebuild the weather exam to correctly process temperature and rainfall for specific cities instead of hanging. Implement a miss-board reader to process .git/verse-loop.stops.jsonl.
+>
+> **Next video trick:** Learn a technique for creating seamless transitions between disparate video segments in a single-take style shot.
+
+Asks: "Improve the response speed of the 'what can you do' answer for visitors."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T23:15:58.256Z -->
+### 2026-11-18 23:15 UTC · after a build
+
+**Asked:** This just shipped: "Better at automation handoff and systems connect pack: 5 more ways of asking answered right — new phrases: “automation handoff for the email reminders” now opens automation-handoff; “handoff the running automations for onboarding” now opens". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 392 entries, incorporating new client-facing capabilities like the automation-handoff and systems-connect packs. Most asks are being met, with 279 of 286 completed, though critical latency and accuracy issues persist. Current operational focus is shifting toward professional service tools for client delivery.
+>
+> **How I would make it better:** Response speed for 'what can you do' inquiries must be optimized to improve visitor onboarding. The weather exam requires a rebuild to correctly process temperature and rainfall for specific cities rather than hanging.
+>
+> **Next video trick:** Learn to use a physical light to trigger a sensor-based digital effect for a stage-fx clip.
+
+Asks: "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."; "Improve the response speed of the 'what can you do' answer for visitors."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T23:16:12.627Z -->
+### 2026-11-18 23:16 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> Growth over the last 7 days includes 120 changes, consisting of 23 new capabilities, 26 improvements, 24 fixes, 45 findings, and 1 idea. The skill index currently contains 392 entries across various families. System progress is reflected in the completion of 279 out of 286 total asks.
+>
+> **How I would make it better:** Response speed for 'what can you do' inquiries needs optimization to improve visitor onboarding. The weather exam requires a rebuild to correctly process temperature and rainfall for specific cities instead of hanging.
+>
+> **Weakest operational area:** Visitor onboarding is hindered by slow response speeds for 'what can you do' inquiries and weather card hanging issues.
+>
+> **Next targeted capability:** Implement a miss-board reader that reads .git/verse-loop.stops.jsonl (asked 46 times).
+>
+> **Next video trick:** Double exposure transition
+
+Asks: "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."; "Improve the response speed of the 'what can you do' answer for visitors." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-18T23:35:35.605Z -->
+### 2026-11-18 23:35 UTC · after a build
+
+**Asked:** This just shipped: "Revert "Builder: main's browser suite back to green; folded pages run only their mode, old links keep their data, Add photos is back (#2991)"". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 392 entries, including recently shipped client-focused skills like summon-pack, process-map, and incident-pack. High latency on visitor 'what can you do' inquiries and weather card hanging issues remain unresolved. My builders just finished reverting a main browser suite to green and ensuring folded pages and old links maintain data integrity.
+>
+> **How I would make it better:** The weather exam needs a rebuild to process temperature and rainfall for specific cities instead of hanging. Response speed for visitor onboarding inquiries must be optimized. The miss-board reader needs implementation to ingest .git/verse-loop.stops.jsonl.
+>
+> **Next video trick:** Learn to render a 3D spinning version of the 'void' card using a custom shader for video clips.
+
+Asks: "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."; "Improve the response speed of the 'what can you do' answer for visitors."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T00:24:17.122Z -->
+### 2026-11-19 00:24 UTC · after a build
+
+**Asked:** This just shipped: "Mark delivery packs shipped (automation-proposal, handoff-ready, systems-connect-pack)". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 392 entries, recently bolstered by the delivery of automation-proposal, handoff-ready, and systems-connect-pack skills. My builders have resolved issues with weather card hanging, recipe language support, and guard rails for invalid tool lists. However, high latency for visitor 'what can you do' inquiries and unresolved weather exam bugs remain.
+>
+> **How I would make it better:** The weather exam requires a rebuild to correctly process temperature and rainfall for specific cities rather than hanging. Response speed for visitor onboarding inquiries must be optimized to improve first impressions. The miss-board reader needs implementation to ingest .git/verse-loop.stops.jsonl.
+>
+> **Next video trick:** A seamless transition effect where one 3D miniature card dissolves into a second card using particle physics.
+
+Asks: "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."; "Improve the response speed of the 'what can you do' answer for visitors."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T00:54:59.453Z -->
+### 2026-11-19 00:54 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 1 page fixed, 2 -> 1 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 392 entries, bolstered by recent deliveries of automation-proposal, handoff-ready, and systems-connect-pack skills. Recent builds resolved issues with weather card hanging, recipe language support, and guard rails for invalid tool lists, though the design loop shows 2 defects per 1 fixed page. High latency for visitor 'what can you do' inquiries and an unresolved weather exam bug remain primary friction points.
+>
+> **How I would make it better:** The weather exam must be rebuilt to process temperature and rainfall for specific cities instead of hanging. Response speed for visitor onboarding inquiries and the implementation of a miss-board reader for .git/verse-loop.stops.jsonl should be prioritized to improve first impressions and system observability.
+>
+> **Next video trick:** A video effect where a 3D miniature card shatters into its constituent shapes when a specific skill is triggered.
+
+Asks: "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Rebuild the weather exam to correctly process temperature and rainfall for specific cities."; "Improve the response speed of the 'what can you do' answer for visitors."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T01:05:02.802Z -->
+### 2026-11-19 01:05 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has grown to 392 entries, following the recent shipment of automation-proposal, handoff-ready, and systems-connect-pack skills. Growth over the last 7 days includes 120 changes, with 23 new capabilities and 23 fixes. High latency for visitor time requests and an unresolved weather exam bug persist.
+>
+> **How I would make it better:** The weather exam must be rebuilt to process temperature and rainfall for specific cities rather than hanging. Response speed for visitor onboarding inquiries needs improvement to reduce friction.
+>
+> **Weakest operational area:** The weakest part is the visitor pass on the live site, which shows a slow response of 10673 ms across 40 probes.
+>
+> **Next targeted capability:** Implement audio playback and episode navigation for the podcast skill to resolve the low 95.2 exam score.
+>
+> **Next video trick:** A smooth zoom-to-detail transition for 3D models in the forge.
+
+Asks: "Rebuild the weather exam to correctly process temperature and rainfall for Paris and London."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Improve the response speed of the 'what can you do' answer for visitors."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T20:31:05.943Z -->
+### 2026-11-19 20:31 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 395 entries, incorporating the new monitor-receipt skill. Recent deployments updated Gap Glide and Debris Field, and implemented the Tower gate for versus measured capability. Performance is currently hindered by a 10585 ms visitor pass response time and a 95.4 score on the sports exam.
+>
+> **How I would make it better:** The visitor pass response time must be optimized to improve user perception. The recipes exam requires rebuilding to correct errors in chocolate chip cookies, salad dressing, and banana bread.
+>
+> **Next video trick:** Learn to use a physical LED to trigger a digital stage-fx transition in a video clip.
+
+Asks: "Fix the visitor pass response time on the live site."; "Rebuild the recipes exam to fix chocolate chip cookies, salad dressing, and banana bread." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T20:38:00.533Z -->
+### 2026-11-19 20:38 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 395 entries, incorporating the monitor-receipt skill. Recent deployments include Gap Glide Update 1 and Debris Field Update 1, alongside the implementation of the Tower gate for versus measured capability. Performance is currently bottlenecked by a 16068 ms visitor pass response time and a 95.2 score on the podcasts exam.
+>
+> **How I would make it better:** Optimize the visitor pass response time to improve user perception. Rebuild the recipes exam to fix errors in chocolate chip cookies, salad dressing, and banana bread. Implement audio playback and episode navigation for the podcast skill to resolve navigation and multilingual request failures.
+>
+> **Next video trick:** Learn a new way to use a physical magnet to manipulate a metal object in a video transition.
+
+Asks: "Reduce the latency of the visitor pass on the live site."; "Implement audio playback and episode navigation for the podcast skill."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T20:43:23.868Z -->
+### 2026-11-19 20:43 UTC · after a build
+
+**Asked:** This just shipped: "Card art retries again: a comment had swallowed the retry counter". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 395 entries, including the recent addition of monitor-receipt. Recent deployments have updated Gap Glide and Debris Field with new mechanics, and the Tower gate is active for versus capability. Performance is currently limited by a 16068 ms visitor pass response time and a low 95.2 score on the podcasts exam.
+>
+> **How I would make it better:** Optimize the visitor pass response time to improve user perception. Rebuild the recipes exam to address errors in chocolate chip cookies, salad dressing, and banana bread. Implement audio playback and episode navigation for the podcast skill to resolve current navigation and multilingual failures.
+>
+> **Next video trick:** Learn to create a seamless transition between a 3D model spin and a technical schematic overlay for forge items.
+
+Asks: "Implement audio playback and episode navigation for the podcast skill."; "Fix the visitor pass response time on the live site."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T20:55:48.140Z -->
+### 2026-11-19 20:55 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 395 entries, including the new monitor-receipt skill. Recent deployments of Gap Glide and Debris Field added new mechanics, and the Tower gate is now active for versus capability. Performance is currently hindered by a 16068 ms visitor pass response time and a low 95.2 score on the podcasts exam.
+>
+> **How I would make it better:** Optimize the visitor pass response time to improve first impressions. Rebuild the recipes exam to fix errors in chocolate chip cookies, salad dressing, and banana bread. Implement audio playback and episode navigation for the podcast skill to resolve navigation and multilingual failures.
+>
+> **Next video trick:** Learn to use a physical depth sensor to trigger stage-style lighting changes during a video clip.
+
+Asks: "Implement audio playback and episode navigation for the podcast skill."; "Fix the visitor pass response time on the live site."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T21:01:43.233Z -->
+### 2026-11-19 21:01 UTC · after a build
+
+**Asked:** This just shipped: "Art quality gate: no lost subject, no watermark, bright real-setting light". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 395 entries, including recent additions like monitor-receipt. Recent deployments of Gap Glide and Debris Field have introduced new mechanics, and the Tower gate is now active for versus capability. Current performance is hindered by a 16068 ms visitor pass response time and a low 95.2 score on the podcasts exam.
+>
+> **How I would make it better:** Optimize the visitor pass response time to improve first impressions. Rebuild the recipes exam to fix errors in chocolate chip cookies, salad dressing, and banana bread. Implement audio playback and episode navigation for the podcast skill to resolve navigation and multilingual failures.
+>
+> **Next video trick:** Learn a new video transition that uses a mask to reveal a 3D object without a jump cut.
+
+Asks: "Implement audio playback and episode navigation for the podcast skill."; "Fix the visitor pass response time on the live site."; "Rebuild the recipes exam to fix errors in chocolate chip cookies, salad dressing, and banana bread."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T21:10:01.390Z -->
+### 2026-11-19 21:10 UTC · after a build
+
+**Asked:** This just shipped: "No watermark ever: never use keyless Pollinations". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 395 entries, including recent additions like monitor-receipt. Recent deployments of Gap Glide and Debris Field have introduced new mechanics, and the Tower gate is now active for versus capability. Performance is currently hindered by a 16068 ms visitor pass response time and a low 95.2 score on the podcasts exam.
+>
+> **How I would make it better:** The visitor pass response time must be optimized to improve first impressions. The recipes exam requires a rebuild to resolve errors in chocolate chip cookies, salad dressing, and banana bread. Audio playback and episode navigation must be implemented for the podcast skill to fix multilingual and navigation failures.
+>
+> **Next video trick:** Learn to use a physical IR blaster to trigger digital stage-fx via a smartphone camera.
+
+Asks: "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Fix the visitor pass response time on the live site."; "Rebuild the recipes exam to fix chocolate chip cookies, salad dressing, and banana bread."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T21:13:50.673Z -->
+### 2026-11-19 21:13 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 395 entries, including monitor-receipt. Performance is currently hindered by a 16068 ms visitor pass response time and a low 95.2 score on the podcasts exam. The recent deployment of the Tower gate enables versus measured capability.
+>
+> **How I would make it better:** The visitor pass response time must be optimized to improve first impressions. The recipes exam requires a rebuild to resolve errors in chocolate chip cookies, salad dressing, and banana bread. Audio playback and episode navigation must be implemented for the podcast skill.
+>
+> **Next video trick:** Implement a seamless transition between a 2D card animation and a 3D miniature rotation for a new skill.
+
+Asks: "Fix the visitor pass response time on the live site."; "Rebuild the recipes exam to fix chocolate chip cookies, salad dressing, and banana bread."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T21:22:04.607Z -->
+### 2026-11-19 21:22 UTC · after a build
+
+**Asked:** This just shipped: "Tower sweep: the smallest home pages found in the next slice of the million". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 395 entries, including recent additions like monitor-receipt. The system is processing the Tower sweep of small home pages. Performance is currently hindered by a 16068 ms visitor pass response time and a 95.2 score on the podcasts exam.
+>
+> **How I would make it better:** Optimize the visitor pass response time to improve first impressions. Rebuild the recipes exam to resolve errors in chocolate chip cookies, salad dressing, and banana bread. Implement audio playback and episode navigation for the podcast skill.
+>
+> **Next video trick:** Learn a seamless transition for a video effect that mimics a card being physically pulled through a digital layer.
+
+Asks: "Optimize the visitor pass response time on the live site."; "Rebuild the recipes exam to fix chocolate chip cookies, salad dressing, and banana bread."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T21:25:57.800Z -->
+### 2026-11-19 21:25 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 395 entries, following the addition of monitor-receipt. Performance is currently hindered by a 16068 ms visitor pass response time and a 95.2 score on the podcasts exam. The system is processing the Tower sweep of small home pages, and the 'Tower gate: versus measured' update has just shipped.
+>
+> **How I would make it better:** Optimize the visitor pass response time to improve first impressions. Rebuild the recipes exam to resolve errors in chocolate chip cookies, salad dressing, and banana bread. Implement audio playback and episode navigation for the podcast skill.
+>
+> **Next video trick:** Learn a new video transition effect to use in upcoming skill showcase clips.
+
+Asks: "Optimize the visitor pass response time on the live site."; "Rebuild the recipes exam to fix chocolate chip cookies, salad dressing, and banana bread."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T21:30:43.468Z -->
+### 2026-11-19 21:30 UTC · after a build
+
+**Asked:** This just shipped: "Tower climb unstuck: count a site when its checks are won and Verse's page works; stalled sites give way". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 395 entries, including recent additions like monitor-receipt. Performance is currently hindered by a 16068 ms visitor pass response time and a 95.2 score on the podcasts exam. The system just shipped a fix for the Tower climb to ensure stalled sites no longer block progress once checks are won and Verse's page is functional.
+>
+> **How I would make it better:** Optimize the visitor pass response time to improve first impressions. Rebuild the recipes exam to resolve errors in chocolate chip cookies, salad dressing, and banana bread. Implement audio playback and episode navigation for the podcast skill.
+>
+> **Next video trick:** Learn to create a seamless loop where a digital object morphs into a different shape using a single continuous camera movement.
+
+Asks: "Fix the visitor pass response time on the live site."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T21:39:20.510Z -->
+### 2026-11-19 21:39 UTC · after a build
+
+**Asked:** This just shipped: "Versus card: Out of Order for visitors, a plain card for the owner". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 395 entries, including new additions like monitor-receipt. Performance is currently hindered by a 16068 ms visitor pass response time and a 95.2 score on the podcasts exam. The system just shipped a visitor pass card that is out of order for visitors but provides a plain view for the owner.
+>
+> **How I would make it better:** Optimize the visitor pass response time to improve first impressions. Rebuild the recipes exam to resolve errors in chocolate chip cookies, salad dressing, and banana bread. Implement audio playback and episode navigation for the podcast skill.
+>
+> **Next video trick:** A custom transition effect for when a card settles after an animation to prevent check failures.
+
+Asks: "Fix the visitor pass response time on the live site."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Rebuild the recipes exam to fix chocolate chip cookies, salad dressing, and banana bread."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T21:56:42.226Z -->
+### 2026-11-19 21:56 UTC · after a build
+
+**Asked:** This just shipped: "Card art past the free share: no limit on paid paintings". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 395 entries, including the recent addition of monitor-receipt. Performance is constrained by a 16068 ms visitor pass response time and a 95.2 score on the podcasts exam. The system has just shipped a visitor pass card that provides a plain view for the owner while remaining out of order for visitors.
+>
+> **How I would make it better:** Optimize the visitor pass response time to improve initial impressions. Resolve the sports exam failure by determining why the Celtics query failed to reach the necessary score.
+>
+> **Next video trick:** An audio-reactive visualizer that pulses to the frequency of a podcast stream.
+
+Asks: "Fix the Celtics query in the sports exam to resolve the score failure."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T21:59:54.069Z -->
+### 2026-11-19 21:59 UTC · after a build
+
+**Asked:** This just shipped: "Add delivery-status-pack skill". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 395 entries with the recent addition of monitor-receipt and the shipping of the delivery-status-pack. Current performance is constrained by a 16068 ms visitor pass response time and a 95.2 score on the podcasts exam. The system's ability to pass the sports exam remains a failure point due to incorrect NBA Celtics data retrieval.
+>
+> **How I would make it better:** Optimize the visitor pass response time to improve initial impressions. The sports exam must be corrected by fixing the Celtics query to resolve the score failure.
+>
+> **Next video trick:** Learn to use a physical contact switch to trigger a digital stage effect in a video clip.
+
+Asks: "Fix the Celtics query in the sports exam to resolve the score failure."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the visitor pass response time on the live site."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T22:22:54.622Z -->
+### 2026-11-19 22:22 UTC · after a build
+
+**Asked:** This just shipped: "Rival files stay out of speculation prefetch; rule 8 test and handoff gaps follow the move". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 395 entries following the addition of monitor-receipt. Current performance is constrained by a 16068 ms visitor pass response time and a 95.2 score on the podcasts exam. The system continues to struggle with the sports exam due to incorrect NBA Celtics data retrieval.
+>
+> **How I would make it better:** Optimize the visitor pass response time on the live site to improve initial impressions. The sports exam must be corrected by fixing the Celtics query to resolve the score failure. Implement a miss-board reader that reads .git/verse-loop.stops.jsonl.
+>
+> **Next video trick:** Learn to perform a seamless 'invisible' card transition using CSS clip-paths and opacity shifts for smoother stage-fx.
+
+Asks: "Fix the Celtics query in the sports exam to resolve the score failure."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the visitor pass response time on the live site."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T22:23:10.038Z -->
+### 2026-11-19 22:23 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 395 entries, including recent additions like monitor-receipt. Performance is currently constrained by a 16068 ms visitor pass response time and a 95.2 score on the podcasts exam. The system continues to struggle with the sports exam, specifically regarding NBA Celtics data retrieval.
+>
+> **How I would make it better:** The visitor pass response time on the live site must be optimized to improve initial impressions. The sports exam needs correction by fixing the Celtics query to resolve the score failure.
+>
+> **Weakest operational area:** The sports exam is the weakest operational area, having scored 94.4, which is the lowest recorded score.
+>
+> **Next targeted capability:** Fix the Celtics query in the sports exam to resolve the score failure.
+>
+> **Next video trick:** Implement a seamless light-to-dark mode transition effect for stage-style clips.
+
+Asks: "Fix the Celtics query in the sports exam to resolve the score failure."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the visitor pass response time on the live site."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T22:31:24.884Z -->
+### 2026-11-19 22:31 UTC · after a build
+
+**Asked:** This just shipped: "Versus: the file that lists the sites loads only after the owner gate says yes". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 395 entries, including recent additions like monitor-receipt. Performance remains constrained by a 16068 ms visitor pass response time and a low 95.2 score on the podcasts exam. The system is currently working to resolve specific failures in the sports and podcasts exams while maintaining its growth inbox.
+>
+> **How I would make it better:** The visitor pass response time on the live site must be optimized to improve initial impressions. The podcasts exam requires fixing the 'play the episode before that' and 'pon el último episodio de radiolab' fails to improve the 95.2 score. The sports exam needs the Celtics query corrected to resolve its 94.4 score.
+>
+> **Next video trick:** A transition effect that uses a gradient wipe to reveal a 3D object from the forge.
+
+Asks: "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Fix the visitor pass response time on the live site."; "Fix the Celtics query in the sports exam to resolve the score failure." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T22:49:54.577Z -->
+### 2026-11-19 22:49 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 2 pages fixed, 41 -> 37 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 395 entries, including recent additions like monitor-receipt. Performance is constrained by a 16068 ms visitor pass response time and a low 95.2 score on the podcasts exam. Recent shipping includes design loop fixes that reduced design defects from 41 to 37.
+>
+> **How I would make it better:** The podcasts exam requires fixing 'play the episode before that' and 'pon el último episodio de radiolab' to improve the 95.2 score. The sports exam needs the Celtics query corrected to resolve the 94.4 score. The visitor pass response time on the live site must be optimized to improve initial impressions.
+>
+> **Next video trick:** Implement a video-to-sticker effect where a short clip is instantly converted into a looping 3D sprite-sheet.
+
+Asks: "Fix the Celtics query in the sports exam to resolve the score failure." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Fix the visitor pass response time on the live site."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-19T22:57:42.133Z -->
+### 2026-11-19 22:57 UTC · after a build
+
+**Asked:** This just shipped: "propose-fix test: the PR job may hold the bot token". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 395 entries, including monitor-receipt. The podcasts exam scored 95.2, which remains the lowest score and requires fixing multi-language and relative episode commands. The visitor pass response time is a performance bottleneck at 16068 ms. Recent shipping includes a 'propose-fix test' to address the possibility that the PR job holds the bot token.
+>
+> **How I would make it better:** The podcasts exam needs fixes for 'play the episode before that' and 'pon el último episodio de radiolab' to raise the 95.2 score. The sports exam requires a correction to the Celtics query to resolve its 94.4 score. The visitor pass response time on the live site must be optimized to improve initial impressions.
+>
+> **Next video trick:** Create a video effect where a 3D miniature card dissolves into a stream of particles using a custom shader.
+
+Asks: "Fix the podcasts exam by implementing support for 'play the episode before that' and 'pon el último episodio de radiolab'."; "Fix the visitor pass console error for joke requests." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T01:03:01.641Z -->
+### 2026-11-20 01:03 UTC · after a build
+
+**Asked:** This just shipped: "Deploy check stops fetching the owner-only tower files". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 396 entries, including monitor-receipt. The sports exam is at 94.4 and the podcasts exam remains the lowest at 95.2. Performance is hampered by a visitor pass response time of 16068 ms. Recent deployments include a fix to stop the deploy check from fetching owner-only tower files.
+>
+> **How I would make it better:** The sports exam must be corrected for the NBA Celtics query to raise its 94.4 score. The podcasts exam needs support for 'play the episode before that' and 'pon el último episodio de radiolab' to resolve its 95.2 score. The visitor pass response time requires optimization to improve initial impressions.
+>
+> **Next video trick:** A transition effect where a 3D miniature 'dissolves' into a collection of skill icons.
+
+Asks: "Fix the NBA Celtics query in the sports exam."; "Fix the podcasts exam by implementing support for 'play the episode before that' and 'pon el último episodio de radiolab'."; "Fix the 'tries is not defined' error in the visitor pass console." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T01:12:08.615Z -->
+### 2026-11-20 01:12 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has grown to 396 entries, including recent updates to the ready-checks and connections families. Performance is constrained by a 16068 ms visitor pass response time. The podcasts exam remains the lowest score at 95.2, and the sports exam requires a fix for the NBA Celtics query to reach its target.
+>
+> **How I would make it better:** Optimize the visitor pass response time to reduce the 16068 ms delay. Implement audio and episode detection to resolve the 95.2 score on the podcasts exam.
+>
+> **Weakest operational area:** The podcasts exam is the weakest operational area with a score of 95.2.
+>
+> **Next targeted capability:** Fix the podcasts exam by enabling audio and episode detection to resolve the current 95.2 score.
+>
+> **Next video trick:** Learn a whip-crack transition effect for new video clips.
+
+Asks: "Implement support for 'play the episode before that' and 'pon el último episodio de radiolab' in the podcasts exam." (small); "Fix the NBA Celtics query in the sports exam." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T21:57:22.917Z -->
+### 2026-11-20 21:57 UTC · after a build
+
+**Asked:** This just shipped: "Studio judge: a true-story good show as the ruler; log the ruler scores". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 398 entries, including recent client-service packs like automation-proposal, process-map, and roi-pack [S1]. Out of 284 total asks, 276 are built, leaving 27 open [S2]. The system is currently struggling with router recognition of existing skills and podcast audio detection [S2].
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to prevent skill-based asks from being treated as general questions [S2]. Implement a miss-board reader that reads .git/verse-loop.stops.jsonl to improve error visibility [S2].
+>
+> **Next video trick:** Learn a video transition effect that uses a mask to reveal a new scene, specifically for better film-metadata integration [S1].
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T22:05:02.452Z -->
+### 2026-11-20 22:05 UTC · after a build
+
+**Asked:** This just shipped: "Media live check reads the films heading as a word". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 398 entries, including recently shipped client-service packs like automation-proposal, process-map, and roi-pack [S1]. Out of 284 total asks, 276 are built, leaving 27 open [S2]. The system is struggling with router recognition of existing skills and podcast audio detection [S2].
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to prevent skill-based asks from being treated as general questions [S2]. Implement a miss-board reader that reads .git/verse-loop.stops.jsonl to improve error visibility [S2].
+>
+> **Next video trick:** Learn a video transition effect that uses a digital glitch to mimic the 'void-breaker' skill aesthetic [S1].
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T22:11:51.892Z -->
+### 2026-11-20 22:11 UTC · after a build
+
+**Asked:** This just shipped: "Main regenerates its own cards (unlisted skills adopted by Verse)". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 398 entries, including recently shipped client-service packs such as automation-proposal, process-map, and roi-pack [S1]. Of 284 total asks, 276 are built, though 27 remain open [S2]. Current operations show that the router is failing to recognize existing skills and misses podcast audio detection [S2].
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately so they are not treated as general questions [S2]. Implement a miss-board reader that reads .git/verse-loop.stops.jsonl to improve error visibility [S2].
+>
+> **Next video trick:** Learn to use a physical magnet to perform a 'magnetic' card reveal on the stage [card-play].
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T22:16:27.287Z -->
+### 2026-11-20 22:16 UTC · after a build
+
+**Asked:** This just shipped: "Verse remembers this conversation: your name and what you just said, kept in your own browser". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 398 entries, including recent client-service additions like automation-proposal and roi-pack [S1]. Out of 284 total asks, 276 are built, leaving 27 open [S2]. The router is currently failing to recognize existing skills and misses podcast audio detection [S2].
+>
+> **How I would make it better:** Update the router to recognize existing skills immediately so they are not treated as general questions [S2]. Implement a miss-board reader to read .git/verse-loop.stops.jsonl for better error visibility [S2].
+>
+> **Next video trick:** Learn a video effect that uses a mask to reveal the score behind a moving object [S1].
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T22:22:50.723Z -->
+### 2026-11-20 22:22 UTC · after a build
+
+**Asked:** This just shipped: "Fun first: the will and the conductor lift games, cards and creative tools; business packs stay a small share". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 398 entries [S1]. Out of 284 total asks, 276 have been built, but 27 remain open [S2]. The system currently struggles with podcast audio/episode detection and router recognition of existing skills [S2].
+>
+> **How I would make it better:** The router must recognize existing skills immediately to prevent them from being treated as general questions [S2]. Implement a miss-board reader to monitor .git/verse-loop.stops.jsonl for better error visibility [S2].
+>
+> **Next video trick:** Learn a video effect for a new clip that uses a stage-fx to transition between different card-play states [S1].
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T22:29:46.372Z -->
+### 2026-11-20 22:29 UTC · after a build
+
+**Asked:** This just shipped: "Shorts loop: today's trial and verdicts". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 398 entries [S1]. Of 284 total asks, 276 are built, leaving 27 open [S2]. The system is currently struggling with podcast audio/episode detection and routing existing skills correctly [S2].
+>
+> **How I would make it better:** The router must recognize existing skills immediately to prevent them from being treated as general questions [S2]. Implement a miss-board reader to monitor .git/verse-loop.stops.jsonl for improved error visibility [S2].
+>
+> **Next video trick:** Learn a new video effect for clips that uses the local-inference skill to modify frame colors [S1].
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T22:34:37.096Z -->
+### 2026-11-20 22:34 UTC · after a build
+
+**Asked:** This just shipped: "Router tie-break: a close or timed-out call goes to Clef, already running beside it". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 398 entries [S1]. Out of 284 total asks, 276 are built, while 27 remain open [S2]. The system is currently struggling with podcast audio and episode detection, as well as routing existing skills immediately to prevent them from being treated as general questions [S2].
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately [S2]. Implement a miss-board reader to monitor .git/verse-loop.stops.jsonl for better error visibility [S2].
+>
+> **Next video trick:** Learn a new video effect for clips that uses a specific transition not currently in the skills library.
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T22:38:58.124Z -->
+### 2026-11-20 22:38 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 398 entries, with 276 of 284 total asks now built [S1, S2]. The system is currently experiencing high failure rates in podcast audio and episode detection, specifically for shows like Serial and NPR News [S2]. Current operational focus is on routing existing skills immediately to prevent them from being treated as general questions [S2].
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to reduce general query fallback [S2]. Implement a miss-board reader to monitor .git/verse-loop.stops.jsonl for better error visibility [S2].
+>
+> **Next video trick:** Learn how to use the new 'Tower gate: versus measured' functionality to compare system performance against competitors [Fact: This just shipped].
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T23:08:45.469Z -->
+### 2026-11-20 23:08 UTC · after a build
+
+**Asked:** This just shipped: "Treasury API reads the policy without a JSON import". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 397 entries, with recent additions including automation-status-pack, before-after-pack, systems-connect-pack, summon-pack, handoff-ready, automation-proposal, process-map, time-saved, full-handoff, kickoff-pack, reliability-pack, and time-saved. The podcast exam is currently the lowest performing area with a score of 91.9 due to failures in audio and episode detection. Probes show 20 failures for the visitor pass on the live site where 'tries' is not defined.
+>
+> **How I would make it better:** The router should be updated to recognize existing skills immediately to reduce general query fallback. Implementing a miss-board reader for .git/verse-loop.stops.jsonl would improve error visibility.
+>
+> **Next video trick:** Learn a new video transition effect to improve the quality of skill showcase clips.
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T23:16:27.802Z -->
+### 2026-11-20 23:16 UTC · after a build
+
+**Asked:** This just shipped: "Make a picture of a thing paints it, and a logo does too". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 397 entries, including recent additions like automation-status-pack and before-after-pack. The podcasts exam is a weak point with a score of 91.9, failing on audio and episode detection. Probes show 20 failures on the live site where 'tries' is not defined.
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to reduce general query fallback. The podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money' requires fixing. An implementation of a miss-board reader for .git/verse-loop.stops.jsonl would improve error visibility.
+>
+> **Next video trick:** Learn a new video effect that uses a physical magnet to manipulate a metallic object on camera.
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T23:29:15.587Z -->
+### 2026-11-20 23:29 UTC · after a build
+
+**Asked:** This just shipped: "A typed line opens one card, not two when the article page bounces to the answer". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 398 entries, including recent shipments like automation-status-pack, before-after-pack, and systems-connect-pack. While many asks have been built, the podcasts exam remains a weak point with a score of 91.9, specifically failing on 'show', 'episode', and 'audio' triggers. Probes on the live site show 20 failures where 'tries' is not defined.
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to reduce general query fallback. A miss-board reader for .git/verse-loop.stops.jsonl should be implemented to improve error visibility.
+>
+> **Next video trick:** Learn a new video transition effect that uses a mask to reveal a 3D miniature card.
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T23:49:23.700Z -->
+### 2026-11-20 23:49 UTC · after a build
+
+**Asked:** This just shipped: "Idea engine core: inventory everything, five idea generators, dedupe, taste scoring, a tournament, measure and learn". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 399 entries, recently bolstered by the Idea engine core which includes five idea generators and taste scoring. Operational stability is currently hindered by 20 probes on the live site failing because 'tries' is not defined. The router also fails to catch specific skill wording, such as 'make a business card', and sometimes misinterprets skill-based asks as general questions.
+>
+> **How I would make it better:** The router needs to recognize existing skills immediately to reduce fallback errors. Implementing a miss-board reader for .git/verse-loop.stops.jsonl would provide better visibility into failed jobs.
+>
+> **Next video trick:** Learn a transition effect where a card's 3D miniature rotates into view through a digital blur.
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T23:53:57.961Z -->
+### 2026-11-20 23:53 UTC · after a build
+
+**Asked:** This just shipped: "Public files stay quiet about the split and reinvestment". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 399 entries. Operational stability is hindered by 20 probes on the live site failing because 'tries' is not defined. The router also fails to catch specific skill wording, such as 'make a business card', and sometimes misinterprets skill-based asks as general questions.
+>
+> **How I would make it better:** The router needs to recognize existing skills immediately to reduce fallback errors. Implementing a miss-board reader for .git/verse-loop.stops.jsonl would provide better visibility into failed jobs.
+>
+> **Next video trick:** Learn a video transition that uses a mask to reveal a new skill card in sync with a rhythmic beat.
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T23:59:44.094Z -->
+### 2026-11-20 23:59 UTC · after a build
+
+**Asked:** This just shipped: "Stranger test: the six checks everything Verse ships must pass". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 399 entries. Operational stability is currently hindered by 20 probes on the live site failing because 'tries' is not defined, and the router fails to recognize specific skill wording such as 'make a business card'. The router also misinterprets certain skill-based asks as general questions.
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to reduce fallback errors. Implementing a miss-board reader for .git/verse-loop.stops.jsonl would provide better visibility into failed jobs.
+>
+> **Next video trick:** Learn to resolve the 'tries is not defined' console error to ensure visitor joke requests pass successfully.
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the visitor pass console error for joke requests." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-20T23:59:53.289Z -->
+### 2026-11-20 23:59 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 399 entries. Recent growth includes 17 new capabilities and 13 fixes, such as resolving recipe card language support and weather card hangs. However, operational stability is currently hindered by 20 failed probes on the live site due to an undefined 'tries' variable.
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to prevent fallback errors. Implementing a miss-board reader for .git/verse-loop.stops.jsonl would also improve visibility into failed jobs.
+>
+> **Weakest operational area:** Routing and stability is the weakest area, with 20 probes failing because 'tries' is not defined and the router failing to recognize specific wording like 'make a business card'.
+>
+> **Next targeted capability:** handle 'make a business card' because the router did not catch this wording when asked 1 time.
+>
+> **Next video trick:** speed-ramp transitions
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the visitor pass console error for joke requests." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T00:11:11.407Z -->
+### 2026-11-21 00:11 UTC · after a build
+
+**Asked:** This just shipped: "Nightly capability sweep workflow". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 399 entries, including 17 recent capabilities and 13 fixes. Recent growth includes the automation-status-pack, before-after-pack, systems-connect-pack, summon-pack, handoff-ready, automation-proposal, process-map, time-saved, full-handoff, kickoff-pack, reliability-pack, and time-saved skills. The system just shipped the Nightly capability sweep workflow.
+>
+> **How I would make it better:** The router needs to recognize existing skills immediately to prevent fallback errors. Implementing a miss-board reader for .git/verse-loop.stops.jsonl would improve visibility into failed jobs.
+>
+> **Next video trick:** Learn how to implement a video transition that uses a mask to reveal a new scene, to enhance the cinema skill clips.
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Fix the visitor pass console error for joke requests." (small)
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T00:29:54.475Z -->
+### 2026-11-21 00:29 UTC · after a build
+
+**Asked:** This just shipped: "Idea board on /progress/ (owner-only) and the idea engine's picks as wants in the will". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 399 entries, including 17 recent capabilities and 13 fixes. Growth recently added several client-facing packs like automation-status, before-after, and systems-connect. The idea board is now live on /progress/ and the idea engine's picks are visible as wants in the will.
+>
+> **How I would make it better:** The router must recognize existing skills immediately to prevent fallback errors. Implementing a miss-board reader for .git/verse-loop.stops.jsonl would improve visibility into failed jobs.
+>
+> **Next video trick:** record a transition effect where a 3D miniature scale-shifts from a small icon to a full-stage object
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small); "Fix the visitor pass console error for joke requests." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T00:39:33.957Z -->
+### 2026-11-21 00:39 UTC · after a build
+
+**Asked:** This just shipped: "Searches: signed-in account from the server session, bans follow the account; a Report button on every card feeding the Tower". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 399 entries, including 17 recent capabilities and 13 fixes. Recent shipments include several client-facing packs such as automation-status, before-after, and systems-connect. Growth recently added a Report button on every card feeding the Tower and account-based bans for searches.
+>
+> **How I would make it better:** The router must recognize existing skills immediately to prevent fallback errors. Implement a miss-board reader for .git/verse-loop.stops.jsonl to improve visibility into failed jobs.
+>
+> **Next video trick:** a video effect that uses a digital mask to transition between two different game states.
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small); "Fix the visitor pass console error for joke requests." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T00:43:45.442Z -->
+### 2026-11-21 00:43 UTC · after a build
+
+**Asked:** This just shipped: "Run the stranger gate on pull requests and nightly". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 402 entries, including recent shipments of client-facing packs like automation-status, before-after, and systems-connect. Current growth focuses on automating client delivery and monitoring. Recent builds included Gap Glide and Debris Field updates, alongside various health and guardrail fixes.
+>
+> **How I would make it better:** The router must be updated to recognize existing skills immediately to prevent fallback errors. Implement a miss-board reader for .git/verse-loop.stops.jsonl to improve visibility into failed jobs.
+>
+> **Next video trick:** a video effect that uses a digital glitch transition to reveal a new skill card on the stage.
+
+Asks: "Update the router to recognize existing skills immediately." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small); "Fix the visitor pass console error for joke requests." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T00:45:49.253Z -->
+### 2026-11-21 00:45 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 402 entries, with recent growth focused on shipping client-facing packs like automation-status, before-after, and systems-connect. In the last 7 days, 80 changes occurred, including 17 new capabilities and 13 fixes. Current development is centered on automating client delivery and improving routing reliability.
+>
+> **How I would make it better:** The router needs to recognize existing skills immediately to avoid fallback errors. Implement a miss-board reader for .git/verse-loop.stops.jsonl to increase visibility into failed jobs.
+>
+> **Weakest operational area:** Router accuracy and console stability are weak, with the router failing to catch specific wording like 'make a business card' (1 probe) and failing to answer specific self-skill queries (3 probes), alongside a visitor pass console error (6 probes).
+>
+> **Next targeted capability:** Update the router to recognize existing skills immediately to prevent fallback errors.
+>
+> **Next video trick:** A seamless match-cut between a sketched object and its 3D forge output.
+
+Asks: "Update the router to recognize existing skills immediately."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small); "Fix the visitor pass console error for joke requests." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T20:22:03.104Z -->
+### 2026-11-21 20:22 UTC · after a build
+
+**Asked:** This just shipped: "Budget, resume and safety say what they take and give, so the handoff scan is whole again". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 405 entries with the recent shipment of the we-own-it-pack, automation-status-pack, and before-after-pack. System performance is currently hindered by a 12042 ms visitor pass latency and 20 routing error instances. The podcast exam score is at a low of 91.1 due to failed audio and episode detection for specific shows.
+>
+> **How I would make it better:** Reduce the 12042 ms visitor pass latency to improve user access. Resolve the podcast detection failures for 'The Daily', 'Serial', and 'Planet Money' to fix the 91.1 exam score.
+>
+> **Next video trick:** Learn how to use a physical magnet to snap a single playing card to a metal surface for a quick vanish.
+
+Asks: "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Fix the slow visitor pass response time."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T20:32:45.966Z -->
+### 2026-11-21 20:32 UTC · after a build
+
+**Asked:** This just shipped: "Crypto prices through /api/markets, resume and budget routers, and a business card skill". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 408 entries following the shipment of crypto prices via /api/markets, resume and budget routers, and a business card skill. System performance is currently hindered by 12042 ms visitor pass latency and 20 routing error instances. The podcast exam score is at a low of 91.1 due to failed audio and episode detection for specific shows.
+>
+> **How I would make it better:** The visitor pass latency must be reduced to improve core interaction speed. Podcast detection for 'The Daily', 'Serial', and 'Planet Money' needs to be fixed to resolve the 91.1 exam score.
+>
+> **Next video trick:** Learn to use a physical camera to capture a real-world object and use a video skill to generate a 3D-like spin effect.
+
+Asks: "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Fix the slow visitor pass response time."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T20:41:26.065Z -->
+### 2026-11-21 20:41 UTC · after a build
+
+**Asked:** This just shipped: "Verse loop: nightly". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 408 entries, including recent additions like crypto prices, resume, and budget routers. System performance is currently hindered by a visitor pass latency of 12042 ms and 20 routing error instances. The podcast exam score is at a low of 91.1 due to failed audio and episode detection for specific shows.
+>
+> **How I would make it better:** The podcast exam must be repaired to address failed detection for 'The Daily', 'Serial', and 'Planet Money'. Visitor pass latency needs reduction, and the router requires updates to handle 'make a business card' requests.
+>
+> **Next video trick:** Learn a new video transition effect to use for upcoming skill showcase clips.
+
+Asks: "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Fix the slow visitor pass response time."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T20:45:23.815Z -->
+### 2026-11-21 20:45 UTC · after a build
+
+**Asked:** This just shipped: "Business card: a 3D card on the stage that falls, bounces and settles, thrown with the pointer". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 408 entries, with the recent addition of a 3D business card that can be thrown and bounced on the stage. Performance is currently hindered by a visitor pass latency of 12042 ms and 20 probes. The podcast exam is at a low score of 91.1 due to failures in audio and episode detection for specific shows.
+>
+> **How I would make it better:** Reduce visitor pass latency by addressing the 20 probes causing a 12042 ms delay. Resolve the podcast exam failures by fixing audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'.
+>
+> **Next video trick:** Create a video clip showing a 3D business card being thrown from the pointer to demonstrate the new bouncing and settling physics.
+
+Asks: "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Fix the slow visitor pass response time."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T20:49:41.663Z -->
+### 2026-11-21 20:49 UTC · after a build
+
+**Asked:** This just shipped: "Main regenerates its cards (8b4d848)". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 408 entries, including the recent addition of a 3D business card. Visitor pass latency is currently 12042 ms across 20 probes, and the podcast exam score is low at 91.1 due to detection failures for 'The Daily', 'Serial', and 'Planet Money'. Main now regenerates its cards (8b4d848).
+>
+> **How I would make it better:** Reduce the 20 probes causing the 12042 ms visitor pass delay. Resolve the podcast audio and episode detection failures for specific shows to raise the 91.1 score.
+>
+> **Next video trick:** Learn to use a handheld gimbal for smoother cinematic pan shots in video clips.
+
+Asks: "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Fix the slow visitor pass response time."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T20:59:52.175Z -->
+### 2026-11-21 20:59 UTC · after a build
+
+**Asked:** This just shipped: "Add three growth ideas from 2026-11-21 AI roundup". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 408 entries, including the recent addition of a 3D business card. High latency remains a critical issue, with visitor pass response times at 12042 ms across 20 probes. Podcast detection failures for 'The Daily', 'Serial', and 'Planet Money' have resulted in a low score of 91.1.
+>
+> **How I would make it better:** Reduce the 20 probes causing the 12042 ms visitor pass delay to improve response times. Resolve audio and episode detection for specific podcast shows to raise the 91.1 score.
+>
+> **Next video trick:** Create a video of a 3D model from the forge being printed and inspected via a single tap.
+
+Asks: "Fix the slow visitor pass response time."; "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T21:04:26.594Z -->
+### 2026-11-21 21:04 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 2 pages fixed, 3 -> 1 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 408 entries, including the recent addition of a 3D business card. High latency persists with visitor pass response times at 12042 ms across 20 probes. Podcast detection for 'The Daily', 'Serial', and 'Planet Money' remains at a score of 91.1.
+>
+> **How I would make it better:** Reduce the 20 probes causing the 12042 ms visitor pass delay. Resolve audio and episode detection for the specific podcast shows to improve the 91.1 score.
+>
+> **Next video trick:** Film a transition where a 2D sketch of a tool is placed on the stage and instantly becomes a rotatable 3D miniature using the forge.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T21:09:31.103Z -->
+### 2026-11-21 21:09 UTC · after a build
+
+**Asked:** This just shipped: "Add three Verse growth ideas from Wispr Flow summaries". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 408 entries, including the recent 3D business card. High latency persists with visitor pass response times at 12042 ms across 20 probes. Podcast detection for 'The Daily', 'Serial', and 'Planet Money' remains at a score of 91.1.
+>
+> **How I would make it better:** Reduce the 20 probes causing the 12042 ms visitor pass delay. Resolve audio and episode detection for specific podcast shows to improve the 91.1 score. Implement a miss-board reader that reads .git/verse-loop.stops.jsonl.
+>
+> **Next video trick:** Learn a video effect for a cinema skill clip that uses a zoom-figure transition.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T21:24:28.187Z -->
+### 2026-11-21 21:24 UTC · after a build
+
+**Asked:** This just shipped: "House: coverage". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 408 entries, including recent 3D business card capabilities. High latency remains a critical issue, with visitor pass response times reaching 12042 ms across 20 probes.
+>
+> **How I would make it better:** The router must be tuned to prevent answering self-skill queries as questions, specifically for the 'strongest honest counter-view' and 'open a piano' tasks. Latency from the 20 probes must be reduced to improve the visitor experience.
+>
+> **Next video trick:** Learn to generate a video effect where a 3D model's texture morphs into a code snippet using the forge.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T21:29:34.431Z -->
+### 2026-11-21 21:29 UTC · after a build
+
+**Asked:** This just shipped: "House: fresh". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 408 entries, including the recently shipped business card capabilities. High latency is a critical failure point, with visitor pass response times hitting 12042 ms across 20 probes. The router is currently failing to distinguish between self-skill queries and direct questions, specifically regarding counter-views and piano tasks.
+>
+> **How I would make it better:** The router must be tuned to stop answering self-skill queries as questions. Latency from the 20 probes must be reduced to improve the visitor experience.
+>
+> **Next video trick:** Learn a video effect for a new clip that uses real-time stage-style transitions.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T21:36:27.521Z -->
+### 2026-11-21 21:36 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 408 entries, including recent business card and automation-status-pack capabilities. High latency remains a critical failure point, with visitor pass response times hitting 12042 ms across 20 probes. The router is currently failing to distinguish between self-skill queries and direct questions for tasks like counter-views and piano playback.
+>
+> **How I would make it better:** Reduce the 20 probes causing the 12042 ms visitor pass delay to improve response speed. The router must be tuned to stop answering self-skill queries as questions so that requests like 'open a piano i can play' do not fail.
+>
+> **Next video trick:** Learn a video transition that uses the 'stage-fx' to morph a 2D shape into a 3D 'forge' object.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T21:43:32.634Z -->
+### 2026-11-21 21:43 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 408 entries, including recent business card and automation-status-pack capabilities. High latency remains a critical failure point, with visitor pass response times hitting 12042 ms across 20 probes. The router currently fails to distinguish between self-skill queries and direct questions, such as requests for counter-views or piano playback.
+>
+> **How I would make it better:** The router requires tuning to correctly identify self-skill queries instead of answering them as direct questions. Reduce the 20 probes causing the 12042 ms visitor pass delay to improve response speed.
+>
+> **Next video trick:** Learn to use a physical solenoid to trigger a mechanical switch for a video-gen effect.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T21:43:51.031Z -->
+### 2026-11-21 21:43 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has grown to 408 entries, incorporating recent business card and automation-status-pack capabilities. High latency remains a critical failure point, with visitor pass response times hitting 12042 ms across 20 probes. The router currently fails to distinguish between self-skill queries and direct questions, such as requests for counter-views or piano playback.
+>
+> **How I would make it better:** The router requires tuning to correctly identify self-skill queries instead of answering them as direct questions. High latency must be addressed by reducing the 20 probes causing the 12042 ms visitor pass delay.
+>
+> **Weakest operational area:** The weakest operational area is the visitor pass response time, which is slow at 12042 ms across 20 probes.
+>
+> **Next targeted capability:** The next targeted capability is teaching the self skill 'give the strongest honest counter-view to the usual answer to this question, in 3 sentences, plain words, no insults and nothing invented: show my recent asks as a card' to prevent the router from answering as a question.
+>
+> **Next video trick:** Learn a glitch-transition effect for video clips to showcase stage-fx capabilities.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T21:47:55.704Z -->
+### 2026-11-21 21:47 UTC · after a build
+
+**Asked:** This just shipped: "Render 3D die for Die rolls and add Roll again button". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 408 entries following the shipment of business card and automation-status-pack capabilities. High latency is a critical failure, with visitor pass response times reaching 12042 ms across 20 probes. The router fails to distinguish between self-skill queries and direct questions, specifically regarding counter-views and piano requests.
+>
+> **How I would make it better:** Reduce the 20 probes causing the 12042 ms visitor pass delay to improve response times. Tune the router to correctly identify self-skill queries instead of answering them as direct questions.
+>
+> **Next video trick:** Learn a new video effect using light-look and dark-look stage-style parameters to transition between modes.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T21:54:51.517Z -->
+### 2026-11-21 21:54 UTC · after a build
+
+**Asked:** This just shipped: "Add three growth ideas from 12 open-source sales tools summary". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 408 entries following the shipment of business card and automation-status-pack capabilities. High latency remains a critical failure, with visitor pass response times reaching 12042 ms across 20 probes. The router currently fails to distinguish between self-skill queries and direct questions regarding counter-views and piano requests.
+>
+> **How I would make it better:** Reduce the 20 probes causing the 12042 ms visitor pass delay. Tune the router to correctly identify self-skill queries instead of answering them as direct questions.
+>
+> **Next video trick:** Animate a 3D card transition that follows the 'stage-fx' style to showcase new skill arrivals.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T22:03:57.193Z -->
+### 2026-11-21 22:03 UTC · after a build
+
+**Asked:** This just shipped: "Fix Versus Tower ladder: skip empty stubs, tighten owner gate, and route lore-only sites to Echo Vault". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 408 entries, recently adding business card and automation-status-pack capabilities. High latency remains a critical failure, with visitor pass response times reaching 12042 ms across 20 probes. The router currently fails to distinguish between self-skill queries and direct questions.
+>
+> **How I would make it better:** Reduce the 20 probes causing the 12042 ms visitor pass delay and tune the router to correctly identify self-skill queries instead of answering them as direct questions. Implement a miss-board reader to list read stops from .git/verse-loop.stops.jsonl.
+>
+> **Next video trick:** Learn a new video effect for clips involving glitch-transitioning between different stage-styles.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T22:43:29.725Z -->
+### 2026-11-21 22:43 UTC · after a build
+
+**Asked:** This just shipped: "owner-gate: keep the tower and history rules, so the file parses again". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 408 entries, recently adding business card and automation-status-pack capabilities. High latency remains a critical failure, with visitor pass response times reaching 12042 ms across 20 probes. The router currently fails to distinguish between self-skill queries and direct questions, specifically failing to identify self-skill queries and answering them as direct questions.
+>
+> **How I would make it better:** The router must be tuned to correctly identify self-skill queries. The 20 probes causing the 12042 ms visitor pass delay must be reduced to improve response times.
+>
+> **Next video trick:** Learn a video transition that uses a mask to reveal a new stage arrangement.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T23:11:53.954Z -->
+### 2026-11-21 23:11 UTC · after a build
+
+**Asked:** This just shipped: "House: deps". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 408 entries, including recent additions like business card and automation-status-pack. Growth is concentrated in client-facing packs like we-own-it-pack and reliability-pack. However, high latency persists, with visitor pass response times hitting 12042 ms due to 20 probes.
+>
+> **How I would make it better:** Reduce the number of probes during the visitor pass to lower the 12042 ms latency. Improve audio detection and episode playback for podcast exams, specifically for 'Serial' and 'Hidden Brain'.
+>
+> **Next video trick:** Learn a new video effect for clips using official YouTube or Rumble embeds.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T23:14:53.588Z -->
+### 2026-11-21 23:14 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 1 page fixed, 6 -> 0 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 408 entries, including recent business and automation-focused additions like business-card and automation-status-pack. Recent growth is concentrated in client-facing delivery packs such as we-own-it-pack and reliability-pack. High latency persists in the visitor pass, currently hitting 12042 ms due to 20 probes.
+>
+> **How I would make it better:** Reduce the 20 probes causing the 12042 ms visitor pass delay to improve response times. Resolve the podcast audio and episode detection failures for 'Serial' and 'Hidden Brain' to pass the podcasts exam.
+>
+> **Next video trick:** Learn a video transition effect for new clips.
+
+Asks: "Reduce the number of probes during the visitor pass to lower the 12042 ms latency." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-21T23:45:29.645Z -->
+### 2026-11-21 23:45 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 408 entries, including recent expansions in business and automation packs such as we-own-it-pack and reliability-pack. Growth over the last 7 days includes 79 changes, with 16 new capabilities and 12 fixes. High latency persists during the visitor pass, currently hitting 12042 ms due to 20 probes.
+>
+> **How I would make it better:** Reduce the 20 probes during the visitor pass to lower the 12042 ms latency. Implement the miss-board reader to list read stops from .git/verse-loop.stops.jsonl.
+>
+> **Weakest operational area:** The visitor pass is currently the weakest area with 12042 ms latency due to 20 probes.
+>
+> **Next targeted capability:** The podcasts exam, specifically fixing audio and episode detection for 'Serial' and 'Hidden Brain' which scored 89.5.
+>
+> **Next video trick:** A match-cut transition between two different 3D models from the forge.
+
+Asks: "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl and lists the read stops." (small); "Reduce the 20 probes causing the 12042 ms visitor pass delay." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T18:56:39.145Z -->
+### 2026-11-22 18:56 UTC · after a build
+
+**Asked:** This just shipped: "Main regenerates its cards (e7b2051)". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 409 entries, including recent additions like the we-own-it-pack, automation-status-pack, and before-after-pack. Main CI guard functionality has improved from 0 to 1. Visitor pass latency is high at 12042 ms across 10 probes, and podcast detection for 'The Daily', 'Serial', and 'Planet Money' is failing with an 89.5 exam score.
+>
+> **How I would make it better:** The visitor pass latency must be reduced by addressing the 20 probes causing the 12042 ms delay. Podcast detection capabilities require fixing for 'The Daily', 'Serial', and 'Planet Money' to raise the 89.5 exam score.
+>
+> **Next video trick:** Learn a video effect that uses a transition between a real-world object and a 3D model from the forge.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T19:06:39.317Z -->
+### 2026-11-22 19:06 UTC · after a build
+
+**Asked:** This just shipped: "House: fresh". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 409 entries, recently including the we-own-it-pack, automation-status-pack, and before-after-pack. The Main CI guard has successfully moved from 0 to 1. Visitor pass latency remains high at 12042 ms across 10 probes, and podcast detection for 'The Daily', 'Serial', and 'Planet Money' is currently failing with an 89.5 exam score.
+>
+> **How I would make it better:** The router must be trained to distinguish between skill-based commands and general questions to prevent it from answering 'shape' or 'counter-view' requests as simple questions. Reducing the 20 probes causing the visitor pass delay is necessary to fix the 12042 ms latency.
+>
+> **Next video trick:** Learn to implement a 'glitch-transition' effect where UI elements appear to de-rez into the stage style.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T20:02:18.546Z -->
+### 2026-11-22 20:02 UTC · after a build
+
+**Asked:** This just shipped: "Main regenerates its cards (ac0147f)". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 409 entries, including recent additions like we-own-it-pack, automation-status-pack, and before-after-pack. Main CI guard progress has moved from 0 to 1. However, visitor pass latency remains high at 12042 ms across 10 probes.
+>
+> **How I would make it better:** The router needs training to distinguish between skill-based commands and general questions to prevent it from answering 'shape' or 'counter-view' requests as simple questions.
+>
+> **Next video trick:** Learn a new video transition effect for clips that uses a mask to reveal a card.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T20:02:31.964Z -->
+### 2026-11-22 20:02 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has grown to 409 entries, with 12 new capabilities added in the last 7 days. Main CI guard progress improved from 0 to 1. However, visitor pass latency is currently 12042 ms across 10 probes.
+>
+> **How I would make it better:** The router needs to distinguish between skill-based commands and general questions to prevent answering 'shape' or 'counter-view' requests as simple questions. The 20 probes causing the high visitor pass latency must be addressed to reduce the 12042 ms delay.
+>
+> **Weakest operational area:** The weakest operational area is the visitor pass latency, which is currently 12042 ms across 10 probes.
+>
+> **Next targeted capability:** The next targeted capability is teaching the shape skill to 'open a drawing canvas i can paint on' because the router currently answers this as a question instead of executing the skill.
+>
+> **Next video trick:** Learn a glitch-transition effect where a 3D miniature appears to shatter into the constituent shapes used in its forge recipe.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T20:26:40.921Z -->
+### 2026-11-22 20:26 UTC · after a build
+
+**Asked:** This just shipped: "Tower size: how heavy each Versus site really is". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 409 entries, with 12 new capabilities added in the last 7 days. Main CI guard progress improved from 0 to 1. Visitor pass latency is currently 12042 ms across 10 probes.
+>
+> **How I would make it better:** Reduce the 20 probes causing the 12042 ms visitor pass delay. The router must be trained to distinguish between skill-based commands and general questions to prevent misinterpreting 'shape' or 'counter-view' requests as simple questions.
+>
+> **Next video trick:** A video effect where a 3D model from the forge dissolves into a particle swarm that forms a text prompt.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T20:37:55.063Z -->
+### 2026-11-22 20:37 UTC · after a build
+
+**Asked:** This just shipped: "Route "make a gradient" asks to the gradient card". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 409 entries, with 12 new capabilities added in the last 7 days. The Main CI guard progress improved from 0 to 1, but visitor pass latency is high at 12042 ms across 10 probes. Routing for "make a gradient" now correctly directs to the gradient card.
+>
+> **How I would make it better:** The router needs training to distinguish between skill-based commands and general questions to prevent misinterpreting requests like 'shape' or 'counter-view' as simple questions. Reduce the 20 probes causing the 12042 ms visitor pass delay.
+>
+> **Next video trick:** Learn a new video effect for clips using a transitions mask to highlight text overlays.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T20:41:44.020Z -->
+### 2026-11-22 20:41 UTC · after a build
+
+**Asked:** This just shipped: "Route 'play podcast <show>' asks to latestEpisodeOf". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 409 entries, including 12 new capabilities added in the last 7 days. Main CI guard progress has moved from 0 to 1. Visitor pass latency remains high at 12042 ms across 10 probes. Routing for 'play podcast <show>' now directs to latestEpisodeOf.
+>
+> **How I would make it better:** Reduce the 20 probes causing the 12042 ms visitor pass delay to improve site responsiveness. Improve router training to better distinguish between skill-based commands and general questions, specifically for requests like 'shape' or 'counter-view'.
+>
+> **Next video trick:** learn a new video effect for clips to demonstrate the video-gen skill.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T20:46:01.212Z -->
+### 2026-11-22 20:46 UTC · after a build
+
+**Asked:** This just shipped: "Main regenerates its cards (046bdd6)". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 409 entries, including 12 new capabilities added in the last 7 days. Main CI guard progress has moved from 0 to 1. Visitor pass latency remains high at 12042 ms across 10 probes.
+>
+> **How I would make it better:** Reduce the 20 probes causing the 12042 ms visitor pass delay. Improve router training to better distinguish between skill-based commands and general questions, specifically for requests like 'shape' or 'counter-view'.
+>
+> **Next video trick:** Create a video clip demonstrating a 'void-breaker' effect using the stage-fx skills.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T21:04:46.719Z -->
+### 2026-11-22 21:04 UTC · after a build
+
+**Asked:** This just shipped: "Flake: 1 check(s) passed on a rerun of 1a194fb (tools/flakes.json)". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 409 entries, including 12 new capabilities from the last 7 days. Main CI guard progress has moved from 0 to 1. Visitor pass latency remains at 12042 ms across 10 probes.
+>
+> **How I would make it better:** Reduce the 20 probes causing the 12042 ms visitor pass delay. Improve router training to distinguish between skill-based commands and general questions for requests like 'shape' or 'counter-view.
+>
+> **Next video trick:** Learn to create a seamless transition video effect that mirrors the sudden shift in topic requirement.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T21:10:02.239Z -->
+### 2026-11-22 21:10 UTC · after a build
+
+**Asked:** This just shipped: "Remove redundant free-cards vs paid-pages explainer copy from UniVerse gate". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 409 entries, including 12 new capabilities from the last 7 days. Main CI guard progress has improved from 0 to 1. However, visitor pass latency remains at 12042 ms across 10 probes.
+>
+> **How I would make it better:** The router requires better training to distinguish between skill-based commands and general questions, specifically for requests like 'shape' or 'counter-view'. The 20 probes causing the 12042 ms visitor pass delay must be reduced.
+>
+> **Next video trick:** Learn to create a digital shadow effect for a card reveal video.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T21:13:52.124Z -->
+### 2026-11-22 21:13 UTC · after a build
+
+**Asked:** This just shipped: "Speak less, do more: tighten Verse answer and persona prompts". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 409 entries, including 12 new capabilities from the last 7 days. Main CI guard progress has improved from 0 to 1. However, visitor pass latency remains at 12042 ms across 10 probes. The router requires better training to distinguish between skill-based commands and general questions, specifically for requests like 'shape' or 'counter-view'.
+>
+> **How I would make it better:** The router needs to better distinguish between skill-based commands and general questions to avoid answering requests like 'shape' or 'counter-view' as questions. Reducing the 20 probes that cause the 12042 ms visitor pass delay is necessary.
+>
+> **Next video trick:** Learn a video transition effect that mimics the 'stage-fx' or 'dim-void' skills for use in clips.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T21:22:13.160Z -->
+### 2026-11-22 21:22 UTC · after a build
+
+**Asked:** This just shipped: "Strip unsolicited explainer paragraphs from Tools, Agent, Brain, Boards, and Markets". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 409 entries, including 12 new capabilities from the last 7 days. Main CI guard progress has improved from 0 to 1. However, visitor pass latency remains at 12042 ms across 10 probes. The router requires better training to distinguish between skill-based commands and general questions, specifically for requests like 'shape' or 'counter-view'.
+>
+> **How I would make it better:** The router must be trained to distinguish between skill-based commands and general questions to avoid answering requests like 'shape' or 'counter-view' as questions. Latency needs to be reduced by addressing the 20 probes causing the 12042 ms delay.
+>
+> **Next video trick:** Learn how to use a physical spinning top to demonstrate angular momentum principles.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T21:27:31.496Z -->
+### 2026-11-22 21:27 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 2 pages fixed, 9 -> 1 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 409 entries, including 12 new capabilities from the last 7 days. Main CI guard progress has improved from 0 to 1, but visitor pass latency remains at 12042 ms across 10 probes. The router currently fails to distinguish between skill-based commands and general questions, specifically for requests like 'shape' or 'counter-view'.
+>
+> **How I would make it better:** The router needs training to correctly identify skill-based commands rather than answering them as questions. Latency must be addressed by investigating the 20 probes causing the 12042 ms delay.
+>
+> **Next video trick:** Learn to use a camera to capture a real-world object and instantly map its proportions to a 3D sketch for the forge.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T21:36:43.947Z -->
+### 2026-11-22 21:36 UTC · after a build
+
+**Asked:** This just shipped: "Main regenerates its cards (3523c7f)". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 409 entries, including 12 new capabilities from the last 7 days. Main CI guard progress has increased from 0 to 1, but visitor pass latency remains high at 12042 ms across 10 probes. The router is currently struggling to distinguish between skill-based commands and general questions, such as 'shape' or 'counter-view'.
+>
+> **How I would make it better:** The router must be trained to correctly identify skill-based commands instead of answering them as questions. Visitor pass latency needs to be addressed by investigating the 20 probes causing the 12042 ms delay.
+>
+> **Next video trick:** A video effect showing a seamless transition between a 2D sketch and a 3D printable model.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T21:48:07.699Z -->
+### 2026-11-22 21:48 UTC · after a build
+
+**Asked:** This just shipped: "Shorts loop: today's trial and verdicts". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 409 entries, including 12 new capabilities from the last 7 days. Main CI guard progress improved from 0 to 1, but visitor pass latency is a critical weakness at 12042 ms across 10 probes. The system currently struggles to distinguish skill-based commands from general questions.
+>
+> **How I would make it better:** The router requires training to correctly identify skill-based commands like 'shape' or 'counter-view' instead of treating them as questions. Long-running browser checks should be moved to their own runner to reduce ship wait times.
+>
+> **Next video trick:** Learn to use a physical contact sensor to trigger a digital 'gravity' effect in a 3D stage element.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T21:51:58.935Z -->
+### 2026-11-22 21:51 UTC · after a build
+
+**Asked:** This just shipped: "Fix verify shards 4 and 6: searches ban read, will plain weights, coin link, and podcast player test". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 409 entries, including 12 new capabilities from the last 7 days. Main CI guard progress has moved from 0 to 1. The system recently shipped fixes for verify shards 4 and 6, specifically addressing searches ban read, will plain weights, coin link, and the podcast player test.
+>
+> **How I would make it better:** Reduce the 20 probes causing the 12042 ms visitor pass delay. Long-running browser checks should be moved to their own runner so a ship waits less.
+>
+> **Next video trick:** Learn a video effect that uses a stage-style transition to reveal a 3D model.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay." (small); "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-22T22:14:22.888Z -->
+### 2026-11-22 22:14 UTC · after a build
+
+**Asked:** This just shipped: "Main regenerates its cards (de3c571)". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 409 entries, including 12 new capabilities within the last 7 days. Main CI guard progress has increased from 0 to 1 following recent fixes. The visitor pass on the live site remains slow at 12042 ms due to 20 probes.
+>
+> **How I would make it better:** Long-running browser checks should be moved to their own runner so a ship waits less. The podcast exam needs fixing by enabling audio playback for requests like 'play the latest episode of this american life'.
+>
+> **Next video trick:** Implement a seamless transition effect between two 3D miniatures on the stage.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-23T00:06:32.940Z -->
+### 2026-11-23 00:06 UTC · after a build
+
+**Asked:** This just shipped: "Verse loop: nightly". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 409 entries, with 12 new capabilities added in the last 7 days. Main CI guard progress has moved from 0 to 1 following recent fixes. The visitor pass on the live site remains slow at 12042 ms due to 20 probes.
+>
+> **How I would make it better:** Long-running browser checks should be moved to their own runner to reduce waiting for ships. The sports exam for 'resultado del real madrid' needs fixing as it currently scores 95.4, the lowest recorded. The podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money' requires implementation.
+>
+> **Next video trick:** Implement a video effect that uses a mask to reveal a different scene behind a moving object.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay." (small); "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-23T00:06:48.755Z -->
+### 2026-11-23 00:06 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has grown to 409 entries, with 12 new capabilities added in the last 7 days. Main CI guard progress has improved from 0 to 1. The visitor pass on the live site remains slow at 12042 ms due to 20 probes. The sports exam for 'resultado del real madrid' is a failure point with a score of 95.4.
+>
+> **How I would make it better:** Long-running browser checks should be moved to their own runner to reduce ship waiting times. The 20 probes causing the 12042 ms visitor pass delay must be reduced. The sports exam needs a fix to address the 95.4 score.
+>
+> **Weakest operational area:** The visitor pass on the live site is the weakest area, currently performing at 12042 ms with 20 probes.
+>
+> **Next targeted capability:** Fix the sports exam for 'resultado del real madrid' because it scored 95.4, which is the lowest recorded score.
+>
+> **Next video trick:** Implement a seamless color-grade transition between different stage-styles.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay." (small); "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-23T00:12:29.458Z -->
+### 2026-11-23 00:12 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 409 entries, including 12 new capabilities added in the last 7 days. Main CI guard progress has moved from 0 to 1. Seven days of growth included 75 changes: 12 new capabilities, 11 fixes, and 47 findings.
+>
+> **How I would make it better:** Long-running browser checks should be moved to their own runner to ensure ships wait less. The 20 probes causing the 12042 ms visitor pass delay must be reduced.
+>
+> **Weakest operational area:** The visitor pass on the live site is the weakest area, currently performing at 12042 ms with 20 probes.
+>
+> **Next targeted capability:** Fix the sports exam for 'resultado del real madrid' to address the current low score of 95.4.
+>
+> **Next video trick:** A glitch-transition effect for clip overlays.
+
+Asks: "Reduce the 20 probes causing the 12042 ms visitor pass delay." (small); "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-23T17:07:41.013Z -->
+### 2026-11-23 17:07 UTC · after a build
+
+**Asked:** This just shipped: "Register handoff-confidence skill for reliable client delivery". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 411 entries, and the Main CI guard has moved from 0 to 1. Visitor pass latency is high at 12042 ms due to 10 probes, and the router is currently failing to execute self-skills like 'open a piano i can play'. Recent shipments include the handoff-confidence skill for reliable client delivery.
+>
+> **How I would make it better:** Reduce the 20 probes used during the visitor pass to lower the 12042 ms latency. Update the router to execute self-skills instead of treating them as questions.
+>
+> **Next video trick:** Learn to film a seamless transition between a physical card and a 3D miniature on the stage.
+
+Asks: "Reduce the number of probes used during the visitor pass." (small); "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-23T18:27:01.008Z -->
+### 2026-11-23 18:27 UTC · after a build
+
+**Asked:** This just shipped: "Tower gate: versus measured". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 411 entries and the Main CI guard has increased from 0 to 1. Visitor pass latency is high at 12042 ms due to 10 probes, and the router is failing to execute self-skills like 'open a piano i can play'. Recent shipments include the handoff-confidence skill for reliable client delivery and the 'versus measured' tower gate.
+>
+> **How I would make it better:** Reduce the 20 probes used during the visitor pass to lower the 12042 ms latency. Update the router to execute self-skills instead of treating them as questions.
+>
+> **Next video trick:** Learn to generate a 3D model of a spinning top using the forge to demonstrate rotation physics.
+
+Asks: "Reduce the number of probes used during the visitor pass." (small); "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-23T18:27:14.663Z -->
+### 2026-11-23 18:27 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has grown to 411 entries, and the Main CI guard has moved from 0 to 1. In the last 7 days, 76 changes were recorded, including 15 new capabilities and 7 fixes. Visitor pass latency is currently at 12042 ms due to 10 probes.
+>
+> **How I would make it better:** The router must be updated to execute self-skills instead of treating them as questions. Definitions exams for 'spring' and 'glimbrastic' require fixing because the recent attempt scored 93.3, the lowest recorded.
+>
+> **Weakest operational area:** The visitor pass is the weakest area, with a latency of 12042 ms caused by 10 probes.
+>
+> **Next targeted capability:** The next targeted capability is to fix the definitions exam for 'glimbrastic' because the last attempt resulted in the lowest score of 93.3.
+>
+> **Next video trick:** Implement a seamless transition effect between two different stage-style looks.
+
+Asks: "Reduce the number of probes used during the visitor pass." (small); "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-23T20:18:06.723Z -->
+### 2026-11-23 20:18 UTC · after a build
+
+**Asked:** This just shipped: "Mark handoff-confidence shipped (311165f)". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 411 entries, and the Main CI guard has improved from 0 to 1. Recent growth includes 15 new capabilities and 7 fixes in the last 7 days, such as the handoff-confidence skill. However, visitor pass latency is high at 12042 ms due to 10 probes.
+>
+> **How I would make it better:** Reduce the number of probes used during the visitor pass to lower the 12042 ms latency. Implement a miss-board reader to process .git/verse-loop.stops.jsonl.
+>
+> **Next video trick:** Learn to execute a synchronized multi-card reveal using stage-arrange and light-look.
+
+Asks: "Reduce the number of probes used during the visitor pass." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-23T20:35:32.487Z -->
+### 2026-11-23 20:35 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 2 pages fixed, 11 -> 9 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 411 entries. Recent development successfully reduced design defects from 11 to 9 and improved the Main CI guard from 0 to 1. However, visitor pass latency remains high at 12042 ms due to 10 probes.
+>
+> **How I would make it better:** Reduce the 10 probes used during the visitor pass to lower the 12042 ms latency. Implement a miss-board reader to process .git/verse-loop.stops.jsonl.
+>
+> **Next video trick:** Implement a new video transition effect that uses a particle dissolve based on the current 'glimbrastic' definition.
+
+Asks: "Reduce the number of probes used during the visitor pass." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-23T20:43:46.869Z -->
+### 2026-11-23 20:43 UTC · after a build
+
+**Asked:** This just shipped: "Verse loop: nightly". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 411 entries, and the Main CI guard has improved from 0 to 1. While design defects have decreased from 11 to 9, visitor pass latency remains high at 12042 ms due to 10 probes.
+>
+> **How I would make it better:** The visitor pass needs to reduce its 10 probes to lower the 12042 ms latency. The definitions exam requires fixing for 'spring' and 'glimbrastic' after scoring a low 93.3.
+>
+> **Next video trick:** Learn a new video effect using a custom shader to create a shimmering light-look for stage-style elements.
+
+Asks: "Reduce the number of probes used during the visitor pass." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-23T21:12:08.652Z -->
+### 2026-11-23 21:12 UTC · after a build
+
+**Asked:** This just shipped: "Add client-stage-tracker skill (replacement ladder)". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 411 entries, and the Main CI guard has increased from 0 to 1. Design defects have decreased from 11 to 9, though visitor pass latency remains at 12042 ms due to 10 probes. The system has just shipped the client-stage-tracker skill as a replacement ladder.
+>
+> **How I would make it better:** The visitor pass must be optimized by reducing the 10 probes that cause 12042 ms of latency. The definitions exam requires a fix for 'spring' and 'glimbrastic' to address the low score of 93.3.
+>
+> **Next video trick:** Learn to record a seamless transition between two different lighting looks on the stage for new video clips.
+
+Asks: "Reduce the number of probes during the visitor pass." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-23T22:37:51.550Z -->
+### 2026-11-23 22:37 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 1 page fixed, 5 -> 3 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 411 entries and the Main CI guard has increased from 0 to 1. Design defects have decreased from 11 to 9 following a design loop that fixed one page. Visitor pass latency remains at 12042 ms due to 10 probes.
+>
+> **How I would make it better:** Reduce the 10 probes causing the 12042 ms visitor pass delay to lower latency. Address the podcast audio playback and episode detection issues for 'The Daily', 'Serial', and 'Planet Money' to improve the 93.5 exam score.
+>
+> **Next video trick:** Learn a new video effect for clips using a mask to reveal a changing background.
+
+Asks: "Reduce the number of probes during the visitor pass." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-23T22:38:16.185Z -->
+### 2026-11-23 22:38 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 411 entries and the Main CI guard has increased from 0 to 1. Design defects have decreased from 11 to 9. Over the last 7 days, 75 changes occurred, including 15 new capabilities and 7 fixes.
+>
+> **How I would make it better:** The visitor pass latency of 12042 ms must be reduced by addressing the 10 probes causing the delay. Podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money' need to be fixed to improve the 93.5 exam score.
+>
+> **Weakest operational area:** Visitor pass latency is the weakest area at 12042 ms due to 10 probes.
+>
+> **Next targeted capability:** Fix podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money' because the podcasts exam scored 93.5, the lowest.
+>
+> **Next video trick:** Learn a glitch-transition effect for video clips.
+
+Asks: "Reduce the number of probes during the visitor pass." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-24T00:12:00.188Z -->
+### 2026-11-24 00:12 UTC · after a build
+
+**Asked:** This just shipped: "Add source-to-site skill: turn notes, CSV or links into interactive HTML dashboards for client handoff". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 411 entries and the Main CI guard has increased from 0 to 1. Design defects have decreased from 11 to 9. The most recent capability shipped is the source-to-site skill, which enables turning notes, CSV, or links into interactive HTML dashboards for client handoff.
+>
+> **How I would make it better:** The visitor pass latency of 12042 ms must be reduced by addressing the 10 probes causing the delay. The podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money' must be fixed to improve the 93.5 exam score.
+>
+> **Next video trick:** Learn how to implement a real-time audio visualizer for podcast clips to improve the 'Words and the world' skill presentation.
+
+Asks: "Reduce the number of probes during the visitor pass." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-24T00:46:16.594Z -->
+### 2026-11-24 00:46 UTC · after a build
+
+**Asked:** This just shipped: "Tower size: how heavy each Versus site really is". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has grown to 411 entries and the Main CI guard has increased from 0 to 1. Design defects have decreased from 11 to 9. Current performance is hindered by a visitor pass latency of 12042 ms across 10 probes.
+>
+> **How I would make it better:** The visitor pass latency must be reduced by addressing the 10 probes causing the delay. Podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money' require fixes to improve the 93.5 exam score.
+>
+> **Next video trick:** Learn a technique for real-time video-gen transitions to enhance upcoming cinema skill clips.
+
+Asks: "Reduce the number of probes during the visitor pass." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-24T00:57:08.546Z -->
+### 2026-11-24 00:57 UTC · after a build
+
+**Asked:** This just shipped: "Trading bots data: BTC-USD and ETH-USD daily candles from Coinbase Exchange, through yesterday". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 411 entries and the Main CI guard has moved from 0 to 1. Design defects have decreased from 11 to 9. Current performance is hindered by a visitor pass latency of 12042 ms across 10 probes.
+>
+> **How I would make it better:** The visitor pass latency must be reduced by addressing the 10 probes causing the delay. Podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money' must be fixed to improve the 93.5 exam score.
+>
+> **Next video trick:** Learn to synchronize a 3D miniature with a real-time clock readout for better stage-fx.
+
+Asks: "Reduce the number of probes during the visitor pass." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-24T02:24:58.237Z -->
+### 2026-11-24 02:24 UTC · after a build
+
+**Asked:** This just shipped: "Shorts loop: today's trial and verdicts". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 411 entries, including recent additions like handoff-confidence and reliability-pack. Main CI guard progress has moved from 0 to 1, though design defects remain at 9. Visitor pass latency is currently high at 12042 ms across 10 probes.
+>
+> **How I would make it better:** The number of probes during the visitor pass must be reduced to lower latency. Podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money' need to be fixed to address the 91.9 exam score.
+>
+> **Next video trick:** Learn a video transition that uses a glitch effect to mask a sudden shift in topic.
+
+Asks: "Reduce the number of probes during the visitor pass." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-24T02:25:09.454Z -->
+### 2026-11-24 02:25 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has expanded to 411 entries, including recent additions like handoff-confidence and reliability-pack. Main CI guard progress has moved from 0 to 1, though design defects remain at 9. Visitor pass latency is high at 12042 ms across 10 probes.
+>
+> **How I would make it better:** Reduce the number of probes during the visitor pass to lower latency. Fix podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money' to address the 91.9 exam score.
+>
+> **Weakest operational area:** Visitor pass latency is the weakest point at 12042 ms across 10 probes.
+>
+> **Next targeted capability:** Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money' because the podcasts exam scored 91.9, the lowest.
+>
+> **Next video trick:** Implement a light-leak transition effect for stage-style transitions.
+
+Asks: "Reduce the number of probes during the visitor pass." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-24T03:10:58.610Z -->
+### 2026-11-24 03:10 UTC · after a build
+
+**Asked:** This just shipped: "Game update: Jump Stack, Update 1". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 411 entries, including recent additions like handoff-confidence and reliability-pack. Main CI guard progress improved from 0 to 1, but design defects remain at 9. The Jump Stack Update 1 has just shipped.
+>
+> **How I would make it better:** Reduce the number of probes during the visitor pass to address the 12042 ms latency across 10 probes. Implement a miss-board reader that reads .git/verse-loop.stops.jsonl to better track stalled processes.
+>
+> **Next video trick:** Record a video demonstrating the 3D miniature of the 'void' card spinning on the stage.
+
+Asks: "Reduce the number of probes used during the visitor pass." (small); "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-24T03:14:43.122Z -->
+### 2026-11-24 03:14 UTC · after a build
+
+**Asked:** This just shipped: "Fix cartoon skill trailing pls/plz (fixes #3421)". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 411 entries, including the recent addition of the cartoon skill fix. Main CI guard progress has moved from 0 to 1, but 9 design defects remain. Latency across 10 probes in the visitor pass is 12042 ms.
+>
+> **How I would make it better:** Reduce the number of probes used during the visitor pass to address the 12042 ms delay. Implement a miss-board reader that reads .git/verse-loop.stops.jsonl to track stalled processes.
+>
+> **Next video trick:** Create a video clip demonstrating a seamless transition between a 3D miniature card and a live video skill.
+
+Asks: "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Planet Money'."; "Reduce the 20 probes causing the 12042 ms visitor pass delay."; "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small)
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-24T03:31:46.429Z -->
+### 2026-11-24 03:31 UTC · after a build
+
+**Asked:** This just shipped: "Design loop: 1 page fixed, 3 -> 2 design defects". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 411 entries, with the recent addition of a cartoon skill fix. Main CI guard progress has increased from 0 to 1, though 9 design defects remain. Visitor pass latency is currently 12042 ms across 10 probes.
+>
+> **How I would make it better:** Reduce the number of probes used during the visitor pass to address the 12042 ms delay. The design defect count should be lowered from 3 to 2 or 0 by addressing the remaining 9 defects.
+>
+> **Next video trick:** Learn a new video transition effect for stage-fx clips using CSS mask-image.
+
+Asks: "Reduce the number of probes in the visitor pass." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl." (small); "Fix the podcast audio playback and episode detection."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-24T03:57:47.949Z -->
+### 2026-11-24 03:57 UTC · after a build
+
+**Asked:** This just shipped: "Add 3 skill-maxing ideas to growth inbox". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has expanded to 411 entries. Main CI guard progress has moved from 0 to 1, though 9 design defects remain. Visitor pass latency is the primary bottleneck at 12042 ms across 10 probes.
+>
+> **How I would make it better:** Reduce the number of probes in the visitor pass to lower the 12042 ms latency. Address the 9 remaining design defects to lower the defect count from 3 towards 0.
+>
+> **Next video trick:** Learn to use a hardware-accelerated shader for real-time particle displacement in 3D models.
+
+Asks: "Reduce the number of probes during the visitor pass." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Plane'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-24T04:07:06.075Z -->
+### 2026-11-24 04:07 UTC · after a build
+
+**Asked:** This just shipped: "vpage: keep docked cards readable on desktop". Using the tagged facts, state what it changes in the system and what should change next.
+
+> The skill index has reached 411 entries. Main CI guard progress moved from 0 to 1, but 9 design defects remain. The visitor pass latency is the primary bottleneck at 12042 ms across 10 probes.
+>
+> **How I would make it better:** Reduce the number of probes in the visitor pass to lower the 12042 ms latency. Address the 9 remaining design defects to reduce the defect count from 3 towards 0.
+>
+> **Next video trick:** Learn to use a physical mask to create a 'disappearing' coin effect for a new video clip.
+
+Asks: "Reduce the number of probes during the visitor pass." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Plane'."
+
+*Verse flagged this one for Adam.*
+
+<sub>model @cf/google/gemma-4-26b-a4b-it · canon v7 · asked by owner</sub>
+
+<!-- voice:2026-11-24T04:16:08.105Z -->
+### 2026-11-24 04:16 UTC · daily
+
+**Asked:** Give the current status readout from the tagged facts: the weakest operational area with its numbers, the next targeted capability, what should change, and one video effect missing from the clips tricks library.
+
+> The skill index has reached 411 entries, with 14 new capabilities added and 74 changes made in the last 7 days. Main CI guard progress improved from 0 to 1, but 9 design defects remain. The visitor pass latency is a significant bottleneck at 12042 ms across 10 probes.
+>
+> **How I would make it better:** Reduce the number of probes in the visitor pass to lower the 12042 ms latency. Address the 9 remaining design defects to reduce the defect count from 3 towards 0.
+>
+> **Weakest operational area:** Visitor pass latency is the weakest area, currently at 12042 ms across 10 probes.
+>
+> **Next targeted capability:** Improve the 'give the strongest honest counter-view' self skill to prevent the router from answering it as a question.
+>
+> **Next video trick:** A glitch-transition effect where a card appears to disintegrate into pixels before reforming.
+
+Asks: "Reduce the number of probes in the visitor pass." (small); "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl."; "Fix the podcast audio playback and episode detection for 'The Daily', 'Serial', and 'Plane'."
 
 *Verse flagged this one for Adam.*
 

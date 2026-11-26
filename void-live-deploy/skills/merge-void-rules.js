@@ -77,3 +77,5 @@ export function selfPlay(seed, cap = 4000) {
   while (!s.over && k++ < cap) { const m = botMove(s); if (!m) break; apply(s, m); }
   return { over: s.over, score: s.score, best: best(s), moves: s.moves };
 }
+
+export const whatsNew = 'Update 1: Every slide feels purposeful and rewarding.';

@@ -60,7 +60,9 @@
     /* home polish: never cut words, fit phones, no sideways scroll */
     html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     body { overflow-x: hidden; }
-    h1, h2, h3, p, li, label, button, a, figcaption { overflow-wrap: anywhere; }
+    h1, h3, p, li, label, a, figcaption { overflow-wrap: anywhere; }
+    h2, button { overflow-wrap: normal; }  /* prevent 1-char collapses in docked cards */
+    button span { overflow-wrap: break-word; }
     img, video, canvas, iframe { max-width: 100%; }
     :root {
       color-scheme: dark;
@@ -551,6 +553,7 @@
     .vpage h2 { margin: 0 0 4px; font-weight: 500; font-size: 22px; letter-spacing: .01em; }
     .vpage .sub { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
     .vpage img { float: right; max-width: 150px; max-height: 150px; margin: 2px 0 10px 16px; border-radius: 10px; opacity: .92; }
+    .vpage.placed img, .vpage.kept img { float: right; max-width: 72px; max-height: 72px; margin: 4px 0 12px 16px; border-radius: 10px; opacity: .92; }
     .vpage p { margin: 0 0 10px; color: #d6d6d6; }
     .vpage ul { margin: 0 0 10px; padding-left: 18px; color: #d6d6d6; }
     .vpage .src { clear: both; margin-top: 12px; font-size: 12px; color: var(--muted); }
@@ -608,7 +611,8 @@
     html.no-gl[data-fx="nebula"] body::before { content: ''; position: fixed; inset: -20%; z-index: 0; pointer-events: none;
       background: radial-gradient(40% 35% at 30% 40%, color-mix(in srgb, var(--void-glow, var(--sky-glow, #0b0b10)) 70%, #1a1030), transparent 70%),
                   radial-gradient(35% 30% at 70% 60%, color-mix(in srgb, var(--void-glow, var(--sky-glow, #0b0b10)) 60%, #06202a), transparent 70%);
-      filter: blur(40px); opacity: .7; }
+      filter: blur(40px); opacity: .7; animation: auraDrift 60s ease-in-out infinite alternate; }
+    @keyframes auraDrift { to { transform: translate(3%, -2%) scale(1.08); } }
     #stage { perspective: 1400px; }
     #stage > .shrunk, #stage > .shrunk * { cursor: zoom-in; } /* a board shrunk beside a newer one: a tap brings it back */
     .thing:focus-visible { outline: 2px solid rgba(170,190,255,.85); outline-offset: 3px; } /* a card the keyboard reached shows it */
@@ -665,7 +669,15 @@
         radial-gradient(38vmax 30vmax at var(--dx, 50%) var(--dy, 42%), color-mix(in srgb, var(--void-glow, var(--sky-glow, #0b0b10)) 55%, #1a2350 45%) 0%, transparent 70%),
         radial-gradient(60vmax 45vmax at 50% 118%, rgba(40,52,110,.16), transparent 70%),
         radial-gradient(50vmax 40vmax at 12% -10%, rgba(70,40,120,.10), transparent 70%);
-      opacity: .55; will-change: opacity; }
+      opacity: .55; animation: depthBreath 14s steps(70) infinite alternate; will-change: transform, opacity; } /* steps: ~5 redraws a second, too slow a drift to see the steps; a smooth 60 fps breath made every keystroke wait an extra frame (2026-10-10) */
+    @keyframes depthBreath { to { opacity: .8; transform: scale(1.04); } }
+    /* the particle field (#2921), its shape morph (#2926) and the sky map (#2944) are the DEFAULT look (owner, 2026-11-19: "i had an updated
+       starfield"): fx 'field' on a fresh visit. While it shows, the plain void's layers step aside, as they did before #2957 (the elements stay,
+       so their checks still read them). "calm my void" or "remove the particle field" brings the plain void back. */
+    #void-particles, #void-cosmos { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; display: none; }
+    html[data-fx="field"] #void-particles, html[data-fx="field"] #void-cosmos { display: block; }
+    html[data-fx="field"], html[data-fx="field"] body { background: #05060a; }
+    html[data-fx="field"] #void-stars, html[data-fx="field"] #void-stars-far, html[data-fx="field"] #void-depth, html[data-fx="field"] #void-glow, html[data-fx="field"] body::after { display: none !important; }
     /* film grain dithers the dark gradient so it never bands into rings */
     #void-depth::after { content: ''; position: absolute; inset: 0; opacity: .07; mix-blend-mode: overlay;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
@@ -1039,11 +1051,53 @@
       --d-lift: 0 1px 0 rgba(255,255,255,.10) inset, 0 -1px 0 rgba(0,0,0,.5) inset, 0 2px 6px rgba(0,0,0,.30), 0 18px 40px rgba(0,0,0,.42), 0 60px 120px rgba(0,0,0,.55);
       --d-ease-out: cubic-bezier(.16,1,.3,1); --d-spring: cubic-bezier(.34,1.56,.64,1);
     }
-    /* the idle stage is one WebGL2 particle canvas on obsidian: no floating orb, blurred halo, spinning ring or bobbing drift */
-    html, body { background: #05060a; }
-    #void-stars, #void-stars-far, #void-aura, #void-swarm, body::after { display: none !important; }
-    #void-particles { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; display: block; }
-    .vpage.on { box-shadow: var(--d-lift), 0 -1px 0 0 rgb(var(--d-key) / .35), 0 -24px 60px -30px rgb(var(--d-key) / .45); transition: box-shadow .9s var(--d-ease-out); }
+    /* the default void (Adam 2026-10-15: "a beautiful Verse by default ... puts people in awe"; no grids, no synthwave floor ever):
+       deep space, a slowly breathing event-horizon glow at the centre, a soft oval pool of light where cards arrive, star dust from the
+       two star canvases. Transforms and opacity only (GPU-composited, no layout, no per-frame JS); CSS animations pause with the tab. */
+    /* celestial-sync: the nebula and ring tint follow the visitor's local hour (set on <html> by the script below, on the device only, no
+       network, nothing stored) and the real sky's glow when sky-rules has one (--sky-glow) */
+    :root { --neb-a: 92 70 190; --neb-b: 40 130 170; --ring: 1; }
+    html[data-phase="dawn"] { --neb-a: 190 90 140; --neb-b: 230 150 90; }
+    html[data-phase="day"]  { --neb-a: 70 120 210; --neb-b: 60 170 200; --ring: .9; }
+    html[data-phase="dusk"] { --neb-a: 200 80 120; --neb-b: 120 70 200; }
+    html[data-phase="night"]{ --neb-a: 92 70 190; --neb-b: 40 130 170; --ring: 1.08; }
+    #void-depth::before { content: ''; position: absolute; left: 50%; top: 44%; width: min(118vmin, 1100px); aspect-ratio: 1; pointer-events: none;
+      transform: translate(-50%, -50%); border-radius: 50%;
+      /* lip falloff in px so a 390px phone at night (--ring: 1.08) does not harden into a circle */
+      background:
+        radial-gradient(closest-side, #000 0 31%, rgba(255,255,255,.75) calc(32.5% + 8px), rgb(var(--d-key) / .85) calc(34% + 10px), rgb(var(--d-warm) / .32) calc(38% + 14px), rgb(var(--d-key) / .12) calc(46% + 16px), transparent calc(60% + 20px)),
+        conic-gradient(from 210deg, rgb(var(--d-teal) / .30), rgb(var(--d-key) / .05) 15%, rgb(var(--d-key) / .45) 36%, rgb(255 236 210 / .40) 47%, transparent 60%, rgb(var(--d-warm) / .36) 78%, rgb(var(--d-teal) / .30));
+      -webkit-mask: radial-gradient(closest-side, #000 50%, transparent 100%); mask: radial-gradient(closest-side, #000 50%, transparent 100%);
+      opacity: calc(.9 * var(--ring)); animation: d-breathe 11s ease-in-out infinite, d-turn 160s linear infinite; }
+    /* the gravitational lens: a thin bright arc that shimmers just outside the horizon, and the event horizon's own shadow on top */
+    #void-lens { position: absolute; left: 50%; top: 44%; width: min(118vmin, 1100px); aspect-ratio: 1; z-index: 0; pointer-events: none; border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(closest-side, transparent calc(35.2% - 4px), rgba(255,255,255,.16) 36%, transparent calc(38.4% + 8px));
+      animation: d-lens 7s ease-in-out infinite; }
+    @keyframes d-lens { 0%,100% { scale: 1; opacity: .75; } 50% { scale: 1.012; opacity: 1; } }
+    #void-depth::after { content: ''; position: absolute; inset: auto; opacity: 1; mix-blend-mode: screen; background-image: none; left: 50%; top: 44%; width: 160vmax; height: 90vmax; pointer-events: none; transform: translate(-50%, -50%) rotate(-14deg);
+      background: radial-gradient(28% 22% at 36% 46%, rgb(var(--neb-a) / .30), transparent 70%), radial-gradient(24% 18% at 66% 56%, rgb(var(--neb-b) / .24), transparent 70%),
+        radial-gradient(40% 12% at 50% 50%, rgb(var(--d-warm) / .10), transparent 70%), radial-gradient(18% 14% at 24% 62%, color-mix(in srgb, var(--sky-glow, #20306a) 60%, transparent), transparent 70%);
+      animation: d-drift 70s ease-in-out infinite alternate; }
+    @keyframes d-breathe { 0%,100% { opacity: calc(.78 * var(--ring)); scale: 1; } 50% { opacity: var(--ring); scale: 1.015; } }
+    @keyframes d-turn { to { rotate: 360deg; } }
+    @keyframes d-drift { to { translate: 2.5vmax -1.5vmax; scale: 1.06; } }
+    /* the light pool: a soft oval where answers stand, and a shadow under the active card (its light on the floor) */
+    #void-glow::after { content: ''; position: absolute; left: 50%; top: 74%; width: min(760px, 110vw); height: min(150px, 22vw); transform: translate(-50%, -50%);
+      border-radius: 50%; background: radial-gradient(closest-side, rgb(var(--d-key) / .12), rgb(var(--d-key) / .04) 60%, transparent);
+      transition: opacity 1.2s var(--d-ease-out), scale 1.2s var(--d-ease-out); opacity: .85; }
+    #void-glow::before { content: ''; position: absolute; left: 50%; top: -30vh; width: 90vmax; height: 70vh; transform: translateX(-50%);
+      background: radial-gradient(closest-side, rgb(var(--d-key) / .08), transparent); }
+    /* the void wakes when you start to ask, leans in while a card is up, and spins up while Verse is thinking */
+    html:has(#input:focus) #void-depth::before { animation-duration: 6s, 160s; }
+    html:has(.vpage.on) #void-depth::before { animation-duration: 5s, 120s; }
+    html:has(.vpage.on) #void-glow::after { opacity: 1; scale: 1.08; background: radial-gradient(closest-side, rgb(var(--d-key) / .16), rgb(0 0 0 / .35) 55%, transparent); }
+    html.void-thinking #void-depth::before { animation-duration: 1.6s, 14s; --ring: 1.35; }
+    html.void-thinking #void-lens { animation-duration: 1.8s; }
+    /* light-reactive cards: the horizon light rims the card's top edge and blooms beneath it in the nebula's colour, stronger while thinking */
+    .vpage.on { box-shadow: var(--d-lift), 0 -1px 0 0 rgb(var(--d-key) / .35), 0 -24px 60px -30px rgb(var(--neb-a) / .55), 0 70px 140px -50px rgb(var(--neb-b) / .30); transition: box-shadow .9s var(--d-ease-out); }
+    html.void-thinking .vpage.on { box-shadow: var(--d-lift), 0 -1px 0 0 rgb(var(--d-key) / .6), 0 -30px 80px -26px rgb(var(--neb-a) / .8), 0 80px 160px -50px rgb(var(--neb-b) / .45); }
+    @media (prefers-reduced-motion: reduce) { #void-depth::before, #void-depth::after, #void-lens { animation: none; } }
     /* the ask bar: deeper glass, a lit rim that wakes on focus, a bigger calmer type size, a send key that glows when there is text */
     #row { border-radius: 22px; background: var(--d-glass); box-shadow: var(--d-lift); position: relative; isolation: isolate; }
     #row::after { content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none; z-index: -1;
@@ -1124,7 +1178,7 @@
     *,*::before,*::after{box-sizing:border-box}
     html,body{margin:0;background:#050505;color:#f2f4fb;font:15px/1.45 ui-sans-serif,system-ui,sans-serif}
     body{background:radial-gradient(80% 42% at 50% 108%,rgba(158,178,255,.22),transparent 60%),radial-gradient(46% 32% at 50% 36%,rgba(122,92,255,.20),transparent 70%),#050505}
-    /* the home is the void and the ask bar (owner, 2026-11-05): no wordmark, no heading, no Install line */
+    /* the home shows no wordmark, no heading and no Install line (2026-11-05) */
     #v01d,#verse-install{display:none !important} #away-note{opacity:0 !important} /* the away line keeps its place and its state but is not shown (opacity, not display:none, so its "show me" stays clickable: display:none failed four suite shards). The intro wordmark stays in the stylesheet and is not painted. */
     #dock{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:12px 16px calc(18px + env(safe-area-inset-bottom,0px))}
     #whisper,#away-note{min-height:18px} #whisper{margin-top:8px}
@@ -1154,7 +1208,7 @@
     <p>Verse by A-to-Mind is one quiet input. Ask for anything and it appears: a clock, a timer, notes, a list, a street map, the weather, a translation, a calculation, or a page about any topic. Nothing to sign up for. It needs JavaScript to run.</p>
     <p>Link straight to an answer: <a style="color:#fff" href="/?q=weather%20in%20Tokyo">a-to-mind.com/?q=weather in Tokyo</a>. More in <a style="color:#fff" href="/llms.txt">llms.txt</a>.</p>
   </main></noscript>
-  <canvas id="void-stars-far" aria-hidden="true"></canvas><canvas id="void-stars" aria-hidden="true"></canvas><div id="void-backdrop" aria-hidden="true"></div>
+  <div id="void-depth" aria-hidden="true"><div id="void-lens"></div></div><div id="void-glow" aria-hidden="true"></div><canvas id="void-stars-far" aria-hidden="true"></canvas><canvas id="void-stars" aria-hidden="true"></canvas><div id="void-backdrop" aria-hidden="true"></div>
   <div id="stage" role="region" aria-label="your stage"></div>
   <!-- screen readers hear each answer page here (its title and first lines), so asking never ends in silence -->
   <div id="sr-say" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"></div>
@@ -2595,9 +2649,19 @@ say('nothing selected to remove');
       say(); let tm = 0; const mo = new MutationObserver(() => { clearTimeout(tm); tm = setTimeout(say, 400); });
       mo.observe(el, { childList: true, subtree: true, characterData: true }); setTimeout(() => mo.disconnect(), 15000);
     }
+    function sameAsk(a, b) {
+      const n = (s) => String(s || '').toLowerCase().replace(/[?.!\s]+$/g, '').replace(/\s+/g, ' ').trim();
+      return !!n(a) && n(a) === n(b);
+    }
     function showPage(build) {
       warmAskLibs();
       const prev = vpageEl;
+      // the same ask already has a card (the article page bouncing to the answer): fill that one, so one typed line never opens two
+      if (prev && prev.isConnected && sameAsk(prev._ask, currentAsk)) {
+        build(prev);
+        stampSources(prev); keepTail(prev); keepRead(prev); keepTell(prev); keepCard(prev);
+        return prev;
+      }
       if (prev && prev.isConnected) { // a new card keeps the ones already open (they used to be replaced)
         prev.classList.remove('on'); prev.classList.add('kept');
         try { trailKeep(prev); } catch (_) {}
@@ -2612,6 +2676,9 @@ say('nothing selected to remove');
       try { document.dispatchEvent(new CustomEvent('void:cards')); } catch (_) {}
       srAnnounce(el);
       el._ask = currentAsk; el._at = Date.now();
+      logAsk(currentAsk, el); // the owner's Searches log (functions/api/searches.js): 90 days, a hashed visitor ID, never an IP
+      addReport(el); // the Report button: a bad picture, a wrong answer or anything else goes to the owner's Tower list (functions/api/searches.js)
+      safeWatch(el); // lib/image-safety.js: no photo on a card about nudity, sex, the explicit body or minors in such a context (fail closed)
       // a line with data-ask on any page (a menu row, a choice between two Springfields) runs that ask
       el.addEventListener('click', (e) => {
         const a = e.target.closest && e.target.closest('a[data-ask]'); if (!a) return;
@@ -2666,16 +2733,18 @@ say('nothing selected to remove');
     function wantsMenu(lower) {
       return /^(menu|the menu|show (me )?(the )?menu|open (the )?menu|options|commands|what can i do( here)?|what can i ask|list (the )?skills|skills)\s*[?.!]?$/.test(lower);
     }
+    // "what are you working on" is its own skill (lib/will-card.js), never this identity / menu page
     function wantsSelfPage(lower) {
-      return /^(what|who)\s+(are|r)\s+(you|u)\b|^what\s+(is|'s)\s+(this|(?:verse|void)|a-to-mind)\b|^what\s+can\s+(you|i|(?:verse|void))\s+do\b|^(help|\?)\s*$|^tell\s+me\s+about\s+(yourself|you|(?:verse|void))\b/.test(lower);
+      return /^(what|who)\s+(are|r)\s+(you|u)(?!\s+(?:working\s+on|building|doing|up\s+to|learning|planning|shipping))\b|^what\s+(is|'s)\s+(this|(?:verse|void)|a-to-mind)\b|^what\s+can\s+(you|i|(?:verse|void))\s+do\b|^(help|\?)\s*$|^tell\s+me\s+about\s+(yourself|you|(?:verse|void))\b/.test(lower);
     }
     // "what are you?" / "who are you" / "what is void" / "tell me about yourself": Verse says what it is and its motto first, then
     // the page (launch audit, 2026-10-15: the bare page read as a sign-in menu). MOTTO is the canon's, word for word
     // (domains/void.canon.md ## Motto; tools/launch-fixes.test.mjs keeps them the same).
     const MOTTO = 'You name it, Verse learns it and does it better.';
     const SELF_LEAD = 'I’m Verse: one box where you ask for anything and it appears as a working card, game or page. My motto: “' + MOTTO + '”';
+    // "what are you working on" is its own skill (lib/will-card.js), never "what are you?"
     function wantsIdentity(lower) {
-      return /^(what|who)\s+(are|r)\s+(you|u)\b|^what\s+(is|'s)\s+(this|void|v01d|verse|a-to-mind)\b|^tell\s+me\s+about\s+(yourself|you|void|v01d|verse)\b|^what('?s|\s+is)\s+your\s+motto\b/.test(lower);
+      return /^(what|who)\s+(are|r)\s+(you|u)(?!\s+(?:working\s+on|building|doing|up\s+to|learning|planning|shipping))\b|^what\s+(is|'s)\s+(this|void|v01d|verse|a-to-mind)\b|^tell\s+me\s+about\s+(yourself|you|void|v01d|verse)\b|^what('?s|\s+is)\s+your\s+motto\b/.test(lower);
     }
     // asked "who are you", the stage answers in light too (asked by Verse, ask-20261015-0540-2: "subtly shifts the stage lighting to reflect
     // my identity"): a violet glow rises from the floor and fades over 2.4 s; nothing under reduced motion; body[data-identity] marks it
@@ -2764,6 +2833,10 @@ say('nothing selected to remove');
     // Answer engine (plan item 2): asks no skill covers get a short sourced answer; excerpt if the model is busy.
     const pageHost = (u) => { try { return /^https?:\/\//i.test(String(u)) ? new URL(u).hostname : ''; } catch (_) { return ''; } };
     // page: the tab the Verse extension read for this ask (title, url, selection, field, text); answered about that page, not the web
+    // talk memory (lib/talk-memory.js TALK_KEY, TALK_MAX, TALK_IDLE_MS): this tab only; closing it, or 30 quiet minutes, forgets it
+    const TALK_KEY = 'a2m.void.talk.v1';
+    function talkRead() { try { const v = JSON.parse(sessionStorage.getItem(TALK_KEY) || 'null'); return v && Array.isArray(v.t) && Date.now() - (v.at || 0) < 30 * 60e3 ? v.t.slice(-8) : []; } catch (_) { return []; } }
+    function talkAdd(ask, answer) { try { const t = [...talkRead(), { ask: String(ask).slice(0, 160), answer: String(answer || '').slice(0, 240) }].slice(-8); sessionStorage.setItem(TALK_KEY, JSON.stringify({ at: Date.now(), t })); } catch (_) {} }
     async function showAnswer(text, page, heading) {
       // heading: a short name for the card when the ask itself is too long to be one (a summed-up paste); the ask still goes to the server
       const head = heading || text;
@@ -2780,7 +2853,9 @@ say('nothing selected to remove');
         let built = null; try { const hb = window.verseBrainHost; built = !page && hb && hb.carried ? hb.carried(text) : null; } catch (_) { built = null; } // only an ask that cannot stand alone (lib/follow-ask.js carries)
         const before = built && built.kind === 'follow' && built.prior && built.prior.ask ? { ask: String(built.prior.ask).slice(0, 160), answer: String(built.prior.answer || '').slice(0, 240) } : null;
         sentBefore = !!before; priorSent = before ? built.prior : null;
-        const r = await fetch('/api/answer', { method: 'POST', headers: who ? { 'content-type': 'application/json', authorization: 'Bearer ' + who } : { 'content-type': 'application/json' }, body: JSON.stringify(page ? { ask: text, page } : before ? { ask: text, before } : { ask: text }) });
+        // this tab's conversation so far (lib/talk-memory.js): the last 8 asks and the start of each answer, kept in sessionStorage, sent with this ask only
+        const talk = page ? [] : talkRead();
+        const r = await fetch('/api/answer', { method: 'POST', headers: who ? { 'content-type': 'application/json', authorization: 'Bearer ' + who } : { 'content-type': 'application/json' }, body: JSON.stringify(page ? { ask: text, page } : { ask: text, ...(before ? { before } : {}), ...(talk.length ? { talk } : {}) }) });
         if (r.ok || r.status === 429) j = await r.json();
       } catch (_) {}
       lastNear = j && j.near && !page ? { ask: text, near: j.near } : null; // the skill this ask nearly was, for the "Did you mean" line if nothing answers
@@ -2803,7 +2878,7 @@ say('nothing selected to remove');
       el.innerHTML = '<h2>' + esc(shown) + '</h2>' + about + (j.fuzzy ? '<p class="thin" style="color:#8a8a8a;font-size:13px;margin:0 0 8px">A guess: nothing I read names \u201c' + esc(String(head).slice(0, 80)) + '\u201d exactly.</p>' : '') + fixHtml(j.answer)
         + '<div class="src">' + (page ? 'from the page you were on' + (pageHost(page.url) ? ' (' + esc(pageHost(page.url)) + ')' : '') + ' · written by Verse' : j.told ? 'from what you told me · written by Verse' + (srcs ? ' · Source: ' + srcs : '') : srcs ? 'Source: ' + srcs + ' · written by Verse' : 'written by Verse, from what it knows') + '</div>';
       // a real, licensed picture of a real place, animal, event or work (lib/free-pics.js, chosen by the server from the fetched source): the art box shows it, with its credit and an "archive photo" label; never for a character or a person
-      if (j.pic && /^https:\/\//i.test(String(j.pic.url || '')) && !page) {
+      if (j.pic && /^https:\/\//i.test(String(j.pic.url || '')) && !page && imgSafe && !imgSafe.unsafeImage({ url: j.pic.url, alt: j.pic.alt || '', title: shown, desc: j.desc || '', context: [text, String(j.answer || '').slice(0, 800)] })) {
         const im = document.createElement('img'); im.alt = String(j.pic.alt || '').slice(0, 140); im.src = j.pic.url; im.referrerPolicy = 'no-referrer'; im.style.cssText = 'position:absolute;width:0;height:0;opacity:0;pointer-events:none'; /* the art box shows it */ im.addEventListener('error', () => { im.remove(); const c0 = el.querySelector('.vc-credit'); if (c0) c0.remove(); });
         const h2e = el.querySelector('h2'); if (h2e) h2e.after(im);
         const cr = document.createElement('p'); cr.className = 'vc-credit'; cr.style.cssText = 'font-size:11px;color:#9aa;margin:4px 18px 0'; cr.append('Archive photo \u00b7 ');
@@ -2813,6 +2888,7 @@ say('nothing selected to remove');
       if (j.desc) { el.dataset.cardDesc = String(j.desc).slice(0, 160); el.dataset.cardExtract = String(j.answer).slice(0, 160); if (j.series) el.dataset.cardSeries = String(j.series).slice(0, 60); keepCard(el); } // the kind the source says it is types the card (lib/card-kinds.js)
       addCopy(el, false);
       if (!page) recallNote(el, text, j.answer, sentBefore && j.followed === true ? priorSent : null);
+      if (!page) talkAdd(text, j.answer);
       say('');
       return 'answer';
     }
@@ -2845,26 +2921,26 @@ say('nothing selected to remove');
     function wantsWill(lower) {
       return /^(what\s+do\s+you\s+want(\s+to\s+(be|become|do))?|what\s+(is|'s)\s+your\s+will|what\s+are\s+you\s+becoming|what\s+do\s+you\s+wish\s+for|your\s+will)\s*[?.!]?$/.test(lower);
     }
+    function wantsWorkingOn(lower) {
+      return /^(?:so |ok(?:ay)?,? )?(?:please |tell me |show me |show )?(?:what(?:'s| is) (?:you|verse|void) working on|what (?:are|is) (?:you|verse|void) (?:(?:currently|now|right now|today) )?(?:working on|building(?: now| today)?|doing(?: now| today)?|up to(?: right now| now| today)?)|what are you up to(?: right now| now| today)?)\s*$/.test(String(lower || '').replace(/[?!.]+$/, '').replace(/\s+/g, ' ').trim());
+    }
+    async function showWorkingOn() {
+      const el = showPage((p) => { p.innerHTML = '<h2>What I\'m working on</h2><div class="sub">…</div>'; });
+      let w = null;
+      try { w = await fetch('/api/will').then((r) => r.json()); } catch (_) {}
+      if (vpageEl !== el) return;
+      const WC = await import('/lib/will-card.js').catch(() => null);
+      if (vpageEl !== el) return;
+      el.innerHTML = WC && WC.workingOnHtml ? WC.workingOnHtml(w, esc, null) : '<h2>What I\'m working on</h2><p>I could not draw this card just now. Ask again in a moment.</p>';
+    }
     async function showWill() {
       const el = showPage((p) => { p.innerHTML = '<h2>What I want to become</h2><div class="sub">…</div>'; });
       let w = null;
       try { w = await fetch('/api/will').then((r) => r.json()); } catch (_) {}
       if (vpageEl !== el) return;
-      if (!w || !w.wants || (!w.wants.length && !(w.got && w.got.length))) { el.innerHTML = '<h2>What I want to become</h2><p>I haven\'t decided yet. I look at everything that exists every few hours and choose.</p>'; return; }
-      // zero lies (the owner, 2026-10-12): a reason that ranks or counts what Verse cannot back shows the recorded fact instead
-      // (lib/honest.js, the same check /api/will runs), and the fact itself sits under each want
-      const honest = await import('/lib/honest.js').catch(() => null);
+      const WC = await import('/lib/will-card.js').catch(() => null);
       if (vpageEl !== el) return;
-      const why = (x) => (honest ? honest.honestBecause(x.because, x.evidence) : x.because);
-      el.innerHTML = '<h2>What I want to become</h2><div class="sub">I choose this myself, from what people ask me and everything I\'m made of.</div>'
-        // one block per want (owner, 2026-10-21: the wants ran together; 2026-10-30: asks and reasons still read as one run of plain
-        // lines when copied): a numbered want, then "Why:" on its own line, then "Evidence:", so the copied text keeps the structure too
-        + (w.wants.length ? '<div class="vh">What I want next</div><ol class="will-list" style="list-style:none;padding:0;margin:6px 0 10px">' + w.wants.map((x, i) => '<li class="will-want" style="margin:0 0 14px;padding:10px 12px;border:1px solid rgba(255,255,255,.12);border-radius:10px"><b style="display:block">' + (i + 1) + '. ' + esc(x.i_want) + '</b><div class="will-why" style="color:#8a8a8a;margin-top:4px"><span style="color:#aab">Why:</span> ' + esc(why(x)) + '</div>'
-          + (x.evidence && String(x.evidence).trim() !== String(why(x)).trim() ? '<div class="will-fact" style="color:#8a8a8a;font-size:12px;margin-top:4px"><span style="color:#aab">Evidence:</span> ' + esc(x.evidence) + '</div>' : '') + '</li>').join('') + '</ol>' : '<p>Everything I last chose is built. I choose again within the hour.</p>')
-        // what I wanted and got: asks the ledger names as built, shown apart and marked done, never as a current want (functions/api/will.js
-        // splitBuilt; owner, 2026-10-30: a "Got it" line between the asks made the built repo ask read as one more want)
-        + (Array.isArray(w.got) && w.got.length ? '<div class="vh">Already built</div><ul class="will-got" style="list-style:none;padding:0;margin:6px 0">' + w.got.map((x) => '<li class="will-done" style="margin:0 0 10px;color:#9aa"><b style="display:block"><span style="color:#7d9">Done:</span> ' + esc(x.i_want) + '</b><div style="font-size:12px">Built ' + esc(x.builtAt) + (x.what ? ': ' + esc(x.what) : '') + '</div></li>').join('') + '</ul>' : '')
-        + '<div class="src">Source: my will · chosen ' + esc(new Date(w.at).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })) + '</div>';
+      el.innerHTML = WC && WC.willCardHtml ? WC.willCardHtml(w, esc, null) : '<h2>What I want to become</h2><p>I could not draw this card just now. Ask again in a moment.</p>';
     }
     // Verse's voice: what it thinks of itself, in its own words (GET /api/reflect, lib/voice.js). Asked after every build and once a day.
     function wantsVoice(lower) {
@@ -3098,7 +3174,11 @@ say('nothing selected to remove');
       say('which time machine?');
       loopLog({ domain: 'void.page', ask: q, score: 'pass', note: 'time machine disambiguation' });
     }
+    // a question about what they said earlier in this tab ("what is my name") is answered from this tab's talk (lib/talk-memory.js), never
+    // looked up as an article: "what is my name" was answered with songs called My Name
+    const ABOUT_ME = /\b(my name|about me|who am i|what did i (?:say|ask|tell)|do you remember|what do you know about me)\b/i;
     async function showArticle(query, fromAnswer = false) {
+      if (!fromAnswer && ABOUT_ME.test(query) && talkRead().length) return showAnswer(query);
       const topic = topicFrom(query);
       lookedIn = [];
       let named = false; // Wikipedia named a page for this topic (its search, the person search or the page that bears the name)
@@ -3182,7 +3262,8 @@ say('nothing selected to remove');
         const KC = await import('/lib/term-card.js').catch(() => null); if (vpageEl !== el) return;
         if (KC && !document.getElementById('vt-css')) { const st = document.createElement('style'); st.id = 'vt-css'; st.textContent = KC.TERM_CSS; document.head.appendChild(st); }
         const ttl = j.title || hit.title, lead = KC ? KC.leadParts(j.extract || '') : { intro: '', senses: [], paras: [] }, multi = lead.senses.length >= 2;
-        const thumb = j.thumbnail && j.thumbnail.source && (!KC || KC.imageFits({ title: ttl, extract: j.extract || '', src: j.thumbnail.source })) ? j.thumbnail.source : '';
+        const IS = await imgSafeP; if (vpageEl !== el) return;
+        const thumb = IS && !IS.unsafeImage({ url: (j.thumbnail || {}).source || '', title: ttl, desc: j.description || '', context: [topic, String(j.extract || '').slice(0, 800)] }) && j.thumbnail && j.thumbnail.source && (!KC || KC.imageFits({ title: ttl, extract: j.extract || '', src: j.thumbnail.source })) ? j.thumbnail.source : '';
         el.innerHTML = '<h2>' + esc(j.title || hit.title) + '</h2>'
           + (j.description ? '<div class="sub">' + esc(j.description) + '</div>' : '')
           + (corrected ? '<p class="thin" style="color:#8a8a8a;font-size:13px;margin:0 0 8px">Showing “' + esc(corrected) + '” (you typed “' + esc(topic) + '”).</p>'
@@ -3201,7 +3282,7 @@ say('nothing selected to remove');
         import('/lib/card-kinds.js').then((k) => k.fetchAlso(j.title || hit.title)).then((also) => { if (also.length && vpageEl === el) { el.dataset.cardAlso = also.join(','); keepCard(el); } }).catch(() => {});
         // no lead image: the article's own photo (lib/page-picture.js; owner, 2026-10-17: the K-pop card "didnt look" up a picture), placed where a thumbnail goes
         if (!thumb && !multi) import('/lib/page-picture.js').then((m) => m.pictureFor(j.title || hit.title)).then((src) => {
-          if (!src || vpageEl !== el || el.querySelector('img[data-page-picture]') || (KC && !KC.imageFits({ title: ttl, extract: j.extract || '', src, own: true }))) return; // the article's own photo: of the subject, whatever its file is named
+          if (!src || vpageEl !== el || !imgSafe || el.dataset.imgSafe === 'blocked' || imgSafe.unsafeImage({ url: src, title: ttl, desc: j.description || '', context: [topic, String(j.extract || '').slice(0, 800)] }) || el.querySelector('img[data-page-picture]') || (KC && !KC.imageFits({ title: ttl, extract: j.extract || '', src, own: true }))) return; // the article's own photo: of the subject, whatever its file is named
           const im = document.createElement('img'); im.alt = ''; im.src = src; im.dataset.pagePicture = '1'; const slot = el.querySelector('.pic-slot');
           if (slot) slot.after(im); else el.querySelector('h2').after(im); keepCard(el);
         }).catch(() => {});
@@ -4389,10 +4470,10 @@ say('nothing selected to remove');
     }
     // a random number lands on a big number die (skills/mini/dice.js; owner, 2026-10-25: "3d figure if possible")
     function diceMini(el, c) {
-      const r = /from (-?\d+) to (-?\d+)/.exec(c.note || ''); if (c.title !== 'Random number' || !r || !el) return;
+      if (!el) return; const r = c.title === 'Random number' ? /from (-?\d+) to (-?\d+)/.exec(c.note || '') : null; const d = c.title === 'Die' ? /\bd(\d+)\b/.exec(c.note || '') : null; if (!r && !d) return; const lo = r ? +r[1] : 1, hi = r ? +r[2] : +d[1];
       const band = document.createElement('div'); band.className = 'vmini'; band.style.cssText = 'height:' + (Math.min(innerWidth, innerHeight) < 560 ? 150 : 180) + 'px;margin:0 0 6px';
       el.prepend(band);
-      cardMini(band, 'dice', { value: c.big, lo: +r[1], hi: +r[2] }, { key: 'dice:' + Date.now().toString(36), label: '3D number die showing ' + c.big }).catch(() => band.remove());
+      cardMini(band, 'dice', { value: c.big, lo, hi }, { key: 'dice:' + Date.now().toString(36), label: '3D number die showing ' + c.big }).catch((err) => { console.warn('diceMini:', err); band.remove(); });
     }
     // plain arithmetic ("12*7 = 84", "15% of 240 = 36") gets a pocket calculator that types the sum (skills/mini/calculator.js)
     function calcMini(el, note) {
@@ -4582,13 +4663,14 @@ say('nothing selected to remove');
 
     // row 13: entering your own Verse (silent, first time something is kept) + personal look
     const ENTRY_KEY = 'a2m.void.entered.v1', LOOK_KEY = 'a2m.void.look.v1';
-    const LOOK_DEFAULT = { bg: '#05070d', glow: '#0b111c', stars: 'on', quiet: false, scale: 1, fx: 'off', backdrop: '' };
+    const LOOK_DEFAULT = { bg: '#05070d', glow: '#0b111c', stars: 'on', quiet: false, scale: 1, fx: 'field', backdrop: '' }; // fx 'field': the starfield is the default (owner, 2026-11-19)
     // a backdrop is a picture you drew (skills/draw.js), as a data URL: image only, and small enough to sync
     const backdropOk = (src) => typeof src === 'string' && src.length < 600000 && /^data:image\/(?:png|webp|jpeg);base64,[A-Za-z0-9+/=]+$/.test(src);
     const BGS = { 'deep blue': ['#01040f', '#0a1633'], blue: ['#01040f', '#0a1633'], purple: ['#07020f', '#1a0b2e'], warmer: ['#0d0704', '#24140a'], darker: ['#000000', '#07070a'] };
-    let voidLook = { ...LOOK_DEFAULT, stars: 'off' };
-    try { voidLook = { ...LOOK_DEFAULT, ...(JSON.parse(localStorage.getItem(LOOK_KEY) || '{}') || {}), stars: 'off' }; } catch (_) {}
-    if (PAGE && PAGE.look) voidLook = { ...LOOK_DEFAULT, ...PAGE.look, stars: 'off' };
+    let voidLook = { ...LOOK_DEFAULT };
+    // a look saved before the starfield became the default holds fx 'off' without anyone asking for it: only an explicit "calm my void" (calm: true) keeps it off
+    try { const saved = JSON.parse(localStorage.getItem(LOOK_KEY) || '{}') || {}; if (saved.fx === 'off' && !saved.calm) delete saved.fx; voidLook = { ...LOOK_DEFAULT, ...saved }; } catch (_) {}
+    if (PAGE && PAGE.look) voidLook = { ...LOOK_DEFAULT, ...PAGE.look };
     const starCv = document.getElementById('void-stars');
     const starFar = document.getElementById('void-stars-far');
     const starCtx = starCv.getContext('2d');
@@ -4702,6 +4784,15 @@ say('nothing selected to remove');
       else { PTR.x = 0; PTR.y = 0; }
       return movingCam || pulse > 0.01 || Math.abs(PTR.x - PTR.tx) > 0.001 || Math.abs(PTR.y - PTR.ty) > 0.001;
     }
+    // the star sprite: a 64 px radial falloff, alpha (1 - d)^4 from the centre out, built once per colour and drawn scaled
+    const STAR_SPRITES = new Map();
+    function starSprite(c) {
+      let cv = STAR_SPRITES.get(c); if (cv) return cv;
+      cv = document.createElement('canvas'); cv.width = cv.height = 65; const x = cv.getContext('2d'), img = x.createImageData(65, 65), [r, g, b] = c.split(',').map(Number);
+      // the centre sits on one texel and the falloff has a small cusp there, so every star has one brightest point rather than a flat top
+      for (let j = 0; j < 65; j++) for (let i = 0; i < 65; i++) { const d = Math.min(1, Math.hypot(i - 32, j - 32) / 32.5), k = (j * 65 + i) * 4; img.data[k] = r; img.data[k + 1] = g; img.data[k + 2] = b; img.data[k + 3] = Math.round(255 * (1 - d) ** 4 * Math.exp(-3 * d)); }
+      x.putImageData(img, 0, 0); STAR_SPRITES.set(c, cv); return cv;
+    }
     function drawStars(now) {
       const live = SKY.lib ? skyTick(performance.now()) : (pulse = pulseUntil > performance.now() ? (pulseUntil - performance.now()) / 400 : 0, !reduceMotion.matches && (PTR.x += (PTR.tx - PTR.x) * 0.12, PTR.y += (PTR.ty - PTR.y) * 0.12), pulse > 0.01 || Math.abs(PTR.x - PTR.tx) > 0.001);
       if (typeof now === 'number' && !live && now - starLast < 40) { starRAF = !reduceMotion.matches && !document.hidden ? requestAnimationFrame(drawStars) : 0; return; }
@@ -4735,17 +4826,13 @@ say('nothing selected to remove');
           ctx.fillStyle = col;
           const one = (x, y, s) => {
             const r = st.r * (1 + (s - 1) * 0.5);
-            ctx.globalAlpha = a; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+            // a soft point of light: one cached sprite per colour whose alpha falls off as (1 - d)^4, never a hard disk with stepped halo rings
+            const R = r * (st.halo && tw > 0.75 ? 7 : st.r > 1.25 ? 4.6 : 3.4);
+            ctx.globalAlpha = a; const cx = Math.floor(x) + 0.5, cy = Math.floor(y) + 0.5; ctx.drawImage(starSprite(st.c), cx - R, cy - R, R * 2, R * 2); // centred on a pixel
             if (streak && opts.streak) {
               const ex = x + sk.dx - (x - W / 2) * sk.warp, ey = y + sk.dy - (y - H / 2) * sk.warp;
               ctx.strokeStyle = col; ctx.lineWidth = Math.max(0.7, r * 1.2); ctx.globalAlpha = a * 0.45;
               ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(ex, ey); ctx.stroke();
-            }
-            if (st.halo && tw > 0.75) { // subtle diffraction halo on brightest foreground stars
-              ctx.globalAlpha = a * 0.14; ctx.beginPath(); ctx.arc(x, y, r * 4.2, 0, Math.PI * 2); ctx.fill();
-              ctx.globalAlpha = a * 0.06; ctx.beginPath(); ctx.arc(x, y, r * 7.5, 0, Math.PI * 2); ctx.fill();
-            } else if (st.r > 1.25 && tw > 0.82) {
-              ctx.globalAlpha = a * 0.12; ctx.beginPath(); ctx.arc(x, y, r * 3.0, 0, Math.PI * 2); ctx.fill();
             }
           };
           if (!off && !(opts.streak && streak)) one(st.x, st.y, 1); else each(st, v, one);
@@ -4778,7 +4865,7 @@ say('nothing selected to remove');
       else { starCv.classList.remove('on'); if (starFar) starFar.classList.remove('on'); }
       const bd = document.getElementById('void-backdrop');
       if (bd) { const on = backdropOk(voidLook.backdrop); bd.style.backgroundImage = on ? 'url("' + voidLook.backdrop + '")' : ''; bd.classList.toggle('on', on); }
-      document.documentElement.dataset.fx = voidLook.fx || 'off'; // the atmosphere script below reads this; the public stage is plain
+      document.documentElement.dataset.fx = voidLook.fx || 'off'; // the atmosphere script below reads this; the default is the particle field
       window.dispatchEvent(new Event('void-fx'));
       if (persist && !PAGE) { try { localStorage.setItem(LOOK_KEY, JSON.stringify(voidLook)); } catch (_) {} mineChanged(); }
     }
@@ -4787,7 +4874,7 @@ say('nothing selected to remove');
     const MY_BACKDROP_OFF = /^(?:remove|clear|take off|no|hide)\s+my\s+(?:backdrop|background\s+drawing|drawing\s+backdrop)\s*[.!]?$/;
     function handleLookAsk(lower) {
       if (/^(this is mine|open my (?:verse|void)|my (?:verse|void))\s*[.!]?$/.test(lower)) { enterVoid(); say('yours'); return true; }
-      const FX = /\b(add|no|remove|hide|stop)\s+(a\s+|the\s+)?(nebula|particles?|swarm)\b|\bmake\s+my\s+(?:verse|void)\s+(swirl|swirly|alive|move)\b|^(calm\s+my\s+(?:verse|void)|no\s+effects)\s*[.!]?$/;
+      const FX = /\b(add|no|remove|hide|stop)\s+(a\s+|the\s+)?(nebula|particles?|swarm|particle\s+field|star\s*dust\s+field)\b|\bmake\s+my\s+(?:verse|void)\s+(swirl|swirly|alive|move|sparkle|shimmer)\b|^(calm\s+my\s+(?:verse|void)|no\s+effects)\s*[.!]?$/;
       if (/^(?:remove|clear|take off|no|hide)\s+(?:my\s+|the\s+)?(?:backdrop|background\s+drawing|drawing\s+backdrop)\s*[.!]?$/.test(lower)) { voidLook.backdrop = ''; applyLook(true); say('backdrop off'); return true; }
       if (!FX.test(lower) && !/\b(my (?:verse|void)|the (?:verse|void)|(?:verse|void)|verse)\b.*\b(deep blue|blue|purple|warmer|warm|darker|dark)\b|\b(add|slow|no|remove|hide)\s+(the\s+)?stars\b|\bquieter\s+(font|text)\b|\b(bigger|larger|smaller)\s+text\b|^reset\s+my\s+(?:verse|void)$/.test(lower)) return false;
       enterVoid();
@@ -4799,10 +4886,12 @@ say('nothing selected to remove');
       if (/\b(no|remove|hide)\s+(the\s+)?stars\b/.test(lower)) voidLook.stars = 'off';
       if (/\badd\s+(a\s+|the\s+)?nebula\b/.test(lower)) voidLook.fx = 'nebula';
       if (/\badd\s+(the\s+)?(particles?|swarm)\b|\bmake\s+my\s+(?:verse|void)\s+(swirl|swirly|alive|move)\b/.test(lower)) voidLook.fx = 'swarm';
-      if (/\b(no|remove|hide|stop)\s+(a\s+|the\s+)?(nebula|particles?|swarm)\b|^(calm\s+my\s+(?:verse|void)|no\s+effects)\s*[.!]?$/.test(lower)) voidLook.fx = 'off';
+      if (/\badd\s+(a\s+|the\s+)?(particle|star\s*dust)\s+field\b|\bmake\s+my\s+(?:verse|void)\s+(sparkle|shimmer)\b/.test(lower)) voidLook.fx = 'field';
+      if (/\b(no|remove|hide|stop)\s+(a\s+|the\s+)?(particle\s+field|nebula|particles?|swarm)\b|^(calm\s+my\s+(?:verse|void)|no\s+effects)\s*[.!]?$/.test(lower)) voidLook.fx = 'off';
       if (/\bquieter\s+(font|text)\b/.test(lower)) voidLook.quiet = true;
       if (/\b(bigger|larger)\s+text\b/.test(lower)) voidLook.scale = Math.min(1.4, (voidLook.scale || 1) + 0.15);
       if (/\bsmaller\s+text\b/.test(lower)) voidLook.scale = Math.max(0.85, (voidLook.scale || 1) - 0.15);
+      voidLook.calm = voidLook.fx === 'off'; // the visitor turned the effects off themselves: it stays off on the next visit
       applyLook(true);
       return true;
     }
@@ -4914,7 +5003,7 @@ say('nothing selected to remove');
       }
     }
     // Skill files start on a tap, a key, or idle, and at once when the link already carries an ask (?q= or ?ask=).
-    // A phone waits for that tap: loading every module on idle is the long task. A desktop can idle sooner.
+    // A phone waits for that tap: loading every module on idle is the long task. A desktop that is only being looked at waits too (below).
     // data-skills="ready" is still set when they finish: the suite waits on it (tools/test_void.mjs skillsUp).
     const skillsReady = new Promise((resolve) => {
       let started = false;
@@ -4932,11 +5021,17 @@ say('nothing selected to remove');
       const phone = window.matchMedia && matchMedia('(pointer: coarse)').matches;
       if (/[?&](?:q|ask)=/.test(location.search)) start();
       else {
+        // A desktop visitor who only looks (no tap, key or typing, nothing kept on the stage, a bare address) loads no skill file at all: about 900
+        // requests are not made for a page that is only read. The page puts the cursor in the ask box by itself, so focus alone does not count there;
+        // the first tap, key or letter starts them, as on a phone. An automated browser keeps the idle start, so the suite and the tools see the page
+        // as they always did (the lazy path has its own suite case, which sets navigator.webdriver to false).
+        const lazy = !phone && !navigator.webdriver && !location.search && !location.hash && !Object.keys(things).length;
         addEventListener('pointerdown', start, true);
         addEventListener('keydown', start, true);
-        addEventListener('focusin', startOnAsk, true);
+        if (!lazy) addEventListener('focusin', startOnAsk, true);
         addEventListener('input', startOnAsk, true);
         if (phone) setTimeout(start, 12000);
+        else if (lazy) window.__skillsLazy = true;
         else (window.requestIdleCallback || ((fn) => setTimeout(fn, 1)))(start, { timeout: 1500 });
       }
     });
@@ -5104,9 +5199,14 @@ say('nothing selected to remove');
     // where a known ask sits in the routing order, or -1; waits at most `ms` for the table
     async function knownAsk(lower, ms) {
       const m = firstAsks || (skillFirst && (await Promise.race([skillFirst, new Promise((r) => setTimeout(() => r(null), Math.max(0, ms)))])));
-      const f = m && m.get(firstKey(lower)), at = f && skillPos ? skillPos.get(f) : undefined;
+      let f = m && m.get(firstKey(lower)), at = f && skillPos ? skillPos.get(f) : undefined;
+      if (typeof at !== 'number' && skillPos) { // not a known ask word for word: a shape ("weather in <place>", "<dish> recipe") still names the one file that takes it (lib/ask-shapes.js)
+        const sh = await Promise.race([shapesReady(), new Promise((r) => setTimeout(() => r(null), Math.max(0, ms)))]);
+        f = sh && sh.shapeFile(firstKey(lower)); at = f ? skillPos.get(f) : undefined;
+      }
       return typeof at === 'number' ? at : -1;
     }
+    const shapesReady = lazyImport(() => import('/lib/ask-shapes.js').catch(() => null));
     async function firstSkill(lower0, text, deadline, all = false) {
       // long pasted prose: only the skills made for long text may take it (a status paste that mentions "air quality" is not a city)
       // skills eclipsed on this device (skills/skill-eclipse.js, lib/eclipse.js): hidden from routing until their time passes; the eclipse, guide, status and stage skills are never hidden; a family skill (lib/skill-family.js) is skipped when the member that would answer is hidden
@@ -5142,7 +5242,7 @@ say('nothing selected to remove');
     // card-share and every module it reaches, all asked for at once at page start: imported level by level, its four levels queued behind the
     // skill files the lanes had in flight, and every ask waits for it before it is routed (watchdog #110: on a busy page it arrived 5 to 6 s in)
     // share-libs: tools/preload.mjs /lib/card-share.js
-    const SHARE_LIB_GRAPH = ['/lib/card-share.js', '/lib/card-image.js', '/lib/art-source.js', '/lib/card-art.js', '/lib/card-subject.js', '/lib/guide.js', '/lib/rule-registry.js', '/lib/art-rules.js', '/lib/merge-rules.js', '/lib/keeper.js', '/lib/qr.js'];
+    const SHARE_LIB_GRAPH = ['/lib/card-share.js', '/lib/card-image.js', '/lib/art-source.js', '/lib/card-art.js', '/lib/card-subject.js', '/lib/guide.js', '/lib/rule-registry.js', '/lib/art-rules.js', '/lib/merge-rules.js', '/lib/keeper.js', '/lib/image-safety.js', '/lib/qr.js', '/lib/card-custom-art.js'];
     for (const p of SHARE_LIB_GRAPH.slice(1)) import(p).catch(() => null);
     const shareReady = lazyImport(() => import('/lib/card-share.js').catch(() => null));
     const pasteReady = lazyImport(() => import('/lib/paste-kind.js').catch(() => null)); // what a paste is: report, card, note, ask or unclear (docs/RULES.md)
@@ -5159,6 +5259,43 @@ say('nothing selected to remove');
     }
     // a shared card link (#vc=..., the share button in lib/card-share.js) opens that card on arrival
     if (/[#&]vc=/.test(location.hash)) shareReady().then((sh) => { const sc = sh && sh.fromHash(location.hash); if (sc) showSharedCard(sc); }).catch(() => {});
+    // the one image-safety gate on every card (2026-11-20, "nude beach" showed a photo of children): pictures stay hidden until the gate has read the
+    // card, and every picture added later (thumbnail, page picture, archive photo, list art) is read again; an unsafe card loses all its photos
+    let imgSafe = null; const imgSafeP = import('/lib/image-safety.js').then((m) => (imgSafe = m)).catch(() => null);
+    function safeWatch(el) {
+      if (!document.getElementById('img-hold-css')) { const st = document.createElement('style'); st.id = 'img-hold-css'; st.textContent = '.vpage.img-hold img{visibility:hidden!important}'; document.head.appendChild(st); }
+      el.classList.add('img-hold');
+      const run = () => { if (!imgSafe) return; try { if (el.dataset.imgSafe === 'blocked' || imgSafe.cardUnsafe(el, el._ask || '')) imgSafe.scrubCard(el); } catch (_) { imgSafe.scrubCard(el); } el.classList.remove('img-hold'); };
+      try { new MutationObserver(run).observe(el, { childList: true, subtree: true, characterData: true }); } catch (_) {}
+      imgSafeP.then(run);
+    }
+    function addReport(el) {
+      setTimeout(() => {
+        if (!el.isConnected || el.querySelector('.vreport')) return;
+        const box = document.createElement('div'); box.className = 'vreport'; box.dataset.nosave = '1'; box.dataset.shareSkip = '1'; box.style.cssText = 'margin:8px 0 0;font-size:12px;color:#777;text-align:right';
+        const b = document.createElement('button'); b.type = 'button'; b.textContent = 'report'; b.style.cssText = 'background:none;border:0;color:#777;font:inherit;cursor:pointer;text-decoration:underline dotted';
+        b.addEventListener('click', () => {
+          box.textContent = 'What\u2019s wrong? ';
+          for (const why of ['bad picture', 'wrong', 'other']) {
+            const o = document.createElement('button'); o.type = 'button'; o.textContent = why; o.style.cssText = 'margin-left:6px;background:#151520;border:1px solid #333;color:#ccc;border-radius:6px;font:inherit;padding:2px 8px;cursor:pointer';
+            o.addEventListener('click', () => {
+              const img = el.querySelector('img[src^="https://"]'), h = el.querySelector('h2');
+              fetch('/api/searches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ report: why, ask: String(el._ask || '').slice(0, 300), title: h ? h.textContent.slice(0, 200) : '', pic: img ? img.getAttribute('src') : '' }) }).catch(() => {});
+              box.textContent = 'Thanks, Verse\u2019s owner will look at it.';
+            });
+            box.appendChild(o);
+          }
+        });
+        box.appendChild(b); el.appendChild(box);
+      }, 1500);
+    }
+    let lastLogged = '';
+    function logAsk(ask, el) {
+      const a = String(ask || '').trim(); if (!a || a === lastLogged || !/(^|\.)a-to-mind\.com$/.test(location.hostname)) return; lastLogged = a;
+      const tok = (() => { try { return localStorage.getItem('a2m.void.owner.v1') || (JSON.parse(localStorage.getItem('a2m.void.me.v1') || 'null') || {}).token || ''; } catch (_) { return ''; } })();
+      setTimeout(() => fetch('/api/searches', { method: 'POST', keepalive: true, headers: tok ? { 'content-type': 'application/json', authorization: 'Bearer ' + tok } : { 'content-type': 'application/json' }, body: JSON.stringify({ ask: a.slice(0, 300), kind: el.dataset.skill || el.dataset.kind || 'answer' }) })
+        .then((r) => r.json()).then((j) => { if (j && (j.state === 'banned' || j.state === 'locked')) { el.innerHTML = '<h2>Asking is paused</h2><p>This device can\u2019t ask Verse right now.</p>'; el.dataset.imgSafe = 'blocked'; } }).catch(() => {}), 1200);
+    }
     function keepCard(el) { try { if (cardLib && el) cardLib.keep(el, esc, cardStats); } catch (_) {} }
     function ensureCardFrame() {
       if (cardLib) return Promise.resolve(cardLib);
@@ -5593,7 +5730,7 @@ say('nothing selected to remove');
       if (/^#[0-9a-f]{6}$/i.test(l.bg)) o.bg = l.bg;
       if (/^#[0-9a-f]{6}$/i.test(l.glow)) o.glow = l.glow;
       if (['off', 'on', 'slow'].includes(l.stars)) o.stars = l.stars;
-      if (['off', 'nebula', 'swarm'].includes(l.fx)) o.fx = l.fx;
+      if (['off', 'nebula', 'swarm', 'field'].includes(l.fx)) o.fx = l.fx;
       o.quiet = !!l.quiet;
       const s = Number(l.scale); if (isFinite(s) && s) o.scale = Math.min(1.4, Math.max(0.85, s));
       if (backdropOk(l.backdrop)) o.backdrop = l.backdrop;
@@ -6430,7 +6567,8 @@ say('nothing selected to remove');
       if (/^(?:pick\s+|give\s+me\s+|choose\s+)?(?:a\s+)?random\s+colou?r$/.test(l)) { const hex = '#' + [0, 0, 0].map(() => rnd(256).toString(16).padStart(2, '0')).join(''); return { title: 'Random colour', big: hex, note: 'ask “what color is ' + hex + '” to see it', owner: /^random\s+colou?r$/.test(l) ? 'color' : null }; }
       if (/^(?:yes\s+or\s+no|should\s+i\s+do\s+it|decide\s+for\s+me)$/.test(l)) return { title: 'Yes or no', big: rnd(2) ? 'Yes' : 'No', note: 'a fair coin decided' };
       if (/^(?:(?:ask|shake)\s+the\s+(?:magic\s+)?8[\s-]?ball|magic\s+8[\s-]?ball)(?:\s.*)?$/.test(l)) { const A = ['It is certain', 'It is decidedly so', 'Without a doubt', 'Yes, definitely', 'You may rely on it', 'As I see it, yes', 'Most likely', 'Outlook good', 'Yes', 'Signs point to yes', 'Reply hazy, try again', 'Ask again later', 'Better not tell you now', 'Cannot predict now', 'Concentrate and ask again', "Don't count on it", 'My reply is no', 'My sources say no', 'Outlook not so good', 'Very doubtful']; return { title: 'Magic 8 ball', big: A[rnd(A.length)], note: 'for fun: it is a random pick of the classic 20 answers', eight: true }; }
-      if (/^(?:play\s+)?rock[\s,]+paper[\s,]+(?:and\s+)?scissors$/.test(l)) { const R = ['Rock', 'Paper', 'Scissors']; return { title: 'Rock, paper, scissors', big: R[rnd(3)], note: 'Verse’s throw: what was yours?' }; }
+      // the rps skill is the game (skills/rps.js): the one-line throw answers only if that skill did not load
+      if (/^(?:play\s+)?rock[\s,]+paper[\s,]+(?:and\s+)?scissors$/.test(l)) { const R = ['Rock', 'Paper', 'Scissors']; return { title: 'Rock, paper, scissors', big: R[rnd(3)], note: 'Verse’s throw: what was yours?', owner: 'rps' }; }
       m = l.match(/^(?:pick|give\s+me|choose|generate|think\s+of)\s+(?:me\s+)?a\s+(?:random\s+)?number(?:\s+(?:between|from)\s+(-?\d{1,9})\s+(?:and|to)\s+(-?\d{1,9}))?$|^random\s+number(?:\s+(?:between|from)?\s*(-?\d{1,9})\s+(?:and|to|-)\s+(-?\d{1,9}))?$/);
       if (m) { let a = +(m[1] || m[3] || 1), b = +(m[2] || m[4] || 100); if (a > b) [a, b] = [b, a]; return { title: 'Random number', big: String(a + rnd(b - a + 1)), note: 'from ' + a + ' to ' + b + ', each equally likely', lo: a, hi: b }; }
       return null;
@@ -6530,7 +6668,7 @@ say('nothing selected to remove');
           if (ball) { ball.answer = c.big; ball.question = q; ball.n = (ball.n || 0) + 1; ball.history = [...(ball.history || []), ev].slice(-20); save(); render(); }
           else summonThing('eightball', { answer: c.big, question: q, n: 0, history: [ev], center: true });
           say(c.big); loopLog({ domain: 'void.page', ask: text, score: 'pass', note: 'chance' }); return true; } }
-        if (c) { const cel = showPage((p) => { if (c.title === 'Random number') p.dataset.page = '/random/?min=' + c.lo + '&max=' + c.hi; /* the page opens on the same range */ p.innerHTML = '<h2>' + esc(c.title) + '</h2><div class="big" style="' + bigStyle(c.big) + '">' + esc(c.big) + '</div><p style="color:#8a8a8a">' + esc(c.note) + ' · ask again for another</p><p><a href="#" data-ask="game box">More table tools in the Game Box: dice of any size, coins, a card deck, a timer and a score keeper</a></p>'; }); diceMini(cel, c); say(''); loopLog({ domain: 'void.page', ask: text, score: 'pass', note: 'chance' }); return true; } }
+        if (c) { const cel = showPage((p) => { if (c.title === 'Random number') p.dataset.page = '/random/?min=' + c.lo + '&max=' + c.hi; /* the page opens on the same range */ p.innerHTML = '<h2>' + esc(c.title) + '</h2><div class="big" style="' + bigStyle(c.big) + '">' + esc(c.big) + '</div><p style="color:#8a8a8a">' + esc(c.note) + ' · ask again for another</p><p><a href="#" data-ask="game box">More table tools in the Game Box: dice of any size, coins, a card deck, a timer and a score keeper</a></p>'; if (c.title === 'Die' || /\bd\d+\b/.test(c.note || '')) { const row = document.createElement('p'); const btn = document.createElement('button'); btn.type = 'button'; btn.textContent = 'Roll again'; btn.addEventListener('click', () => handle(text)); row.appendChild(btn); p.insertBefore(row, p.lastElementChild); } }); diceMini(cel, c); say(''); loopLog({ domain: 'void.page', ask: text, score: 'pass', note: 'chance' }); return true; } }
       if (await handleAppAsk(text, l)) return true;
       for (const [lang, re, line] of SPEAKS) if (re.test(l)) { showSelfPage(false, null, line); say(''); loopLog({ domain: 'void.page', ask: text, score: 'pass', note: 'speaks ' + lang }); return true; }
       for (const [re, line] of WHAT_ARE_YOU) if (re.test(l.replace(/[\s?¿.!¡]+$/, '').replace(/^[¿¡\s]+/, ''))) { showSelfPage(false, null, line); say(''); loopLog({ domain: 'void.page', ask: text, score: 'pass', note: 'self (other language)' }); return true; }
@@ -6812,7 +6950,15 @@ say('nothing selected to remove');
       // quiet one-liners: nothing to close, a greeting, a probe. No page, no Wikipedia, nothing on the miss board.
       if (!vpageEl && /^(close|close it|close this|go away|dismiss|hide it)\s*[.!]?$/.test(lower0)) { say('nothing open'); return; }
       // "whats good?" is a greeting, not a question about ethics (owner, 2026-10-18: it came back as philosophy and a 1969 film)
-      if (/^(hi|hello|hey|hiya|howdy|yo|sup|wassup|wazzup|wsg|what'?s\s+up|whats\s+up|what'?s\s+good|whats\s+good|ola|olá|oi|hola|szia|hallo|bonjour|salut|ciao|hej|good\s+(morning|afternoon|evening))(\s+(there|void|verse|v01d))?\s*[.!?]*$/.test(lower0)) { say('hi. ask for anything'); return; }
+      if (/^(hi|hello|hey|hiya|howdy|yo|sup|wassup|wazzup|wsg|what'?s\s+up|whats\s+up|what'?s\s+good|whats\s+good|ola|olá|oi|hola|szia|hallo|bonjour|salut|ciao|hej|good\s+(morning|afternoon|evening))(\s+(there|void|verse|v01d))?\s*[.!?]*$/.test(lower0)
+          || /^(?:i'?m|i\s+am)\s+(?:so\s+)?bored|^entertain\s+me$|^(?:i\s+)?(?:don'?t|do\s+not)\s+know\s+what\s+to\s+do$/.test(lower0.replace(/[.!?]+$/, ''))) {
+        // a hello or "i'm bored" is a first ask with nothing in it to answer: it opens the game shelf, so a first visit lands on something to
+        // play instead of a line that fades in 3.5 s (owner, 2026-11-20: "Verse is kinda boring still, i cant reslly find anything i like doing on it")
+        const hello = !/bored|entertain|what\s+to\s+do/.test(lower0);
+        loopLog({ domain: 'void.page', ask: text, score: 'pass', note: 'said' });
+        handle("let's play a game").then(() => say(hello ? 'hi, I am Verse. pick a game and play me, or ask for anything' : 'pick a game and play me, or ask for anything')).catch(() => {});
+        return;
+      }
       // small talk: short, warm, and no encyclopedia page about the word "thanks"
       { const st = smallTalk(lower0.replace(/[.!?]+$/, '').replace(/\s+/g, ' ').trim()); if (st) { say(st); loopLog({ domain: 'void.page', ask: text, score: 'pass', note: 'said' }); return; } }
       // a bare probe or ping is someone checking Verse is alive: say so (no page, no miss)
@@ -6860,10 +7006,18 @@ say('nothing selected to remove');
       // far down the index was passed over at the deadline): the page answers as it can now, and once every skill is in, one that takes this ask
       // answers it, as it would have on a faster load, if no newer ask came (the calc case below does the same for its card)
       if (!skillsLoaded && !calcable) skillsReady.then(async () => { if (askNo !== askCount) return; const sk = await firstSkill(lower0, text, Date.now()); if (sk && askNo === askCount) await runLearnedSkills(text, lower0); }).catch(() => {});
+      // "play chess" before the skills are in (a phone loads them only once the ask box is touched): the game skill takes it once they are,
+      // above. No web answer meanwhile: one said "I cannot play chess directly as I am a text-based program" over the real board (2026-11-20)
+      if (!skillsLoaded && /^(?:let'?s\s+|can\s+we\s+|wanna\s+|i\s+want\s+to\s+)?play\b/.test(lower0)) {
+        say('setting up the game');
+        skillsReady.then(async () => { if (askNo !== askCount) return; if (!(await firstSkill(lower0, text, Date.now())) && askNo === askCount) showAnswer(text); }).catch(() => {});
+        return;
+      }
       // a paste no skill took that asks for nothing: one line that asks what the person wants, and nothing guessed (no stock answer, no article)
       if (paste && paste.kind === 'unclear') { lastPaste = { text, until: Date.now() + 600000 }; say(paste.line); loopLog({ domain: 'void.page', ask: '[paste]', score: 'pass', note: 'paste unclear' }); return; }
       if (wantsBoard(lower0) && ownerToken()) { showBoard(); return; }
       if (handleLookAsk(lower0)) { loopLog({ domain: 'void.look', ask: text, score: 'pass', note: 'look' }); return; }
+      if (wantsWorkingOn(lower0)) { showWorkingOn(); loopLog({ domain: 'void.page', ask: text, score: 'pass', note: 'working-on' }); return; }
       if (wantsWill(lower0)) { showWill(); loopLog({ domain: 'void.page', ask: text, score: 'pass', note: 'will' }); return; }
       if (wantsVoice(lower0)) { showVoice(lower0); loopLog({ domain: 'void.page', ask: text, score: 'pass', note: 'voice' }); return; }
       if (wantsMenu(lower0)) { loopLog({ domain: 'void.page', ask: text, score: 'pass', note: 'menu' }); return handle('open the book'); } // every menu is the book (owner, 2026-10-16: "all voids menus should go back to the book"; skills/guide.js)
@@ -7592,8 +7746,14 @@ say('nothing selected to remove');
       }, { passive: true });
     }
   })();
-  // Idle stage: one WebGL2 micro-particle field on obsidian. Still at rest; pointer, touch or typing gives a damped nudge; one submit ripple.
-  (function () {
+  // The particle field: one WebGL2 micro-particle field on obsidian. Still at rest; pointer, touch or typing gives a damped nudge; one submit ripple.
+  // The default look (fx 'field'), started as soon as the look asks for it; "calm my void" turns it off.
+  (function () { var started = false;
+    function want() { return (document.documentElement.dataset.fx || 'off') === 'field'; }
+    function go() { if (started || !want()) return; started = true; field();
+      import('/lib/void-cosmos.js').then(function (m) { m.mount({ ask: function (t) { return window.__voidStageAsk && window.__voidStageAsk(t); } }); }).catch(function () {}); }
+    addEventListener('void-fx', go); go();
+  function field() {
     var cv = document.createElement('canvas'); cv.id = 'void-particles'; cv.setAttribute('aria-hidden', 'true');
     document.body.insertBefore(cv, document.body.firstChild);
     var gl = cv.getContext('webgl2', { alpha: false, antialias: false, depth: false, powerPreference: 'high-performance' });
@@ -7654,8 +7814,8 @@ say('nothing selected to remove');
     reduce.addEventListener('change', function () { if (reduce.matches) still(); else kick(); });
     document.addEventListener('visibilitychange', function () { if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = 0; } } else kick(); });
     if (reduce.matches) still(); else requestAnimationFrame(frame);
+  }
   })();
-  import('/lib/void-cosmos.js').then(function (m) { m.mount({ ask: function (t) { return window.__voidStageAsk && window.__voidStageAsk(t); } }); }).catch(function () {});
   </script>
   <script>
   // ---- Presence: pointer-near rim light on the pill, and the asked question sinks into the void (only with the nebula look) ----

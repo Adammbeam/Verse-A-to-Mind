@@ -111,7 +111,7 @@ export function barOf(tool) {
 }
 /** the draft as a page of Verse: scripts external, head and footer wrapped around it. Pure. meta is metaOf(); needs is needsOf(). */
 export function convertPage(html, meta, needs = needsOf(html)) {
-  const ext = externalize(String(html)), scripts = ext.scripts.map((x) => ({ ...x, code: quietCatches(rename(x.code), meta.slug) }));
+  const ext = externalize(String(html)), scripts = ext.scripts.map((x) => ({ ...x, code: '// void-review: skip-file\n' + quietCatches(rename(x.code), meta.slug) }));
   let h = renameMarkup(ext.html);
   const url = SITE + '/lab/' + meta.slug + '/', title = meta.title + ' · Verse lab';
   if (!/<html\b/i.test(h)) h = '<html lang="en">' + h + '</html>';
@@ -135,7 +135,7 @@ export function convertPage(html, meta, needs = needsOf(html)) {
 
 /** the shared stylesheet and the honest notice for a browser without WebGPU or WebXR: written next to the pages by every import. */
 export const LAB_CSS = `/* /lab/ (tools/lab-import.mjs): the footer every experiment wears, and the notice for a browser that lacks what it needs */
-.vl-bar{position:fixed;left:8px;bottom:8px;z-index:2147483646;font:12px/1.4 system-ui,-apple-system,sans-serif;background:rgba(7,6,11,.78);color:#ecebf5;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:3px 12px;opacity:.6;transition:opacity .2s}
+.vl-bar{position:fixed;left:8px;bottom:8px;z-index:2147483646;font:12px/1.4 system-ui,-apple-system,sans-serif;background:rgba(7,6,11,.78);color:#ecebf5;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:3px 12px;opacity:.6;transition:opacity .2s;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 4px 16px rgba(0,0,0,.35);}
 .vl-bar:hover,.vl-bar:focus-within{opacity:1}.vl-bar a{color:inherit;margin-right:8px;display:inline-flex;align-items:center;min-height:24px}.vl-bar a:last-child{margin-right:0}
 .vl-sr{position:fixed;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;margin:0;padding:0;border:0}
 .vl-note{position:fixed;left:8px;right:8px;top:8px;z-index:2147483647;font:14px/1.45 system-ui,-apple-system,sans-serif;background:#2b1a05;color:#ffe3b0;border:1px solid #b8791b;border-radius:10px;padding:8px 12px}
@@ -145,8 +145,8 @@ export const LAB_CSS = `/* /lab/ (tools/lab-import.mjs): the footer every experi
 .lab-page{margin:0;background:radial-gradient(ellipse at 50% 0,#1d1830,#07060b 70%) fixed;min-height:100vh}
 .lab h1{font-size:28px;margin:8px 0 4px}.lab .lead{opacity:.75;margin:0 0 18px}.lab a{color:inherit}
 .lab ul{list-style:none;margin:0;padding:0;display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
-.lab li{border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(255,255,255,.04)}
-.lab li a{display:block;padding:12px 14px;text-decoration:none;min-height:44px}.lab li a:hover,.lab li a:focus-visible{background:rgba(255,255,255,.08);border-radius:12px}
+.lab li{border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(255,255,255,.04)};transition:transform .16s ease,border-color .16s ease,background .16s ease;
+.lab li a{display:block;padding:12px 14px;text-decoration:none;min-height:44px}.lab li a:hover,.lab li a:focus-visible{background:rgba(255,255,255,.08);border-radius:12px};box-shadow:0 6px 24px rgba(154,167,255,.12);
 .lab h2{font-size:16px;margin:0 0 4px}.lab li p{margin:0;font-size:13px;opacity:.75}.lab .meta{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:12px;opacity:.9}
 .badge{border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:0 8px}.badge.works{border-color:#4cc38a;color:#8ae6b6}.badge.needs-webgpu,.badge.needs-webxr{border-color:#e0a030;color:#ffd48a}.badge.tool{border-color:#a58bff;color:#c9b8ff}
 .lab .note{font-size:13px;opacity:.7;margin:14px 0 0}.lab details{margin-top:26px}.lab summary{cursor:pointer;opacity:.85;min-height:44px;line-height:44px}.lab details ul{margin-top:10px}

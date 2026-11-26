@@ -5,10 +5,10 @@ import { SELF_SITES } from '../void-live-deploy/lib/self-sites.js';
 import { pageForJob } from './tower-self.mjs';
 
 // leftovers may only shrink: delete a path here in the same change that removes its page
-const NUMBERED = ['/convert/unit-converter-2/'];
+const NUMBERED = [];
 const SAME_HEADLINE = [
-  ['/color/colour-management/', '/color/colour-picker-tool/'],
-  ['/convert/unit-converter-2/', '/convert/unit-converter/'],
+  ['/color/', '/color/colour-picker-tool/'],
+  ['/convert/', '/convert/'],
 ];
 
 test('a numbered second page is a leftover, and the list only shrinks', () => {
@@ -29,7 +29,7 @@ test('two pages with one headline are a leftover, and that list only shrinks', (
 
 test('the same headline is the existing page, and a different headline stays free', () => {
   const fam = { id: 'colour', base: '/color/' };
-  assert.equal(pageForJob(fam, { h1: 'Colour codes: hex, RGB, HSL, CMYK, shades and schemes' }, SELF_SITES), '/color/colour-picker-tool/');
+  assert.equal(pageForJob(fam, { h1: 'Color Picker' }, SELF_SITES), '/color/colour-picker-tool/');
   assert.equal(pageForJob(fam, { h1: 'A gradient between two colours' }, SELF_SITES), null);
   assert.equal(pageForJob({ id: 'unit converter', base: '/convert/' }, { h1: 'short' }, SELF_SITES), null);
 });

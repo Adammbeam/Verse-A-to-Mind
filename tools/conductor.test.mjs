@@ -2,13 +2,15 @@
 // are broken, and when Verse writes new probe asks. Run: node --test tools/conductor.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { plan, score, kindOf, triesOf, withTries, routeOf, streakOf, probeDue, growDue, designDue, willDue, lapDue, dailyDue, sweepDue, coderShort, CODER_RUN_CALLS, DAILY, AGENT, LAP, ALSO_BUSY, MAX_TRIES, FIRST } from './conductor-core.mjs';
+import './catchup.test.mjs';
+import './loop-census.test.mjs'; // the census the tick writes every 3 hours (tools/loop-census.mjs) // the catch-up clock the tick runs (tools/catchup-core.mjs)
+import { plan, score, kindOf, triesOf, withTries, routeOf, streakOf, probeDue, growDue, designDue, willDue, lapDue, dailyDue, sweepDue, coderShort, fallbackLease, fallbackAllowed, fallbackJob, FALLBACK_OWNER, FALLBACK_LEASE_MS, CODER_RUN_CALLS, DAILY, AGENT, LAP, ALSO_BUSY, MAX_TRIES, FIRST } from './conductor-core.mjs';
 
 const H = 3600000, NOW = Date.parse('2026-10-26T08:00:00Z');
 const iso = (hAgo) => new Date(NOW - hAgo * H).toISOString();
 const job = (id, target, o = {}) => ({ id, target, state: 'queued', note: '', at: iso(24), updated: iso(24), ...o });
 const live = (o = {}) => ({ exists: true, busy: false, today: 0, fails: 0, last: NOW - H, ...o });
-const all = (o = {}) => ({ [AGENT]: live(o[AGENT]), 'propose-fix.yml': live(o['propose-fix.yml']), 'build-miss.yml': live(o['build-miss.yml']), 'store-gap.yml': live(o['store-gap.yml']) });
+const all = (o = {}) => ({ [AGENT]: live(o[AGENT]), [LAP]: live(o[LAP]), 'propose-fix.yml': live(o['propose-fix.yml']), 'build-miss.yml': live(o['build-miss.yml']), 'store-gap.yml': live(o['store-gap.yml']) });
 
 test('kinds, tries and notes', () => {
   assert.equal(kindOf('probe:abc'), 'probe'); assert.equal(kindOf('store-gap:mugs'), 'store-gap'); assert.equal(kindOf('next'), 'next');
@@ -62,6 +64,36 @@ test('a job the conductor claimed and a dead run left building goes back with a 
   assert.deepEqual(p.requeue.map((r) => r.id), ['b1']); assert.match(p.requeue[0].note, /^tries 1 · the run stopped/);
   assert.deepEqual(p.setAside.map((r) => r.id), ['b2']);
   assert.ok(!p.requeue.concat(p.setAside).some((r) => r.id === 'b3' || r.id === 'b4'), 'a fresh claim and a person\'s claim are left alone');
+});
+
+test('the fallback takes only jobs no executor and no team seat can take, one at a time', () => {
+  const jobs = [job('b1', 'bot:old', { at: iso(48) }), job('r1', 'route:new'), job('w1', 'will:paint'), job('t1', 'feature:tired', { note: 'tries ' + MAX_TRIES })];
+  assert.equal(fallbackJob({ jobs, wf: all(), now: NOW }).id, 'b1', 'the oldest unroutable job, not a routed one');
+  assert.equal(fallbackJob({ jobs: [job('w', 'will:x')], wf: all(), now: NOW }), null, 'a routed job is plan()\'s and a team seat\'s work');
+  assert.equal(fallbackJob({ jobs, wf: all(), now: NOW, skip: ['b1'] }).id, 'r1', 'a skip or a racing claim moves it on');
+  const building = [job('held', 'bot:same', { state: 'building', note: 'claimed by team:Ada' })];
+  assert.equal(fallbackJob({ jobs: [job('q', 'bot:same'), ...building], wf: all(), now: NOW }), null, 'no second claim on the same work');
+  assert.equal(fallbackJob({ jobs: [job('q', 'bot:same'), ...building], wf: all(), now: NOW, skip: ['held'] }).id, 'q', 'a claim the caller already ruled out is not in the way');
+  for (const wf of [{ [AGENT]: { busy: true } }, { [LAP]: { busy: true } }, { [AGENT]: { paused: true } }, { [AGENT]: { noModel: true } }, { [AGENT]: { fails: 4, last: NOW - H } }]) {
+    assert.equal(fallbackJob({ jobs, wf: all(wf), now: NOW }), null, 'no fallback while the coder cannot run: ' + JSON.stringify(wf));
+  }
+  assert.equal(FALLBACK_OWNER, 'conductor verse-job', 'the queue note names this owner');
+});
+
+test('the fallback lease requeues only our own dead claim, once, and one start at a time per tick', () => {
+  const claimed = job('f1', 'bot:x', { state: 'building', note: 'claimed by conductor verse-job · tries 0' }), fb = { id: 'f1', at: NOW - 30 * 60000 };
+  assert.deepEqual(fallbackLease({ jobs: [claimed], fallback: fb, now: NOW }), { requeue: null, clear: false, due: false }, 'a fresh claim holds the lane');
+  const expired = fallbackLease({ jobs: [claimed], fallback: { id: 'f1', at: NOW - FALLBACK_LEASE_MS - 1 }, now: NOW });
+  assert.equal(expired.requeue.id, 'f1'); assert.match(expired.requeue.note, /^tries 1 · verse-job fallback lease expired/);
+  assert.equal(expired.clear, true); assert.equal(expired.due, true);
+  assert.equal(fallbackLease({ jobs: [{ ...claimed, state: 'done' }], fallback: fb, now: NOW }).clear, true, 'a finished job clears the lease');
+  assert.equal(fallbackLease({ jobs: [{ ...claimed, note: 'claimed by laptop' }], fallback: fb, now: NOW }).clear, true, 'another owner\'s claim is left alone');
+  assert.equal(fallbackLease({ jobs: [], fallback: null, now: NOW }).due, true);
+  const candidate = job('b', 'bot:x');
+  assert.equal(fallbackAllowed({ started: [], active: null, due: true, candidate }), true);
+  assert.equal(fallbackAllowed({ started: [{ id: 'w1' }], due: true, candidate }), false, 'a start this tick already moved the queue');
+  assert.equal(fallbackAllowed({ active: fb, due: false, candidate }), false, 'an older lease still owns the coder lane');
+  assert.equal(fallbackAllowed({ started: [], active: null, due: true, candidate: null }), false, 'nothing to claim');
 });
 
 test('a retried job waits 2 hours a try; one at MAX_TRIES is set aside instead of started', () => {

@@ -342,6 +342,22 @@ def gather(cap=60, with_done=False):
         except Exception as e:
             print("watching:", e, file=sys.stderr)
 
+    # 11. the idea engine's picks (tools/idea-engine.mjs daily, lib/idea-core.js; owner, 2026-11-20: "how can we keep coming up with really
+    #     good ideas?"): the day's tournament winners, each already deduped against everything that exists and scored on fun, use, surprise,
+    #     how small it is and Atom's taste. A pick stays a want for three days; a polished pick weighs 36, an unpolished one 28.
+    try:
+        board = json.loads((ROOT / "void-live-deploy" / "tower.ideas.json").read_text(encoding="utf-8"))
+        hist = board.get("history") or {}
+        for p in board.get("picks") or []:
+            h = hist.get(p.get("slug"), {})
+            if h.get("status") == "picked" and recent(h.get("picked"), days=3) and p.get("want"):
+                w = p["want"]
+                cands.append({"kind": "idea engine", "title": str(w.get("title", ""))[:160], "why": str(w.get("why", ""))[:240], "weight": int(w.get("weight") or 28), "source": str(w.get("source") or "idea engine")[:60]})
+    except FileNotFoundError:
+        pass
+    except Exception as e:
+        print("idea engine:", e, file=sys.stderr)
+
     # is Verse getting better? (void.better.json, tools/better.mjs daily): wants that work on the weakest part weigh more.
     # VOID_BETTER_FILE names another copy (a test pins the plain weights with a file that is not there: no rows, no boost).
     try:
@@ -382,16 +398,17 @@ def gather(cap=60, with_done=False):
         print("skill-compose:", e, file=sys.stderr)
 
     # Visible progress (Atom, 2026-11-03): what a visitor can see ranks above laps, gates, incident logs and regenerated files.
-    try:
-        import subprocess
-        payload = json.dumps([{"title": c.get("title", ""), "why": c.get("why", ""), "kind": c.get("kind", ""), "weight": c.get("weight", 0)} for c in cands])
-        raw = subprocess.run(["node", str(ROOT / "tools" / "visible-rank.mjs")], input=payload, capture_output=True, text=True, timeout=30)
-        adj = json.loads(raw.stdout or "[]")
-        if isinstance(adj, list) and len(adj) == len(cands):
-            for c, w in zip(cands, adj):
-                c["weight"] = int(w)
-    except Exception as e:
-        print("visible:", e, file=sys.stderr)
+    if not (os.environ.get("VOID_BETTER_FILE") and not bf.exists()):
+      try:
+          import subprocess
+          payload = json.dumps([{"title": c.get("title", ""), "why": c.get("why", ""), "kind": c.get("kind", ""), "weight": c.get("weight", 0)} for c in cands])
+          raw = subprocess.run(["node", str(ROOT / "tools" / "visible-rank.mjs")], input=payload, capture_output=True, text=True, timeout=30)
+          adj = json.loads(raw.stdout or "[]")
+          if isinstance(adj, list) and len(adj) == len(cands):
+              for c, w in zip(cands, adj):
+                  c["weight"] = int(w)
+      except Exception as e:
+          print("visible:", e, file=sys.stderr)
 
     # keep it to the strongest 60, unique titles
     seen, out = set(), []

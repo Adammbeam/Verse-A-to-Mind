@@ -14,6 +14,9 @@ export const COINS = Object.freeze({
   SHIB: ['shiba-inu', 'Shiba Inu'], UNI: ['uniswap', 'Uniswap'], NEAR: ['near', 'NEAR Protocol'], APT: ['aptos', 'Aptos'], ARB: ['arbitrum', 'Arbitrum'], OP: ['optimism', 'Optimism'],
   FIL: ['filecoin', 'Filecoin'], AAVE: ['aave', 'Aave'], ALGO: ['algorand', 'Algorand'], HBAR: ['hedera-hashgraph', 'Hedera'], USDT: ['tether', 'Tether'], USDC: ['usd-coin', 'USD Coin'],
 });
+// the fiat codes the coin list may price in (a closed list: a stranger cannot pick another). The same codes the crypto card
+// reads in an ask ("bitcoin price in rupees"), so /api/markets?ids=&vs= answers every one of them.
+export const VS_CODES = Object.freeze('aed ars aud bdt bhd bmd brl cad chf clp cny czk dkk eur gbp gel hkd huf idr ils inr jpy krw kwd lkr mmk mxn myr ngn nok nzd php pkr pln rub sar sek sgd thb try twd uah usd vnd zar'.split(' '));
 // ECB reference currencies (frankfurter.dev): a closed list
 export const CURRENCIES = Object.freeze(['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'NZD', 'SEK', 'NOK', 'DKK', 'PLN', 'CZK', 'HUF', 'RON', 'BGN', 'TRY', 'CNY', 'HKD', 'SGD', 'KRW', 'INR', 'BRL', 'MXN', 'ZAR', 'ILS', 'IDR', 'MYR', 'PHP', 'THB', 'ISK']);
 // indices: [shown symbol, name, Stooq symbol, Yahoo symbol, aliases]

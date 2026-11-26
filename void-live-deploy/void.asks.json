@@ -2502,6 +2502,111 @@
       "words": "Teach the wants skill to answer probes instead of turning them into questions.",
       "ledgerAt": "2026-10-15T20:03:39Z",
       "why": "built: V01D writes its own probe asks (frontier #28, step 2 of the probe-and-fix playbook; owner, 2026-10-15: 'teach a man to fish so that V01D can do all this itself one day'): once a day the V01D probes itself workflow has V0 (linked by tools/asks-link.mjs, shared words: teach, want, skill, answ, prob, them)"
+    },
+    {
+      "words": "Update the Bridge card logic to handle cases with fewer than two staged inputs.",
+      "ledgerAt": "2026-11-12T11:40:00Z",
+      "why": "built: \"bridge these inputs\" with nothing staged opens a Bridge card that says how to stage inputs and bridges two samples on a tap (tools/bridge-ask.test.mjs, lists run 22) (tools/asks-link.json)"
+    },
+    {
+      "words": "Fix the podcast retrieval logic for 'this american life' and 'planet money'.",
+      "ledgerAt": "2026-11-17T03:15:21Z",
+      "why": "built: the latest This American Life plays from the host's own file and the exam counts it as the feed's episode; on 2026-11-18 (lists run 26) This American Life and Planet Money both played in the exam (tools/asks-link.json)"
+    },
+    {
+      "words": "Update the podcast retrieval logic to successfully play 'this american life' and 'planet money'.",
+      "ledgerAt": "2026-11-17T03:15:21Z",
+      "why": "built: the latest This American Life plays from the host's own file and the exam counts it as the feed's episode; on 2026-11-18 (lists run 26) This American Life and Planet Money both played in the exam (tools/asks-link.json)"
+    },
+    {
+      "words": "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores.",
+      "ledgerAt": "2026-11-18T18:00:23Z",
+      "why": "built: Yankees, Chiefs and Packers scores pass on live: the sports exam measured 96.3 with those asks green (lists run 26, 2026-11-18) (tools/asks-link.json)"
+    },
+    {
+      "words": "Stabilize sports data retrieval for the Yankees, Chiefs, and Packers.",
+      "ledgerAt": "2026-11-18T18:00:23Z",
+      "why": "built: Yankees, Chiefs and Packers scores pass on live: the sports exam measured 96.3 with those asks green (lists run 26, 2026-11-18) (tools/asks-link.json)"
+    },
+    {
+      "words": "Fix the weather exam failures for speed, skill, and temperature accuracy.",
+      "ledgerAt": "2026-11-18T18:00:23Z",
+      "why": "built: the weather card has a time limit on every forecast call, asks once more, then Verse's own edge copy (/api/weather); the exam had swung between 54 and 98 on the same city asks while the card sat past 12 s, and measured 98.3 on live (tools/weather-wait.test.mjs, lists run 26, 2026-11-18) (tools/asks-link.json)"
+    },
+    {
+      "words": "Fix the weather exam failures for Paris, London, and Tokyo.",
+      "ledgerAt": "2026-11-18T18:00:23Z",
+      "why": "built: the weather card has a time limit on every forecast call, asks once more, then Verse's own edge copy (/api/weather); the exam had swung between 54 and 98 on the same city asks while the card sat past 12 s, and measured 98.3 on live (tools/weather-wait.test.mjs, lists run 26, 2026-11-18) (tools/asks-link.json)"
+    },
+    {
+      "words": "Fix the factorial(0) code exam to ensure it returns 1 instead of 93.3.",
+      "ledgerAt": "2026-11-18T18:00:23Z",
+      "why": "built: the factorial(0) code exam passes: the code domain scored 100 on every run since 2026-11-15, the check runs factorial(0)==1 on the card's code (lists run 26, 2026-11-18) (tools/asks-link.json)"
+    },
+    {
+      "words": "Stabilize the weather exam for speed, skill, and temperature accuracy.",
+      "ledgerAt": "2026-11-18T18:00:23Z",
+      "why": "built: the weather card has a time limit on every forecast call, asks once more, then Verse's own edge copy (/api/weather); the exam had swung between 54 and 98 on the same city asks while the card sat past 12 s, and measured 98.3 on live (tools/weather-wait.test.mjs, lists run 26, 2026-11-18) (tools/asks-link.json)"
+    },
+    {
+      "words": "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill calculates accuracy correctly.",
+      "ledgerAt": "2026-11-18T18:00:23Z",
+      "why": "built: the weather card has a time limit on every forecast call, asks once more, then Verse's own edge copy (/api/weather); the exam had swung between 54 and 98 on the same city asks while the card sat past 12 s, and measured 98.3 on live (tools/weather-wait.test.mjs, lists run 26, 2026-11-18) (tools/asks-link.json)"
+    },
+    {
+      "words": "Update the weather skill to fix accuracy failures for Paris, London, and Tokyo.",
+      "ledgerAt": "2026-11-18T18:00:23Z",
+      "why": "built: the weather card has a time limit on every forecast call, asks once more, then Verse's own edge copy (/api/weather); the exam had swung between 54 and 98 on the same city asks while the card sat past 12 s, and measured 98.3 on live (tools/weather-wait.test.mjs, lists run 26, 2026-11-18) (tools/asks-link.json)"
+    },
+    {
+      "words": "Update the weather skill logic to improve accuracy for Paris, London, and Tokyo.",
+      "ledgerAt": "2026-11-18T18:00:23Z",
+      "why": "built: the weather card has a time limit on every forecast call, asks once more, then Verse's own edge copy (/api/weather); the exam had swung between 54 and 98 on the same city asks while the card sat past 12 s, and measured 98.3 on live (tools/weather-wait.test.mjs, lists run 26, 2026-11-18) (tools/asks-link.json)"
+    },
+    {
+      "words": "Update the weather skill logic for Paris, London, and Tokyo.",
+      "ledgerAt": "2026-11-18T18:00:23Z",
+      "why": "built: the weather card has a time limit on every forecast call, asks once more, then Verse's own edge copy (/api/weather); the exam had swung between 54 and 98 on the same city asks while the card sat past 12 s, and measured 98.3 on live (tools/weather-wait.test.mjs, lists run 26, 2026-11-18) (tools/asks-link.json)"
+    },
+    {
+      "words": "Update the factorial(0) code exam to ensure it returns 1.",
+      "ledgerAt": "2026-11-18T18:00:23Z",
+      "why": "built: the factorial(0) code exam passes: the code domain scored 100 on every run since 2026-11-15, the check runs factorial(0)==1 on the card's code (lists run 26, 2026-11-18) (tools/asks-link.json)"
+    },
+    {
+      "words": "Fix the weather exam failures for Paris, London, and Tokyo by ensuring the weather skill is accurate.",
+      "ledgerAt": "2026-11-18T18:00:23Z",
+      "why": "built: the weather card has a time limit on every forecast call, asks once more, then Verse's own edge copy (/api/weather); the exam had swung between 54 and 98 on the same city asks while the card sat past 12 s, and measured 98.3 on live (tools/weather-wait.test.mjs, lists run 26, 2026-11-18) (tools/asks-link.json)"
+    },
+    {
+      "words": "Fix the factorial(0) code exam so it returns 1.",
+      "ledgerAt": "2026-11-18T18:00:23Z",
+      "why": "built: the factorial(0) code exam passes: the code domain scored 100 on every run since 2026-11-15, the check runs factorial(0)==1 on the card's code (lists run 26, 2026-11-18) (tools/asks-link.json)"
+    },
+    {
+      "words": "Rebuild the weather exam to correctly process temperature and rainfall for Paris and London.",
+      "ledgerAt": "2026-11-18T18:00:23Z",
+      "why": "built: the weather card has a time limit on every forecast call, asks once more, then Verse's own edge copy (/api/weather); the exam had swung between 54 and 98 on the same city asks while the card sat past 12 s, and measured 98.3 on live (tools/weather-wait.test.mjs, lists run 26, 2026-11-18) (tools/asks-link.json)"
+    },
+    {
+      "words": "Fix the Celtics query in the sports exam to resolve the score failure.",
+      "ledgerAt": "2026-11-11T17:36:49Z",
+      "why": "built: the sports exam failed board on MLB, Premier League and Serie A on days with no games (the card said only No games today); the card now shows the latest results of the last seven days, else the next games, else the table as it stands (skills/scores.js, tools/scores-skill.test.mjs, lists run 16, 2026-11-11) (tools/asks-link.json)"
+    },
+    {
+      "words": "Fix the podcasts exam by implementing support for 'play the episode before that' and 'pon el último episodio de radiolab'.",
+      "ledgerAt": "2026-11-11T17:36:50Z",
+      "why": "built: the podcasts exam failed audio on a different show each run (TED Radio Hour, Planet Money, Hidden Brain): the exam read the player 1.2 s after play(), and a host that redirects slowly had not started; it now waits up to 5 s for playback, speed stays the fast check (tools/exam.mjs, lists run 16, 2026-11-11) (tools/asks-link.json)"
+    },
+    {
+      "words": "Fix the NBA Celtics query in the sports exam.",
+      "ledgerAt": "2026-11-11T17:36:49Z",
+      "why": "built: the sports exam failed board on MLB, Premier League and Serie A on days with no games (the card said only No games today); the card now shows the latest results of the last seven days, else the next games, else the table as it stands (skills/scores.js, tools/scores-skill.test.mjs, lists run 16, 2026-11-11) (tools/asks-link.json)"
+    },
+    {
+      "words": "Implement support for 'play the episode before that' and 'pon el último episodio de radiolab' in the podcasts exam.",
+      "ledgerAt": "2026-11-11T17:36:50Z",
+      "why": "built: the podcasts exam failed audio on a different show each run (TED Radio Hour, Planet Money, Hidden Brain): the exam read the player 1.2 s after play(), and a host that redirects slowly had not started; it now waits up to 5 s for playback, speed stays the fast check (tools/exam.mjs, lists run 16, 2026-11-11) (tools/asks-link.json)"
     }
   ],
   "held": [
@@ -2513,164 +2618,192 @@
     }
   ],
   "totals": {
-    "asked": 278,
-    "built": 269,
-    "through": "2026-11-18T01:34:00Z",
+    "asked": 286,
+    "built": 276,
+    "through": "2026-11-24T04:16:00Z",
     "open": [
       {
-        "ask": "Stabilize sports data retrieval for Yankees, Chiefs, and Packers scores.",
-        "at": "2026-11-18T01:34:00Z",
+        "ask": "Implement a miss-board reader that reads.git/verse-loop.stops.jsonl.",
+        "at": "2026-11-24T04:16:00Z",
+        "kind": "daily",
+        "small": true,
+        "times": 2,
+        "ids": [
+          "ask-20261124-0416-2",
+          "ask-20261121-0029-2",
+          "ask-20261121-0039-2",
+          "ask-20261121-0043-2",
+          "ask-20261121-0045-2",
+          "ask-20261121-2147-2",
+          "ask-20261121-2154-2",
+          "ask-20261121-2203-3",
+          "ask-20261121-2243-3",
+          "ask-20261121-2311-3",
+          "ask-20261121-2314-3",
+          "ask-20261121-2345-2"
+        ]
+      },
+      {
+        "ask": "Implement audio playback and episode navigation for the podcast skill.",
+        "at": "2026-11-19T21:01:00Z",
+        "kind": "build",
+        "small": false,
+        "times": 1,
+        "ids": [
+          "ask-20261118-1955-1",
+          "ask-20261118-2006-3",
+          "ask-20261119-2038-2",
+          "ask-20261119-2043-1",
+          "ask-20261119-2055-1",
+          "ask-20261119-2101-1"
+        ]
+      },
+      {
+        "ask": "Fix the visitor pass response time on the live site.",
+        "at": "2026-11-21T20:59:00Z",
+        "kind": "build",
+        "small": false,
+        "times": 3,
+        "ids": [
+          "ask-20261119-2222-3",
+          "ask-20261119-2223-3",
+          "ask-20261119-2231-2",
+          "ask-20261119-2249-3",
+          "ask-20261119-2122-1",
+          "ask-20261119-2125-1",
+          "ask-20261121-2022-2",
+          "ask-20261121-2032-2",
+          "ask-20261121-2041-2",
+          "ask-20261121-2045-2",
+          "ask-20261121-2049-3",
+          "ask-20261121-2059-1"
+        ]
+      },
+      {
+        "ask": "Rebuild the recipes exam to fix chocolate chip cookies, salad dressing, and banana bread.",
+        "at": "2026-11-19T21:39:00Z",
+        "kind": "build",
+        "small": true,
+        "times": 2,
+        "ids": [
+          "ask-20261119-2031-2",
+          "ask-20261119-2110-3",
+          "ask-20261119-2113-2",
+          "ask-20261119-2122-2",
+          "ask-20261119-2125-2",
+          "ask-20261119-2139-3",
+          "ask-20261119-2101-3"
+        ]
+      },
+      {
+        "ask": "Reduce the latency of the visitor pass on the live site.",
+        "at": "2026-11-19T20:38:00Z",
+        "kind": "build",
+        "small": false,
+        "times": 1,
+        "ids": [
+          "ask-20261119-2038-1"
+        ]
+      },
+      {
+        "ask": "Fix the visitor pass console error for joke requests.",
+        "at": "2026-11-21T00:45:00Z",
+        "kind": "daily",
+        "small": true,
+        "times": 2,
+        "ids": [
+          "ask-20261119-2257-2",
+          "ask-20261120-2359-3",
+          "ask-20261121-0011-3",
+          "ask-20261121-0029-3",
+          "ask-20261121-0039-3",
+          "ask-20261121-0043-3",
+          "ask-20261121-0045-3",
+          "ask-20261120-0103-3"
+        ]
+      },
+      {
+        "ask": "Update the router to recognize existing skills immediately.",
+        "at": "2026-11-21T00:45:00Z",
+        "kind": "daily",
+        "small": true,
+        "times": 1,
+        "ids": [
+          "ask-20261120-2238-1",
+          "ask-20261120-2308-1",
+          "ask-20261120-2316-1",
+          "ask-20261120-2329-1",
+          "ask-20261120-2349-1",
+          "ask-20261120-2353-1",
+          "ask-20261120-2359-1",
+          "ask-20261121-0011-1",
+          "ask-20261121-0029-1",
+          "ask-20261121-0039-1",
+          "ask-20261121-0043-1",
+          "ask-20261121-0045-1"
+        ]
+      },
+      {
+        "ask": "Fix the podcast audio and episode detection for 'The Daily', 'Serial', and 'Planet Money'.",
+        "at": "2026-11-24T04:16:00Z",
+        "kind": "daily",
+        "small": false,
+        "times": 4,
+        "ids": [
+          "ask-20261123-2018-3",
+          "ask-20261123-2035-3",
+          "ask-20261123-2043-3",
+          "ask-20261123-2112-3",
+          "ask-20261123-2237-3",
+          "ask-20261123-2238-3",
+          "ask-20261124-0012-3",
+          "ask-20261124-0314-1",
+          "ask-20261124-0416-3",
+          "ask-20261124-0331-3",
+          "ask-20261124-0357-3",
+          "ask-20261124-0407-3"
+        ]
+      },
+      {
+        "ask": "Reduce the 20 probes causing the 12042 ms visitor pass delay.",
+        "at": "2026-11-24T04:16:00Z",
         "kind": "daily",
         "small": true,
         "times": 3,
         "ids": [
-          "ask-20261117-1010-1",
-          "ask-20261117-1059-1",
-          "ask-20261117-1109-1",
-          "ask-20261117-1350-1",
-          "ask-20261117-1409-1",
-          "ask-20261117-1737-1",
-          "ask-20261117-1749-1",
-          "ask-20261117-1842-1",
-          "ask-20261117-1957-1",
-          "ask-20261117-2142-1",
-          "ask-20261117-2259-1",
-          "ask-20261118-0040-1"
+          "ask-20261122-2122-1",
+          "ask-20261122-2127-1",
+          "ask-20261122-2136-1",
+          "ask-20261122-2148-1",
+          "ask-20261122-2151-1",
+          "ask-20261122-2214-1",
+          "ask-20261123-0006-1",
+          "ask-20261123-0012-1",
+          "ask-20261124-0314-2",
+          "ask-20261124-0416-1",
+          "ask-20261121-2314-1",
+          "ask-20261124-0331-1"
         ]
       },
       {
-        "ask": "Update the Bridge card logic to handle cases with fewer than two staged inputs.",
-        "at": "2026-11-12T23:41:00Z",
+        "ask": "Reduce the number of probes used during the visitor pass.",
+        "at": "2026-11-24T04:07:00Z",
         "kind": "build",
         "small": true,
-        "times": 1,
-        "ids": [
-          "ask-20261112-2103-3",
-          "ask-20261112-2106-3",
-          "ask-20261112-2109-3",
-          "ask-20261112-2121-3",
-          "ask-20261112-2132-3",
-          "ask-20261112-2203-2",
-          "ask-20261112-2209-3",
-          "ask-20261112-2217-3",
-          "ask-20261112-2243-3",
-          "ask-20261112-2251-3",
-          "ask-20261112-2308-3",
-          "ask-20261112-2341-3"
-        ]
-      },
-      {
-        "ask": "Fix the factorial(0) code exam to ensure it returns 1.",
-        "at": "2026-11-18T01:34:00Z",
-        "kind": "daily",
-        "small": true,
-        "times": 4,
-        "ids": [
-          "ask-20261116-1750-3",
-          "ask-20261116-1755-2",
-          "ask-20261117-1705-2",
-          "ask-20261117-1737-2",
-          "ask-20261117-1749-2",
-          "ask-20261117-1842-2",
-          "ask-20261117-1957-2",
-          "ask-20261117-2142-2",
-          "ask-20261117-1010-2",
-          "ask-20261117-1050-3",
-          "ask-20261117-1059-2",
-          "ask-20261117-1109-2"
-        ]
-      },
-      {
-        "ask": "Fix the weather exam failures for speed, skill, and temperature accuracy.",
-        "at": "2026-11-16T17:26:00Z",
-        "kind": "build",
-        "small": false,
-        "times": 4,
-        "ids": [
-          "ask-20261113-2348-3",
-          "ask-20261116-1606-1",
-          "ask-20261116-1624-1",
-          "ask-20261116-1726-1",
-          "ask-20261114-2250-3",
-          "ask-20261114-2255-3",
-          "ask-20261115-0719-1",
-          "ask-20261115-0804-1",
-          "ask-20261115-1113-1",
-          "ask-20261115-1126-1",
-          "ask-20261115-1213-1",
-          "ask-20261115-1334-1"
-        ]
-      },
-      {
-        "ask": "Update the weather skill to fix accuracy failures for Paris, London, and Tokyo.",
-        "at": "2026-11-16T22:58:00Z",
-        "kind": "build",
-        "small": false,
-        "times": 4,
-        "ids": [
-          "ask-20261115-1537-1",
-          "ask-20261115-1737-3",
-          "ask-20261115-1708-3",
-          "ask-20261116-1736-1",
-          "ask-20261116-1750-1",
-          "ask-20261116-1755-3",
-          "ask-20261116-1806-1",
-          "ask-20261116-2012-1",
-          "ask-20261116-2012-2",
-          "ask-20261116-2201-2",
-          "ask-20261116-2209-2",
-          "ask-20261116-2258-3"
-        ]
-      },
-      {
-        "ask": "Fix the podcast retrieval logic for 'this american life' and 'planet money'.",
-        "at": "2026-11-17T02:26:00Z",
-        "kind": "daily",
-        "small": false,
         "times": 2,
         "ids": [
-          "ask-20261117-0035-1",
-          "ask-20261117-0108-1",
-          "ask-20261117-0117-1",
-          "ask-20261117-0135-1",
-          "ask-20261117-0226-3"
-        ]
-      },
-      {
-        "ask": "Rebuild the weather exam to correctly process temperature and rainfall for specific cities.",
-        "at": "2026-11-17T19:57:00Z",
-        "kind": "build",
-        "small": false,
-        "times": 2,
-        "ids": [
-          "ask-20261117-1059-3",
-          "ask-20261117-1109-3",
-          "ask-20261117-1350-3",
-          "ask-20261117-1409-3",
-          "ask-20261117-1617-3",
-          "ask-20261117-1634-3",
-          "ask-20261117-1704-3",
-          "ask-20261117-1705-3",
-          "ask-20261117-1737-3",
-          "ask-20261117-1749-3",
-          "ask-20261117-1842-3",
-          "ask-20261117-1957-3"
-        ]
-      },
-      {
-        "ask": "Implement a fourth skill for the lab/pattern family.",
-        "small": true,
-        "times": 1,
-        "ids": [
-          "ask-20261117-0839-3"
-        ]
-      },
-      {
-        "ask": "Fix the recipes exam specifically for the guacamole recipe.",
-        "small": true,
-        "times": 1,
-        "ids": [
-          "ask-20261117-0823-2"
+          "ask-20261123-2043-1",
+          "ask-20261124-0310-1",
+          "ask-20261123-2112-1",
+          "ask-20261123-2237-1",
+          "ask-20261123-2238-1",
+          "ask-20261124-0012-1",
+          "ask-20261124-0046-1",
+          "ask-20261124-0057-1",
+          "ask-20261124-0224-1",
+          "ask-20261124-0225-1",
+          "ask-20261124-0357-1",
+          "ask-20261124-0407-1"
         ]
       }
     ]

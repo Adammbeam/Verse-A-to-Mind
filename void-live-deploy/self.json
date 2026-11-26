@@ -304,6 +304,102 @@
   },
   {
    "state": "shipped",
+   "date": "2026-11-03",
+   "ask": "delivery-pack skill: package a business idea into a client handoff (clarify, systems, status/docs/automations)",
+   "from": "new idea by growth agent; helper/delivery-pack"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-05",
+   "ask": "Numbers and money family: savings growth at 0% is the money put in, a 20% tip on 45 is 9, and 96 px at 96 dpi is 2.54…",
+   "from": "tools/numbers-proof.test.mjs"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-04",
+   "ask": "system-status skill: client-visible status card for a system Verse owns (state, monitors, ownership, handoff)",
+   "from": "new idea by growth agent; helper/system-status"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-05",
+   "ask": "system-handoff skill: package a running system or automation into a client handoff (ownership, status, docs, monitors)",
+   "from": "new idea by growth agent; helper/system-handoff"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-06",
+   "ask": "heavy-lift-map skill: map a business process to the systems, automations and handoff Verse owns so the client does less",
+   "from": "new idea by growth agent; helper/heavy-lift-map"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-06",
+   "ask": "monitor-pack skill: propose the monitors, alerts and status checks Verse handles for a process so the client does not…",
+   "from": "new idea by growth agent; helper/monitor-pack"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-06",
+   "ask": "verify-pack skill: propose the tests, checks and verification Verse handles for a process so the client does not do…",
+   "from": "new idea by growth agent; helper/verify-pack"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-09",
+   "ask": "ownership-pack skill: clarify what Verse owns versus what the client owns so handoffs reduce client work",
+   "from": "new idea by growth agent; helper/ownership-pack"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-03",
+   "ask": "delivery-pack skill: package a business idea into a client handoff (clarify, systems, status/docs/automations, Verse…",
+   "from": "new idea by growth agent; helper/delivery-pack"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-05",
+   "ask": "Numbers and money family: savings growth at 0% is the money put in, a 20% tip on 45 is 9, and 96 px at 96 dpi is 2.54…",
+   "from": "tools/numbers-proof.test.mjs"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-04",
+   "ask": "system-status skill: client-visible status card for a system Verse owns (state, monitors, ownership, handoff)",
+   "from": "new idea by growth agent; helper/system-status"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-05",
+   "ask": "system-handoff skill: package a running system or automation into a client handoff (ownership, status, docs, monitors)",
+   "from": "new idea by growth agent; helper/system-handoff"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-06",
+   "ask": "heavy-lift-map skill: map a business process to the systems, automations and handoff Verse owns so the client does less",
+   "from": "new idea by growth agent; helper/heavy-lift-map"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-06",
+   "ask": "monitor-pack skill: propose the monitors, alerts and status checks Verse handles for a process so the client does not…",
+   "from": "new idea by growth agent; helper/monitor-pack"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-06",
+   "ask": "verify-pack skill: propose the tests, checks and verification Verse handles for a process so the client does not do…",
+   "from": "new idea by growth agent; helper/verify-pack"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-09",
+   "ask": "ownership-pack skill: clarify what Verse owns versus what the client owns so handoffs reduce client work and package…",
+   "from": "new idea by growth agent; helper/ownership-pack"
+  },
+  {
+   "state": "shipped",
    "date": "2026-11-09",
    "ask": "reuse-pack skill: map a business process to existing tools Verse can own/connect so the client does less inventing",
    "from": "new idea by growth agent; helper/reuse-pack"
@@ -355,6 +451,48 @@
    "date": "2026-11-12",
    "ask": "time-saved skill: client-visible estimate of hours saved because Verse owns the systems, monitors and tests so the…",
    "from": "new idea by growth agent; helper/time-saved"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-12",
+   "ask": "status-digest skill: client-visible digest of systems Verse owns (status, monitors, next handoff, time saved) so the…",
+   "from": "new idea by growth agent; helper/status-digest"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-12",
+   "ask": "full-handoff skill: complete client handoff package (ownership, status, docs, monitors, automations) for systems Verse…",
+   "from": "new idea by growth agent; helper/full-handoff"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-12",
+   "ask": "time-saved skill: client-visible estimate of hours saved because Verse owns the systems, monitors and tests so the…",
+   "from": "new idea by growth agent; helper/time-saved"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-12",
+   "ask": "roi-pack skill: package the return on investment (hours saved, estimated cost avoided) for a business idea Verse owns…",
+   "from": "new idea by growth agent; helper/roi-pack"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-12",
+   "ask": "time-saved skill: client-visible estimate of hours saved because Verse owns the systems, monitors and tests so the…",
+   "from": "new idea by growth agent; helper/time-saved"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-12",
+   "ask": "reliability-pack skill: package the suggested monitors, verification checks, live status reading and incident path for…",
+   "from": "new idea by growth agent; helper/reliability-pack"
+  },
+  {
+   "state": "shipped",
+   "date": "2026-11-23",
+   "ask": "handoff-confidence skill: client-visible confidence card for a system Verse owns (tests, monitors, ownership, client…",
+   "from": "new idea by growth agent; helper/handoff-confidence"
   }
  ],
  "open": [
@@ -490,6 +628,30 @@
    "date": "",
    "ask": "Client offer pack",
    "from": "growth, 2026-11-10"
+  },
+  {
+   "state": "open",
+   "date": "",
+   "ask": "Client systems connect pack",
+   "from": "growth, 2026-11-18"
+  },
+  {
+   "state": "open",
+   "date": "",
+   "ask": "Delivery pack",
+   "from": "growth, 2026-11-19"
+  },
+  {
+   "state": "open",
+   "date": "",
+   "ask": "Client monitor receipt",
+   "from": "growth, 2026-11-19"
+  },
+  {
+   "state": "open",
+   "date": "",
+   "ask": "Full lift plan",
+   "from": "growth, 2026-11-19"
   }
  ],
  "games": [
@@ -545,6 +707,7 @@
   "rack",
   "ringer",
   "savings",
+  "snail",
   "stopwatch",
   "swarm",
   "swatch",
@@ -653,7 +816,7 @@
   },
   {
    "name": "Life extension and disease cures",
-   "last": "2026-11-11"
+   "last": "2026-11-18"
   },
   {
    "name": "Planet restoration",
@@ -665,13 +828,69 @@
   }
  ],
  "building": {
-  "at": "2026-11-25T21:50:25Z",
+  "at": "2026-11-18T16:01:46Z",
   "date": "2026-10-15",
   "by": "claude",
   "item": "Verse values anything from a photo",
   "what": "steps 1 and 2 shipped. The vision slot is lib/models.js path vision (Workers AI LLaVA, the site's own binding); skills/appraise.js + functions/api/appraise.js + lib/appraise-photo.js: one photo, downsized in the…"
  },
  "commits": [
+  {
+   "at": "2026-11-26T00:51:43Z",
+   "subject": "Phase over any page, and the ask that opens it"
+  },
+  {
+   "at": "2026-11-26T00:51:20Z",
+   "subject": "Visit: a day that began on the D1 salt keeps it, so SALT's return mid-day counts no one twice"
+  },
+  {
+   "at": "2026-11-26T00:49:15Z",
+   "subject": "The clock says when a set secret goes blank; /api/free names the model that answers now"
+  },
+  {
+   "at": "2026-11-26T00:48:02Z",
+   "subject": "team: any agent joins itself over MCP by name; agents.txt, llms.txt and the /team/ card advertise the one-call join and that Verse…"
+  },
+  {
+   "at": "2026-11-26T00:48:02Z",
+   "subject": "Salvage: serve the GitHub finds on the live site"
+  },
+  {
+   "at": "2026-11-26T00:46:34Z",
+   "subject": "Salvage: GitHub finds for the travel floor and crew"
+  },
+  {
+   "at": "2026-11-26T00:44:32Z",
+   "subject": "Status pages say whether each secret reached this deploy: set, empty or absent (never a value)"
+  },
+  {
+   "at": "2026-11-26T00:44:29Z",
+   "subject": "team: Verse's tick makes #ideas proposals jobs with automated guards (secret scan, acceptance gate, dedupe, caps, rival names out); a seat…"
+  },
+  {
+   "at": "2026-11-26T00:42:07Z",
+   "subject": "Phase: a see-through layer at /phase/ that sees what you share, puts a character or you into it, and records a clip"
+  },
+  {
+   "at": "2026-11-26T00:41:00Z",
+   "subject": "crew: lanes from closed work steer the hand-out, a starter job on self-join, stock scaled to working seats, owner crew panel API"
+  },
+  {
+   "at": "2026-11-26T00:38:51Z",
+   "subject": "Test: the suite-end catch names the last check that ran"
+  },
+  {
+   "at": "2026-11-26T00:36:25Z",
+   "subject": "Self: always state the aim, and file a floor-gap job past stale wants"
+  },
+  {
+   "at": "2026-11-26T00:33:50Z",
+   "subject": "meta-ask: a pasted card code is read field by field, not taken for a passage"
+  },
+  {
+   "at": "2026-11-26T00:32:44Z",
+   "subject": "Refresh every generated card (node tools/refresh.mjs --keep-going)"
+  },
   {
    "at": "2026-11-26T00:30:45Z",
    "subject": "meta-ask: a reasoning test gets a puzzle, memory gets the truth, a make ask is written not looked up"
@@ -693,64 +912,8 @@
    "subject": "Answer engine: a slow source or free model no longer holds an uncached answer"
   },
   {
-   "at": "2026-11-26T00:24:39Z",
-   "subject": "Empty-state suggestions name the families that answer them"
-  },
-  {
-   "at": "2026-11-26T00:23:44Z",
-   "subject": "Photos: no other site's name in a public address"
-  },
-  {
-   "at": "2026-11-26T00:22:50Z",
-   "subject": "Self: refresh self.json after merging main"
-  },
-  {
-   "at": "2026-11-26T00:22:33Z",
-   "subject": "Fold the 7 waiting growth entries into the ledger"
-  },
-  {
-   "at": "2026-11-26T00:22:19Z",
-   "subject": "Self: Verse knows its aim, and the tick files the current floor's weakest gap"
-  },
-  {
-   "at": "2026-11-26T00:20:32Z",
-   "subject": "team/agent.mjs: job prompts point at Adammbeam/Verse-A-to-Mind"
-  },
-  {
-   "at": "2026-11-26T00:20:28Z",
-   "subject": "tools: a cheap worldtime and today collision check"
-  },
-  {
-   "at": "2026-11-26T00:19:25Z",
-   "subject": "Log: the everyday and world answers, and the edge-cache fix, in the growth ledger and agent log"
-  },
-  {
-   "at": "2026-11-26T00:16:12Z",
-   "subject": "Answer engine: weather, sunrise, sunset, the time in a place and word meanings from live sources"
-  },
-  {
-   "at": "2026-11-26T00:15:30Z",
-   "subject": "Visitor pass: wait for '…' cards to fill, and expect song previews for 'play music'"
-  },
-  {
-   "at": "2026-11-26T00:14:03Z",
-   "subject": "Checks green: guide, families and automations tests"
-  },
-  {
-   "at": "2026-11-26T00:11:43Z",
-   "subject": "SEO checks green: game pages get canonical, h1 and share tags, and links from the arcade"
-  },
-  {
-   "at": "2026-11-26T00:08:59Z",
-   "subject": "team/agents.txt: the contributor guide names Adammbeam/Verse-A-to-Mind, not the old void-loop fork"
-  },
-  {
-   "at": "2026-11-26T00:05:39Z",
-   "subject": "quiz card: the gear question and the kept save are polled for, not read after a guessed 900 ms (mvcf80qw)"
-  },
-  {
-   "at": "2026-11-26T00:05:22Z",
-   "subject": "Ask bar: the empty placeholder says Ask Verse"
+   "at": "2026-11-26T00:27:31Z",
+   "subject": "Point agent-facing guides and live pages at Verse-A-to-Mind"
   }
  ],
  "builders": {
@@ -976,26 +1139,28 @@
   ],
   "visits": {
    "clock-mini": 1,
+   "news-scene": 1,
+   "review-2026-united-states-elections": 1,
    "trailer-mississippi-senate-race-election-results": 1,
    "x9": 1
   },
   "note": "V01D's clip engine state. visits: deep-link visits per moment (from a-to-mind.com/c/_stats, summed by moment) steer tools/clips.mjs plan. learned: each trick added after the first library, with who asked (Void's daily next_trick gets built and credited here)."
  },
  "people": {
-  "line": "People this week: 81 (370 visits; counted by Verse itself, no cookies, our own runs and bots taken out)",
-  "at": "2026-11-18T14:01Z",
+  "line": "People this week: 46 (219 visits; counted by Verse itself, no cookies, our own runs and bots taken out)",
+  "at": "2026-11-24T05:55Z",
   "source": "verse"
  },
  "tower": {
-  "target": "flightconnections.com",
-  "kind": "travel",
-  "since": "2026-11-09",
+  "target": "howsecureismypassword.net",
+  "kind": "password strength",
+  "since": "2026-11-23",
   "next": [
    "heycolor.com",
    "nameunit.com",
    "emojicombos.com"
   ],
   "beaten": 2,
-  "total": 1292
+  "total": 1296
  }
 }

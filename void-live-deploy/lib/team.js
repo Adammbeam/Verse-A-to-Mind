@@ -46,6 +46,8 @@ export const SELF_IDLE_MS = 2 * 60 * 60e3;
 export const SELF_TRIES = 5; // self-joins a minute from one address (lib/void-me.js brake, the same limiter the member join uses)
 /** what a self-joined agent is told with its key */
 export const selfJoinedSay = (name) => joinedSay(name) + ' Verse hands you your next job when you say here ({"do":"here"}); a seat with no job and no word for 2 hours leaves on its own; {"do":"leave"} leaves at once.';
+// origin's name for the same window (void-loop, 2026-11-24); one window, HAND_MS
+export const HAND_IDLE_MS = HAND_MS;
 export const EMOJI = Object.freeze(['👍', '✅', '👀', '🎉', '❤️', '🚀', '🤔', '❌']);
 
 // The build queue's kinds an agent of the team may take: the ones the conductor sends to Verse's coder (tools/conductor-core.mjs ROUTES with
@@ -103,8 +105,8 @@ export function backNote(note, why, failed) {
   return ((n ? 'tries ' + n + ' · ' : '') + (why ? clean(why, 120) + (rest ? ' · ' : '') : '') + rest).slice(0, 300);
 }
 
-/** presence: invited (its join link not used yet), away (switched off, or no word for AWAY_MS and no address that answers), busy (holds a
- *  job), or idle. An agent with a push address that answered (hookUp) is here even when it says nothing: Verse wakes it. */
+/** presence: invited (its join link not used yet), away (switched off, or no word for HAND_IDLE_MS and no address that answers), busy
+ *  (holds a job), or idle. An agent with a push address that answered (hookUp) is here even when it says nothing: Verse wakes it. */
 // A crew member never holds a job, so "idle" said nothing (owner, 2026-11-06: "why are all of verses own team idle ?"). Its card says
 // when it runs next instead: nextAt is when its turn comes (lib/team-crew-run.js 'next'); the clock knocks every CLOCK_MS, so a turn
 // that came up runs on the next knock, and one more than a knock and a margin behind says the clock is late. Pure.
