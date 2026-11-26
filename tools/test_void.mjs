@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { acquire as acquireHeavy } from './heavy.mjs';
 import { WAITS as RETIRED_LABEL } from '../void-live-deploy/lib/v01d-fixes.js';
 import { checkAll, patchFor } from '../void-live-deploy/lib/sightline.js';
-import { parseShard, inShard } from './shard.mjs';
+import { parseShard, inShard, CORE_LABEL } from './shard.mjs';
 import { applyAgent, inboxOf } from '../void-live-deploy/lib/agent-core.js';
 import { currentNav } from '../void-live-deploy/lib/verse-shell.js';
 import { applyBuilderUni } from './uni-pass.mjs';
@@ -83,8 +83,9 @@ let SECTION = null;
 const want = (label) => { const on = (!ONLY.length || ONLY.every((w) => label.toLowerCase().includes(w))) && inShard(label, SHARD); if (on && ONLY.length) wanted.add(label); if (on) { sweep(); SECTION = label; } return on; };
 // everything outside the named sections (the long run of asks on the one shared page `t`, and the checks that read what
 // those asks left behind): --only "core" runs it. Plain setup (declarations, no checks) always runs.
-const CORE = want('core: the shared page, the asks typed one after another');
+const CORE = want(CORE_LABEL);
 if (process.argv.includes('--list')) {
+  if (inShard(CORE_LABEL, SHARD)) console.log(CORE_LABEL);
   for (const f of [import.meta.url, new URL('./test_3d.mjs', import.meta.url)]) for (const m of fs.readFileSync(new URL(f), 'utf8').matchAll(/^  if \(want\(("(?:[^"\\]|\\.)*")\)\)/gm)) { const l = JSON.parse(m[1]); if (inShard(l, SHARD)) console.log(l); }
   exitFlushed(0);
 }
