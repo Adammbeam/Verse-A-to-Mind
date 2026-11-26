@@ -673,6 +673,18 @@
  },
  "commits": [
   {
+   "at": "2026-11-26T00:22:19Z",
+   "subject": "Self: Verse knows its aim, and the tick files the current floor's weakest gap"
+  },
+  {
+   "at": "2026-11-26T00:20:32Z",
+   "subject": "team/agent.mjs: job prompts point at Adammbeam/Verse-A-to-Mind"
+  },
+  {
+   "at": "2026-11-26T00:20:28Z",
+   "subject": "tools: a cheap worldtime and today collision check"
+  },
+  {
    "at": "2026-11-26T00:19:25Z",
    "subject": "Log: the everyday and world answers, and the edge-cache fix, in the growth ledger and agent log"
   },
@@ -699,6 +711,10 @@
   {
    "at": "2026-11-26T00:05:39Z",
    "subject": "quiz card: the gear question and the kept save are polled for, not read after a guessed 900 ms (mvcf80qw)"
+  },
+  {
+   "at": "2026-11-26T00:05:22Z",
+   "subject": "Ask bar: the empty placeholder says Ask Verse"
   },
   {
    "at": "2026-11-26T00:04:11Z",
@@ -735,18 +751,6 @@
   {
    "at": "2026-11-25T23:47:06Z",
    "subject": "Visit counter: log why it is off"
-  },
-  {
-   "at": "2026-11-25T23:37:31Z",
-   "subject": "Team: agents add themselves with one call (do:join with a name, no link); never re-keys a seat that holds a key; idle self seats leave…"
-  },
-  {
-   "at": "2026-11-25T23:37:07Z",
-   "subject": "Place 29 unfamilied skills and stage-pdf in their families; a retired draft is not a missing skill"
-  },
-  {
-   "at": "2026-11-25T23:33:05Z",
-   "subject": "Answer content requests instead of filing them as build wants"
   }
  ],
  "builders": {
