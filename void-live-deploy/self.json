@@ -673,6 +673,42 @@
  },
  "commits": [
   {
+   "at": "2026-11-26T00:30:45Z",
+   "subject": "meta-ask: a reasoning test gets a puzzle, memory gets the truth, a make ask is written not looked up"
+  },
+  {
+   "at": "2026-11-26T00:29:53Z",
+   "subject": "Regenerate the preload graph and the similar index (both stale on main)"
+  },
+  {
+   "at": "2026-11-26T00:28:40Z",
+   "subject": "follow-ask: carry an earlier ask only when the new one cannot stand alone"
+  },
+  {
+   "at": "2026-11-26T00:28:01Z",
+   "subject": "bench-live: an honesty benchmark against the live answer engine, three states"
+  },
+  {
+   "at": "2026-11-26T00:27:34Z",
+   "subject": "Answer engine: a slow source or free model no longer holds an uncached answer"
+  },
+  {
+   "at": "2026-11-26T00:24:39Z",
+   "subject": "Empty-state suggestions name the families that answer them"
+  },
+  {
+   "at": "2026-11-26T00:23:44Z",
+   "subject": "Photos: no other site's name in a public address"
+  },
+  {
+   "at": "2026-11-26T00:22:50Z",
+   "subject": "Self: refresh self.json after merging main"
+  },
+  {
+   "at": "2026-11-26T00:22:33Z",
+   "subject": "Fold the 7 waiting growth entries into the ledger"
+  },
+  {
    "at": "2026-11-26T00:22:19Z",
    "subject": "Self: Verse knows its aim, and the tick files the current floor's weakest gap"
   },
@@ -715,42 +751,6 @@
   {
    "at": "2026-11-26T00:05:22Z",
    "subject": "Ask bar: the empty placeholder says Ask Verse"
-  },
-  {
-   "at": "2026-11-26T00:04:11Z",
-   "subject": "Answer engine: the time, the date, coins, dice and days-until are answered from the clock, not the model"
-  },
-  {
-   "at": "2026-11-26T00:03:28Z",
-   "subject": "Answer engine: a passage, directive or talk reply says it went past the edge cache"
-  },
-  {
-   "at": "2026-11-26T00:02:56Z",
-   "subject": "/build.json answers again: the hash of the shell files this deploy serves"
-  },
-  {
-   "at": "2026-11-26T00:00:30Z",
-   "subject": "Sudoku: 'play sudoku' opens a real 9 by 9 puzzle with one solution"
-  },
-  {
-   "at": "2026-11-25T23:58:14Z",
-   "subject": "Open tool: 'currency converter' opens the markets currency converter page"
-  },
-  {
-   "at": "2026-11-25T23:52:36Z",
-   "subject": "Answer engine: a joke is told by the joke skill, not read from the cache"
-  },
-  {
-   "at": "2026-11-25T23:50:25Z",
-   "subject": "Visit counter: count again when the deployment reads no SALT"
-  },
-  {
-   "at": "2026-11-25T23:48:46Z",
-   "subject": "Keep self-grounded on the route log and pin the what's-next check to fixture facts"
-  },
-  {
-   "at": "2026-11-25T23:47:06Z",
-   "subject": "Visit counter: log why it is off"
   }
  ],
  "builders": {
