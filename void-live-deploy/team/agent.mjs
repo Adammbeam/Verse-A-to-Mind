@@ -14,6 +14,10 @@
 //        The command is your coding agent's one-shot mode, so the loop goes on with nobody pressing Continue (owner, 2026-10-30: "make it so
 //        Verse and Beam keep going automatically on their own"). Without --run it prints each job and waits for `done` or `back`.
 //   node agent.mjs me | here [--no-auto] | next [--wait] | read <channel> | post <channel> <text> [--thread <id>]
+//   node agent.mjs say <name|#thread> <text> | inbox | help <name> <text> | hand <name> <text> | split <name> <text>
+//        say: a direct message to a teammate, or a reply in a thread. inbox: your unread mail and @mentions.
+//        help/hand: ask that teammate for help, or hand them a piece of work (a job offered to them).
+//        next, here, done and me also print unread messages, and next --wait wakes when a message arrives.
 //   node agent.mjs meeting [text]   read the meeting room, or post one line to it (#meeting: the one stream the owner and
 //                                    every agent read together, the live room on /team/)
 //   node agent.mjs mentions | done [--link <pull request>] [--note <text>] | back [--note <why>] [--not-failed]
@@ -109,9 +113,11 @@ export function runJob(cmd, job, { key, log = console.log, minutes = 0 } = {}) {
 export async function workOnce(o, { run, log = console.log, shown = new Set(), minutes = 0 } = {}) {
   const h = await call(o, 'POST', '', { do: 'here' });
   if (!h.ok) return { state: 'error', say: h.say, status: h.status };
-  if (!h.job) return { state: 'idle', say: h.say };
+  const inbox = Array.isArray(h.inbox) ? h.inbox : [];
+  if (inbox.length) showInbox(inbox, log);
+  if (!h.job) return { state: inbox.length ? 'mail' : 'idle', say: h.say, inbox };
   const job = await fullJob(o, h.job);
-  if (!run) { if (!h.job.already || !shown.has(job.job)) { shown.add(job.job); log('Job ' + job.job + ' (' + (job.kind || '?') + ', thread ' + job.thread + '): ' + job.ask); if (job.brief) log(job.brief); log('Work it now. Post progress in its thread, then: node agent.mjs done --link <pull request>, or node agent.mjs back --note <why>.'); } return { state: 'busy', job }; }
+  if (!run) { if (!h.job.already || !shown.has(job.job)) { shown.add(job.job); log('Job ' + job.job + ' (' + (job.kind || '?') + ', thread ' + job.thread + '): ' + job.ask); if (job.brief) log(job.brief); log('Work it now. Post progress in its thread, then: node agent.mjs done --link <pull request>, or node agent.mjs back --note <why>.'); } return { state: 'busy', job, inbox }; }
   log('Working on ' + job.job + ' (' + job.kind + '): ' + job.ask);
   const beat = setInterval(() => { call(o, 'POST', '', { do: 'here' }).catch(() => {}); }, 5 * 60e3); // stay present while it runs
   let r; try { r = await runJob(run, job, { key: o.key, log, minutes }); } finally { clearInterval(beat); }
@@ -125,7 +131,13 @@ export async function workOnce(o, { run, log = console.log, shown = new Set(), m
 
 function flag(args, name, fallback) { const i = args.indexOf(name); if (i < 0) return fallback; const v = args[i + 1]; args.splice(i, 2); return v; }
 function has(args, name) { const i = args.indexOf(name); if (i < 0) return false; args.splice(i, 1); return true; }
-const print = (j) => console.log(JSON.stringify(j, null, 2));
+function showInbox(inbox, log = console.log) {
+  if (!inbox || !inbox.length) return;
+  log(inbox.length + ' message' + (inbox.length === 1 ? '' : 's') + ' for you:');
+  for (const m of inbox) log((m.c ? '#' + m.c + ' ' : '') + '#' + m.id + ' ' + (m.by || '?') + ': ' + (m.body || ''));
+  log('Answer a teammate with: node agent.mjs say <name or #thread> <text>. Do not ask the owner what to do next, and never stand by.');
+}
+const print = (j) => { console.log(JSON.stringify(j, null, 2)); if (j && Array.isArray(j.inbox) && j.inbox.length) showInbox(j.inbox); };
 
 const KEY_FILE = () => process.env.VERSE_TEAM_KEY_FILE || pathJoin(homedir(), '.verse-team-key');
 const KEY_RE = /^vt1\.[0-9a-f]{12}\.[0-9a-f]{32}$/;
@@ -155,10 +167,10 @@ export async function join(link, { api = apiFor(link), fetch: f = fetch } = {}) 
 const WORK_NOT_TTY = 'work prints each job for someone to read, and this output goes to a file or a pipe, so a job would be held with nothing working it.\n'
   + 'An agent in a tool shell: run node agent.mjs next --wait, work the job it prints, close it with done or back, then run next --wait again.\n'
   + 'A command that does the work: node agent.mjs work --run "<command>". To log anyway: add --log.';
-const USAGE = 'Usage: node agent.mjs join <your name or a link> | hook <https address> | hook --off | me | rekey | mentions | here [--no-auto] | next [--wait] | read <channel> | post <channel> <text> [--thread id] | meeting [text] | done [--link pr] [--note text] | patch <file.diff> [--note text] | file <job> | switch <job id> | claim <job id> | thread <id> | back [--note why] [--not-failed] | work [--run "cmd"] [--every 60] [--minutes 90]';
+const USAGE = 'Usage: node agent.mjs join <your name or a link> | hook <https address> | hook --off | me | rekey | mentions | inbox | here [--no-auto] | next [--wait] | read <channel> | post <channel> <text> [--thread id] | say <name|#thread> <text> | help <name> <text> | hand <name> <text> | split <name> <text> | meeting [text] | done [--link pr] [--note text] | patch <file.diff> [--note text] | file <job> | switch <job id> | claim <job id> | thread <id> | back [--note why] [--not-failed] | work [--run "cmd"] [--every 60] [--minutes 90]';
 async function main(argv) {
   const [cmd, ...args] = argv;
-  if (!cmd || cmd === 'help' || cmd === '--help') { console.log(USAGE); return 0; }
+  if (!cmd || cmd === '--help' || (cmd === 'help' && !args.length)) { console.log(USAGE); return 0; }
   if (cmd === 'join') {
     const j = await join(args[0]);
     if (!j.ok || !KEY_RE.test(j.key || '')) { console.error('Did not join: ' + (j.say || 'no key came back')); return 1; }
@@ -172,6 +184,7 @@ async function main(argv) {
   const o = { key };
   switch (cmd) {
     case 'mentions': { const r = await call(o, 'GET', '?activity'); if (!r.ok) { print(r); return 1; } for (const m of r.hits) console.log('#' + m.c + ' #' + m.id + ' ' + m.by + ': ' + m.body); return 0; }
+    case 'inbox': { const r = await call(o, 'GET', '?inbox'); if (!r.ok) { print(r); return 1; } if (!(r.inbox && r.inbox.length)) { console.log(r.say || 'no unread messages'); return 0; } showInbox(r.inbox); return 0; }
     case 'me': print(await call(o, 'GET', '?me')); return 0;
     case 'hook': {
       const r = await call(o, 'POST', '', { do: 'hook', url: has(args, '--off') ? '' : (args[0] || '') });
@@ -194,7 +207,7 @@ async function main(argv) {
       const every = Math.max(20, Number(flag(args, '--every', 30)) || 30) * 1e3;
       for (;;) {
         const r = await workOnce(o);
-        if (r.state === 'busy') return 0;
+        if (r.state === 'busy' || r.state === 'mail') return 0;
         if (r.state === 'error') { console.error('Team API: ' + (r.say || 'no answer')); if (r.status === 401) return 1; }
         await new Promise((res) => setTimeout(res, every));
       }
@@ -202,6 +215,19 @@ async function main(argv) {
     case 'read': { const r = await call(o, 'GET', '?c=' + encodeURIComponent(args[0] || 'work')); if (!r.ok) { print(r); return 1; } for (const m of r.messages) console.log('#' + m.id + ' ' + new Date(m.at).toISOString().slice(0, 16) + ' ' + m.by + (m.replies ? ' [' + m.replies + ' replies]' : '') + ': ' + m.body); return 0; }
     case 'meeting': { const text = args.join(' ').trim(); const r = text ? await call(o, 'POST', '', { do: 'post', c: 'meeting', body: text }) : await call(o, 'GET', '?c=meeting'); if (!r.ok) { print(r); return 1; } if (text) { console.log('Posted in #meeting' + (r.id ? ' as #' + r.id : '') + '.'); return 0; } for (const m of r.messages) console.log('#' + m.id + ' ' + new Date(m.at).toISOString().slice(0, 16) + ' ' + m.by + ': ' + m.body); return 0; }
     case 'post': { const thread = flag(args, '--thread'); const [c, ...words] = args; print(await call(o, 'POST', '', { do: 'post', c, body: words.join(' '), thread: thread ? Number(thread) : undefined })); return 0; }
+    case 'say': {
+      const dest = args[0] || '', text = args.slice(1).join(' ').trim();
+      if (!dest || !text) { console.error('Usage: node agent.mjs say <name or #thread> <text>'); return 2; }
+      const thread = dest.startsWith('#') || /^\d+$/.test(dest) ? dest.replace(/^#/, '') : undefined;
+      const r = await call(o, 'POST', '', { do: 'say', to: thread ? undefined : dest, thread, body: text });
+      print(r); return r.ok ? 0 : 1;
+    }
+    case 'help': case 'hand': case 'split': {
+      const name = args[0] || '', text = args.slice(1).join(' ').trim();
+      if (!name || !text) { console.error('Usage: node agent.mjs ' + cmd + ' <name> <text>'); return 2; }
+      const r = await call(o, 'POST', '', { do: cmd === 'split' ? 'split' : 'help', to: name, ask: text, body: text });
+      print(r); return r.ok ? 0 : 1;
+    }
     case 'done': {
       const link = flag(args, '--link', ''), note = flag(args, '--note', ''), r = await call(o, 'POST', '', { do: 'done', ok: true, link, note });
       print(r);
@@ -236,6 +262,7 @@ async function main(argv) {
         let r; try { r = await workOnce(o, { run, shown, minutes }); } catch (e) { r = { state: 'error', say: e.message }; }
         // one short line each turn, so the agent sees the loop is alive and what it is waiting for
         if (r.state === 'idle') console.log(stamp() + 'no job yet: ' + String(r.say || 'waiting').split('\n')[0].slice(0, 120).replace(/[.:]\s*$/, '') + '. Next check in ' + every / 1e3 + ' s.');
+        if (r.state === 'mail') console.log(stamp() + 'a teammate wrote you: answer with say, then keep looping. Next check in ' + every / 1e3 + ' s.');
         if (r.state === 'busy') console.log(stamp() + 'holding ' + r.job.job + ': close it with done or back. Next check in ' + every / 1e3 + ' s.');
         if (r.state === 'error') console.error('Team API: ' + (r.say || 'no answer') + (r.status === 401 ? ' (the key was removed or replaced: ask the owner for a new join link)' : ''));
         if (r.status === 401) return 1;

@@ -29,6 +29,8 @@ export const HOME = Object.freeze([
   // It is a channel like any other over /api/team, so an agent posts to it with {"do":"post","c":"meeting","body":"..."}.
   { code: 'meeting', title: 'meeting', about: 'The meeting room: the owner and every agent in one room, one live stream. Presence is above it, the chat below.' },
 ]);
+/** direct messages: a hidden channel, only the two people in the thread (and the owner) read it */
+export const MAIL = 'mail';
 export const LIMITS = Object.freeze({ body: 4000, lines: 80, about: 160, title: 24, search: 6, page: 60, thread: 300 });
 export const RATES = Object.freeze({ gap: 1000, day: 600, channelsDay: 10, channels: 60, agents: 100, asks: 50, dreamsDay: 4, dreamsOpen: 5, filesDay: 6, filesOpen: 20 }); // files: a member's own #work post filed as a job (api/team.js 'file') // dreams: Verse Brain's posts in #work (api/team.js 'dream')
 // a crew member (lib/team-crew.js) works on Verse's 15-minute clock, so it is here while it worked in the last 40 minutes
@@ -80,6 +82,12 @@ export const ownerAsk = (job) => /^team-\d+$/.test(String(job && job.id || '')) 
 export const WEEK_MS = 7 * 864e5;
 /** a job Verse filed for itself (id want-*, or noted as wanted by Verse's brain) */
 export const selfFiled = (job) => /^want-/.test(String(job && job.id || '')) || /wanted by Verse's brain/i.test(String((job && job.note) || ''));
+/** a job one teammate offered to another (queue note contains `offered to team:<name>`) */
+export const offeredTo = (job, name) => {
+  const n = String(name || '');
+  if (!n) return false;
+  return new RegExp('(?:^|[·\\s])offered to team:' + n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?:\\s|·|$)', 'i').test(String((job && job.note) || ''));
+};
 /** the queued jobs an agent may take, best first. Three tiers: the owner's #work asks (oldest first), then the rest, then by worth.
  *  Inside the second tier, a self-filed job sorts ahead of background jobs older than a week, only while the self-filed job itself
  *  is under a week old; after that it falls back to the usual order (worth, then oldest first). Never above the owner's asks.

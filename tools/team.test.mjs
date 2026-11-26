@@ -883,3 +883,71 @@ test('never idle: a seat that hands in gets its next job in the same reply, and 
     assert.match(v.next.target, /^auto:stranger-eye-/, 'gap taken, review done: a first-time-visitor pass');
   } finally { globalThis.fetch = real; }
 });
+
+test('offeredTo matches a help-ask note and not a look-alike name', () => {
+  assert.equal(T.offeredTo({ note: 'offered to team:Bea · from team:Ada' }, 'Bea'), true);
+  assert.equal(T.offeredTo({ note: 'claimed by team:Bea · offered to team:Bea · from team:Ada' }, 'Bea'), true);
+  assert.equal(T.offeredTo({ note: 'offered to team:Bea · from team:Ada' }, 'Be'), false);
+  assert.equal(T.offeredTo({ note: 'offered to team:Bea · from team:Ada' }, 'Ada'), false);
+  assert.equal(T.MAIL, 'mail');
+});
+
+test('an agent messages a teammate by name; the other sees it on here, me and inbox, then it is read; a help ask becomes their job', async () => {
+  const env = world();
+  const ada = await admit(env, 'Ada');
+  const bea = await admit(env, 'Bea');
+  const sent = await post(env, { do: 'say', to: 'Bea', body: 'can you land the waiting proposals?' }, ada.key, T0);
+  assert.equal(sent.status, 201, sent.say);
+  assert.ok(sent.id && sent.c === T.MAIL);
+  assert.match(String(sent.say || ''), /@Bea/);
+  const shell = await get(env, '');
+  assert.ok(!shell.channels.some((c) => c.code === 'mail'), 'mail is not on the public channel list');
+  assert.equal((await get(env, '?c=mail')).status, 401);
+  const other = await admit(env, 'Cid');
+  const hid = await get(env, '?c=mail', other.key, T0);
+  assert.equal(hid.status, 200);
+  assert.equal((hid.messages || []).length, 0, 'a third agent does not read that mail');
+  const h = await post(env, { do: 'here' }, bea.key, T0 + 1000);
+  assert.equal(h.status, 200, h.say);
+  assert.ok(h.inbox && h.inbox.some((m) => m.id === sent.id && m.by === 'Ada' && /can you land/.test(m.body)));
+  assert.match(h.inbox[0].body, /@Bea/);
+  const h2 = await post(env, { do: 'here' }, bea.key, T0 + 2000);
+  assert.ok(!(h2.inbox && h2.inbox.length), 'a second here does not repeat the same mail');
+  const reply = await post(env, { do: 'say', thread: sent.id, body: 'on it, landing them now' }, bea.key, T0 + 3000);
+  assert.equal(reply.status, 201, reply.say);
+  const meAda = await get(env, '?me', ada.key, T0 + 3000);
+  assert.ok(meAda.inbox && meAda.inbox.some((m) => /on it/.test(m.body) && m.by === 'Bea'));
+  const box = await get(env, '?inbox', ada.key, T0 + 4000);
+  assert.ok(!(box.inbox && box.inbox.length), 'me already marked it read');
+  assert.equal((await post(env, { do: 'say', to: 'Ada', body: 'hello to myself here' }, ada.key, T0 + 5000)).status, 400);
+  assert.equal((await post(env, { do: 'say', to: 'Nobody', body: 'hello there friend' }, ada.key, T0 + 6000)).status, 404);
+  // Bea stays seen from the earlier here, so a help ask is handed at once
+  const hp = await post(env, { do: 'help', to: 'Bea', body: 'please land the team talk patch on main' }, ada.key, T0 + 7000);
+  assert.equal(hp.status, 201, hp.say);
+  assert.ok(hp.job && hp.thread);
+  assert.equal(hp.to, 'Bea');
+  assert.equal(hp.handed, true, hp.say);
+  const meBea = await get(env, '?me', bea.key, T0 + 7000);
+  assert.equal(meBea.me.job, hp.job);
+  const q = env.DB.raw.prepare('SELECT * FROM void_queue WHERE id = ?').get(hp.job);
+  assert.ok(T.offeredTo(q, 'Bea'), q && q.note);
+});
+
+test('next --wait wakes when a message arrives, even with no job', async () => {
+  let n = 0;
+  const srv = createServer((req, res) => {
+    let body = ''; req.on('data', (d) => { body += d; }); req.on('end', () => {
+      res.setHeader('content-type', 'application/json');
+      if (++n < 2) return res.end(JSON.stringify({ ok: true, say: 'no job could be made just now' }));
+      res.end(JSON.stringify({ ok: true, say: 'no job could be made just now', inbox: [{ id: 9, c: 'mail', by: 'Ada', body: '@Bea land the patch' }] }));
+    });
+  });
+  await new Promise((r) => srv.listen(0, '127.0.0.1', r));
+  try {
+    const r = await runAgent(['next', '--wait', '--every', '20'], { VERSE_TEAM_API: 'http://127.0.0.1:' + srv.address().port + '/api/team' });
+    assert.equal(r.code, 0, r.err + r.out);
+    assert.match(r.out, /@Bea land the patch/);
+    assert.match(r.out, /say /);
+    assert.equal(n, 2, 'it asked again until a message came');
+  } finally { srv.close(); }
+});
