@@ -26,7 +26,7 @@ const HTML = `<!doctype html><html><head><meta charset="utf-8"><style>
   <div class="card" style="left:812px;top:84px"><small>Weather · Tokyo</small><b>18° · light rain</b></div>
   <div class="card" style="left:712px;top:236px"><small>Days until Christmas</small><b>56 days</b></div>
   <div class="card" style="left:1000px;top:236px"><small>12 × 7</small><b>84</b></div>
-  <div class="pill"><i></i>Ask anything<span>a-to-mind.com</span></div>
+  <div class="pill"><i></i>Ask Verse<span>a-to-mind.com</span></div>
 </body></html>`;
 
 const exe = process.env.CHROME_PATH || process.env.VOID_TEST_BROWSER || (existsSync('/opt/pw-browsers/chromium') ? '/opt/pw-browsers/chromium' : undefined);
