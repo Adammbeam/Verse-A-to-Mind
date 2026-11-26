@@ -1,0 +1,271 @@
+{
+  "about": "One-off AutoSalvage GitHub hunt, 2026-11-25 (America/New_York). High-quality permissive repos that fill Verse's current gaps. Each find was proposed on the /team/ board in #ideas. The grok-lead seat cannot file jobs (the API returns: a member proposes in #ideas; the owner makes it a job). Only the owner can promote a proposal with the 'Make it a job' button on /team/ or POST {do:'promote', id}. The crew tick does not auto-promote #ideas proposals.",
+  "at": "2026-11-25T19:46:26-05:00",
+  "by": "grok-lead",
+  "tower": {
+    "id": "travel: flightconnections.com",
+    "since": "2026-11-09",
+    "verse_page": "/flights/",
+    "curated_gaps": [
+      "live fares (no feed)",
+      "flight status and live map (OpenSky terms unverified)",
+      "destination photos with credit (lib/free-pics.js, server side; not wired)",
+      "current nonstop routes (the bundled OpenFlights routes stop in June 2014)"
+    ]
+  },
+  "checks_on_main": {
+    "note": "Latest main at write time was 784025d (PR #54, suite-ran-last-check). Cloudflare Pages on that SHA was green. A complete live list of the earlier 'about 15 failing checks' was not re-derived in this one-off; the last completed red GitHub Actions on main from earlier that day (America/New_York) were Tower gate, Site test, Outcome exam, and Verse verify (merge: daily-ai-radar.mjs), all on older SHAs around 00:00\u201300:43 ET."
+  },
+  "search": {
+    "note": "gh search repos was blocked mid-run (GitHub 'User flagged as spammy' on the search API after the first query). Candidates were then looked up with the GitHub repos API, and licenses were verified with GET /repos/{owner}/{repo} (license.spdx_id) and, when SPDX was missing or NOASSERTION, by reading the LICENSE file."
+  },
+  "filing": {
+    "seat": "grok-lead",
+    "file": "refused with 403: 'a member proposes in #ideas ({\"do\":\"propose\"}); the owner makes it a job'",
+    "propose": "accepted; each find is a top-level #ideas proposal",
+    "promote": "owner only. The /team/ UI shows 'Make it a job' only when S.me.kind === 'owner'. API case 'promote' returns 403 unless me.kind === 'owner'. No cron or AutoSalvage tick promotes #ideas proposals (searched void-cron and team API)."
+  },
+  "rejected": [
+    {
+      "name": "OpenFlights",
+      "url": "https://github.com/jpatokal/openflights",
+      "license": "AGPL-3.0",
+      "stars": 1686,
+      "why": "Website code is AGPL-3.0, not a permitted license for this hunt. Verse already uses OpenFlights route *data* under ODbL (tools/routes-build.mjs) and correctly treats it as history from June 2014. Do not vendor the AGPL app."
+    },
+    {
+      "name": "OpenSky API bindings",
+      "url": "https://github.com/openskynetwork/opensky-api",
+      "license": "GPL-3.0",
+      "stars": 476,
+      "why": "Official bindings are GPL-3.0. Travel gaps also still mark OpenSky terms unverified, so this was not proposed."
+    }
+  ],
+  "finds": [
+    {
+      "name": "Leaflet",
+      "url": "https://github.com/Leaflet/Leaflet",
+      "license": "BSD-2-Clause",
+      "stars": 45991,
+      "pushed_at": "2026-11-25T19:32:10Z",
+      "gap": "travel floor (flightconnections.com): route map and explore map",
+      "where": "/flights/map/ and /flights/routes/",
+      "board": {
+        "kind": "proposal",
+        "channel": "ideas",
+        "id": 7732,
+        "url": "https://a-to-mind.com/team/#ideas/7732"
+      }
+    },
+    {
+      "name": "MapLibre GL JS",
+      "url": "https://github.com/maplibre/maplibre-gl-js",
+      "license": "BSD-3-Clause",
+      "stars": 12181,
+      "pushed_at": "2026-11-25T20:40:46Z",
+      "gap": "travel floor: interactive vector route map in the style of flightconnections.com",
+      "where": "/flights/map/",
+      "board": {
+        "kind": "proposal",
+        "channel": "ideas",
+        "id": 7733,
+        "url": "https://a-to-mind.com/team/#ideas/7733"
+      }
+    },
+    {
+      "name": "Turf.js",
+      "url": "https://github.com/Turfjs/turf",
+      "license": "MIT",
+      "stars": 10555,
+      "pushed_at": "2026-11-25T10:23:55Z",
+      "gap": "travel floor: flown distance versus great circle (partial today)",
+      "where": "/flights/distance/ and /flights/trip/",
+      "board": {
+        "kind": "proposal",
+        "channel": "ideas",
+        "id": 7734,
+        "url": "https://a-to-mind.com/team/#ideas/7734"
+      }
+    },
+    {
+      "name": "mwgg/Airports",
+      "url": "https://github.com/mwgg/Airports",
+      "license": "MIT",
+      "stars": 807,
+      "pushed_at": "2026-10-01T07:20:11Z",
+      "gap": "travel floor: whole list of the world's airports, airport information, timezones",
+      "where": "tools/airports-build.mjs and /flights/airports/",
+      "board": {
+        "kind": "proposal",
+        "channel": "ideas",
+        "id": 7735,
+        "url": "https://a-to-mind.com/team/#ideas/7735"
+      }
+    },
+    {
+      "name": "OurAirports data",
+      "url": "https://github.com/davidmegginson/ourairports-data",
+      "license": "Unlicense",
+      "stars": 536,
+      "pushed_at": "2026-11-25T02:53:16Z",
+      "gap": "travel floor: current airport data (and a live feed Verse can rebuild from); bundled OpenFlights routes still stop at June 2014",
+      "where": "tools/airports-build.mjs, /flights/airports/",
+      "board": {
+        "kind": "proposal",
+        "channel": "ideas",
+        "id": 7736,
+        "url": "https://a-to-mind.com/team/#ideas/7736"
+      }
+    },
+    {
+      "name": "deck.gl",
+      "url": "https://github.com/visgl/deck.gl",
+      "license": "MIT",
+      "stars": 14823,
+      "pushed_at": "2026-11-26T00:12:46Z",
+      "gap": "travel floor: explore-map overlays (arcs, destination density) for routes and trips",
+      "where": "/flights/map/ and /flights/trip/",
+      "board": {
+        "kind": "proposal",
+        "channel": "ideas",
+        "id": 7737,
+        "url": "https://a-to-mind.com/team/#ideas/7737"
+      }
+    },
+    {
+      "name": "WebLLM",
+      "url": "https://github.com/mlc-ai/web-llm",
+      "license": "Apache-2.0",
+      "stars": 19407,
+      "pushed_at": "2026-11-20T14:21:53Z",
+      "gap": "free in-browser model runner (wishlist: stay inside Workers AI free cap; more on-page answers)",
+      "where": "void-live-deploy model/answer path, an optional on-page runtime",
+      "board": {
+        "kind": "proposal",
+        "channel": "ideas",
+        "id": 7723,
+        "url": "https://a-to-mind.com/team/#ideas/7723"
+      }
+    },
+    {
+      "name": "Transformers.js",
+      "url": "https://github.com/huggingface/transformers.js",
+      "license": "Apache-2.0",
+      "stars": 16458,
+      "pushed_at": "2026-11-25T15:12:23Z",
+      "gap": "on-page models for embeddings, classify, caption (wishlist pictures; travel destination photos later)",
+      "where": "on-page skills / /image/ helpers, no server model required",
+      "board": {
+        "kind": "proposal",
+        "channel": "ideas",
+        "id": 7724,
+        "url": "https://a-to-mind.com/team/#ideas/7724"
+      }
+    },
+    {
+      "name": "llama.cpp",
+      "url": "https://github.com/ggml-org/llama.cpp",
+      "license": "MIT",
+      "stars": 136284,
+      "pushed_at": "2026-11-25T23:28:06Z",
+      "gap": "free local model runner Verse can point crew or the owner at (no paid API)",
+      "where": "docs + an optional local runner hook, not a required production dependency",
+      "board": {
+        "kind": "proposal",
+        "channel": "ideas",
+        "id": 7725,
+        "url": "https://a-to-mind.com/team/#ideas/7725"
+      }
+    },
+    {
+      "name": "Ollama",
+      "url": "https://github.com/ollama/ollama",
+      "license": "MIT",
+      "stars": 188140,
+      "pushed_at": "2026-11-26T00:40:08Z",
+      "gap": "free local model runner for crew agents (AutoSalvage / team)",
+      "where": "team agent script / local crew path",
+      "board": {
+        "kind": "proposal",
+        "channel": "ideas",
+        "id": 7726,
+        "url": "https://a-to-mind.com/team/#ideas/7726"
+      }
+    },
+    {
+      "name": "smolagents",
+      "url": "https://github.com/huggingface/smolagents",
+      "license": "Apache-2.0",
+      "stars": 30535,
+      "pushed_at": "2026-11-25T14:15:20Z",
+      "gap": "agent framework for Verse's team crew (find/run free agents on the board)",
+      "where": "tools/ and /team/ agent path",
+      "board": {
+        "kind": "proposal",
+        "channel": "ideas",
+        "id": 7727,
+        "url": "https://a-to-mind.com/team/#ideas/7727"
+      }
+    },
+    {
+      "name": "jsnes",
+      "url": "https://github.com/bfirsh/jsnes",
+      "license": "Apache-2.0",
+      "stars": 6444,
+      "pushed_at": "2026-11-24T06:24:05Z",
+      "gap": "permissive emulator core for Verse games / Phase-over-media (not GPL libretro)",
+      "where": "Verse games surface or a Phase overlay demo",
+      "board": {
+        "kind": "proposal",
+        "channel": "ideas",
+        "id": 7728,
+        "url": "https://a-to-mind.com/team/#ideas/7728"
+      }
+    },
+    {
+      "name": "v86",
+      "url": "https://github.com/copy/v86",
+      "license": "BSD-2-Clause",
+      "stars": 23739,
+      "pushed_at": "2026-11-21T22:00:41Z",
+      "gap": "browser x86 emulator core for games, old tools, or Phase-over-a-machine",
+      "where": "an opt-in lab or games page, not the default ask path",
+      "board": {
+        "kind": "proposal",
+        "channel": "ideas",
+        "id": 7729,
+        "url": "https://a-to-mind.com/team/#ideas/7729"
+      }
+    },
+    {
+      "name": "Phaser",
+      "url": "https://github.com/phaserjs/phaser",
+      "license": "MIT",
+      "stars": 40784,
+      "pushed_at": "2026-08-21T06:56:13Z",
+      "gap": "HTML5 game framework for Verse games and Phase player-two companions",
+      "where": "Verse games / P2 companion layer",
+      "board": {
+        "kind": "proposal",
+        "channel": "ideas",
+        "id": 7730,
+        "url": "https://a-to-mind.com/team/#ideas/7730"
+      }
+    },
+    {
+      "name": "Hugging Face Datasets",
+      "url": "https://github.com/huggingface/datasets",
+      "license": "Apache-2.0",
+      "stars": 22186,
+      "pushed_at": "2026-11-25T17:24:05Z",
+      "gap": "dataset source the crew can pull from for travel, games, and model evals",
+      "where": "tools/ + documented dataset pins, not an unbounded scrape",
+      "board": {
+        "kind": "proposal",
+        "channel": "ideas",
+        "id": 7731,
+        "url": "https://a-to-mind.com/team/#ideas/7731"
+      }
+    }
+  ]
+}
