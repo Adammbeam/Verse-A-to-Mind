@@ -1,1 +1,0 @@
-{"at":"2026-11-26T00:19:18Z","by":"atomeam","kind":"fix","what":"The answer engine's reply to a pasted passage, a directive or small talk now says it went past the edge cache (it is never kept), which put the answer-edge test on main back to green.","ref":"https://github.com/Adammbeam/Verse-A-to-Mind/pull/30"}
