@@ -156,3 +156,16 @@ test('the route without SALT: counted with a random salt made for the day and ke
   const dump = JSON.stringify(env.DB.raw.prepare('SELECT * FROM void_visit_seen').all());
   assert.doesNotMatch(dump, /203\.0\.113|198\.51/);
 });
+
+test('SALT coming back mid-day: a day that began on the D1 salt keeps it, so one visitor stays one unique; days without a D1 row use SALT', async () => {
+  const env = world({ SALT: '' });
+  assert.equal((await post(env, { p: '/' })).status, 204); // the day starts with no SALT: a D1 salt is made
+  route.resetReady(); // a new isolate after the redeploy that brings SALT back
+  env.SALT = 'restored-salt'; // secret-scan: ok (a made-up salt for the test)
+  assert.equal((await post(env, { p: '/' })).status, 204); // the same person, after the switch
+  const j = await read(env);
+  assert.equal(j.days[0].views.person, 2); assert.equal(j.days[0].uniq.person, 1, 'not counted twice across the switch');
+  const env2 = world(); // a fresh day with SALT and no D1 salt row: SALT is used and no salt row is made
+  assert.equal((await post(env2, { p: '/' })).status, 204);
+  assert.equal(env2.DB.raw.prepare("SELECT name FROM sqlite_master WHERE name = 'void_visit_salt'").all().length ? env2.DB.raw.prepare('SELECT COUNT(*) c FROM void_visit_salt').get().c : 0, 0);
+});

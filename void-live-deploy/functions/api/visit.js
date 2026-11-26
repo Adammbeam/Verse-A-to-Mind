@@ -48,7 +48,20 @@ export async function daySalt(env, day) {
   salts.clear(); salts.set(day, String(row.s));
   return String(row.s);
 }
-export const resetReady = () => { ready.reset(); saltReady.reset(); salts.clear(); }; // tests: a new fake database needs its tables made again
+// The day a SALT secret comes back (2026-11-25, restored at 19:49 ET), that UTC day already has a D1 salt and keys made with it: a
+// visitor seen before and after the switch would count as two. So a day that has a D1 salt keeps it to its end; SALT takes the next day.
+// Read-only (never makes a row); "no row for this day" is remembered per isolate, so SALT days cost one read per isolate, not per beacon.
+const noRow = new Set();
+export async function keptSalt(env, day) {
+  if (salts.has(day)) return salts.get(day);
+  if (noRow.has(day)) return null;
+  let row = null;
+  try { row = await env.DB.prepare('SELECT s FROM void_visit_salt WHERE day = ?').bind(day).first(); } catch (_) { row = null; } // no table yet: no row
+  if (row && row.s) { salts.clear(); salts.set(day, String(row.s)); return String(row.s); }
+  noRow.clear(); noRow.add(day);
+  return null;
+}
+export const resetReady = () => { ready.reset(); saltReady.reset(); salts.clear(); noRow.clear(); }; // tests: a new fake database needs its tables made again
 
 const seen = async (env, k) => { const r = await env.DB.prepare('SELECT n, day FROM void_visit_seen WHERE k = ?').bind(k).first(); return r ? { n: Number(r.n) || 0, day: r.day } : null; };
 const tick = (env, k, day) => env.DB.prepare('INSERT INTO void_visit_seen (k, day, n) VALUES (?, ?, 1) ON CONFLICT(k) DO UPDATE SET n = CASE WHEN day = excluded.day THEN n + 1 ELSE 1 END, day = excluded.day').bind(k, day).run();
@@ -77,7 +90,7 @@ export async function onRequestPost({ request, env }) {
   const here = new URL(request.url), from = request.headers.get('origin');
   if (from && from !== here.origin) return json({ ok: false, error: 'same-origin only' }, 403);
   if (!env || !env.DB) { console.error('visit: off: no DB binding'); return off(); } // closed, not open: no way to keep the day's count
-  let salt = env.SALT;
+  let salt = env.SALT ? (await keptSalt(env, dayOf(Date.now()))) || env.SALT : '';
   if (!salt) { try { salt = await daySalt(env, dayOf(Date.now())); } catch (e) { console.error('visit: off: no salt: ' + String((e && e.message) || e).slice(0, 200)); return off(); } }
   const len = Number(request.headers.get('content-length'));
   if (Number.isFinite(len) && len > LIMITS.body) return json({ ok: false, error: 'too big' }, 413);
