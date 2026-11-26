@@ -67,6 +67,8 @@ export function startHost(opts = {}) {
   };
   /** what this ask builds on in this visitor's history ({ kind: 'repeat' | 'follow', prior: { ask, at, answer } }), or null; logs nothing. */
   host.builtOn = (ask) => Dl.builtOn(host.brain.dialogue, String(ask == null ? '' : ask).trim(), now());
+  /** the earlier ask to send with this one, only when this one actually follows it (lib/brain-dialogue.js carriedOn), or null; logs nothing. */
+  host.carried = (ask) => Dl.carriedOn(host.brain.dialogue, String(ask == null ? '' : ask).trim(), now());
   /** the conversation orb's counts (lib/brain-dialogue.js dialogueStats), now. */
   host.dialogue = () => Dl.dialogueStats(host.brain.dialogue, now());
   /** more than one skill can answer `text`: the brain picks (lib/brain-route.js). names: the skills that match, in the page's order.

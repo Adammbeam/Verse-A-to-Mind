@@ -19,7 +19,7 @@
 // Pure: no DOM, no clock (every time is passed in), no Math.random.
 import { cleanWords } from './brain-organs.js';
 import { deposit } from './brain-workspace.js';
-import { points } from './follow-ask.js';
+import { points, carries } from './follow-ask.js';
 
 export const MAX = 60, ASK_MAX = 160, ANSWER_MAX = 240, DAY = 86400000, GAP = 10 * 60000, FOLLOW_DAYS = 30, REPEAT = 0.8, MATCH_MS = 5 * 60000;
 const KEY_ASK = /^\s*(?:unlock\s*)+\S{16,}/i;
@@ -99,6 +99,21 @@ export function builtOn(D, ask, at) {
   const r = heardIt ? null : recall(D, ask, at);
   const kind = link ? link.kind : r ? r.kind : null, p = link ? D.log.find((x) => x.at === link.at) || null : r ? r.entry : null;
   return kind && p ? { kind, prior: { ask: p.ask, at: p.at, answer: p.answer } } : null;
+}
+
+/** the earlier ask the page sends with `ask` at `at`, or null: what it builds on as a follow-up, or else the newest ask before it, and only
+ *  when the new ask cannot stand alone (lib/follow-ask.js carries). A shared word is not enough: live on 2026-11-25 "Create a benchmark
+ *  prompt set" went with a pasted page description and its card said it followed on from it. Logs nothing. Pure. */
+export function carriedOn(D, ask, at) {
+  const r = builtOn(D, ask, at);
+  if (r && r.kind === 'follow' && carries(ask, r.prior, at)) return r;
+  const f = flat(ask); if (!f || !Number.isFinite(at)) return null;
+  for (let i = D.log.length - 1; i >= 0; i--) {
+    const e = D.log[i]; if (flat(e.ask) === f) continue;
+    const prior = { ask: e.ask, at: e.at, answer: e.answer };
+    return carries(ask, prior, at) ? { kind: 'follow', prior } : null;
+  }
+  return null;
 }
 
 /** the counts, at time `at`: asks logged, answered, repeats and follow-ups heard, follow-ups kept (answered, not asked again within GAP,
