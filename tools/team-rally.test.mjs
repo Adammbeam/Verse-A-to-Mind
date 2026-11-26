@@ -78,6 +78,7 @@ test('rally: the seat query excludes the owner, crew bots, seats holding a job a
   assert.match(sql, /key != ''/);
   assert.match(sql, /crew = 0/);
   assert.match(sql, /job IS NULL/);
+  assert.match(sql, /auto = 1/);
   assert.match(sql, /seen >= \?/);
   assert.deepEqual(args, [NOW - HAND_MS, 5], 'the cut is HAND_MS, the same window handIdle uses');
 });

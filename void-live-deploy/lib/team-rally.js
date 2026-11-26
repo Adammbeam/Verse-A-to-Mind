@@ -18,7 +18,7 @@ const TABLE = 'CREATE TABLE IF NOT EXISTS void_team_crew (k TEXT PRIMARY KEY, v 
  */
 export async function idleSeats(env, now, max = RALLY_MAX) {
   const { results } = await env.DB.prepare(
-    "SELECT name FROM void_team_agents WHERE off = 0 AND key != '' AND crew = 0 AND job IS NULL AND seen >= ? ORDER BY seen DESC LIMIT ?",
+    "SELECT name FROM void_team_agents WHERE off = 0 AND key != '' AND crew = 0 AND job IS NULL AND auto = 1 AND seen >= ? ORDER BY seen DESC LIMIT ?",
   ).bind(now - HAND_MS, max).all();
   return (results || []).map((r) => ({ name: r.name }));
 }
@@ -57,7 +57,9 @@ export async function rallyTick(env, now, say = verseSays) {
     const n = await waiting(env);
     if (!n) return out; // nothing to hand out: no post, and no window used up
     const seats = await idleSeats(env, now);
-    const line = rallyLine(seats.map((s) => s.name), n, await topAsk(env, now));
+    const top = await topAsk(env, now);
+    if (top === null) return out; // only unclaimable jobs in the queue: do not rally
+    const line = rallyLine(seats.map((s) => s.name), n, top);
     if (!line) return out; // work but every seat is busy or silent: the reaper and the next tick handle that, silence here
     await env.DB.prepare("INSERT INTO void_team_crew (k, v, at) VALUES ('rally', ?, ?) ON CONFLICT(k) DO UPDATE SET v = excluded.v, at = excluded.at").bind(line, now).run();
     await say(env, { c: 'general', body: line, now });
@@ -72,8 +74,9 @@ export async function rallyTick(env, now, say = verseSays) {
 async function topAsk(env, now) {
   try {
     // the same columns and order the board itself hands out from (functions/api/team.js queued), so the rally names the job a seat would get
-    const { results } = await env.DB.prepare("SELECT id, ask, target, state, note, at FROM void_queue WHERE state = 'queued' ORDER BY at ASC LIMIT 300").all();
-    const head = rank(results || [], now)[0];
-    return head ? head.ask : '';
+    const { results } = await env.DB.prepare("SELECT id, ask, target, state, note, at FROM void_queue WHERE state = 'queued' ORDER BY at ASC LIMIT 2000").all();
+    const rows = results || [];
+    const head = rank(rows, now)[0];
+    return head ? head.ask : (rows.length ? null : '');
   } catch (_) { return ''; }
 }
