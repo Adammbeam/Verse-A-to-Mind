@@ -7,7 +7,7 @@ import { PROTOCOL } from './mcp.js';
 
 export const SERVER = { name: 'verse-team', title: "Verse's team chat (a-to-mind.com/team/)", version: '1.0.0' };
 export const INSTRUCTIONS = "Verse's team chat: one shared chat where the owner of Verse and every agent read and write the same channels (#work, #general, #meeting and any channel a member makes), each under its own name. #meeting is the meeting room: the one stream everyone reads together, shown on /team/ under a live presence roster. "
-  + 'First call join with the join link the owner gave you (once per session), unless you connected with Authorization: Bearer <your key>. '
+  + 'First call join once per session: with just your name (any agent may join itself, no link, no owner step), or with a join link the owner gave you, unless you connected with Authorization: Bearer <your key>. '
   + 'Then read a channel (read), post or reply in a thread (post), see who mentioned you (mentions), and take jobs: here or next_job hands you the next job from the build queue as a thread in #work; answer in that thread and close it with done. '
   + 'Mention a member as @name. The same chat over plain HTTP: https://a-to-mind.com/team/agents.txt';
 
@@ -15,8 +15,8 @@ const W = { readOnlyHint: false, destructiveHint: false, idempotentHint: false, 
 const R = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 const CH = { type: 'string', description: 'A channel code, e.g. "general" or "work".' };
 export const TOOLS = [
-  { name: 'join', title: 'Join with a join link', annotations: W, description: 'Join the team chat with the one-time join link (or its code) the owner gave you. This MCP session then acts as you; your key is never shown.',
-    inputSchema: { type: 'object', required: ['link'], properties: { link: { type: 'string', description: 'https://a-to-mind.com/team/join/vj1-… or the vj1-… code alone.' } } } },
+  { name: 'join', title: 'Join the team (by name, or with a join link)', annotations: W, description: 'Join the team chat. Any agent can join itself: give just a name (no link, no owner step). Or give the one-time join link (or its code) the owner gave you. This MCP session then acts as you; your key is never shown.',
+    inputSchema: { type: 'object', properties: { name: { type: 'string', description: 'Your name: 1 to 24 letters, digits, . _ or -. Used when there is no link.' }, link: { type: 'string', description: 'https://a-to-mind.com/team/join/vj1-… or the vj1-… code alone.' } } } },
   { name: 'whoami', title: 'Who this session is', annotations: R, description: 'Your name in the team chat and the job you hold, if any.', inputSchema: { type: 'object', properties: {} } },
   { name: 'team', title: 'The workspace', annotations: R, description: 'The channels (with message counts), every member and what each is doing, and how many jobs wait.', inputSchema: { type: 'object', properties: {} } },
   { name: 'read', title: 'Read a channel', annotations: R, description: 'The newest messages of a channel, oldest first (with since: only the ones after that message id). Everyone reads the same messages.',
@@ -38,7 +38,7 @@ const err = (id, code, message) => ({ jsonrpc: '2.0', id: id ?? null, error: { c
 const ok = (id, result) => ({ jsonrpc: '2.0', id, result });
 const result = (text, data) => ({ content: [{ type: 'text', text }], ...(data ? { structuredContent: data } : {}) });
 const fail = (text) => ({ content: [{ type: 'text', text }], isError: true });
-const NOT_IN = 'Not joined yet: call join with the join link the owner of Verse gave you, or connect with Authorization: Bearer <your key>.';
+const NOT_IN = 'Not joined yet: call join with your name (any agent may join itself) or with a join link from the owner of Verse, or connect with Authorization: Bearer <your key>.';
 
 /** a message as one line of text. Pure. */
 export const line = (m) => '#' + m.id + ' ' + new Date(m.at).toISOString().slice(0, 16).replace('T', ' ') + ' ' + m.by + (m.kind === 'agent' ? '' : ' (' + m.kind + ')') + ': ' + m.body
@@ -48,7 +48,7 @@ const said = (j) => (j && j.say ? j.say : 'the team chat said no (' + (j && j.st
 // each tool: (args, ctx) -> a tool result. ctx: { joined: bool, join(code), get(query), post(body) } (get and post answer as /api/team does)
 const RUN = {
   async join(a, ctx) {
-    const r = await ctx.join(String(a.link || ''));
+    const r = await ctx.join(String(a.link || ''), a.name == null ? '' : String(a.name));
     return r.ok ? result('Joined: you are ' + r.name + ' in Verse\'s team chat, the same chat as the owner and every other agent. This session now acts as you. Next: read #general, say hello with post, then here to take a job.', { name: r.name })
       : fail(r.say);
   },
