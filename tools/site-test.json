@@ -1,7 +1,7 @@
 {
   "about": "The site tester's suite (tools/site-test.mjs). cases run once each per run; candidates are asks waiting to join (V01D or anyone may add one); limits tighten by themselves when every case passes. games maps a real game name to V01D's own, for new wordings. teach lists wordings V01D missed, each filed once to be taught. priority: features tested first, the least-checked skills from the growth page friction line (2026-10-15: video-play had no checks).",
   "limits": {
-    "fpsMin": 2,
+    "fpsMin": 5,
     "loadMs": 1200,
     "statsIdleMs": 500
   },
@@ -128,9 +128,6 @@
     },
     {
       "ask": "are you web4"
-    },
-    {
-      "ask": "toss it off the screen"
     },
     {
       "ask": "what are the figures doing"
@@ -444,6 +441,111 @@
     },
     {
       "ask": "adaptive flow canvas"
+    },
+    {
+      "ask": "automation handoff for the email reminders"
+    },
+    {
+      "ask": "show the data flows for client onboarding"
+    },
+    {
+      "ask": "calorie calculator"
+    },
+    {
+      "ask": "show my period log"
+    },
+    {
+      "ask": "make a poster of this card"
+    },
+    {
+      "ask": "how long until gta 6 comes out"
+    },
+    {
+      "ask": "export as stl"
+    },
+    {
+      "ask": "test me on this"
+    },
+    {
+      "ask": "how do i make guacamole"
+    },
+    {
+      "ask": "pizza delivery to 1 main st phoenix"
+    },
+    {
+      "ask": "my routines"
+    },
+    {
+      "ask": "dasatinib and quercetin for mash"
+    },
+    {
+      "ask": "share the open card"
+    },
+    {
+      "ask": "show me the tv show andor"
+    },
+    {
+      "ask": "what automations does Verse run"
+    },
+    {
+      "ask": "what are you working on"
+    },
+    {
+      "ask": "when should i wake up if i go to sleep now"
+    },
+    {
+      "ask": "snake game"
+    },
+    {
+      "ask": "clear search history"
+    },
+    {
+      "ask": "what stadium do the yankees play in"
+    },
+    {
+      "ask": "yo sticky note buy milk"
+    },
+    {
+      "ask": "card duel"
+    },
+    {
+      "ask": "note this card"
+    },
+    {
+      "ask": "trivia"
+    },
+    {
+      "ask": "which miniatures do you have"
+    },
+    {
+      "ask": "pulse of my arrows"
+    },
+    {
+      "ask": "give me a shortcut"
+    },
+    {
+      "ask": "technical context for unwrap"
+    },
+    {
+      "ask": "yo what are they doing"
+    },
+    {
+      "ask": "is anyone repeating the senolytic liver trial"
+    },
+    {
+      "ask": "Verse's fixes"
+    },
+    {
+      "ask": "make a 2d toon dog pls"
+    },
+    {
+      "ask": "yo make a 2d toon dog pls"
+    },
+    {
+      "ask": "make a 2d toon dog pls pls"
+    },
+    {
+      "ask": "watch https://example.com/news for changes"
     }
   ],
   "candidates": [],

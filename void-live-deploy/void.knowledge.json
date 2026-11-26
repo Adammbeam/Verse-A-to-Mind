@@ -9,47 +9,56 @@
     "seen": 1
   },
   {
-    "id": "page:live-check-image-gen-a-to-mind-com-api-image-and",
-    "from": "page",
-    "consumed": "live check: image-gen (a-to-mind.com /api/image and /image/ (FLUX.2 klein-4b on Workers AI, …)",
-    "learned": "2026-11-18: worked; asked \"can a visitor paint a picture on a-to-mind.com/image/ and change it with one typed line\"",
-    "retain": "image-gen depends on a-to-mind.com /api/image and /image/ (FLUX.2 klein-4b on Workers AI, or the free painter, behind them); its newest live check (2026-11-18) worked",
-    "at": "2026-11-18T13:13:00.011Z",
-    "seen": 1
-  },
-  {
     "id": "page:live-check-video-gen-a-to-mind-com-api-clip-and-",
     "from": "page",
     "consumed": "live check: video-gen (a-to-mind.com /api/clip and /video/ (the partner video model behind t…)",
-    "learned": "2026-11-18: did not work; asked \"is AI video on at a-to-mind.com right now, and does the video page serve\"; why: credits",
-    "retain": "video-gen depends on a-to-mind.com /api/clip and /video/ (the partner video model behind them on Workers AI); its newest live check (2026-11-18) did not work (credits)",
-    "at": "2026-11-18T07:53:39.053Z",
+    "learned": "2026-11-24: did not work; asked \"is AI video on at a-to-mind.com right now, and does the video page serve\"; why: credits",
+    "retain": "video-gen depends on a-to-mind.com /api/clip and /video/ (the partner video model behind them on Workers AI); its newest live check (2026-11-24) did not work (credits)",
+    "at": "2026-11-24T10:21:42.112Z",
     "seen": 1
   },
   {
     "id": "page:live-check-rides-osrm-public-demo-router-router-",
     "from": "page",
     "consumed": "live check: rides (OSRM public demo router (router.project-osrm.org))",
-    "learned": "2026-11-17: worked; asked \"how long is the drive from SFO to Union Square, San Francisco right now\"; answer {\"minutes\":21,\"km\":23.2}",
-    "retain": "rides depends on OSRM public demo router (router.project-osrm.org); its newest live check (2026-11-17) worked",
-    "at": "2026-11-17T22:19:41.870Z",
+    "learned": "2026-11-24: worked; asked \"how long is the drive from SFO to Union Square, San Francisco right now\"; answer {\"minutes\":21,\"km\":23.2}",
+    "retain": "rides depends on OSRM public demo router (router.project-osrm.org); its newest live check (2026-11-24) worked",
+    "at": "2026-11-24T01:39:46.994Z",
     "seen": 1
   },
   {
     "id": "page:live-check-baggage-the-airline-pages-the-baggage",
     "from": "page",
     "consumed": "live check: baggage (the airline pages the baggage card cites (aa.com, britishairways.com))",
-    "learned": "2026-11-17: worked; asked \"are the baggage card's figures still on the airlines' own pages\"; 4 pages answered 403/200",
-    "retain": "baggage depends on the airline pages the baggage card cites (aa.com, britishairways.com); its newest live check (2026-11-17) worked",
-    "at": "2026-11-17T21:53:20.273Z",
+    "learned": "2026-11-24: worked; asked \"are the baggage card's figures still on the airlines' own pages\"; 4 pages answered 403/200",
+    "retain": "baggage depends on the airline pages the baggage card cites (aa.com, britishairways.com); its newest live check (2026-11-24) worked",
+    "at": "2026-11-24T01:11:49.868Z",
+    "seen": 1
+  },
+  {
+    "id": "page:live-check-image-gen-a-to-mind-com-api-image-and",
+    "from": "page",
+    "consumed": "live check: image-gen (a-to-mind.com /api/image and /image/ (FLUX.2 klein-4b on Workers AI, …)",
+    "learned": "2026-11-23: worked; asked \"can a visitor paint a picture on a-to-mind.com/image/ and change it with one typed line\"",
+    "retain": "image-gen depends on a-to-mind.com /api/image and /image/ (FLUX.2 klein-4b on Workers AI, or the free painter, behind them); its newest live check (2026-11-23) worked",
+    "at": "2026-11-23T14:57:10.210Z",
+    "seen": 1
+  },
+  {
+    "id": "page:howsecureismypassword-net",
+    "from": "page",
+    "consumed": "howsecureismypassword.net",
+    "learned": "howsecureismypassword.net surpassed: ahead of it on 15 of 15 aspects, measured head to head; a checker is trusted only when nothing leaves the device: the password never goes in a link, the leak list is ask…; Verse's page…",
+    "retain": "howsecureismypassword.net was surpassed by /password/?mode=strength",
+    "at": "2026-11-23T00:00:00Z",
     "seen": 1
   },
   {
     "id": "page:convertlive-com",
     "from": "page",
     "consumed": "convertlive.com",
-    "learned": "convertlive.com surpassed: Passed convertlive.com (12/14, conquering in background); Verse's page /convert/unit-converter/",
-    "retain": "convertlive.com was surpassed by /convert/unit-converter/",
+    "learned": "convertlive.com surpassed: Passed convertlive.com (12/14, conquering in background); Verse's page /convert/",
+    "retain": "convertlive.com was surpassed by /convert/",
     "at": "2026-11-11T14:27:58Z",
     "seen": 1
   },
@@ -84,8 +93,8 @@
     "id": "page:convertunits-com",
     "from": "page",
     "consumed": "convertunits.com",
-    "learned": "convertunits.com surpassed: Passed convertunits.com (12/14, conquering in background); Verse's page /convert/unit-converter-2/",
-    "retain": "convertunits.com was surpassed by /convert/unit-converter-2/",
+    "learned": "convertunits.com surpassed: Passed convertunits.com (12/14, conquering in background); Verse's page /convert/",
+    "retain": "convertunits.com was surpassed by /convert/",
     "at": "2026-11-09T21:07:08Z",
     "seen": 1
   },
@@ -372,8 +381,8 @@
     "id": "page:emojigraph-org",
     "from": "page",
     "consumed": "emojigraph.org",
-    "learned": "emojigraph.org assimilated; Verse's page /emoji-combos/emoji-dictionary/",
-    "retain": "emojigraph.org was assimilated by /emoji-combos/emoji-dictionary/",
+    "learned": "emojigraph.org assimilated; Verse's page /emoji-combos/",
+    "retain": "emojigraph.org was assimilated by /emoji-combos/",
     "at": "2026-11-03T23:37:24Z",
     "seen": 1
   },

@@ -37,8 +37,22 @@ test('visitor work comes first, and the page is safe to publish', () => {
   assert.equal(keepPatch({ kind: 'test', file: 'a.js', test: 'node --test x' }, 'function f(){return 1}', 0), true);
 });
 
-test('the clock writes nothing when it has no passing test', async () => {
-  const out = await once({ env: {}, log: () => {} });
+test('the clock calls every ready free agent at once and writes nothing', async () => {
+  const calls = [];
+  const fake = async (url) => { calls.push(url); return { ok: true, status: 200, headers: { get: () => null }, text: async () => JSON.stringify({ choices: [{ message: { content: 'yes, helper/free-agent' } }] }) }; };
+  const out = await once({ env: { GROQ_API_KEY: 'k', GEMINI_API_KEY: 'k' }, state: { sources: {} }, log: () => {}, fetchImpl: fake, now: NOW });
+  assert.equal(calls.length, 3, 'groq, gemini and pollinations are all called in one run');
+  assert.equal(out.replies.length, 3);
+  assert.ok(out.replies.every((r) => r.ok));
+  assert.equal(out.skipped, false);
+  assert.equal(out.html, '');
+  assert.equal(out.state.sources.groq.used, 1);
+});
+
+test('the clock writes nothing when no free agent answers', async () => {
+  const fake = async () => ({ ok: false, status: 500, headers: { get: () => null }, text: async () => 'nope' });
+  const out = await once({ env: {}, state: { sources: {} }, log: () => {}, fetchImpl: fake, now: NOW });
   assert.equal(out.html, '');
   assert.equal(out.skipped, true);
+  assert.equal(out.state.sources.pollinations.tried, 1);
 });

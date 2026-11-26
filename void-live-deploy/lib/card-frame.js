@@ -21,9 +21,10 @@ import { sealArt, SEAL_CSS } from './void-seal.js';
 import { subjectOf, motifsFor, skillSubjectOf } from './card-subject.js';
 import { lookOfSkill, LOOK_CSS } from './card-look.js'; // the family's frame: organic for sky and earth, blueprint for numbers and money (asked by Verse)
 import { artSource } from './art-source.js';
+import { cardUnsafe, scrubCard } from './image-safety.js'; // fail closed: a card about nudity, sex, the explicit body or minors in such a context carries no photo (2026-11-20)
 import { sectionsOf } from './card-sections.js';
 import { badgesOf, noticeOf, themeOf } from './subject-kinds.js';
-import { isNoAnswer } from './no-answer.js'; // a refusal body is a Not found card, never a sourced answer with an "Adds to Verse" line
+import { isNoAnswer, disclaimsSources, UNSOURCED_LINE } from './no-answer.js'; // a refusal body is a Not found card, never a sourced answer with an "Adds to Verse" line
 
 export const RARITY = {
   proven: { name: 'Mythic', gem: '#f0852d', foil: '#ffb347,#c4561a,#ffd27a,#b8430f' }, checked: { name: 'Rare', gem: '#e3c15a', foil: '#f1dc8a,#a98a2e,#f6e7a6,#8a6d1c' },
@@ -259,19 +260,30 @@ export const PAGE_OF = Object.freeze({ ...Object.fromEntries(SITE_PAGES.map((p) 
   weather: ['/weather/', 'Weather'], recipe: ['/recipes/', 'Recipes'], calc: ['/calculator/', 'Calculator'], vat: ['/vat/', 'VAT calculator'], 'calc-more': ['/calculator/', 'Calculator'],
   convert: ['/convert/', 'Unit converter'], gradient: ['/color/gradient/', 'Gradient'], wheel: ['/random/wheel/', 'Wheel of names'], coin: ['/random/coin/', 'Coin flip'],
   'is-it': ['/is-it/christmas', 'Is it…?'], baseconv: ['/base64/bases/', 'Base converter'], timer: ['/stopwatch/', 'Stopwatch and timer'],
-  words: ['/word-count/', 'Word counter'], fakeuser: ['/random/people/', 'Made-up people'], time: ['/time/', 'Time zones'], colour: ['/color/', 'Colour codes'], color: ['/color/', 'Colour codes'],
-  password: ['/password/', 'Password generator'], base64: ['/base64/', 'Base64'], random: ['/random/', 'Random number'],
-  worldtime: ['/time/', 'Time zones'], imgfit: ['/resize-image/', 'Resize an image'], 'photo-tools': ['/photos/', 'Photo tools'], pwcheck: ['/password/strength/', 'Password strength'], 'stl-check': ['/stl/', 'STL checker'], toolkit: ['/tools/', 'Every tool'],
-  podcast: ['/podcasts/', 'Podcasts'], 'podcast-search': ['/podcasts/', 'Podcasts'], 'local-stations': ['/local/', 'Local TV and radio'], notepad: ['/notes/', 'Notes'], textgen: ['/generators/', 'Generators'], boards: ['/boards/', 'Boards'], fanfic: ['/fanfic/', 'Fan fiction'], 'team-chat': ['/team/', 'Team chat'], draw: ['/learn-to-draw/', 'Learn to draw'], 'verse-brain': ['/brain/', 'Verse Brain'], converter: ['/converter/', 'File converter'], rap: ['/rap/', 'Verse raps'], markets: ['/markets/', 'Markets'], stocks: ['/markets/', 'Markets'], news: ['/news/', 'News'], scores: ['/scores/', 'Scores'], 'sports-browse': ['/scores/sports/', 'Sports'], fantasy: ['/fantasy/', 'Fantasy tools'], metronome: ['/metronome/', 'Metronome'], piano: ['/piano/', 'Piano'], tuner: ['/tuner/', 'Tuner'], bpm: ['/bpm/', 'BPM counter'], chordfinder: ['/chords/', 'Chords and scales'], 'music-tools': ['/music/', 'Music tools'], cartoon: ['/image/', 'AI image generator'], 'video-gen': ['/video/', 'AI video generator'], formulas: ['/calculators/', 'Formula calculators'], repo: ['/ledger/', 'Repo activity ledger'], emoji: ['/emojis/', 'Emoji counts'], 'emoji-combos': ['/emoji-combos/', 'Emoji combos'], 'gh-file': ['/g/', 'Snippet / Note in a link'], arcade: ['/arcade/', 'Verse Arcade'] });
+  words: ['/word-count/', 'Word counter'], fakeuser: ['/random/people/', 'Random User Generator'], time: ['/time/', 'Time zones'], colour: ['/color/', 'Color Picker'], color: ['/color/', 'Color Picker'],
+  password: ['/password/', 'Password generator'], base64: ['/base64/', 'Base64'], random: ['/random/', 'Random Number Generator'],
+  worldtime: ['/time/', 'Time zones'], imgfit: ['/resize-image/', 'Image Resizer'], 'photo-tools': ['/photos/', 'Photo Editor'], pwcheck: ['/password/strength/', 'Password strength'], 'stl-check': ['/stl/', 'STL checker'], toolkit: ['/tools/', 'Tools'],
+  podcast: ['/podcasts/', 'Podcasts'], 'podcast-search': ['/podcasts/', 'Podcasts'], 'local-stations': ['/local/', 'Local TV and radio'], notepad: ['/notes/', 'Notes'], textgen: ['/generators/', 'Generators'], boards: ['/boards/', 'Boards'], fanfic: ['/fanfic/', 'Fan fiction'], 'team-chat': ['/team/', 'Team chat'], draw: ['/learn-to-draw/', 'Learn to draw'], 'verse-brain': ['/brain/', 'Verse Brain: What Verse Knows'], converter: ['/converter/', 'File Converter'], rap: ['/rap/', 'Rap Generator'], markets: ['/markets/', 'Markets'], stocks: ['/markets/', 'Markets'], news: ['/news/', 'News'], scores: ['/scores/', 'Scores'], 'sports-browse': ['/scores/sports/', 'Sports'], fantasy: ['/fantasy/', 'Fantasy Sports'], metronome: ['/metronome/', 'Metronome'], piano: ['/piano/', 'Piano'], tuner: ['/tuner/', 'Tuner'], bpm: ['/bpm/', 'BPM counter'], chordfinder: ['/chords/', 'Chords and scales'], 'music-tools': ['/music/', 'Music tools'], cartoon: ['/image/', 'AI image generator'], 'video-gen': ['/video/', 'AI video generator'], formulas: ['/calculators/', 'Formula calculators'], repo: ['/ledger/', 'Activity Log'], emoji: ['/emojis/', 'Emoji Counter'], 'emoji-combos': ['/emoji-combos/', 'Emoji combos'], 'gh-file': ['/g/', 'Note in a Link'], arcade: ['/arcade/', 'Verse Arcade'] });
 // a card from a skill or a built-in answer that does several things (util: colours, word counts, passwords; the page's own calculator,
 // stopwatch and random number) names its page itself with data-page; only a page in this list is linked (owner, 2026-10-25: "and vice versa")
-export const PAGE_PATHS = Object.freeze(Object.fromEntries(Object.values(PAGE_OF).map(([href, label]) => [href, label])));
+export const PAGE_PATHS = Object.freeze({ ...Object.fromEntries(Object.values(PAGE_OF).map(([href, label]) => [href, label])), '/photos/?mode=resize': 'Image Resizer' });
 // a data-page may carry what the card shows in a plain query ('/random/?min=-5&max=5'), so the page opens on it, not on its default
 const PAGE_QUERY = /^\?[A-Za-z0-9_.=&%-]{1,200}$/;
 /** the [href, label] of a card's full page: its own data-page when it is a known page (with a plain query or none), else its skill's; null when it has none. Pure. */
 export const pageOfCard = (name, page) => {
-  const i = page ? page.indexOf('?') : -1, base = i < 0 ? page : page.slice(0, i);
-  return page && PAGE_PATHS[base] && (i < 0 || PAGE_QUERY.test(page.slice(i))) ? [page, PAGE_PATHS[base]] : PAGE_OF[name] || null;
+  if (page) {
+    const i = page.indexOf('?');
+    if (i < 0 || PAGE_QUERY.test(page.slice(i))) {
+      let best = '';
+      for (const href of Object.keys(PAGE_PATHS)) {
+        if (page === href || page.startsWith(href + (href.includes('?') ? '&' : '?'))) {
+          if (href.length > best.length) best = href;
+        }
+      }
+      if (best) return [page, PAGE_PATHS[best]];
+    }
+  }
+  return PAGE_OF[name] || null;
 };
 /** a card with no data-page that links to its own skill's page with a plain query ('/translate/?q=good%20morning&to=fr') opens that page on
  *  what it shows, not on its default: the first such href, or '' (also when the card links to the plain page too). hrefs: the card's own link targets. Pure. */
@@ -282,7 +294,7 @@ export const ownPageOf = (name, hrefs) => {
   return '';
 };
 /** the link to a skill's full page, or '' when it has none. Pure. */
-export const pageLinkHtml = (name, esc, page = '') => { const p = pageOfCard(name, page); return p ? '<a class="vc-page" href="' + esc(p[0]) + '" style="display:inline-block;margin:6px 0 2px;font-size:13px;font-weight:600">Open the full ' + esc(p[1]) + ' page →</a>' : ''; };
+export const pageLinkHtml = (name, esc, page = '') => { const p = pageOfCard(name, page); return p ? '<a class="vc-page" href="' + esc(p[0]) + '" style="display:inline-block;margin-top:6px;margin-bottom:2px;font-size:13px;font-weight:600">Open the full ' + esc(p[1]) + ' page →</a>' : ''; };
 
 /** put the card's frame on a page, or refresh it: idempotent, and safe to call from a MutationObserver (it only writes when it changes). */
 export function keep(el, esc, stats) {
@@ -295,7 +307,10 @@ export function keep(el, esc, stats) {
   let own = null; try { own = el.dataset.cardOwn ? JSON.parse(el.dataset.cardOwn) : null; } catch (_) {} // a merged card brings its own worked-out numbers
   // a body that says it found nothing ("I do not have information ...") is a Not found card: no source count, no stats, no "Adds to Verse", a neutral picture
   const bodyText = !name && !own ? answerText(el) : '', notFound = !name && !own && (el.dataset.notFound !== undefined || (bodyText.length > 12 && isNoAnswer(bodyText)));
-  const c = own ? ownCard(own) : cardOf({ ...lookup(stats, name), notFound, entity: notFound ? null : entity, kind: el.dataset.cardKind || '', artKind: el.dataset.artKind || '', artMeta: el.dataset.artKind ? { genre: el.dataset.artGenre || '', year: el.dataset.artYear || '' } : null, sources: name ? null : srcLinks || null, ageDays: name ? null : editedDaysAgo(src && src.textContent) ?? editedDaysAgo(el.textContent), kept: el.dataset.cardKept !== undefined, filed: el.dataset.cardAdds || '' });
+  // an answer that itself says its sources do not hold the ask is not "sourced": no source count, no Sourced badge, and the source list says so plainly (owner audit, 2026-11-19)
+  const unsourced = !name && !own && !notFound && bodyText.length > 40 && disclaimsSources(bodyText);
+  const c = own ? ownCard(own) : cardOf({ ...lookup(stats, name), notFound, entity: notFound ? null : entity, kind: el.dataset.cardKind || '', artKind: el.dataset.artKind || '', artMeta: el.dataset.artKind ? { genre: el.dataset.artGenre || '', year: el.dataset.artYear || '' } : null, sources: name || unsourced ? null : srcLinks || null, ageDays: name ? null : editedDaysAgo(src && src.textContent) ?? editedDaysAgo(el.textContent), kept: el.dataset.cardKept !== undefined, filed: el.dataset.cardAdds || '' });
+  if (unsourced && src && src.dataset.unsourced === undefined) { const asOf = /\bas of [^\u00b7\n]+$/i.exec(src.textContent.trim()); src.dataset.unsourced = '1'; src.textContent = UNSOURCED_LINE + (asOf ? ' \u00b7 written by Verse \u00b7 ' + asOf[0] : ''); }
   // the card's own link to its page keeps what it shows (a translation, a search); it often arrives after the frame, so a drawn link is moved to it
   const page = el.dataset.page || ownPageOf(name, Array.from(el.querySelectorAll('a[href^="/"]:not(.vc-page)'), (a) => a.getAttribute('href'))), drawn = el.querySelector(':scope > .vc-page'), want = pageOfCard(name, page);
   if (drawn && want && drawn.getAttribute('href') !== want[0]) drawn.setAttribute('href', want[0]);
@@ -308,6 +323,7 @@ export function keep(el, esc, stats) {
   const h2t = el.querySelector('h2'); c.key = notFound ? 'not found' : name || (h2t ? h2t.textContent.trim() : '') || c.typeLine; c.season = seasonOf(new Date().getMonth(), typeof location !== 'undefined' ? location.search : '');
   // the art is of the subject (owner, 2026-10-17: the art should be of the subject of each card): when the answer carries a picture of the thing
   // (its source's thumbnail), the art box shows that picture in its true colour (owner, 2026-10-17: the ink filter stripped a poster's colour), under a light ink texture; with none, the plate of its kind
+  if (el.dataset.imgSafe === 'blocked' || cardUnsafe(el, el._ask || '')) scrubCard(el);
   const photoImg = [...el.querySelectorAll('img[src]')].find((i) => !i.closest('.vc-art') && /^https:\/\//.test(i.getAttribute('src') || '')), photo = photoImg ? photoImg.getAttribute('src') : '';
   // the card's subject is what its ANSWER is about (lib/card-subject.js), not the ask's words: the plate draws it, the Art Forge paints it
   const subj = own || notFound ? { nouns: [], phrase: '' } : c.isSkill ? skillSubjectOf(c.key) : subjectOf(c.key, answerText(el)); c.nouns = subj.nouns; el._vcSubject = subj.phrase;

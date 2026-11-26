@@ -4,7 +4,7 @@ const CACHE = 'void-shell-v2';
 const SHELL = ['/', '/manifest.webmanifest', '/icon-192.png', '/icon.svg', '/skills/index.json', '/verse.css', '/verse-shell.js', '/verse-field.js'];
 // the one-tool pages open offline too (owner, 2026-10-24: the tower gate measures offline): each page is kept under its own path, with the
 // modules its generated modulepreload block names (tools/preload.mjs), fetched once at install
-const TOOLS = ['/bots/', '/agent/', '/photos/', '/brain/', '/progress/', '/ledger/', '/autopilot/', '/stopwatch/', '/word-count/', '/color/', '/color/gradient/', '/random/wheel/', '/random/people/', '/base64/bases/', '/convert/', '/resize-image/', '/password/strength/', '/random/', '/random/coin/', '/base64/', '/stl/', '/calculator/', '/calculators/', '/vat/', '/time/', '/password/', '/weather/', '/local/', '/translate/', '/recipes/', '/markets/', '/markets/caps/', '/metronome/', '/arcade/', '/paint/', '/emojis/', '/emoji-combos/', '/tournaments/', '/prizes/', '/hosting/', '/identity/', '/cpan/', '/obituaries/', '/books/', '/podcasts/', '/scores/', '/scores/sports/', '/fantasy/', '/calendar/', '/notes/', '/generators/', '/boards/', '/fanfic/', '/team/', '/learn-to-draw/', '/converter/', '/rap/', '/news/', '/journal/', '/image/', '/video/', '/pdf/', '/kanban/', '/g/', '/is-it/christmas', '/tools/', '/markets/currency-converter/', '/emoji-combos/emoji-dictionary/', '/emojis/everywhere/', '/convert/unit-converter/', '/convert/unit-converter-2/', '/color/colour-picker-tool/', '/news/global-headlines/', '/color/colour-management/'];
+const TOOLS = ['/bots/', '/agent/', '/photos/', '/brain/', '/progress/', '/ledger/', '/autopilot/', '/stopwatch/', '/word-count/', '/color/', '/base64/', '/convert/', '/password/', '/random/', '/stl/', '/calculator/', '/vat/', '/time/', '/weather/', '/local/', '/translate/', '/recipes/', '/markets/', '/metronome/', '/arcade/', '/paint/', '/emojis/', '/emoji-combos/', '/tournaments/', '/prizes/', '/hosting/', '/identity/', '/cpan/', '/books/', '/podcasts/', '/scores/', '/fantasy/', '/calendar/', '/notes/', '/generators/', '/boards/', '/fanfic/', '/team/', '/learn-to-draw/', '/converter/', '/rap/', '/news/', '/journal/', '/image/', '/video/', '/pdf/', '/kanban/', '/g/', '/is-it/christmas', '/tools/', '/emojis/everywhere/', '/color/colour-picker-tool/'];
 // any /is-it/<day> page (not its .rss or .json) is kept under its own path once visited
 // the pages whose own module files (/generators/<page>/app.js, /image/app.js) are kept like /lib/ code: the page itself is shelled at install
 // with every other kept page (see KEPT below), and its modules are kept the first time it loads under the worker
@@ -21,7 +21,7 @@ const TOOLS = ['/bots/', '/agent/', '/photos/', '/brain/', '/progress/', '/ledge
 // the research journal (2026-11-07, /journal/) likewise: its engine lib/journal.js is kept like the other /lib/ code, and the papers it read
 // are kept by the page itself on this device, so an offline visit still shows the last papers it read
 // the store (2026-10-26, owner: "need a /store page that beats amazons") likewise; its catalogue is kept by the page itself in localStorage, so an offline visit still shows every product and the cart
-const LATER = ['/store/', '/jobs/', '/jobs/regions/', '/jobs/alerts/', '/jobs/europe/', '/jobs/salary/', '/jobs/categories/', '/jobs/tags/', '/jobs/companies/', '/flights/', '/flights/trip/', '/flights/airports/', '/flights/time/', '/flights/distance/', '/flights/map/', '/flights/co2/', '/flights/routes/', '/music/', '/piano/', '/tuner/', '/bpm/', '/chords/', '/markets/screener/', '/photos/squoosh/', '/photos/tinypng/', '/photos/details/', '/photos/exifeditor/', '/photos/photopea/', '/photos/iloveimg/', '/generators/make/', '/generators/chat/', '/generators/story/', '/generators/forum/'];
+const LATER = ['/store/', '/jobs/', '/flights/', '/music/', '/piano/', '/tuner/', '/bpm/', '/chords/', '/generators/make/', '/generators/chat/', '/generators/story/', '/generators/forum/'];
 // Every page the site keeps — TOOLS and LATER alike — is pre-cached as a THIN HTML SHELL at install (owner, 2026-10-26: the offline class
 // deletion). A LATER page used to be kept only on its first open, so the gate's fresh context could lose the race and read 0 offline while
 // the page passed here every time: two floors stalled on exactly that, and 33 pages carried the risk. The shells are HTML only, which is what
@@ -74,6 +74,8 @@ self.addEventListener('activate', (e) => {
 const DRESS = new Set(['/', '/team/', '/bots/', '/agent/', '/films/', '/treasury/', '/scoreboard/', '/security/', '/limits/', '/contribute/']);
 function dress(res, path) {
   if (!res || res.status !== 200 || !/text\/html/.test(res.headers.get('content-type') || '')) return Promise.resolve(res);
+  // the UniVerse screen is not the page: a nav drawn on it ran the shell once, and the owner's page swapped in after it had no bar (2026-11-20)
+  if (res.headers.get('x-verse-gate') === 'uni') return Promise.resolve(res);
   const p = !path || path === '/' ? '/' : (path.endsWith('/') ? path : path + '/');
   if (!DRESS.has(p)) return Promise.resolve(res);
   return res.clone().text().then((html) => {

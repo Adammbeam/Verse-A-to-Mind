@@ -58,19 +58,19 @@ async function drawLine(J) {
 
 /** per floor id, per journey name: the script. A journey with no script here is INCOMPLETE. */
 export const SCRIPTS = {
-  // flightconnections.com (/flights/routes/, lists run 20): its visitors pick the airport they leave from and see where a nonstop flight
+  // flightconnections.com (/flights/?mode=routes, lists run 20): its visitors pick the airport they leave from and see where a nonstop flight
   // goes, nearest first; then send that map on. Lisbon to Madrid is a short nonstop in the route data, so it must be listed within 3 hours,
   // and New York must not be (over 3 hours); the link must carry the airport and bring the same list back after another airport was picked
   'travel: flightconnections.com': {
     'do the main job and see the result': async (J) => {
-      await J.open('/flights/routes/'); await J.fill('#f-from', 'Lisbon', 'type Lisbon as the airport to leave from');
+      await J.open('/flights/?mode=routes'); await J.fill('#f-from', 'Lisbon', 'type Lisbon as the airport to leave from');
       await J.click('#f-from-list button >> nth=0', 'pick the first airport offered');
       await J.fill('#w-h', '3', 'set the flight time to at most 3 h');
       await J.expect((t) => /nonstop route from[^\n]*Lisbon[^\n]*up to 3 h/i.test(t) && /\bMAD\b\s+Madrid/.test(t), 'airports with a nonstop route from Lisbon within 3 h, Madrid among them');
       await J.expect((t) => !/\bJFK\b\s+New York/.test(t), 'New York left out (more than 3 hours away)');
     },
     'share the result and reopen it from the link': async (J) => {
-      await J.open('/flights/routes/'); await J.fill('#f-from', 'Lisbon', 'type Lisbon'); await J.click('#f-from-list button >> nth=0', 'pick the first airport offered');
+      await J.open('/flights/?mode=routes'); await J.fill('#f-from', 'Lisbon', 'type Lisbon'); await J.click('#f-from-list button >> nth=0', 'pick the first airport offered');
       await J.expect(/\bMAD\b\s+Madrid/, 'Madrid listed from Lisbon');
       const u = await J.shareLink('#fl-share'); if (!/[?&]from=LIS(&|$)/.test(u)) throw new Failed('the share link does not carry the airport: ' + u);
       await J.fill('#f-from', 'Singapore', 'type Singapore instead'); await J.click('#f-from-list button >> nth=0', 'pick the first airport offered');
@@ -192,18 +192,18 @@ export const SCRIPTS = {
       await J.expect((t) => /\bVAT 416[.,]67\b/.test(t) && /\bNet 2[,\s\u00a0]?083[.,]33\b/.test(t) && /\bTotal 2[,\s\u00a0]?500[.,]00\b/.test(t), 'the same answer back from its link: VAT 416.67 out of 2,500.00 at 20%');
     },
   },
-  // password strength (/password/strength/, against howsecureismypassword.net): the password is checked on the device and never put in the
+  // password strength (/password/?mode=strength, against howsecureismypassword.net): the password is checked on the device and never put in the
   // address, so the shared link is the checker alone. The share journey proves that: the link carries nothing typed, it reopens the empty
   // checker, and the same password typed again gets the same answer
   'password strength': {
     'do the main job and see the result': async (J) => {
-      await J.open('/password/strength/'); await J.fill('#pw', 'password', 'type the common password "password"');
+      await J.open('/password/?mode=strength'); await J.fill('#pw', 'password', 'type the common password "password"');
       await J.expect((t) => /\bVery weak\b/.test(t) && /Instantly\s*cracked from a stolen list/i.test(t) && /Contains "password", a password or word people use first/.test(t) && /Make it longer/.test(t), 'Very weak, cracked instantly, the reason and a tip');
       await J.fill('#pw', 'q7#Vm2!xZp9@Lk4$Wd8&', 'type a 20-character random password');
       await J.expect((t) => /\bVery strong\b/.test(t) && /More than a trillion years\s*cracked from a stolen list/i.test(t) && !/\bVery weak\b/.test(t), 'Very strong, more than a trillion years to crack');
     },
     'share the result and reopen it from the link': async (J) => {
-      await J.open('/password/strength/'); await J.fill('#pw', 'password', 'type the common password "password"'); await J.expect(/\bVery weak\b/, 'Very weak');
+      await J.open('/password/?mode=strength'); await J.fill('#pw', 'password', 'type the common password "password"'); await J.expect(/\bVery weak\b/, 'Very weak');
       const u = await J.shareLink('#link'); if (/password(?!-strength)|[?#&]p=/i.test(u)) throw new Failed('the shared link carries what was typed: ' + u);
       await J.open('/word-count/'); await J.open(u);
       await J.expect((t) => /Type one to see its strength/.test(t) && !/\bVery weak\b/.test(t), 'the checker back from its link, empty: nothing typed came with it');

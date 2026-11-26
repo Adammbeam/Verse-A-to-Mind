@@ -27,9 +27,10 @@ import { resolve, join, relative, sep, dirname, isAbsolute } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { guardPatch, kindOf } from '../void-live-deploy/lib/patch-guard.js';
-import { FREE_MODEL } from '../void-live-deploy/lib/models.js';
+import { FREE_MODEL, GEMINI_MODELS } from '../void-live-deploy/lib/models.js';
 import { scanDiff, DEFAULT_CHECKS } from './verse-loop.mjs';
 import { BUILD_OUTPUTS } from './generated.mjs';
+import { charterPrompt } from './charter.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const LIMITS = { turns: 30, tokens: 250000, out: 6000, finishTries: 3, reads: 12 };
@@ -60,8 +61,9 @@ export function providersFrom(env = process.env) {
   // GitHub Models is gone: GitHub retired it on 2026-07-30 (docs.github.com/en/rest/models/inference), and its old endpoint answers 200 "OK" to every call
   const oa = (name, key, url, model) => { if (env[key]) out.push({ name, model, key: env[key], url, shape: 'openai' }); };
   oa('openrouter', 'OPENROUTER_API_KEY', 'https://openrouter.ai/api/v1/chat/completions', env.VERSE_CODER_OPENROUTER_MODEL || 'qwen/qwen3-coder:free');
-  oa('groq', 'GROQ_API_KEY', 'https://api.groq.com/openai/v1/chat/completions', env.VERSE_CODER_GROQ_MODEL || 'llama-3.3-70b-versatile');
-  oa('gemini', 'GEMINI_API_KEY', 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', env.VERSE_CODER_GEMINI_MODEL || 'gemini-2.5-flash');
+  // Groq's free plan (2026-11-20) serves qwen3.8-27b; llama-3.3-70b-versatile moved to Contact Sales. The coder skips OpenAI's open-weight models.
+  oa('groq', 'GROQ_API_KEY', 'https://api.groq.com/openai/v1/chat/completions', env.VERSE_CODER_GROQ_MODEL || 'qwen/qwen3.8-27b');
+  oa('gemini', 'GEMINI_API_KEY', 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', env.VERSE_CODER_GEMINI_MODEL || GEMINI_MODELS[0]);
   oa('cerebras', 'CEREBRAS_API_KEY', 'https://api.cerebras.ai/v1/chat/completions', env.VERSE_CODER_CEREBRAS_MODEL || 'qwen-3-coder-480b');
   return out.filter((p) => !/gpt-oss/i.test(p.model));
 }
@@ -95,40 +97,54 @@ export async function readReply(r) {
   return n <= 64 && !/[<>]/.test(s) ? { notJson: bad(n).notJson + ' ' + JSON.stringify(s.replace(/[A-Za-z0-9_\-]{20,}/g, '[masked]')) } : bad(n);
 }
 
-/** a model function over the providers: each call tries them in order from the last one that answered; a 429 or error moves on */
+/** a model function over the providers: each call tries them in order from the last one that answered; a 429, a timeout, or an empty answer moves on.
+ *  When none of the free providers answer, one paid call (pay:true on /api/coder) runs and its cents are kept on the function. */
 export function stackModel(providers, { fetchImpl = fetch, timeoutMs = 120000, maxOut = 4096 } = {}) {
   let at = 0;
   const fn = async (messages) => {
     const errs = [];
+    const noteOf = async (r) => {
+      if (typeof r.text !== 'function') return '';
+      try {
+        const t = await r.text();
+        let j = null; try { j = JSON.parse(t); } catch (_) { /* a plain sentence */ }
+        const e = j && j.errors && j.errors[0];
+        if (e && (e.code || e.message)) return ' ' + [e.code, String(e.message || '').slice(0, 80)].filter(Boolean).join(' ');
+        if (t && t.length <= 80 && !/[<>]/.test(t)) return ' ' + t.replace(/[A-Za-z0-9_-]{20,}/g, '[masked]').replace(/\s+/g, ' ').trim();
+      } catch (_) { /* status alone */ }
+      return '';
+    };
+    const accept = (p, j, i) => {
+      if (j && j.notJson) { errs.push(p.name + ' ' + j.notJson); return null; }
+      const x = p.shape === 'workers' ? (j && j.result) || {} : j || {};
+      const text = typeof x.response === 'string' ? x.response : x.response ? JSON.stringify(x.response) : String((x.choices && x.choices[0] && x.choices[0].message && x.choices[0].message.content) || '');
+      if (!text.trim()) { errs.push(p.name + ' empty'); return null; }
+      at = i; fn.last = p.name + ' ' + ((j && j.model) || p.model);
+      if (j && j.paid) fn.paid = true;
+      if (j && j.cents) fn.cents = (fn.cents || 0) + Number(j.cents);
+      const u = x.usage || (j && j.usage) || {};
+      return { text, tokens: u.total_tokens || 0 };
+    };
+    const post = (p, body) => fetchImpl(p.url, { method: 'POST', signal: AbortSignal.timeout(timeoutMs), headers: { ...(p.headers || {}), authorization: 'Bearer ' + p.key, 'content-type': 'application/json' }, body: JSON.stringify(body) });
     for (let k = 0; k < providers.length; k++) {
       const i = (at + k) % providers.length, p = providers[i];
       try {
         const body = p.shape === 'workers'
           ? { messages, max_tokens: maxOut, reasoning_effort: 'low', chat_template_kwargs: { enable_thinking: false } }
           : { model: p.model, messages, max_tokens: maxOut, temperature: 0.2 };
-        const r = await fetchImpl(p.url, { method: 'POST', signal: AbortSignal.timeout(timeoutMs), headers: { ...(p.headers || {}), authorization: 'Bearer ' + p.key, 'content-type': 'application/json' }, body: JSON.stringify(body) });
-        if (!r.ok) {
-          let note = '';
-          if (typeof r.text === 'function') {
-            try {
-              const t = await r.text();
-              let j = null; try { j = JSON.parse(t); } catch (_) { /* a plain sentence */ }
-              const e = j && j.errors && j.errors[0];
-              if (e && (e.code || e.message)) note = ' ' + [e.code, String(e.message || '').slice(0, 80)].filter(Boolean).join(' ');
-              else if (t && t.length <= 80 && !/[<>]/.test(t)) note = ' ' + t.replace(/[A-Za-z0-9_-]{20,}/g, '[masked]').replace(/\s+/g, ' ').trim();
-            } catch (_) { /* status alone */ }
-          }
-          errs.push(p.name + ' ' + r.status + note); continue;
-        }
-        const j = await readReply(r);
-        if (j && j.notJson) { errs.push(p.name + ' ' + j.notJson); continue; }
-        const x = p.shape === 'workers' ? (j && j.result) || {} : j || {};
-        const text = typeof x.response === 'string' ? x.response : x.response ? JSON.stringify(x.response) : String((x.choices && x.choices[0] && x.choices[0].message && x.choices[0].message.content) || '');
-        if (!text.trim()) { errs.push(p.name + ' empty'); continue; }
-        at = i; fn.last = p.name + ' ' + p.model;
-        const u = x.usage || j.usage || {};
-        return { text, tokens: u.total_tokens || 0 };
+        const r = await post(p, body);
+        if (!r.ok) { errs.push(p.name + ' ' + r.status + await noteOf(r)); continue; }
+        const got = accept(p, await readReply(r), i);
+        if (got) return got;
       } catch (e) { errs.push(p.name + ' ' + String((e && e.name) || e)); }
+    }
+    const verse = errs.length && providers.find((p) => p.name === 'verse');
+    if (verse) {
+      try {
+        const r = await post(verse, { messages, max_tokens: maxOut, reasoning_effort: 'low', chat_template_kwargs: { enable_thinking: false }, pay: true });
+        if (!r.ok) errs.push('verse paid ' + r.status + await noteOf(r));
+        else { const got = accept(verse, await readReply(r), providers.indexOf(verse)); if (got) return got; }
+      } catch (e) { errs.push('verse paid ' + String((e && e.name) || e)); }
     }
     return { error: 'no model answered (' + errs.join(', ') + ')' };
   };
@@ -230,7 +246,14 @@ export const keyless = (env = process.env) => Object.fromEntries(Object.entries(
 const git = (root, args, opts = {}) => spawnSync('git', args, { cwd: root, encoding: 'utf8', maxBuffer: 64 << 20, ...opts });
 const readOr = (p) => { try { return readFileSync(p, 'utf8'); } catch (_) { return null; } };
 
-export const WINDOW = Object.freeze({ messages: 20, fresh: 4, keep: 600, task: 6000, taskTurns: 2 });
+/** where a lap's brief starts its reference notes (tools/verse-loop.mjs buildPrompt) */
+export const NOTES = '\n## docs/GATE-STANDARDS.md';
+/** a brief without its opening charter copy (the system message has it). Pure over the charter text. */
+export function withoutCharter(text, charter = charterPrompt()) {
+  const t = String(text || ''), c = String(charter || '').trim();
+  return c && t.startsWith(c) ? t.slice(c.length).replace(/^\s+/, '') : t;
+}
+export const WINDOW = Object.freeze({ messages: 16, fresh: 4, keep: 450, task: 6000, taskTurns: 2 });
 /** what the model gets each turn: the system and the task, then the last WINDOW.messages turns, with each tool result older than the
  *  newest WINDOW.fresh messages cut to WINDOW.keep characters. Every turn sends the whole window again, so full old reads made the
  *  count grow with the square of the turns: a 250000-token run stopped near turn 12 of 30 with nothing shipped; now the newest WINDOW.fresh / 2 results stay whole.
@@ -243,8 +266,15 @@ export function windowOf(messages) {
   const m = Array.isArray(messages) ? messages : [];
   const rest = m.length > WINDOW.messages + 2 ? m.slice(-WINDOW.messages) : m.slice(2);
   const turns = m.filter((x) => x && x.role === 'assistant').length;
-  const task = m[1] && turns > WINDOW.taskTurns && m[1].content.length > WINDOW.task
-    ? { ...m[1], content: m[1].content.slice(0, WINDOW.task) + '\n[... ' + (m[1].content.length - WINDOW.task) + ' characters of reference notes cut after the first turns; the task is above]' } : m[1];
+  // after the first turns the brief shrinks to what only it carries: the rules and the task. The system message already has the charter, so the
+  // brief's second copy goes, and the reference notes at its end (docs/GATE-STANDARDS.md, docs/TAGTEAM.md: they grow with every game update)
+  // go too; whatever is left is held to WINDOW.task. Sent whole every turn, the real brief ran the token cap out at turn 28 of 30 (2026-11-20).
+  let task = m[1];
+  if (m[1] && turns > WINDOW.taskTurns) {
+    const body = withoutCharter(m[1].content), at = body.indexOf(NOTES);
+    const head = at > 0 ? body.slice(0, at) : body, kept = head.slice(0, WINDOW.task);
+    task = { ...m[1], content: kept + (kept.length < m[1].content.length ? '\n[... ' + (m[1].content.length - kept.length) + ' characters of the charter and reference notes cut after the first turns; the task is above]' : '') };
+  }
   return [...m.slice(0, 1), ...(m.length > 1 ? [task] : []), ...rest.map((x, i) => (i < rest.length - WINDOW.fresh && x.content.length > WINDOW.keep
     ? x.role === 'user' ? { role: 'user', content: x.content.slice(0, WINDOW.keep) + '\n[... ' + (x.content.length - WINDOW.keep) + ' characters cut from an older result; read it again if you need it]' }
       : x.content.length > 4 * WINDOW.keep ? { role: x.role, content: x.content.slice(0, WINDOW.keep) + '\n[... ' + (x.content.length - WINDOW.keep) + ' characters cut from an older turn of yours]' } : x
@@ -384,7 +414,8 @@ export function functionLossOk(reasons, moved) {
   return lost.length > 0 && lost.every((n) => hasWord(moved, n));
 }
 
-const SYSTEM = (checks, target) => `You are Verse's coding agent, working in a git repository through tools. You change code so the task is done and every check stays green.
+export const SYSTEM = (checks, target) => `${charterPrompt()}
+You are Verse's coding agent, working in a git repository through tools. You change code so the task is done and every check stays green.
 Answer every turn with exactly one JSON object and nothing else (an edit may put its diff in a \`\`\`diff block right after the JSON instead):
 {"tool":"list","path":"tools"}                       list a directory
 {"tool":"read","path":"tools/x.mjs","from":1,"to":200} read lines of a file (a file over ${HUGE} lines returns an outline unless from/to are set)
@@ -689,15 +720,15 @@ export function ownReview(root, env = keyless()) {
 export function scriptedModel(replies) { let i = 0; return async () => ({ text: typeof replies[Math.min(i, replies.length - 1)] === 'string' ? replies[Math.min(i++, replies.length - 1)] : JSON.stringify(replies[Math.min(i++, replies.length - 1)]) }); }
 
 function parseCli(argv) {
-  const o = { repo: process.cwd(), promptFile: '', task: '', checks: '', target: '', turns: 0, tokens: 0 };
-  const flags = { '--repo': 'repo', '--prompt-file': 'promptFile', '--task': 'task', '--checks': 'checks', '--target': 'target', '--max-turns': 'turns', '--max-tokens': 'tokens' };
+  const o = { repo: process.cwd(), promptFile: '', task: '', checks: '', target: '', turns: 0, tokens: 0, reads: 0 };
+  const flags = { '--repo': 'repo', '--prompt-file': 'promptFile', '--task': 'task', '--checks': 'checks', '--target': 'target', '--max-turns': 'turns', '--max-tokens': 'tokens', '--max-reads': 'reads' };
   for (let i = 0; i < argv.length; i++) { const k = flags[argv[i]]; if (!k) throw new Error('unknown flag ' + argv[i]); o[k] = argv[++i]; }
   return o;
 }
 
 async function main() {
   const o = parseCli(process.argv.slice(2)), env = process.env, root = resolve(o.repo);
-  const say = (r) => { console.log(JSON.stringify({ outcome: r.outcome, why: r.why, turns: r.turns || 0, tokens: r.tokens || 0, files: r.files || [], provider: r.provider || '', spent: r.spent || null })); process.exit(EXIT[r.outcome] ?? 1); };
+  const say = (r) => { console.log(JSON.stringify({ outcome: r.outcome, why: r.why, turns: r.turns || 0, tokens: r.tokens || 0, files: r.files || [], provider: r.provider || '', spent: r.spent || null, cents: r.cents || 0, paid: !!r.paid })); process.exit(EXIT[r.outcome] ?? 1); };
   const prompt = o.promptFile ? readFileSync(o.promptFile, 'utf8') : o.task;
   if (!prompt) return say({ outcome: 'error', why: 'give --prompt-file or --task' });
   const checks = o.checks ? JSON.parse(readFileSync(o.checks, 'utf8')) : existsSync(join(root, 'tools/verse-loop.checks.json')) ? JSON.parse(readFileSync(join(root, 'tools/verse-loop.checks.json'), 'utf8')) : DEFAULT_CHECKS;
@@ -708,8 +739,8 @@ async function main() {
     if (!ps.length) return say({ outcome: 'no-model', why: 'Verse\'s coder needs one model key in the environment: ' + KEY_NAMES.join(', ') });
     model = stackModel(ps); provider = ps.map((p) => p.name).join(' > ');
   }
-  const r = await runCoder({ root, prompt, checks, target: o.target, model, env, limits: { ...(+o.turns ? { turns: +o.turns } : {}), ...(+o.tokens ? { tokens: +o.tokens } : {}) }, log: (s) => console.error(s) });
-  say({ ...r, provider: (model.last || provider) });
+  const r = await runCoder({ root, prompt, checks, target: o.target, model, env, limits: { ...(+o.turns ? { turns: +o.turns } : {}), ...(+o.tokens ? { tokens: +o.tokens } : {}), ...(+o.reads ? { reads: +o.reads } : {}) }, log: (s) => console.error(s) });
+  say({ ...r, provider: (model.last || provider), cents: (model && model.cents) || 0, paid: !!(model && model.paid) });
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main().catch((e) => { console.log(JSON.stringify({ outcome: 'error', why: String((e && e.message) || e).slice(0, 300) })); process.exit(1); });

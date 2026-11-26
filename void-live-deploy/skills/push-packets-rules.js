@@ -1,4 +1,5 @@
 /** Push Packets: slide one packet onto its mark. Verse tugs the same pusher the wrong way and usually jams. */
+export const whatsNew = 'Update 1: You can finally master the rhythm of the tug and land the packet perfectly.';
 export const id = 'push-packets', CELL = 28, W = 6 * 28, H = 4 * 28, CAP = 80;
 const LEVELS = [
   ['######', '#@$. #', '#    #', '######'],

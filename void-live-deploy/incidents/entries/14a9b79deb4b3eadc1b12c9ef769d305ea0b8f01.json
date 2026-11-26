@@ -1,0 +1,24 @@
+{
+ "at": "2026-11-24T13:14:15.986Z",
+ "sha": "14a9b79deb4b3eadc1b12c9ef769d305ea0b8f01",
+ "run": "https://github.com/atomeam/void-loop/actions/runs/45394624867",
+ "suite": "browser suite on main",
+ "checks": [
+  "poster wins: on a skill card (phone) the stats chip touches no text, the rarity and collector row included",
+  "will: Verse says what it wants",
+  "store: an ask a product covers gets Verse's answer first, then one line (product, live price, link) from the live catalog; new store products are found",
+  "catalog: first read pulls the live store (all 7 products, tiered Verse Monthly = $49 a month) and saves it",
+  "coin: /flip/ shows all 7 things a full answer shows — the flip counter named, the tap and the result said in words (the gate's own rule, the 3 the tower sat at 4 of 7 on)",
+  "busy blocks: three blocks make a bar with the free gaps named, typing \"gym 5-6pm\" adds a fourth, \"clear busy blocks\" takes the card off",
+  "suite ran to the end"
+ ],
+ "touched": [
+  "data/game-updates.json",
+  "docs/TAGTEAM.md",
+  "void-live-deploy/scoreboard/game-updates.json",
+  "void-live-deploy/skills/void-breaker-rules.js"
+ ],
+ "shards": [
+  1
+ ]
+}

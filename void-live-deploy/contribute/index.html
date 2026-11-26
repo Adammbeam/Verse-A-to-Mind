@@ -20,11 +20,14 @@
   h1 { font-size: 1.6rem; margin: 0 0 8px; } h2 { font-size: 1.1rem; margin: 26px 0 6px; }
   a { color: var(--accent); } .note { color: var(--soft); font-size: .92rem; }
   input { width: 100%; box-sizing: border-box; padding: 8px 10px; background: #12101c; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; font: inherit; }
-  table { width: 100%; border-collapse: collapse; margin: 10px 0; } td { padding: 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; } td { padding: 6px; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: anywhere; }
+  /* the bot and skill tables can be wider than a phone: they scroll inside this box, never the page (a wide font
+     in the merge gate's browser measured the page 18 px wider than the window, 2026-11-21) */
+  .scroll { overflow-x: auto; max-width: 100%; }
   code { background: #12101c; padding: 1px 5px; border-radius: 4px; }
 </style>
 <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}</style>
-</head>
+<script type="module" src="/lib/verse-scene.js"></script><link rel="stylesheet" href="/lib/verse-polish.css"></head>
 <body>
 <main>
 <h1>Assimilate: build Verse with us</h1>
@@ -40,11 +43,83 @@
 <h2>Browse the pieces</h2>
 <input id="q" type="search" placeholder="Filter bots and skills" aria-label="Filter bots and skills">
 <h2 id="bots-h">Bots</h2>
-<table><tbody id="bots"><tr><td class="note">Loading…</td></tr></tbody></table>
+<div class="scroll"><table><tbody id="bots"><tr><td class="note">Loading…</td></tr></tbody></table></div>
 <h2 id="skills-h">Skills</h2>
-<table><tbody id="skills"><tr><td class="note">Loading…</td></tr></tbody></table>
+<div class="scroll"><table><tbody id="skills"><tr><td class="note">Loading…</td></tr></tbody></table></div>
 <p class="note">Run the bots at <a href="/bots/">/bots/</a>. See how Verse is doing on the <a href="/progress/">progress</a> page.</p>
 </main>
 <script src="/contribute/app.js" defer></script>
+<style>
+/* verse design loop: kept by tools/design-loop.mjs, measured before and after */
+#bots > tr:nth-of-type(1) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(2) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(3) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(4) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(6) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(7) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(8) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(9) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(12) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(13) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(14) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(15) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(16) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(18) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(19) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(20) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(21) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(22) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(23) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(24) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(25) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(26) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(27) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(28) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(29) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(30) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(31) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(32) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(33) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(34) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(35) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(36) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(37) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(38) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(39) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(40) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(41) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(43) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(44) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(45) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(46) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(47) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(50) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(51) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(52) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(53) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(54) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(55) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(56) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(57) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(58) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(59) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(60) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(61) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(62) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(63) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(64) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(66) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(67) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(68) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(69) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(79) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(97) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(102) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(103) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(104) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(112) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+#bots > tr:nth-of-type(113) > td:nth-of-type(3) > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+/* end verse design loop */
+</style>
 </body>
 </html>

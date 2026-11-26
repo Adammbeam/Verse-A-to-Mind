@@ -15,7 +15,14 @@ export const STORE_PRODUCTS = CATALOG.filter((p) => p.status !== 'unpublished').
 export const productOf = (id) => STORE_PRODUCTS.find((p) => p.id === id) || null;
 // UTM on every link we hand out, so Gumroad's analytics show which Verse surface sold it
 export const gumroadUrl = (p, medium = 'store') => 'https://moonbeam846.gumroad.com/l/' + p.gumroad + '?utm_source=a-to-mind&utm_medium=' + medium + '&utm_campaign=v01d-store';
-export const price = (p) => (p.pwyw && p.cents > 0 ? 'Pay what you want · ' + '$' + (p.cents / 100).toFixed(p.cents % 100 ? 2 : 0) + ' gets it all' : p.pwyw && !p.cents ? 'Free · pay what you want' : p.cents ? '$' + (p.cents / 100).toFixed(p.cents % 100 ? 2 : 0) + (p.every ? ' a ' + p.every : '') : 'Free');
+// what a product costs, in words: the fixed price (every price is fixed now, 2026-11-21), a subscription's period, or Free. A
+// pay-what-you-want product from before the fixed prices still reads honestly, so an old catalog entry cannot print a blank price.
+export const price = (p) => {
+  const money = (cents) => '$' + (cents / 100).toFixed(cents % 100 ? 2 : 0);
+  if (p.cents > 0) return money(p.cents) + (p.every ? ' a ' + p.every : '');
+  if (p.pwyw) return 'Free · pay what you want';
+  return 'Free';
+};
 export const publicCatalog = () => STORE_PRODUCTS.map(({ files, ...p }) => ({ ...p, price: price(p), buy: p.gumroad ? gumroadUrl(p) : null, files: files ? files.length : 0, ...(isShareProduct(p) ? { share: publicShare(p) } : {}) }));
 
 // which provider is live, without ever reading a secret's value out
@@ -86,7 +93,7 @@ export const orderCode = (id) => String(id).slice(-8).toUpperCase();
 // "what can I buy": Verse's answer, from the catalog
 export function buyAnswer() {
   const live = STORE_PRODUCTS.filter((p) => p.gumroad && !p.soon);
-  const made = STORE_PRODUCTS.filter((p) => !p.gumroad && !p.soon && p.files).map((p) => ({ id: p.id, name: p.name, price: p.pwyw ? 'Free · pay what you want' : price(p), blurb: p.blurb, url: '/store/#' + p.id }));
+  const made = STORE_PRODUCTS.filter((p) => !p.gumroad && !p.soon && p.files).map((p) => ({ id: p.id, name: p.name, price: price(p), blurb: p.blurb, url: '/store/#' + p.id }));
   return { lead: 'What Verse sells · support Verse', rows: live.map((p) => ({ id: p.id, name: p.tip ? p.name + ' (tip jar)' : p.name, price: price(p), blurb: p.blurb, url: gumroadUrl(p, 'void-card') })), made, more: 'Everything is at a-to-mind.com/store.' };
 }
 

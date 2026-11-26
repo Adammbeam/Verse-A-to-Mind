@@ -1,0 +1,57 @@
+{
+ "at": "2026-11-21T17:21:16Z",
+ "sha": "e073c76360997336eae8c849f3a300a4b68330ae",
+ "runId": 44929225531,
+ "run": "https://github.com/atomeam/void-loop/actions/runs/44929225531",
+ "workflow": "Verse deploy",
+ "event": "workflow_dispatch",
+ "branch": "main",
+ "conclusion": "failure",
+ "jobs": [
+  {
+   "name": "test-and-deploy",
+   "id": 136921969330,
+   "url": "https://github.com/atomeam/void-loop/actions/runs/44929225531/job/136921969330",
+   "conclusion": "failure",
+   "step": {
+    "number": 6,
+    "name": "Test (full suite)"
+   },
+   "fails": [
+    "FAIL we-own-it-pack  -> match works"
+   ],
+   "tail": [
+    "pass rps",
+    "pass sales-pack",
+    "pass scope-pack",
+    "pass shop",
+    "pass show-countdown",
+    "pass shuffle",
+    "pass stage-marks",
+    "pass status-board",
+    "pass status-digest",
+    "pass stopwatch",
+    "pass store",
+    "pass summon-pack",
+    "pass system-design",
+    "pass system-plan",
+    "pass system-slice",
+    "pass system-status",
+    "pass systems-connect-pack",
+    "pass systems-owned",
+    "pass terminal",
+    "pass time-saved",
+    "pass triangulate",
+    "pass uuid",
+    "pass verse-runs",
+    "pass video-gen",
+    "pass walker",
+    "FAIL we-own-it-pack  -> match works",
+    "pass wordladder",
+    "pass yesno",
+    "pass zoom-figure",
+    "Error: Process completed with exit code 1."
+   ]
+  }
+ ]
+}

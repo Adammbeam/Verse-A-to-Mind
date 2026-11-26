@@ -1,17 +1,17 @@
-// Two fix attempts per pull request, for the copy rewriter and the conflict fixer. The count is one hidden
+// Two fix attempts per pull request, for the copy rewriter, the conflict fixer and the PR autofixer. The count is one hidden
 // comment (an HTML comment, so GitHub does not show it). The third attempt does not push another commit.
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
 export const CAP = 2;
 export const MARK = '<!-- fix-cap';
-const KINDS = ['copy', 'conflict'];
+const KINDS = ['copy', 'conflict', 'autofix'];
 
 export function readCap(comments) {
   const hit = (comments || []).find((c) => String(c && c.body || '').startsWith(MARK));
-  const counts = { copy: 0, conflict: 0 };
-  const m = hit && String(hit.body).match(/copy=(\d+)\s+conflict=(\d+)/);
-  if (m) { counts.copy = +m[1]; counts.conflict = +m[2]; }
+  const counts = { copy: 0, conflict: 0, autofix: 0 };
+  const m = hit && String(hit.body).match(/copy=(\d+)\s+conflict=(\d+)(?:\s+autofix=(\d+))?/);
+  if (m) { counts.copy = +m[1]; counts.conflict = +m[2]; counts.autofix = +(m[3] || 0); }
   return { id: hit && hit.id, counts };
 }
 
@@ -25,7 +25,7 @@ export function claim(comments, kind) {
   return { allowed: true, count: next[kind], id: cur.id, body: format(next) };
 }
 
-const format = (counts) => MARK + ' copy=' + counts.copy + ' conflict=' + counts.conflict + ' -->';
+const format = (counts) => MARK + ' copy=' + counts.copy + ' conflict=' + counts.conflict + ' autofix=' + (counts.autofix || 0) + ' -->';
 
 /** Run write() only when this kind still has an attempt. The copy rewriter and the conflict fixer both use this. */
 export function guarded(comments, kind, write) {
@@ -38,7 +38,7 @@ function arg(name, argv) { const i = argv.indexOf(name); return i >= 0 && argv[i
 
 function cli(argv) {
   const kind = arg('--kind', argv), pr = arg('--pr', argv), repo = process.env.REPO || process.env.GITHUB_REPOSITORY || '';
-  if (argv[0] !== 'claim' || !/^\d+$/.test(pr) || !repo || (kind !== 'copy' && kind !== 'conflict')) { console.error('usage: node tools/fix-cap.mjs claim --pr <n> --kind copy|conflict'); return 2; }
+  if (argv[0] !== 'claim' || !/^\d+$/.test(pr) || !repo || !KINDS.includes(kind)) { console.error('usage: node tools/fix-cap.mjs claim --pr <n> --kind copy|conflict|autofix'); return 2; }
   const gh = (args, input) => execFileSync('gh', args, { encoding: 'utf8', input });
   let comments = [];
   try { comments = JSON.parse(gh(['api', '--paginate', `repos/${repo}/issues/${pr}/comments?per_page=100`])); } catch (_) { comments = []; }

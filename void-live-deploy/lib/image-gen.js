@@ -3,15 +3,18 @@
 // A prompt typed by a person, a style and a shape from short allow-lists, an optional "leave out" line and a seed in; the prompt the painter
 // gets, the size, the reason a prompt is refused, and the caps out. The painter is the Art Forge's (functions/api/card-art.js): Workers AI's
 // image model first, inside a share of the forge's own daily cap, then Pollinations (free) with its safety filter on, then an honest "resting".
+import { unsafeText, minorBlocked } from './image-safety.js';
 import { SEXUAL, HATE } from './art-rules.js';
 import { keeperOf } from './keeper.js';
 
 export const PROMPT_MAX = 400, NEGATIVE_MAX = 200, PER_GO = 4;
-// the money rule (STANDING.md): the image page has its own Workers AI share, AI_SHARE a day, inside the free daily allowance. Its paintings are
-// counted in the forge's total too (functions/api/card-art.js madeToday), so the forge paints that many fewer when /image/ paints first; both
-// together never pass AI_SHARE + FREE_CAP (40) a day (2026-10-25: a share counted under the forge's 30 left /image/ with none by the afternoon); past that the free painter (Pollinations) takes POLL_CAP a day; a connection gets PER_CONN pictures a day in all. ~104 neurons a
+// the money rule (STANDING.md): free resources first, then the treasury, with a public log line. The image page has its own Workers AI
+// share, AI_SHARE a day, counted in the forge's total too (functions/api/card-art.js madeToday). Past that share, leftover free Workers AI
+// under the forge's combined cap still paints (a free limit is never a stop). Past the combined free cap the treasury pays one cent a
+// picture from the infrastructure pot and logs it. Pollinations takes POLL_CAP a day only with a key (the keyless endpoint stamps a logo).
+// A connection gets PER_CONN pictures a day in all. ~104 neurons a
 // Workers AI picture (klein-4b, 26.05 neurons per 512x512 output tile, a 1024x1024 picture is 4 tiles), so the share is ~1,040 neurons a day.
-// There is deliberately no setting that raises AI_SHARE above 10: more paid pictures are the owner's call (each ~$0.0011 past the free allowance).
+// IMAGE_AI_SHARE never raises the free share above 10; paid pictures past the combined cap are the treasury's, not a higher share setting.
 export const AI_SHARE = 10, POLL_CAP = 150, PER_CONN = 24, PER_MINUTE = 6;
 /** the image page's Workers AI share today: IMAGE_AI_SHARE when it is a whole number from 0 up, else AI_SHARE, never above AI_SHARE. Pure. */
 export const aiShareOf = (env) => { const v = env && env.IMAGE_AI_SHARE, n = Math.floor(Number(v)); return v !== undefined && String(v).trim() !== '' && Number.isFinite(n) && n >= 0 ? Math.min(n, AI_SHARE) : AI_SHARE; };
@@ -62,6 +65,7 @@ export function refusalOf(prompt, negative = '', style = 'none', isSecret = () =
   const p = cleanLine(prompt), n = cleanLine(negative, NEGATIVE_MAX), lo = p.toLowerCase();
   if (!p.replace(/[^\p{L}\p{N}]/gu, '')) return 'empty';
   if (isSecret(p) || isSecret(n) || /[A-Za-z0-9_-]{32,}/.test(p) || /\d{9,}/.test(p.replace(/[\s-]/g, ''))) return 'secret';
+  if (minorBlocked(unsafeText(p))) return 'unsuitable'; // lib/image-safety.js: never a painting of minors in a nude, partly clothed or sexual context
   if (SEXUAL.test(lo) || HATE.test(lo) || /\b(?:undress\w*|topless|lingerie|bikini|underage|loli|shota|child\w* (?:in|wearing) (?:underwear|swimsuit))\b/i.test(p)) return 'unsuitable';
   if (PERSON_WORDS.test(p) || namedPersonPhoto(p, style)) return 'person';
   if (keeperOf(p)) return 'kept';

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<style>
+body { margin:0; background:#0a0a12; color:#cfd3e6; font:14px ui-sans-serif,system-ui; overflow:hidden; }
+#ui { position:absolute; top:8px; left:8px; z-index:10; background:rgba(10,12,24,0.85); padding:10px 12px; border-radius:8px; max-width:280px; }
+button { margin:3px 4px 3px 0; padding:6px 10px; background:#223; color:#aaf; border:1px solid #55f; border-radius:4px; cursor:pointer; }
+button:hover { background:#334; }
+#status { font-size:12px; margin-top:6px; color:#8af; }
+canvas { display:block; background:#050510; cursor:crosshair; }
+.focus-hint { font-size:11px; color:#8a8; }
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="verse-handoff" content="in: none; out: none">
+<title>webgpu-wave-interference-spatial-audio-sculptor · Verse lab</title>
+<meta name="description" content="A novel interactive spatial capability for The Verse canvas: a real-time 2D wave interference field (finite-difference wave equation) driven by user-placed virtual">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Verse">
+<meta property="og:title" content="webgpu-wave-interference-spatial-audio-sculptor · Verse lab">
+<meta property="og:description" content="A novel interactive spatial capability for The Verse canvas: a real-time 2D wave interference field (finite-difference wave equation) driven by user-placed virtual">
+<meta property="og:url" content="https://a-to-mind.com/lab/f881-webgpu-wave-interference-spatial-audio-sculptor/">
+<meta property="og:image" content="https://a-to-mind.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://a-to-mind.com/lab/f881-webgpu-wave-interference-spatial-audio-sculptor/">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/lab/lab.css">
+<style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}</style>
+<script src="/visit.js" defer></script>
+</head>
+<body>
+<div id="ui">
+  <strong>F881 Wave Sculptor</strong><br>
+  Click empty space to add source · Drag sources<br>
+  Drag to draw focus rect · Harmonize maximizes |amp| inside<br>
+  <button id="add">Add Source</button>
+  <button id="harm">Harmonize Focus</button>
+  <button id="clear">Clear All</button>
+  <button id="audio">Start Audio</button>
+  <div id="status">Ready · click canvas</div>
+  <div class="focus-hint">Headphones recommended for spatial audio</div>
+</div>
+<canvas id="cv"></canvas>
+<script src="app.js"></script>
+<h1 class="vl-sr">webgpu-wave-interference-spatial-audio-sculptor</h1>
+<footer class="vl-bar"><a href="/lab/">&larr; Lab</a> <a href="/">Ask Verse anything</a> <a class="vl-use" href="/tuner/" data-tool="Tuner">Use it: Tuner</a></footer><script src="/lab/use-it.js" defer></script>
+</body>
+</html>

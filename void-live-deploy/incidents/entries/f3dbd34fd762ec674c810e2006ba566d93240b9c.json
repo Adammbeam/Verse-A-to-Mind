@@ -1,0 +1,16 @@
+{
+ "at": "2026-11-21T21:36:01.439Z",
+ "sha": "f3dbd34fd762ec674c810e2006ba566d93240b9c",
+ "run": "https://github.com/atomeam/void-loop/actions/runs/44949738211",
+ "suite": "browser suite on main",
+ "checks": [
+  "poster wins: on a skill card (phone) the stats chip touches no text, the rarity and collector row included",
+  "suite ran to the end"
+ ],
+ "touched": [
+  "domains/growth-inbox.md"
+ ],
+ "shards": [
+  1
+ ]
+}

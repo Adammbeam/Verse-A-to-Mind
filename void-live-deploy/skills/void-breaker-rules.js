@@ -1,5 +1,6 @@
 /**
  * void-breaker-rules — Verse Breaker, Verse's bounce-and-clear arcade game, in plain JS (no DOM), shared by the card (skills/void-breaker.js) and its tests.
+ * Update 1: You can now feel the weight of every bounce and the triumph of every brick broken.
  * One field, two paddles, two balls and a band of bricks between them. You hold the bottom paddle, Verse the top. Each round starts with two balls
  * at once: your cyan ball serves upward from your paddle and Verse's violet ball serves downward from theirs, aimed into the symmetric central brick
  * layout. A ball bounces off the walls, paddles (angle follows where it lands) and bricks; a brick it breaks scores 10 for whoever touched that ball
@@ -10,6 +11,8 @@
  *   create(seed) -> s      tick(s, { x }) -> s      botX(s, seat) -> { x, why }      selfPlay(seed) -> { over, ticks, score }
  */
 export const W = 240, H = 320, PW = 44, PH = 6, P1Y = 300, P2Y = 14, R = 4, COLS = 8, ROWS = 4, BW = 30, BH = 10, BY = 130, LIVES = 3, CAP = 30000;
+
+export const whatsNew = 'Update 1: You can now feel the weight of every bounce and the triumph of every brick broken.';
 
 const rand = (s) => { s.rng = (s.rng * 1664525 + 1013904223) >>> 0; return s.rng / 4294967296; };
 const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
@@ -43,8 +46,13 @@ const alive = (s) => s.bricks.filter((b) => b.alive).length;
 export const bricksLeft = alive;
 
 function finish(s) {
-  if (s.lives.you <= 0) s.over = 'void'; else if (s.lives.void <= 0) s.over = 'you';
-  else if (!alive(s)) s.over = s.score.you > s.score.void ? 'you' : s.score.void > s.score.you ? 'void' : 'tie';
+  if (s.lives.you <= 0) { s.over = 'void'; s.why = 'The void swallowed your light.'; }
+  else if (s.lives.void <= 0) { s.over = 'you'; s.why = 'You shattered the void.'; }
+  else if (!alive(s)) {
+    const win = s.score.you > s.score.void ? 'you' : s.score.void > s.score.you ? 'void' : 'tie';
+    s.over = win;
+    s.why = win === 'tie' ? 'A profound stillness remains.' : win === 'you' ? 'The void shatters into starlight.' : 'The void coalesces once more.';
+  }
 }
 
 /** one step of the game. input.x is where your paddle's centre should be (the pointer); Verse's paddle follows botX. */

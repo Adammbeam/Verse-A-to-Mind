@@ -1,37 +1,54 @@
+# /terms was never a page (no terms of service has been written, and the archived draft waits for a human seal); the page that says what Verse will and will not do is Event Horizon
+/terms /limits/ 301
+/terms/ /limits/ 301
 # a reading list with no tool opens its Echo Vault entry
 /research /echo-vault/?entry=paper-notes 301
 /research/ /echo-vault/?entry=paper-notes 301
+# a museum of studied sites with no tool opens Echo Vault
+/internet-history /echo-vault/ 301
+/internet-history/ /echo-vault/ 301
 # Verse's redirects (Cloudflare Pages): a floor's own name never 404s - Versus's shopping floor is the store
 /shopping /store/ 301
 # the AI check is a mode of the photo details page (owner, 2026-11-03: one page per category, features fold in as modes)
-/ai-authenticity-checker /photos/details/?mode=ai 301
-/ai-authenticity-checker/ /photos/details/?mode=ai 301
+/ai-authenticity-checker /photos/?tab=info&mode=ai 301
+/ai-authenticity-checker/ /photos/?tab=info&mode=ai 301
 /shopping/ /store/ 301
 # plain names for the photos lane pages (owner, 2026-10-28: plain titles, old URLs kept)
-/photos/batch /photos/?tab=crop 301
-/photos/batch/ /photos/?tab=crop 301
-/photos/editor /photos/?tab=adj 301
-/photos/editor/ /photos/?tab=adj 301
+/photos/batch /photos/?tab=out 301
+/photos/batch/ /photos/?tab=out 301
+/photos/iloveimg /photos/?tab=out 301
+/photos/iloveimg/ /photos/?tab=out 301
+/photos/photopea /photos/?tab=draw 301
+/photos/photopea/ /photos/?tab=draw 301
+/photos/editor /photos/?tab=draw 301
+/photos/editor/ /photos/?tab=draw 301
+/photos/squoosh /photos/?tab=out 301
+/photos/squoosh/ /photos/?tab=out 301
+/photos/tinypng /photos/?tab=out 301
+/photos/tinypng/ /photos/?tab=out 301
+/resize-image /photos/?mode=resize 301
+/resize-image/ /photos/?mode=resize 301
 /photos/compress /photos/?tab=out 301
 /photos/compress/ /photos/?tab=out 301
 /photos/metadata /photos/?tab=info 301
 /photos/metadata/ /photos/?tab=info 301
-# pages once named after other sites (2026-11-25: no other site's name in a public address) open the Verse tool that does the job
-/photos/photopea/* /photos/?tab=adj 301
-/photos/photopea /photos/?tab=adj 301
+# pages once named after other sites, deeper links, and the short-lived /photos/details/ (2026-11-25) open the photos page tab that does the job
+/photos/photopea/* /photos/?tab=draw 301
 /photos/squoosh/* /photos/?tab=out 301
-/photos/squoosh /photos/?tab=out 301
 /photos/tinypng/* /photos/?tab=out 301
-/photos/tinypng /photos/?tab=out 301
-/photos/iloveimg/* /photos/?tab=crop 301
-/photos/iloveimg /photos/?tab=crop 301
+/photos/iloveimg/* /photos/?tab=out 301
 /photos/exifeditor/* /photos/?tab=info 301
-/photos/exifeditor /photos/?tab=info 301
-/photos/exif/* /photos/details/:splat 301
-/photos/exif /photos/details/ 301
+/photos/exif/* /photos/?tab=info 301
+/photos/details /photos/?tab=info 301
+/photos/details/ /photos/?tab=info 301
+/photos/details/* /photos/?tab=info 301
 # the photo details checker by its short name
-/exif /photos/details/ 301
-/exif/ /photos/details/ 301
+/photos/exif /photos/?tab=info 301
+/photos/exif/ /photos/?tab=info 301
+/photos/exifeditor /photos/?tab=info 301
+/photos/exifeditor/ /photos/?tab=info 301
+/exif /photos/?tab=info 301
+/exif/ /photos/?tab=info 301
 # Verse's status page lives on /autopilot/ (combine-pages rule): the plain name opens it
 /status /autopilot/#status 301
 /status/ /autopilot/#status 301
@@ -45,24 +62,28 @@
 /charity/ /creed/give/ 301
 /religion /creed/ 301
 /religion/ /creed/ 301
-/flip /random/coin/ 301
-/flip/ /random/coin/ 301
-/wheel /random/wheel/ 301
-/wheel/ /random/wheel/ 301
-/random-user /random/people/ 301
-/random-user/ /random/people/ 301
-/gradient /color/gradient/ 301
-/gradient/ /color/gradient/ 301
-/base-converter /base64/bases/ 301
-/base-converter/ /base64/bases/ 301
-/password-strength /password/strength/ 301
-/password-strength/ /password/strength/ 301
+/flip /random/?mode=coin 301
+/flip/ /random/?mode=coin 301
+/wheel /random/?mode=wheel 301
+/wheel/ /random/?mode=wheel 301
+/random-user /random/?mode=people 301
+/random-user/ /random/?mode=people 301
+/color/colour-management /color/ 301
+/color/colour-management/ /color/ 301
+/color/gradient /color/?mode=gradient 301
+/color/gradient/ /color/?mode=gradient 301
+/gradient /color/?mode=gradient 301
+/gradient/ /color/?mode=gradient 301
+/base-converter /base64/?mode=bases 301
+/base-converter/ /base64/?mode=bases 301
+/password-strength /password/?mode=strength 301
+/password-strength/ /password/?mode=strength 301
 /one-time-fix /fix/one-time/ 301
 /one-time-fix/ /fix/one-time/ 301
 /full-stack-audit /fix/audit/ 301
 /full-stack-audit/ /fix/audit/ 301
-/sports /scores/sports/ 301
-/sports/ /scores/sports/ 301
+/sports /scores/?mode=sports 301
+/sports/ /scores/?mode=sports 301
 /podcast /podcasts/?show=verse 301
 /podcast/ /podcasts/?show=verse 301
 /convert/unit-converter /convert/ 301
@@ -96,3 +117,66 @@
 /emoji /emojis/ 301
 /emoji/ /emojis/ 301
 /emoji/* /emojis/ 302
+
+# password + base64 family members
+/password/strength /password/?mode=strength 301
+/password/strength/ /password/?mode=strength 301
+/base64/bases /base64/?mode=bases 301
+/base64/bases/ /base64/?mode=bases 301
+
+# scores + calculator family members
+/scores/sports /scores/?mode=sports 301
+/scores/sports/ /scores/?mode=sports 301
+/calculators /calculator/?mode=formulas 301
+/calculators/ /calculator/?mode=formulas 301
+
+# random + markets family members
+/random/coin /random/?mode=coin 301
+/random/coin/ /random/?mode=coin 301
+/random/wheel /random/?mode=wheel 301
+/random/wheel/ /random/?mode=wheel 301
+/random/people /random/?mode=people 301
+/random/people/ /random/?mode=people 301
+/markets/caps /markets/?mode=caps 301
+/markets/caps/ /markets/?mode=caps 301
+/markets/screener /markets/?mode=screener 301
+/markets/screener/ /markets/?mode=screener 301
+/news/global-headlines /news/?sec=world 301
+/news/global-headlines/ /news/?sec=world 301
+/emoji-combos/emoji-dictionary /emoji-combos/ 301
+/emoji-combos/emoji-dictionary/ /emoji-combos/ 301
+# /rival/ and /compare/ moved into Versus: lib/versus-moved.js answers them (it keeps the query; this file would drop it)
+# a reading list with no tool opens its Echo Vault entry
+/reading-list /echo-vault/?entry=paper-notes 301
+/reading-list/ /echo-vault/?entry=paper-notes 301
+
+# standard searchable names for tools (owner, 2026-11-20: call tools by the names people already search)
+/image-resizer /photos/?mode=resize 301
+/image-resizer/ /photos/?mode=resize 301
+/color-picker /color/ 301
+/color-picker/ /color/ 301
+/pdf-editor /pdf/ 301
+/pdf-editor/ /pdf/ 301
+/unit-converter /convert/ 301
+/unit-converter/ /convert/ 301
+/password-generator /password/ 301
+/password-generator/ /password/ 301
+/random-number-generator /random/ 301
+/random-number-generator/ /random/ 301
+/random-user-generator /random/?mode=people 301
+/random-user-generator/ /random/?mode=people 301
+/photo-editor /photos/ 301
+/photo-editor/ /photos/ 301
+/word-counter /word-count/ 301
+/word-counter/ /word-count/ 301
+/file-converter /converter/ 301
+/file-converter/ /converter/ 301
+/rap-generator /rap/ 301
+/rap-generator/ /rap/ 301
+/videos /films/ 301
+/videos/ /films/ 301
+# standard name for Starboard
+/dashboard /starboard/ 301
+/dashboard/ /starboard/ 301
+/games /arcade/ 301
+/games/ /arcade/ 301

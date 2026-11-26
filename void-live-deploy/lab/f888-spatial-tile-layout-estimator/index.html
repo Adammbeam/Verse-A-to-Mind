@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<style>
+:root { --bg:#0f1419; --card:#1a2332; --accent:#4fd1c5; --text:#e2e8f0; --muted:#94a3b8; --warn:#f59e0b; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: system-ui, -apple-system, sans-serif; background:var(--bg); color:var(--text); line-height:1.4; }
+header { padding:1rem; text-align:center; border-bottom:1px solid #2d3748; }
+h1 { margin:0; font-size:1.4rem; }
+.sub { color:var(--muted); font-size:0.9rem; }
+.controls { display:flex; flex-wrap:wrap; gap:0.75rem; padding:1rem; background:var(--card); }
+label { display:flex; flex-direction:column; font-size:0.8rem; color:var(--muted); gap:0.25rem; }
+input, select, button { padding:0.5rem; border-radius:6px; border:1px solid #4a5568; background:#2d3748; color:var(--text); font-size:1rem; }
+button { background:var(--accent); color:#0f1419; border:none; cursor:pointer; font-weight:600; }
+button.secondary { background:#4a5568; color:var(--text); }
+.rooms { padding:0 1rem; display:flex; flex-wrap:wrap; gap:0.5rem; }
+.room-card { background:var(--card); padding:0.5rem; border-radius:8px; font-size:0.85rem; display:flex; align-items:center; gap:0.5rem; }
+.canvas-wrap { position:relative; margin:1rem; border:1px solid #2d3748; border-radius:8px; overflow:hidden; background:#111827; }
+canvas { display:block; width:100%; height:auto; touch-action:none; cursor:grab; }
+canvas:active { cursor:grabbing; }
+.summary { padding:1rem; background:var(--card); margin:1rem; border-radius:8px; }
+.totals { font-size:1.1rem; font-weight:600; color:var(--accent); }
+.actions { display:flex; flex-wrap:wrap; gap:0.5rem; padding:0 1rem 1rem; }
+.note { font-size:0.75rem; color:var(--muted); padding:0 1rem 1rem; }
+.warn { color:var(--warn); }
+@media (max-width:600px) { .controls { flex-direction:column; } }
+</style>
+<meta name="verse-handoff" content="in: none; out: none">
+<title>Spatial Tile Layout Estimator · Verse lab</title>
+<meta name="description" content="Job: Enter room sizes and tile dimensions; drag the rooms around on a canvas to plan the layout; see live tile counts with waste percentage.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Verse">
+<meta property="og:title" content="Spatial Tile Layout Estimator · Verse lab">
+<meta property="og:description" content="Job: Enter room sizes and tile dimensions; drag the rooms around on a canvas to plan the layout; see live tile counts with waste percentage.">
+<meta property="og:url" content="https://a-to-mind.com/lab/f888-spatial-tile-layout-estimator/">
+<meta property="og:image" content="https://a-to-mind.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://a-to-mind.com/lab/f888-spatial-tile-layout-estimator/">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/lab/lab.css">
+<style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}</style>
+<script src="/visit.js" defer></script>
+</head>
+<body>
+<header>
+  <h1>Spatial Tile Layout Estimator</h1>
+  <div class="sub">Drag rooms to plan · live tile counts · download plan & list</div>
+</header>
+
+<div class="controls">
+  <label>Units
+    <select id="units"><option value="ft">Feet</option><option value="m">Metres</option></select>
+  </label>
+  <label>Tile width <input type="number" id="tileW" value="12" min="1" step="0.1"></label>
+  <label>Tile length <input type="number" id="tileL" value="12" min="1" step="0.1"></label>
+  <label>Waste % <input type="number" id="waste" value="10" min="0" max="50" step="1"></label>
+  <button id="addRoom">Add room</button>
+</div>
+
+<div class="rooms" id="roomList"></div>
+
+<div class="canvas-wrap">
+  <canvas id="c" width="800" height="500"></canvas>
+</div>
+
+<div class="summary">
+  <div class="totals" id="totals">Add rooms to see totals</div>
+  <div id="details"></div>
+</div>
+
+<div class="actions">
+  <button id="png">Download layout PNG</button>
+  <button id="csv" class="secondary">Download CSV</button>
+  <button id="copy" class="secondary">Copy summary</button>
+  <button id="clear" class="secondary">Clear all</button>
+</div>
+
+<div class="note">
+  Rectangles only. Tiles calculated as ceil(room area / tile area × (1 + waste%)). Waste covers cuts and breakage (typical 10–15%). No doors or obstacles modelled. Saved on this device.
+</div>
+
+<script src="app.js"></script>
+<footer class="vl-bar"><a href="/lab/">&larr; Lab</a> <a href="/">Ask Verse anything</a></footer>
+</body>
+</html>

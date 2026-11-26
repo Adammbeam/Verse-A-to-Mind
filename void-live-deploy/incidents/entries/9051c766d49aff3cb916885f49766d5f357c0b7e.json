@@ -1,0 +1,27 @@
+{
+ "at": "2026-11-23T06:29:28.769Z",
+ "sha": "9051c766d49aff3cb916885f49766d5f357c0b7e",
+ "run": "https://github.com/atomeam/void-loop/actions/runs/45120456164",
+ "suite": "browser suite on main",
+ "checks": [
+  "poster wins: on a skill card (phone) the stats chip touches no text, the rarity and collector row included",
+  "suite ran to the end",
+  "stage extras success pulse: a skill the last status check could not load and this one can makes a green pulse on the stage; the failure list is then empty",
+  "will: Verse says what it wants",
+  "store: an ask a product covers gets Verse's answer first, then one line (product, live price, link) from the live catalog; new store products are found",
+  "catalog: first read pulls the live store (all 7 products, tiered Verse Monthly = $49 a month) and saves it",
+  "coin: /flip/ shows all 7 things a full answer shows — the flip counter named, the tap and the result said in words (the gate's own rule, the 3 the tower sat at 4 of 7 on)",
+  "status: \"void status\" shows every skill loading, the browser checks, and the sources as they answer: both Open-Meteo services and Wikipedia up, Frankfurter answering 503, the blocked rest unreachable; nothing left in storage",
+  "one side card per lifted board: a move made while the 3D board loads leaves exactly one side card on the stage, and it carries the move, not the empty first state"
+ ],
+ "touched": [
+  "domains/void.agents.log.md",
+  "tools/bench.json",
+  "tools/card-cycle.json",
+  "tools/grow-self.state.json",
+  "void-live-deploy/void.growth.json"
+ ],
+ "shards": [
+  1
+ ]
+}

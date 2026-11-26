@@ -1,0 +1,854 @@
+{
+ "site": "iamrapid.com",
+ "url": "https://iamrapid.com/tools/repair-3d-file/",
+ "scanned": "2026-11-22",
+ "status": 200,
+ "assets": [
+  {
+   "f": "cdnjs.cloudflare.com/animate.min.css",
+   "t": "css",
+   "b": 71750,
+   "ext": true
+  },
+  {
+   "f": "cdnjs.cloudflare.com/noty.min.css",
+   "t": "css",
+   "b": 15649,
+   "ext": true
+  },
+  {
+   "f": "cdnjs.cloudflare.com/noty.min.js",
+   "t": "js",
+   "b": 30991,
+   "ext": true
+  },
+  {
+   "f": "embed.tawk.to/default",
+   "t": "js",
+   "b": 1157,
+   "ext": true
+  },
+  {
+   "f": "embed.tawk.to/branding-widget.css",
+   "t": "css",
+   "b": 18327,
+   "ext": true
+  },
+  {
+   "f": "embed.tawk.to/bubble-widget.css",
+   "t": "css",
+   "b": 21430,
+   "ext": true
+  },
+  {
+   "f": "embed.tawk.to/message-preview.css",
+   "t": "css",
+   "b": 40136,
+   "ext": true
+  },
+  {
+   "f": "embed.tawk.to/min-widget.css",
+   "t": "css",
+   "b": 23756,
+   "ext": true
+  },
+  {
+   "f": "embed.tawk.to/twk-BrandingWidget-Ch7CGNp6.js",
+   "t": "js",
+   "b": 3980,
+   "ext": true
+  },
+  {
+   "f": "embed.tawk.to/twk-BubbleWidget-DN1A4gsj.js",
+   "t": "js",
+   "b": 10534,
+   "ext": true
+  },
+  {
+   "f": "embed.tawk.to/twk-MessagePreview-71JM7paz.js",
+   "t": "js",
+   "b": 13078,
+   "ext": true
+  },
+  {
+   "f": "embed.tawk.to/twk-MinWidget-CAwDL-zr.js",
+   "t": "js",
+   "b": 12408,
+   "ext": true
+  },
+  {
+   "f": "embed.tawk.to/twk-branding-pin-Dt9lQEFz.js",
+   "t": "js",
+   "b": 1998,
+   "ext": true
+  },
+  {
+   "f": "embed.tawk.to/twk-iframe-styles-s81g3FN1.js",
+   "t": "js",
+   "b": 9615,
+   "ext": true
+  },
+  {
+   "f": "embed.tawk.to/twk-main.js",
+   "t": "js",
+   "b": 344828,
+   "ext": true
+  },
+  {
+   "f": "embed.tawk.to/twk-message-format-DKJXm_pH.js",
+   "t": "js",
+   "b": 4539,
+   "ext": true
+  },
+  {
+   "f": "embed.tawk.to/twk-messenger-components.es-BucRPcgF.js",
+   "t": "js",
+   "b": 227151,
+   "ext": true
+  },
+  {
+   "f": "googleads.g.doubleclick.net/",
+   "t": "js",
+   "b": 6645,
+   "ext": true
+  },
+  {
+   "f": "bootstrap.min.css",
+   "t": "css",
+   "b": 14964,
+   "map": true
+  },
+  {
+   "f": "footer-component.js",
+   "t": "js",
+   "b": 6133
+  },
+  {
+   "f": "footer.css",
+   "t": "css",
+   "b": 13352,
+   "map": true
+  },
+  {
+   "f": "header-component.js",
+   "t": "js",
+   "b": 14190
+  },
+  {
+   "f": "header.css",
+   "t": "css",
+   "b": 60033
+  },
+  {
+   "f": "instant-online-quotes.css",
+   "t": "css",
+   "b": 53681
+  },
+  {
+   "f": "tools-modal-viewer.js",
+   "t": "js",
+   "b": 86092
+  },
+  {
+   "f": "downloads.css",
+   "t": "css",
+   "b": 4699
+  },
+  {
+   "f": "quote-cta.js",
+   "t": "js",
+   "b": 4824
+  },
+  {
+   "f": "tool-handoff.js",
+   "t": "js",
+   "b": 2390
+  },
+  {
+   "f": "repair-3d-engine.js",
+   "t": "js",
+   "b": 41491
+  },
+  {
+   "f": "repair-3d-file-utils.js",
+   "t": "js",
+   "b": 48438
+  },
+  {
+   "f": "repair-3d-file.css",
+   "t": "css",
+   "b": 26662
+  },
+  {
+   "f": "repair-3d-ui.js",
+   "t": "js",
+   "b": 18784
+  },
+  {
+   "f": "stl-viewer-figma.css",
+   "t": "css",
+   "b": 16251
+  },
+  {
+   "f": "tool-page.css",
+   "t": "css",
+   "b": 4375
+  },
+  {
+   "f": "tools.css",
+   "t": "css",
+   "b": 18958
+  },
+  {
+   "f": "scripts.clarity.ms/clarity.js",
+   "t": "js",
+   "b": 73892,
+   "ext": true
+  },
+  {
+   "f": "www.clarity.ms/w6v2a88bk4",
+   "t": "js",
+   "b": 726,
+   "ext": true
+  },
+  {
+   "f": "www.googletagmanager.com/js",
+   "t": "js",
+   "b": 497743,
+   "ext": true
+  },
+  {
+   "f": "www.googletagmanager.com/js",
+   "t": "js",
+   "b": 556451,
+   "ext": true
+  },
+  {
+   "f": "www.googletagmanager.com/gtm.js",
+   "t": "js",
+   "b": 471373,
+   "ext": true
+  }
+ ],
+ "assetCount": 40,
+ "bytes": 2893474,
+ "html": {
+  "mobile": {
+   "title": "STL Fixer & STL Repair Online: Free Mesh",
+   "lang": "en",
+   "manifest": null,
+   "canonical": true,
+   "share": {
+    "og": 8,
+    "twitter": true,
+    "themeColor": false,
+    "appleCapable": false
+   },
+   "iframes": [
+    "www.googletagmanager.com"
+   ],
+   "accepts": [
+    ".stl,.obj",
+    ".stl"
+   ],
+   "inputTypes": {
+    "checkbox": 1,
+    "file": 2,
+    "number": 1,
+    "text": 1
+   },
+   "forms": 1,
+   "details": 1,
+   "ariaLabels": [
+    "Breadcrumb",
+    "Dismiss message",
+    "STL Viewer",
+    "Toggle Pan Mode",
+    "[token]"
+   ],
+   "roles": {
+    "dialog": 1
+   },
+   "noscript": true
+  },
+  "desktop": {}
+ },
+ "controls": [
+  {
+   "l": "3D Printing Cost Guide",
+   "w": "md"
+  },
+  {
+   "l": "3D Printing Services",
+   "w": "md"
+  },
+  {
+   "l": "Aerospace",
+   "w": "md"
+  },
+  {
+   "l": "Auto-repair after analysis",
+   "w": "md"
+  },
+  {
+   "l": "Automotive",
+   "w": "md"
+  },
+  {
+   "l": "Bangalore",
+   "w": "md"
+  },
+  {
+   "l": "Case Study",
+   "w": "md"
+  },
+  {
+   "l": "Company",
+   "w": "md"
+  },
+  {
+   "l": "Consumer electronics",
+   "w": "md"
+  },
+  {
+   "l": "Contact Us",
+   "w": "md"
+  },
+  {
+   "l": "DMLS",
+   "w": "md"
+  },
+  {
+   "l": "DMLS Materials",
+   "w": "md"
+  },
+  {
+   "l": "Delhi",
+   "w": "md"
+  },
+  {
+   "l": "FDM",
+   "w": "md"
+  },
+  {
+   "l": "FDM Materials",
+   "w": "md"
+  },
+  {
+   "l": "Get Quote",
+   "w": "md"
+  },
+  {
+   "l": "Guides",
+   "w": "md"
+  },
+  {
+   "l": "Home",
+   "w": "md"
+  },
+  {
+   "l": "How it works",
+   "w": "md"
+  },
+  {
+   "l": "Industries",
+   "w": "md"
+  },
+  {
+   "l": "Instant Quotation",
+   "w": "md"
+  },
+  {
+   "l": "Jewellery",
+   "w": "md"
+  },
+  {
+   "l": "Knowledge Hub",
+   "w": "md"
+  },
+  {
+   "l": "Locations",
+   "w": "md"
+  },
+  {
+   "l": "Login",
+   "w": "d"
+  },
+  {
+   "l": "MJF",
+   "w": "md"
+  },
+  {
+   "l": "MJF Materials",
+   "w": "md"
+  },
+  {
+   "l": "Materials",
+   "w": "md"
+  },
+  {
+   "l": "Medical and dental",
+   "w": "md"
+  },
+  {
+   "l": "Noida (NCR)",
+   "w": "md"
+  },
+  {
+   "l": "Other Locations",
+   "w": "md"
+  },
+  {
+   "l": "Polyjet",
+   "w": "md"
+  },
+  {
+   "l": "Polyjet Materials",
+   "w": "md"
+  },
+  {
+   "l": "Pricing",
+   "w": "md"
+  },
+  {
+   "l": "Privacy Policy",
+   "w": "md"
+  },
+  {
+   "l": "Pune",
+   "w": "md"
+  },
+  {
+   "l": "Resources",
+   "w": "md"
+  },
+  {
+   "l": "Robotics and Automation",
+   "w": "md"
+  },
+  {
+   "l": "SLA",
+   "w": "md"
+  },
+  {
+   "l": "SLA Materials",
+   "w": "md"
+  },
+  {
+   "l": "SLS",
+   "w": "md"
+  },
+  {
+   "l": "SLS Materials",
+   "w": "md"
+  },
+  {
+   "l": "Subscribe",
+   "w": "md"
+  },
+  {
+   "l": "Terms & Conditions",
+   "w": "md"
+  },
+  {
+   "l": "Tools",
+   "w": "md"
+  },
+  {
+   "l": "Try a sample broken STL",
+   "w": "md"
+  }
+ ],
+ "robots": {
+  "disallow": [
+   "/agent/",
+   "/blog/",
+   "/www.iamrpaid.com/",
+   "/www.iamrapid.com/",
+   "/www.rapidfabos.com/"
+  ],
+  "sitemaps": [
+   "https://iamrapid.com/sitemap.xml"
+  ],
+  "crawlDelay": null
+ },
+ "sitemap": {
+  "urls": 136,
+  "index": false,
+  "sections": [
+   {
+    "s": "materials",
+    "n": 36
+   },
+   {
+    "s": "knowledge-hub",
+    "n": 34
+   },
+   {
+    "s": "tools",
+    "n": 12
+   },
+   {
+    "s": "case-study",
+    "n": 10
+   },
+   {
+    "s": "3d-printing-services",
+    "n": 8
+   },
+   {
+    "s": "industries",
+    "n": 7
+   },
+   {
+    "s": "guides",
+    "n": 4
+   },
+   {
+    "s": "/",
+    "n": 1
+   },
+   {
+    "s": "[token]",
+    "n": 1
+   },
+   {
+    "s": "[token]",
+    "n": 1
+   },
+   {
+    "s": "3d-printing-services-in-chenna",
+    "n": 1
+   },
+   {
+    "s": "[token]",
+    "n": 1
+   },
+   {
+    "s": "3d-printing-services-in-delhi",
+    "n": 1
+   },
+   {
+    "s": "3d-printing-services-in-gurgao",
+    "n": 1
+   },
+   {
+    "s": "[token]",
+    "n": 1
+   }
+  ],
+  "langs": []
+ },
+ "code": [
+  {
+   "file": "bootstrap.min.css",
+   "own": true,
+   "apis": [
+    "Respects the reduced-motion setting"
+   ],
+   "media": [
+    "reduced"
+   ]
+  },
+  {
+   "file": "tools-modal-viewer.js",
+   "own": true,
+   "keys": [
+    "Escape@79746"
+   ],
+   "downloads": [
+    "thumbnail.png@32177",
+    "volume-report-parts.csv@46551"
+   ],
+   "blobTypes": [
+    "image/png@31778"
+   ],
+   "apis": [
+    "Background worker threads",
+    "Full screen mode"
+   ],
+   "mimes": [
+    "image/png"
+   ],
+   "keydownHandlers": 1
+  },
+  {
+   "file": "repair-3d-ui.js",
+   "own": true,
+   "apis": [
+    "Drag and drop files or items"
+   ]
+  },
+  {
+   "file": "tools.css",
+   "own": true,
+   "apis": [
+    "Respects the reduced-motion setting"
+   ],
+   "media": [
+    "reduced"
+   ]
+  }
+ ],
+ "hosts": [
+  {
+   "host": "apitest.iamrapid.com",
+   "file": "footer-component.js",
+   "at": 4431
+  },
+  {
+   "host": "cdn.jsdelivr.net",
+   "file": "tools-modal-viewer.js",
+   "at": 19443
+  },
+  {
+   "host": "cdnjs.cloudflare.com",
+   "file": "tools-modal-viewer.js",
+   "at": 19265
+  },
+  {
+   "host": "getbootstrap.com",
+   "file": "bootstrap.min.css",
+   "at": 43
+  },
+  {
+   "host": "storefront.iamrapid.com",
+   "file": "header-component.js",
+   "at": 456
+  }
+ ],
+ "thirdParty": [
+  "ad.doubleclick.net",
+  "cdn.jsdelivr.net",
+  "cdnjs.cloudflare.com",
+  "embed.tawk.to",
+  "getbootstrap.com",
+  "googleads.g.doubleclick.net",
+  "o.clarity.ms",
+  "r.clarity.ms",
+  "scripts.clarity.ms",
+  "va.tawk.to",
+  "www.clarity.ms",
+  "www.google-analytics.com",
+  "www.google.com",
+  "www.googletagmanager.com"
+ ],
+ "services": [
+  "Ads",
+  "Chat widget",
+  "Cloudflare",
+  "Google Analytics",
+  "Product analytics"
+ ],
+ "requests": [
+  "https://ad.doubleclick.net/ccm/s/collect?auid&fmt&gtm",
+  "https://embed.tawk.[token].json",
+  "https://o.clarity.ms/collect",
+  "https://r.clarity.ms/collect",
+  "https://va.tawk.to/v1/session/start",
+  "https://va.tawk.to/v1/widget-settings?propertyId&sv&widgetId",
+  "https://www.google-analytics.com/g/collect?_ee&_fv&_nsi&_p&_s&_ss&cid&dl",
+  "https://www.google.com/ccm/collect?ae&apvc&auid&dl&dma&dt&en&ep.ads_data_redaction",
+  "https://www.google.com/ccm/collect?apvc&auid&dl&dma&dt&en&fmt&frm"
+ ],
+ "websockets": [
+  "wss://vsb136.tawk.to/s/?EIO&__t&asver&cver&k&pop&tkn&transport",
+  "wss://vsb70.tawk.to/s/?EIO&__t&asver&cver&k&pop&tkn&transport"
+ ],
+ "storage": {
+  "local": [
+   "[token]",
+   "_gcl_ls",
+   "twk_5b7e9777afc2c34e96e7d3b4"
+  ],
+  "session": [
+   "_cltk",
+   "previousNav"
+  ],
+  "idb": [
+   "iamrapid-tools-launch-db"
+  ]
+ },
+ "candidates": [
+  {
+   "name": "Drag and drop files or items",
+   "kind": "import",
+   "tag": "read",
+   "evidence": "repair-3d-ui.js@17420"
+  },
+  {
+   "name": "Opens files: .stl",
+   "kind": "import",
+   "tag": "observed",
+   "evidence": "input[type=file][accept]"
+  },
+  {
+   "name": "Opens files: .stl,.obj",
+   "kind": "import",
+   "tag": "observed",
+   "evidence": "input[type=file][accept]"
+  },
+  {
+   "name": "Exports a file named like thumbnail.png",
+   "kind": "export",
+   "tag": "read",
+   "evidence": "tools-modal-viewer.js@32177"
+  },
+  {
+   "name": "Exports a file named like volume-report-parts.csv",
+   "kind": "export",
+   "tag": "read",
+   "evidence": "tools-modal-viewer.js@46551"
+  },
+  {
+   "name": "Exports as image/png",
+   "kind": "export",
+   "tag": "read",
+   "evidence": "tools-modal-viewer.js@31778"
+  },
+  {
+   "name": "Embeds www.googletagmanager.com",
+   "kind": "embed",
+   "tag": "observed",
+   "evidence": "iframe"
+  },
+  {
+   "name": "API call va.tawk.to/v1/session/start",
+   "kind": "api",
+   "tag": "observed",
+   "evidence": "network"
+  },
+  {
+   "name": "API call va.tawk.to/v1/widget-settings?propertyId&sv&widgetId",
+   "kind": "api",
+   "tag": "observed",
+   "evidence": "network"
+  },
+  {
+   "name": "Full screen mode",
+   "kind": "setting",
+   "tag": "read",
+   "evidence": "tools-modal-viewer.js@81348"
+  },
+  {
+   "name": "Input of type number",
+   "kind": "input",
+   "tag": "observed",
+   "evidence": "input[type=number] x1"
+  },
+  {
+   "name": "Keeps a database in the browser: iamrapid-tools-launch-db",
+   "kind": "storage",
+   "tag": "observed",
+   "evidence": "indexedDB"
+  },
+  {
+   "name": "Remembers a setting in the browser: [token]",
+   "kind": "storage",
+   "tag": "observed",
+   "evidence": "localStorage"
+  },
+  {
+   "name": "Remembers a setting in the browser: _gcl_ls",
+   "kind": "storage",
+   "tag": "observed",
+   "evidence": "localStorage"
+  },
+  {
+   "name": "Remembers a setting in the browser: twk_5b7e9777afc2c34e96e7d3b4",
+   "kind": "storage",
+   "tag": "observed",
+   "evidence": "localStorage"
+  },
+  {
+   "name": "Background worker threads",
+   "kind": "service",
+   "tag": "read",
+   "evidence": "tools-modal-viewer.js@68937"
+  },
+  {
+   "name": "Live updates over a WebSocket",
+   "kind": "service",
+   "tag": "observed",
+   "evidence": "wss://vsb136.tawk.to/s/?EIO&__t&asver&cver&k&pop&tkn&transport"
+  },
+  {
+   "name": "Respects the reduced-motion setting",
+   "kind": "a11y",
+   "tag": "read",
+   "evidence": "bootstrap.min.css@3948"
+  },
+  {
+   "name": "Path kept from crawlers /agent/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /blog/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /www.iamrapid.com/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /www.iamrpaid.com/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /www.rapidfabos.com/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Section /3d-printing-services/ (8 pages)",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "sitemap.xml"
+  },
+  {
+   "name": "Section /case-study/ (10 pages)",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "sitemap.xml"
+  },
+  {
+   "name": "Section /guides/ (4 pages)",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "sitemap.xml"
+  },
+  {
+   "name": "Section /industries/ (7 pages)",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "sitemap.xml"
+  },
+  {
+   "name": "Section /knowledge-hub/ (34 pages)",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "sitemap.xml"
+  },
+  {
+   "name": "Section /materials/ (36 pages)",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "sitemap.xml"
+  },
+  {
+   "name": "Section /tools/ (12 pages)",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "sitemap.xml"
+  }
+ ]
+}

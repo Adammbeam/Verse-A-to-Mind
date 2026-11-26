@@ -1,17 +1,12 @@
-# Free-agent clock: hourly, UTC midnight, 07:02 and 08:02 UTC, and the 1st. Status codes only, never a key.
+# Free-agent clock. Dispatched once an hour by grow-clock.yml (2026-11-24): its own GitHub schedule was throttled for hours at a time.
+# The dispatch keeps this workflow's actions/cache state, so cap/park/drop survive between runs. Status codes only, never a key.
 name: Recruit free agents
 
 on:
-  schedule:
-    - cron: '5 * * * *'
-    - cron: '2 0 * * *'
-    - cron: '2 7 * * *'
-    - cron: '2 8 * * *'
-    - cron: '2 0 1 * *'
   workflow_dispatch:
     inputs:
       source:
-        description: Backup only. The schedule does not read this and does not wait on it.
+        description: Backup only. Kept so a hand run can still ask; the clock does not read it.
         type: string
         default: ''
 concurrency:

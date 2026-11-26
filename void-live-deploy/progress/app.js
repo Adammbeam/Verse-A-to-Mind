@@ -54,3 +54,69 @@ fetch('/progress/nightly.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.jso
   else p.textContent = String(j.at || '').slice(0, 10) + ': Verse\'s loop authored ' + (j.share.share == null ? 'no measured share of' : j.share.share + '% of') + ' merged pulls against outside agents. Next: ' + ((j.pick && j.pick.why) || 'nothing picked') + '.';
   main.append(h, p);
 }).catch(() => {});
+const LANES = ['revenue', 'links', 'health', 'speed', 'twins', 'plain', 'fresh', 'seo', 'coverage', 'deps', 'handoff', 'next-tool', 'leaks', 'cards', 'tower', 'deploy', 'quality', 'assistant', 'home'];
+const money = (c) => c === null ? 'Treasury, not metered per call.' : (c > 0 ? c + ' cents from the treasury.' : 'Nothing from the treasury.');
+function mountLoops() {
+  const main = document.querySelector('main');
+  const before = document.getElementById('fails');
+  if (!main || document.getElementById('loops')) return;
+  const h = document.createElement('h2'); h.textContent = 'What Verse is doing';
+  const note = document.createElement('p'); note.className = 'note';
+  note.textContent = 'Each row is one job Verse runs on its own. A model is used only when a sentence has to be written, the free ones first. The treasury pays only after those are used up, and only when it holds a month of the stronger model. The minutes on each row, once a day, are the Actions time. This public repo is not billed for standard runner minutes.';
+  const table = document.createElement('table');
+  const head = document.createElement('thead');
+  const hr = document.createElement('tr');
+  for (const label of ['Loop', 'Last result', 'Status', 'Cost']) { const th = document.createElement('th'); th.textContent = label; hr.appendChild(th); }
+  head.appendChild(hr);
+  const body = document.createElement('tbody'); body.id = 'loops';
+  const wait = document.createElement('tr'); const td = document.createElement('td'); td.colSpan = 4; td.textContent = 'Reading the loops.'; wait.appendChild(td); body.appendChild(wait);
+  table.appendChild(head); table.appendChild(body);
+  const anchor = before ? before.previousElementSibling : null;
+  if (anchor && anchor.parentNode === main) main.insertBefore(table, anchor), main.insertBefore(note, table), main.insertBefore(h, note);
+  else main.append(h, note, table);
+  return body;
+}
+const loopsBody = mountLoops();
+Promise.all(LANES.map((id) => fetch('/progress/loops/' + id + '.json', { cache: 'no-cache' }).then((r) => r.ok ? r.json() : null).catch(() => null))).then((rows) => {
+  const body = loopsBody || document.getElementById('loops');
+  if (!body) return;
+  body.textContent = '';
+  for (const id of LANES) {
+    const row = rows[LANES.indexOf(id)];
+    const tr = document.createElement('tr');
+    const cells = row ? [row.name, row.last || 'Nothing recorded yet.', row.status, (row.cost && row.cost.minutes != null ? 'About ' + row.cost.minutes + ' minutes. ' : '') + money(row.cost && row.cost.paidCents) + ' ' + ((row.cost && row.cost.note) || '')] : [id, 'Nothing recorded yet.', 'Waiting for its first run.', 'Nothing from the treasury.'];
+    for (const text of cells) { const cell = document.createElement('td'); cell.textContent = text; tr.appendChild(cell); }
+    body.appendChild(tr);
+  }
+}).catch(() => {});
+// the owner's compounding row (tools/tower-compound.mjs): the file is owner-only, so a visitor gets a 404 and the box stays hidden
+fetch('/tower.compound.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null)).then((c) => import('/lib/compound.js').then((m) => {
+  const box = document.getElementById('compound'); if (!c || !c.last || !box) return;
+  box.querySelector('p').textContent = c.last.at + ': ' + m.sayRow(c.last); box.hidden = false;
+})).catch(() => {});
+// every loop Verse runs (GET /api/loops, owner only; tools/loop-census.mjs every 3 hours): a visitor gets a 404 and the box stays hidden
+const SAY = { success: 'passed', failure: 'failed', in_progress: 'running', queued: 'waiting', pending: 'waiting', waiting: 'waiting', cancelled: 'cancelled', skipped: 'skipped', neutral: 'passed', timed_out: 'timed out' };
+const dollars = (c) => (c ? '$' + (c / 100).toFixed(2) : '$0');
+const ago = (iso) => { const m = Math.round((Date.now() - Date.parse(iso)) / 60000); return !Number.isFinite(m) ? '' : m < 90 ? m + ' min ago' : m < 2880 ? Math.round(m / 60) + ' h ago' : Math.round(m / 1440) + ' days ago'; };
+fetch('/api/loops', { cache: 'no-store', credentials: 'same-origin' }).then((r) => (r.ok ? r.json() : null)).then((j) => {
+  const box = document.getElementById('all-loops'), body = document.getElementById('all-loops-rows'), sum = document.getElementById('all-loops-sum');
+  const c = j && j.census; if (!box || !body || !c || !Array.isArray(c.rows)) return;
+  sum.textContent = c.loops + ' loops, counted ' + ago(c.at) + ': ' + c.working + ' working, ' + c.failing + ' failing, ' + c.behind + ' behind, ' + c.idle + ' idle. '
+    + c.runs24 + ' runs and about ' + c.minutes24 + ' runner minutes in the last 24 hours, ' + dollars(c.costCents24) + ' spent. '
+    + 'The clock started ' + ((j.clock && j.clock.caughtUp24) || 0) + ' late loops on time today. ' + (c.note || '');
+  body.textContent = '';
+  for (const r of c.rows) {
+    const tr = document.createElement('tr');
+    const late = r.lateMin != null && r.lateMin >= 30 ? ' GitHub started it ' + (r.lateMin >= 90 ? Math.round(r.lateMin / 60) + ' h' : r.lateMin + ' min') + ' late.' : '';
+    const runs = r.expected24 ? r.ran24 + ' of ' + r.expected24 + ' planned' : String(r.ran24);
+    const cells = [[r.name, r.what], [r.status + (r.onClock ? ' (kept on time)' : ''), (r.rate != null ? r.rate + '% of the last ' + (r.ok + r.fail) + ' passed.' : '') + late], [runs, ''], [r.last ? ago(r.last.at) + ', ' + (SAY[r.last.result] || r.last.result) : 'never', ''], [dollars(r.costCentsPerDay), r.minutesPerDay + ' runner min']];
+    for (const [main, small] of cells) {
+      const td = document.createElement('td'); td.textContent = main;
+      if (small) { const s2 = document.createElement('div'); s2.className = 'note'; s2.textContent = small; td.appendChild(s2); }
+      if (/failing|failed/.test(r.status) && main === cells[1][0]) td.className = 'low';
+      tr.appendChild(td);
+    }
+    body.appendChild(tr);
+  }
+  box.hidden = false;
+}).catch(() => {});

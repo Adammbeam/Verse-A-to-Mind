@@ -1,0 +1,30 @@
+{
+ "at": "2026-11-23T17:41:45.866Z",
+ "sha": "8fc6c434b5c06ad1706ade5586b95806dc903e87",
+ "run": "https://github.com/atomeam/void-loop/actions/runs/45223270513",
+ "suite": "browser suite on main",
+ "checks": [
+  "the fix pages: the hub lists every error page; each loads with its steps, sources, live price and Gumroad link, fits a phone, and \"Ask Verse\" lands on the fixer",
+  "poster wins: on a skill card (phone) the stats chip touches no text, the rarity and collector row included",
+  "the book: \"open the book\" dims the stage and fills it with the book, no card and no menu behind it: the cover swings open to the title page alone on the right (folio 1), black glass set in a serif, a prompt along the foot (Turn page / Esc), and as many skill pages as skills/index.json has skills",
+  "the book: the index at the back lists every skill with its page (and every boxed game by its box name), and its Clock entry lands on the clock page: the running heads (the title on the left, the chapter on the right), the name, one line, asks as lines of ink, a rating and its number in its chapter, no picture",
+  "will: Verse says what it wants",
+  "store: an ask a product covers gets Verse's answer first, then one line (product, live price, link) from the live catalog; new store products are found",
+  "catalog: first read pulls the live store (all 7 products, tiered Verse Monthly = $49 a month) and saves it",
+  "coin: /flip/ shows all 7 things a full answer shows — the flip counter named, the tap and the result said in words (the gate's own rule, the 3 the tower sat at 4 of 7 on)",
+  "suite ran to the end"
+ ],
+ "touched": [
+  "domains/growth-inbox.md",
+  "tools/handoff-confidence.test.mjs",
+  "void-live-deploy/skills/index.json",
+  "void-live-deploy/skills/order/12100-handoff-confidence"
+ ],
+ "shards": [
+  1,
+  3
+ ],
+ "passed": [
+  3
+ ]
+}

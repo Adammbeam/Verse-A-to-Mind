@@ -364,16 +364,20 @@ for (const [name, file] of [
   ['country-wikidata', 'country-wikidata.test.mjs'], // the country card's live source is Wikidata since REST Countries retired its keyless API (issue #1063)
   ['words-family', 'words-family.test.mjs'], // Words and the world: joke, news, book, show, sport, senolytic, video-play checked like a person meets them (Verse's ask)
   ['sky-skills', 'sky-skills.test.mjs'],
+  ['sky-app-skills', 'sky-app-skills.test.mjs'],
   ['sky-world', 'sky-world.test.mjs'],
   ['sky', 'test_sky.mjs'],
   ['take', 'take.test.mjs'],
   ['chess-replay', 'chess-replay.test.mjs'],
   ['sorry', 'sorry.test.mjs'],
   ['voice', 'voice.test.mjs'],
+  ['pr-autofix', 'pr-autofix.test.mjs'],
   ['pr-ready', 'pr-ready.test.mjs'],
   ['suite-gate', 'suite-gate.test.mjs'],
   ['suite-diff', 'suite-diff.test.mjs'],
   ['merge-stall', 'merge-stall.test.mjs'], // no merge for 2 hours while a green pull request waits: one issue names the stuck step
+  ['main-regen', 'main-regen.test.mjs'], // main's stale generated cards (an unlisted skill, a missing family) come back as one automerge PR
+  ['pr-tidy', 'pr-tidy.test.mjs'], // held runs on bot pull requests are approved; one blocked 2 days with a quiet head closes with its reason
   ['rea-study', 'rea-study.test.mjs'], ['study-engine', 'study-engine.test.mjs'], ['studies-api', 'studies-api.test.mjs'],
   ['review-api', 'review-api.test.mjs'], ['review-pr', 'review-pr.test.mjs'],
   ['go', 'go.test.mjs'],
