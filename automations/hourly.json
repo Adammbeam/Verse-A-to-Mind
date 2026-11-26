@@ -10,7 +10,7 @@
     { "id": "hourly-main-green", "name": "Guard: the live site is up", "when": { "on": "schedule", "every": 60 },
       "do": [{ "action": "watch", "watch": { "kind": "page", "url": "https://a-to-mind.com/", "op": "not-contains", "value": "Verse" }, "tell": "team" }] },
     { "id": "hourly-deploy-green", "name": "Guard: the live site deploys", "when": { "on": "schedule", "every": 60 },
-      "do": [{ "action": "watch", "watch": { "kind": "page", "url": "https://a-to-mind.com/", "op": "not-contains", "value": "Verse" }, "tell": "team" }] },
+      "do": [{ "action": "watch", "watch": { "kind": "page", "url": "https://a-to-mind.com/build.json", "op": "not-contains", "value": "\"id\"" }, "tell": "team" }] },
     { "id": "hourly-registry", "name": "Signal: the MCP registry lists Verse", "when": { "on": "schedule", "every": 60 },
       "do": [{ "action": "watch", "watch": { "kind": "page", "url": "https://registry.modelcontextprotocol.io/v0/servers?search=io.github.atomeam", "op": "contains", "value": "by A-to-Mind" }, "tell": "team" }] },
     { "id": "hourly-store", "name": "Signal: the store moved (a sale or a product)", "when": { "on": "schedule", "every": 60 },
