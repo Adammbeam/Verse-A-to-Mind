@@ -228,8 +228,9 @@ async function coderLane(env, now) {
       tried24: await n("SELECT COUNT(*) AS n FROM void_queue WHERE note LIKE '%verse-job%' AND updated >= ?", since) };
   } catch (_) { return null; }
 }
+// 2000, not 300 (2026-11-26: with 300+ queued, every job filed since was never handed out, and could not be claimed by its id)
 async function queued(env) {
-  try { const { results } = await env.DB.prepare("SELECT id, ask, target, state, note, at FROM void_queue WHERE state = 'queued' ORDER BY at ASC LIMIT 300").all(); return results; } catch (_) { return []; }
+  try { const { results } = await env.DB.prepare("SELECT id, ask, target, state, note, at FROM void_queue WHERE state = 'queued' ORDER BY at ASC LIMIT 2000").all(); return results; } catch (_) { return []; }
 }
 // only while the job is still this agent's: building, its note starting "claimed by team:<name> ·"
 const heldBy = (name) => 'claimed by team:' + name.replace(/[\\%_]/g, (c) => '\\' + c) + ' ·%';
