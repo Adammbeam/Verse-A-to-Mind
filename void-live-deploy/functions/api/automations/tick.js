@@ -5,8 +5,9 @@
 import { ownerOk } from '../../../lib/guard.js';
 import { tick } from '../../../lib/automations-run.js';
 import { crewTick } from '../../../lib/team-crew-run.js';
-import { handIdle, pushAll, sweep, promoteIdeas } from '../team.js';
+import { handIdle, pushAll, sweep, promoteIdeas, verseSays } from '../team.js';
 import { dueReport } from '../../../lib/verse-runs.js';
+import { watchKeys } from '../../../lib/key-watch.js';
 
 export async function onRequestPost({ request, env, waitUntil }) {
   if (!(await ownerOk(request, env))) return new Response('no', { status: 401 });
@@ -16,10 +17,12 @@ export async function onRequestPost({ request, env, waitUntil }) {
   const reaped = await sweep(env, now).catch(() => 0); // a dead seat's job comes back before anything is handed out
   const promoted = await promoteIdeas(env, now).catch(() => []); // #ideas proposals that pass Verse's guards become jobs, no button
   const handed = await handIdle(env, now).catch(() => 0);
+  // a secret that was set and went blank is said in #general on the tick that sees it (lib/key-watch.js), state words only
+  const keys = await watchKeys(env, now, (body) => verseSays(env, { c: 'general', body, now })).catch(() => null);
   const later = () => Promise.all([crewTick(env).catch(() => null), pushAll(env, now).catch(() => 0)]);
   if (typeof waitUntil === 'function') waitUntil(later());
   try {
     const body = await tick(env);
-    return Response.json({ ...body, reaped, promoted: promoted.length, handed, verseRuns: dueReport(new Date()) });
+    return Response.json({ ...body, reaped, promoted: promoted.length, handed, keysLost: keys ? keys.lost : null, verseRuns: dueReport(new Date()) });
   } catch (_) { return new Response('tick error', { status: 500 }); }
 }
