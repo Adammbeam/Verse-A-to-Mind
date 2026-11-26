@@ -11995,6 +11995,31 @@ try {
     !/api\/routes|escalat|lib\/router|bge-m3|qwen/i.test(html) && fs.readFileSync(path.join(root, 'void.html'), 'utf8') === html, '');
   }
   } // CORE
+  // Physics Stack Exchange gap 221848: the asker wanted the Faddeev-Popov trick on a toy Gaussian integral. The card
+  // walks the four insertion steps, checks the determinant at a chosen point, and shows that the naive 2π double
+  // counts the circle because the slice y = 0 hits each orbit twice; the correct answer is π.
+  if (want("faddeev-popov: the physics gap title reaches a worked insertion and near misses do not")) {
+    const fpApi = await import(new URL('../void-live-deploy/skills/faddeev-popov.js', import.meta.url).href);
+    const fpMods = [];
+    for (const n of JSON.parse(fs.readFileSync(path.join(root, 'skills', 'index.json'), 'utf8'))) { const sk = (await import(new URL('../void-live-deploy/skills/' + n + '.js', import.meta.url).href)).default; fpMods.push(...(sk.family ? sk.members : [sk])); }
+    const fpFirst = (a) => { const k = fpMods.find((s) => s.match(a.toLowerCase(), a)); return k ? k.name : null; };
+    const fpMod = fpMods.find((s) => s.name === 'faddeev-popov');
+    const fpEsc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const fpRot = fpApi.rotatePoint(1, 1, -Math.PI / 4), fpRoutes = fpApi.toyRoutes();
+    const fpHtml = fpApi.cardHtml({ x: 1, y: 1, deg: 45, unit: 'degrees', factor: Math.SQRT2 }, fpEsc);
+    check('faddeev-popov: the gap title routes only here; the orbit rotation and determinant are right, the naive count is 2π and both fixes give π, and the card walks the steps and credits the question',
+      !!fpMod && fpMod.examples.length >= 5 && fpMod.nearMisses.length >= 4
+        && fpMod.examples.every((e) => fpFirst(e) === 'faddeev-popov') && fpMod.nearMisses.every((e) => fpFirst(e) !== 'faddeev-popov')
+        && fpApi.fpAsk('How to apply the Faddeev-Popov method to a simple integral') && !fpApi.fpAsk('gaussian integral calculator')
+        && Math.abs(fpRot.x - Math.SQRT2) < 1e-9 && Math.abs(fpRot.y) < 1e-9
+        && Math.abs(fpApi.fpFactor(1, 1, -Math.PI / 4) - Math.SQRT2) < 1e-9
+        && Math.abs(fpApi.sliceAngle(1, 1) + Math.PI / 4) < 1e-9
+        && fpRoutes.naive.result === 2 && fpRoutes.half.result === 1 && fpRoutes.shared.result === 1
+        && /Faddeev–Popov on a toy integral/.test(fpHtml) && /Insert unity/.test(fpHtml) && /The determinant/.test(fpHtml)
+        && /physics\.stackexchange\.com\/questions\/221848/.test(fpHtml) && /CC BY-SA 4\.0/.test(fpHtml)
+        && !/\/api\/publish/.test(fpHtml),
+      fpMod ? fpMod.examples.map((e) => e + ' -> ' + fpFirst(e)).join(' | ') + ' ; ' + JSON.stringify({ rot: fpRot, routes: fpRoutes }) : 'missing faddeev-popov skill');
+  }
   // the convert card (asked by Verse, 2026-10-14): "unit converter" puts a converter on the stage that converts both ways,
   // swaps, lists every other unit of the kind, keeps its kind, units and number across a reload, and puts itself away;
   // one-off asks ("5 miles in km") and other converters (currency, pdf, time zone) are not its.
