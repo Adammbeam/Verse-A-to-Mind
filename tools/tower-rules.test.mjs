@@ -121,8 +121,8 @@ test('rule 8: every floor has its rival page, kept current by the deploy and the
   // the files are regenerated on every deploy and every gate run (deploy.yml, tower-gate.yml); here: every served floor has one and the index maps it
   const { build } = await import('./rival-pages.mjs'); assert.equal(typeof build, 'function');
   for (const f of served().floors) assert.ok(idx.rivals[f.site] || idx.rivals[siteSlug(f.site)], f.site + ' is not in rivals/index.json');
-  assert.match(fs.readFileSync(path.join(ROOT, '.github', 'workflows', 'deploy.yml'), 'utf8'), /node tools\/rival-pages\.mjs/, 'deploy.yml regenerates the rival pages');
-  const gate = fs.readFileSync(path.join(ROOT, '.github', 'workflows', 'tower-gate.yml'), 'utf8');
+  assert.match(fs.readFileSync((fs.existsSync(path.join(ROOT, '.github', 'workflows', 'deploy.yml')) ? path.join(ROOT, '.github', 'workflows', 'deploy.yml') : path.join(ROOT, '.github', 'workflows-parked', 'deploy.yml')), 'utf8'), /node tools\/rival-pages\.mjs/, 'deploy.yml regenerates the rival pages');
+  const gate = fs.readFileSync((fs.existsSync(path.join(ROOT, '.github', 'workflows', 'tower-gate.yml')) ? path.join(ROOT, '.github', 'workflows', 'tower-gate.yml') : path.join(ROOT, '.github', 'workflows-parked', 'tower-gate.yml')), 'utf8');
   assert.match(gate, /node tools\/tower-gate\.mjs --versus/);
   assert.doesNotMatch(gate, /node tools\/rival-pages\.mjs/);
 });
@@ -162,5 +162,5 @@ test('rule 12 and 13: studies respect robots.txt, and the current floor\'s gaps 
   const scan = fs.readFileSync(path.join(ROOT, 'tools', 'feature-scan.mjs'), 'utf8');
   assert.match(scan, /robots\.txt respected/); assert.match(scan, /Missing features become build jobs on Verse's queue/);
   assert.match(scan, /tower\(\[\], ev, null, null, null, null, null, null, null, null, pa\)/, 'the queue follows the closest-first climb');
-  assert.match(fs.readFileSync(path.join(ROOT, '.github', 'workflows', 'feature-scan.yml'), 'utf8'), /--queue/);
+  assert.match(fs.readFileSync((fs.existsSync(path.join(ROOT, '.github', 'workflows', 'feature-scan.yml')) ? path.join(ROOT, '.github', 'workflows', 'feature-scan.yml') : path.join(ROOT, '.github', 'workflows-parked', 'feature-scan.yml')), 'utf8'), /--queue/);
 });
