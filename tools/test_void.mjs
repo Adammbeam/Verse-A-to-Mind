@@ -11995,6 +11995,25 @@ try {
     !/api\/routes|escalat|lib\/router|bge-m3|qwen/i.test(html) && fs.readFileSync(path.join(root, 'void.html'), 'utf8') === html, '');
   }
   } // CORE
+  // Wikipedia wanted-page gap: "Animal Hospital (video game)" names two vet games, not the BBC show. The card is data,
+  // from Nintendo's own pages and Wikipedia's disambiguation; the gap is closed when the exact title reaches it.
+  if (want("animal-hospital: the Wikipedia gap title names the 3DS and Switch vet games, not the BBC show")) {
+    const ahApi = await import(new URL('../void-live-deploy/skills/animal-hospital.js', import.meta.url).href);
+    const ahMods = [];
+    for (const n of JSON.parse(fs.readFileSync(path.join(root, 'skills', 'index.json'), 'utf8'))) { const sk = (await import(new URL('../void-live-deploy/skills/' + n + '.js', import.meta.url).href)).default; ahMods.push(...(sk.family ? sk.members : [sk])); }
+    const ahFirst = (a) => { const k = ahMods.find((s) => s.match(a.toLowerCase(), a)); return k ? k.name : null; };
+    const ahMod = ahMods.find((s) => s.name === 'animal-hospital');
+    const ahEsc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const ahHtml = ahApi.cardHtml(ahApi.CARD, ahEsc);
+    check('animal-hospital: the Wikipedia gap title routes only to it; its card names both vet games, keeps the BBC show separate, and cites Nintendo and Wikipedia',
+      !!ahMod && ahMod.examples.length >= 4 && ahMod.nearMisses.length >= 3
+        && ahMod.examples.every((e) => ahFirst(e) === 'animal-hospital') && ahMod.nearMisses.every((e) => ahFirst(e) !== 'animal-hospital')
+        && ahApi.gameAsk('Animal Hospital (video game)') && !ahApi.gameAsk('Animal Hospital') && !ahApi.gameAsk('Animal Hospital TV show')
+        && /Pet Hospital/.test(ahHtml) && /2013/.test(ahHtml) && /2023/.test(ahHtml) && /Neopica/.test(ahHtml) && /Tivola/.test(ahHtml)
+        && /BBC/.test(ahHtml) && /wikipedia\.org\/wiki\/Animal_Hospital/.test(ahHtml) && /nintendo\.com/.test(ahHtml)
+        && !/\/api\/publish/.test(ahHtml),
+      ahMod ? ahMod.examples.map((e) => e + ' -> ' + ahFirst(e)).join(' | ') : 'missing animal-hospital skill');
+  }
   // the convert card (asked by Verse, 2026-10-14): "unit converter" puts a converter on the stage that converts both ways,
   // swaps, lists every other unit of the kind, keeps its kind, units and number across a reload, and puts itself away;
   // one-off asks ("5 miles in km") and other converters (currency, pdf, time zone) are not its.

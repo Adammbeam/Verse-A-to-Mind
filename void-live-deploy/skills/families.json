@@ -15,7 +15,7 @@
  "totals": {
   "experiment": 3,
   "tested": 21,
-  "checked": 18,
+  "checked": 19,
   "proven": 459
  },
  "families": [
@@ -2082,17 +2082,19 @@
    "count": {
     "experiment": 0,
     "tested": 3,
-    "checked": 2,
+    "checked": 3,
     "proven": 46
    },
    "sources": {
-    "read": 27,
-    "named": 25,
-    "second": 15,
+    "read": 28,
+    "named": 26,
+    "second": 16,
     "answered": 0,
-    "points": 1.48,
-    "one_live_from_proven": [],
-    "words": "Source reliability: 27 skills answer from outside sources; 25 name the source on the card, 15 have a second source, 0 have a kept live answer from it (1.48 of 3 on average)."
+    "points": 1.5,
+    "one_live_from_proven": [
+     "animal-hospital"
+    ],
+    "words": "Source reliability: 28 skills answer from outside sources; 26 name the source on the card, 16 have a second source, 0 have a kept live answer from it (1.5 of 3 on average). One kept live answer each would make 1 more proven: animal-hospital."
    },
    "skills": [
     {
@@ -2864,6 +2866,25 @@
      "why": "a self-test",
      "last_tested": "2026-11-26",
      "last_tested_by": "its tests"
+    },
+    {
+     "name": "animal-hospital",
+     "tier": "checked",
+     "why": "a self-test, 3 browser-suite mentions",
+     "last_tested": "2026-11-26",
+     "last_tested_by": "its tests",
+     "source": {
+      "sites": [
+       "nintendo.com",
+       "wikipedia.org"
+      ],
+      "named": true,
+      "second": true,
+      "answered": false,
+      "points": 2,
+      "next": "live",
+      "words": "source 2 of 3: nintendo.com, wikipedia.org; named on the card; a second source; no kept live answer yet. One kept live answer from nintendo.com would make it proven"
+     }
     }
    ]
   },
