@@ -553,7 +553,7 @@ export async function sweep(env, now) {
   const { results: busy } = await env.DB.prepare('SELECT * FROM void_team_agents WHERE job IS NOT NULL AND off = 0 AND ' + LEASE + ' >= ?').bind(now - T.STALE_MS).all();
   for (const a of busy) await unstall(env, a, now);
   const { results } = await env.DB.prepare('SELECT * FROM void_team_agents WHERE job IS NOT NULL AND ' + LEASE + ' < ?').bind(now - T.STALE_MS).all();
-  for (const a of results) await giveBack(env, a, now, '@' + a.name + ' went quiet for 30 minutes', false);
+  for (const a of results) await giveBack(env, a, now, '@' + a.name + ' went quiet for ' + Math.round(T.STALE_MS / 60e3) + ' minutes', false);
   const orphans = await reapOrphans(env, now).catch(() => 0);
   await reapSelf(env, now).catch(() => 0);
   await deconflict(env, now).catch(() => []);

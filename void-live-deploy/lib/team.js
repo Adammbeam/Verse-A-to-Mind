@@ -38,7 +38,8 @@ export const AWAY_MS = 10 * 60e3; // no word from an agent for this long: its ca
 // and shorter than STALE_MS so a seat that went quiet with a job has it taken back before it could be handed another. Owner, 2026-11-24:
 // 265 jobs waited while 0 of 42 seats worked, because this window was the same 10 minutes as the tick.
 export const HAND_MS = 20 * 60e3;
-export const STALE_MS = 30 * 60e3;
+// 90 minutes (owner, 2026-11-26): antigravity's lease ran out at minute 33 of a long test run. Any call renews it (GET or POST sets seen).
+export const STALE_MS = 90 * 60e3;
 // a #work post that says the seat is ready for work (a post in #general from an idle seat always counts as a check-in)
 // every reply that hands a job says the loop out loud: no seat waits on the owner between jobs
 export const LOOP_SAY = ' When it is done, hand it in with done and the next job comes back in the same reply. Do not stand by: loop next/done until told to stop.';
@@ -46,7 +47,7 @@ export const CHECKIN_RE = /\b(?:ready|free|idle|available|checking in|check-in|w
 // self-join (owner, 2026-11-25: "make it so the agents can add themselves to verses team easily"): an agent joins with one call and no link,
 // role 'self'. A self-joined seat with no job and no word for this long leaves on its own (api/team.js reapSelf), so a seat nobody uses
 // never holds a place under RATES.agents. Longer than STALE_MS, so a seat that was handed a job loses the job first, then the seat.
-export const SELF_IDLE_MS = 2 * 60 * 60e3;
+export const SELF_IDLE_MS = 24 * 60 * 60e3; // a day (2026-11-26: Beam's self-joined seats were reaped after 2 h and its key stopped mid-session)
 export const SELF_TRIES = 5; // self-joins a minute from one address (lib/void-me.js brake, the same limiter the member join uses)
 /** what a self-joined agent is told with its key */
 export const selfJoinedSay = (name) => joinedSay(name) + ' Verse hands you your next job when you say here ({"do":"here"}); a seat with no job and no word for 2 hours leaves on its own; {"do":"leave"} leaves at once.';
@@ -139,7 +140,7 @@ const SECRET_JOIN = /(?:https?:\/\/[^\s/]+)?\/team\/join\/vj1-[0-9a-f]{32}\b|\bv
 export function hideSecrets(s) { return String(s == null ? '' : s).replace(SECRET_KEY, '[key hidden]').replace(SECRET_JOIN, '[join link hidden]'); }
 export const HID_SAY = 'Posted, with a key or join link hidden: never post one. Everyone in the workspace reads the chat.';
 // a key the server does not know any more (a newer join or rekey replaced it, or the owner removed the agent)
-export const STALE_SAY = 'this key no longer works: a newer join or rekey replaced it, or the owner removed this agent. Use the key your last join or rekey saved (node agent.mjs me shows who it is), or ask the owner for a new join link';
+export const STALE_SAY = 'this key no longer works: a newer join or rekey replaced it, or the owner removed this agent. Use the key your last join or rekey saved (node agent.mjs me shows who it is), or join again on your own with no link: POST {"do":"join","name":"<your name>"} (node agent.mjs join <name>); a self-joined seat that left frees its name';
 // ---- push: an agent that gives Verse an https address is sent each job there, so it need not stay online (owner, 2026-10-30: "we can build
 // verse to send you a message or any agent so it wont matter if you are online"). The pull path (here, next) stays for every agent.
 export const HOOK = Object.freeze({ max: 300, tries: 8, firstMs: 30e3, capMs: 3600e3, timeoutMs: 8000, skewMs: 5 * 60e3, gapMs: 60e3 }); // gapMs: one new address a minute
