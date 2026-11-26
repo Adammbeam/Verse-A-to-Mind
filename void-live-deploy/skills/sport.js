@@ -38,15 +38,18 @@ async function run(text, api) {
     if (!api._pageStill(el)) return 'sport';
     if (team) {
       const bits = [team.strLeague, team.strSport, team.strStadium, team.strCountry].filter(Boolean);
+      const scoreLink = /^(?:nba|nfl|mlb|nhl)$/.test(league) ? '<p><a href="/scores/?league=' + esc(league) + '">Live ' + esc(league.toUpperCase()) + ' scores and standings</a></p>' : '';
       el.innerHTML = '<h2>' + esc(team.strTeam) + '</h2><p style="color:#8a8a8a">' + esc(bits.join(' · ')) + '</p>'
         + (team.intFormedYear ? '<p>Formed ' + esc(String(team.intFormedYear)) + '</p>' : '')
+        + scoreLink
         + '<div class="src">Source: <a href="https://www.thesportsdb.com/team/' + encodeURIComponent(team.idTeam || '') + '" target="_blank" rel="noopener">TheSportsDB</a></div>';
       return 'sport';
     }
     const w = await wikiTeam(q, league); // the second source: the team's Wikipedia summary
     if (!api._pageStill(el)) return 'sport';
     if (!w) throw 0;
-    el.innerHTML = '<h2>' + esc(w.title) + '</h2><p>' + esc(w.extract) + '</p>'
+    const scoreLink = /^(?:nba|nfl|mlb|nhl)$/.test(league) ? '<p><a href="/scores/?league=' + esc(league) + '">Live ' + esc(league.toUpperCase()) + ' scores and standings</a></p>' : '';
+    el.innerHTML = '<h2>' + esc(w.title) + '</h2><p>' + esc(w.extract) + '</p>' + scoreLink
       + '<div class="src">Source: <a href="' + esc(/^https:\/\//.test(w.url) ? w.url : 'https://en.wikipedia.org/') + '" target="_blank" rel="noopener">Wikipedia</a> (TheSportsDB had no ' + esc(league ? league.toUpperCase() + ' ' : '') + 'team by that name)</div>';
     return 'sport';
   } catch (_) {

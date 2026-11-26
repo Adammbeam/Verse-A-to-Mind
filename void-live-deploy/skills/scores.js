@@ -4,7 +4,7 @@
  * "Open the full Scores page" link (lib/card-frame.js PAGE_OF). A table ask shows the top eight rows. Nothing is invented: a feed that does not answer says so.
  * Contract: { name, examples, nearMisses, match(lower, text), run(text, api) }
  */
-import { scoresAsk, teamScoreAsk, teamGame, leagueOf, localDay, LEAGUE_IDS } from '../lib/scores.js';
+import { scoresAsk, teamScoreAsk, teamGame, leagueOf, leagueForTeam, localDay, LEAGUE_IDS, TEAM_ALIASES } from '../lib/scores.js';
 
 const cap = (s) => s.replace(/\b[a-z]/g, (c) => c.toUpperCase());
 // "what was the chiefs score last night": every league's board for that day (today, then yesterday when no day was named), and the first game the team is in
@@ -23,6 +23,55 @@ async function runTeam(t, api) {
     if (hit) break;
   }
   if (!hit) {
+    // No game today/yesterday: if we know the team's league, look at its last 7 days, next 7 days, or current standings (off-season).
+    const knownLg = answered ? leagueForTeam(t.team) : '';
+    if (knownLg) {
+      const get = (q) => fetch('/api/scores?' + new URLSearchParams(q)).then((r) => r.json()).catch(() => null);
+      const shift = (n) => localDay(new Date(Date.now() + n * 864e5));
+      const [past, next] = await Promise.all([get({ league: knownLg, date: shift(-7), span: '7' }), get({ league: knownLg, date: shift(1), span: '7' })]);
+      if (!api._pageStill(el)) return 'scores';
+      const lg = leagueOf(knownLg);
+      const pastGames = (past && past.ok && Array.isArray(past.games) ? past.games : []).slice().sort((a, b) => String(b.start || '').localeCompare(String(a.start || '')));
+      const nextGames = (next && next.ok && Array.isArray(next.games) ? next.games : []).slice().sort((a, b) => String(a.start || '').localeCompare(String(b.start || '')));
+      const recent = teamGame([{ league: knownLg, games: pastGames }], t.team);
+      const upcoming = !recent && teamGame([{ league: knownLg, games: nextGames }], t.team);
+      if (recent || upcoming) {
+        const g = (recent || upcoming).game;
+        const line = g.state === 'pre' ? esc(g.home.name) + ' vs ' + esc(g.away.name) : esc(g.home.name) + ' ' + esc(g.home.score) + ' \u2013 ' + esc(g.away.score) + ' ' + esc(g.away.name);
+        const st = g.state === 'live' ? 'Live, ' + esc(g.status) : g.state === 'final' ? esc(g.status || 'Final') : 'Starts ' + esc(dayLabel(g.start));
+        const win = g.state === 'final' ? [g.home, g.away].find((s) => s.winner) : null;
+        const whenTxt = g.start ? dayLabel(g.start) : (recent ? 'last 7 days' : 'next 7 days');
+        el.innerHTML = '<h2>' + esc(title) + '</h2><div class="sub">' + esc(lg.name) + ', ' + esc(whenTxt) + '</div><p style="font-size:1.2em">' + line + '</p><p>' + st + (win ? '. ' + esc(win.name) + ' won.' : '') + '</p>'
+          + '<div class="src">Source: ' + esc((recent ? past && past.source : next && next.source) || src || 'public score feeds') + ' \u00b7 data may be delayed</div>';
+        return 'scores';
+      }
+      const stj = await get({ league: knownLg, view: 'standings' });
+      if (!api._pageStill(el)) return 'scores';
+      const groups = stj && stj.ok && Array.isArray(stj.groups) ? stj.groups : [];
+      const raw = t.team.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').trim();
+      const want = TEAM_ALIASES[raw] || raw;
+      let foundRow = null, foundGrp = null;
+      for (const grp of groups) {
+        for (const row of grp.rows || []) {
+          const rn = (' ' + String(row.name || '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ') + ' ');
+          if (rn.includes(' ' + want + ' ') || rn.includes(' ' + raw + ' ')) { foundRow = row; foundGrp = grp; break; }
+        }
+        if (foundRow) break;
+      }
+      const g0 = foundGrp || groups[0];
+      if (g0 && Array.isArray(g0.rows) && g0.rows.length) {
+        const cols = g0.cols || [];
+        const summary = foundRow
+          ? '<p><strong>' + esc(foundRow.name) + '</strong> (' + esc(g0.name || lg.name) + ' standings): ' + cols.slice(0, 4).map((c, i) => esc(c) + ' ' + esc((foundRow.cells || [])[i] || '')).join(' · ') + '</p>'
+          : '';
+        const fi = cols.findIndex((c) => /^(?:pts|p|pct|w)$/i.test(c)), ci = fi >= 0 ? fi : cols.length - 1;
+        el.innerHTML = '<h2>' + esc(title) + '</h2><div class="sub">' + esc(lg.name) + ' standings</div>'
+          + '<p>No ' + esc(cap(t.team)) + ' game in the last week or the next.</p>' + summary
+          + '<ol>' + g0.rows.slice(0, 6).map((r) => '<li>' + esc(r.name) + ' <span style="color:#8a8a8a">\u00b7 ' + esc(cols[ci] || '') + ' ' + esc((r.cells || [])[ci] || '') + '</span></li>').join('') + '</ol>'
+          + '<div class="src">Source: ' + esc(stj.source || src || 'public score feeds') + ' \u00b7 data may be delayed</div>';
+        return 'scores';
+      }
+    }
     el.innerHTML = '<h2>' + esc(title) + '</h2>' + (answered ? '<p>No ' + esc(cap(t.team)) + ' game ' + (days.length > 1 ? 'today or yesterday' : days[0] ? 'yesterday' : 'today') + ' in the leagues Verse follows (' + esc(LEAGUE_IDS.filter((id) => id !== 'f1').map((id) => leagueOf(id).name).join(', ')) + ').</p>'
       : '<p>The score feed didn\'t answer just now. Ask again in a moment, or open the Scores page.</p>');
     return answered ? 'scores' : 'none';
