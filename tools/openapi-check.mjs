@@ -6,6 +6,7 @@
 // is, so the description never drifts from the code and nothing internal is published by accident.
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const ROOT = new URL('../void-live-deploy/', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 const FN = join(ROOT, 'functions');
@@ -96,6 +97,7 @@ export const INTERNAL = {
   '/api/handoff': 'agent handoff, owner key',
   '/api/hook/{id}': 'automation webhooks, one secret URL each',
   '/api/memory': 'what Verse remembers, owner only',
+  '/api/proposals': 'patches, checked by a runner, shipped by wrangler; POST with FORGE token, GET/PATCH owner only',
   '/api/mine': "a person's own Verse, passkey session",
   '/api/miss': 'the page reports a miss',
   '/api/misses': 'the miss board, owner token',
@@ -159,7 +161,8 @@ export function check({ spec, routes, catalog, statics = new Set() }) {
   return problems;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+// pathToFileURL, not `file://${process.argv[1]}`: on Windows that never matched, so this check passed by doing nothing.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const spec = JSON.parse(readFileSync(join(ROOT, 'openapi.json'), 'utf8'));
   const routes = new Map();
   for (const f of walk(FN)) {

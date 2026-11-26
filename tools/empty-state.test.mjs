@@ -3,12 +3,14 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { SUGGESTIONS, pickSuggestion, createLinkState, offlineView, OFFLINE_PLACEHOLDER, keyboardInset, mayAutofocus, contrast, over } from '../void-live-deploy/lib/empty-state.js';
 
 const skillsDir = path.resolve(import.meta.dirname, '../void-live-deploy/skills');
 const index = JSON.parse(fs.readFileSync(path.join(skillsDir, 'index.json'), 'utf8'));
 const skills = [];
-for (const n of index) { const m = await import(path.join(skillsDir, n + '.js')); if (m.default && m.default.match) skills.push(m.default); }
+// a plain path is not a valid ESM specifier on Windows (ERR_UNSUPPORTED_ESM_URL_SCHEME)
+for (const n of index) { const m = await import(pathToFileURL(path.join(skillsDir, n + '.js')).href); if (m.default && m.default.match) skills.push(m.default); }
 
 test('every suggestion is one of its skill\'s own examples and routes to that skill, never the article fallback', () => {
   assert.ok(SUGGESTIONS.length >= 8);
