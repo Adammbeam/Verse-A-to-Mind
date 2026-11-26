@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en" class="vs-tool"><link rel="stylesheet" href="/verse.css" media="screen">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Line speed check · Verse</title>
+<meta name="description" content="Measure your download speed, upload speed, latency and jitter directly against Verse's edge. No ads, no trackers, and works with scripts off.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Verse">
+<meta property="og:title" content="Line speed check · Verse">
+<meta property="og:description" content="Start a check and read how fast your line is: download Mbps, upload Mbps, latency and jitter.">
+<meta property="og:url" content="https://a-to-mind.com/line-speed/">
+<meta property="og:image" content="https://a-to-mind.com/og.png">
+<style>
+  :root { color-scheme: dark; --bg: #0b0a10; --ink: #ecebf5; --soft: #a3a0b3; --line: #2c2938; --accent: #a58bff; --good: #5fd08e; --bad: #ff7a6e; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { margin: 0 0 6px; font-size: clamp(26px, 4vw, 34px); letter-spacing: -0.02em; }
+  .sub { color: var(--soft); margin: 0 0 20px; }
+  .card { border: 1px solid var(--line); border-radius: 14px; padding: 18px; background: #12101a; margin: 16px 0; }
+  form { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  label { font-size: 14px; color: var(--soft); display: flex; align-items: center; gap: 8px; }
+  select { background: #0e0d15; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; font: inherit; }
+  button { background: var(--accent); color: #0b0a10; border: 0; border-radius: 10px; padding: 10px 18px; font: 600 15px/1.2 inherit; cursor: pointer; }
+  button:disabled { opacity: 0.6; cursor: wait; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 12px; margin-top: 16px; }
+  .stat { border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: #0e0d15; }
+  .stat .k { font-size: 12px; color: var(--soft); text-transform: uppercase; letter-spacing: .04em; }
+  .stat .v { font-size: 24px; font-weight: 600; margin-top: 4px; color: var(--good); }
+  #status { margin: 12px 0 0; color: var(--soft); min-height: 24px; }
+  #meta { margin: 10px 0 0; font-size: 13px; color: var(--soft); }
+  nav#related { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 14px; }
+  nav#related a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Line speed</h1>
+  <p class="sub">Start a check to measure download, upload, latency and jitter directly against Verse&rsquo;s edge. No ads, nothing stored.</p>
+
+  <section class="card">
+    <form id="speed-form" method="post" action="/line-speed/">
+      <label for="bytes">Test size
+        <select id="bytes" name="bytes">
+          <option value="262144">Quick (256 KB)</option>
+          <option value="1048576" selected>Standard (1 MB)</option>
+          <option value="4194304">Thorough (4 MB)</option>
+        </select>
+      </label>
+      <button id="start-btn" type="submit">Start speed check</button>
+    </form>
+
+    <p id="status" role="status" aria-live="polite">Ready when you are.</p>
+
+    <div class="grid" aria-label="Speed check results">
+      <div class="stat"><div class="k">Download</div><div class="v" id="out-down">&mdash;</div></div>
+      <div class="stat"><div class="k">Upload</div><div class="v" id="out-up">&mdash;</div></div>
+      <div class="stat"><div class="k">Latency</div><div class="v" id="out-ping">&mdash;</div></div>
+      <div class="stat"><div class="k">Jitter</div><div class="v" id="out-jitter">&mdash;</div></div>
+    </div>
+    <p id="meta"></p>
+  </section>
+
+  <nav id="related" aria-label="Use with">
+    <span style="color:var(--soft)">Use with</span>
+    <a href="/ip/">Your IP</a>
+    <a href="/time/">World clock</a>
+    <a href="/stopwatch/">Stopwatch</a>
+    <a href="/converter/">Unit converter</a>
+    <a href="/tools/">All tools</a>
+    <a href="/">Ask Verse anything</a>
+  </nav>
+</main>
+<script type="module" src="/verse-shell.js"></script>
+<script type="module">
+  const form = document.getElementById('speed-form');
+  const btn = document.getElementById('start-btn');
+  const sizeSel = document.getElementById('bytes');
+  const statusEl = document.getElementById('status');
+  const metaEl = document.getElementById('meta');
+  const outDown = document.getElementById('out-down');
+  const outUp = document.getElementById('out-up');
+  const outPing = document.getElementById('out-ping');
+  const outJitter = document.getElementById('out-jitter');
+
+  const round2 = (n) => Math.round(n * 100) / 100;
+  const round1 = (n) => Math.round(n * 10) / 10;
+  const med = (a) => { const s = a.slice().sort((x, y) => x - y); const m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+  const jit = (a) => a.length < 2 ? 0 : a.slice(1).reduce((acc, v, i) => acc + Math.abs(v - a[i]), 0) / (a.length - 1);
+  const grade = (d, p) => d >= 100 && p <= 40 ? 'Very fast — ready for 4K streaming, large downloads and low-latency calls.'
+    : d >= 25 && p <= 80 ? 'Fast — comfortable for HD/4K video, video calls and browsing.'
+    : d >= 5 ? 'Usable — fine for browsing, audio and standard video.'
+    : 'Slow — expect buffering on video or large downloads.';
+
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const bytes = Number(sizeSel.value) || 1048576;
+    const upBytes = Math.min(bytes, 524288);
+    btn.disabled = true;
+    outDown.textContent = outUp.textContent = outPing.textContent = outJitter.textContent = '…';
+    metaEl.textContent = '';
+    try {
+      statusEl.textContent = 'Measuring latency…';
+      const pings = [];
+      let edge = null;
+      for (let i = 0; i < 4; i++) {
+        const t0 = performance.now();
+        const r = await fetch('/line-speed/?probe=ping&n=' + i + '&t=' + Date.now(), { cache: 'no-store' });
+        const j = await r.json();
+        pings.push(performance.now() - t0);
+        edge = j;
+      }
+      const pingMs = round1(med(pings));
+      const jitterMs = round1(jit(pings));
+      outPing.textContent = pingMs + ' ms';
+      outJitter.textContent = jitterMs + ' ms';
+
+      statusEl.textContent = 'Measuring download…';
+      const d0 = performance.now();
+      const dr = await fetch('/line-speed/?probe=down&bytes=' + bytes + '&t=' + Date.now(), { cache: 'no-store' });
+      const dbuf = await dr.arrayBuffer();
+      const dMs = Math.max(1, performance.now() - d0);
+      const downMbps = round2((dbuf.byteLength * 8) / (dMs / 1000) / 1e6);
+      outDown.textContent = downMbps + ' Mbps';
+
+      statusEl.textContent = 'Measuring upload…';
+      const payload = new Uint8Array(upBytes);
+      for (let i = 0; i < upBytes; i++) payload[i] = (i * 19 + 7) & 255;
+      const u0 = performance.now();
+      const ur = await fetch('/line-speed/?probe=up&t=' + Date.now(), { method: 'POST', body: payload, cache: 'no-store' });
+      await ur.json();
+      const uMs = Math.max(1, performance.now() - u0);
+      const upMbps = round2((upBytes * 8) / (uMs / 1000) / 1e6);
+      outUp.textContent = upMbps + ' Mbps';
+
+      statusEl.textContent = grade(downMbps, pingMs);
+      if (edge) {
+        const bits = ['Edge: ' + (edge.colo || 'edge'), edge.httpProtocol, edge.asOrganization, edge.country].filter(Boolean);
+        metaEl.textContent = bits.join(' · ');
+      }
+    } catch (_) {
+      statusEl.textContent = 'The line check could not reach the server just now. Try again in a moment.';
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

@@ -338,12 +338,16 @@ export function scoresAsk(text) {
 const NOT_TEAM = /^(?:my|your|our|their|his|her|the|a|an|what|whats|credit|fico|test|sat|act|gre|gmat|lsat|mcat|quiz|exam|final|game|high|top|best|live|bowling|golf|wordle|chess|match|team|sports?|tennis|cricket|football|soccer|basketball|baseball|hockey|rugby|darts|boxing|ufc|mma|nascar|college|ncaa|world|cup|olympic|olympics)$/i;
 /** an ask for one team's game -> { team, day: 'yesterday' | 'today' | '' } | null; never a league ("nba scores" is scoresAsk's) and never a credit or test score. Pure. */
 export function teamScoreAsk(text) {
-  const t = String(text || '').trim().replace(/[?!.]+$/, '').replace(/\s+/g, ' ').toLowerCase();
+  const t = String(text || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().replace(/[?!.]+$/, '').replace(/\s+/g, ' ').toLowerCase();
   const pats = [
-    /^(?:what was|what'?s|what is) the ([a-z][a-z .'&-]{1,30}?) (?:game )?(?:score|result)(?: (last night|yesterday|today|tonight))?$/,
-    /^how did the ([a-z][a-z .'&-]{1,30}?) do(?: (last night|yesterday|today|tonight))?$/,
-    /^did the ([a-z][a-z .'&-]{1,30}?) win(?: (last night|yesterday|today|tonight))?$/,
-    /^(?:the )?([a-z][a-z .'&-]{1,30}?) (?:game )?(?:score|scores|result|final score)(?: (last night|yesterday|today|tonight))?$/,
+    /^(?:what was|what'?s|what is) the ([a-z0-9][a-z0-9 .'&-]{1,30}?) (?:game )?(?:score|result)(?: (last night|yesterday|today|tonight))?$/,
+    /^how did the ([a-z0-9][a-z0-9 .'&-]{1,30}?) do(?: (last night|yesterday|today|tonight))?$/,
+    /^did the ([a-z0-9][a-z0-9 .'&-]{1,30}?) win(?: (last night|yesterday|today|tonight))?$/,
+    /^(?:the )?([a-z0-9][a-z0-9 .'&-]{1,30}?) (?:game )?(?:score|scores|result|final score)(?: (last night|yesterday|today|tonight))?$/,
+    /^(?:resultado|marcador|puntaje) (?:del?|de la|de los|de las) ([a-z0-9][a-z0-9 .'&-]{1,30}?)(?: (hoy|ayer|anoche))?$/,
+    /^como (?:quedo|jugo) (?:el |la )?([a-z0-9][a-z0-9 .'&-]{1,30}?)(?: (hoy|ayer|anoche))?$/,
+    /^(?:score|resultat) (?:du|de la|des|de) ([a-z0-9][a-z0-9 .'&-]{1,30}?)(?: (aujourd'hui|hier))?$/,
+    /^(?:ergebnis|spielstand) (?:von )?([a-z0-9][a-z0-9 .'&-]{1,30}?)(?: (heute|gestern))?$/,
   ];
   let team = '', day = '';
   for (const p of pats) {
@@ -354,11 +358,29 @@ export function teamScoreAsk(text) {
     team = c; day = m[2] || ''; break;
   }
   if (!team) return null;
-  return { team, day: /last night|yesterday/.test(day) ? 'yesterday' : day ? 'today' : '' };
+  return { team, day: /last night|yesterday|ayer|anoche|hier|gestern/.test(day) ? 'yesterday' : day ? 'today' : '' };
 }
 /** the game a team played on a set of scoreboards ([{ league, games }]): the first whose home or away name, short name or abbreviation holds the team as whole words. Pure. */
 // common nicknames that the feed may spell differently (or that collide with other sports): resolve to the canonical side name.
-export const TEAM_ALIASES = { yankees: 'new york yankees', chiefs: 'kansas city chiefs', packers: 'green bay packers' };
+export const TEAM_ALIASES = { yankees: 'new york yankees', chiefs: 'kansas city chiefs', packers: 'green bay packers', barca: 'barcelona', psg: 'paris saint germain', spurs: 'tottenham hotspur' };
+// known league for popular teams so an off-day or off-season team ask can fall back to that league's last 7 days, next 7 days, or standings.
+export const TEAM_LEAGUES = Object.freeze({
+  yankees: 'mlb', 'new york yankees': 'mlb', dodgers: 'mlb', 'red sox': 'mlb', cubs: 'mlb', mets: 'mlb', astros: 'mlb', braves: 'mlb', phillies: 'mlb', padres: 'mlb',
+  chiefs: 'nfl', 'kansas city chiefs': 'nfl', packers: 'nfl', 'green bay packers': 'nfl', cowboys: 'nfl', eagles: 'nfl', bills: 'nfl', ravens: 'nfl', '49ers': 'nfl', lions: 'nfl', patriots: 'nfl', steelers: 'nfl', bears: 'nfl', bengals: 'nfl',
+  lakers: 'nba', celtics: 'nba', warriors: 'nba', knicks: 'nba', bucks: 'nba', nuggets: 'nba', heat: 'nba', mavs: 'nba', mavericks: 'nba', thunder: 'nba', bulls: 'nba',
+  bruins: 'nhl', rangers: 'nhl', oilers: 'nhl', maple: 'nhl', 'maple leafs': 'nhl', avalanche: 'nhl', penguins: 'nhl',
+  arsenal: 'epl', liverpool: 'epl', chelsea: 'epl', 'manchester city': 'epl', 'man city': 'epl', 'manchester united': 'epl', 'man utd': 'epl', tottenham: 'epl', newcastle: 'epl',
+  'real madrid': 'laliga', madrid: 'laliga', barcelona: 'laliga', barca: 'laliga', atletico: 'laliga', 'atletico madrid': 'laliga',
+  bayern: 'bundesliga', 'bayern munich': 'bundesliga', dortmund: 'bundesliga', leverkusen: 'bundesliga',
+  juventus: 'seriea', inter: 'seriea', milan: 'seriea', 'ac milan': 'seriea', napoli: 'seriea',
+  psg: 'ligue1', 'paris saint germain': 'ligue1', marseille: 'ligue1',
+  'inter miami': 'mls', 'la galaxy': 'mls',
+});
+/** the league id for a known team name or nickname, or '' when unknown. Pure. */
+export function leagueForTeam(team) {
+  const k = String(team || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+  return TEAM_LEAGUES[k] || '';
+}
 export function teamGame(boards, team) {
   const raw = String(team || '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').trim(); if (!raw) return null;
   const want = TEAM_ALIASES[raw] || raw;
