@@ -258,3 +258,8 @@ test('the Reduced motion hard switch holds the stage still: no card tilt toward 
   assert.ok(tilt.length > 0 && html.includes("const held = () => document.documentElement.classList.contains('a11y-motion');"), 'the stage tilt reads the switch');
   assert.ok(tilt.includes("const el = held() ? null : e.target.closest && e.target.closest('.vpage, .thing');"), 'with it on, no card is tilted and the last one is let go');
 });
+test('how someone feels is not an event; a real plan said in the first person still is (stranger audit, 2026-11-26)', async () => {
+  const { parseCalendar } = await import('../void-live-deploy/skills/calendar.js');
+  for (const t of ['i feel sad today', 'I am so tired today', 'im bored tonight', 'feeling lonely this week', 'i think tomorrow will be good', "I'm stressed about Friday"]) assert.equal(parseCalendar(t), null, t);
+  for (const t of ['dentist tomorrow at 3', 'I have a dentist appointment tomorrow at 3', 'i am at the doctor tomorrow at 2', 'call mom tomorrow at 5']) assert.equal(parseCalendar(t).kind, 'add', t);
+});
