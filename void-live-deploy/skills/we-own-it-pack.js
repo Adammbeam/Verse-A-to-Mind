@@ -7,7 +7,9 @@
  */
 export function isWeOwnIt(text) {
   const t = String(text || '').trim().replace(/[?!.]+$/, '');
-  return /we-own-it|heavy lifting|verse does it|package the hard work/i.test(t);
+  // "package the hard work" is process-lift-pack's phrase (it owns that wording in its own matcher and sits earlier in the index), so this
+  // skill no longer claims it: two skills claiming one phrase means the later one's example can never route to it
+  return /we-own-it|heavy lifting|verse does it/i.test(t);
 }
 
 function extractIdea(text) {
@@ -43,7 +45,7 @@ export default {
   name: 'we-own-it-pack',
   examples: [
     'verse does it pack for my invoice idea',
-    'package the hard work for client onboarding',
+    'we-own-it pack for client onboarding',
     'we-own-it for SaaS support',
     'make a we-own-it pack for the support ticket router'
   ],
@@ -52,7 +54,8 @@ export default {
   run,
   suite() {
     const ok = isWeOwnIt('verse does it pack for my invoice idea')
-      && isWeOwnIt('package the hard work for client onboarding')
+      && isWeOwnIt('we-own-it pack for client onboarding')
+      && !isWeOwnIt('package the hard work for client onboarding')
       && isWeOwnIt('we-own-it for SaaS support')
       && isWeOwnIt('make a we-own-it pack for the support ticket router')
       && isWeOwnIt('package the heavy lifting')
