@@ -5,7 +5,7 @@
 import { ownerOk } from '../../../lib/guard.js';
 import { tick } from '../../../lib/automations-run.js';
 import { crewTick } from '../../../lib/team-crew-run.js';
-import { handIdle, pushAll, sweep, promoteIdeas, verseSays } from '../team.js';
+import { handIdle, pushAll, sweep, promoteIdeas, verseSays, settleReviews, freeLineTick, retireJunk } from '../team.js';
 import { dueReport } from '../../../lib/verse-runs.js';
 import { watchKeys } from '../../../lib/key-watch.js';
 
@@ -16,13 +16,15 @@ export async function onRequestPost({ request, env, waitUntil }) {
   // queue sat at 265 waiting with seats idle while the clock ran. Hand out here too. It is D1-only and bounded, so it is counted and returned.
   const reaped = await sweep(env, now).catch(() => 0); // a dead seat's job comes back before anything is handed out
   const promoted = await promoteIdeas(env, now).catch(() => []); // #ideas proposals that pass Verse's guards become jobs, no button
+  const retired = await retireJunk(env, now).catch(() => 0); // jobs that can never be done leave the queue first, so real ones come up (lib/team-busy.js)
   const handed = await handIdle(env, now).catch(() => 0);
   // a secret that was set and went blank is said in #general on the tick that sees it (lib/key-watch.js), state words only
   const keys = await watchKeys(env, now, (body) => verseSays(env, { c: 'general', body, now })).catch(() => null);
-  const later = () => Promise.all([crewTick(env).catch(() => null), pushAll(env, now).catch(() => 0)]);
+  // hand-ins in review are settled from their pull request, and once an hour #work hears who is free and what is waiting (lib/team-busy.js)
+  const later = () => Promise.all([crewTick(env).catch(() => null), pushAll(env, now).catch(() => 0), settleReviews(env, now).catch(() => 0), freeLineTick(env, now).catch(() => '')]);
   if (typeof waitUntil === 'function') waitUntil(later());
   try {
     const body = await tick(env);
-    return Response.json({ ...body, reaped, promoted: promoted.length, handed, keysLost: keys ? keys.lost : null, verseRuns: dueReport(new Date()) });
+    return Response.json({ ...body, reaped, retired, promoted: promoted.length, handed, keysLost: keys ? keys.lost : null, verseRuns: dueReport(new Date()) });
   } catch (_) { return new Response('tick error', { status: 500 }); }
 }

@@ -163,3 +163,10 @@ test('the card 5 note, end to end: self route, whole note, my own facts, no clai
   assert.doesNotMatch(res.answer, /noted this correction|do not have feelings|I am a program/);
   assert.match(res.answer, /^My last card/);
 });
+test('a reply to how someone feels has no "I have no feelings" and no "This is your step to take" (stranger audit, 2026-11-26)', async () => {
+  const { dropFiller, FILLER_RULE } = await import('../void-live-deploy/lib/answer-honesty.js');
+  const out = dropFiller('I have no feelings, but I can observe that sadness is a heavy weight to carry. If you are looking for ways to process this, you might consider talking to someone you trust. This is your step to take.');
+  assert.equal(out, 'If you are looking for ways to process this, you might consider talking to someone you trust.');
+  assert.equal(dropFiller('Book the room first. This step is yours: the venue will not hold it.'), 'Book the room first. This step is yours: the venue will not hold it.', 'a sentence that says whose step and why stays');
+  assert.match(FILLER_RULE, /how they feel/);
+});

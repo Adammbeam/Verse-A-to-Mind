@@ -9,7 +9,7 @@ import { askKey, clean, KEY_RE } from './team.js';
 import { looksSecret } from './stage-port.js';
 import { redact } from './automation-fix.js';
 
-export const PROMOTE = Object.freeze({ perTick: 8, perAuthorDay: 12, open: 60, minLen: 40 });
+export const PROMOTE = Object.freeze({ perTick: 20, perAuthorDay: 60, open: 120, minLen: 40, tries: 3 }); // a guard failure is tried again on the next ticks, then dropped with the reason
 // a lead seat files directly: role 'lead', or a seat that has handed in at least this many jobs with a pull request (earned, not granted)
 export const LEAD_SHIPPED = 3;
 export const isLead = (a, shipped = 0) => !!a && !a.off && (a.role === 'lead' || ((a.role === 'self' || a.role === 'agent') && shipped >= LEAD_SHIPPED));
@@ -37,12 +37,27 @@ export function scrubRivals(text, hosts = []) {
   for (const h of hosts) { if (!h) continue; const re = new RegExp('\\b(?:https?:\\/\\/)?(?:www\\.)?' + h.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b[^\\s,;)]*', 'gi'); t = t.replace(re, 'a rival site'); }
   return t;
 }
+// the licenses an outside find may be reused under (tools/autosalvage/unify.mjs PERMISSIVE and SHARE_ALIKE; tools/team-promote.test.mjs holds them equal)
+export const PERMISSIVE = ['MIT', 'Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'CC0-1.0', 'Unlicense', 'CC-BY-4.0', 'CC-BY-3.0', '0BSD', 'Zlib', 'PDDL-1.0', 'ODC-By-1.0', 'Python-2.0', 'OGL-UK-3.0'];
+export const SHARE_ALIKE = ['GPL-2.0', 'GPL-3.0', 'AGPL-3.0', 'LGPL-2.1', 'LGPL-3.0', 'MPL-2.0', 'ODbL-1.0', 'CC-BY-SA-4.0', 'EPL-2.0'];
+/** a proposal that brings outside work in (it names a github.com repository): its license must be named and reusable. '' when fine. */
+export function licenseProblem(body) {
+  const t = String(body || '');
+  if (!/https?:\/\/github\.com\/[\w.-]+\/[\w.-]+/i.test(t) || !/\b(salvage|integrate|vendor|reuse|port)\b/i.test(t)) return '';
+  const m = /\blicen[cs]e\s*[:=-]\s*([A-Za-z0-9.+-]+)/i.exec(t);
+  if (!m) return 'it brings in outside work but names no license (a "License: <SPDX id>" line)';
+  const id = m[1].replace(/[.,;]+$/, ''), k = (l) => l.toLowerCase();
+  if (PERMISSIVE.some((l) => k(l) === k(id))) return '';
+  if (SHARE_ALIKE.some((l) => k(id).startsWith(k(l).replace(/-\d.*$/, '')))) return /\b(isolated|separate service|own process|kept separate)\b/i.test(t) ? '' : 'its license (' + id + ') is share-alike: say how it stays isolated (a separate service, never mixed into Verse code)';
+  return 'its license (' + id + ') is not on the reviewed list';
+}
 /** one proposal through the guards. ctx: { openKeys: Set of askKey, rivals: [hosts], authorToday: n, promotedOpen: n }
  *  -> { ok: true, ask, gate } or { ok: false, why } */
 export function vet(body, ctx = {}) {
   const text = String(body || '').replace(/^Proposal:\s*/i, '').trim();
   if (text.length < PROMOTE.minLen) return { ok: false, why: 'too short to be a job: say what changes and how it is checked' };
   if (leaks(text)) return { ok: false, why: 'it looks like it holds a key, a join link or a secret, so it stays here; post it again without one' };
+  const lic = licenseProblem(text); if (lic) return { ok: false, why: lic };
   const gate = gateOf(text);
   if (!gate) return { ok: false, why: 'it has no acceptance gate: add a line "Acceptance: <the check that passes, live or in a node test>" and propose it again' };
   const key = askKey(clean(text, 1000));
