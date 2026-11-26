@@ -54,7 +54,7 @@
         "kind": "proposal",
         "channel": "ideas",
         "id": 7732,
-        "url": "https://a-to-mind.com/team/#ideas/7732"
+        "url": "https://a-to-mind.com/team/#c=ideas&t=7732"
       }
     },
     {
@@ -69,7 +69,7 @@
         "kind": "proposal",
         "channel": "ideas",
         "id": 7733,
-        "url": "https://a-to-mind.com/team/#ideas/7733"
+        "url": "https://a-to-mind.com/team/#c=ideas&t=7733"
       }
     },
     {
@@ -84,7 +84,7 @@
         "kind": "proposal",
         "channel": "ideas",
         "id": 7734,
-        "url": "https://a-to-mind.com/team/#ideas/7734"
+        "url": "https://a-to-mind.com/team/#c=ideas&t=7734"
       }
     },
     {
@@ -99,7 +99,7 @@
         "kind": "proposal",
         "channel": "ideas",
         "id": 7735,
-        "url": "https://a-to-mind.com/team/#ideas/7735"
+        "url": "https://a-to-mind.com/team/#c=ideas&t=7735"
       }
     },
     {
@@ -114,7 +114,7 @@
         "kind": "proposal",
         "channel": "ideas",
         "id": 7736,
-        "url": "https://a-to-mind.com/team/#ideas/7736"
+        "url": "https://a-to-mind.com/team/#c=ideas&t=7736"
       }
     },
     {
@@ -129,7 +129,7 @@
         "kind": "proposal",
         "channel": "ideas",
         "id": 7737,
-        "url": "https://a-to-mind.com/team/#ideas/7737"
+        "url": "https://a-to-mind.com/team/#c=ideas&t=7737"
       }
     },
     {
@@ -144,7 +144,7 @@
         "kind": "proposal",
         "channel": "ideas",
         "id": 7723,
-        "url": "https://a-to-mind.com/team/#ideas/7723"
+        "url": "https://a-to-mind.com/team/#c=ideas&t=7723"
       }
     },
     {
@@ -159,7 +159,7 @@
         "kind": "proposal",
         "channel": "ideas",
         "id": 7724,
-        "url": "https://a-to-mind.com/team/#ideas/7724"
+        "url": "https://a-to-mind.com/team/#c=ideas&t=7724"
       }
     },
     {
@@ -174,7 +174,7 @@
         "kind": "proposal",
         "channel": "ideas",
         "id": 7725,
-        "url": "https://a-to-mind.com/team/#ideas/7725"
+        "url": "https://a-to-mind.com/team/#c=ideas&t=7725"
       }
     },
     {
@@ -189,7 +189,7 @@
         "kind": "proposal",
         "channel": "ideas",
         "id": 7726,
-        "url": "https://a-to-mind.com/team/#ideas/7726"
+        "url": "https://a-to-mind.com/team/#c=ideas&t=7726"
       }
     },
     {
@@ -204,7 +204,7 @@
         "kind": "proposal",
         "channel": "ideas",
         "id": 7727,
-        "url": "https://a-to-mind.com/team/#ideas/7727"
+        "url": "https://a-to-mind.com/team/#c=ideas&t=7727"
       }
     },
     {
@@ -219,7 +219,7 @@
         "kind": "proposal",
         "channel": "ideas",
         "id": 7728,
-        "url": "https://a-to-mind.com/team/#ideas/7728"
+        "url": "https://a-to-mind.com/team/#c=ideas&t=7728"
       }
     },
     {
@@ -234,7 +234,7 @@
         "kind": "proposal",
         "channel": "ideas",
         "id": 7729,
-        "url": "https://a-to-mind.com/team/#ideas/7729"
+        "url": "https://a-to-mind.com/team/#c=ideas&t=7729"
       }
     },
     {
@@ -249,7 +249,7 @@
         "kind": "proposal",
         "channel": "ideas",
         "id": 7730,
-        "url": "https://a-to-mind.com/team/#ideas/7730"
+        "url": "https://a-to-mind.com/team/#c=ideas&t=7730"
       }
     },
     {
@@ -264,8 +264,9 @@
         "kind": "proposal",
         "channel": "ideas",
         "id": 7731,
-        "url": "https://a-to-mind.com/team/#ideas/7731"
+        "url": "https://a-to-mind.com/team/#c=ideas&t=7731"
       }
     }
-  ]
+  ],
+  "public_path": "https://a-to-mind.com/resources/salvage-github.json"
 }
