@@ -127,6 +127,10 @@ export function parseCalendar(text) {
   // as a calendar event): an ask that opens with a work verb, or runs past MAX_EVENT_WORDS words, has no event in it; the explicit forms
   // ("add X to my calendar", "remind me to ...") were taken above or below and keep any length
   if (/^(?:please\s+)?(?:review|summari[sz]e|list|explain|analy[sz]e|compare|audit|describe|tell\s+me|give\s+me|look\s+at|go\s+through|walk\s+me)\b/i.test(t)) return null;
+  // how someone feels is not an event (stranger audit, 2026-11-26: "i feel sad today" was put on the calendar as "I feel sad", all day):
+  // a first-person feeling or opinion ("i feel", "i'm", "i am", "i think", "i love", "i miss") with no event word in it goes to the answer
+  if (/^(?:i\s+(?:feel|felt|am|was|think|thought|love|hate|miss|wish|like|guess|just|really|can'?t|don'?t|didn'?t)|i'?m|im|feeling|i'?ve\s+been|it'?s\s+been|today\s+(?:is|was|sucks))\b/i.test(t)
+    && !/\b(?:meeting|appointment|dentist|doctor|party|birthday|flight|class|lesson|interview|lunch|dinner|breakfast|call|exam|deadline|concert|game|gym|workout|shift|work at|trip)\b/i.test(t)) return null;
   if (!/^(?:please\s+)?remind\s+me\b/i.test(t) && t.split(/\s+/).length > MAX_EVENT_WORDS) return null;
   const w = parseWhenText(t);
   // "remind me to call mom" with no when: it goes on today, so it is kept rather than lost
