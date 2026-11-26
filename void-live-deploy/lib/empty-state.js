@@ -11,10 +11,10 @@ export const SUGGESTIONS = [
   { ask: 'draw a circle', skill: 'shape' },
   { ask: 'sticky note buy milk', skill: 'sticky' },
   { ask: 'set a timer for 5 minutes', skill: 'time' },
-  { ask: 'make a 3d torus', skill: 'make' },
+  { ask: 'make a 3d torus', skill: 'experiments' },
   { ask: 'open a converter', skill: 'convert' },
   { ask: '20% tip on 45', skill: 'tip' },
-  { ask: 'where is jupiter', skill: 'skycard' },
+  { ask: 'where is jupiter', skill: 'where-is' },
 ];
 
 // the next suggestion: never the one just shown (rnd is injectable for tests)
