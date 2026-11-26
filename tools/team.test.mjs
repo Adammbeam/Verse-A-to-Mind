@@ -659,6 +659,8 @@ test('work --run hands the whole job to a one-shot agent and stops a stuck one, 
   assert.match(p, /Job mvq1 \(versus, versus:hexo\.io, thread 61\):\nVersus: hexo\.io needs a page/);
   assert.match(p, /Code: https:\/\/github\.com\/atomeam\/void-loop/, 'the brief comes with it');
   assert.match(p, /newest main in a clean checkout/, 'never an old local branch (Beam\'s first PRs carried a 10-day-old commit)');
+  assert.match(p, /git clone https:\/\/github\.com\/Adammbeam\/Verse-A-to-Mind/);
+  assert.match(p, /pull request to Adammbeam\/Verse-A-to-Mind main/);
   assert.match(p, /a domains\/targets file alone does not finish it/, 'a versus job is the page, not a note about the site');
   assert.match(p, /last line/);
   assert.match(p, /never quote the owner/, 'a pull request says the change in its own words');
