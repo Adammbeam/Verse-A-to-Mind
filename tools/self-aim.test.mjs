@@ -2,7 +2,7 @@
 // Run: node --test tools/self-aim.test.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { isSelfAsk, selfFacts, towerFacts, AIM, SELF_RULE } from '../void-live-deploy/lib/self-context.js';
+import { isSelfAsk, selfFacts, towerFacts, AIM, SELF_RULE, withAim, wantsAim, hasAim, aimLine } from '../void-live-deploy/lib/self-context.js';
 import { buildSelf, floorKind, towerOf } from './self-context.mjs';
 import { GUIDE } from '../void-live-deploy/lib/job-guide.js';
 import { askOf } from './flakes.mjs';
@@ -57,4 +57,26 @@ test('a flake job first asks for a cheap deterministic node test, not a browser 
   assert.match(GUIDE.flake, /node --test/);
   assert.match(GUIDE.flake, /do not start by reproducing it in a full browser suite/);
   assert.match(GUIDE.versus, /Prefer a cheap, deterministic node test/);
+});
+
+test('withAim puts the standing aim on a want or become ask in code, even when the model only lists nearer wants', () => {
+  const self = { aim: AIM, tower: { kind: 'travel' } };
+  const willOnly = 'I want a retirement planning app, a purse capacity calculator, and a relationship history logger.';
+  const out = withAim(willOnly, self, 'What do you want?');
+  assert.ok(out.startsWith(AIM), out);
+  assert.match(out, /I am taking on travel work/);
+  assert.ok(out.includes(willOnly));
+  assert.ok(hasAim(out));
+  const already = withAim(AIM + ' I also want a tide table.', self, 'what do you want?');
+  assert.equal(already.split('one place people need').length - 1, 1, 'the aim is not stated twice when the model already said it');
+  const facts = selfFacts({ self });
+  assert.ok(hasAim(facts));
+  assert.equal(withAim(facts, self, 'what do you want?'), facts, 'facts that already state the aim are left as written');
+  assert.equal(withAim(willOnly, self, 'what time is it in Tokyo?'), willOnly, 'a non-aim ask is left alone');
+  assert.ok(wantsAim('what are you trying to become?') && wantsAim('what is your aim?') && !wantsAim('what is the aim of photosynthesis'));
+  assert.equal(aimLine({}), AIM);
+  assert.match(aimLine({ tower: { kind: 'travel' } }), /I am taking on travel work/);
+  assert.doesNotMatch(aimLine({ tower: { kind: 'travel', target: 'example-floor.test' } }), /example-floor\.test/);
+  const empty = withAim('', self, 'what do you want?');
+  assert.ok(empty.startsWith(AIM) && empty.includes('travel'));
 });

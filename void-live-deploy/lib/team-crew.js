@@ -15,6 +15,7 @@
  */
 
 import { slugOf, categoryOf, CATEGORIES } from './watch-build.js'; // a TV or radio idea's blueprint job is tv:<slug> (tools/watch-build.mjs queues it)
+import { WEEK_MS } from './team.js';
 export const RETIRED = Object.freeze([{ id: 'c7e0000000a1', channel: 'tower' }]); // TowerScout: it mapped sites and filed nothing a visitor can use
 export const CREW = Object.freeze([
   { id: 'c7e0000000a2', slug: 'exam-coach', name: 'ExamCoach', every: 60, channel: 'exam', lane: 'exam',
@@ -36,6 +37,15 @@ export const byLane = (lane) => CREW.find((b) => b.lane === lane) || null;
 export const LANES = Object.freeze({ exam: 'gap', tower: 'versus', page: 'heal', link: 'heal', miss: 'gap', revenue: 'feature', idea: 'feature', merge: 'heal' });
 export const CREW_AWAY_MS = 40 * 60e3; // the clock knocks every 15 minutes: a crew member is here while it has worked in the last 40
 export const MAX_OPEN = 12, FILE_PER_TICK = 2, REOPEN_MAX = 3, REOPEN_GAP_MS = 24 * 3600e3, SETTLE_MS = 2 * 3600e3;
+/** a want filed from a current-floor checklist gap (key floor-*, or metric floorgap:) */
+export const isFloorGap = (w) => /^floor-/.test(String((w && w.key) || '')) || /^floorgap:/.test(String((w && (w.metric && w.metric.id || w.metric)) || ''));
+/** the oldest open want past the 7-day window, to yield a MAX_OPEN slot for a fresh floor-gap filing. Pure. Never evicts another floor-gap want. */
+export function yieldFor(incoming, openWants, now) {
+  if (!isFloorGap(incoming)) return null;
+  const stale = (openWants || []).filter((w) => w && (now - Number(w.filed || w.at || 0)) > WEEK_MS && !isFloorGap(w))
+    .sort((a, b) => Number(a.filed || a.at || 0) - Number(b.filed || b.at || 0));
+  return stale[0] || null;
+}
 export const TAG = 'Want key: ';
 export const WANT_KEY = /^[a-z0-9][a-z0-9-]{2,60}$/;
 // the pages StatusWatch probes every run (plus the page of every open page want)

@@ -9,6 +9,24 @@ import { PERSONA } from './persona.js';
 import { models, ANSWER_FALLBACK } from './models.js';
 // What Verse is trying to become, in its own words: a fact it always reads, humble, with no rival names and no boast.
 export const AIM = 'I aim to be the one place people need for the things they come to the web for, taking them on one kind of work at a time, doing each kind as well as the best place for that kind does, saying honestly where I still fall short, and keeping at it on my own.';
+/** asks that must state the aim in the answer, even if the model only lists nearer wants */
+export const wantsAim = (ask) => /\bwhat (do|did) you want\b|\bwhat (are|were|will) you (trying to become|aiming (?:to be|to become|for|at)|becoming)\b|\bwhat (is|are) your aims?\b|\bwhat do you aim\b/i.test(String(ask || ''));
+export const hasAim = (text) => String(text || '').includes('one place people need') && String(text || '').includes('keeping at it on my own');
+/** the standing aim, plus the current floor's kind when the record has one. Pure. */
+export function aimLine(self) {
+  const aim = (self && self.aim) || AIM;
+  const kind = self && self.tower && self.tower.kind;
+  return kind ? aim + ' I am taking on ' + kind + ' work.' : aim;
+}
+/** put the standing aim ahead of a self answer so "what do you want?" always states it, independent of the model. Pure; no new state. */
+export function withAim(answer, self, ask) {
+  if (!wantsAim(ask)) return String(answer || '');
+  const line = aimLine(self);
+  const text = String(answer || '').trim();
+  if (!text) return line;
+  if (hasAim(text)) return text;
+  return line + ' ' + text;
+}
 const SELF_NOUN = /\b(wish\s*list|improvement budget|growth[- ]inbox|outcome cards?|scouting[- ]reports?|your (own )?(architecture|internals|inner workings|tech stack)|your (will|wants|skills|board|plans?|roadmap|growth|inbox|features?|backlog|priorit(y|ies)|frontier|open (asks|items|work)|asks|to-?do list)|about yourself)\b/i;
 // "your frontier" and "your open asks" (2026-11-25: "what is still open on your frontier?" got "nothing on the web"); a bare "frontier" (the airline, the final one) stays a question
 // "Verse" (once "Verse") the product, capitalised, or a-to-mind; never C's void pointer / void function
