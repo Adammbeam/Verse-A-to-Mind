@@ -19,6 +19,7 @@ import { FIX_SYSTEM, INJECTION_RULE, ruleFix, redact, platformOf, basisOf } from
 import { guardAnswer, heldBack } from '../../lib/patch-guard.js';
 import { REVIEW_SYSTEM, ruleReview, findingsText, langNamed } from '../../lib/code-review.js';
 import { models, ANSWER_FALLBACK } from '../../lib/models.js';
+import { bounded, hedged, SOURCES_MS } from '../../lib/answer-speed.js';
 import { runFree } from '../../lib/ai-gateway.js';
 import { keeperOf, scrubOut } from '../../lib/keeper.js';
 import { redactPersonal } from '../../lib/privacy.js';
@@ -609,8 +610,8 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   // a follow-up that points back ("how was that mountain formed") also reads the earlier ask's sources, taken in turn with its own
   const follows = before && !self && !note && !isPaste(ask) ? before : null;
   const earlierP = follows && points(ask) ? sources(follows.ask).catch(() => []) : null; // searched beside the new ask's own, not after it
-  let src = self || isPaste(ask) || note ? [] : await sources(ask);
-  if (earlierP) src = mergeSources([await earlierP, src]);
+  let src = self || isPaste(ask) || note ? [] : await bounded(sources(ask), SOURCES_MS, []); // a slow Wikipedia never holds the answer (lib/answer-speed.js)
+  if (earlierP) src = mergeSources([await bounded(earlierP, SOURCES_MS, []), src]);
   const srcAt = Date.now();
   const route = await settle(routeP, t0 + BUDGET_MS);
   // the skill the ask nearly was (lib/near-miss.js, asked by Verse): the page offers that skill's first example when it ends up with no answer
@@ -695,12 +696,15 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
     await log({ model: MODEL, outcome: 'plan:skill' });
     return Response.json({ goal: planGoal, steps: planResult.steps, timer: planResult.timer, practice: planResult.practice, learn: planResult.learn, note: planResult.note, model: MODEL, route: 'skill', ...nearOut });
   }
+  let secondTried = false; // the hedge already ran the second free model: the fallback chain below does not wait on it twice
   if (!answer) {
     try {
-      const r = await runFree(env, MODEL, { messages, ...ANSWER_RUN });
-      answer = scrubOut(redact(String(pick(r)).trim()), env);
-      model = MODEL;
-      if (!answer) throw new Error('empty');
+      // the first free model alone for HEDGE_MS, then the second beside it: the first answer wins (lib/answer-speed.js hedged)
+      const clean = (r) => scrubOut(redact(String(pick(r)).trim()), env);
+      const won = await hedged([{ id: MODEL, run: () => runFree(env, MODEL, { messages, ...ANSWER_RUN }).then(clean) },
+        { id: ANSWER_FALLBACK, run: () => { secondTried = true; return runFree(env, ANSWER_FALLBACK, { messages, ...ANSWER_RUN }).then(clean); } }], { capMs: STRONG_TIMEOUT_MS });
+      answer = won.value; model = won.id;
+      if (won.id !== MODEL) outcome += '; default slow, second free model';
     } catch (e) {
       // the free allowance ran out (or Gemma is down): the free ceiling isn't a stop, but paying still needs both conditions
       try { await recordShortfall(env, 'answer', String(e && e.message) === 'empty' ? 'empty' : reasonOf(e)); } catch (_) {}
@@ -708,7 +712,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
       const alt = await freeLlm(messages, { env, registry: await loadRegistry(env, request.url) }).catch(() => null);
       if (alt) { const a2 = scrubOut(redact(noThink(String(alt.answer).trim())), env); if (a2) { answer = a2; model = alt.source; outcome += '; default busy, ' + alt.source; } }
       // the second free try: the other free model (lib/models.js ANSWER_FALLBACK), before anything paid or the open web
-      if (!answer) try { const r = await within(runFree(env, ANSWER_FALLBACK, { messages, ...ANSWER_RUN }), STRONG_TIMEOUT_MS); const second = scrubOut(redact(String(pick(r)).trim()), env); if (second) { answer = second; model = ANSWER_FALLBACK; outcome += '; default busy, second free model'; } } catch (_) { /* both free models out: on to paid, then the web */ }
+      if (!answer && !secondTried) try { const r = await within(runFree(env, ANSWER_FALLBACK, { messages, ...ANSWER_RUN }), STRONG_TIMEOUT_MS); const second = scrubOut(redact(String(pick(r)).trim()), env); if (second) { answer = second; model = ANSWER_FALLBACK; outcome += '; default busy, second free model'; } } catch (_) { /* both free models out: on to paid, then the web */ }
       const access = answer ? null : await paidAccess(env);
       const paid = answer ? answer : access.model ? await tryPaid(access, 'free allowance out') : '';
       if (!paid) {
