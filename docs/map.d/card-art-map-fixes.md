@@ -1,0 +1,7 @@
+- `sudoku` — a skill: Sudoku, the number-placement puzzle Verse can play.
+- `client-work-drop` — a skill: the client tasks that drop once Verse owns the systems, monitors, tests and handoffs for a process.
+- `verse-check.yml` — workflow: Verse's own review check on a pull request.
+- `verse-merge.yml` — workflow: the automerge gate that lands a clean pull request.
+- `bench-live.mjs` — tool: the live benchmark runner that samples Verse's answers.
+- `build-tools-json.mjs` — tool: builds the tools.json catalogue browsers read.
+- `wipe-guard.mjs` — tool: the guard that checks a wipe leaves no kept stage behind.

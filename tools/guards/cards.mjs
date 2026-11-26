@@ -12,6 +12,8 @@ export const POOL = [
   { ask: 'chicken soup recipe', words: ['chicken'] }, { ask: 'salad recipe', words: ['salad'] },
 ];
 export const PER_RUN = 6, WAIT_ART_MS = 50000, RECUR = 3, BUDGET_MS = 9 * 60e3;
+// a card's own photo is art too (lib/art-source.js): a painted picture is not the only way to have real art in the box
+export const ART_SEL = '.vc-forge-img, .vc-art-photo';
 
 /** the asks for this run: a rotating window over the pool, so the whole pool is covered in a day or two. Pure. */
 export function pickAsks(pool, now, n = PER_RUN, everyMs = 6 * 3600e3) {
@@ -82,8 +84,9 @@ async function look(ctx, b, item) {
     await inp.fill(item.ask); await inp.press('Enter');
     await p.waitForSelector('.vcard', { timeout: 30000 }).catch(() => {});
     const t0 = Date.now();
-    while (Date.now() - t0 < WAIT_ART_MS) { await p.waitForTimeout(3000); if (await p.evaluate(() => { const e = [...document.querySelectorAll('.vcard')].pop(); return !!(e && (e.querySelector('.vc-forge-img') || !e.querySelector('.vc-art'))); })) break; }
-    const info = await p.evaluate(() => { const el = [...document.querySelectorAll('.vcard')].pop(); if (!el) return null; const img = el.querySelector('.vc-forge-img'); return { subj: el.dataset.artSubject || '', art: !!el.querySelector('.vc-art'), img: img ? { w: img.naturalWidth, complete: img.complete } : null, text: el.innerText }; });
+    // a card's own photo is its art too (lib/art-source.js): a painted picture is not the only way to have real art in the box
+    while (Date.now() - t0 < WAIT_ART_MS) { await p.waitForTimeout(3000); if (await p.evaluate((sel) => { const e = [...document.querySelectorAll('.vcard')].pop(); return !!(e && (e.querySelector(sel) || !e.querySelector('.vc-art'))); }, ART_SEL)) break; }
+    const info = await p.evaluate((sel) => { const el = [...document.querySelectorAll('.vcard')].pop(); if (!el) return null; const img = el.querySelector(sel); return { subj: el.dataset.artSubject || '', art: !!el.querySelector('.vc-art'), img: img ? { w: img.naturalWidth, complete: img.complete } : null, text: el.innerText }; }, ART_SEL);
     if (!info) return out;
     out.card = true; out.expectArt = info.art; out.img = info.img; out.text = info.text;
     if (/recipe/i.test(item.ask)) out.tone = await toneJudge(info.text, ctx.env || process.env); // null when no judge answered: reported, never passed
