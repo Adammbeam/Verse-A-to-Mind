@@ -65,6 +65,35 @@ export function rivalOf(floor) {
   const m = /(?:^|:\s*)((?:[a-z0-9-]+\.)+[a-z]{2,})$/i.exec(s(floor, 120));
   return m ? m[1].toLowerCase() : '';
 }
+/** the public kind of a floor id ("travel: flightconnections.com" -> "travel"; a bare host is not a kind). */
+export function floorKind(id) {
+  const raw = s(id, 120);
+  const i = raw.indexOf(':');
+  if (i > 0) return s(raw.slice(0, i), 40);
+  if (raw && !/(?:^|\.)(?:[a-z0-9-]+\.)+[a-z]{2,}$/i.test(raw)) return raw;
+  return '';
+}
+/** Checklist gaps on the current tower floor, most urgent first (at most one). Named open items on the floor's
+ *  own checklist (tower.target.json background), never win/lose aspect counts, and public words use the kind, never a rival host.
+ *  The job starts with a cheap, deterministic node test, not a full browser suite. */
+export function floorGapsOf(ev = {}) {
+  const target = ev.target, id = target && s(target.id, 120);
+  if (!id) return [];
+  const kind = floorKind(id) || 'this kind of work';
+  const items = (Array.isArray(target.background) ? target.background : []).filter((b) => b && s(b.id, 120) === id && s(b.aspect, 80));
+  if (!items.length) return [];
+  items.sort((a, b) => String(a.since || '').localeCompare(String(b.since || '')) || String(a.aspect).localeCompare(String(b.aspect)));
+  const g = items[0], aspect = s(g.aspect, 80), n = items.length, job = s(g.job, 160).replace(/(?:[a-z0-9-]+\.)+[a-z]{2,}/gi, '').replace(/\s+/g, ' ').trim();
+  const key = ('floor-' + slug(kind, 16) + '-' + slug(aspect, 24)).slice(0, 60);
+  return [{
+    key, lane: 'tower',
+    title: 'Close the open ' + aspect + ' check on the ' + kind + ' floor',
+    why: 'The current tower floor (' + kind + ') still has ' + n + ' open checklist item' + (n === 1 ? '' : 's') + '. The weakest is "' + aspect + '"' + (job ? ' (' + job + ')' : '') + '. Start with a cheap, deterministic node test that fails with a precise message; do not start with a full browser suite.',
+    done: 'A cheap deterministic node test covers the gap, and the ' + aspect + ' check on the ' + kind + ' floor is verified on the live site, so that item leaves the floor\'s open checklist.',
+    cite: [{ what: 'tower floor checklist', url: 'https://a-to-mind.com/tower.target.json' }],
+    metric: { id: 'floorgap:' + id + '|' + aspect, label: aspect + ' on the ' + kind + ' floor is verified', better: 'up', value: 0 },
+  }];
+}
 /**
  * Verse's wants, from its evidence, most urgent first. ev (every field optional; a missing one makes no want and measures nothing):
  *   exam     /exam/latest.json { domains: { <d>: { score, fails: [{ ask }] } } } or /progress/exam.json { cases: [{ id, ask, ok }] }
@@ -99,6 +128,8 @@ export function wantsOf(ev = {}) {
       done: 'The link opens a page that answers 200, or the link goes.', cite: [{ what: 'SiteOperator link walk', url: 'https://a-to-mind.com' + s(l.from || '/', 40) }],
       metric: { id: 'link:' + s(l.path, 80), label: s(l.path, 60) + ' answers 200', better: 'up', value: 0 } });
   }
+  // The current floor's own checklist is work: one named open item, cheapest check first (after pages that fail, before the exam).
+  for (const w of floorGapsOf(ev)) want(w);
   // the outcome exam: the lowest domains (or a case that regressed)
   const doms = ev.exam && ev.exam.domains && typeof ev.exam.domains === 'object' ? Object.entries(ev.exam.domains) : [];
   const low = doms.filter(([, d]) => d && num(d.score) != null && d.score < 100).sort((a, b) => a[1].score - b[1].score || (a[0] < b[0] ? -1 : 1)).slice(0, 2);
@@ -158,6 +189,12 @@ export function measure(id, ev = {}) {
   if (k === 'exam') { const d = ev.exam && ev.exam.domains && ev.exam.domains[arg]; return d ? num(d.score) : null; }
   if (k === 'examcase') { const c = ((ev.exam && ev.exam.cases) || []).find((x) => x && x.id === arg); return c ? (c.ok ? 1 : 0) : null; }
   if (k === 'tower') { const rows = ev.tower && ev.tower.floors && ev.tower.floors[arg]; return rows ? towerMisses(rows).length : null; }
+  if (k === 'floorgap') {
+    const at = arg.indexOf('|'), fid = at >= 0 ? arg.slice(0, at) : arg, aspect = at >= 0 ? arg.slice(at + 1) : '';
+    if (!ev.target || s(ev.target.id, 120) !== fid) return null;
+    const open = (ev.target.background || []).some((b) => b && s(b.id, 120) === fid && s(b.aspect, 80) === aspect);
+    return open ? 0 : 1;
+  }
   if (k === 'page') { const p = (ev.probe || []).find((x) => x && x.path === arg); return p ? (p.status === 200 ? 1 : 0) : null; }
   if (k === 'link') { const p = (ev.links || []).find((x) => x && x.path === arg) || (ev.probe || []).find((x) => x && x.path === arg); return p ? (p.status === 200 ? 1 : 0) : null; }
   if (k === 'guard') { const g = (ev.guards || []).find((x) => x && x.id === arg); return g && g.now !== 'unknown' ? (g.now === 'up' ? 1 : 0) : null; }

@@ -32,7 +32,10 @@ test('the job says fix it, never skip it, and fits the queue', () => {
   const g = { check: 'a'.repeat(300), times: 2, shas: ['aaaaaaa', 'bbbbbbb'] };
   assert.ok(targetOf(g.check).length <= 40 && targetOf(g.check).startsWith('flake:'));
   assert.ok(askOf(g).length <= 200);
-  assert.match(askOf({ check: 'sky / still', times: 2, shas: ['a', 'b'] }), /never skip, quarantine or retry/);
+  const ask = askOf({ check: 'sky / still', times: 2, shas: ['a', 'b'] });
+  assert.match(ask, /never skip, quarantine or retry/);
+  assert.match(ask, /cheap deterministic node test/);
+  assert.match(ask, /precise failure/);
   assert.match(askOf({ check: 'paste any size and read aloud: a 3,000-line pasted log reaches the server under 20 kB', times: 2, shas: ['a'] }), /^make "paste any size and read aloud" robust/, 'the check by the head of its name, whole');
 });
 
@@ -54,7 +57,7 @@ test('a failed shard is rerun once; a pass stays green; a second fail reverts', 
   assert.equal(again.green, false);
   const text = 'FAIL walker: a slow drag lifts the figure and sets it back on the floor  -> gone\n';
   assert.deepEqual(namesOf(text, 'browser-suite shard 8'), ['walker: a slow drag lifts the figure and sets it back on the floor']);
-  const verify = readFileSync(new URL('../.github/workflows/verify.yml', import.meta.url), 'utf8');
+  const verify = readFileSync(new URL('../.github/workflows-parked/verify.yml', import.meta.url), 'utf8');
   const rerun = verify.indexOf('Rerun this shard once');
   assert.ok(rerun > 0 && verify.indexOf('node tools/flake-rerun.mjs land', rerun) > rerun);
   assert.ok(verify.indexOf('node tools/revert-target.mjs --pick') > verify.indexOf('node tools/flake-rerun.mjs land', rerun));

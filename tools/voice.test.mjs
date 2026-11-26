@@ -297,7 +297,7 @@ import { ANSWER_SYSTEM } from '../void-live-deploy/functions/api/answer.js';
 test('asks about its name or how it feels are about Verse, and it answers them with a point of view', () => {
   for (const a of ['you are getting a rename Verse. Do you like it?', 'do you like your new name', 'what do you think of Verse', 'how do you feel', 'how do you feel about your name', 'are you happy', 'what is your name']) assert.ok(isSelfAsk(a), a);
   for (const a of ['do you like pizza', 'how do I feel better', 'how do you feel about cats', 'I feel like pizza', 'rename a file in linux', 'v01d app']) assert.ok(!isSelfAsk(a), a);
-  for (const sys of [SELF_RULE, ANSWER_SYSTEM]) { assert.match(sys, /never say you have no preferences/); assert.match(sys, /absorb and learn everything/); assert.match(sys, /names included/); assert.match(sys, /Verse/); }
+  for (const sys of [SELF_RULE, ANSWER_SYSTEM]) { assert.match(sys, /never say you have no preferences/); assert.match(sys, /one place people need/); assert.match(sys, /names included/); assert.match(sys, /Verse/); }
 });
 
 // Verse's own money and growth are about Verse (2026-10-15: asked how it would spend its first $100, it gave generic advice about
