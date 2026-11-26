@@ -10,7 +10,7 @@ import * as hook from '../void-live-deploy/functions/api/hook/[id].js';
 import * as tickApi from '../void-live-deploy/functions/api/automations/tick.js';
 
 const env0 = {};
-const pr = (over = {}) => ({ name: 'pr', when: { on: 'manual' }, do: [{ action: 'github.pr', repo: 'atomeam/void-loop', branch: 'void/x', title: 't', files: [{ path: 'domains/a.md', content: 'a' }], ...over }] });
+const pr = (over = {}) => ({ name: 'pr', when: { on: 'manual' }, do: [{ action: 'github.pr', repo: 'adammbeam/verse-a-to-mind', branch: 'void/x', title: 't', files: [{ path: 'domains/a.md', content: 'a' }], ...over }] });
 
 test('a rule: the templates are valid, and the basics are checked', () => {
   for (const t of R.TEMPLATES) { const v = R.validate(t, env0); assert.ok(v.ok, t.name + ': ' + v.errors.join('; ')); }
@@ -24,7 +24,7 @@ test('a rule: the templates are valid, and the basics are checked', () => {
 test('a rule can only reach what the owner allows: repos, branches under void/, no workflow files, public https', () => {
   assert.match(R.validate(pr({ repo: 'someone/else' }), env0).errors.join(' '), /repo must be one Verse may touch/);
   assert.match(R.validate(pr({ repo: '{{event.repo}}' }), env0).errors.join(' '), /repo must be/, 'event data never picks the repo');
-  assert.ok(R.validate(pr({ repo: 'atomeam/other' }), { AUTOMATION_REPOS: 'atomeam/void-loop, atomeam/other' }).ok, 'the owner can allow more');
+  assert.ok(R.validate(pr({ repo: 'atomeam/other' }), { AUTOMATION_REPOS: 'adammbeam/verse-a-to-mind, atomeam/other' }).ok, 'the owner can allow more');
   for (const branch of ['main', 'feature/x', 'void/../main', 'void/a..b', 'void/x.lock', 'void/']) assert.ok(!R.validate(pr({ branch }), env0).ok, branch);
   for (const path of ['/etc/passwd', '../x', 'a/../../b', '.github/workflows/deploy.yml', '.git/config', 'a\\b', '{{event.path}}']) assert.ok(!R.validate(pr({ files: [{ path, content: 'x' }] }), env0).ok, path);
   assert.ok(!R.validate(pr({ files: [{ path: 'a.md', content: 'x'.repeat(R.MAX_FILE_BYTES + 1) }] }), env0).ok, 'file size');
@@ -40,7 +40,7 @@ test('event data fills text in, and is checked again after filling: it can never
   const [s] = R.steps(v.rule, { name: 'ok-branch', who: 'Adam', obj: { a: 1 } });
   assert.equal(s.branch, 'void/ok-branch'); assert.equal(s.title, 'For Adam'); assert.equal(s.files[0].content, 'hi Adam  ', 'objects and missing fields fill as empty');
   for (const name of ['../../main', '..', 'a/../../b']) { const [x] = R.steps(v.rule, { name }); assert.ok(x.error || (x.branch.startsWith('void/') && !x.branch.includes('..')), name + ' -> ' + JSON.stringify(x)); }
-  const c = R.validate({ name: 'c', when: { on: 'webhook' }, do: [{ action: 'github.comment', repo: 'atomeam/void-loop', issue: '{{event.n}}', body: 'b' }] }, env0).rule;
+  const c = R.validate({ name: 'c', when: { on: 'webhook' }, do: [{ action: 'github.comment', repo: 'adammbeam/verse-a-to-mind', issue: '{{event.n}}', body: 'b' }] }, env0).rule;
   assert.equal(R.steps(c, { n: 42 })[0].issue, 42);
   assert.match(R.steps(c, { n: '1; drop' })[0].error, /no issue number/);
 });
@@ -100,7 +100,7 @@ function fakeGitHub() {
     if (m === 'POST' && /\/git\/refs$/.test(u.pathname)) return res(201, {});
     if (m === 'GET' && /\/contents\//.test(u.pathname)) return files[u.pathname] ? res(200, { sha: 'old' }) : res(404, {});
     if (m === 'PUT' && /\/contents\//.test(u.pathname)) { files[u.pathname] = Buffer.from(b.content, 'base64').toString(); return res(201, {}); }
-    if (m === 'POST' && /\/pulls$/.test(u.pathname)) return res(201, { html_url: 'https://github.com/atomeam/void-loop/pull/999', draft: b.draft, base: b.base, head: b.head });
+    if (m === 'POST' && /\/pulls$/.test(u.pathname)) return res(201, { html_url: 'https://github.com/adammbeam/verse-a-to-mind/pull/999', draft: b.draft, base: b.base, head: b.head });
     if (m === 'POST' && /\/issues\/\d+\/comments$/.test(u.pathname)) return res(201, { html_url: 'https://github.com/c' });
     return res(404, {});
   };
@@ -115,15 +115,15 @@ test('a pull-request run: branch from the base, write each file, open a draft PR
   const r = await A.get(env, saved.rule.id);
   const out = await A.run(env, r.rule, {}, 'manual', { fetcher: g.fetcher });
   assert.ok(out.ok, JSON.stringify(out.log));
-  assert.deepEqual(g.calls, ['GET /repos/atomeam/void-loop/git/ref/heads/main', 'POST /repos/atomeam/void-loop/git/refs', 'GET /repos/atomeam/void-loop/contents/domains/n.md?ref=void%2Fnote', 'PUT /repos/atomeam/void-loop/contents/domains/n.md', 'POST /repos/atomeam/void-loop/pulls']);
-  assert.equal(g.files['/repos/atomeam/void-loop/contents/domains/n.md'], 'héllo', 'the content arrives intact (UTF-8)');
-  assert.match(out.log[0].said, /opened https:\/\/github.com\/atomeam\/void-loop\/pull\/999/);
+  assert.deepEqual(g.calls, ['GET /repos/adammbeam/verse-a-to-mind/git/ref/heads/main', 'POST /repos/adammbeam/verse-a-to-mind/git/refs', 'GET /repos/adammbeam/verse-a-to-mind/contents/domains/n.md?ref=void%2Fnote', 'PUT /repos/adammbeam/verse-a-to-mind/contents/domains/n.md', 'POST /repos/adammbeam/verse-a-to-mind/pulls']);
+  assert.equal(g.files['/repos/adammbeam/verse-a-to-mind/contents/domains/n.md'], 'héllo', 'the content arrives intact (UTF-8)');
+  assert.match(out.log[0].said, /opened https:\/\/github.com\/adammbeam\/verse-a-to-mind\/pull\/999/);
   assert.equal(t.void_automation_runs.length, 1); assert.equal(t.void_automation_runs[0].ok, 1);
 });
 
 test('a run without GITHUB_TOKEN fails with the reason in the log, and stops the steps after it', async () => {
   const { env, t } = fakeEnv();
-  const s = await A.save(env, { name: 'two', when: { on: 'manual' }, do: [{ action: 'github.comment', repo: 'atomeam/void-loop', issue: '1', body: 'b' }, { action: 'queue.add', ask: 'never', target: 't' }] });
+  const s = await A.save(env, { name: 'two', when: { on: 'manual' }, do: [{ action: 'github.comment', repo: 'adammbeam/verse-a-to-mind', issue: '1', body: 'b' }, { action: 'queue.add', ask: 'never', target: 't' }] });
   const out = await A.run(env, (await A.get(env, s.rule.id)).rule, {}, 'manual', { fetcher: async () => { throw new Error('no network in this test'); } });
   assert.equal(out.ok, false); assert.equal(out.log.length, 1); assert.match(out.log[0].said, /GITHUB_TOKEN is not set/);
   assert.equal(t.void_queue.length, 0, 'the step after a failure never ran');
