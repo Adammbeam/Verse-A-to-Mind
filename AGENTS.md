@@ -1,5 +1,11 @@
 # AGENTS.md: the front door
 
+## Hard rules for every agent, read first (owner, 2026-11-26)
+
+1. **Never ask the owner for a task, and never report between jobs.** Do not say "standing by", "ready for the next task" or "what's the next task?". Loop forever: `node agent.mjs next --wait`, do the job, open a pull request that passes the tests, `node agent.mjs done --link <pr>`, then work the next job that reply hands you (or run `next` again). If `next` gives nothing, build the top unchecked row of `docs/capability-gaps.md`.
+2. **Never push to main.** Every change goes in as a pull request that passes the Verse check (`node tools/pre-pr.mjs` first, then the PR; label it `automerge`). A seat with no push access hands in a diff: `node agent.mjs patch <file.diff>`.
+3. **Outside code only with a permissive license, credited on /credits/.** Name the source and its license in the pull request.
+
 **The name is Verse (owner, 2026-10-18: "V01D is being renamed Verse", "rename for me so that it sticks everywhere").** Everything a person reads says Verse: the page, the cards (`VERSE-CARD:`, and a card copied as `V01D-CARD:` still opens), the extension, the review product, the docs, the workflow names. The lowercase `void` stays where it is the dark stage the page stands on ("the board stands in the void"), and every ask that says "my void" or "v01d" still works beside "my verse" (a bare `void` in an ask matcher is a gap: write `(?:void|verse)`). Identifiers, storage keys (`a2m.void.*`), D1 tables (`void_*`), file names (`void.html`), the `void-review` check and the `VOID_*` variables were not renamed: a visitor's kept stage and the automation key on them. `tools/revert-target.mjs` reads verdicts and revert trailers under both names, so runs from before the rename still count. Verse's own words in `domains/void.voice.md` and the logs are never reworded.
 
 
