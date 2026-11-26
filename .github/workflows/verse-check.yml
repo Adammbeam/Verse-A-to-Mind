@@ -1,25 +1,36 @@
 name: Verse check
-
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
-
+    types: [opened, synchronize, reopened, labeled, ready_for_review]
 permissions:
   contents: read
   pull-requests: read
-  checks: read
-
+concurrency:
+  group: verse-check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 jobs:
   check:
+    name: Verse check
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      - name: pre-pr
-        run: node tools/pre-pr.mjs --check-only
-      - name: merge-gate
+          node-version: 22
+      - name: bring main in
+        run: git fetch --no-tags origin main && git -c user.name=verse-check -c user.email=check@a-to-mind.com merge --no-edit origin/main
+      - name: pre-PR check
+        env:
+          PRE_PR_BASE: origin/main
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: node tools/pre-pr.mjs --check-only --pr ${{ github.event.pull_request.number }}
+      - name: merge gate
+        env:
+          MERGE_GATE_BASE: origin/main
+          VISION_JUDGE_SHOTS: ${{ runner.temp }}/vision-judge-shots
         run: node tools/merge-gate.mjs
