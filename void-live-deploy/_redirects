@@ -4,21 +4,34 @@
 # Verse's redirects (Cloudflare Pages): a floor's own name never 404s - Versus's shopping floor is the store
 /shopping /store/ 301
 # the AI check is a mode of the photo details page (owner, 2026-11-03: one page per category, features fold in as modes)
-/ai-authenticity-checker /photos/exif/?mode=ai 301
-/ai-authenticity-checker/ /photos/exif/?mode=ai 301
+/ai-authenticity-checker /photos/details/?mode=ai 301
+/ai-authenticity-checker/ /photos/details/?mode=ai 301
 /shopping/ /store/ 301
 # plain names for the photos lane pages (owner, 2026-10-28: plain titles, old URLs kept)
-/photos/batch /photos/iloveimg/ 301
-/photos/batch/ /photos/iloveimg/ 301
-/photos/editor /photos/photopea/ 301
-/photos/editor/ /photos/photopea/ 301
-/photos/compress /photos/tinypng/ 301
-/photos/compress/ /photos/tinypng/ 301
-/photos/metadata /photos/exifeditor/ 301
-/photos/metadata/ /photos/exifeditor/ 301
+/photos/batch /photos/?tab=crop 301
+/photos/batch/ /photos/?tab=crop 301
+/photos/editor /photos/?tab=adj 301
+/photos/editor/ /photos/?tab=adj 301
+/photos/compress /photos/?tab=out 301
+/photos/compress/ /photos/?tab=out 301
+/photos/metadata /photos/?tab=info 301
+/photos/metadata/ /photos/?tab=info 301
+# pages once named after other sites (2026-11-25: no other site's name in a public address) open the Verse tool that does the job
+/photos/photopea/* /photos/?tab=adj 301
+/photos/photopea /photos/?tab=adj 301
+/photos/squoosh/* /photos/?tab=out 301
+/photos/squoosh /photos/?tab=out 301
+/photos/tinypng/* /photos/?tab=out 301
+/photos/tinypng /photos/?tab=out 301
+/photos/iloveimg/* /photos/?tab=crop 301
+/photos/iloveimg /photos/?tab=crop 301
+/photos/exifeditor/* /photos/?tab=info 301
+/photos/exifeditor /photos/?tab=info 301
+/photos/exif/* /photos/details/:splat 301
+/photos/exif /photos/details/ 301
 # the photo details checker by its short name
-/exif /photos/exif/ 301
-/exif/ /photos/exif/ 301
+/exif /photos/details/ 301
+/exif/ /photos/details/ 301
 # Verse's status page lives on /autopilot/ (combine-pages rule): the plain name opens it
 /status /autopilot/#status 301
 /status/ /autopilot/#status 301

@@ -1,4 +1,4 @@
-// /photos/exif/'s AI check mode (owner, 2026-11-03: fold new features into the one page for their category as a mode). Verse heard it on TV
+// /photos/details/'s AI check mode (owner, 2026-11-03: fold new features into the one page for their category as a mode). Verse heard it on TV
 // (WFTV (ABC), 30 Oct 2026: a tool to verify whether video evidence was synthetically altered; domains/tv-built/). The photo details page
 // already reads what a file records, so this mode reads what it says about who made it: Content Credentials (C2PA), the IPTC AI source
 // type, Stable Diffusion and ComfyUI settings, generator and editor names and the camera (lib/ai-check.js). Photos and videos are read on

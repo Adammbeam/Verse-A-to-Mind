@@ -1,7 +1,7 @@
 // Modes built from what Verse watched, on the page that already covers the job.
 // /notes/?mode=relationship  a dated log of what happened with someone
 // /notes/?mode=devotion      one line kept for one person
-// /photos/exif/?mode=provenance  who held a work, on this device
+// /photos/details/?mode=provenance  who held a work, on this device
 // /weather/?mode=hvac        the heat to set from the temperature on the page
 // Nothing is uploaded. A paid product is linked once, in one honest line.
 
