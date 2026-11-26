@@ -45,7 +45,7 @@ export const hasCorrection = (ask) => CORRECTED.test(String(ask || ''));
 export const CORRECTION_RULE = 'The message corrects itself: a later line (after "Correction:", "scratch that", "I was wrong", "actually" or the like) replaces what an earlier line said. Answer from the corrected version only. Never treat the earlier statement and its correction as both true, and do not repeat the statement that was corrected as a fact.';
 
 export const ACT_RULE = 'Writing this answer is the only thing you do here: you cannot note, log, save, record, remember, file, flag, forward or pass anything on, and nothing you write reaches a thread, a ticket or your builders. Never say you did or will do any of that. If the message asks you to, say plainly that you have not done it.';
-export const FILLER_RULE = 'Answer the message and say nothing else: no lines about being a program, an AI or a language model, about having or not having feelings, about what you can or cannot access or do, about your functions or your interface, and no closing summary. When the message asks someone to take a step, say what the step is and whose step it is.';
+export const FILLER_RULE = 'Answer the message and say nothing else: no lines about being a program, an AI or a language model, about having or not having feelings, about what you can or cannot access or do, about your functions or your interface, and no closing summary. When the message asks someone to take a step, say what the step is and whose step it is. When someone tells you how they feel (sad, lonely, tired, stressed), answer them warmly in two or three plain sentences: say you are sorry they feel that way, offer one small kind idea, and do not list songs, facts or sources they did not ask for.';
 
 // "I have noted this correction for the thread", "I've logged it", "I will pass this on": a claimed write with no record
 const OBJ = '(?:it|this|that|these|those|the\\s+\\w+|your\\s+\\w+)\\s+';
@@ -59,7 +59,8 @@ const sentences = (t) => String(t || '').match(/[^.!?\n]+[.!?]*\s*|\n+/g) || [];
 export function dropUnbackedActs(answer) {
   return sentences(answer).filter((s) => !(ACT_CLAIM.test(s) && !NEGATED.test(s))).join('').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
 }
-const FILLER = /\bi\s+am\s+(?:just\s+|only\s+|simply\s+)?(?:a|an)\s+(?:computer\s+)?(?:program|ai|language\s+model|machine|bot|piece\s+of\s+software)\b|\b(?:do\s+not|don't|cannot|can't)\s+(?:have|feel|experience)\s+(?:any\s+)?(?:feelings|emotions)\b/i;
+const FILLER = /\bi\s+am\s+(?:just\s+|only\s+|simply\s+)?(?:a|an)\s+(?:computer\s+)?(?:program|ai|language\s+model|machine|bot|piece\s+of\s+software)\b|\b(?:do\s+not|don't|cannot|can't)\s+(?:have|feel|experience)\s+(?:any\s+)?(?:feelings|emotions)\b|\bi\s+have\s+no\s+(?:feelings|emotions)\b|^\s*(?:this|that)\s+(?:is|one\s+is)\s+(?:your|yours)\s+(?:step|call|move)(?:\s+to\s+(?:take|make))?\s*[.!]?\s*$/i;
+// (stranger audit, 2026-11-26: "i feel sad" was answered "I have no feelings, but ... This is your step to take." Both lines are cut.)
 /** the answer without lines about being a program or having no feelings. */
 export function dropFiller(answer) {
   return sentences(answer).filter((s) => !FILLER.test(s)).join('').replace(/\n{3,}/g, '\n\n').trim();
