@@ -146,6 +146,40 @@ export function engine(L) {
   return { assemble, merge, split, extract, remove, rotate, reverse, imagesToPdf, numberPages, watermark, crop, info, optimize, pageCount };
 }
 
+/** A4 PDF of a title and paragraphs, made with the same pdf-lib /pdf/ uses. Non-Latin letters become ?. */
+export async function fromText(L, { title = '', paras = [] } = {}) {
+  const pdf = await L.PDFDocument.create(), font = await pdf.embedFont(L.StandardFonts.TimesRoman), bold = await pdf.embedFont(L.StandardFonts.TimesRomanBold);
+  const W = PAGE_SIZES.a4[0], H = PAGE_SIZES.a4[1], M = 64, size = 12, lead = 16.5;
+  let page = null, y = 0;
+  const ok = (s) => [...String(s)].map((c) => (c === '\t' ? '    ' : c === '\n' || (c.charCodeAt(0) >= 32 && c.charCodeAt(0) <= 126) ? c : '?')).join('');
+  const wrap = (t, f, s) => {
+    const out = [];
+    for (const part of String(t).split('\n')) {
+      let line = '';
+      for (const word of part.split(/ +/)) {
+        const next = line ? line + ' ' + word : word;
+        if (f.widthOfTextAtSize(next, s) <= W - 2 * M || !line) line = next; else { out.push(line); line = word; }
+      }
+      out.push(line);
+    }
+    return out;
+  };
+  const draw = (t, f, s, gap) => {
+    for (const l of wrap(ok(t), f, s)) {
+      if (!page || y < M + s) { page = pdf.addPage([W, H]); y = H - M; }
+      if (l) page.drawText(l, { x: M, y: y - s, size: s, font: f });
+      y -= s * lead / size;
+    }
+    y -= gap;
+  };
+  if (title) draw(title, bold, 18, 10);
+  for (const p of paras) if (String(p || '').length) draw(p, font, size, 7);
+  if (!page) page = pdf.addPage([W, H]);
+  if (title) pdf.setTitle(String(title).slice(0, 200));
+  pdf.setProducer('Verse (a-to-mind.com)'); pdf.setCreator('Verse');
+  return pdf.save();
+}
+
 // ---- browser side: pdf-lib and pdf.js are loaded when a tool is first used ----
 const LIB = '/vendor/pdf-lib-1.17.1/pdf-lib.min.js', PDFJS = '/vendor/pdfjs-6.4.299/build/pdf.min.js', PDFJS_WORKER = '/vendor/pdfjs-6.4.299/build/pdf.worker.min.js';
 let libP = null, jsP = null;

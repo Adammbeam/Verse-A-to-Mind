@@ -1,6 +1,6 @@
 ---
 name: void-run
-description: How a run on Verse (this repo, a-to-mind.com) goes from claim to merged PR. Use when building a skill, fixing something, taking a frontier step or a queued job in atomeam/void-loop.
+description: How a run on Verse (this repo, a-to-mind.com) goes from claim to merged PR. Use when building a skill, fixing something, taking a frontier step or a queued job in Adammbeam/Verse-A-to-Mind.
 ---
 
 # A run on Verse

@@ -11,7 +11,7 @@ import { startHost } from '../void-live-deploy/lib/brain-host.js';
 
 const read = (f) => readFileSync(new URL('../' + f, import.meta.url), 'utf8');
 const NOW = Date.parse('2026-10-30T06:00:00Z'), hAgo = (h) => new Date(NOW - h * 3600e3).toISOString();
-const RUN = 'https://github.com/atomeam/void-loop/actions/runs/1';
+const RUN = 'https://github.com/Adammbeam/Verse-A-to-Mind/actions/runs/1';
 const rows = (verify = 'failed') => [
   { name: 'Checks on main', file: 'verify.yml', state: verify, sha: 'abc1234', url: RUN, checks: ['appraise: the sky card', 'versus: a page'] },
   { name: 'Deploy', file: 'deploy.yml', state: 'passed', sha: 'abc1234', url: RUN },
@@ -19,12 +19,32 @@ const rows = (verify = 'failed') => [
 ];
 
 test('what was read becomes observations; a part that could not be read is left out, never called ok', () => {
-  const o = W.observe({ rows: rows(), prs: [{ number: 9, created_at: hAgo(1) }, { number: 7, created_at: hAgo(5), html_url: 'https://github.com/atomeam/void-loop/pull/7' }], issues: [{ number: 9, pull_request: {} }] }, NOW);
+  const o = W.observe({ rows: rows(), prs: [{ number: 9, created_at: hAgo(1) }, { number: 7, created_at: hAgo(5), html_url: 'https://github.com/Adammbeam/Verse-A-to-Mind/pull/7' }], issues: [{ number: 9, pull_request: {} }] }, NOW);
   assert.deepEqual(o.map((x) => [x.key, x.ok]), [['ci:verify.yml', false], ['ci:deploy.yml', true], ['prs', false], ['issues', true]]);
   assert.equal(o[0].what, 'Checks on main failed on abc1234'); assert.match(o[0].why, /failing: appraise: the sky card; versus: a page/);
-  assert.match(o[2].why, /the oldest, #7, has waited 5 hours; the goal is 0 open/); assert.equal(o[2].url, 'https://github.com/atomeam/void-loop/pull/7');
+  assert.match(o[2].why, /the oldest, #7, has waited 5 hours; the goal is 0 open/); assert.equal(o[2].url, 'https://github.com/Adammbeam/Verse-A-to-Mind/pull/7');
   assert.deepEqual(W.observe({ rows: [{ file: 'x.yml', state: 'unknown' }] }), [], 'nothing read, nothing claimed');
   assert.equal(W.observe({ rows: [{ ...rows()[0], url: 'https://evil.example/x' }] })[0].url, '', 'only links into the repository are kept');
+});
+
+test('a missing or parked Actions run is not a break on main', () => {
+  const unknown = [
+    { name: 'Checks on main', file: 'verify.yml', state: 'unknown', note: 'no run on main yet', runs: [] },
+    { name: 'Deploy', file: 'deploy.yml', state: 'unknown', note: 'GitHub answered HTTP 404', runs: [] },
+  ];
+  assert.deepEqual(W.observe({ rows: unknown }), [], 'absent runs are not called failed');
+  assert.deepEqual(W.observe({ rows: [{ name: 'Checks on main', file: 'verify.yml', state: 'unknown', sha: '9c59758', url: RUN }] }), []);
+});
+
+test('a kept break that links to the old public repo is not loaded as a current break', () => {
+  const stale = 'https://github.com/atomeam/void-loop/actions/runs/44936349604';
+  const w = W.createWatch();
+  assert.equal(W.loadWatch(w, {
+    seen: { 'ci:verify.yml': { kind: 'ci', ok: false, what: 'Checks on main failed on 9c59758', why: 'a red run on main stops what comes after it', url: stale, at: NOW } },
+    log: [{ id: 'w1', at: NOW, kind: 'watch', pick: 'ci:verify.yml', what: 'Checks on main failed on 9c59758', why: 'a red run on main stops what comes after it', url: stale }],
+  }), true);
+  assert.deepEqual(w.seen, {});
+  assert.deepEqual(w.log, []);
 });
 
 test('a break is logged once, a change in it is logged again, and its end is logged as mended', () => {
@@ -61,12 +81,12 @@ test('the host reads GitHub and /incidents.json, logs the breaks with its picks,
     if (/workflows\/verify\.yml/.test(u)) return body({ workflow_runs: [{ head_sha: 'abc1234def', status: 'completed', conclusion: 'failure', created_at: '2026-10-30T05:00:00Z', html_url: RUN }] });
     if (/workflows\//.test(u)) return body({ workflow_runs: [{ head_sha: 'abc1234def', status: 'completed', conclusion: 'success', created_at: '2026-10-30T05:00:00Z', html_url: RUN }] });
     if (/\/pulls\?/.test(u)) return body([]);
-    if (/\/issues\?/.test(u)) return body([{ number: 12, html_url: 'https://github.com/atomeam/void-loop/issues/12' }]);
+    if (/\/issues\?/.test(u)) return body([{ number: 12, html_url: 'https://github.com/Adammbeam/Verse-A-to-Mind/issues/12' }]);
     return { ok: false, status: 404 };
   };
   const h = startHost({ win: null, doc: null, ticking: false, bridge: false, fetch: fetchFn, store: { loadKept: async () => null, keep: async () => true } });
   await h.ready; const r = await h.watchNow();
-  assert.ok(calls.includes('/incidents.json')); assert.ok(calls.some((u) => /api\.github\.com\/repos\/atomeam\/void-loop\/pulls/.test(u)));
+  assert.ok(calls.includes('/incidents.json')); assert.ok(calls.some((u) => /api\.github\.com\/repos\/Adammbeam\/Verse-A-to-Mind\/pulls/.test(u)));
   assert.deepEqual(r.breaks.map((b) => b.key).sort(), ['ci:verify.yml', 'issues']);
   assert.match(r.breaks.find((b) => b.key === 'ci:verify.yml').why, /failing: core: the stage loads/, 'the cause comes from /incidents.json');
   assert.deepEqual(h.watchStats().breaks, 2);

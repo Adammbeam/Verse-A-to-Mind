@@ -11,10 +11,10 @@ export const SUGGESTIONS = [
   { ask: 'draw a circle', skill: 'shape' },
   { ask: 'sticky note buy milk', skill: 'sticky' },
   { ask: 'set a timer for 5 minutes', skill: 'time' },
-  { ask: 'make a 3d torus', skill: 'make' },
+  { ask: 'make a 3d torus', skill: 'experiments' },
   { ask: 'open a converter', skill: 'convert' },
   { ask: '20% tip on 45', skill: 'tip' },
-  { ask: 'where is jupiter', skill: 'skycard' },
+  { ask: 'where is jupiter', skill: 'where-is' },
 ];
 
 // the next suggestion: never the one just shown (rnd is injectable for tests)
@@ -26,7 +26,7 @@ export function pickSuggestion(list, last, rnd = Math.random) {
 }
 
 export const OFFLINE_PLACEHOLDER = 'offline: skills that need the network will wait';
-export const READY_PLACEHOLDER = 'Ask anything'; // the empty stage has no other words: the bar itself has to say a person can type
+export const READY_PLACEHOLDER = 'Ask Verse'; // the empty stage has no other words: the bar itself has to say a person can type
 
 // The link state, from what the page already sees: the browser's online flag and its own failed requests. Two same-origin requests in a
 // row that never reached the network count as offline; any success (or the browser's `online` event) clears it at once.

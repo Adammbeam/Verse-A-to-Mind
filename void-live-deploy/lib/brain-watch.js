@@ -16,6 +16,8 @@
 //              public filter, skills/growth-tree.js publicWhat): data the What's new card may show; a new count is an action ('wrote')
 // Pure: no fetch, no DOM, no storage (lib/brain-host.js reads, lib/brain-mind.js keeps). Check names and pull request numbers only.
 
+import { ownRepoUrl } from './verse-repo.js';
+
 export const WATCH_MS = 15 * 60 * 1000, PR_OLD_H = 3, MAX_LOG = 40, MAX_CHECKS = 3;
 const KINDS = ['ci', 'prs', 'issues', 'will', 'team'], LOGGED = ['watch', 'recovered', 'decided', 'wrote'];
 /** the skills that answer for each kind of break (names in skills/index.json), for the brain's attention. */
@@ -30,7 +32,7 @@ const s = (x, n = 120) => String(x == null ? '' : x).slice(0, n);
 export const clip = (x, n = 120) => { const t = String(x == null ? '' : x).replace(/\s+/g, ' ').trim(); if (t.length <= n) return t; const c = t.slice(0, n - 3), at = c.lastIndexOf(' '); return (at > n / 2 ? c.slice(0, at) : c).replace(/[\s,;:.(\u00b7]+$/, '') + '...'; };
 /** a reason that follows "because": no end stop, and a first word that is not a name ("It allows" reads "it allows"; "I" stays). */
 const reason = (x, n) => { const t = clip(x, n).replace(/\.$/, ''); return /^[A-Z][a-z]/.test(t) ? t[0].toLowerCase() + t.slice(1) : t; };
-const gh = (u) => (/^https:\/\/github\.com\/atomeam\/void-loop\//.test(u || '') ? s(u, 200) : '');
+const gh = (u) => s(ownRepoUrl(u), 200);
 
 /** what was read, as observations: [{ key, kind, ok, what, why, url }]. rows: the status card's build rows (buildState, with causesOf
  *  checks); prs: open pull requests [{ number, created_at, html_url }]; issues: open issues [{ number, html_url, pull_request }]
@@ -163,13 +165,17 @@ export const watchOf = (W) => ({ seen: W.seen, log: W.log.slice(-MAX_LOG), seq: 
 export function loadWatch(W, k) {
   if (!k || typeof k !== 'object' || !k.seen || typeof k.seen !== 'object') return false;
   const n = (x) => (Number.isFinite(x) && x >= 0 ? Math.round(x) : 0), seen = {};
-  for (const [key, v] of Object.entries(k.seen).slice(0, 12)) if (v && typeof v === 'object' && KINDS.includes(v.kind)) seen[s(key, 40)] = { ok: !!v.ok, kind: v.kind, what: s(v.what), why: s(v.why, 200), url: gh(v.url), at: n(v.at) };
+  for (const [key, v] of Object.entries(k.seen).slice(0, 12)) {
+    if (!(v && typeof v === 'object' && KINDS.includes(v.kind))) continue;
+    if (v.url && !gh(v.url)) continue; // a link into a repo that is not Verse's home is not a current break
+    seen[s(key, 40)] = { ok: !!v.ok, kind: v.kind, what: s(v.what), why: s(v.why, 200), url: gh(v.url), at: n(v.at) };
+  }
   W.seen = seen; W.seq = n(k.seq); W.at = n(k.at); W.reads = n(k.reads);
   const d = k.next && typeof k.next === 'object' ? k.next : null;
   W.next = d ? { want: s(d.want, 120), because: s(d.because, 160), site: s(d.site, 60), tower: s(d.tower, 160), at: n(d.at) } : null;
   const wr = k.wrote && typeof k.wrote === 'object' && Array.isArray(k.wrote.lines) ? k.wrote : null;
   W.wrote = wr ? { total: n(wr.total), lines: wr.lines.slice(0, 6).filter((x) => typeof x === 'string').map((x) => s(x, 400)), since: s(wr.since, 10), at: n(wr.at) } : null;
-  W.log = (Array.isArray(k.log) ? k.log : []).filter((a) => a && typeof a.id === 'string' && LOGGED.includes(a.kind)).slice(-MAX_LOG)
+  W.log = (Array.isArray(k.log) ? k.log : []).filter((a) => a && typeof a.id === 'string' && LOGGED.includes(a.kind) && !(a.url && !gh(a.url))).slice(-MAX_LOG)
     .map((a) => ({ id: s(a.id, 12), at: n(a.at), kind: a.kind, ask: '', cands: [], pick: s(a.pick, 40), first: '', what: s(a.what), why: s(a.why, 200), url: gh(a.url), outcome: a.outcome === 'seen' ? 'seen' : null }));
   return true;
 }

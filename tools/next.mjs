@@ -13,6 +13,7 @@ import { scan as reviewOverrides, summarize as overrideSummary } from './review-
 import { load as loadTargets, scoreOf } from './targets.mjs';
 import { asksInLog } from './reflect.mjs';
 import { sameAsk } from '../void-live-deploy/lib/self-blocks.js';
+import { holdState } from '../void-live-deploy/lib/voice.js';
 
 const SNAPSHOT = new URL('../domains/void.misses.json', import.meta.url);
 
@@ -52,10 +53,11 @@ export const voidAsks = () => { let v = ''; try { v = readFileSync(VOICE, 'utf8'
 
 /** The holds and the Versus target (owner, 2026-10-29: every site ever made, smallest first; an ask that does not help beat the
  *  current target waits). held: void.asks.json `held` ({ words, until, why, frontier? }); target: tower.target.json's id. A frontier
- *  item or an ask is held while an entry whose `until` is still the target names it, by its frontier title or its words. Pure. */
+ *  item or an ask is held while an entry whose `until` is still the target names it, by its frontier title or its words (lib/voice.js
+ *  holdState: an `until` that is not a site keeps its hold; one naming a site the target has moved past is released). Pure. */
 export function isHeld(title, held, target) {
   const k = normAsk(title);
-  return !!k && !!target && (Array.isArray(held) ? held : []).some((h) => h && String(h.until || '') === String(target)
+  return !!k && (Array.isArray(held) ? held : []).some((h) => holdState(h, target) === 'held'
     && ((h.frontier && normAsk(h.frontier) === k) || (h.words && (normAsk(h.words) === k || sameAsk(h.words, title)))));
 }
 /** the Versus target's next aspect, from its domains/targets file: { site, next } or null when there is none or it is beaten. Pure. */

@@ -188,6 +188,7 @@ export async function act(env, step, { fetcher = fetch } = {}) {
     if (!made.ok && made.status !== 422) throw new Error('could not make branch ' + step.branch + ' (' + made.status + ')');
     for (const f of step.files) {
       const cur = await gh(env, fetcher, 'GET', repo + '/contents/' + pathEnc(f.path) + '?ref=' + enc(step.branch));
+      if (cur.ok && cur.data && !cur.data.sha) throw new Error('could not write ' + f.path + ' (missing the file sha)');
       const put = await gh(env, fetcher, 'PUT', repo + '/contents/' + pathEnc(f.path), { message: step.title, content: b64(f.content), branch: step.branch, ...(cur.ok && cur.data && cur.data.sha ? { sha: cur.data.sha } : {}) });
       if (!put.ok) throw new Error('could not write ' + f.path + ' (' + put.status + ')');
     }

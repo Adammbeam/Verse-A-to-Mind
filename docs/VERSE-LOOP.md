@@ -33,7 +33,7 @@ node tools/verse-loop.mjs --once [--dry-run] [--agent verse|opencode|aider|cmd] 
 ## Drop it in: a terminal (three steps)
 
 1. **A clone of its own.** The loop detaches HEAD and refuses a dirty tree, so give it its own clone or worktree:
-   `git clone https://github.com/atomeam/void-loop ~/verse-loop && cd ~/verse-loop && npm ci && gh auth login`
+   `git clone https://github.com/Adammbeam/Verse-A-to-Mind ~/verse-loop && cd ~/verse-loop && npm ci && gh auth login`
 2. **Keys in the environment only**, in a file outside the repo, e.g. `~/.config/verse-loop.env` (mode 600), with lines `VOID_OWNER_TOKEN=…` and, for a coding agent, `VERSE_LOOP_AGENT=opencode`, `VERSE_LOOP_MODEL=…` and one free-tier key (order below). Try it: `set -a; . ~/.config/verse-loop.env; set +a; node tools/verse-loop.mjs --once --dry-run`
 3. **Run it on a timer**, pick one:
    - cron (hourly): `41 * * * * cd ~/verse-loop && set -a && . ~/.config/verse-loop.env && set +a && node tools/verse-loop.mjs --once >> ~/verse-loop.log 2>&1`

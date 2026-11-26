@@ -64,6 +64,12 @@ const FILLER = /\bi\s+am\s+(?:just\s+|only\s+|simply\s+)?(?:a|an)\s+(?:computer\
 export function dropFiller(answer) {
   return sentences(answer).filter((s) => !FILLER.test(s)).join('').replace(/\n{3,}/g, '\n\n').trim();
 }
+/** the errata voice ("my card said X; it should say Y") is only for the own-card correction path, never a fallback answer. */
+export function dropErrataVoice(answer) {
+  // mid-word dots (void.growth.json) are not the end of the errata sentence
+  const cut = String(answer || '').replace(/\bmy (?:last )?card said\b[\s\S]*?\b(?:it )?should say\b(?:[^.!?]|\.(?=\S))*(?:[.!?]+)?/gi, '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+  return /^[.!?]+$/.test(cut) ? '' : cut;
+}
 
 // A caveat or an equivalence the model adds to tie an off-target source to the ask (coordinator, 2026-10-30: "the 3 mile run" was answered
 // "the exact distance of three miles can vary depending on the surface ... [1]" from the 5000 metres page, and "5 m c" was answered

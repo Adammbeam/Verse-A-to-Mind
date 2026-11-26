@@ -23,3 +23,7 @@ test('the card links to the tool page', () => {
   const out = skill.run('word counter', { esc: (s) => String(s), showPage: (fn) => { fn(el); return el; } });
   assert.equal(out, 'open-tool'); assert.equal(el.dataset.page, '/word-count/'); assert.match(el.innerHTML, /<a href="\/word-count\/">Open the Word counter page<\/a>/);
 });
+test('the currency converter opens the markets page that converts at the live rate; a pair with an amount stays with its skill', () => {
+  for (const a of ['currency converter', 'Currency converter?', 'exchange rates', 'open the currency converter', 'currency exchange']) assert.equal((toolAsk(a) || {}).href, '/markets/currency-converter/', a);
+  for (const a of ['currency converter 100 usd to eur', 'exchange rate usd to eur']) assert.equal(toolAsk(a), null, a);
+});

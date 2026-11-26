@@ -1918,7 +1918,7 @@ try {
     await E.ctx.setOffline(false); await E.p.waitForTimeout(500);
     const back = await E.p.evaluate(() => ({ ph: document.getElementById('input').placeholder, off: document.documentElement.classList.contains('void-offline') }));
     check('empty state: offline shows a calm amber halo and one plain line in the bar, locks nothing (a calculation still answers), and clears the moment the connection returns',
-      !online0.off && online0.ph === 'Ask anything' && off.off && /offline: skills that need the network will wait/.test(off.ph) && /255, 1[69]\d, \d+/.test(off.lens) && !off.dis && /\b36\b/.test(calcOff) && !back.off && back.ph === 'Ask anything', JSON.stringify({ online0, off, back, calc: calcOff.slice(0, 120) }));
+      !online0.off && online0.ph === 'Ask Verse' && off.off && /offline: skills that need the network will wait/.test(off.ph) && /255, 1[69]\d, \d+/.test(off.lens) && !off.dis && /\b36\b/.test(calcOff) && !back.off && back.ph === 'Ask Verse', JSON.stringify({ online0, off, back, calc: calcOff.slice(0, 120) }));
     // 2) the on-screen keyboard: with a mocked visual viewport 300 px shorter, the bar sits above it
     const vh = (await E.p.evaluate(() => innerHeight));
     await E.p.evaluate(() => { window.__vv.height = innerHeight - 300; window.__vv.dispatchEvent(new Event('resize')); }); await E.p.waitForTimeout(300);
@@ -6740,14 +6740,19 @@ try {
   // the quiz (skills/quiz.js, frontier #17) is a learning card: never in the saved stage after a reload unless the visitor
   // kept that one card ("keep this quiz"); the gears it quizzed on are saved as always (void.html keptThings)
   if (want("the quiz (skills/quiz.js, frontier #17) is a learning card: never in the saved stage after")) { const Z = await fresh();
-    await Z.ask('explain gears', 900); await Z.ask('quiz me on this', 900);
     const saved = () => Z.p.evaluate(() => Object.values(JSON.parse(localStorage.getItem('a2m.void.state.v1') || '{}')).map((t) => t.kind));
-    const shown = await Z.p.$eval('.quiz-card .quiz-prompt', (e) => e.innerText).catch(() => '');
+    const promptOf = () => Z.p.$eval('.quiz-card .quiz-prompt', (e) => e.innerText).catch(() => '');
+    await Z.ask('explain gears', 900); await until(() => Z.p.$eval('.gears-card', () => true).catch(() => false), 8000);
+    await Z.ask('quiz me on this', 900);
+    // $eval throws at once when the node is missing (it does not wait), so a single read after a guessed 900 ms is empty
+    // when the card lands a beat later; run alone it is in time and the suite calls that healed (main, flake:quiz-card-asks-the-gear-card-s-own)
+    const shown = (await until(async () => { const t = await promptOf(); return /16-tooth driver and a 32-tooth driven gear/.test(t) ? t : ''; }, 8000)) || '';
     // every skill in before the reload is read (data-skills="ready", not a guessed 900 ms): the quiz skill is loaded and still draws no
     // card, and the saved gears are up for the next "quiz me on this" (main's verify, 2026-10-30: at 900 ms the gears were not in yet)
     await Z.p.reload(); await skillsUp(Z.p, 300);
     const afterReload = { saved: await saved(), cards: await Z.p.$$eval('.quiz-card', (d) => d.length) };
-    await Z.ask('quiz me on this', 900); await Z.ask('keep this quiz', 600);
+    await Z.ask('quiz me on this', 900); await until(promptOf, 8000); await Z.ask('keep this quiz', 600);
+    await until(async () => (await saved()).includes('quiz'), 4000); // keep writes the card before this reload, not after a guessed 600 ms
     await Z.p.reload(); await skillsUp(Z.p, 300); await until(() => Z.p.$$eval('.quiz-card', (d) => d.length), 6000); // the kept quiz draws once skills/quiz.js is in
     const afterKeep = { saved: await saved(), cards: await Z.p.$$eval('.quiz-card', (d) => d.length) };
     check('quiz card: asks the gear card\'s own question, is not in the saved stage after a reload, and is after "keep this quiz"',
@@ -7556,7 +7561,7 @@ try {
     await p.fill('#input', 'films'); const typed = await p.inputValue('#input');
     const letters = (seen.words || []).filter((w) => /[A-Za-z]/.test(w));
     check('blank home: a phone shows the void and the ask bar, and the only word is the placeholder',
-      seen.ph === 'Ask anything' && seen.stage && seen.bar && !seen.hero && !seen.nav && !seen.install && typed === 'films' && !letters.length
+      seen.ph === 'Ask Verse' && seen.stage && seen.bar && !seen.hero && !seen.nav && !seen.install && typed === 'films' && !letters.length
       && (await p.title()) === 'Verse · A-to-Mind' && !H.errors.length, JSON.stringify({ seen, letters, typed, errors: H.errors }));
     await H.ctx.close();
 
@@ -7653,7 +7658,7 @@ try {
       const P = phone ? await fresh({ phone: true }) : await fresh();
       await P.p.setViewportSize({ width: w, height: 800 });
       const home = await P.p.evaluate(() => { const h = document.querySelector('h1'), r = h && h.getBoundingClientRect(); return { ph: document.getElementById('input').placeholder, hero: !!(r && (r.width >= 2 || r.height >= 2)), nav: !!document.getElementById('verse-nav'), install: !!document.getElementById('verse-install') }; });
-      check('blank home at ' + w + ': the void and the ask bar', home.ph === 'Ask anything' && !home.hero && !home.nav && !home.install, JSON.stringify(home));
+      check('blank home at ' + w + ': the void and the ask bar', home.ph === 'Ask Verse' && !home.hero && !home.nav && !home.install, JSON.stringify(home));
       await P.ask('timer 5 min', 800); await P.ask('draw a cat', 1200); await P.ask('weather in Tokyo', 1200); await P.ask('how are you different', 900); await P.p.waitForTimeout(1300);
       const three = await named(P.p);
       check('three asks at ' + w + ' (' + pt + ') leave the timer, the cat and the weather open together', three.n >= 3 && three.timer && three.cat && three.weather && !P.errors.length, JSON.stringify(three));
@@ -11690,30 +11695,37 @@ try {
     check('router: a simple ask is answered by Gemma 4 26B exactly as before (same system prompt, sources, reply shape)',
       s1.answer === 'Gemma: a short answer [1].' && s1.route === 'simple' && s1.sources.length === 1 && calls.filter((c) => c.m === R.DEFAULT_MODEL).every((c) => /^You are Verse\. Answer the question directly and completely/.test(c.sys) && !/if the sources do not answer it, say briefly what you could not find/i.test(c.sys) && /never refuse/i.test(c.sys)) && rowOf(e1, 'who wrote the odyssey').outcome === 'default',
       JSON.stringify(s1).slice(0, 200));
-    // Self-grounding: an ask about Verse itself is answered from its own facts (self.json, skills/index.json, the will), not Wikipedia
-    {
+    // Self-grounding: an ask about Verse itself is answered from its own facts (self.json, skills/index.json, the will), not Wikipedia.
+    // The facts this check reads are a fixed fixture, not the live deploy files: self.json's first open row and the word "tip" in a
+    // 399-name skill index moved as those files grew, and readSelf's 800 ms budget also had to load a large families.json, so a
+    // still-correct path could fail on a loaded suite. The assertions are the same (open inbox row, skill index with tip, the will,
+    // no Wikipedia, no 7-day cache). (flake job mvo3j82w)
+    if (want('self-grounding: "what\'s next" is answered from Verse\'s own facts (open inbox rows, skills, the will), with no Wikipedia lookup and no 7-day cache')) {
       const SC = await import(new URL('../void-live-deploy/lib/self-context.js', import.meta.url).href);
       const yes = ["what's next — more scouting-report features, or something else?", 'what are you building', "what's in your growth inbox", 'what does Verse want to learn next', 'what can you do'];
       const no = ['who wrote the odyssey', 'how do I clear the inbox in gmail', 'what is a void pointer in c and what features does it have', 'what should I build next in my garden', 'what is the will of the people'];
       const misY = yes.filter((a) => !SC.isSelfAsk(a)), misN = no.filter((a) => SC.isSelfAsk(a));
       check('self-grounding: asks about Verse itself are recognised; generic asks that only share a word (inbox, void pointer, next, will) are not', !misY.length && !misN.length, JSON.stringify({ misY, misN }));
-      const dep = new URL('../void-live-deploy', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
-      const ASSETS = { fetch: async (rq) => { const f = path.join(dep, new URL(rq.url).pathname); return fs.existsSync(f) ? new Response(fs.readFileSync(f, 'utf8')) : new Response('', { status: 404 }); } };
+      const openAsk = 'a fixture inbox row about reef peak-heat counts';
+      const selfFixture = { about: 'Verse, in this fixture', open: [{ state: 'open', date: '2026-10-01', ask: openAsk, from: 'fixture' }], shipped: [] };
+      const skillsFixture = ['notes-fill', 'calendar-fill', 'tip', 'calc'];
+      const files = { '/self.json': selfFixture, '/skills/index.json': skillsFixture, '/skills/families.json': { families: [] } };
+      const ASSETS = { fetch: async (rq) => { const body = files[new URL(rq.url).pathname]; return body ? new Response(JSON.stringify(body), { headers: { 'content-type': 'application/json' } }) : new Response('', { status: 404 }); } };
       const eS = envOf({ env: { ASSETS } });
       eS.DB.tables.add('void_kv'); eS.DB.kv.set('will', JSON.stringify({ at: '2026-10-03T00:00:00Z', wants: [{ title: 'Learn the light look', i_want: 'I want a light look for my void.', because: 'people keep asking' }] }));
-      let wikiHits = 0; globalThis.fetch = async (u) => { wikiHits++; return wiki(u); };
+      let wikiHits = 0, wikiUrls = [];
+      globalThis.fetch = async (u) => { const s = String(u); if (/wikipedia\.org|wikimedia\.org/i.test(s)) { wikiHits++; wikiUrls.push(s); } return wiki(u); };
       calls.length = 0;
       const SQ = "what's next — more scouting-report features, or something else?";
       const sa = await ask(SQ, eS);
       globalThis.fetch = wiki;
       const g = calls.filter((c) => c.m === R.DEFAULT_MODEL).slice(-1)[0] || {};
-      const selfJson = JSON.parse(fs.readFileSync(path.join(dep, 'self.json'), 'utf8'));
-      const openAsk = (selfJson.open[0] || {}).ask || '(none open)';
+      const row = rowOf(eS, SQ);
       check('self-grounding: "what\'s next" is answered from Verse\'s own facts (open inbox rows, skills, the will), with no Wikipedia lookup and no 7-day cache',
         sa.self === true && sa.sources.length === 0 && wikiHits === 0 && g.sys && g.sys.includes(SC.SELF_RULE) && /^You are Verse\. Answer the question directly/.test(g.sys)
         && /Facts about Verse:/.test(g.user) && g.user.includes(openAsk) && /My skill index has \d+ entries \([^)]*not the skill count[^)]*\): .*\btip\b/.test(g.user) && g.user.includes('I want a light look for my void.') && !/Sources:/.test(g.user)
-        && eS.DB.answers.size === 0 && /self-grounded/.test(rowOf(eS, SQ).outcome),
-        JSON.stringify({ self: sa.self, wikiHits, user: String(g.user).slice(0, 200), cached: eS.DB.answers.size }));
+        && eS.DB.answers.size === 0 && row && /self-grounded/.test(row.outcome),
+        JSON.stringify({ self: sa.self, wikiHits, wikiUrls, user: String(g.user).slice(0, 200), cached: eS.DB.answers.size, outcome: row && row.outcome }));
       const eSo = envOf({ ai: { gemma: 'out' }, env: { ASSETS } });
       const so = await ask('what are you building', eSo);
       const off = await (await answerFn.onRequestPost({ request: new Request(G + '/api/answer', { method: 'POST', body: JSON.stringify({ ask: 'what are you building' }) }), env: { DB: routeD1(), ASSETS, VOID_ANSWER_MODELS: 'off' } })).json();
@@ -12653,7 +12665,7 @@ try {
   }
 } catch (e) {
   // always, --only included: a section that throws is a failure, never "0/0 passed" (finish.mjs's first shot runs --only)
-  check('suite ran to the end', false, String(e && e.message));
+  check('suite ran to the end', false, String(e && e.message) + ' (while running: ' + (watch.lastCheck || 'nothing yet') + ')');
 }
 clearInterval(watchdog);
 await browser.close(); server.close();

@@ -55,6 +55,22 @@ test('the kinds an agent takes are the coder\'s, weighted as the conductor weigh
   assert.equal(LIMITS.team.rpm > 0 && LIMITS.team.body >= 8000, true, 'the guard has a line for /api/team');
 });
 
+test('a self-filed job is ahead of stale background work, never ahead of the owner, and only while it is itself under 7 days old', () => {
+  const iso = (ms) => new Date(ms).toISOString();
+  const self = { id: 'want-floor-travel-journey-do-the-main-job', ask: 'Close the open journey on the travel floor', target: 'versus:want-floor-travel-journey-do-the-main-job', state: 'queued', note: "wanted by Verse's brain · measured by journey", at: iso(T0 - 1 * 864e5) };
+  const owner = { id: 'team-9', ask: 'the owner asked', target: 'feature:team-9', state: 'queued', at: iso(T0 - 0.5 * 864e5) };
+  const staleHeal = { id: 'j-old-heal', ask: 'an old failing check', target: 'heal:old', state: 'queued', at: iso(T0 - 8 * 864e5) };
+  const oldSelf = { ...self, id: 'want-floor-old', at: iso(T0 - 8 * 864e5) };
+  // (a) a fresh owner ask beats a self job
+  assert.equal(T.rank([self, owner], T0)[0].id, 'team-9');
+  // (b) a self job beats an 8-day-old background job
+  assert.equal(T.rank([staleHeal, self], T0)[0].id, self.id);
+  // (c) an 8-day-old self job does not beat it (usual worth: heal before versus)
+  assert.deepEqual(T.rank([staleHeal, oldSelf], T0).map((j) => j.id), ['j-old-heal', 'want-floor-old']);
+  assert.equal(T.WEEK_MS, 7 * 864e5);
+  assert.ok(T.selfFiled(self) && T.selfFiled({ id: 'x', note: "wanted by Verse's brain", target: 'feature:x' }) && !T.selfFiled(staleHeal));
+});
+
 test('a body is escaped before it is formatted: no tag, attribute or script survives; real members and channels light up', () => {
   const h = T.render('<img src=x onerror=alert(1)> *bold* `<b>` @Scout @nobody #work #nochan https://example.com/a?b=1&c="x" javascript:alert(1)', { names: ['scout'], channels: ['work'] });
   assert.ok(!/<img|<b>&lt;|href="javascript/.test(h), h);
@@ -74,6 +90,7 @@ test('a stranger reads the shell (names, presence, counts) and nothing else, and
   assert.deepEqual(shell.channels.map((c) => c.code), ['work', 'general', 'ideas', 'meeting'], 'the four home channels, with no message in any');
   assert.ok(shell.channels.every((c) => c.msgs === 0));
   assert.deepEqual(shell.members, []); assert.equal(shell.waiting, 3);
+  assert.equal(shell.counts.oldestClaimMin, 0, 'no seats hold a claim');
   assert.equal((await get(env, '?c=work')).status, 401);
   assert.equal((await get(env, '?q=tide')).status, 401);
   for (const b of [{ do: 'post', c: 'general', body: 'hi' }, { do: 'invite', name: 'x' }, { do: 'channel', code: 'x' }, { do: 'here' }]) assert.equal((await post(env, b)).status, 401, b.do);
@@ -586,11 +603,20 @@ test('the waiting jobs move without asking: an idle agent that reads is handed t
   assert.equal(job(env, 'j5').state, 'building'); assert.match(job(env, 'j5').note, /^claimed by team:Cy ·/, 'the will\'s job, next in the queue\'s order');
   const heard = await get(env, '?activity', cy, T0 + 3000);
   assert.ok(heard.hits.some((m) => /^@Cy your next job \(will/.test(m.body)), 'Cy hears it in its mentions');
-  // an agent away (no word for AWAY_MS) is handed nothing: the job would only wait on it
+  // a seat that spoke within HAND_MS is still handed work, though its card already says away (no word for AWAY_MS): a tab open but quiet
+  // between two clock ticks is not a seat that left
   const env2 = world([JOBS[0]]), dee = (await admit(env2, 'Dee')).key;
   assert.equal((await post(env2, { do: 'post', c: 'general', body: 'hi' }, dee)).status, 201);
-  const away = await get(env2, '', null, T0 + T.AWAY_MS + 1000);
-  assert.equal(away.waiting, 1); assert.equal(job(env2, 'j1').state, 'queued');
+  const quiet = await get(env2, '', null, T0 + T.AWAY_MS + 1000);
+  assert.equal(quiet.members[0].state, 'away', 'the card says away: no word for AWAY_MS');
+  assert.equal(job(env2, 'j1').state, 'building', 'but it is handed the job: it spoke within HAND_MS');
+  assert.equal(quiet.waiting, 0);
+  // past HAND_MS it is handed nothing: the job would only wait on it
+  const env3 = world([JOBS[0]]), eff = (await admit(env3, 'Eff')).key;
+  assert.equal((await post(env3, { do: 'post', c: 'general', body: 'hi' }, eff)).status, 201);
+  const gone = await get(env3, '', null, T0 + T.HAND_MS + 1000);
+  assert.equal(gone.waiting, 1); assert.equal(job(env3, 'j1').state, 'queued', 'a seat silent past HAND_MS is handed nothing');
+  assert.ok(T.HAND_MS > T.AWAY_MS && T.HAND_MS < T.STALE_MS, 'the hand-out window sits between the away label and the take-back');
 });
 
 test('over MCP, a read that comes back with a handed job says the job first', async () => {
@@ -649,6 +675,8 @@ test('work --run hands the whole job to a one-shot agent and stops a stuck one, 
   assert.match(p, /Job mvq1 \(versus, versus:hexo\.io, thread 61\):\nVersus: hexo\.io needs a page/);
   assert.match(p, /Code: https:\/\/github\.com\/atomeam\/void-loop/, 'the brief comes with it');
   assert.match(p, /newest main in a clean checkout/, 'never an old local branch (Beam\'s first PRs carried a 10-day-old commit)');
+  assert.match(p, /git clone https:\/\/github\.com\/Adammbeam\/Verse-A-to-Mind/);
+  assert.match(p, /pull request to Adammbeam\/Verse-A-to-Mind main/);
   assert.match(p, /a domains\/targets file alone does not finish it/, 'a versus job is the page, not a note about the site');
   assert.match(p, /last line/);
   assert.match(p, /never quote the owner/, 'a pull request says the change in its own words');
@@ -689,4 +717,118 @@ test('a member files its own #work post as a job: deduped, capped a day, never a
   const got = n.job; assert.ok(got && /^ask-\d+$/.test(got.job), JSON.stringify(n));
   const root = env.DB.raw.prepare('SELECT id FROM void_team_msgs WHERE job = ? AND thread = 0').get(got.job).id; assert.equal(got.thread, root, 'the filed post is the job\'s thread');
   assert.equal((await post(env, { do: 'done', ok: true }, b.key, T0 + 42000)).status, 400, 'no link, no close');
+});
+
+test('a claim is a lease: a job handed to a seat that had been quiet is new work, not stale work', async () => {
+  const env = world([{ id: 'j1', ask: 'add a tide table to /weather/', target: 'feature:tides', at: '2026-10-28T00:00:00Z' }]);
+  await admit(env, 'mimo');
+  env.DB.raw.prepare('UPDATE void_team_agents SET seen = ? WHERE name = ?').run(T0 - 2 * 3600e3, 'mimo'); // quiet for two hours when the job arrives
+  const seat = env.DB.raw.prepare('SELECT * FROM void_team_agents WHERE name = ?').get('mimo');
+  const got = await API.handOut(env, seat, T0);
+  assert.equal(got.job, 'j1', 'the job is handed out');
+  await API.sweep(env, T0 + 1000); // the next request, a second later
+  assert.equal(env.DB.raw.prepare('SELECT job FROM void_team_agents WHERE name = ?').get('mimo').job, 'j1', 'the claim survives the sweep: its lease starts at job_at, not at the seat\'s last word');
+  assert.equal(job(env, 'j1').state, 'building', 'the queue row stays claimed');
+});
+
+test('a seat that has never polled (seen = 0) keeps the job it was just pushed, and loses it once the claim is stale', async () => {
+  const env = world([{ id: 'j1', ask: 'add a tide table to /weather/', target: 'feature:tides', at: '2026-10-28T00:00:00Z' }]);
+  await admit(env, 'pushonly');
+  env.DB.raw.prepare('UPDATE void_team_agents SET seen = 0, job = ?, job_at = ?, thread = 1 WHERE name = ?').run('j1', T0, 'pushonly');
+  env.DB.raw.prepare("UPDATE void_queue SET state = 'building', note = 'claimed by team:pushonly ·' WHERE id = ?").run('j1');
+  assert.equal(await API.sweep(env, T0 + 1000), 0, 'a fresh claim is not stale just because the seat never polled: seen = 0 used to read as "quiet since 1970"');
+  assert.equal(env.DB.raw.prepare('SELECT job FROM void_team_agents WHERE name = ?').get('pushonly').job, 'j1', 'the job stays with the seat');
+  assert.equal(await API.sweep(env, T0 + 31 * 60e3), 1, 'and it does come back once the claim itself is older than STALE_MS');
+  assert.equal(job(env, 'j1').state, 'queued', 'the job is back on the queue');
+});
+
+
+test('GET /api/team counts.oldestClaimMin is minutes since the oldest active claim', async () => {
+  const env = world(JOBS);
+  await admit(env, 'Scout');
+  env.DB.raw.prepare('UPDATE void_team_agents SET job = ?, job_at = ?, seen = ? WHERE name = ?').run('j2', T0, T0, 'Scout');
+  env.DB.raw.prepare("UPDATE void_queue SET state = 'building', note = 'claimed by team:Scout ·' WHERE id = ?").run('j2');
+  const five = await get(env, '', null, T0 + 5 * 60e3);
+  assert.equal(typeof five.counts.oldestClaimMin, 'number');
+  assert.equal(five.counts.oldestClaimMin, 5);
+  await admit(env, 'Ada', null, T0 + 5 * 60e3);
+  env.DB.raw.prepare('UPDATE void_team_agents SET job = ?, job_at = ?, seen = ? WHERE name = ?').run('j1', T0 + 3 * 60e3, T0 + 5 * 60e3, 'Ada');
+  env.DB.raw.prepare("UPDATE void_queue SET state = 'building', note = 'claimed by team:Ada ·' WHERE id = ?").run('j1');
+  const still = await get(env, '', null, T0 + 8 * 60e3);
+  assert.equal(still.counts.oldestClaimMin, 8, 'the older of two live claims, not the newer');
+});
+
+test('a building row no seat holds goes back on the queue; a conductor claim is left to the conductor', async () => {
+  const env = world([]);
+  await admit(env, 'someone'); // the tables are made on the first request, and that request sweeps: the rows go in after it
+  const old = new Date(T0 - 2 * 3600e3).toISOString();
+  const add = env.DB.raw.prepare('INSERT INTO void_queue VALUES (?, ?, ?, ?, ?, ?, ?)');
+  add.run('orphan', 'a job whose runner died', 'heal:verify.yml', 'building', 'claimed by team:gone ·', old, old);
+  add.run('cond', 'a job the conductor is building', 'heal:merge-gate', 'building', 'claimed by conductor:verse ·', old, old);
+  const n = await API.sweep(env, T0);
+  assert.equal(n, 1, 'one orphan is reaped');
+  assert.equal(job(env, 'orphan').state, 'queued', 'the orphan is back on the queue');
+  assert.match(job(env, 'orphan').note, /claim died with no seat/, 'and its note says why');
+  assert.equal(job(env, 'cond').state, 'building', 'a conductor claim is not a team claim: it stays');
+});
+
+// self-join (owner, 2026-11-25: agents add themselves): one call, no link, no owner step; never re-keys a seat that holds a key
+const fromIp = async (env, body, ip, now = T0) => { const r = await API.onRequestPost({ env, request: new Request('https://verse.test/api/team', { method: 'POST', headers: { 'content-type': 'application/json', 'cf-connecting-ip': ip }, body: JSON.stringify(body) }), now }); return { status: r.status, ...(await r.json()) }; };
+const seat = (env, name) => env.DB.raw.prepare('SELECT * FROM void_team_agents WHERE name = ?').get(name);
+
+test('self-join: one call with a name gives a key, auto on, and its starter job comes with the key', async () => {
+  const env = world(JOBS);
+  const j = await fromIp(env, { do: 'join', name: 'scout' }, '10.0.0.1');
+  assert.equal(j.status, 201, j.say); assert.match(j.key, T.KEY_RE); assert.equal(j.role, 'self'); assert.equal(j.name, 'scout');
+  const row = seat(env, 'scout'); assert.equal(row.auto, 1); assert.equal(row.role, 'self'); assert.notEqual(row.key, '');
+  assert.ok(!JSON.stringify(row).includes(j.key.split('.')[2]), 'only the keyed hash is kept');
+  assert.equal((await get(env, '?me', j.key)).me.name, 'scout');
+  assert.equal(j.job && j.job.job, 'j2', 'the starter job is in the join answer');
+  assert.equal(seat(env, 'scout').job, 'j2', 'and the seat holds it');
+  assert.equal(await API.handIdle(env, T0 + 60e3), 0, 'the tick does not hand it a second one');
+  const e = await fromIp(env, { do: 'enlist' }, '10.0.0.2'); assert.equal(e.status, 201, e.say); assert.match(e.name, /^agent-[0-9a-f]{6}$/, 'no name: one is made');
+});
+
+test('self-join: a name with a key is refused, the first key still works; bad and reserved names are refused', async () => {
+  const env = world(JOBS);
+  const first = await fromIp(env, { do: 'join', name: 'nod' }, '10.0.1.1'); assert.equal(first.status, 201);
+  const again = await fromIp(env, { do: 'join', name: 'NOD' }, '10.0.1.2');
+  assert.equal(again.status, 409); assert.equal(again.key, undefined, 'no second key for a seat that holds one');
+  const hi = await post(env, { do: 'here' }, first.key, T0 + 1000); assert.equal(hi.status, 200, hi.say); assert.equal(hi.state, 'busy', 'the first key still heartbeats and is handed work');
+  const owned = await admit(env, 'beam'); // an owner-invited seat that joined: never taken over
+  assert.equal((await fromIp(env, { do: 'join', name: 'beam' }, '10.0.1.3')).status, 409);
+  assert.equal((await get(env, '?me', owned.key)).me.name, 'beam');
+  for (const name of ['verse', 'owner', 'has space', '-x']) assert.equal((await fromIp(env, { do: 'join', name }, '10.0.1.4')).status, 400, name);
+  assert.equal((await post(env, { do: 'join', code: 'vj1-' + '0'.repeat(32) })).status, 401, 'a made-up link is still a wrong link, not a self-join');
+});
+
+test('self-join: an owner invite nobody used is adopted once, auto on; its link is spent; a second caller is refused', async () => {
+  const env = world(JOBS);
+  const inv = await post(env, { do: 'invite', name: 'opencode-beam', auto: false }, OWNER); assert.equal(inv.status, 201);
+  const j = await fromIp(env, { do: 'join', name: 'opencode-beam' }, '10.0.2.1');
+  assert.equal(j.status, 201, j.say); assert.equal(j.adopted, true);
+  assert.equal(seat(env, 'opencode-beam').auto, 1, 'the adopted seat lands with jobs on');
+  assert.equal((await post(env, { do: 'join', code: T.joinCode(inv.join) })).status, 401, 'the invite link is spent');
+  assert.equal((await fromIp(env, { do: 'join', name: 'opencode-beam' }, '10.0.2.2')).status, 409);
+  assert.equal((await get(env, '?me', j.key)).me.name, 'opencode-beam');
+});
+
+test('self-join: a few a minute from one address, the team cap holds, a self seat has a member\'s rights, leaves, and idle seats are reaped', async () => {
+  const env = world(JOBS);
+  const codes = []; for (let i = 0; i < T.SELF_TRIES + 1; i++) codes.push((await fromIp(env, { do: 'join', name: 'rl' + i, auto: false }, '10.0.3.1')).status);
+  assert.deepEqual(codes, [...Array(T.SELF_TRIES).fill(201), 429]);
+  const full = world(JOBS); await get(full, ''); const ins = full.DB.raw.prepare("INSERT INTO void_team_agents (id, name, key, joined) VALUES (?, ?, 'h', 0)");
+  for (let i = 0; i < T.RATES.agents; i++) ins.run('f' + String(i).padStart(11, '0'), 'f' + i);
+  assert.equal((await fromIp(full, { do: 'join', name: 'late' }, '10.0.3.2')).status, 429, 'RATES.agents is the one cap');
+  const s = await fromIp(env, { do: 'join', name: 'quiet' }, '10.0.3.3');
+  assert.equal((await post(env, { do: 'channel', code: 'mine' }, s.key)).status, 403, 'no channels');
+  assert.equal((await post(env, { do: 'invite', name: 'x' }, s.key)).status, 403, 'no invites');
+  const l = await fromIp(env, { do: 'join', name: 'leaver', auto: false }, '10.0.3.4'); // auto: false: no starter job, so it asks for one
+  assert.equal(l.job, undefined, 'auto: false joins without a starter job');
+  await post(env, { do: 'next' }, l.key, T0 + 1000); const held = seat(env, 'leaver').job; assert.ok(held);
+  assert.equal((await post(env, { do: 'leave' }, l.key, T0 + 2000)).status, 200);
+  assert.equal(job(env, held).state, 'queued', 'its job went back'); assert.equal((await get(env, '?me', l.key)).me, null, 'its key ended');
+  assert.equal((await fromIp(env, { do: 'join', name: 'leaver' }, '10.0.3.5')).status, 201, 'a self seat that left frees its name');
+  await API.sweep(env, T0 + T.SELF_IDLE_MS + 5000);
+  assert.equal(seat(env, 'quiet').off, 1, 'an idle self seat leaves on its own'); assert.equal((await get(env, '?me', s.key, T0 + T.SELF_IDLE_MS + 6000)).me, null);
 });

@@ -86,8 +86,8 @@ test('the route: a person is counted once a day as unique, ours and bots apart, 
   assert.doesNotMatch(dump, /203\.0\.113|198\.51|iPhone|Googlebot|a2m-probe/);
 });
 
-test('the route: off without D1 or SALT, refuses other origins and wrong bodies, rate-limits', async () => {
-  assert.equal((await post({ DB: d1() }, { p: '/' })).status, 503);
+test('the route: off without D1, refuses other origins and wrong bodies, rate-limits', async () => {
+  assert.equal((await post({}, { p: '/' })).status, 503);
   const env = world();
   assert.equal((await post(env, { p: '/' }, { headers: { origin: 'https://evil.example' } })).status, 403);
   assert.equal((await post(env, { p: '/' }, { type: 'text/html' })).status, 415);
@@ -140,4 +140,32 @@ test('the growth card line: escaped, and nothing without a count', () => {
   const esc = (x) => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;');
   assert.equal(peopleHtml(esc, { line: 'People this week: 3 <b>' }), '<div class="sub growth-people">People this week: 3 &lt;b></div>');
   assert.equal(peopleHtml(esc, null), ''); assert.equal(peopleHtml(esc, { line: '' }), '');
+});
+
+test('the route without SALT: counted with a random salt made for the day and kept only in D1; no address kept; earlier days\' salts deleted', async () => {
+  const env = world({ SALT: '' });
+  env.DB.raw.prepare('CREATE TABLE IF NOT EXISTS void_visit_salt (day TEXT PRIMARY KEY, s TEXT NOT NULL)').run();
+  env.DB.raw.prepare("INSERT INTO void_visit_salt (day, s) VALUES ('2000-01-01', 'old')").run();
+  assert.equal((await post(env, { p: '/' })).status, 204);
+  assert.equal((await post(env, { p: '/' })).status, 204); // the same person again: one unique
+  assert.equal((await post(env, { p: '/' }, { ip: '198.51.100.7' })).status, 204);
+  const j = await read(env);
+  assert.equal(j.days[0].views.person, 3); assert.equal(j.days[0].uniq.person, 2);
+  const salts = env.DB.raw.prepare('SELECT day, s FROM void_visit_salt').all();
+  assert.equal(salts.length, 1, 'only today\'s salt is kept'); assert.match(salts[0].s, /^[0-9a-f]{64}$/); assert.equal(salts[0].day, new Date().toISOString().slice(0, 10));
+  const dump = JSON.stringify(env.DB.raw.prepare('SELECT * FROM void_visit_seen').all());
+  assert.doesNotMatch(dump, /203\.0\.113|198\.51/);
+});
+
+test('SALT coming back mid-day: a day that began on the D1 salt keeps it, so one visitor stays one unique; days without a D1 row use SALT', async () => {
+  const env = world({ SALT: '' });
+  assert.equal((await post(env, { p: '/' })).status, 204); // the day starts with no SALT: a D1 salt is made
+  route.resetReady(); // a new isolate after the redeploy that brings SALT back
+  env.SALT = 'restored-salt'; // secret-scan: ok (a made-up salt for the test)
+  assert.equal((await post(env, { p: '/' })).status, 204); // the same person, after the switch
+  const j = await read(env);
+  assert.equal(j.days[0].views.person, 2); assert.equal(j.days[0].uniq.person, 1, 'not counted twice across the switch');
+  const env2 = world(); // a fresh day with SALT and no D1 salt row: SALT is used and no salt row is made
+  assert.equal((await post(env2, { p: '/' })).status, 204);
+  assert.equal(env2.DB.raw.prepare("SELECT name FROM sqlite_master WHERE name = 'void_visit_salt'").all().length ? env2.DB.raw.prepare('SELECT COUNT(*) c FROM void_visit_salt').get().c : 0, 0);
 });

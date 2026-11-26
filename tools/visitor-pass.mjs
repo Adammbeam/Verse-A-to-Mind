@@ -4,11 +4,13 @@
 //   node tools/visitor-pass.mjs --full --only desktop
 // Writes one JSON report (--out, default tools/visitor-pass.json is not written unless --write).
 // It only reads the site. Posts to Verse's own /api are answered here with an empty 204, so a pass
-// never lands in the miss board, the answer log or a view count. Outside GETs (the weather, the
+// never lands in the miss board, the answer log or a view count. The one exception is POST /api/answer, sent marked
+// (lib/pass-mark.js) so an answered ask is timed for real; the answer engine leaves a marked ask out of its route log. Outside GETs (the weather, the
 // dictionary, a price) go through, because that is how the card gets its answer.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { passLets, PASS_HEADER } from '../void-live-deploy/lib/pass-mark.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const SITE = process.env.VOID_SITE || 'https://a-to-mind.com';
@@ -30,7 +32,7 @@ export const ASKS = [
   { ask: 'recipe for scrambled eggs', skill: /recipe/, good: /egg/i },
   { ask: 'how do I make pasta', skill: /recipe/, good: /pasta|noodle|boil/i },
   { ask: 'news', skill: /news/, good: /news|headline|today/i },
-  { ask: 'play music', skill: /local-stations|radio/, good: /radio|station|stream/i },
+  { ask: 'play music', skill: /media-pick|local-stations|radio/, good: /preview|song|radio|station|stream/i }, // 2026-11-25: music now gives real song previews (skills/media-pick.js)
   { ask: 'tell me a joke', skill: /joke/, good: /joke|\?|!/ },
   { ask: 'tell me a riddle', skill: /joke|riddle/, good: /riddle|what|answer/i },
   { ask: 'directions from Lakeland FL to Tampa', skill: /distance|place|maps/, good: /tampa|lakeland|mile|km|route|map/i },
@@ -85,6 +87,10 @@ const USEFUL = (t) => {
   if (/[…]\s*$/.test(s) && s.length < 80) return false;
   return true;
 };
+
+/** a card still filling in: a lone ellipsis where the answer goes, or a skill's own "still working" line. `\b…\b` missed both (an ellipsis is no
+ *  word character), so "…" cards were judged before they filled (2026-11-25: what is pi, play sudoku, currency converter, play music). Pure. */
+export function isPending(text) { return /checking rates|thinking…?|(?:^|\s)…(?=\s|$)|checking each one is real…/i.test(bodyOf(text)); }
 
 /** One ask's verdict. Pure. row: { note, text, ms, layout }. A right answer counts even when a different skill wrote it. */
 export function judgeAsk(spec, row) {
@@ -209,9 +215,11 @@ export async function pass({ asks, profiles, site = SITE, shots, axe = '' } = {}
       const spec = PROFILES[name]; if (!spec) continue;
       const ctx = await browser.newContext(spec.mobile ? { viewport: { width: spec.width, height: spec.height }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 } : { viewport: { width: spec.width, height: spec.height } });
       // a pass never writes to Verse: posts stay in the browser. The card's own GETs (weather, dictionary, prices) go out.
+      // the answer engine's POST goes through, marked, so an answered ask is timed as a visitor meets it (lib/pass-mark.js); it is left out of the route log
       await ctx.route('**/*', (route) => {
         const req = route.request();
-        if (req.method() !== 'GET' && req.method() !== 'HEAD') return route.fulfill({ status: 204, body: '' });
+        if (!passLets(req.method(), req.url(), site)) return route.fulfill({ status: 204, body: '' });
+        if (req.method() === 'POST') return route.continue({ headers: { ...req.headers(), [PASS_HEADER]: '1' } });
         return route.continue();
       });
       const page = await ctx.newPage();
@@ -247,7 +255,7 @@ export async function pass({ asks, profiles, site = SITE, shots, axe = '' } = {}
         while (Date.now() - start < cap) {
           await page.waitForTimeout(350);
           got = await readLoop(page, a.ask);
-          const pending = /checking rates|thinking…?|\b…\b/.test(bodyOf(got.text));
+          const pending = isPending(got.text);
           if (USEFUL(got.text) && !pending && (got.note || Date.now() - start > 1500)) break;
         }
         const row = judgeAsk(a, { ...got, ms: Date.now() - start, slow: !!spec.slow });

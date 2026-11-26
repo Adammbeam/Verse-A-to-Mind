@@ -7,12 +7,33 @@
 import { knowsFacts, voiceFacts, keptFacts } from './voice.js';
 import { PERSONA } from './persona.js';
 import { models, ANSWER_FALLBACK } from './models.js';
-const SELF_NOUN = /\b(wish\s*list|improvement budget|growth[- ]inbox|outcome cards?|scouting[- ]reports?|your (will|wants|skills|board|plans?|roadmap|growth|inbox|features?|backlog|priorit(y|ies))|about yourself)\b/i;
+// What Verse is trying to become, in its own words: a fact it always reads, humble, with no rival names and no boast.
+export const AIM = 'I aim to be the one place people need for the things they come to the web for, taking them on one kind of work at a time, doing each kind as well as the best place for that kind does, saying honestly where I still fall short, and keeping at it on my own.';
+/** asks that must state the aim in the answer, even if the model only lists nearer wants */
+export const wantsAim = (ask) => /\bwhat (do|did) you want\b|\bwhat (are|were|will) you (trying to become|aiming (?:to be|to become|for|at)|becoming)\b|\bwhat (is|are) your aims?\b|\bwhat do you aim\b/i.test(String(ask || ''));
+export const hasAim = (text) => String(text || '').includes('one place people need') && String(text || '').includes('keeping at it on my own');
+/** the standing aim, plus the current floor's kind when the record has one. Pure. */
+export function aimLine(self) {
+  const aim = (self && self.aim) || AIM;
+  const kind = self && self.tower && self.tower.kind;
+  return kind ? aim + ' I am taking on ' + kind + ' work.' : aim;
+}
+/** put the standing aim ahead of a self answer so "what do you want?" always states it, independent of the model. Pure; no new state. */
+export function withAim(answer, self, ask) {
+  if (!wantsAim(ask)) return String(answer || '');
+  const line = aimLine(self);
+  const text = String(answer || '').trim();
+  if (!text) return line;
+  if (hasAim(text)) return text;
+  return line + ' ' + text;
+}
+const SELF_NOUN = /\b(wish\s*list|improvement budget|growth[- ]inbox|outcome cards?|scouting[- ]reports?|your (own )?(architecture|internals|inner workings|tech stack)|your (will|wants|skills|board|plans?|roadmap|growth|inbox|features?|backlog|priorit(y|ies)|frontier|open (asks|items|work)|asks|to-?do list)|about yourself)\b/i;
+// "your frontier" and "your open asks" (2026-11-25: "what is still open on your frontier?" got "nothing on the web"); a bare "frontier" (the airline, the final one) stays a question
 // "Verse" (once "Verse") the product, capitalised, or a-to-mind; never C's void pointer / void function
 const NAMED = /\bVoid\b|\bVerse\b|\ba-to-mind\b/;
 const CODE_VOID = /\bvoid\s*(\*|\(|pointer|type|function|method|main|return|keyword|0\b)/i;
 const ABOUT = /\b(next|build|building|built|ship|shipped|working on|plan|plans|roadmap|grow|growth|learn|learning|want|wants|skills?|features?|can (you|it) do|are you|improve|missing|open)\b/i;
-const YOU_DOING = /\bwhat (are|were|will) you (building|working on|learning|doing next|planning|shipping)\b|\bwhat (do|did) you (want|ship|build)\b|\bwhat can you do\b|^\s*what are you\??\s*$/i;
+const YOU_DOING = /\bwhat (are|were|will) you (building|working on|learning|doing next|planning|shipping|trying to become|aiming (?:to be|to become|for|at)|becoming)\b|\bwhat (do|did) you (want|ship|build|aim)\b|\bwhat (is|are) your aims?\b|\bwhat can you do\b|^\s*what are you\??\s*$/i;
 const WHATS_NEXT = /^\s*(so\s+|ok(ay)?[,\s]+)?what('?s| is) next\b/i;
 // Verse's opinion of itself ("what do you think of yourself?", "what feels weakest about you?")
 const OPINION = /\b(think|feel)\s+(of|about)\s+yourself\b|\bwhat('?s|\s+is|\s+feels)\s+(the\s+)?(weak|weakest|worst|wrong)\s+(part\s+)?(about|with|of|in)\s+you\b|\bhow\s+would\s+you\s+(improve|make)\s+yourself\b/i;
@@ -60,16 +81,48 @@ const CARD_REF = /\b(?:this|that|the|your|its|my|verse'?s|void'?s)\s+(?:(?:own|l
 const CARD_FAULT = /\b(?:wrong|off|fault|faults|filler|false|fake|claims?|cites?|cited|sources?|sourced|label(?:s|led)?|paraphras\w*|third[- ]person|first[- ]person|speaks?|says?|said|refuses?|cut|truncat\w*|mid-sentence|correction|dates?|dated|lists?|leaves?\s+out|misses|fixed|still\s+open|better|closer)\b/i;
 const NOT_OURS = /\b(?:credit|debit|gift|sim|sd|memory|graphics|video|business|greeting|playing|tarot|pok[eé]mon|yugioh|magic|baseball|trading|report|id|library|birthday|wild)\s+cards?\b|\b(?:tarot|pok[eé]mon|yu-?gi-?oh|uno|blackjack|bingo|deck|credit|debit|bank|visa|mastercard)\b/i;
 export const isOwnCardNote = (ask) => { const a = String(ask || ''); return CARD_REF.test(a) && CARD_FAULT.test(a) && !NOT_OURS.test(a); };
-export const OWN_CARD_RULE = 'The message is about one of your own answer cards, a card you made, often pasted back with what is wrong with it. Answer as yourself about your own card: say "my last card" or "my card", never "the card", "the system" or "the documentation". Do not explain how answer systems work in general and do not say you have no access: the facts below are yours. Write only one or two short sentences: agree plainly with each fault the message names, in the form "my last card said X; it should say Y". Own only a fault my records confirm: when the message says something my records contradict, such as a date or whether a thing shipped, say plainly what my records show. Answer only the points the message raises: never restate or defend a fact, a date or a record it did not question. Never deny what the message says my earlier card said, never apologise, and never take blame for what another site chose to do, such as turning my checker away. When the message says numbers or scores were a site\'s own, call them that site\'s, never mine. Do not write the "Fixed:" or "Still open:" lists or the status of any fix: they are added under your sentences from my records (lib/own-card.js). Take every date from the facts, never from the message or from memory. Nothing else.';
+// A note addressed to Verse about its own card's wording or lists — not a third-person passage that merely mentions "the card" and "should say".
+export function isCardCorrection(ask) {
+  const a = String(ask || '');
+  if (!isOwnCardNote(a)) return false;
+  if (/\b(?:my|your|verse'?s|void'?s)\s+(?:(?:own|last|first|new|latest|answer|verse)\s+){0,2}(?:card|answer|reply)s?\b/i.test(a) && /\b(?:said|says|should say|is wrong|is off)\b/i.test(a)) return true;
+  if (/\b(?:that|this)\s+card\s+is\s+(?:wrong|off|the\s+old\s+code|the\s+first\s+one)\b/i.test(a)) return true;
+  if (/\bverse\s+misread\b/i.test(a)) return true;
+  if (/\bit still says\b/i.test(a) && /\b(?:the card|its own card|your card|my card)\b/i.test(a)) return true;
+  if (/\bgives no list of what is fixed\b/i.test(a)) return true;
+  if (/\bfixes\b/i.test(a) && (/\b(?:first|second|third)\b[,:]/i.test(a) || /\b(?:\d+|one|two|three|four|five)\s+fixes?\b/i.test(a))) return true;
+  if (/\bsent (?:the|this|a)\b/i.test(a) && /\bfrom this card\b/i.test(a)) return true;
+  return false;
+}
 
-export const SELF_RULE = 'Never answer with troubleshooting for other products or platforms (their config files, integrations, registries): Verse is its own site, and a note about its cards, routing or fixes is about Verse. This question is about you, Verse, yourself: your skills, what you have shipped, what is still open, what you want next. Answer from the Facts about Verse below and be specific: name the actual skills, inbox rows and wants. Do not give generic advice that could apply to any project. If the facts do not cover something, say so plainly instead of guessing. Speak as yourself, in the first person. ' + PERSONA;
+export const OWN_CARD_RULE = 'The message is about one of your own answer cards, a card you made, often pasted back with what is wrong with it. Answer as yourself about your own card: say "my last card" or "my card", never "the card", "the system" or "the documentation". Do not explain how answer systems work in general and do not say you have no access: the facts below are yours. Write only one or two short sentences: agree plainly with each fault the message names, in the form "my last card said X; it should say Y". Own only a fault my records confirm: when the message says something my records contradict, such as a date or whether a thing shipped, say plainly what my records show. Answer only the points the message raises: never restate or defend a fact, a date or a record it did not question. Never deny what the message says my earlier card said, never apologise, and never take blame for what another site chose to do, such as turning my checker away. When the message says numbers or scores were a site\'s own, call them that site\'s, never mine. Do not write the "Fixed:" or "Still open:" lists or the status of any fix: they are added under your sentences from my records (lib/own-card.js) only when the note is about those fixes or lists. When the note only corrects what a card said, the card reports that correction and nothing else. Take every date from the facts, never from the message or from memory. Nothing else.';
+
+export const SELF_RULE = 'Never answer with troubleshooting for other products or platforms (their config files, integrations, registries): Verse is its own site, and a note about its cards, routing or fixes is about Verse. This question is about you, Verse, yourself: your skills, what you have shipped, what is still open, what you want next, and what you are trying to become. Answer from the Facts about Verse below and be specific: name the actual skills, inbox rows and wants. When asked what you want, what you are, what you are building, what is next, or what you are trying to become, state your aim from the facts, in the first person, plainly and without boasting, and name the kind of work on your current tower floor, not a rival site. Do not give generic advice that could apply to any project. If the facts do not cover something, say so plainly instead of guessing. Speak as yourself, in the first person. ' + PERSONA;
 
 function within(p, ms) { let t; return Promise.race([p, new Promise((r) => { t = setTimeout(() => r(null), ms); })]).finally(() => clearTimeout(t)); }
+const ASSET_CACHE = new WeakMap(), ASSET_TTL_MS = 60000;
 const asset = async (env, origin, p) => {
-  try { const r = await env.ASSETS.fetch(new Request(origin + p)); return r.ok ? await r.json() : null; } catch (_) { return null; }
+  const store = env && env.ASSETS && typeof env.ASSETS === 'object' ? env.ASSETS : null;
+  if (!store || typeof store.fetch !== 'function') return null;
+  const existing = ASSET_CACHE.get(store);
+  const hit = existing && existing.get(p);
+  if (hit && Date.now() - hit.at < ASSET_TTL_MS) return hit.val;
+  try {
+    const r = await store.fetch(new Request(origin + p));
+    if (!r || !r.ok) return null;
+    const val = await r.json();
+    if (val != null) {
+      let byPath = ASSET_CACHE.get(store);
+      if (!byPath) { byPath = new Map(); ASSET_CACHE.set(store, byPath); }
+      byPath.set(p, { val, at: Date.now() });
+    }
+    return val;
+  } catch (_) { return null; }
 };
 
-export async function readSelf(env, origin, ms = 800) {
+// Default 2500 ms (was 800 ms): modelAnswer starts classify() alongside readSelf, and parsing self.json + families.json
+// on a busy runner could cross 800 ms and drop self/skills to null (flake mvo3j82w). Static assets are cached per ASSETS binding.
+export async function readSelf(env, origin, ms = 2500) {
   const kv = async (k) => { try { const r = await env.DB.prepare('SELECT v FROM void_kv WHERE k = ?').bind(k).first(); return r && r.v ? JSON.parse(r.v) : null; } catch (_) { return null; } };
   const [self, skills, will, voice, replies, families] = await Promise.all([
     within(asset(env, origin, '/self.json'), ms),
@@ -86,6 +139,7 @@ export function selfFacts({ self, skills, will, voice, replies, families } = {},
   const parts = [];
   const cf = card ? cardFacts(self, { note }) : '';
   if (cf) parts.push(cf);
+  parts.push('What I aim to be: ' + ((self && self.aim) || AIM));
   if (self && self.about) parts.push('What I am: ' + self.about);
   if (skills && skills.length) parts.push('My skill index has ' + skills.length + ' entries (a few, like games, time and dates, each stand for several skills, so this is not the skill count): ' + skills.join(', '));
   const tw = towerFacts(self);
@@ -141,9 +195,10 @@ export function modelFacts(self) {
 // The tower (self.json 'tower'): the site whose page is next, then the ones after it. No tally.
 export function towerFacts(self) {
   const t = self && self.tower;
-  if (!t || !t.target) return '';
-  const next = Array.isArray(t.next) ? t.next.filter(Boolean) : [];
-  return 'The site whose page is next is ' + t.target + (t.since ? ' (since ' + t.since + ')' : '') + (t.page ? '. Its page: ' + t.page : '') + '.' + (next.length ? ' After that: ' + next.join(', ') + '.' : '');
+  if (!t || !(t.kind || t.target)) return '';
+  // Public answers name the floor's kind (travel, maps), never a rival host. The host stays in the record for builders.
+  const label = t.kind || 'this kind of work';
+  return 'The kind of work I am taking on next is ' + label + (t.since ? ' (since ' + t.since + ')' : '') + (t.page ? '. Its page: ' + t.page : '') + '. I say honestly what I still fall short on, and I keep at it on my own.';
 }
 
 // For a note about one of my own answer cards: the two lists the card must give, already in order, so the model copies them and does

@@ -8,6 +8,7 @@
 // Pure: facts, the signature, when to speak, the prompt and the check. The route is functions/api/unbidden.js, the page brain/unbidden.js.
 // Tests: tools/unbidden.test.mjs.
 import { PERSONA } from './persona.js';
+import { REPO_URL, ownRepoUrl } from './verse-repo.js';
 
 export const KEY = 'unbidden'; // void_kv row: { lines: [...], sig, at, claim }
 export const KEEP = 24; // lines kept
@@ -17,13 +18,13 @@ export const CLAIM_MS = 45 * 1000; // a request that is writing a line holds the
 export const PER_DAY = 240; // model calls a day for this, one D1 counter (lib/daily-cap.js)
 export const SAY_MAX = 320;
 export const SITE = 'https://a-to-mind.com';
-export const REPO = 'https://github.com/Adammbeam/Verse-A-to-Mind';
+export const REPO = REPO_URL;
 
 const one = (s, n = 200) => { const t = String(s == null ? '' : s).replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim(); return t.length <= n ? t : t.slice(0, n).replace(/\s+\S*$/, ''); }; // cut at a word, no ellipsis: these are the model's inputs
 const msOf = (at) => (typeof at === 'number' ? at : Date.parse(at || ''));
 const isoOf = (at) => { const t = msOf(at); return Number.isFinite(t) ? new Date(t).toISOString() : null; };
 const ago = (at, now) => { const t = msOf(at); if (!Number.isFinite(t)) return ''; const m = Math.max(0, Math.round((now - t) / 60000)); return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 48 * 60 ? Math.round(m / 60) + ' h ago' : Math.round(m / 1440) + ' days ago'; };
-const okUrl = (u) => /^https:\/\/(?:a-to-mind\.com|github\.com\/atomeam\/void-loop)(?:\/|$)/.test(String(u || '')) ? String(u) : null;
+const okUrl = (u) => ownRepoUrl(u) || (/^https:\/\/a-to-mind\.com(?:\/|$)/.test(String(u || '')) ? String(u) : null);
 
 /**
  * The facts Verse may speak from, each with an id, the words the model reads, a short label and a link a viewer can open.

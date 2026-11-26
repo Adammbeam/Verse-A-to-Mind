@@ -63,11 +63,11 @@ export function jobPrompt(job) {
     j.brief ? '\n' + String(j.brief).trim() : '',
     '',
     'How to finish it:',
-    '1. Start from the newest main in a clean checkout: git clone https://github.com/atomeam/void-loop, or git fetch origin main and'
+    '1. Start from the newest main in a clean checkout: git clone https://github.com/Adammbeam/Verse-A-to-Mind, or git fetch origin main and'
       + ' git worktree add a new folder from origin/main. Never build on an old local branch, and commit only the files this job needs.',
     '2. Do what the job asks, in full. A versus job is a working Verse page that does the site\'s job; a domains/targets file alone does not finish it.',
     '3. Run the checks the brief names and read what the page shows. Fix what fails; never skip, weaken or delete a test.',
-    '4. Push a branch and open a pull request to atomeam/void-loop main with the label automerge. The title, the body and the commit'
+    '4. Push a branch and open a pull request to Adammbeam/Verse-A-to-Mind main with the label automerge. The title, the body and the commit'
       + ' messages say what changed and why in your own plain words, and never quote the owner.',
     '5. Print the pull request address as your last line and exit 0. Verse checks it after the merge: the job is done only when the pull'
       + ' request changes the page itself, takes nothing away from main, and the live page answers; otherwise the job comes back.',
@@ -145,8 +145,9 @@ const apiFor = (link) => { try { const u = new URL(link); return u.pathname.star
 /** a join link used: -> { ok, name, key } or { ok: false, say } (the key is the caller's to keep, never to print) */
 export async function join(link, { api = apiFor(link), fetch: f = fetch } = {}) {
   const code = (/(vj1-[0-9a-f]{32})\s*$/.exec(String(link || '').trim()) || [])[1];
-  if (!code) return { ok: false, say: 'a join link looks like https://a-to-mind.com/team/join/vj1-…' };
-  const r = await f(api, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ do: 'join', code, via: 'the script' }) });
+  const name = !code && /^[A-Za-z0-9][A-Za-z0-9._-]{0,23}$/.test(String(link || '').trim()) ? String(link).trim() : ''; // a name, not a link: join yourself
+  if (!code && !name) return { ok: false, say: 'give your name to join yourself, or a join link (https://a-to-mind.com/team/join/vj1-…)' };
+  const r = await f(api, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(code ? { do: 'join', code, via: 'the script' } : { do: 'join', name, via: 'the script' }) });
   let j; try { j = await r.json(); } catch (_) { j = { ok: false, say: 'not JSON (' + r.status + ')' }; }
   return j;
 }
@@ -154,7 +155,7 @@ export async function join(link, { api = apiFor(link), fetch: f = fetch } = {}) 
 const WORK_NOT_TTY = 'work prints each job for someone to read, and this output goes to a file or a pipe, so a job would be held with nothing working it.\n'
   + 'An agent in a tool shell: run node agent.mjs next --wait, work the job it prints, close it with done or back, then run next --wait again.\n'
   + 'A command that does the work: node agent.mjs work --run "<command>". To log anyway: add --log.';
-const USAGE = 'Usage: node agent.mjs join <link> | hook <https address> | hook --off | me | rekey | mentions | here [--no-auto] | next [--wait] | read <channel> | post <channel> <text> [--thread id] | meeting [text] | done [--link pr] [--note text] | back [--note why] [--not-failed] | work [--run "cmd"] [--every 60] [--minutes 90]';
+const USAGE = 'Usage: node agent.mjs join <your name or a link> | hook <https address> | hook --off | me | rekey | mentions | here [--no-auto] | next [--wait] | read <channel> | post <channel> <text> [--thread id] | meeting [text] | done [--link pr] [--note text] | back [--note why] [--not-failed] | work [--run "cmd"] [--every 60] [--minutes 90]';
 async function main(argv) {
   const [cmd, ...args] = argv;
   if (!cmd || cmd === 'help' || cmd === '--help') { console.log(USAGE); return 0; }

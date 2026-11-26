@@ -2,11 +2,23 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { inflateSync } from 'node:zlib';
 import vm from 'node:vm';
 import { parsePages, splitGroups, sizeText, imageKind, zip, engine } from '../void-live-deploy/lib/pdf-tools.js';
 globalThis.self ??= globalThis; vm.runInThisContext(readFileSync(new URL('../void-live-deploy/vendor/pdf-lib-1.17.1/pdf-lib.min.js', import.meta.url), 'utf8'));
 const L = globalThis.PDFLib, T = engine(L);
 const make = async (n, label = 'p') => { const d = await L.PDFDocument.create(); for (let i = 1; i <= n; i++) { const p = d.addPage([200 + i, 300]); p.drawText(label + i, { x: 20, y: 150 }); } return d.save(); };
+const wordsIn = (bytes) => {
+  const s = Buffer.from(bytes).toString('latin1'), bits = [];
+  for (const m of s.matchAll(/stream\r?\n([\s\S]*?)endstream/g)) {
+    for (const cand of [m[1], m[1].replace(/\r?\n$/, '')]) { try { bits.push(inflateSync(Buffer.from(cand, 'latin1')).toString('latin1')); break; } catch {} }
+  }
+  const body = bits.join('\n'), out = [];
+  for (const m of body.matchAll(/<([0-9A-Fa-f]+)>/g)) out.push(Buffer.from(m[1], 'hex').toString('latin1'));
+  for (const m of body.matchAll(/\(([^\\)]*(?:\\.[^\\)]*)*)\)/g)) out.push(m[1]);
+  return out.join('\n');
+};
+
 const sizes = async (bytes) => (await L.PDFDocument.load(bytes)).getPages().map((p) => Math.round(p.getWidth()));
 test('page specs: ranges, open ends, even, odd, last, junk dropped, order kept', () => {
   assert.deepEqual(parsePages('1-3, 5', 9), [0, 1, 2, 4]); assert.deepEqual(parsePages('8-', 10), [7, 8, 9]); assert.deepEqual(parsePages('-2', 5), [0, 1]);
@@ -55,4 +67,14 @@ test('page numbers, watermark, crop, info, optimize keep every page', async () =
 test('zip: a stored archive with the right names and sizes', () => {
   const z = zip([{ name: 'a.txt', bytes: new TextEncoder().encode('hello') }, { name: 'b.txt', bytes: new TextEncoder().encode('world!') }]), dv = new DataView(z.buffer);
   assert.equal(dv.getUint32(0, true), 0x04034b50); assert.equal(dv.getUint32(14, true), 0x3610a686); assert.equal(dv.getUint16(z.length - 12, true), 2); assert.equal(sizeText(1536), '1.5 KB'); assert.equal(sizeText(5 * 1048576), '5.00 MB');
+});
+test('fromText makes a real PDF that carries the words it was given', async () => {
+  const bytes = await (await import('../void-live-deploy/lib/pdf-tools.js')).fromText(L, { title: 'Reef notes', paras: ['Dry Tortugas peak 13.70 DHW.', 'Carysfort had zero days at 31.5 C.'] });
+  const doc = await L.PDFDocument.load(bytes);
+  assert.equal(doc.getPageCount(), 1);
+  assert.equal(doc.getTitle(), 'Reef notes');
+  const words = wordsIn(bytes);
+  assert.match(words, /Reef notes/);
+  assert.match(words, /Dry Tortugas peak 13.70 DHW/);
+  assert.match(words, /Carysfort had zero days at 31.5 C/);
 });

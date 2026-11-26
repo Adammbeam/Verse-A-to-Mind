@@ -11,8 +11,25 @@ import { conflictMarkers } from '../void-live-deploy/lib/code-review.js';
 import { APPEND_JSON, APPEND_TEXT, INDEX, keyOf } from './records.mjs'; // the append-only records, shared with tools/revert-records.mjs
 import { settleChecks } from './checks-list.mjs';
 import { INBOX, settleText } from './shared-merge.mjs';
+import { wipeRefusal, allowWipe } from './wipe-guard.mjs';
 
 const sh = (c) => execSync(c, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+const before = sh('git rev-parse HEAD');
+function refuseWipe() {
+  const against = [before, 'origin/main'];
+  for (const ref of against) {
+    let deletedText = '', treeText = '';
+    try { deletedText = sh('git diff --cached --name-only --diff-filter=D ' + ref); } catch (_) {}
+    try { treeText = sh('git ls-tree -r --name-only ' + ref); } catch (_) {}
+    const wipe = wipeRefusal({ deleted: deletedText.split('\n').filter(Boolean).length, treeSize: treeText.split('\n').filter(Boolean).length, allow: allowWipe() });
+    if (wipe) {
+      try { sh('git merge --abort'); } catch (_) {}
+      console.error('merge-main: ' + wipe);
+      process.exit(1);
+    }
+  }
+}
+
 // tools/families.mjs conflicts are two branches adding skills to the same family list: the settled text is main's
 // line with the union of both sides' additions (see below); samePrefixWords asks that both sides' lines are the
 // same family statement apart from the skills array.
@@ -39,7 +56,7 @@ function regen() {
   try { execFileSync(process.execPath, [resolve(process.cwd(), 'tools', 'similar-index.mjs')], { stdio: 'ignore' }); } catch (_) {}
   try { sh(`git add ${REGEN.filter((f) => existsSync(resolve(process.cwd(), f))).join(' ')}`); if (sh('git diff --cached --name-only')) { sh('git commit -q -m "Regenerate the generated files after the merge"'); console.log('regenerated the generated files after the merge'); } } catch (_) {}
 }
-try { sh('git merge --no-edit origin/main'); console.log('merged origin/main (no conflicts)'); regen(); process.exit(0); } catch (_) {}
+try { sh('git merge --no-edit --no-commit origin/main'); refuseWipe(); try { sh('git commit -q --no-edit'); } catch (_) {} console.log('merged origin/main (no conflicts)'); regen(); process.exit(0); } catch (_) {}
 
 const conflicted = sh('git diff --name-only --diff-filter=U').split('\n').filter(Boolean);
 const sideOf = (n, f) => { try { return execFileSync('git', ['show', `:${n}:${f}`], { encoding: 'utf8' }); } catch (_) { return ''; } };
@@ -118,6 +135,7 @@ for (const f of conflicted) {
 // never commit a merge that still carries a conflict marker anywhere (#291 hand-merged one into the growth ledger): name it and stop
 const marked = sh('git ls-files').split('\n').filter(Boolean).filter((f) => { try { const t = existsSync(f) ? readFileSync(f, 'utf8') : ''; return !t.includes('\0') && conflictMarkers(t).length; } catch (_) { return false; } });
 if (marked.length) { console.error('conflict markers left in: ' + marked.join(', ') + ' (merge left in progress, nothing committed)'); process.exit(1); }
+refuseWipe();
 sh('git commit -q --no-edit');
 regen();
 console.log('merged origin/main; resolved ' + conflicted.join(', '));

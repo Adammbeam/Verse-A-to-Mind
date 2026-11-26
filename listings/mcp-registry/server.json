@@ -5,6 +5,6 @@
   "description": "Ask Verse anything with sources, plus code review, translation and more paid per call over x402.",
   "version": "1.2.0",
   "websiteUrl": "https://a-to-mind.com",
-  "repository": { "url": "https://github.com/atomeam/void-loop", "source": "github" },
+  "repository": { "url": "https://github.com/Adammbeam/Verse-A-to-Mind", "source": "github" },
   "remotes": [{ "type": "streamable-http", "url": "https://a-to-mind.com/api/mcp" }]
 }

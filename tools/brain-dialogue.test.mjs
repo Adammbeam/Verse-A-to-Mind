@@ -136,3 +136,17 @@ test('an ask that points back follows the newest ask it shares a word with, even
   Dl.heard(D, 'who built it', T0 + 2 * MIN);
   assert.equal(Dl.heard(D, 'who built it', t + DAY + MIN).kind, 'repeat');
 });
+
+test('carriedOn: the earlier ask goes with a new one only when the new one follows it (live, 2026-11-25)', () => {
+  const D = Dl.makeDialogue(), T = Date.UTC(2026, 10, 25, 23), M = 60000;
+  Dl.heard(D, 'Try a reasoning test', T); Dl.answered(D, 'Try a reasoning test', 'Send me a logic problem and I will work it through.', T + 1000);
+  Dl.heard(D, 'Test its memory next', T + M);
+  assert.equal(Dl.builtOn(D, 'Test its memory next', T + M).kind, 'follow', 'the orb still links them by the shared word');
+  assert.equal(Dl.carriedOn(D, 'Test its memory next', T + M), null, 'but the earlier ask is not sent');
+  Dl.answered(D, 'Test its memory next', 'This page keeps your asks on this device.', T + M + 1000);
+  Dl.heard(D, 'who painted the starry night', T + 2 * M); Dl.answered(D, 'who painted the starry night', 'Vincent van Gogh, in 1889.', T + 2 * M + 1000);
+  Dl.heard(D, 'where did he live', T + 3 * M);
+  assert.equal(Dl.carriedOn(D, 'where did he live', T + 3 * M).prior.ask, 'who painted the starry night', 'a short question that points back takes the ask just before it');
+  assert.equal(Dl.carriedOn(D, 'What is 2 + 2?', T + 4 * M), null);
+  assert.equal(Dl.carriedOn(D, 'why?', T + 3 * M + 31 * M), null, 'not after FOLLOW_MS');
+});

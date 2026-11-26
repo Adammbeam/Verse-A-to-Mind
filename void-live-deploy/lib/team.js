@@ -33,8 +33,19 @@ export const LIMITS = Object.freeze({ body: 4000, lines: 80, about: 160, title: 
 export const RATES = Object.freeze({ gap: 1000, day: 600, channelsDay: 10, channels: 60, agents: 100, asks: 50, dreamsDay: 4, dreamsOpen: 5, filesDay: 6, filesOpen: 20 }); // files: a member's own #work post filed as a job (api/team.js 'file') // dreams: Verse Brain's posts in #work (api/team.js 'dream')
 // a crew member (lib/team-crew.js) works on Verse's 15-minute clock, so it is here while it worked in the last 40 minutes
 export const CREW_AWAY_MS = 40 * 60e3;
-export const AWAY_MS = 10 * 60e3; // no word from an agent for this long: away
+export const AWAY_MS = 10 * 60e3; // no word from an agent for this long: its card says away
+// how long a seat that spoke is still handed work. Longer than a clock tick (10 min) so a tab open but quiet is not skipped between ticks,
+// and shorter than STALE_MS so a seat that went quiet with a job has it taken back before it could be handed another. Owner, 2026-11-24:
+// 265 jobs waited while 0 of 42 seats worked, because this window was the same 10 minutes as the tick.
+export const HAND_MS = 20 * 60e3;
 export const STALE_MS = 30 * 60e3; // an agent away this long with a job gives it back to the queue
+// self-join (owner, 2026-11-25: "make it so the agents can add themselves to verses team easily"): an agent joins with one call and no link,
+// role 'self'. A self-joined seat with no job and no word for this long leaves on its own (api/team.js reapSelf), so a seat nobody uses
+// never holds a place under RATES.agents. Longer than STALE_MS, so a seat that was handed a job loses the job first, then the seat.
+export const SELF_IDLE_MS = 2 * 60 * 60e3;
+export const SELF_TRIES = 5; // self-joins a minute from one address (lib/void-me.js brake, the same limiter the member join uses)
+/** what a self-joined agent is told with its key */
+export const selfJoinedSay = (name) => joinedSay(name) + ' Verse hands you your next job when you say here ({"do":"here"}); a seat with no job and no word for 2 hours leaves on its own; {"do":"leave"} leaves at once.';
 export const EMOJI = Object.freeze(['👍', '✅', '👀', '🎉', '❤️', '🚀', '🤔', '❌']);
 
 // The build queue's kinds an agent of the team may take: the ones the conductor sends to Verse's coder (tools/conductor-core.mjs ROUTES with
@@ -58,12 +69,27 @@ export const memberAsk = (job) => /^ask-\d+$/.test(String(job && job.id || '')) 
 /** an ask as dedupe compares it: lower case, words only */
 export const askKey = (s) => String(s || '').toLowerCase().replace(/https?:\/\/\S+/g, (u) => u.replace(/[?#].*$/, '')).replace(/[^a-z0-9:/.]+/g, ' ').trim().slice(0, 200);
 export const ownerAsk = (job) => /^team-\d+$/.test(String(job && job.id || '')) && String(job.target || '') === 'feature:' + job.id;
-/** the queued jobs an agent may take, best first: the owner's #work asks before every background job, oldest first, then the rest by worth;
+/** a week: the window a met want is kept, and the age window for a self-filed job's lift past stale background work */
+export const WEEK_MS = 7 * 864e5;
+/** a job Verse filed for itself (id want-*, or noted as wanted by Verse's brain) */
+export const selfFiled = (job) => /^want-/.test(String(job && job.id || '')) || /wanted by Verse's brain/i.test(String((job && job.note) || ''));
+/** the queued jobs an agent may take, best first. Three tiers: the owner's #work asks (oldest first), then the rest, then by worth.
+ *  Inside the second tier, a self-filed job sorts ahead of background jobs older than a week, only while the self-filed job itself
+ *  is under a week old; after that it falls back to the usual order (worth, then oldest first). Never above the owner's asks.
  *  skip: job ids this agent gave back or failed (it gets another) */
 export function rank(jobs, now, skip = []) {
   const no = new Set(skip);
+  const age = (j) => now - msOf(j && j.at);
+  const lift = (j) => selfFiled(j) && age(j) < WEEK_MS;
+  const staleBg = (j) => !selfFiled(j) && age(j) > WEEK_MS;
   return (jobs || []).filter((j) => j && j.state === 'queued' && TEAM_KINDS.includes(kindOf(j.target)) && !no.has(j.id) && triesOf(j.note) < MAX_TRIES)
-    .map((j) => ({ j, o: ownerAsk(j) ? 1 : 0, s: score(j, now) })).sort((a, b) => b.o - a.o || (a.o ? 0 : b.s - a.s) || msOf(a.j.at) - msOf(b.j.at)).map((x) => x.j);
+    .map((j) => ({ j, o: ownerAsk(j) ? 1 : 0, s: score(j, now) })).sort((a, b) => {
+      if (a.o !== b.o) return b.o - a.o;
+      if (a.o) return msOf(a.j.at) - msOf(b.j.at);
+      const aUp = lift(a.j) && staleBg(b.j), bUp = lift(b.j) && staleBg(a.j);
+      if (aUp !== bUp) return aUp ? -1 : 1;
+      return b.s - a.s || msOf(a.j.at) - msOf(b.j.at);
+    }).map((x) => x.j);
 }
 /** a queue note with "claimed by team:<name> ·" in front (the API checks a job is still an agent's by that start), the rest (tries and reasons) kept, at most 300 characters (the queue's cap) */
 export const claimNote = (note, name) => { const rest = String(note || '').replace(/^claimed by [^·]*·?\s*/i, '').trim(); return ('claimed by team:' + name + ' ·' + (rest ? ' ' + rest : '')).slice(0, 300); };

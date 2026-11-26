@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { supports, supportedOnly, hasCorrection, dropUnbackedActs, dropFiller, ASK_MAX, QUERY_MAX, CORRECTION_RULE, ACT_RULE } from '../void-live-deploy/lib/answer-honesty.js';
-import { isOwnCardNote, OWN_CARD_RULE, modelFacts, towerFacts, selfFacts, cardFacts, wholeClause } from '../void-live-deploy/lib/self-context.js';
+import { isOwnCardNote, isCardCorrection, OWN_CARD_RULE, modelFacts, towerFacts, selfFacts, cardFacts, wholeClause } from '../void-live-deploy/lib/self-context.js';
 import { SOURCE_LINKS, SOURCE_BOX, cardOf, keywordsOf } from '../void-live-deploy/lib/card-frame.js';
 import { towerOf } from './self-context.mjs';
 import { tower, LANE_PAGES } from '../void-live-deploy/lib/tower.js';
@@ -69,15 +69,18 @@ test('fault 4: the answer route reads the whole note; only the encyclopedia sear
 // fault 5: a note about Verse's own card is answered by Verse, about itself, with Fixed and Still open from its records
 test('fault 5: the five card notes are notes about my own card; other cards are not', () => {
   for (const t of [CARD1, CARD4, CARD5]) assert.equal(isOwnCardNote(t), true, t.slice(0, 40));
+  for (const t of [CARD1, CARD4, CARD5]) assert.equal(isCardCorrection(t), true, 'addressed to Verse: ' + t.slice(0, 40));
   for (const t of ['my credit card was declined', 'what does the card say in tarot', 'what is the best answer to 2+2', 'make me a birthday card']) assert.equal(isOwnCardNote(t), false, t);
   assert.match(OWN_CARD_RULE, /my last card/); assert.match(OWN_CARD_RULE, /Fixed:/); assert.match(OWN_CARD_RULE, /Still open:/);
-  assert.match(read('../void-live-deploy/functions/api/answer.js'), /isOwnCardNote\(ask\) \? ' ' \+ OWN_CARD_RULE/);
+  const ans = read('../void-live-deploy/functions/api/answer.js');
+  assert.match(ans, /const own = isCardCorrection\(ask\)/);
+  assert.match(ans, /own \? ' ' \+ OWN_CARD_RULE/);
 });
 
 test('fault 5: the gemma date comes from the record, and #1406 and the card fixes are shipped facts', () => {
   assert.match(modelFacts(selfJson), /2026-10-25, commit 630e666fb/);
   const facts = selfFacts({ self: selfJson });
-  assert.match(facts, /The site whose page is next is /);
+  assert.match(facts, /The kind of work I am taking on next is /);
   assert.match(facts, /630e666fb/);
 });
 
@@ -90,10 +93,11 @@ test('fault 5: Still open starts with the tower target, then the next smallest s
   const live = tower([], {}, { sites: [{ site: 'sycophanthex.com', rank: 391415, hardness: 46 }] }, null, null, null, 'sycophanthex.com');
   assert.equal(live.floors.find((f) => f.id === 'sycophanthex.com').page, '/fanfic/', 'the tower target is fought by the fan-fiction archive');
   assert.equal(LANE_PAGES['sycophanthex.com'], '/fanfic/');
-  const line = towerFacts(selfJson), target = selfJson.tower.target; // the record's target, whichever site the owner has it on now (sycophanthex.com until 2026-10-29, then onlineconverter.com)
-  assert.ok(target && line.indexOf(target) >= 0 && line.indexOf(target) < line.indexOf(selfJson.tower.next[0]), 'the target comes before the next sites');
+  const line = towerFacts(selfJson), kind = selfJson.tower.kind;
+  assert.ok(kind && line.includes(kind), 'the public line names the floor kind');
+  assert.doesNotMatch(line, /\.(com|net|org|ru)\b/, 'public tower facts name no rival host');
   const facts = selfFacts({ self: selfJson });
-  assert.ok(facts.indexOf('The site whose page is next') < facts.indexOf('Growth inbox, still open'), 'the tower comes before the other open work');
+  assert.ok(facts.indexOf('The kind of work I am taking on next') < facts.indexOf('Growth inbox, still open'), 'the tower comes before the other open work');
 });
 
 // card 5's note: the lists the model copies come from the record, and the record's gemma date stands
@@ -144,7 +148,7 @@ test('the card 5 note, end to end: self route, whole note, my own facts, no clai
   assert.ok(seen, 'the model was asked');
   const all = (seen.messages || []).map((m) => m.content).join('\n');
   assert.match(all, /smallest-first order behind sycophanthex\.com/, 'the note reached the model whole');
-  assert.match(all, /my last card/); assert.match(all, /2026-10-25, commit 630e666fb/); assert.match(all, /The site whose page is next/);
+  assert.match(all, /my last card/); assert.match(all, /2026-10-25, commit 630e666fb/); assert.match(all, /The kind of work I am taking on next/);
   assert.match(all, /do not copy them/); assert.match(all, /my record stands/);
   // the Fixed list opens on my newest shipped row, read from the record (it said 2026-10-29 until rows shipped after that day)
   const newest = selfJson.shipped.map((r) => r.date).filter((d) => /^\d{4}-\d\d-\d\d$/.test(d)).sort().pop();

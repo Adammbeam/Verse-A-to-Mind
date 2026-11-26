@@ -22,7 +22,7 @@ Cloudflare token with zone analytics appears. The owner will not switch on Cloud
 
 - `node tools/traffic.mjs` (print), `--write` (write the file), `--json`.
 - `node --test tools/traffic.test.mjs` (classes, cleaning, the route on a fake D1, the Cloudflare split, the line).
-- Dispatch: the GitHub API `POST /repos/atomeam/void-loop/actions/workflows/traffic.yml/dispatches {"ref":"main"}`, or the Actions tab.
+- Dispatch: the GitHub API `POST /repos/Adammbeam/Verse-A-to-Mind/actions/workflows/traffic.yml/dispatches {"ref":"main"}`, or the Actions tab.
 - To use Cloudflare's own counts: a token with **Zone > Analytics > Read** (and **Zone > Zone > Read**, or a `CLOUDFLARE_ZONE_ID` secret) as
   `CLOUDFLARE_ANALYTICS_TOKEN`. `tools/cf-scope.mjs` shows what each token can read; on 2026-10-26 only `CLOUDFLARE_API_TOKEN` was set and it
   could read no analytics.

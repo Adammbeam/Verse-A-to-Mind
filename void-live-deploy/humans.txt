@@ -5,7 +5,7 @@ Built with: AI coding agents, working in the open in the repository below
 
 /* SITE */
 Site: https://a-to-mind.com
-Source: https://github.com/atomeam/void-loop
+Source: https://github.com/Adammbeam/Verse-A-to-Mind
 Standards: HTML5, CSS, JavaScript modules
 Components: three.js, PDF.js
 Software: Cloudflare Pages and Pages Functions, Cloudflare D1, KV, R2 and Workers AI

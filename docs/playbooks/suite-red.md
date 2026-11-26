@@ -4,7 +4,7 @@ What starts it: Verse verify on main fails a browser-suite section, and the site
 
 ## What to read
 
-The job log, not the summary. `gh run view <run-id> --repo atomeam/void-loop --log-failed` and the check's own JSON. The geometry is the bug: a card bottom and a dock top, a chip that moved, a millisecond.
+The job log, not the summary. `gh run view <run-id> --repo Adammbeam/Verse-A-to-Mind --log-failed` and the check's own JSON. The geometry is the bug: a card bottom and a dock top, a chip that moved, a millisecond.
 
 ## Three that kept failing the same way
 

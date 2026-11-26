@@ -107,3 +107,16 @@ test('ledgerWiped needs no base: it catches a ledger left as a placeholder or a 
   assert.equal(ledgerWiped('domains/void.frontier.md', md), '', 'a whole ledger is fine');
   assert.equal(ledgerWiped('tools/other.md', 'PLACEHOLDER'), '', 'not a ledger');
 });
+
+test('prepush refuses a commit that deletes most of the tree, unless VOID_ALLOW_WIPE=1', () => {
+  const { w, sh } = repo();
+  for (let i = 0; i < 60; i++) writeFileSync(join(w, 'f' + i + '.txt'), 'x');
+  sh(w, 'git add -A && git commit -q -m many');
+  sh(w, 'git rm -q ' + Array.from({ length: 51 }, (_, i) => 'f' + i + '.txt').join(' ') + ' && git commit -q -m wipe');
+  const pre = (env = {}) => spawnSync(process.execPath, [join(here, 'prepush.mjs'), '--base', 'HEAD~1'], { cwd: w, encoding: 'utf8', env: { ...process.env, ...env } });
+  const bad = pre();
+  assert.equal(bad.status, 1, bad.stderr + bad.stdout);
+  assert.match(bad.stderr, /delete 51 files/);
+  const ok = pre({ VOID_ALLOW_WIPE: '1' });
+  assert.equal(ok.status, 0, ok.stderr + ok.stdout);
+});

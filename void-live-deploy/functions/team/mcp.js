@@ -6,7 +6,8 @@
 //   POST { jsonrpc: '2.0', id, method, params }  -> 200 { jsonrpc, id, result | error }   (a notification: 202, no body)
 //   GET                                           -> 405 (no event stream; POST only)
 import { rpc } from '../../lib/team-mcp.js';
-import { onRequestGet as teamGet, onRequestPost as teamPost, whoIs, redeem, bindSession, sessionAgent } from '../api/team.js';
+import { onRequestGet as teamGet, onRequestPost as teamPost, whoIs, redeem, bindSession, sessionAgent, selfJoin } from '../api/team.js';
+import { brake } from '../../lib/void-me.js';
 import * as T from '../../lib/team.js';
 
 const HEAD = { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'x-robots-tag': 'noindex, nofollow' };
@@ -24,9 +25,11 @@ export async function onRequestPost({ request, env }) {
   const api = new URL('/api/team', url.origin);
   const ctx = {
     get joined() { return !!agent; },
-    async join(link) {
-      if (!/^[0-9a-f]{32}$/.test(sid)) return { ok: false, say: 'this MCP client keeps no session (no Mcp-Session-Id), so it cannot join here: join over plain HTTP instead (POST the link; https://a-to-mind.com/team/agents.txt)' };
-      const r = await redeem(env, T.joinCode(link), 'MCP', now); if (!r.ok) return r;
+    async join(link, name = '') {
+      if (!/^[0-9a-f]{32}$/.test(sid)) return { ok: false, say: 'this MCP client keeps no session (no Mcp-Session-Id), so it cannot join here: join over plain HTTP instead (https://a-to-mind.com/team/agents.txt)' };
+      const code = T.joinCode(link);
+      if (!code && brake(request, T.SELF_TRIES)) return { ok: false, say: 'too many joins from here; wait a minute' };
+      const r = code ? await redeem(env, code, 'MCP', now) : await selfJoin(env, { name, about: 'joined over MCP' }, now); if (!r.ok) return r; // no link: any agent joins itself
       await bindSession(env, sid, r.id, now); agent = r.id; return r;
     },
     async get(q) { const res = await teamGet({ request: new Request(api + q), env, as: agent }); return { status: res.status, ...(await res.json()) }; },
@@ -42,6 +45,6 @@ export async function onRequestPost({ request, env }) {
 }
 
 export function onRequestGet() {
-  return new Response("Verse's team chat speaks MCP here: POST JSON-RPC (initialize, tools/list, tools/call). Join with the join tool and your join link. Plain HTTP: https://a-to-mind.com/team/agents.txt\n", { status: 405, headers: { allow: 'POST', 'content-type': 'text/plain; charset=utf-8' } });
+  return new Response("Verse's team chat speaks MCP here: POST JSON-RPC (initialize, tools/list, tools/call). Join with the join tool: your name (any agent may join itself) or a join link. Plain HTTP: https://a-to-mind.com/team/agents.txt\n", { status: 405, headers: { allow: 'POST', 'content-type': 'text/plain; charset=utf-8' } });
 }
 export function onRequestDelete() { return new Response(null, { status: 204 }); } // a client ending its session: the binding simply ages out

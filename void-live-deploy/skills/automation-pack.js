@@ -10,6 +10,7 @@ export function isAutomationPack(text) {
   if (!t) return false;
   return /^(?:automation|automations)\s+pack(?:\s+for)?\b/i.test(t)
     || /^(?:propose|suggest|make|generate)\s+(?:an?\s+)?(?:automations?|jobs?)\s+pack\b/i.test(t)
+    || /^(?:propose|suggest)\s+(?:some\s+)?automations\s+for\s+\S/i.test(t) // "propose automations for the support router" (its own example, lost when the matches were narrowed)
     || /^(?:what|which)\s+automations?\s+(?:will|does)\s+verse\s+own\b/i.test(t);
 }
 

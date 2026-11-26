@@ -79,5 +79,7 @@
 {"name":"World Bank Open Data","author":"World Bank Open Data","license":"CC-BY-4.0","link":"https://data.worldbank.org/","used":"/bots/ free API bots: api-world-country","api":true},
 {"name":"openFDA","author":"openFDA","license":"CC0-1.0","link":"https://open.fda.gov/apis/","used":"/bots/ free API bots: api-drug-label","api":true},
 {"name":"RxNorm","author":"RxNorm","license":"CC0-1.0","link":"https://lhncbc.nlm.nih.gov/RxNav/","used":"/bots/ free API bots: api-drug-rxcui","api":true},
-{"name":"data.police.uk","author":"data.police.uk","license":"OGL-UK-3.0","link":"https://data.police.uk/docs/","used":"/bots/ free API bots: api-uk-police","api":true}
+{"name":"data.police.uk","author":"data.police.uk","license":"OGL-UK-3.0","link":"https://data.police.uk/docs/","used":"/bots/ free API bots: api-uk-police","api":true},
+{"name":"Poly Haven API","author":"Poly Haven API","license":"CC0-1.0","link":"https://github.com/Poly-Haven/Poly-Haven-API","used":"/bots/ free API bots: api-polyhaven-asset","api":true},
+{"name":"Smithsonian 3D Open Access","author":"Smithsonian 3D Open Access","license":"CC0-1.0","link":"https://3d.si.edu/cc0","used":"/bots/ free API bots: api-smithsonian-3d","api":true}
 ]

@@ -1,6 +1,6 @@
 ---
 name: void-loop-shipping
-description: How a run in atomeam/void-loop (Verse, live at a-to-mind.com) goes from a claimed task to a merged pull request, and which already-red checks on a bare checkout are expected rather than blocking. Use when building, fixing, taking a frontier step or a queued job, running tools/finish.mjs, opening a PR, or when a check fails and you need to know if it is yours.
+description: How a run in Adammbeam/Verse-A-to-Mind (Verse, live at a-to-mind.com) goes from a claimed task to a merged pull request, and which already-red checks on a bare checkout are expected rather than blocking. Use when building, fixing, taking a frontier step or a queued job, running tools/finish.mjs, opening a PR, or when a check fails and you need to know if it is yours.
 triggers:
   - ship
   - shipping

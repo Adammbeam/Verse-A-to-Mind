@@ -27,6 +27,10 @@ export function namedFixes(note) {
   return { count, items };
 }
 
+/** whether the note is about the Fixed / Still open lists or named fixes, so those records belong under the lead. Pure. */
+export const wantsRecordLists = (note) => !!(namedFixes(note).items.length || namedFixes(note).count
+  || /\b(?:still open|what is fixed|fixed and|\bfixes\b|pull requests?|#\d+|shipped|pending|not started|lists? leave out|list of what)\b/i.test(String(note || '')));
+
 // words that say nothing about which fix this is: they are in nearly every title of this repo
 const PLAIN = new Set(('the and for are was has had not but can that this with from into your their them they then than when what which will would '
   + 'verse void card cards answer answers note notes site sites page pages make makes made gets new now still its it\'s fix fixes fixed thread threads line lines '
@@ -133,16 +137,17 @@ export function quoteLines(note, prior = []) {
 /** a Fixed list sorted newest first by its leading date (the gemma row is no longer last). Pure. */
 export const newestFirst = (rows) => rows.map((r, i) => ({ r, i, d: (/^(\d{4}-\d\d-\d\d)/.exec(r) || [])[1] || '' })).sort((a, b) => (a.d === b.d ? a.i - b.i : a.d < b.d ? 1 : -1)).map((x) => x.r);
 
-/** the whole card body for a note about my own card: the guarded lead, quote checks, the fix statuses, then Fixed (when the note names no fixes) and Still open. Pure. */
+/** the whole card body for a note about my own card: the guarded lead, quote checks, then the fix statuses or Fixed / Still open only when the note is about those. Pure. */
 export function ownCardAnswer(lead, note, { lists = { fixed: [], open: [] }, commits = [], pulls = null, prior = [] } = {}) {
   const quotes = quoteLines(note, prior), fixes = fixLines(note, { commits, pulls, prior });
+  const listsWanted = wantsRecordLists(note);
   let top = guardLead(lead, note);
   if (!top) top = fixes.length ? 'Here is where each fix from your note stands.' : 'You are right about my last card.';
   const parts = [top];
   if (quotes.length) parts.push(quotes.join(' '));
   if (fixes.length) parts.push('Fixes you named:\n' + fixes.join('\n'));
-  else if (lists.fixed.length) parts.push('Fixed:\n' + newestFirst(lists.fixed).join('\n'));
-  if (lists.open.length) parts.push('Still open:\n' + lists.open.join('\n'));
+  else if (listsWanted && lists.fixed.length) parts.push('Fixed:\n' + newestFirst(lists.fixed).join('\n'));
+  if ((fixes.length || listsWanted) && lists.open.length) parts.push('Still open:\n' + lists.open.join('\n'));
   return parts.join('\n\n');
 }
 

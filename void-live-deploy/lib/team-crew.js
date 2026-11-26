@@ -15,6 +15,7 @@
  */
 
 import { slugOf, categoryOf, CATEGORIES } from './watch-build.js'; // a TV or radio idea's blueprint job is tv:<slug> (tools/watch-build.mjs queues it)
+import { WEEK_MS } from './team.js';
 export const RETIRED = Object.freeze([{ id: 'c7e0000000a1', channel: 'tower' }]); // TowerScout: it mapped sites and filed nothing a visitor can use
 export const CREW = Object.freeze([
   { id: 'c7e0000000a2', slug: 'exam-coach', name: 'ExamCoach', every: 60, channel: 'exam', lane: 'exam',
@@ -36,6 +37,15 @@ export const byLane = (lane) => CREW.find((b) => b.lane === lane) || null;
 export const LANES = Object.freeze({ exam: 'gap', tower: 'versus', page: 'heal', link: 'heal', miss: 'gap', revenue: 'feature', idea: 'feature', merge: 'heal' });
 export const CREW_AWAY_MS = 40 * 60e3; // the clock knocks every 15 minutes: a crew member is here while it has worked in the last 40
 export const MAX_OPEN = 12, FILE_PER_TICK = 2, REOPEN_MAX = 3, REOPEN_GAP_MS = 24 * 3600e3, SETTLE_MS = 2 * 3600e3;
+/** a want filed from a current-floor checklist gap (key floor-*, or metric floorgap:) */
+export const isFloorGap = (w) => /^floor-/.test(String((w && w.key) || '')) || /^floorgap:/.test(String((w && (w.metric && w.metric.id || w.metric)) || ''));
+/** the oldest open want past the 7-day window, to yield a MAX_OPEN slot for a fresh floor-gap filing. Pure. Never evicts another floor-gap want. */
+export function yieldFor(incoming, openWants, now) {
+  if (!isFloorGap(incoming)) return null;
+  const stale = (openWants || []).filter((w) => w && (now - Number(w.filed || w.at || 0)) > WEEK_MS && !isFloorGap(w))
+    .sort((a, b) => Number(a.filed || a.at || 0) - Number(b.filed || b.at || 0));
+  return stale[0] || null;
+}
 export const TAG = 'Want key: ';
 export const WANT_KEY = /^[a-z0-9][a-z0-9-]{2,60}$/;
 // the pages StatusWatch probes every run (plus the page of every open page want)
@@ -64,6 +74,35 @@ export function towerMisses(rows) {
 export function rivalOf(floor) {
   const m = /(?:^|:\s*)((?:[a-z0-9-]+\.)+[a-z]{2,})$/i.exec(s(floor, 120));
   return m ? m[1].toLowerCase() : '';
+}
+/** the public kind of a floor id ("travel: flightconnections.com" -> "travel"; a bare host is not a kind). */
+export function floorKind(id) {
+  const raw = s(id, 120);
+  const i = raw.indexOf(':');
+  if (i > 0) return s(raw.slice(0, i), 40);
+  if (raw && !/(?:^|\.)(?:[a-z0-9-]+\.)+[a-z]{2,}$/i.test(raw)) return raw;
+  return '';
+}
+/** Checklist gaps on the current tower floor, most urgent first (at most one). Named open items on the floor's
+ *  own checklist (tower.target.json background), never win/lose aspect counts, and public words use the kind, never a rival host.
+ *  The job starts with a cheap, deterministic node test, not a full browser suite. */
+export function floorGapsOf(ev = {}) {
+  const target = ev.target, id = target && s(target.id, 120);
+  if (!id) return [];
+  const kind = floorKind(id) || 'this kind of work';
+  const items = (Array.isArray(target.background) ? target.background : []).filter((b) => b && s(b.id, 120) === id && s(b.aspect, 80));
+  if (!items.length) return [];
+  items.sort((a, b) => String(a.since || '').localeCompare(String(b.since || '')) || String(a.aspect).localeCompare(String(b.aspect)));
+  const g = items[0], aspect = s(g.aspect, 80), n = items.length, job = s(g.job, 160).replace(/(?:[a-z0-9-]+\.)+[a-z]{2,}/gi, '').replace(/\s+/g, ' ').trim();
+  const key = ('floor-' + slug(kind, 16) + '-' + slug(aspect, 24)).slice(0, 60);
+  return [{
+    key, lane: 'tower',
+    title: 'Close the open ' + aspect + ' check on the ' + kind + ' floor',
+    why: 'The current tower floor (' + kind + ') still has ' + n + ' open checklist item' + (n === 1 ? '' : 's') + '. The weakest is "' + aspect + '"' + (job ? ' (' + job + ')' : '') + '. Start with a cheap, deterministic node test that fails with a precise message; do not start with a full browser suite.',
+    done: 'A cheap deterministic node test covers the gap, and the ' + aspect + ' check on the ' + kind + ' floor is verified on the live site, so that item leaves the floor\'s open checklist.',
+    cite: [{ what: 'tower floor checklist', url: 'https://a-to-mind.com/tower.target.json' }],
+    metric: { id: 'floorgap:' + id + '|' + aspect, label: aspect + ' on the ' + kind + ' floor is verified', better: 'up', value: 0 },
+  }];
 }
 /**
  * Verse's wants, from its evidence, most urgent first. ev (every field optional; a missing one makes no want and measures nothing):
@@ -99,6 +138,8 @@ export function wantsOf(ev = {}) {
       done: 'The link opens a page that answers 200, or the link goes.', cite: [{ what: 'SiteOperator link walk', url: 'https://a-to-mind.com' + s(l.from || '/', 40) }],
       metric: { id: 'link:' + s(l.path, 80), label: s(l.path, 60) + ' answers 200', better: 'up', value: 0 } });
   }
+  // The current floor's own checklist is work: one named open item, cheapest check first (after pages that fail, before the exam).
+  for (const w of floorGapsOf(ev)) want(w);
   // the outcome exam: the lowest domains (or a case that regressed)
   const doms = ev.exam && ev.exam.domains && typeof ev.exam.domains === 'object' ? Object.entries(ev.exam.domains) : [];
   const low = doms.filter(([, d]) => d && num(d.score) != null && d.score < 100).sort((a, b) => a[1].score - b[1].score || (a[0] < b[0] ? -1 : 1)).slice(0, 2);
@@ -158,6 +199,12 @@ export function measure(id, ev = {}) {
   if (k === 'exam') { const d = ev.exam && ev.exam.domains && ev.exam.domains[arg]; return d ? num(d.score) : null; }
   if (k === 'examcase') { const c = ((ev.exam && ev.exam.cases) || []).find((x) => x && x.id === arg); return c ? (c.ok ? 1 : 0) : null; }
   if (k === 'tower') { const rows = ev.tower && ev.tower.floors && ev.tower.floors[arg]; return rows ? towerMisses(rows).length : null; }
+  if (k === 'floorgap') {
+    const at = arg.indexOf('|'), fid = at >= 0 ? arg.slice(0, at) : arg, aspect = at >= 0 ? arg.slice(at + 1) : '';
+    if (!ev.target || s(ev.target.id, 120) !== fid) return null;
+    const open = (ev.target.background || []).some((b) => b && s(b.id, 120) === fid && s(b.aspect, 80) === aspect);
+    return open ? 0 : 1;
+  }
   if (k === 'page') { const p = (ev.probe || []).find((x) => x && x.path === arg); return p ? (p.status === 200 ? 1 : 0) : null; }
   if (k === 'link') { const p = (ev.links || []).find((x) => x && x.path === arg) || (ev.probe || []).find((x) => x && x.path === arg); return p ? (p.status === 200 ? 1 : 0) : null; }
   if (k === 'guard') { const g = (ev.guards || []).find((x) => x && x.id === arg); return g && g.now !== 'unknown' ? (g.now === 'up' ? 1 : 0) : null; }

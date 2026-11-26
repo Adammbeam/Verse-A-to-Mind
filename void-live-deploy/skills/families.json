@@ -13,8 +13,8 @@
  "smoke_at": "2026-11-17",
  "bench_at": "2026-11-16",
  "totals": {
-  "experiment": 2,
-  "tested": 3,
+  "experiment": 3,
+  "tested": 6,
   "checked": 18,
   "proven": 447
  },
@@ -595,7 +595,7 @@
    "for": "board games, card games, arcade and puzzle games and play: one picker (\"games\"), one Verse strength, one 3D stage",
    "count": {
     "experiment": 0,
-    "tested": 1,
+    "tested": 2,
     "checked": 11,
     "proven": 45
    },
@@ -1099,6 +1099,13 @@
      "streak": 4
     },
     {
+     "name": "sudoku",
+     "tier": "tested",
+     "why": "a self-test",
+     "last_tested": "2026-11-26",
+     "last_tested_by": "its tests"
+    },
+    {
      "name": "glyph-verse",
      "tier": "checked",
      "why": "a self-test, 2 real asks in the benchmark",
@@ -1581,6 +1588,16 @@
      "streak": 29
     },
     {
+     "name": "vat",
+     "tier": "proven",
+     "why": "a self-test, 3 real asks in the benchmark",
+     "last_tested": "2026-11-17",
+     "last_tested_by": "the daily smoke test",
+     "success_rate": 1,
+     "promoted": "2026-11-07",
+     "streak": 14
+    },
+    {
      "name": "convert",
      "tier": "proven",
      "why": "a self-test, 9 browser-suite mentions, 5 real asks in the benchmark",
@@ -1658,16 +1675,6 @@
      "last_tested_by": "the daily smoke test",
      "success_rate": 0.833,
      "streak": 29
-    },
-    {
-     "name": "vat",
-     "tier": "proven",
-     "why": "a self-test, 3 real asks in the benchmark",
-     "last_tested": "2026-11-17",
-     "last_tested_by": "the daily smoke test",
-     "success_rate": 1,
-     "promoted": "2026-11-07",
-     "streak": 14
     },
     {
      "name": "crypto",
@@ -2246,6 +2253,16 @@
      }
     },
     {
+     "name": "palindrome",
+     "tier": "proven",
+     "why": "a self-test, 3 real asks in the benchmark",
+     "last_tested": "2026-11-17",
+     "last_tested_by": "the daily smoke test",
+     "success_rate": 1,
+     "promoted": "2026-11-10",
+     "streak": 14
+    },
+    {
      "name": "news",
      "tier": "proven",
      "why": "a self-test, 11 real asks in the benchmark",
@@ -2427,16 +2444,6 @@
      "last_tested_by": "the daily smoke test",
      "success_rate": 1,
      "streak": 29
-    },
-    {
-     "name": "palindrome",
-     "tier": "proven",
-     "why": "a self-test, 3 real asks in the benchmark",
-     "last_tested": "2026-11-17",
-     "last_tested_by": "the daily smoke test",
-     "success_rate": 1,
-     "promoted": "2026-11-10",
-     "streak": 14
     },
     {
      "name": "film-metadata",
@@ -2830,8 +2837,8 @@
    "name": "The stage",
    "for": "notes, lists, links and how the stage looks and is arranged",
    "count": {
-    "experiment": 0,
-    "tested": 0,
+    "experiment": 1,
+    "tested": 2,
     "checked": 0,
     "proven": 103
    },
@@ -3648,6 +3655,13 @@
      "success_rate": 1
     },
     {
+     "name": "sql-query",
+     "tier": "tested",
+     "why": "a self-test",
+     "last_tested": "2026-11-25",
+     "last_tested_by": "its tests"
+    },
+    {
      "name": "qr-scan",
      "tier": "proven",
      "why": "a self-test, 3 real asks in the benchmark",
@@ -3743,6 +3757,13 @@
      "success_rate": 1
     },
     {
+     "name": "stage-pdf",
+     "tier": "tested",
+     "why": "a self-test",
+     "last_tested": "2026-11-25",
+     "last_tested_by": "its tests"
+    },
+    {
      "name": "copy-stack",
      "tier": "proven",
      "why": "a self-test, 3 real asks in the benchmark",
@@ -3777,6 +3798,14 @@
      "success_rate": 1,
      "promoted": "2026-10-29",
      "streak": 22
+    },
+    {
+     "name": "phase",
+     "tier": "experiment",
+     "why": "nothing checks it yet",
+     "last_tested": "2026-11-17",
+     "last_tested_by": "the daily smoke test",
+     "since": "2026-11-26"
     }
    ]
   },

@@ -438,6 +438,30 @@
       "into": "/bots/ (api-paper-finder)",
       "test": "tools/api-bots.test.mjs",
       "pr": null
+    },
+    "outside:Hopding/pdf-lib": {
+      "target": "tool",
+      "into": "/pdf/ and skills/stage-pdf.js (lib/pdf-tools.js fromText)",
+      "test": "tools/pdf-tools.test.mjs and tools/stage-pdf.test.mjs",
+      "pr": null
+    },
+    "outside:Poly-Haven/Poly-Haven-API": {
+      "target": "bot",
+      "into": "/bots/ (api-polyhaven-asset)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:Smithsonian/dpo-voyager": {
+      "target": "bot",
+      "into": "/bots/ (api-smithsonian-3d)",
+      "test": "tools/api-bots.test.mjs",
+      "pr": null
+    },
+    "outside:sql-js/sql.js": {
+      "target": "tool",
+      "into": "skills/sql-query.js (lib/sql-query.js, sql.js 1.17.0 from jsDelivr)",
+      "test": "tools/sql-query.test.mjs",
+      "pr": null
     }
   }
 }

@@ -93,8 +93,10 @@ test('the crew reads: links, sitemaps, feeds, sections, promos with a real measu
   for (const b of C.CREW) assert.ok(T.NAME_RE.test(b.name) && /^[0-9a-f]{12}$/.test(b.id) && T.CODE_RE.test(b.channel) && !T.RESERVED.includes(b.channel), b.name);
 });
 
+const stocked = (env, n) => { const add = env.DB.raw.prepare("INSERT INTO void_queue VALUES (?, ?, ?, 'queued', '', '2026-11-01T00:00:00Z', '2026-11-01T00:00:00Z')"); for (let i = 0; i < n; i++) add.run('stock-' + i, 'stock job ' + i, 'heal:stock-' + i); };
 test('a run seats the crew, files wants as queue jobs with #work threads, and each due member claims, works and closes its own job', async () => {
   const env = world();
+  stocked(env, 12); // a full stock (lib/team-lanes.js MIN_STOCK): the base two a run
   const out = await crewTick(env, T0);
   assert.equal(out.crew.length, C.CREW.length);
   const ags = rows(env, 'SELECT * FROM void_team_agents');
@@ -116,7 +118,7 @@ test('a run seats the crew, files wants as queue jobs with #work threads, and ea
   const growth = rows(env, "SELECT body FROM void_team_msgs WHERE channel = 'growth'")[0].body; assert.match(growth, /x\.com\/intent\/post/); assert.match(growth, /never post outside/);
   const sh = await API.onRequestGet({ env, request: new Request('https://verse.test/api/team'), now: T0 + 60e3 }), j = await sh.json();
   assert.equal(j.members.find((m) => m.name === 'TowerScout'), undefined);
-  assert.equal(j.members.find((m) => m.name === 'ExamCoach').state, 'idle', '20 minutes after a run a crew member is still here (the clock is every 15)');
+  assert.equal(j.members.find((m) => m.name === 'ExamCoach').state, 'crew', '20 minutes after a run a crew member is still here (the clock is every 15)');
   // the second run: nobody due yet except StatusWatch at 30 minutes; nothing filed twice
   const out2 = await crewTick(env, T0 + 31 * 60e3);
   assert.deepEqual(out2.jobs.map((x) => x.bot), ['StatusWatch']);
@@ -128,6 +130,16 @@ test('a run seats the crew, files wants as queue jobs with #work threads, and ea
   const pw = v.wants.find((w) => w.key.startsWith('misses-'));
   if (pw) assert.ok(pw.private && pw.baseline === null && pw.latest === null && !pw.cite.length);
   assert.equal(v.wants.find((w) => w.key === 'exam-images').baseline, 73.9);
+});
+
+test('a low stock files more a run, scaled to the shortfall, and the clock keeps the stock read for the owner\'s panel', async () => {
+  const env = world();
+  const out = await crewTick(env, T0);
+  assert.equal(out.stock.claimable, 0); assert.equal(out.stock.target, 12);
+  assert.ok(out.filed.length > 2, 'an empty board gets more than the base two: ' + out.filed.join(' '));
+  assert.ok(out.filed.includes('link-gone') && out.filed.includes('exam-images'), 'most urgent still first');
+  const kept = JSON.parse(rows(env, "SELECT v FROM void_team_crew WHERE k = 'stock'")[0].v);
+  assert.equal(kept.low, true); assert.equal(kept.filed, out.filed.length);
 });
 
 test('a want closes only when its number moves; handed in with the number unmoved, it goes back on the queue', async () => {
@@ -183,7 +195,7 @@ test('a TV or radio idea is built once, by the blueprint lane: the want adopts t
   const idea = { h: 'abc123def456', topic: 'Art provenance tracker', note: 'Track who owned a painting.', show: 'Antiques Roadshow', value_cents: 900 };
   const w = C.wantsOf({ ideas: [idea] }).find((x) => x.lane === 'idea');
   assert.equal(w.target, 'tv:art-provenance-tracker'); assert.equal(C.jobOf(w).target, 'tv:art-provenance-tracker', 'filed in the blueprint lane, never as a feature: job beside it');
-  assert.match(w.why, /\/photos\/exif\//, 'art provenance is a mode of the photo page');
+  assert.match(w.why, /\/photos\/details\//, 'art provenance is a mode of the photo page');
   const env = world(); await crewTick(env, T0);
   // an older want (filed before this) whose own feature: job waits beside the lane's tv: job for the same idea
   const ins = (id, target, state) => env.DB.raw.prepare('INSERT INTO void_queue (id, ask, target, state, note, at, updated) VALUES (?, ?, ?, ?, ?, ?, ?)').run(id, 'build it', target, state, '', '2026-11-04T00:00:00Z', '2026-11-04T00:00:00Z');
@@ -199,7 +211,7 @@ test('a TV or radio idea is built once, by the blueprint lane: the want adopts t
   assert.deepEqual([q('want-idea-old2').target, q('want-idea-old2').state], ['tv:hvac-remote-management', 'queued'], 'no lane job yet: its own job moves into the lane');
   assert.deepEqual(await foldIdeaWants(env, T0 + 120e3), [], 'folded once');
   assert.deepEqual((await aimIdeaJobs(env, T0 + 180e3)).sort(), ['idea-old1', 'idea-old2']);
-  assert.match(rows(env, 'SELECT ask FROM void_queue WHERE id = ?', 'tv123')[0].ask, /Improve \/photos\/exif\/ as a mode/);
+  assert.match(rows(env, 'SELECT ask FROM void_queue WHERE id = ?', 'tv123')[0].ask, /Improve \/photos\/details\/ as a mode/);
   assert.match(rows(env, 'SELECT ask, note FROM void_queue WHERE id = ?', 'want-idea-old2')[0].ask, /Improve \/weather\/ as a mode/);
   assert.match(rows(env, 'SELECT note FROM void_queue WHERE id = ?', 'want-idea-old2')[0].note, /wanted by Verse/);
 });
@@ -213,4 +225,92 @@ test('an open tower aspect want is closed, and the queue job is set aside', asyn
   assert.equal(rows(env, "SELECT state FROM void_team_wants WHERE key = 'tower-finance'")[0].state, 'set aside');
   assert.equal(rows(env, "SELECT state FROM void_queue WHERE id = 'want-tower-finance'")[0].state, 'set aside');
   assert.match(rows(env, 'SELECT body FROM void_team_msgs WHERE thread = 4242 ORDER BY id DESC')[0].body, /aspect counts no longer make work/);
+});
+
+test('the current floor\'s checklist files one want, names the kind, asks for a cheap node test, and leaves aspect counts alone', () => {
+  const target = { id: 'travel: example-floor.test', since: '2026-11-09', background: [
+    { id: 'travel: example-floor.test', aspect: 'journey: share the result and reopen it from the link', since: '2026-11-11', job: 'retry: script the journey' },
+    { id: 'travel: example-floor.test', aspect: 'journey: do the main job and see the result', since: '2026-11-10', job: 'retry: script the journey with steps and negative controls' },
+    { id: 'other: skipped.test', aspect: 'speed', since: '2026-11-01', job: 'ignore' },
+  ] };
+  const w = C.wantsOf({ at: '2026-11-04T02:00:00Z', exam: EXAM, tower: TOWER, target, sales30: 0 });
+  const g = w.find((x) => x.lane === 'tower');
+  assert.ok(g, 'a named open checklist item is work');
+  assert.equal(g.key, 'floor-travel-journey-do-the-main-job');
+  assert.equal(g.kind, 'versus');
+  assert.match(g.title, /journey: do the main job and see the result/);
+  assert.match(g.title, /travel floor/);
+  assert.match(g.why, /cheap, deterministic node test/);
+  assert.match(g.why, /do not start with a full browser suite/);
+  assert.equal(w.filter((x) => x.lane === 'tower').length, 1, 'one floor want a run, the oldest open item');
+  const pub = [g.title, g.why, g.done, g.metric.label, ...g.cite.map((c) => c.what + ' ' + c.url)].join('\n');
+  assert.doesNotMatch(pub, /example-floor\.test|skipped\.test/, 'public want words name no rival host');
+  assert.equal(C.measure(g.metric.id, { target }), 0);
+  assert.equal(C.measure(g.metric.id, { target: { ...target, background: target.background.filter((b) => b.aspect !== 'journey: do the main job and see the result') } }), 1);
+  assert.equal(C.measure(g.metric.id, {}), null, 'a read that did not load the floor measures nothing');
+  assert.equal(C.floorKind('travel: example-floor.test'), 'travel');
+  assert.equal(C.floorKind('password strength'), 'password strength');
+  assert.equal(C.floorKind('example-floor.test'), '', 'a bare host is not a kind');
+  assert.deepEqual(C.floorGapsOf({}), []);
+  assert.deepEqual(C.wantsOf({ tower: TOWER }).filter((x) => x.lane === 'tower'), [], 'aspect counts still do not file work');
+});
+
+test('a checklist-gap want stays open when old aspect-count wants are retired, and a tick files it', async () => {
+  const target = { id: 'travel: example-floor.test', background: [
+    { id: 'travel: example-floor.test', aspect: 'journey: do the main job and see the result', since: '2026-11-10', job: 'retry: script the journey' },
+  ] };
+  const env = world({ 'https://a-to-mind.com/tower.target.json': JSON.stringify(target) });
+  // no broken links in this world: replace the home page so SiteOperator finds nothing to file, leaving a slot for the floor gap
+  env.CREW_FETCH.pages['https://a-to-mind.com/'] = '<a href="/store/">store</a><a href="/team/">team</a>';
+  const out = await crewTick(env, T0);
+  assert.ok(out.filed.includes('floor-travel-journey-do-the-main-job'), 'the tick files the floor gap: ' + out.filed.join(','));
+  const q = rows(env, "SELECT * FROM void_queue WHERE id = 'want-floor-travel-journey-do-the-main-job'")[0];
+  assert.equal(q.state, 'queued');
+  assert.equal(q.target, 'versus:want-floor-travel-journey-do-the-main-job');
+  assert.match(q.ask, /cheap, deterministic node test/);
+  assert.doesNotMatch(q.ask, /example-floor\.test/);
+  env.DB.raw.prepare('INSERT INTO void_queue (id, ask, target, state, note, at, updated) VALUES (?, ?, ?, ?, ?, ?, ?)').run('want-tower-finance', 'win aspects', 'versus:want-tower-finance', 'queued', '', '2026-11-04T00:00:00Z', '2026-11-04T00:00:00Z');
+  env.DB.raw.prepare("INSERT INTO void_team_wants (key, lane, kind, title, label, metric, better, baseline, latest, cite, private, job, thread, state, filed, checked) VALUES ('tower-finance', 'tower', 'versus', 'Win 9 more aspects on the finance floor', 'finance aspects short', 'tower:finance', 'down', 9, 9, '[]', 0, 'want-tower-finance', 0, 'open', ?, ?)").run(T0, T0);
+  const retired = await retireTowerWants(env, T0 + 60e3);
+  assert.deepEqual(retired, ['tower-finance']);
+  assert.equal(rows(env, "SELECT state FROM void_team_wants WHERE key = 'floor-travel-journey-do-the-main-job'")[0].state, 'open');
+  assert.equal(rows(env, "SELECT state FROM void_queue WHERE id = 'want-floor-travel-journey-do-the-main-job'")[0].state, 'queued');
+});
+
+test('a stale open want yields a MAX_OPEN slot only for a fresh floor-gap filing', () => {
+  const stale = T0 - 8 * 864e5, fresh = T0 - 1 * 864e5;
+  const ideas = Array.from({ length: 12 }, (_, i) => ({ key: 'idea-' + i, lane: 'idea', filed: stale + i, metric: 'joblive:j' + i }));
+  const gap = { key: 'floor-travel-journey-do-the-main-job', lane: 'tower', metric: { id: 'floorgap:travel|journey' } };
+  const drop = C.yieldFor(gap, ideas, T0);
+  assert.equal(drop && drop.key, 'idea-0', 'the oldest stale want yields the slot');
+  assert.equal(C.yieldFor({ key: 'exam-images', lane: 'exam', metric: { id: 'exam:images' } }, ideas, T0), null, 'a non-floor want does not take a slot');
+  assert.equal(C.yieldFor(gap, ideas.map((w) => ({ ...w, filed: fresh })), T0), null, 'a want still under 7 days is not set aside');
+  assert.equal(C.yieldFor(gap, [{ key: 'floor-travel-share', lane: 'tower', filed: stale, metric: { id: 'floorgap:travel|share' } }], T0), null, 'another floor-gap want is not evicted');
+  assert.ok(C.isFloorGap(gap) && !C.isFloorGap(ideas[0]));
+});
+
+test('a tick at MAX_OPEN sets aside a want open more than 7 days and files the floor gap', async () => {
+  const target = { id: 'travel: example-floor.test', background: [
+    { id: 'travel: example-floor.test', aspect: 'journey: do the main job and see the result', since: '2026-11-10', job: 'retry: script the journey' },
+  ] };
+  const env = world({ 'https://a-to-mind.com/tower.target.json': JSON.stringify(target) });
+  env.CREW_FETCH.pages['https://a-to-mind.com/'] = '<a href="/store/">store</a><a href="/team/">team</a>';
+  env.DB.raw.exec("CREATE TABLE IF NOT EXISTS void_team_wants (key TEXT PRIMARY KEY, lane TEXT NOT NULL, kind TEXT NOT NULL, title TEXT NOT NULL, label TEXT NOT NULL, metric TEXT NOT NULL, better TEXT NOT NULL, baseline REAL, latest REAL, cite TEXT NOT NULL DEFAULT '[]', private INTEGER NOT NULL DEFAULT 0, job TEXT NOT NULL, thread INTEGER NOT NULL DEFAULT 0, state TEXT NOT NULL, filed INTEGER NOT NULL, checked INTEGER NOT NULL DEFAULT 0, met_at INTEGER NOT NULL DEFAULT 0, reopened INTEGER NOT NULL DEFAULT 0, nag INTEGER NOT NULL DEFAULT 0)");
+  const filedAt = T0 - 8 * 864e5;
+  for (let i = 0; i < C.MAX_OPEN; i++) {
+    const id = 'want-idea-stale' + i;
+    env.DB.raw.prepare('INSERT INTO void_queue (id, ask, target, state, note, at, updated) VALUES (?, ?, ?, ?, ?, ?, ?)').run(id, 'Build idea ' + i, 'feature:' + id, 'queued', '', new Date(filedAt).toISOString(), new Date(filedAt).toISOString());
+    env.DB.raw.prepare("INSERT INTO void_team_wants (key, lane, kind, title, label, metric, better, baseline, latest, cite, private, job, thread, state, filed, checked) VALUES (?, 'idea', 'feature', ?, 'the build is live', ?, 'up', 0, 0, '[]', 0, ?, 0, 'open', ?, ?)").run('idea-stale' + i, 'Build idea ' + i, 'joblive:' + id, id, filedAt, filedAt);
+  }
+  const out = await crewTick(env, T0);
+  assert.ok(out.filed.includes('floor-travel-journey-do-the-main-job'), 'the tick files the floor gap: ' + (out.filed || []).join(','));
+  const aside = rows(env, "SELECT key, state FROM void_team_wants WHERE state = 'set aside'");
+  assert.equal(aside.length, 1, 'one stale want is set aside: ' + aside.map((r) => r.key).join(','));
+  assert.match(aside[0].key, /^idea-stale/);
+  const q = rows(env, "SELECT * FROM void_queue WHERE id = 'want-floor-travel-journey-do-the-main-job'")[0];
+  assert.equal(q.state, 'queued');
+  const dropped = rows(env, "SELECT state, note FROM void_queue WHERE id = ?", 'want-' + aside[0].key)[0];
+  assert.equal(dropped.state, 'set aside');
+  assert.match(dropped.note, /open more than 7 days/);
+  assert.equal(rows(env, "SELECT key FROM void_team_wants WHERE state = 'open'").length, C.MAX_OPEN, 'the cap itself is not raised');
 });

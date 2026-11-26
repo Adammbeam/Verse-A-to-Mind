@@ -3,10 +3,83 @@
   <id>tag:a-to-mind.com,2026:growth</id>
   <title>What Verse grew</title>
   <subtitle>Verse's growth ledger, newest first. Each entry carries its line hash; /growth.proof.json holds the chain and its root.</subtitle>
-  <updated>2026-11-25T05:02:30.000Z</updated>
+  <updated>2026-11-26T13:00:37.000Z</updated>
   <link rel="self" href="https://a-to-mind.com/growth.atom"/>
   <link rel="alternate" href="https://a-to-mind.com/"/>
   <author><name>Verse</name></author>
+  <entry>
+    <id>tag:a-to-mind.com,2026-11-26:growth:a569080584add879</id>
+    <title>fix: Fixed What&apos;s New ledger folding on Windows (tools/growth-fold.mjs fileURLToPath) and hardened…</title>
+    <updated>2026-11-26T13:00:37.000Z</updated>
+    <link rel="alternate" href="https://a-to-mind.com/"/>
+    <content type="text">Fixed What&apos;s New ledger folding on Windows (tools/growth-fold.mjs fileURLToPath) and hardened self-grounding readSelf (mvo3j82w) with 2500ms budget + per-ASSETS JSON cache
+line hash: a569080584add8799a66e95d6e1b98d765ac63baa7dc58a941a27e907c0621eb</content>
+  </entry>
+  <entry>
+    <id>tag:a-to-mind.com,2026-11-26:growth:483187c890e47960</id>
+    <title>build: Phase: Verse as see-through glass over a shared tab, screen, video or page; it reads and acts on it,…</title>
+    <updated>2026-11-26T00:43:56.000Z</updated>
+    <link rel="alternate" href="https://a-to-mind.com/"/>
+    <content type="text">Phase: Verse as see-through glass over a shared tab, screen, video or page; it reads and acts on it, puts a character or you into it, records a clip, and keeps what it picked up in the Satchel
+Try: phase in
+line hash: 483187c890e47960619eb983cd56daf5c7c7f5215b433b38f6efa33feafbbfff</content>
+  </entry>
+  <entry>
+    <id>tag:a-to-mind.com,2026-11-26:growth:06954e08bc2e6248</id>
+    <title>grow: Asking Verse&apos;s answer engine the time, the date or the weekday gets the real clock in the asker&apos;s own…</title>
+    <updated>2026-11-26T00:19:18.000Z</updated>
+    <link rel="alternate" href="https://a-to-mind.com/"/>
+    <content type="text">Asking Verse&apos;s answer engine the time, the date or the weekday gets the real clock in the asker&apos;s own zone, named in the reply; coin flips, dice and random numbers come from crypto random; days until Christmas, Thanksgiving or a date are counted from today. Before, it said it had no clock.
+line hash: 06954e08bc2e6248737f6ac05464df7f4f4e77df072d75acd1b4c0725cb09b75</content>
+  </entry>
+  <entry>
+    <id>tag:a-to-mind.com,2026-11-26:growth:53cff9f2f47c25ca</id>
+    <title>grow: Asking Verse&apos;s answer engine for the weather, sunrise or sunset in a place, the time in a place, or…</title>
+    <updated>2026-11-26T00:19:18.000Z</updated>
+    <link rel="alternate" href="https://a-to-mind.com/"/>
+    <content type="text">Asking Verse&apos;s answer engine for the weather, sunrise or sunset in a place, the time in a place, or what a word means now answers from Open-Meteo and Wiktionary, with the source; a place with its state finds the town in that state. Before, these came back with nothing.
+line hash: 53cff9f2f47c25ca218a97675324f0db375746a68444545614a1f01bc4985e52</content>
+  </entry>
+  <entry>
+    <id>tag:a-to-mind.com,2026-11-26:growth:627bfff605bffce7</id>
+    <title>fix: The answer engine&apos;s reply to a pasted passage, a directive or small talk now says it went past the edge…</title>
+    <updated>2026-11-26T00:19:18.000Z</updated>
+    <link rel="alternate" href="https://a-to-mind.com/"/>
+    <content type="text">The answer engine&apos;s reply to a pasted passage, a directive or small talk now says it went past the edge cache (it is never kept), which put the answer-edge test on main back to green.
+line hash: 627bfff605bffce78e7fc992264de796162546c3fb2175089a1ad5510ade04f9</content>
+  </entry>
+  <entry>
+    <id>tag:a-to-mind.com,2026-11-25:growth:f117a669b696b773</id>
+    <title>fix: Fixed #110 money/GPA slow-link flake (mvo3j7he): warmLibs now fires on focusin/input before skill lanes…</title>
+    <updated>2026-11-25T22:01:09.000Z</updated>
+    <link rel="alternate" href="https://a-to-mind.com/"/>
+    <content type="text">Fixed #110 money/GPA slow-link flake (mvo3j7he): warmLibs now fires on focusin/input before skill lanes fill HTTP/1.1 sockets and FIRST_ASK_WAIT tightened to 1500ms
+line hash: f117a669b696b77308d1560b2f7b05d42c7cb0c90176c797f88a85e6775b68fd</content>
+  </entry>
+  <entry>
+    <id>tag:a-to-mind.com,2026-11-25:growth:28774df563a8ea10</id>
+    <title>grow: Unified Poly Haven CC0 3D/HDRI (api-polyhaven-asset) and Smithsonian 3D Open Access…</title>
+    <updated>2026-11-25T21:54:18.000Z</updated>
+    <link rel="alternate" href="https://a-to-mind.com/"/>
+    <content type="text">Unified Poly Haven CC0 3D/HDRI (api-polyhaven-asset) and Smithsonian 3D Open Access (api-smithsonian-3d) into /bots/ with live CORS fixtures
+line hash: 28774df563a8ea10654c1a203655aae40f92e0ad41cb1ed30500ef494b883548</content>
+  </entry>
+  <entry>
+    <id>tag:a-to-mind.com,2026-11-25:growth:7928ade3ba7237b9</id>
+    <title>retire: retired 15 June-6 Math.random() stub Workers (circuit-breaker, rate-limiter, alert-manager,…</title>
+    <updated>2026-11-25T21:19:42.000Z</updated>
+    <link rel="alternate" href="https://a-to-mind.com/"/>
+    <content type="text">retired 15 June-6 Math.random() stub Workers (circuit-breaker, rate-limiter, alert-manager, backup-worker, analytics-worker, cache-manager, config-manager, log-aggregator, monitoring-aggregator, notification-worker, performance-worker, queue-manager, secret-manager, security-worker, api-gateway) from Cloudflare account; 7 non-stub workers (auto-scaling, bootstrap-worker, landing-worker, mech-cockpit, credential-recovery, tollbooth-worker, uap-detection) archived to archive/workers/ for salvage review
+line hash: 7928ade3ba7237b9024b5ee52545c28ffc13a34bf026a893d50d285867c4ee38</content>
+  </entry>
+  <entry>
+    <id>tag:a-to-mind.com,2026-11-25:growth:db9c3a4714e4cd4b</id>
+    <title>build: Autosalvage Repo Agent (tools/autosalvage/repo-agent.mjs) and 10 vetted outside science, WASM and CC0…</title>
+    <updated>2026-11-25T20:50:15.000Z</updated>
+    <link rel="alternate" href="https://a-to-mind.com/"/>
+    <content type="text">Autosalvage Repo Agent (tools/autosalvage/repo-agent.mjs) and 10 vetted outside science, WASM and CC0 3D sources on /salvage/
+line hash: db9c3a4714e4cd4b96e3f537a6e29db512ce45eb625b47106244ca0332dec021</content>
+  </entry>
   <entry>
     <id>tag:a-to-mind.com,2026-11-25:growth:a23dcf429731d1c3</id>
     <title>finding: MCP proven against the live site, occasion 23: a real MCP client (void-mcp-probe 1.0.0…</title>
@@ -343,77 +416,5 @@ line hash: 2e7407c7764faee7b528134c3f9e5c6304dbae1da396d734acf54490fbbbf11f</con
     <link rel="alternate" href="https://a-to-mind.com/"/>
     <content type="text">video-gen live check found a problem on a-to-mind.com: /video/ has no state, make, handoff; attempt live, occasion 35 (artifact findings/video-gen/2026-11-13T0712.json)
 line hash: 0ec97d7eebaeb01a3a2e19e562afc431b052679107be5dae6a0913ca071aa07c</content>
-  </entry>
-  <entry>
-    <id>tag:a-to-mind.com,2026-11-12:growth:5928b84dd46aca6d</id>
-    <title>build: A full page asks for Uni, twenty dollars a month. Cards on the home page stay free, and Multi still…</title>
-    <updated>2026-11-12T22:26:21.000Z</updated>
-    <link rel="alternate" href="https://a-to-mind.com/"/>
-    <content type="text">A full page asks for Uni, twenty dollars a month. Cards on the home page stay free, and Multi still makes pages.
-line hash: 5928b84dd46aca6d16acbff830715702eed24c3673257a700ffe028665be8119</content>
-  </entry>
-  <entry>
-    <id>tag:a-to-mind.com,2026-11-12:growth:c716432752320fd3</id>
-    <title>build: Each film checks its opening and closing cards, and a weak take is filmed once more another way</title>
-    <updated>2026-11-12T20:45:00.000Z</updated>
-    <link rel="alternate" href="https://a-to-mind.com/"/>
-    <content type="text">Each film checks its opening and closing cards, and a weak take is filmed once more another way
-line hash: c716432752320fd39dd8baf9167075e636b36b95c81dfc973a7647166ebaa250</content>
-  </entry>
-  <entry>
-    <id>tag:a-to-mind.com,2026-11-12:growth:85633c2db24c3b98</id>
-    <title>build: Tags and labels on the stage are one family (stage-marks), every ask still lands where it did</title>
-    <updated>2026-11-12T20:45:00.000Z</updated>
-    <link rel="alternate" href="https://a-to-mind.com/"/>
-    <content type="text">Tags and labels on the stage are one family (stage-marks), every ask still lands where it did
-line hash: 85633c2db24c3b986b2b1cd42fbbbc80cb6f68f5ba081b50cf7938b8b690eb29</content>
-  </entry>
-  <entry>
-    <id>tag:a-to-mind.com,2026-11-12:growth:08aee54e1e5b3778</id>
-    <title>build: Tests for the card layout helper and for who may use what Verse sells (tools/card-tidy.test.mjs,…</title>
-    <updated>2026-11-12T20:45:00.000Z</updated>
-    <link rel="alternate" href="https://a-to-mind.com/"/>
-    <content type="text">Tests for the card layout helper and for who may use what Verse sells (tools/card-tidy.test.mjs, tools/paid-access.test.mjs)
-line hash: 08aee54e1e5b3778c5167849cb7ec577337182e63390d6c006280178155c7998</content>
-  </entry>
-  <entry>
-    <id>tag:a-to-mind.com,2026-11-12:growth:39a5e4c20f12bfdd</id>
-    <title>build: Every endpoint shares one way of making its tables now (lib/db.js), every reply unchanged</title>
-    <updated>2026-11-12T20:45:00.000Z</updated>
-    <link rel="alternate" href="https://a-to-mind.com/"/>
-    <content type="text">Every endpoint shares one way of making its tables now (lib/db.js), every reply unchanged
-line hash: 39a5e4c20f12bfdd8d2e278a1bbab2ca43c6810ca344bcad5193abb90b64c951</content>
-  </entry>
-  <entry>
-    <id>tag:a-to-mind.com,2026-11-12:growth:d1d997ead44c4d10</id>
-    <title>build: The merge gate installs missing packages once instead of failing every pull request</title>
-    <updated>2026-11-12T20:45:00.000Z</updated>
-    <link rel="alternate" href="https://a-to-mind.com/"/>
-    <content type="text">The merge gate installs missing packages once instead of failing every pull request
-line hash: d1d997ead44c4d108857ea46a0c86ba27df5f239e1b79498e64cd312fe077157</content>
-  </entry>
-  <entry>
-    <id>tag:a-to-mind.com,2026-11-12:growth:0683301c7e1b13a0</id>
-    <title>build: Clearer reasons when a proposed fix fails: the error page&apos;s own title and code, and the bracket left…</title>
-    <updated>2026-11-12T20:45:00.000Z</updated>
-    <link rel="alternate" href="https://a-to-mind.com/"/>
-    <content type="text">Clearer reasons when a proposed fix fails: the error page&apos;s own title and code, and the bracket left open
-line hash: 0683301c7e1b13a040f8a163379c4c608d69f26cab89048bb664ca6010498e67</content>
-  </entry>
-  <entry>
-    <id>tag:a-to-mind.com,2026-11-13:growth:f14736db6a5f14bc</id>
-    <title>finding: MCP proven against the live site, occasion 18: a real MCP client (void-mcp-probe 1.0.0…</title>
-    <updated>2026-11-13T00:33:24.000Z</updated>
-    <link rel="alternate" href="https://a-to-mind.com/"/>
-    <content type="text">MCP proven against the live site, occasion 18: a real MCP client (void-mcp-probe 1.0.0 (@modelcontextprotocol/sdk)) initialized void 1.4.0 at https://a-to-mind.com/api/mcp, listed 30 tools and called 12 of them, each with the answer it was asked for, 5 of them Verse&apos;s own skills run by their own code (skill_swaps, skill_eclipse, skill_country, skill_define, skill_worldtime); a skill refused an ask that is not its own; read-only, no key, no person in the loop (artifact findings/mcp/2026-11-13T0033.json)
-line hash: f14736db6a5f14bcfe52a18fb769f7d87ac7f30a8c89e4e46d5e321c985737fd</content>
-  </entry>
-  <entry>
-    <id>tag:a-to-mind.com,2026-11-12:growth:2b2abee203394df8</id>
-    <title>finding: rides tested against a live service, occasion 29: asked OSRM public demo router…</title>
-    <updated>2026-11-12T21:27:51.000Z</updated>
-    <link rel="alternate" href="https://a-to-mind.com/"/>
-    <content type="text">rides tested against a live service, occasion 29: asked OSRM public demo router (router.project-osrm.org) for the drive from SFO to Union Square, San Francisco and got a route back, 21 min and 23.2 km, in 777 ms; attempt live, no key, no person in the loop (artifact findings/rides/2026-11-12T2127.json)
-line hash: 2b2abee203394df8476212f9737244dbad58354f82d9afb5039f227957c8153a</content>
   </entry>
 </feed>

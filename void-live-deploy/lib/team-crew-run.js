@@ -9,7 +9,8 @@
 import * as C from './team-crew.js';
 import * as P from './team-priorities.js';
 import { slugOf, categoryOf, CATEGORIES } from './watch-build.js';
-import { TEAM_KINDS, kindOf } from './team.js';
+import { TEAM_KINDS, kindOf, rank } from './team.js';
+import * as LN from './team-lanes.js';
 import { readStatus } from '../functions/api/status.js';
 import { crewReady, crewWrite, pushAll, handIdle } from '../functions/api/team.js';
 
@@ -143,9 +144,9 @@ export async function foldIdeaWants(env, now) {
   }
   return folded;
 }
-/** open tower wants came from aspect counts. Those counts are not work any more. -> [keys closed] */
+/** open tower wants that came from aspect counts (metric tower:<floor>) are not work any more. Checklist-gap wants (floorgap:) stay. -> [keys closed] */
 export async function retireTowerWants(env, now) {
-  const { results } = await env.DB.prepare("SELECT key, job, thread FROM void_team_wants WHERE state = 'open' AND (lane = 'tower' OR metric LIKE 'tower:%')").all();
+  const { results } = await env.DB.prepare("SELECT key, job, thread FROM void_team_wants WHERE state = 'open' AND metric LIKE 'tower:%'").all();
   const why = 'Closed: Tower aspect counts no longer make work. Win and lose scoring by aspect was dropped, so this item is not a job.';
   const at = new Date(now).toISOString();
   for (const w of results || []) {
@@ -171,12 +172,34 @@ export async function aimIdeaJobs(env, now) {
   }
   return aimed;
 }
-async function fileWants(env, wants, bots, now) {
-  const { results } = await env.DB.prepare('SELECT key, state FROM void_team_wants').all();
-  const have = new Set(results.map((r) => r.key)), open = results.filter((r) => r.state === 'open').length, filed = [];
+/** the stock the clock keeps (lib/team-lanes.js capsFor): claimable jobs now against PER_SEAT a working seat; kept as 'stock' for the panel */
+export async function stockNow(env, now) {
+  let claimable = 0, seats = 0;
+  try { claimable = rank((await env.DB.prepare("SELECT id, ask, target, state, note, at FROM void_queue WHERE state = 'queued' ORDER BY at ASC LIMIT 1000").all()).results || [], now).length; } catch (_) { claimable = 0; }
+  try { seats = Number(((await env.DB.prepare("SELECT COUNT(*) AS n FROM void_team_agents WHERE off = 0 AND crew = 0 AND key != '' AND MAX(COALESCE(seen, 0), COALESCE(job_at, 0)) >= ?").bind(now - LN.ACTIVE_MS).first()) || {}).n || 0); } catch (_) { seats = 0; }
+  return { claimable, seats, ...LN.capsFor({ claimable, seats, baseFile: C.FILE_PER_TICK, baseOpen: C.MAX_OPEN }) };
+}
+const SLOT_WHY = 'Set aside: open more than 7 days, to make a slot for a job Verse filed from its current floor.';
+async function setAsideWant(env, w, now, why) {
+  const at = new Date(now).toISOString();
+  await env.DB.prepare("UPDATE void_team_wants SET state = 'set aside', checked = ? WHERE key = ?").bind(now, w.key).run(); // void-review: ok (at most one stale open want a filing, to free a MAX_OPEN slot)
+  if (w.job) await env.DB.prepare("UPDATE void_queue SET state = 'set aside', note = ?, updated = ? WHERE id = ? AND state IN ('queued', 'building')").bind(String(why).slice(0, 300), at, w.job).run().catch(() => null); // void-review: ok (same want)
+  if (w.thread) await crewWrite(env, { c: 'work', by: 'verse', thread: w.thread, now, body: why });
+}
+async function fileWants(env, wants, bots, now, caps = { file: C.FILE_PER_TICK, open: C.MAX_OPEN }) {
+  const { results } = await env.DB.prepare('SELECT key, state, filed, job, thread, metric, lane FROM void_team_wants').all();
+  const have = new Set(results.map((r) => r.key));
+  let openRows = (results || []).filter((r) => r.state === 'open');
+  const filed = [];
   for (let w of wants) {
-    if (filed.length >= C.FILE_PER_TICK || open + filed.length >= C.MAX_OPEN) break;
+    if (filed.length >= caps.file) break;
     if (have.has(w.key)) continue;
+    if (openRows.length + filed.length >= caps.open) {
+      const drop = C.yieldFor(w, openRows, now);
+      if (!drop) break;
+      await setAsideWant(env, drop, now, SLOT_WHY);
+      openRows = openRows.filter((r) => r.key !== drop.key);
+    }
     const j = { ...C.jobOf(w) }, at = new Date(now).toISOString(), bot = bots.find((b) => b.lane === w.lane) || C.byLane(w.lane);
     const had = w.target ? await adoptable(env, w.target) : null;
     if (had) { j.id = had.id; w = { ...w, metric: { ...w.metric, id: 'joblive:' + had.id } }; } // the lane's own job builds it: no second job
@@ -304,12 +327,13 @@ export async function crewTick(env, now = Date.now()) {
   // the evidence, read together
   const { results: openPages } = await env.DB.prepare("SELECT metric FROM void_team_wants WHERE state = 'open' AND (metric LIKE 'page:%' OR metric LIKE 'link:%')").all();
   const extra = openPages.map((r) => r.metric.replace(/^(page|link):/, '')).filter((p) => p.startsWith('/'));
-  const [ex, tw, st, pr, walk, misses7, sales30, idl, sz, main] = await Promise.all([
+  const [ex, tw, st, pr, walk, misses7, sales30, idl, sz, main, tg] = await Promise.all([
     readExam(env), get(env, ORIGIN + '/tower.evidence.json', { max: 8e6, ms: 12000 }), readStatus(env, now).catch(() => null),
     probe(env, [...C.KEY_PAGES, ...extra]), isDue('site-operator') ? linkWalk(env, run) : null,
     count(env, 'SELECT COUNT(*) AS n FROM void_misses WHERE last >= ?', new Date(now - 7 * 864e5).toISOString()),
     count(env, 'SELECT COUNT(*) AS n FROM void_sales WHERE verified = 1 AND at >= ?', new Date(now - 30 * 864e5).toISOString()),
     ideas(env, now), get(env, ORIGIN + '/tower.size.json', { max: 4e6, ms: 10000 }), mainState(env).catch(() => null),
+    get(env, ORIGIN + '/tower.target.json', { max: 1e6, ms: 8000 }),
   ]);
   const guards = st && st.guards ? st.guards : [];
   const films = guards.find((g) => g && g.id === 'hourly-films-page');
@@ -318,13 +342,16 @@ export async function crewTick(env, now = Date.now()) {
     if (live.status === 200 && /VERSE (?:FILMS|HOLOVIDS)/.test(live.text)) films.now = 'up';
   }
   const ev = { at: new Date(now).toISOString(), exam: ex.exam, examSrc: ex.src, tower: tw.status === 200 ? json(tw.text) : null, guards, probe: pr,
-    links: walk ? walk.links : [], walk, misses7, sales30, ideas: idl, size: sz && sz.status === 200 ? json(sz.text) : null, main };
+    links: walk ? walk.links : [], walk, misses7, sales30, ideas: idl, size: sz && sz.status === 200 ? json(sz.text) : null, main,
+    target: tg && tg.status === 200 ? json(tg.text) : null };
   // Verse's brain: measure, close, file
   await foldIdeaWants(env, now).catch(() => []);
   await retireTowerWants(env, now).catch(() => []);
   await aimIdeaJobs(env, now).catch(() => []);
   const m = await measureOpen(env, ev, bots, now);
-  const filed = await fileWants(env, C.wantsOf(ev), bots, now);
+  const stock = await stockNow(env, now); // low stock: more wants a run and more open at once, scaled to the working seats
+  const filed = await fileWants(env, C.wantsOf(ev), bots, now, stock);
+  await setState(env, 'stock', { at: now, claimable: stock.claimable, seats: stock.seats, target: stock.target, low: stock.low, filed: filed.length }, now);
   // each due member's own job
   // the turn is taken before the work, so a run cut short does not repeat a job; the members work side by side
   for (const b of due) next[b.slug] = now + b.every * 60e3 - 60e3; // a minute early, so the 15-minute clock does not slip a turn
@@ -332,7 +359,7 @@ export async function crewTick(env, now = Date.now()) {
   const jobs = await Promise.all(due.filter((b) => duties[b.slug]).map((b) => job(env, b, run, TITLES[b.slug], duties[b.slug](env, ev, run, now), now)));
   const prio = await prioritizeRun(env, ev, now, { force: !!(await getState(env, 'override-new')) }).catch(() => null);
   await env.DB.prepare("DELETE FROM void_team_crew WHERE k = 'override-new'").run().catch(() => null);
-  const out = { at: ev.at, run, crew: bots.map((b) => b.name), filed, met: m.met, reopened: m.reopened, jobs, priorities: prio, ms: Date.now() - t0 };
+  const out = { at: ev.at, run, crew: bots.map((b) => b.name), filed, stock: { claimable: stock.claimable, target: stock.target, seats: stock.seats }, met: m.met, reopened: m.reopened, jobs, priorities: prio, ms: Date.now() - t0 };
   await setState(env, 'last', out, now);
   return out;
 }

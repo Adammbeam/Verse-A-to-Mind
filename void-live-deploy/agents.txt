@@ -23,4 +23,4 @@ Privacy: no cookie, no tracking. Global Privacy Control is honored (/.well-known
 # People
 Security: https://a-to-mind.com/.well-known/security.txt
 Humans: https://a-to-mind.com/humans.txt
-Source: https://github.com/atomeam/void-loop
+Source: https://github.com/Adammbeam/Verse-A-to-Mind

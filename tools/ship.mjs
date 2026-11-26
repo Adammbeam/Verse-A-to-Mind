@@ -16,6 +16,7 @@
 
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { wipeRefusal, allowWipe } from './wipe-guard.mjs';
 
 const run0 = promisify(execFile);
 const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 && process.argv[i + 1] && !process.argv[i + 1].startsWith('--') ? process.argv[i + 1] : d; };
@@ -89,6 +90,10 @@ async function check(branch, root) {
   const add = await git(['worktree', 'add', '--detach', dir, branch], { cwd: root });
   if (!add.ok) return { branch, ok: false, why: 'could not open a worktree: ' + add.out.trim().split('\n')[0] };
   try {
+    const del = await git(['diff', '--name-only', '--diff-filter=D', 'main...' + branch], { cwd: root });
+    const tree = await git(['ls-tree', '-r', '--name-only', 'main'], { cwd: root });
+    const wipe = wipeRefusal({ deleted: del.ok ? del.out.split('\n').filter(Boolean).length : 0, treeSize: tree.ok ? tree.out.split('\n').filter(Boolean).length : 0, allow: allowWipe() });
+    if (wipe) return { branch, ok: false, why: wipe };
     const gates = [
       ['review', 'node', ['tools/review-pr.mjs', '--gate']],
       ['checks', 'node', ['tools/checks.mjs']],
@@ -124,6 +129,10 @@ async function main() {
   if (has('--merge') || has('--all')) {
     for (const r of merged) {
       if (!r.ok) continue;
+      const del = await git(['diff', '--name-only', '--diff-filter=D', 'HEAD...' + r.branch], { cwd: root });
+      const tree = await git(['ls-tree', '-r', '--name-only', 'HEAD'], { cwd: root });
+      const wipe = wipeRefusal({ deleted: del.ok ? del.out.split('\n').filter(Boolean).length : 0, treeSize: tree.ok ? tree.out.split('\n').filter(Boolean).length : 0, allow: allowWipe() });
+      if (wipe) { bad = 1; console.log('✗ merge ' + r.branch + ': ' + wipe); continue; }
       const m = await git(['merge', '--no-ff', '-m', 'ship: ' + r.branch, r.branch], { cwd: root });
       r.merged = m.ok;
       if (!m.ok) { bad = 1; console.log('✗ merge ' + r.branch + ': ' + m.out.trim().split('\n')[0]); }

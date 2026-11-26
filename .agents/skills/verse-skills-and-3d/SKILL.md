@@ -1,6 +1,6 @@
 ---
 name: verse-skills-and-3d
-description: How to add a routable card skill in void-live-deploy/skills/ and how to build a card's 3D miniature, in atomeam/void-loop (Verse). Use when creating a new skill, widening a skill's phrasing, adding a 3D miniature, or working with the shared scene engine, three.js meshes, or make.js solid shapes.
+description: How to add a routable card skill in void-live-deploy/skills/ and how to build a card's 3D miniature, in Adammbeam/Verse-A-to-Mind (Verse). Use when creating a new skill, widening a skill's phrasing, adding a 3D miniature, or working with the shared scene engine, three.js meshes, or make.js solid shapes.
 triggers:
   - new skill
   - add a skill

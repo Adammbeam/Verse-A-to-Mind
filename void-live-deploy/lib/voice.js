@@ -85,10 +85,29 @@ export function parseVoice(text) {
 export const untag = (s) => uncite(String(s || '').replace(/\s*\[S\d+(?:[,;]\s*S\d+)*(?:\s[^\]]{0,80})?\]/g, '').replace(/\s+([.,;:!?])/g, '$1').trim());
 /** Asks put behind the site Versus is on (void.asks.json `held`: {words, until, why}; owner, 2026-10-29: every site ever made, smallest
  *  first, so an ask that does not help beat the current target waits). An ask is held while `until` is still the target in
- *  tower.target.json; once that site is beaten and the target moves on, the hold ends by itself. Held asks keep their place on the
+ *  tower.target.json (holdState); once that site is beaten and the target moves on, the hold ends by itself (releasedHolds says so). Held asks keep their place on the
  *  record and come after the open ones, each with `held` (the site). Nothing is dropped or reworded. Pure. */
+/** A hold's state against the current Versus target (tower.target.json id, e.g. "travel: flightconnections.com"): 'held' while its
+ *  `until` names the target's site; 'released' once `until` names a different site (the target moved on and nothing released it:
+ *  2026-11-25, "Absorb and connect every repo" was held until sycophanthex.com long after the target became flightconnections.com);
+ *  an `until` that is not a site (a date, a job id, empty) keeps its hold, and so does any hold when the target cannot be read. Pure. */
+export function holdState(h, target) {
+  if (!h || typeof h.words !== 'string' || !h.words.trim()) return 'none';
+  const site = sitesOf(String(h.until == null ? '' : h.until))[0];
+  if (!site) return 'held';
+  const now = sitesOf(String(target == null ? '' : target))[0];
+  return !now || now === site ? 'held' : 'released';
+}
+/** the holds the target has moved past, each with the one sentence the self card shows, so a release is said, never silent. Pure. */
+export function releasedHolds(held, target) {
+  return (Array.isArray(held) ? held : []).filter((h) => holdState(h, target) === 'released').map((h) => {
+    const what = typeof h.frontier === 'string' && h.frontier.trim() ? h.frontier.trim() : h.words.trim();
+    return { words: h.words.trim(), ...(typeof h.frontier === 'string' && h.frontier.trim() ? { frontier: h.frontier.trim() } : {}), until: String(h.until), target: String(target),
+      line: 'No longer held: the Versus target moved to ' + String(target) + ', so "' + what + '" no longer waits on ' + String(h.until) + '.' };
+  });
+}
 export function holdAsks(asks, held, target) {
-  const H = (Array.isArray(held) ? held : []).filter((h) => h && typeof h.words === 'string' && h.words.trim() && h.until && String(h.until) === String(target || ''));
+  const H = (Array.isArray(held) ? held : []).filter((h) => holdState(h, target) === 'held');
   const hold = (a) => H.find((h) => h.words.toLowerCase() === String(a && a.ask).toLowerCase() || sameAsk(h.words, a && a.ask));
   const now = [], later = [];
   // a hold that names its frontier line (void.asks.json `frontier`) carries it, so the wants card marks that growth inbox item held too

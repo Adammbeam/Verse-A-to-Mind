@@ -153,7 +153,9 @@ export function selfSections(v, now = Date.now(), fam = null) {
   const LABEL = 'Written by ' + label + ' from these facts. Kept word for word; it is a readout, not a felt state.';
   out.push({ id: 'words', title: '', log: false, blocks: (voice ? [{ t: 'quote', text: voice, cite: LABEL }] : [{ t: 'note', text: LABEL }])
     .concat(sourceNote(src, 'thoughts') && !JARGON.test(sourceNote(src, 'thoughts')) ? [{ t: 'note', text: sourceNote(src, 'thoughts'), tight: true }] : [])
-    .concat(given && !JARGON.test(given) ? [{ t: 'given', text: given.slice(0, 1800) }] : []) });
+    .concat(given && !JARGON.test(given) ? [{ t: 'given', text: given.slice(0, 1800) }] : [])
+    // a hold the Versus target moved past (lib/voice.js releasedHolds, from /api/reflect): said in one sentence, never dropped silently
+    .concat((v && Array.isArray(v.released) ? v.released : []).filter((r) => r && typeof r.line === 'string').slice(0, 3).map((r) => ({ t: 'note', text: r.line, tight: true }))) });
   out.push({ id: 'sure', title: '', log: false, blocks: [{ t: 'slot', attr: 'data-v-conf' }] });
   const grow = daily ? [['Next targeted capability', 'next_game'], ['What should change', 'better']].filter(([, k]) => sentence(daily[k]) && !JARGON.test(sentence(daily[k]))) : [];
   const late = [];

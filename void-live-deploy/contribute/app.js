@@ -1,6 +1,6 @@
 // /contribute/: every bot (bots/registry.json) and skill (the skills/ folder on GitHub) with a link to its source, filterable.
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const SRC = 'https://github.com/atomeam/void-loop/blob/main/void-live-deploy/';
+const SRC = 'https://github.com/Adammbeam/Verse-A-to-Mind/blob/main/void-live-deploy/';
 let bots = [], skills = [];
 function draw() {
   const q = document.getElementById('q').value.trim().toLowerCase();
@@ -18,5 +18,5 @@ function draw() {
   document.getElementById('skills').innerHTML = s.slice(0, 600).map((n) => '<tr><td>' + esc(n.replace(/\.m?js$/, '')) + '</td><td><a href="' + SRC + 'skills/' + esc(n) + '">source</a></td></tr>').join('') || '<tr><td class="note">' + (skills.length ? 'No match.' : 'The skills list did not load. Browse them on GitHub.') + '</td></tr>';
 }
 fetch('/bots/registry.json').then((r) => r.json()).then((d) => { bots = (d && d.bots || []).filter((x) => x.status === 'live'); draw(); }).catch(draw);
-fetch('https://api.github.com/repos/atomeam/void-loop/contents/void-live-deploy/skills?ref=main').then((r) => r.json()).then((d) => { skills = Array.isArray(d) ? d.filter((f) => f.type === 'file' && /\.m?js$/.test(f.name)).map((f) => f.name) : []; draw(); }).catch(draw);
+fetch('https://api.github.com/repos/Adammbeam/Verse-A-to-Mind/contents/void-live-deploy/skills?ref=main').then((r) => r.json()).then((d) => { skills = Array.isArray(d) ? d.filter((f) => f.type === 'file' && /\.m?js$/.test(f.name)).map((f) => f.name) : []; draw(); }).catch(draw);
 document.getElementById('q').addEventListener('input', draw);

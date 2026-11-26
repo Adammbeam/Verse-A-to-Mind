@@ -10,6 +10,6 @@
 
 **Motion.** Same-origin view transitions are on in `verse.css`. A scroll-driven settle runs on pages that scroll. The WebGL wash starts after load, skips reduced motion and data saver, and removes itself if WebGL will not start. The CSS horizon stays.
 
-**How to tell it worked.** `node --test tools/verse-shell.test.mjs`. On the home page the ask bar still says Ask anything, the stage under it is empty until someone asks, and the top line names bots and tower wins only after `/api/crew` and `/self.json` answer.
+**How to tell it worked.** `node --test tools/verse-shell.test.mjs`. On the home page the ask bar still says Ask Verse, the stage under it is empty until someone asks, and the top line names bots and tower wins only after `/api/crew` and `/self.json` answer.
 
 **Mistakes.** Do not put suggestion text back on the empty stage. Do not draw a grid floor. Do not fetch `tower.evidence.json` for the one-line count: `self.json` already has `tower.beaten`.

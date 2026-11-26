@@ -19,6 +19,7 @@ import { FIX_SYSTEM, INJECTION_RULE, ruleFix, redact, platformOf, basisOf } from
 import { guardAnswer, heldBack } from '../../lib/patch-guard.js';
 import { REVIEW_SYSTEM, ruleReview, findingsText, langNamed } from '../../lib/code-review.js';
 import { models, ANSWER_FALLBACK } from '../../lib/models.js';
+import { bounded, hedged, SOURCES_MS } from '../../lib/answer-speed.js';
 import { runFree } from '../../lib/ai-gateway.js';
 import { keeperOf, scrubOut } from '../../lib/keeper.js';
 import { redactPersonal } from '../../lib/privacy.js';
@@ -26,9 +27,9 @@ import { PAID_MODEL, BUDGET_MS, STRONG_TIMEOUT_MS, SKILLS, classify, settle, pai
 import { nearOf } from '../../lib/near-miss.js';
 import { clefRoute, clefOn, mergeRoute, clefYesNo } from '../../lib/clef.js';
 import { recordShortfall, reasonOf } from '../../lib/shortfall.js';
-import { isSelfAsk, isOwnCardNote, readSelf, selfFacts, cardLists, SELF_RULE, OWN_CARD_RULE } from '../../lib/self-context.js';
+import { isSelfAsk, isCardCorrection, readSelf, selfFacts, cardLists, SELF_RULE, OWN_CARD_RULE, withAim } from '../../lib/self-context.js';
 import { ownCardAnswer, fetchPulls, keptCards } from '../../lib/own-card.js';
-import { ASK_MAX, QUERY_MAX, supportedOnly, hasCorrection, CORRECTION_RULE, ACT_RULE, FILLER_RULE, dropUnbackedActs, dropFiller, INVENT_RULE, dropUnbackedClaims, citesUnbacked, titledReadings } from '../../lib/answer-honesty.js';
+import { ASK_MAX, QUERY_MAX, supportedOnly, hasCorrection, CORRECTION_RULE, ACT_RULE, FILLER_RULE, dropUnbackedActs, dropFiller, dropErrataVoice, INVENT_RULE, dropUnbackedClaims, citesUnbacked, titledReadings } from '../../lib/answer-honesty.js';
 import { measureOf, measureRule, withMeasure } from '../../lib/measure-ask.js';
 import { prepareDraft, draftPrompt, ruleDraft, DRAFT_SYSTEM, DRAFT_MAX } from '../../lib/draft.js';
 import { scopeOf } from '../../lib/memory-scope.js';
@@ -50,9 +51,15 @@ import * as FP from '../../lib/free-pics.js';
 import { edgeCache, edgeGate, buildId, edgeKeyUrl, edgeGet, edgePut, edgeTtl, marked, storable, HIT, MISS, BYPASS, REFRESH } from '../../lib/answer-edge.js';
 import { isNote, noteRule, relatedPage, talksLimits, dropLimits, NO_LIMITS_RULE, noteReading, setupFacts, noteFinish } from '../../lib/note-ask.js';
 import { telemetryOf } from '../../lib/telemetry.js';
+import { isPass } from '../../lib/pass-mark.js';
 import { planOf, runBot, routeFree, freeLlm, loadRegistry } from '../../lib/answer-free.js';
-import { beforeOf, points, FOLLOW_RULE, beforeBlock, mergeSources } from '../../lib/follow-ask.js';
-import { askWords, grounded, isNameAsk, isNoAnswer, sourcesMatch, guessOf, listRedirect, sectionHit, sectionText, linked } from '../../lib/no-answer.js';
+import { isJokeAsk, jokeAnswer } from '../../lib/joke-answer.js';
+import { metaAnswer, isMakeAsk } from '../../lib/meta-ask.js';
+import { everydayAnswer } from '../../lib/everyday-answer.js';
+import { worldAnswer } from '../../lib/world-answer.js';
+import { beforeOf, carries, points, FOLLOW_RULE, beforeBlock, mergeSources } from '../../lib/follow-ask.js';
+import { askShape, PASSAGE_LINE, fileDirective, DIRECTIVE_SAY, DIRECTIVE_DUP, DIRECTIVE_HELD, TALK_LINE } from '../../lib/ask-shape.js';
+import { askWords, grounded, isNameAsk, isNoAnswer, sourcesMatch, suggestedGuess, listRedirect, sectionHit, sectionText, linked } from '../../lib/no-answer.js';
 const MODEL = models('answer');
 // models are on whenever Workers AI is bound; VOID_ANSWER_MODELS=off (Pages env var) = open-web answers and rules-only fixes
 const modelsOn = (env) => !!(env && env.AI) && String(env.VOID_ANSWER_MODELS || '').trim().toLowerCase() !== 'off';
@@ -472,17 +479,35 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
   if (isPayAsk(ask)) return Response.json({ answer: payAnswer(), sources: [], note: 'pay-honest' }); // verified payment facts only (lib/pay-honest.js)
   if (isPriceChangeAsk(ask)) return Response.json({ answer: priceLockAnswer(), sources: [], note: 'price-lock' }); // prices come only from store data (lib/price-lock.js)
   if (body.page && typeof body.page === 'object') return pageAnswer(request, env, ask, body.page);
+  // a request for a reasoning test, or a question about what Verse remembers, gets the test or the truth about memory (lib/meta-ask.js), never a search
+  { const m = metaAnswer(ask); if (m) { edge.mark = BYPASS; return Response.json({ ...m, at: new Date().toISOString() }); } }
   // a follow-up's earlier ask, from the visitor's device (lib/follow-ask.js): an answer written with it is theirs alone, never cached
-  const before = beforeOf(body, ask);
+  // only when the new ask actually follows it (lib/follow-ask.js carries): a self-contained ask is answered as asked, and the reply says which
+  const offered = beforeOf(body, ask), before = offered && carries(ask, offered) ? offered : null;
   const key = await sha(ask.toLowerCase());
+  // the time, the date, a coin, dice, a random number, days until a day (lib/everyday-answer.js): the server's clock and crypto random, in the request's zone, never cached
+  { const e = everydayAnswer(ask, { tz: request.cf && request.cf.timezone }); if (e) { edge.mark = BYPASS; return Response.json(e); } }
+  // weather, sunrise and sunset, and the time in a named place, and what a word means (lib/world-answer.js): live keyless sources, never cached
+  { const w = await worldAnswer(ask); if (w) { edge.mark = BYPASS; return Response.json(w); } }
+  // the input's shape, read before classify or any self or errata path (lib/ask-shape.js): a passage or a directive never falls through to the fallback model
+  const shape = askShape(ask);
+  if (shape !== 'question') edge.mark = BYPASS; // a passage, a directive or talk is answered here and never kept, so the header says it went past the cache
+  if (shape === 'passage') return Response.json({ answer: PASSAGE_LINE, sources: [], at: new Date().toISOString(), route: 'passage' });
+  if (shape === 'directive') {
+    const filed = await fileDirective(env, ask);
+    return Response.json({ answer: filed.deduped ? DIRECTIVE_DUP : filed.ok ? DIRECTIVE_SAY : DIRECTIVE_HELD, sources: [], at: new Date().toISOString(), route: 'want' });
+  }
+  if (shape === 'talk') return Response.json({ answer: TALK_LINE, sources: [], at: new Date().toISOString(), route: 'talk' });
   // an ask about Verse itself is answered from its own facts, which change with every ship: never from the 7-day cache
-  // a note about one of Verse's own cards is about Verse even when it is long (owner, 2026-10-29)
-  const self = isSelfAsk(ask) && !isPaste(ask) || isOwnCardNote(ask); // a long paste that mentions Verse is still a paste, not a question about Verse (owner, 2026-10-16)
+  // a correction addressed to Verse about one of its own cards is about Verse even when it is long; a passage that only mentions a card is not
+  const self = isCardCorrection(ask) || (isSelfAsk(ask) && !isPaste(ask)); // a long paste that mentions Verse is still a paste, not a question about Verse
   // what this person told Verse (their notes and projects): an answer that used them is theirs alone, so it is never read from or written to the shared cache
   const told = self ? null : await toldMe(request, env, ask);
   // free-resource routing (lib/answer-free.js): an exact, computable ask goes to the live Verse bot whose job it is, before any cache or model;
   // a research ask goes to a free public API (OpenAlex) below, after the rate limit; everything else stays with the free Workers AI model
   const plan = self || told ? null : planOf(ask);
+  // a joke is the joke skill's (lib/joke-answer.js): told fresh from its sources, before the answer cache that once served a song article for it
+  if (!self && !told && isJokeAsk(ask)) { const j = await jokeAnswer(ask); if (j) return Response.json(j); }
   if (plan && plan.kind === 'bot') { const b = runBot(plan); if (b) return Response.json({ answer: b.answer, sources: [], at: new Date().toISOString(), route: 'bot', source: 'bot:' + b.bot.id, bot: b.bot }); }
   // the edge cache first, for an allow-listed ask only (lib/answer-edge.js edgeGate: no bearer, cookie, key or extra field, not personal, not
   // about Verse, not a paste); the key carries this deploy's build id, so a deploy never reads the last one's copies. A hit is the whole reply.
@@ -500,15 +525,16 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
     const hit = masked || self || told || before ? null : await env.DB.prepare('SELECT answer, sources, at FROM void_answers WHERE id = ? AND at > ?').bind(key, new Date(Date.now() - TTL_DAYS * 864e5).toISOString()).first();
     // an answer cached before sources were filtered is filtered on the way out (lib/cite.js)
     // a cached answer that cites a caveat or a notation was written before lib/answer-honesty.js checked them: it is answered again, not served
-    if (hit && !isNoAnswer(hit.answer) && !citesUnbacked(hit.answer) && !talksLimits(hit.answer)) { const c = keepCited(dropFiller(dropUnbackedActs(hit.answer)) || hit.answer, JSON.parse(hit.sources)), out = { answer: c.answer, sources: linked(c.sources), at: hit.at, cached: true, source: 'cache:d1' }; if (edgeKeep) edgeKeep(out, hit.at); return Response.json(out); } // a refusal cached before this check is not served again
+    if (hit && !isNoAnswer(hit.answer) && !citesUnbacked(hit.answer) && !talksLimits(hit.answer) && !(isMakeAsk(ask) && hit.sources !== '[]')) { const c = keepCited(dropFiller(dropUnbackedActs(hit.answer)) || hit.answer, JSON.parse(hit.sources)), out = { answer: c.answer, sources: linked(c.sources), at: hit.at, cached: true, source: 'cache:d1' }; if (edgeKeep) edgeKeep(out, hit.at); return Response.json(out); } // a refusal cached before this check is not served again
   } catch (_) {}
   if (await rateLimited(request, env)) return Response.json({ answer: null, sources: [], note: 'slow down' }, { status: 429 });
   if (plan && plan.kind === 'api') { const r = await routeFree(ask, { env, registry: await loadRegistry(env, request.url) }).catch(() => null); if (r) return Response.json(r); } // out, failed or empty: the model answers
 
-  if (modelsOn(env)) return modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, told, edgeKeep, before);
+  if (modelsOn(env)) return modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, told, edgeKeep, before, !!offered);
   if (self) {
     // no model: the facts themselves are the answer (Wikipedia knows nothing about Verse)
-    const facts = selfFacts(await readSelf(env, new URL(request.url).origin));
+    const got = await readSelf(env, new URL(request.url).origin);
+    const facts = withAim(selfFacts(got), got && got.self, ask);
     if (facts) return Response.json({ answer: facts, sources: [], at: new Date().toISOString(), self: true });
   }
   if (told) return Response.json({ answer: 'From what you told me:\n' + told.map((l) => '• ' + l).join('\n'), sources: [], at: new Date().toISOString(), told: told.length });
@@ -564,7 +590,7 @@ function within(p, ms) { let t; return Promise.race([p, new Promise((_, rej) => 
 // The model path (on unless VOID_ANSWER_MODELS=off).
 // which free resource (or paid model) wrote a model answer, by the names resources/free.json uses
 const sourceOf = (model) => model === MODEL ? 'workers-ai-chat' : model === ANSWER_FALLBACK ? 'workers-ai-chat:fallback' : /^free:/.test(String(model)) ? model : model ? 'paid' : 'none';
-async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, told = null, edgeKeep = null, before = null) {
+async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, told = null, edgeKeep = null, before = null, beforeSent = false) {
   const later = (p) => { try { if (waitUntil) waitUntil(p); } catch (_) {} return p; };
   const origin = new URL(request.url).origin;
   // the router runs alongside the source fetch; the answer waits for it until BUDGET_MS from the start, then moves on without it
@@ -577,7 +603,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   // a note about my own card: the repo's pull requests (for the status of each fix it names) and my earlier cards (to check what it quotes),
   // read beside everything else, both bounded (lib/own-card.js)
   // kept per visitor (a hash of their address, never the address): one person's note or card never reaches another person's card
-  const own = isOwnCardNote(ask), ownKey = own ? OWN_CARDS + ':' + (await sha(request.headers.get('cf-connecting-ip') || 'anon')).slice(0, 16) : '';
+  const own = isCardCorrection(ask), ownKey = own ? OWN_CARDS + ':' + (await sha(request.headers.get('cf-connecting-ip') || 'anon')).slice(0, 16) : '';
   const pullsP = own ? fetchPulls(fetch) : null;
   const priorP = own && env.DB ? env.DB.prepare('SELECT v FROM void_kv WHERE k = ?').bind(ownKey).first().then((r) => (r && r.v ? JSON.parse(r.v) : []), () => []) : Promise.resolve([]);
   const ownBody = async (lead) => { const s = (await selfP) || {}; const sj = s.self || null; return ownCardAnswer(lead, ask, { lists: cardLists(sj), commits: sj && Array.isArray(sj.commits) ? sj.commits : [], pulls: await pullsP, prior: (await priorP) || [] }); };
@@ -589,8 +615,8 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   // a follow-up that points back ("how was that mountain formed") also reads the earlier ask's sources, taken in turn with its own
   const follows = before && !self && !note && !isPaste(ask) ? before : null;
   const earlierP = follows && points(ask) ? sources(follows.ask).catch(() => []) : null; // searched beside the new ask's own, not after it
-  let src = self || isPaste(ask) || note ? [] : await sources(ask);
-  if (earlierP) src = mergeSources([await earlierP, src]);
+  let src = self || isPaste(ask) || note || isMakeAsk(ask) ? [] : await bounded(sources(ask), SOURCES_MS, []); // a slow Wikipedia never holds the answer (lib/answer-speed.js)
+  if (earlierP) src = mergeSources([await bounded(earlierP, SOURCES_MS, []), src]);
   const srcAt = Date.now();
   const route = await settle(routeP, t0 + BUDGET_MS);
   // the skill the ask nearly was (lib/near-miss.js, asked by Verse): the page offers that skill's first example when it ends up with no answer
@@ -611,7 +637,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   const measure = self || told || note || isPaste(ask) ? null : measureOf(ask);
   const guess = !self && !told && !measure && src.length && isNameAsk(ask) && !sourcesMatch(ask, src); // a computed conversion is not a guess
   const messages = self ? [
-    { role: 'system', content: ANSWER_SYSTEM + ' ' + SELF_RULE + (isOwnCardNote(ask) ? ' ' + OWN_CARD_RULE : '') + honest },
+    { role: 'system', content: ANSWER_SYSTEM + ' ' + SELF_RULE + (own ? ' ' + OWN_CARD_RULE : '') + honest },
     { role: 'user', content: `Question: ${ask}\n\nFacts about Verse:\n${facts || '(my facts could not be read just now)'}` },
   ] : [
     { role: 'system', content: ANSWER_SYSTEM + (sectioned ? ' ' + SECTION_RULE : '') + (note ? ' ' + noteRule(notePage, noteFacts) : isPaste(ask) ? ' ' + PASTE_RULE : '') + (told ? ' ' + TOLD_RULE + ' ' + INJECTION_RULE : '') + honest + (src.length ? ' ' + INVENT_RULE : '') + (measure ? ' ' + measureRule(measure) : '') + (follows ? ' ' + FOLLOW_RULE : '') },
@@ -643,12 +669,16 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
       try { await recordShortfall(env, 'answer', 'would escalate'); } catch (_) {}
     }
   }
-  const log = async (extra) => { try { await clefP.then((c) => {
+  // a later rewrite of outcome (a hard ask that would escalate, a Clef merge) used to drop "; self-grounded", so the
+  // "what's next" check failed whenever the classifier called that ask hard (flake job mvo3j82w)
+  const markSelf = (s) => (self && !/; self-grounded/.test(String(s || '')) ? (s ? s + '; self-grounded' : 'self-grounded') : s);
+  const log = async (extra) => { if (isPass(request)) return; try { await clefP.then((c) => { // a visitor pass's own ask is never logged (lib/pass-mark.js)
     const r = mergeRoute(route, c), rec = { ask, masked, route: r.kind, skill: r.skill, score: r.score, scores: r.scores, ms: route.ms, waited, model, outcome, would, ...extra };
     if (r.by === 'clef' && !(extra && extra.outcome)) rec.outcome = r.kind === 'skill' ? String(outcome).replace(/^(default|skill missed: \w+)/, 'skill missed: ' + r.skill + ' (Clef)') : String(outcome).replace(/^skill missed: \w+/, 'default (Clef: no skill)');
     if (r.unsure) rec.outcome = String(rec.outcome) + '; Clef unsure: ' + r.unsure + ' ' + r.clefP;
+    rec.outcome = markSelf(rec.outcome);
     return logRoute(env, rec);
-  }, () => logRoute(env, { ask, masked, route: route.kind, skill: route.skill, score: route.score, scores: route.scores, ms: route.ms, waited, model, outcome, would, ...extra })); } catch (_) {} };
+  }, () => { const rec = { ask, masked, route: route.kind, skill: route.skill, score: route.score, scores: route.scores, ms: route.ms, waited, model, outcome, would, ...extra }; rec.outcome = markSelf(rec.outcome); return logRoute(env, rec); }); } catch (_) {} };
   // Plan asks ("make a plan to learn guitar"): the planner answers with steps, never Gemma + Wikipedia
   // (these fell through the router and answered nothing; bench.misses w46). Any model trouble falls through.
   const planGoal = planAskOf(ask);
@@ -671,12 +701,15 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
     await log({ model: MODEL, outcome: 'plan:skill' });
     return Response.json({ goal: planGoal, steps: planResult.steps, timer: planResult.timer, practice: planResult.practice, learn: planResult.learn, note: planResult.note, model: MODEL, route: 'skill', ...nearOut });
   }
+  let secondTried = false; // the hedge already ran the second free model: the fallback chain below does not wait on it twice
   if (!answer) {
     try {
-      const r = await runFree(env, MODEL, { messages, ...ANSWER_RUN });
-      answer = scrubOut(redact(String(pick(r)).trim()), env);
-      model = MODEL;
-      if (!answer) throw new Error('empty');
+      // the first free model alone for HEDGE_MS, then the second beside it: the first answer wins (lib/answer-speed.js hedged)
+      const clean = (r) => scrubOut(redact(String(pick(r)).trim()), env);
+      const won = await hedged([{ id: MODEL, run: () => runFree(env, MODEL, { messages, ...ANSWER_RUN }).then(clean) },
+        { id: ANSWER_FALLBACK, run: () => { secondTried = true; return runFree(env, ANSWER_FALLBACK, { messages, ...ANSWER_RUN }).then(clean); } }], { capMs: STRONG_TIMEOUT_MS });
+      answer = won.value; model = won.id;
+      if (won.id !== MODEL) outcome += '; default slow, second free model';
     } catch (e) {
       // the free allowance ran out (or Gemma is down): the free ceiling isn't a stop, but paying still needs both conditions
       try { await recordShortfall(env, 'answer', String(e && e.message) === 'empty' ? 'empty' : reasonOf(e)); } catch (_) {}
@@ -684,12 +717,12 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
       const alt = await freeLlm(messages, { env, registry: await loadRegistry(env, request.url) }).catch(() => null);
       if (alt) { const a2 = scrubOut(redact(noThink(String(alt.answer).trim())), env); if (a2) { answer = a2; model = alt.source; outcome += '; default busy, ' + alt.source; } }
       // the second free try: the other free model (lib/models.js ANSWER_FALLBACK), before anything paid or the open web
-      if (!answer) try { const r = await within(runFree(env, ANSWER_FALLBACK, { messages, ...ANSWER_RUN }), STRONG_TIMEOUT_MS); const second = scrubOut(redact(String(pick(r)).trim()), env); if (second) { answer = second; model = ANSWER_FALLBACK; outcome += '; default busy, second free model'; } } catch (_) { /* both free models out: on to paid, then the web */ }
+      if (!answer && !secondTried) try { const r = await within(runFree(env, ANSWER_FALLBACK, { messages, ...ANSWER_RUN }), STRONG_TIMEOUT_MS); const second = scrubOut(redact(String(pick(r)).trim()), env); if (second) { answer = second; model = ANSWER_FALLBACK; outcome += '; default busy, second free model'; } } catch (_) { /* both free models out: on to paid, then the web */ }
       const access = answer ? null : await paidAccess(env);
       const paid = answer ? answer : access.model ? await tryPaid(access, 'free allowance out') : '';
       if (!paid) {
         // no paid path: the open-web answer, as with the switch off (for an ask about Verse: its facts)
-        const web = own ? await ownBody('') : self ? facts : told ? 'From what you told me:\n' + told.map((l) => '• ' + l).join('\n') : fromWeb(src);
+        const web = own ? await ownBody('') : self ? withAim(facts, (await selfP) && (await selfP).self, ask) : told ? 'From what you told me:\n' + told.map((l) => '• ' + l).join('\n') : fromWeb(src);
         await log({ model: null, outcome: outcome + '; model busy, open web' + (access.model ? '' : '; paid: ' + access.why), would: PAID_MODEL });
         if (!web) return Response.json({ answer: null, sources: [], note: 'nothing on the web', route: route.kind, ...nearOut });
         if (own) keepCard(web);
@@ -716,6 +749,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   // no claimed write and no filler (lib/answer-honesty.js); then only the sources the answer cited, and whose fetched text holds the
   // sentence that cites them, go on the card (lib/cite.js renumbers the [n] markers to match)
   answer = dropFiller(dropUnbackedActs(answer)) || answer;
+  if (!own) answer = dropErrataVoice(answer);
   // no cited caveat or notation the cited page does not make, a guess's readings named by their pages, and a stated quantity's exact
   // conversion first (lib/answer-honesty.js, lib/measure-ask.js); this runs before the markers are renumbered, while [n] is still src[n - 1]
   if (!self && !told && src.length) answer = dropUnbackedClaims(answer, src) || answer;
@@ -725,10 +759,11 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   if (measure) answer = withMeasure(isNoAnswer(answer) ? '' : answer, measure);
   ({ answer, sources: pub } = supportedOnly(answer, src, pub));
   // a refusal ("I do not have information ...") is not an answer: nothing is cached or labelled as one, and the page gets the closest guess to offer as a question
-  if (!self && !told && isNoAnswer(answer)) return Response.json({ answer: null, sources: [], note: 'nothing on the web', noAnswer: true, ...(guessOf(src) ? { guess: guessOf(src) } : {}), route: route.kind, ...nearOut });
+  if (!self && !told && isNoAnswer(answer)) return Response.json({ answer: null, sources: [], note: 'nothing on the web', noAnswer: true, ...(suggestedGuess(ask, src) ? { guess: suggestedGuess(ask, src) } : {}), route: route.kind, ...nearOut });
   if (sectioned && src[0] && answer) answer = grounded(answer, src[0].text); // a list-page section: only what its text says
   answer = scrubOut(answer, env); // no env value or key shape leaves in a model's words, whatever the model was told (lib/keeper.js)
   if (own) { answer = scrubOut(await ownBody(answer), env); keepCard(answer); } // the lead the note gave reason for, then the lists from my records
+  if (self) { const got = await selfP; answer = withAim(answer, got && got.self, ask); } // the aim is composed in code, ahead of or alongside the model's words
   const at = new Date().toISOString();
   // the cache write finishes after the answer has gone out (waitUntil), not before: nobody waits on D1 for an answer they already have
   if (!masked && !self && !told && !before) try {
@@ -738,7 +773,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   // a real place, animal, event or work of art gets a real, licensed picture with its credit (lib/free-pics.js), searched by the fetched source's own title, never the visitor's words;
   // a fictional character or a person keeps Verse's own drawing or neutral plate. Bounded: one picture, a few seconds, and the answer never waits longer.
   const pic = lead && lead.desc ? await picFor(env, lead) : null;
-  const out = { answer, sources: linked(pub), at, route: route.kind, source: sourceOf(model), ...nearOut, ...(pic ? { pic } : {}), ...(guess ? { fuzzy: true } : lead ? { name: lead.name, ...(lead.desc ? { desc: lead.desc } : {}), ...(lead.series ? { series: lead.series } : {}) } : {}), ...(self ? { self: true } : {}), ...(told ? { told: told.length } : {}) };
+  const out = { answer, sources: linked(pub), at, route: route.kind, source: sourceOf(model), ...nearOut, ...(pic ? { pic } : {}), ...(guess ? { fuzzy: true } : lead ? { name: lead.name, ...(lead.desc ? { desc: lead.desc } : {}), ...(lead.series ? { series: lead.series } : {}) } : {}), ...(self ? { self: true } : {}), ...(told ? { told: told.length } : {}), ...(beforeSent ? { followed: !!follows } : {}) };
   // the edge copy goes where the D1 row goes, and only for a free model's answer (a paid escalation is never served again for free, lib/answer-edge.js)
   if (edgeKeep && !masked && !self && !told && !before && storable(out, { paid: model !== MODEL && model !== ANSWER_FALLBACK })) edgeKeep(out, at);
   return Response.json(out);

@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { namedFixes, fixStatus, fixLines, guardLead, quoteLines, newestFirst, ownCardAnswer, keptCards, wordsOf } from '../void-live-deploy/lib/own-card.js';
+import { namedFixes, wantsRecordLists, fixStatus, fixLines, guardLead, quoteLines, newestFirst, ownCardAnswer, keptCards, wordsOf } from '../void-live-deploy/lib/own-card.js';
 import { isOwnCardNote, OWN_CARD_RULE, cardLists, cardFacts, selfFacts } from '../void-live-deploy/lib/self-context.js';
 import { subjectOf, motifsFor, isStatusCard } from '../void-live-deploy/lib/card-subject.js';
 
@@ -124,10 +124,26 @@ test('the whole card for note 3: a lead, the earlier card owned, the fix status,
   assert.ok(motifsFor(subjectOf('Answer', 'The deploy failed with an error and a crash, and the site is in an outage.').nouns).includes('warning'), 'a real failure keeps it');
 });
 
-test('a note with no fixes keeps the Fixed list, newest first, and a lead the guard emptied gets a plain one', () => {
-  const body = ownCardAnswer('I apologise for my last card.', 'That card is wrong. It cites a source that says nothing about my question.', { lists: cardLists(selfJson) });
+test('a note that asks about the lists keeps Fixed, newest first, and a lead the guard emptied gets a plain one', () => {
+  const note = 'That card is wrong. It gives no list of what is fixed and what is still open.';
+  const body = ownCardAnswer('I apologise for my last card.', note, { lists: cardLists(selfJson) });
   const newest = selfJson.shipped.map((r) => r.date).filter((d) => /^\d{4}-\d\d-\d\d$/.test(d)).sort().pop();
+  assert.equal(wantsRecordLists(note), true);
   assert.match(body, new RegExp('^You are right about my last card\\.\\n\\nFixed:\\n' + newest));
+  assert.match(body, /\n\nStill open:\n/);
+});
+
+test('a correction of what the card said reports only that, not an unrelated Fixed list', () => {
+  const note = "my card said the 29 organs correspond to real biology; it should say the 29 organs are Verse's metaphor for 29 AI modules.";
+  const lead = "my card said the 29 organs correspond to real biology; it should say the 29 organs are Verse's metaphor for 29 AI modules.";
+  assert.equal(wantsRecordLists(note), false);
+  assert.equal(isOwnCardNote(note), true);
+  const body = ownCardAnswer(lead, note, { lists: cardLists(selfJson) });
+  assert.equal(body, lead);
+  assert.doesNotMatch(body, /\bFixed:|\bStill open:|time-saved skill|full-handoff skill/);
+  const plain = ownCardAnswer('I apologise for my last card.', 'That card is wrong. It cites a source that says nothing about my question.', { lists: cardLists(selfJson) });
+  assert.equal(plain, 'You are right about my last card.');
+  assert.doesNotMatch(plain, /\bFixed:|\bStill open:/);
 });
 
 test('the answer route uses it, keeps one visitor\'s cards apart from another\'s, and the store keeps 8', () => {
@@ -149,7 +165,7 @@ test('the three notes, end to end through /api/answer: each card checks the one 
     ASSETS: { fetch: async (req) => (new URL(req.url).pathname === '/self.json' ? Response.json({ ...selfJson, commits: COMMITS }) : new Response('', { status: 404 })) },
   };
   const realFetch = globalThis.fetch;
-  globalThis.fetch = async (u, o) => (String(u).startsWith('https://api.github.com/repos/atomeam/void-loop/pulls') ? Response.json(PULLS.map((p) => ({ ...p, merged_at: p.merged_at, head: { repo: { full_name: 'atomeam/void-loop' } } }))) : realFetch(u, o));
+  globalThis.fetch = async (u, o) => (String(u).startsWith('https://api.github.com/repos/Adammbeam/Verse-A-to-Mind/pulls') ? Response.json(PULLS.map((p) => ({ ...p, merged_at: p.merged_at, head: { repo: { full_name: 'Adammbeam/Verse-A-to-Mind' } } }))) : realFetch(u, o));
   const ask = async (note, ip = '203.0.113.7') => { const waits = []; const r = await onRequestPost({ request: new Request('https://a-to-mind.com/api/answer', { method: 'POST', headers: { 'cf-connecting-ip': ip }, body: JSON.stringify({ ask: note }) }), env, waitUntil: (p) => waits.push(p) }); await Promise.all(waits); turn++; return (await r.json()).answer; };
   try {
     const a1 = await ask(NOTE1), a2 = await ask(NOTE2), a3 = await ask(NOTE3);
