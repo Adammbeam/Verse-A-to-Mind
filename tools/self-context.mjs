@@ -10,6 +10,7 @@ import { openItems } from './frontier.mjs';
 import { builtIndex, unbuilt } from '../void-live-deploy/lib/frontier.js';
 import { parseFacingLog, shippedVisible } from '../void-live-deploy/lib/visible.js';
 import { isPrivate, deepQuoteFree } from './private.mjs';
+import { AIM } from '../void-live-deploy/lib/self-context.js';
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -94,12 +95,20 @@ export function readWishlist(text, n = 12) {
 // the tower (lib/tower.js): the site Verse is assimilating now (tower.target.json) and the next smallest unbeaten sites, in the tower's own
 // order, smallest first (owner's rule: every site ever made, smallest first). The answer engine lists what is still open from here,
 // so the target leads (owner, 2026-10-29: "the open asks are not in smallest-first order behind sycophanthex.com"). Pure.
+export function floorKind(id) {
+  const raw = String(id || '');
+  const i = raw.indexOf(':');
+  if (i > 0) return clip(raw.slice(0, i).trim(), 40);
+  if (raw && !/(?:^|\.)(?:[a-z0-9-]+\.)+[a-z]{2,}$/i.test(raw)) return clip(raw, 40);
+  return '';
+}
 export function towerOf(floors, target, pages = {}, n = 3) {
   const fl = Array.isArray(floors) ? floors : [], open = fl.filter((f) => f && !f.beaten);
   const id = (target && target.id) || (open[0] && open[0].id); if (!id) return null;
   const t = fl.find((f) => f.id === id) || { id }, name = (f) => clip(f.site || f.id, 60);
   const page = t.page || pages[t.id] ? '' : 'my page for it is not built yet: it still needs a page, named for it in LANE_PAGES in lib/tower.js';
-  return { target: name(t), ...(target && target.since ? { since: clip(target.since, 10) } : {}), ...(page ? { page } : {}), next: open.filter((f) => f.id !== id).slice(0, n).map(name), beaten: fl.length - open.length, total: fl.length };
+  const kind = floorKind(t.id || id);
+  return { target: name(t), ...(kind ? { kind } : {}), ...(target && target.since ? { since: clip(target.since, 10) } : {}), ...(page ? { page } : {}), next: open.filter((f) => f.id !== id).slice(0, n).map(name), beaten: fl.length - open.length, total: fl.length };
 }
 
 export function buildSelf(llms, inbox, { skills = [], minis = [], canon = null, tracks = null, building = null, commits = null, open = null, builders = null, wishlist = null, built = null } = {}) {
@@ -122,7 +131,8 @@ export function buildSelf(llms, inbox, { skills = [], minis = [], canon = null, 
   if (open && built) open = unbuilt(open, built);
   if (building && isPrivate(JSON.stringify(building))) building = null;
   return {
-    about, shipped: rows.filter((r) => r.state === 'shipped' && pub(r)),
+    about, aim: AIM,
+    shipped: rows.filter((r) => r.state === 'shipped' && pub(r)),
     // what is still open comes from the frontier, the one build order (cleanup step 4); the inbox keeps the shipped history
     // `waits` (tools/frontier.mjs waitsOf): what an item says it waits on, so the wants card can list it as blocked
     open: open ? open.map((o) => ({ state: 'open', date: '', ask: clip(o.title, 400), from: clip(o.from, 300), ...(o.waits ? { waits: clip(o.waits, 60) } : {}) })) : rows.filter((r) => r.state !== 'shipped' && pub(r)),

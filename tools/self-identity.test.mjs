@@ -7,7 +7,7 @@ import { isSelfAsk } from '../void-live-deploy/lib/self-context.js';
 const IDENTITY = ['who are you?', 'who are you', 'Hey, who are you really?', 'are you an AI?', 'are you a bot', 'are you human?', 'are you real?',
   'are you ChatGPT?', 'are you claude', 'what model are you?', 'what kind of ai are you', 'what llm powers you', 'who created you?', 'who built you',
   'who owns you', 'introduce yourself', 'what should I call you', 'are you sentient', 'how old are you?', 'where are you hosted', 'what do you do?',
-  'What is Verse?', 'what is a-to-mind.com?'];
+  'What is Verse?', 'what is a-to-mind.com?', 'what are you trying to become?', 'what is your aim?', 'what do you aim to become?'];
 const NOT_IDENTITY = ['who are the beatles', 'who are you by the who lyrics', 'what is a verse', 'what is verse', 'are you kidding me',
   'are you sure that is right', 'who made the eiffel tower', 'who created the internet', 'how old are you to drive in texas',
   'where do you live in london with kids', 'what do you do when you are bored', 'is it real that bats are blind', 'what is a black hole'];

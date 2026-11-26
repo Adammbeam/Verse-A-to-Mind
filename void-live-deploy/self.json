@@ -1,5 +1,6 @@
 {
  "about": "Verse by A-to-Mind does whatever anyone asks: ask for something and it appears. Nothing is shown until someone asks, and there is nothing to sign up for.",
+ "aim": "I aim to be the one place people need for the things they come to the web for, taking them on one kind of work at a time, doing each kind as well as the best place for that kind does, saying honestly where I still fall short, and keeping at it on my own.",
  "shipped": [
   {
    "state": "shipped",
@@ -672,84 +673,84 @@
  },
  "commits": [
   {
-   "at": "2026-11-25T23:23:33Z",
-   "subject": "Leave asks the build ledger proves out of Verse's open frontier"
+   "at": "2026-11-26T00:22:19Z",
+   "subject": "Self: Verse knows its aim, and the tick files the current floor's weakest gap"
   },
   {
-   "at": "2026-11-25T23:23:05Z",
-   "subject": "Add oldestClaimMin to GET /api/team counts"
+   "at": "2026-11-26T00:20:32Z",
+   "subject": "team/agent.mjs: job prompts point at Adammbeam/Verse-A-to-Mind"
   },
   {
-   "at": "2026-11-25T23:19:37Z",
-   "subject": "Treat in-charge offers as directives, not not-found lookups"
+   "at": "2026-11-26T00:20:28Z",
+   "subject": "tools: a cheap worldtime and today collision check"
   },
   {
-   "at": "2026-11-25T23:16:17Z",
-   "subject": "refuse a merge-gate wipe the way 9a726fe did"
+   "at": "2026-11-26T00:19:25Z",
+   "subject": "Log: the everyday and world answers, and the edge-cache fix, in the growth ledger and agent log"
   },
   {
-   "at": "2026-11-25T23:14:33Z",
-   "subject": "Classify asks as question, directive or passage before routing"
+   "at": "2026-11-26T00:16:12Z",
+   "subject": "Answer engine: weather, sunrise, sunset, the time in a place and word meanings from live sources"
   },
   {
-   "at": "2026-11-25T22:55:49Z",
-   "subject": "Report only the correction, not an unrelated Fixed list"
+   "at": "2026-11-26T00:15:30Z",
+   "subject": "Visitor pass: wait for '…' cards to fill, and expect song previews for 'play music'"
   },
   {
-   "at": "2026-11-25T22:55:14Z",
-   "subject": "Point the brain's live repo readers at Verse-A-to-Mind"
+   "at": "2026-11-26T00:14:03Z",
+   "subject": "Checks green: guide, families and automations tests"
   },
   {
-   "at": "2026-11-25T22:50:01Z",
-   "subject": "close the helper backlog already on main"
+   "at": "2026-11-26T00:11:43Z",
+   "subject": "SEO checks green: game pages get canonical, h1 and share tags, and links from the arcade"
   },
   {
-   "at": "2026-11-25T22:45:56Z",
-   "subject": "refuse a tree wipe before it reaches main"
+   "at": "2026-11-26T00:08:59Z",
+   "subject": "team/agents.txt: the contributor guide names Adammbeam/Verse-A-to-Mind, not the old void-loop fork"
   },
   {
-   "at": "2026-11-25T22:08:14Z",
-   "subject": "team: a claim is a lease, and a dead claim comes back"
+   "at": "2026-11-26T00:05:39Z",
+   "subject": "quiz card: the gear question and the kept save are polled for, not read after a guessed 900 ms (mvcf80qw)"
   },
   {
-   "at": "2026-11-25T22:01:20Z",
-   "subject": "fix(loader): warm ask libs on focusin/input and tighten FIRST_ASK_WAIT (#110 flake mvo3j7he) (#6)"
+   "at": "2026-11-26T00:05:22Z",
+   "subject": "Ask bar: the empty placeholder says Ask Verse"
   },
   {
-   "at": "2026-11-25T21:59:53Z",
-   "subject": "List stage-pdf and sql-query in the skill index the ask bar fetches"
+   "at": "2026-11-26T00:04:11Z",
+   "subject": "Answer engine: the time, the date, coins, dice and days-until are answered from the clock, not the model"
   },
   {
-   "at": "2026-11-25T21:56:46Z",
-   "subject": "Query a CSV or SQLite file in the browser (unify sql.js)"
+   "at": "2026-11-26T00:03:28Z",
+   "subject": "Answer engine: a passage, directive or talk reply says it went past the edge cache"
   },
   {
-   "at": "2026-11-25T21:54:19Z",
-   "subject": "feat(bots): unify Poly Haven CC0 3D and Smithsonian 3D Open Access into /bots/"
+   "at": "2026-11-26T00:02:56Z",
+   "subject": "/build.json answers again: the hash of the shell files this deploy serves"
   },
   {
-   "at": "2026-11-25T21:50:41Z",
-   "subject": "Save the stage or a picked note as a PDF (unify pdf-lib)"
+   "at": "2026-11-26T00:00:30Z",
+   "subject": "Sudoku: 'play sudoku' opens a real 9 by 9 puzzle with one solution"
   },
   {
-   "at": "2026-11-25T21:50:25Z",
-   "subject": "Restore the tree deleted by 9a726fe, keeping the growth-inbox note"
+   "at": "2026-11-25T23:58:14Z",
+   "subject": "Open tool: 'currency converter' opens the markets currency converter page"
   },
   {
-   "at": "2026-11-25T21:46:39Z",
-   "subject": "docs(growth-inbox): add 6 AI app/build-loop patterns and video-explainer film upgrades"
+   "at": "2026-11-25T23:52:36Z",
+   "subject": "Answer engine: a joke is told by the joke skill, not read from the cache"
   },
   {
-   "at": "2026-11-25T21:43:37Z",
-   "subject": "trigger: bind rotated READ_TOKEN (S7)"
+   "at": "2026-11-25T23:50:25Z",
+   "subject": "Visit counter: count again when the deployment reads no SALT"
   },
   {
-   "at": "2026-11-25T21:42:40Z",
-   "subject": "feat: crew presence fix + pushAll/handIdle in crewTick (HAND_MS=20m)"
+   "at": "2026-11-25T23:48:46Z",
+   "subject": "Keep self-grounded on the route log and pin the what's-next check to fixture facts"
   },
   {
-   "at": "2026-11-25T21:42:14Z",
-   "subject": "fix: separate crew from idle in presence; import pushAll/handIdle into crewTick"
+   "at": "2026-11-25T23:47:06Z",
+   "subject": "Visit counter: log why it is off"
   }
  ],
  "builders": {
@@ -930,10 +931,6 @@
    "why": "pay-per-use, no monthly fee, but nothing to deliver yet"
   }
  ],
- "visible": {
-  "day": 7,
-  "week": 7
- },
  "clips": {
   "upload": "Anyone can upload any Verse film or ad clip: a-to-mind.com/films/ has 1. Download (free), 2. Copy for YouTube, TikTok, Reels or X (title, description with a tracked a-to-mind.com link, the call to action and a share-this-ad line, hashtags) and 3. Upload to that platform, signed in as yourself. No API or token. Say \"upload this to YouTube\". Verse Tube: a-to-mind.com/films/ is the Verse video site: a watch page per video at /films/?v=<id>, view counts, share buttons for every platform and an RSS feed at /films/rss (docs/void-tube.md).",
   "tricks": [
@@ -991,6 +988,7 @@
  },
  "tower": {
   "target": "flightconnections.com",
+  "kind": "travel",
   "since": "2026-11-09",
   "next": [
    "heycolor.com",

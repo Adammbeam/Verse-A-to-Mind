@@ -143,9 +143,9 @@ export async function foldIdeaWants(env, now) {
   }
   return folded;
 }
-/** open tower wants came from aspect counts. Those counts are not work any more. -> [keys closed] */
+/** open tower wants that came from aspect counts (metric tower:<floor>) are not work any more. Checklist-gap wants (floorgap:) stay. -> [keys closed] */
 export async function retireTowerWants(env, now) {
-  const { results } = await env.DB.prepare("SELECT key, job, thread FROM void_team_wants WHERE state = 'open' AND (lane = 'tower' OR metric LIKE 'tower:%')").all();
+  const { results } = await env.DB.prepare("SELECT key, job, thread FROM void_team_wants WHERE state = 'open' AND metric LIKE 'tower:%'").all();
   const why = 'Closed: Tower aspect counts no longer make work. Win and lose scoring by aspect was dropped, so this item is not a job.';
   const at = new Date(now).toISOString();
   for (const w of results || []) {
@@ -304,12 +304,13 @@ export async function crewTick(env, now = Date.now()) {
   // the evidence, read together
   const { results: openPages } = await env.DB.prepare("SELECT metric FROM void_team_wants WHERE state = 'open' AND (metric LIKE 'page:%' OR metric LIKE 'link:%')").all();
   const extra = openPages.map((r) => r.metric.replace(/^(page|link):/, '')).filter((p) => p.startsWith('/'));
-  const [ex, tw, st, pr, walk, misses7, sales30, idl, sz, main] = await Promise.all([
+  const [ex, tw, st, pr, walk, misses7, sales30, idl, sz, main, tg] = await Promise.all([
     readExam(env), get(env, ORIGIN + '/tower.evidence.json', { max: 8e6, ms: 12000 }), readStatus(env, now).catch(() => null),
     probe(env, [...C.KEY_PAGES, ...extra]), isDue('site-operator') ? linkWalk(env, run) : null,
     count(env, 'SELECT COUNT(*) AS n FROM void_misses WHERE last >= ?', new Date(now - 7 * 864e5).toISOString()),
     count(env, 'SELECT COUNT(*) AS n FROM void_sales WHERE verified = 1 AND at >= ?', new Date(now - 30 * 864e5).toISOString()),
     ideas(env, now), get(env, ORIGIN + '/tower.size.json', { max: 4e6, ms: 10000 }), mainState(env).catch(() => null),
+    get(env, ORIGIN + '/tower.target.json', { max: 1e6, ms: 8000 }),
   ]);
   const guards = st && st.guards ? st.guards : [];
   const films = guards.find((g) => g && g.id === 'hourly-films-page');
@@ -318,7 +319,8 @@ export async function crewTick(env, now = Date.now()) {
     if (live.status === 200 && /VERSE (?:FILMS|HOLOVIDS)/.test(live.text)) films.now = 'up';
   }
   const ev = { at: new Date(now).toISOString(), exam: ex.exam, examSrc: ex.src, tower: tw.status === 200 ? json(tw.text) : null, guards, probe: pr,
-    links: walk ? walk.links : [], walk, misses7, sales30, ideas: idl, size: sz && sz.status === 200 ? json(sz.text) : null, main };
+    links: walk ? walk.links : [], walk, misses7, sales30, ideas: idl, size: sz && sz.status === 200 ? json(sz.text) : null, main,
+    target: tg && tg.status === 200 ? json(tg.text) : null };
   // Verse's brain: measure, close, file
   await foldIdeaWants(env, now).catch(() => []);
   await retireTowerWants(env, now).catch(() => []);
