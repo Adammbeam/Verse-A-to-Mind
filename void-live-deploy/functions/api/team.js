@@ -282,7 +282,9 @@ async function threadId(env, v, me) {
 export async function handOut(env, a, now, only = null) {
   if (a.job) return { job: a.job, thread: a.thread, already: true };
   const skip = only ? [] : String(a.skip || '').split(' ').filter(Boolean); // a job picked on the board is taken even if this agent gave it back once
-  const ranked = T.rank(await queued(env), now, skip), { list: order, pr } = await ordered(env, ranked, now);
+  // a job named by id (a claim, a switch, a split) is read by its id: the first 300 queued are not every job (ask-8097 could not be claimed)
+  const one = only ? await env.DB.prepare("SELECT id, ask, target, state, note, at FROM void_queue WHERE id = ? AND state = 'queued'").bind(only).first().catch(() => null) : null;
+  const ranked = T.rank(only ? [one].filter(Boolean) : await queued(env), now, skip), { list: order, pr } = await ordered(env, ranked, now);
   const list = only ? order : LN.preferLane(order, await laneFor(env, a.id)); // the seat's lane first among Verse's next few, the owner's asks still first
   const building = await buildingNow(env); // every job being built now, by an agent or the conductor: a job that touches the same work is not handed out
   for (const j of only ? ranked.filter((x) => x.id === only).slice(0, 1) : list) { // Verse's own order and WIP cap, unless a job was picked on the board
@@ -1161,7 +1163,7 @@ export async function freeLineTick(env, now) {
 export async function retireJunk(env, now, fetchFn = fetch, max = 400) {
   let rows = []; try { rows = (await env.DB.prepare("SELECT id, ask, target, note FROM void_queue WHERE state = 'queued' LIMIT ?").bind(max).all()).results || []; } catch (_) { return 0; }
   let branches = null;
-  try { const r = await fetchFn('https://github.com/Adammbeam/Verse-A-to-Mind.git/info/refs?service=git-upload-pack', { signal: AbortSignal.timeout(6000) }); branches = r.ok ? branchesOf(await r.text()) : null; } catch (_) { branches = null; }
+  try { const r = await fetchFn('https://github.com/Adammbeam/Verse-A-to-Mind.git/info/refs?service=git-upload-pack', { headers: { 'user-agent': 'git/2.45 verse-team' }, signal: AbortSignal.timeout(6000) }); branches = r.ok ? branchesOf(await r.text()) : null; } catch (_) { branches = null; }
   if (branches && !branches.size) branches = null;
   const at = new Date(now).toISOString(); let n = 0;
   for (const j of rows) {

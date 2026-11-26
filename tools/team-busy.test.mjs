@@ -22,6 +22,7 @@ test('jobs that can never be done are retired, real ones kept', () => {
   assert.ok(live.has('helper/alive'));
   assert.match(retireWhy({ ask: 'Repair helper/full-handoff until it lands: x', target: 'heal:x' }, live), /not a branch on the live repo/);
   assert.equal(retireWhy({ ask: 'Repair helper/alive until it lands: x', target: 'heal:x' }, live), '');
+  assert.match(retireWhy({ ask: 'Repair tower-gate.yml: 5 failed runs in a row on main, the latest https://github.com/atomeam/void-loop/actions/runs/43900977367', target: 'heal:tower-gate.yml' }, live), /old repo/);
   assert.equal(retireWhy({ ask: 'Repair helper/full-handoff until it lands', target: 'heal:x' }, null), '', 'no branch list, nothing retired');
   assert.match(retireWhy({ ask: 'learn from it', target: 'versus:example' }, live), /Versus/);
   assert.match(retireWhy({ ask: 'learn what share.google does', target: 'gap:x' }, live), /not a real site/);

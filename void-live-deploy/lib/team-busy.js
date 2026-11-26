@@ -36,6 +36,8 @@ export function retireWhy(job, branches) {
   const ask = String((job && job.ask) || ''), target = String((job && job.target) || ''), kind = target.split(':')[0];
   const rep = REPAIR.exec(ask);
   if (rep && branches && !branches.has(rep[1])) return 'retired: ' + rep[1] + ' is not a branch on the live repo (it was on the old one)';
+  // a job about the old repo's GitHub Actions (that account is flagged; its runs can never be repaired from here)
+  if (/github\.com\/atomeam\/void-loop\/(?:actions|pull|commit)/i.test(ask + ' ' + String((job && job.note) || ''))) return 'retired: it is about the old repo (atomeam/void-loop), which is flagged';
   if (kind === 'versus') return 'retired: Versus is no longer a driver (owner, 2026-11-25)';
   if (JUNK_HOST.test(ask) || JUNK_HOST.test(target)) return 'retired: not a real site to learn from';
   return '';
@@ -77,4 +79,4 @@ export function makeWorkOf({ name, now, open = [], review = null, gaps = [] }) {
   return { id: 'str-' + stamp, target, ask: 'First-time visitor pass: open https://a-to-mind.com as a stranger, try five real asks a new visitor would type, and file each one that breaks or answers with an article instead of the thing as its own #work job ({"do":"file","body":"..."}). Hand in with done, ok and a note listing what you tried.' };
 }
 /** a made job closes with a note, not a pull request (its work is a review verdict or filed jobs). Pure. */
-export const noteJob = (target) => /^(?:review:|auto:stranger-)/.test(String(target || ''));
+export const noteJob = (target) => /^(?:review:|auto:stranger-|auto:codestore$)/.test(String(target || ''));
