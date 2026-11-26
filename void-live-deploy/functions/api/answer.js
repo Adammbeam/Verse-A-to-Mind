@@ -480,6 +480,7 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
   const key = await sha(ask.toLowerCase());
   // the input's shape, read before classify or any self or errata path (lib/ask-shape.js): a passage or a directive never falls through to the fallback model
   const shape = askShape(ask);
+  if (shape !== 'question') edge.mark = BYPASS; // a passage, a directive or talk is answered here and never kept, so the header says it went past the cache
   if (shape === 'passage') return Response.json({ answer: PASSAGE_LINE, sources: [], at: new Date().toISOString(), route: 'passage' });
   if (shape === 'directive') {
     const filed = await fileDirective(env, ask);
