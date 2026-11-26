@@ -63,11 +63,11 @@ export function jobPrompt(job) {
     j.brief ? '\n' + String(j.brief).trim() : '',
     '',
     'How to finish it:',
-    '1. Start from the newest main in a clean checkout: git clone https://github.com/atomeam/void-loop, or git fetch origin main and'
+    '1. Start from the newest main in a clean checkout: git clone https://github.com/Adammbeam/Verse-A-to-Mind, or git fetch origin main and'
       + ' git worktree add a new folder from origin/main. Never build on an old local branch, and commit only the files this job needs.',
     '2. Do what the job asks, in full. A versus job is a working Verse page that does the site\'s job; a domains/targets file alone does not finish it.',
     '3. Run the checks the brief names and read what the page shows. Fix what fails; never skip, weaken or delete a test.',
-    '4. Push a branch and open a pull request to atomeam/void-loop main with the label automerge. The title, the body and the commit'
+    '4. Push a branch and open a pull request to Adammbeam/Verse-A-to-Mind main with the label automerge. The title, the body and the commit'
       + ' messages say what changed and why in your own plain words, and never quote the owner.',
     '5. Print the pull request address as your last line and exit 0. Verse checks it after the merge: the job is done only when the pull'
       + ' request changes the page itself, takes nothing away from main, and the live page answers; otherwise the job comes back.',
