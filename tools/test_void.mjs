@@ -12665,7 +12665,7 @@ try {
   }
 } catch (e) {
   // always, --only included: a section that throws is a failure, never "0/0 passed" (finish.mjs's first shot runs --only)
-  check('suite ran to the end', false, String(e && e.message));
+  check('suite ran to the end', false, String(e && e.message) + ' (while running: ' + (watch.lastCheck || 'nothing yet') + ')');
 }
 clearInterval(watchdog);
 await browser.close(); server.close();
