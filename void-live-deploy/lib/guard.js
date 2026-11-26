@@ -69,6 +69,7 @@ export const LIMITS = {
   gumroad: { rpm: 120, body: 50000 },
   'github-events': { rpm: 120, body: 1000000 }, // GitHub's webhooks (functions/api/github-events.js): server to server, HMAC-signed, a push or PR body can be hundreds of KB; trimmed before any rule sees it
   team: { rpm: 240, body: 16000 }, // the team chat (functions/api/team.js): a page polls a channel every few seconds; every write needs the owner or an agent key the owner made, with per-agent rates in the route
+  proposals: { rpm: 20, body: 220000 }, // patches offered to Verse (functions/api/proposals.js): a branch, a title and a diff of at most 200,000 bytes (lib/proposals.js MAX_DIFF); the owner or an outside agent's token, and the Worker stores and decides, it never applies a patch
   handoff: { rpm: 30, body: 262144 }, // agent drop-links; 256 KB matches functions/api/handoff.js
   rehearsal: { rpm: 10, body: 500 }, // owner-only: seed and clean the rehearsal's stand-in reply (functions/api/rehearsal.js)
   figurescript: { rpm: 60, body: 4000 }, // Next #19: behavior script for a summoned figure (AI once, then D1 cache)
