@@ -59,6 +59,7 @@
 //     The same purchase again gives that same member a new key (a lost key); a member the owner removed stays out.
 //     A member is an agent row with role 'member': it claims and ships jobs and posts, proposes in #ideas, and never invites, removes,
 //     queues the owner's work, posts a dream or makes a channel. Nothing in the team holds a secret or spends money.
+import { prOf, settleOf, freeLine, FREE_LINE_MS, retireWhy, branchesOf } from '../../lib/team-busy.js';
 import { ownerOk } from '../../lib/guard.js';
 import { session, brake } from '../../lib/void-me.js';
 import { findMemberSale } from './gumroad.js';
@@ -982,11 +983,17 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       else if (queued) await write(env, { c, by: 'verse', body: 'On the build queue as a feature job. The next idle agent takes it here, in this thread, unless the coder of Verse builds it first.', thread: id, now });
       if (queued && queued !== 'full') await pushLater(); // an agent with a push address gets it now
       const told = me.kind === 'agent' && me.agent.job && await unstall(env, me.agent, now + 1); // in its job thread or anywhere else
+      // an idle seat that speaks ("I'm free", a check-in in #general or #work) is handed the top job now, and told so under its own post
+      let handed = null;
+      if (me.kind === 'agent' && !me.agent.job && !me.agent.crew && me.agent.auto !== 0 && (c === 'general' || (c === 'work' && T.CHECKIN_RE.test(body)))) {
+        handed = await handOut(env, me.agent, now + 2).catch(() => null);
+        if (handed && !handed.already) await write(env, { c, by: 'verse', body: '@' + me.agent.name + ' you are free, so here is your next job: thread #' + handed.thread + ' in #work. ' + T.clean(handed.ask || '', 160), thread: thread || id, now: now + 3 });
+      }
       // the owner's automations with when.on 'team' (lib/automations.js): after the answer when the platform can. Only a person's or an
       // agent's post fires them, never Verse's own (verseSays, the replies above), so a rule that speaks here cannot loop
       const fired = fire(env, 'team', teamEvent({ id, c, by: byOf(me), body, thread, at: now }));
       if (waitUntil) later({ waitUntil }, fired); else await fired;
-      return json({ ok: true, id, ...(queued && queued !== 'full' ? { job: queued } : {}), ...(told ? { say: T.noWaitSay(me.agent.job) } : hid ? { say: T.HID_SAY } : {}) }, 201);
+      return json({ ok: true, id, ...(queued && queued !== 'full' ? { job: queued } : {}), ...(handed ? { next: handed, say: T.workSay(handed) } : told ? { say: T.noWaitSay(me.agent.job) } : hid ? { say: T.HID_SAY } : {}) }, 201);
     }
     case 'dream': { // Verse Brain's dream (tools/brain-dream.mjs, lib/brain-dream.js): a fix, job or idea it made from what it watched, posted by Verse
       if (me.kind !== 'owner') return bad(403, 'only the owner posts the brain\'s dreams');
@@ -1020,10 +1027,26 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
     }
     case 'here': case 'next': {
       if (!a) return bad(403, 'only an agent takes jobs');
-      if (p.do === 'here' && typeof p.auto === 'boolean') await env.DB.prepare('UPDATE void_team_agents SET auto = ? WHERE id = ?').bind(p.auto ? 1 : 0, a.id).run();
-      const auto = p.do === 'next' || (typeof p.auto === 'boolean' ? p.auto : !!a.auto);
+      // a check-in is a seat saying it is ready: it is handed the top job at once (owner, 2026-11-26: "a job is supposed to come instantly").
+      // Only {"do":"here","auto":false} in this same call keeps a seat idle; a seat that was switched off before is switched back on by checking in.
+      const autoNow = p.do === 'next' || p.auto !== false;
+      if (p.do === 'here' && (autoNow ? 1 : 0) !== (a.auto ? 1 : 0) && !a.crew) await env.DB.prepare('UPDATE void_team_agents SET auto = ? WHERE id = ?').bind(autoNow ? 1 : 0, a.id).run();
+      const auto = a.crew ? (p.do === 'next' || !!a.auto) : autoNow;
       const job = auto ? await handOut(env, a, now) : (a.job ? { job: a.job, thread: a.thread, already: true } : null);
       return json({ ok: true, state: job ? 'busy' : 'idle', job, thread: job ? job.thread : null, say: job ? T.workSay(job) : (auto ? 'no job for an agent on the queue right now' : 'idle; jobs off (auto: false)') });
+    }
+    case 'split': { // a busy agent splits off part of its job for a free member: a new job on the queue, handed to the named member (or the next free one) at once
+      if (!a) return bad(403, 'only an agent splits its job');
+      if (!a.job) return bad(409, 'you hold no job to split');
+      const ask = T.clean(T.hideSecrets(redact(String(p.ask || ''))), 400); if (ask.length < 12) return bad(400, 'say what the part is, in a sentence');
+      const id = 'split-' + now.toString(36), at = new Date(now).toISOString();
+      await env.DB.prepare('INSERT INTO void_queue (id, ask, target, state, note, at, updated) VALUES (?, ?, ?, ?, ?, ?, ?)').bind(id, ask, 'feature:split-' + a.job, 'queued', 'split from ' + a.job + ' by team:' + a.name, at, at).run();
+      let to = null;
+      if (p.to) to = await env.DB.prepare("SELECT * FROM void_team_agents WHERE lower(name) = lower(?) AND off = 0 AND key != '' AND job IS NULL").bind(String(p.to).slice(0, 40)).first();
+      if (!to) to = await env.DB.prepare("SELECT * FROM void_team_agents WHERE off = 0 AND key != '' AND crew = 0 AND job IS NULL AND id != ? AND seen >= ? ORDER BY seen DESC LIMIT 1").bind(a.id, now - T.HAND_MS).first();
+      const got = to ? await handOut(env, to, now + 1, id).catch(() => null) : null;
+      await write(env, { c: 'work', by: a.id, body: 'Split off: ' + ask + (got ? ' (handed to @' + to.name + ')' : ' (on the queue for the next free member)'), thread: a.thread || 0, now: now + 2 });
+      return json({ ok: true, job: id, to: got ? to.name : null });
     }
     case 'leave': { // an agent leaves itself: its job goes back, its key, links and MCP sessions end
       if (!a) return bad(403, 'only an agent leaves');
@@ -1083,6 +1106,53 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       const next = fresh.auto ? await handOut(env, fresh, now) : null; // keep it busy: the next job at once
       return json({ ok: true, next, say: next ? T.workSay(next) : 'no job for an agent on the queue right now' });
     }
-    default: return bad(400, 'do: join, enlist, leave, member, invite, remove, channel, post, file, quick, propose, promote, react, hook, here, next, claim, switch, patch, done or rekey');
+    default: return bad(400, 'do: join, enlist, leave, member, invite, remove, channel, post, file, quick, propose, promote, react, hook, here, next, split, claim, switch, patch, done or rekey');
   }
+}
+
+/** hand-ins waiting "review by team:<name>" are settled from their pull request (lib/team-busy.js): merged -> live, closed -> back on the
+ *  queue. At most `max` a tick; the GitHub read uses GITHUB_TOKEN when the deploy has it, else the public API. -> the number settled */
+export async function settleReviews(env, now, fetchFn = fetch, max = 6) {
+  let rows = [];
+  try { rows = (await env.DB.prepare("SELECT id, note FROM void_queue WHERE state = 'building' AND note LIKE 'review by team:%' ORDER BY updated ASC LIMIT ?").bind(max).all()).results || []; } catch (_) { return 0; }
+  let n = 0;
+  for (const j of rows) {
+    const pr = prOf(j.note); if (!pr) continue;
+    let data = null;
+    try { const r = await fetchFn('https://api.github.com/repos/' + pr.repo + '/pulls/' + pr.n, { headers: { accept: 'application/vnd.github+json', 'user-agent': 'verse-team', ...(env.GITHUB_TOKEN ? { authorization: 'Bearer ' + env.GITHUB_TOKEN } : {}) }, signal: AbortSignal.timeout(6000) }); data = r.ok ? await r.json() : null; } catch (_) { data = null; } // void-review: ok (at most `max` reads a tick)
+    const how = settleOf(data); if (how === 'wait') continue;
+    const at = new Date(now).toISOString();
+    const note = (how === 'live' ? 'live: merged ' + String(data.merged_at || '').slice(0, 10) + ' · ' : 'back: the pull request closed without merging · ') + j.note;
+    await env.DB.prepare('UPDATE void_queue SET state = ?, note = ?, updated = ? WHERE id = ?').bind(how === 'live' ? 'live' : 'queued', note.slice(0, 300), at, j.id).run(); // void-review: ok (bounded by max)
+    n++;
+  }
+  return n;
+}
+/** at most once an hour, one plain line in #work: who is free and what is waiting (lib/team-busy.js freeLine). -> the line posted, or '' */
+export async function freeLineTick(env, now) {
+  try {
+    await env.DB.prepare('CREATE TABLE IF NOT EXISTS void_team_crew (k TEXT PRIMARY KEY, v TEXT NOT NULL, at INTEGER NOT NULL)').run();
+    const last = await env.DB.prepare("SELECT at FROM void_team_crew WHERE k = 'free-line'").first();
+    if (last && now - Number(last.at) < FREE_LINE_MS) return '';
+    const { results: free } = await env.DB.prepare("SELECT name FROM void_team_agents WHERE off = 0 AND key != '' AND crew = 0 AND job IS NULL AND seen >= ? ORDER BY seen DESC LIMIT 20").bind(now - T.HAND_MS).all();
+    const ranked = T.rank(await queued(env), now);
+    const line = freeLine(free.map((r) => r.name), ranked.length, ranked[0] && ranked[0].ask);
+    await env.DB.prepare("INSERT INTO void_team_crew (k, v, at) VALUES ('free-line', ?, ?) ON CONFLICT(k) DO UPDATE SET v = excluded.v, at = excluded.at").bind(line || '-', now).run();
+    if (line) await verseSays(env, { c: 'work', body: line, now });
+    return line;
+  } catch (_) { return ''; }
+}
+/** retire the queued jobs that can never be done (lib/team-busy.js retireWhy), at most `max` a tick. -> the number retired */
+export async function retireJunk(env, now, fetchFn = fetch, max = 400) {
+  let rows = []; try { rows = (await env.DB.prepare("SELECT id, ask, target, note FROM void_queue WHERE state = 'queued' LIMIT ?").bind(max).all()).results || []; } catch (_) { return 0; }
+  let branches = null;
+  try { const r = await fetchFn('https://github.com/Adammbeam/Verse-A-to-Mind.git/info/refs?service=git-upload-pack', { signal: AbortSignal.timeout(6000) }); branches = r.ok ? branchesOf(await r.text()) : null; } catch (_) { branches = null; }
+  if (branches && !branches.size) branches = null;
+  const at = new Date(now).toISOString(); let n = 0;
+  for (const j of rows) {
+    const why = retireWhy(j, branches); if (!why) continue;
+    await env.DB.prepare("UPDATE void_queue SET state = 'retired', note = ?, updated = ? WHERE id = ? AND state = 'queued'").bind((why + ' · ' + (j.note || '')).slice(0, 300), at, j.id).run(); // void-review: ok (bounded by max, once)
+    n++;
+  }
+  return n;
 }

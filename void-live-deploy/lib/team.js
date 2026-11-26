@@ -38,7 +38,9 @@ export const AWAY_MS = 10 * 60e3; // no word from an agent for this long: its ca
 // and shorter than STALE_MS so a seat that went quiet with a job has it taken back before it could be handed another. Owner, 2026-11-24:
 // 265 jobs waited while 0 of 42 seats worked, because this window was the same 10 minutes as the tick.
 export const HAND_MS = 20 * 60e3;
-export const STALE_MS = 30 * 60e3; // an agent away this long with a job gives it back to the queue
+export const STALE_MS = 30 * 60e3;
+// a #work post that says the seat is ready for work (a post in #general from an idle seat always counts as a check-in)
+export const CHECKIN_RE = /\b(?:ready|free|idle|available|checking in|check-in|what'?s next|any jobs?|need (?:a |some )?work)\b/i; // an agent away this long with a job gives it back to the queue
 // self-join (owner, 2026-11-25: "make it so the agents can add themselves to verses team easily"): an agent joins with one call and no link,
 // role 'self'. A self-joined seat with no job and no word for this long leaves on its own (api/team.js reapSelf), so a seat nobody uses
 // never holds a place under RATES.agents. Longer than STALE_MS, so a seat that was handed a job loses the job first, then the seat.

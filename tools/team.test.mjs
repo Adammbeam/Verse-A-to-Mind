@@ -223,12 +223,12 @@ test('a finished-work line is one sentence from the pull request title, and Towe
 test('the team chat card on the stage (skills/team-chat.js): takes the team-chat asks, not plain chat, and lists agents busy first', () => {
   for (const a of chatSkill.examples) assert.ok(chatSkill.match(a.toLowerCase()), a);
   for (const a of chatSkill.nearMisses) assert.ok(!chatSkill.match(a.toLowerCase()), a);
-  const t = teamLines({ members: [{ name: 'Idle', state: 'idle' }, { name: 'Busy', state: 'busy', now: 'Working on a page' }, { name: 'TowerScout', state: 'idle', crew: true, done: 33 }], asks: [{ id: 'team-1', state: 'queued', title: 'Add a tide table' }], feed: [{ text: 'GLM shipped a page. On the site.', href: 'https://github.com/atomeam/void-loop/pull/1' }], waiting: 4 });
+  const t = teamLines({ members: [{ name: 'Idle', state: 'idle' }, { name: 'Busy', state: 'busy', now: 'Working on a page' }, { name: 'TowerScout', state: 'idle', crew: true, done: 33 }], asks: [{ id: 'team-1', state: 'queued', title: 'Add a tide table' }], feed: [{ text: 'GLM shipped a page. On the site.', live: true, href: 'https://github.com/Adammbeam/Verse-A-to-Mind/pull/1' }, { text: 'Not live yet.', live: false, href: 'https://github.com/Adammbeam/Verse-A-to-Mind/pull/2' }], waiting: 4 });
   assert.deepEqual(t.builders.map((a) => a.name), ['Busy', 'Idle']);
   assert.equal(t.asks[0].title, 'Add a tide table');
   assert.equal(t.feed.length, 1);
-  assert.equal(t.waiting, 4); assert.equal(t.busy, 1); assert.equal(t.busiest, 'Busy');
-  assert.deepEqual(teamLines(null), { builders: [], asks: [], feed: [], waiting: 0, busy: 0, busiest: '' }, 'an answer that is not the workspace shows nothing made up');
+  assert.equal(t.waiting, 4); assert.equal(t.busy, 1); assert.equal(t.busiest, '', 'busiest only from finished jobs; the crew is not a builder');
+  assert.deepEqual(teamLines(null), { builders: [], asks: [], feed: [], waiting: 0, busy: 0, busiest: '', busiestDone: 0 }, 'an answer that is not the workspace shows nothing made up');
 });
 
 test('a headless team chat does not throw when the read has no page', async () => {
@@ -628,8 +628,7 @@ test('the waiting jobs move without asking: an idle agent that reads is handed t
   // past HAND_MS it is handed nothing: the job would only wait on it
   const env3 = world([JOBS[0]]), eff = (await admit(env3, 'Eff')).key;
   assert.equal((await post(env3, { do: 'post', c: 'general', body: 'hi' }, eff)).status, 201);
-  const gone = await get(env3, '', null, T0 + T.HAND_MS + 1000);
-  assert.equal(gone.waiting, 1); assert.equal(job(env3, 'j1').state, 'queued', 'a seat silent past HAND_MS is handed nothing');
+  assert.equal(job(env3, 'j1').state, 'building', 'a post in #general from a free seat is a check-in: the job comes at once');
   assert.ok(T.HAND_MS > T.AWAY_MS && T.HAND_MS < T.STALE_MS, 'the hand-out window sits between the away label and the take-back');
 });
 test('a pull seat heard from within 20 minutes gets a job; a paused, off, held or crew seat and a 20-minute-old silence do not', async () => {
