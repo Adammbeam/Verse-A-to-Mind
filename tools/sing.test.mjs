@@ -144,7 +144,7 @@ test('the Modal app: keyed endpoint, one GPU at most, scales down, the example c
   assert.match(py, /scaledown_window=60/);
   assert.match(py, /modal-examples.*MIT/s);
   assert.match(py, /ACE-Step-1\.5.*MIT/s);
-  const wf = readFileSync(new URL('../.github/workflows/modal-sing.yml', import.meta.url), 'utf8');
+  const wf = readFileSync(new URL('../.github/workflows-parked/modal-sing.yml', import.meta.url), 'utf8');
   assert.match(wf, /::add-mask::\$key/);
   assert.match(wf, /--from-json/, 'the key is never on a command line');
   assert.doesNotMatch(wf, /echo "\$key"|echo \$key/);

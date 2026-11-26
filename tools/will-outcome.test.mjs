@@ -84,7 +84,7 @@ test('one pull request is one try: deferred then declined moves the SAME job, an
 });
 
 test('the workflow that runs it watches closed pull requests and passes no write token to anything a model wrote', () => {
-  const wf = lf(readFileSync(new URL('../.github/workflows/will-outcome.yml', import.meta.url), 'utf8'));
+  const wf = lf(readFileSync(new URL('../.github/workflows-parked/will-outcome.yml', import.meta.url), 'utf8'));
   assert.match(wf, /types: \[closed\]/);
   assert.match(wf, /run: node tools\/will-outcome\.mjs --event closed/);
   assert.match(wf, /VOID_OWNER_TOKEN: \$\{\{ secrets\.VOID_OWNER_TOKEN \}\}/);

@@ -12,6 +12,7 @@ import { CHANGE_BODY } from './image-gen.js';
 export const WINDOW_MS = 60e3;
 // rpm: requests per connection per minute on that route. body: the largest request body accepted, in bytes.
 export const LIMITS = {
+  proposals: { rpm: 30, body: 220000 }, // patch hand-ins (functions/api/proposals.js): up to MAX_DIFF (200 KB) plus JSON fields; forge token or owner
   treasury: { rpm: 30, body: 2000 }, // Verse's treasury (functions/api/treasury.js): public reads, owner-only small JSON actions
   credits: { rpm: 30, body: 2000 }, // internal credits (functions/api/credits/): a claim or the public feed, no payout
   mcp: { rpm: 60, body: 64000 }, // Verse as an MCP server (functions/api/mcp.js): read-only tools; a review_code call carries up to 60,000 characters of code
