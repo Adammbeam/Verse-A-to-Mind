@@ -545,10 +545,10 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
 
   if (modelsOn(env)) return modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, told, edgeKeep, before, !!offered, talk);
   if (self) {
-    // no model: the facts themselves are the answer (Wikipedia knows nothing about Verse)
+    // no model: the facts themselves are the answer (Wikipedia knows nothing about Verse — never fall through to fromWeb even if assets are empty)
     const got = await readSelf(env, new URL(request.url).origin);
     const facts = withAim(selfFacts(got), got && got.self, ask);
-    if (facts) return Response.json({ answer: facts, sources: [], at: new Date().toISOString(), self: true });
+    return Response.json({ answer: facts || '(my facts could not be read just now)', sources: [], at: new Date().toISOString(), source: 'self', self: true });
   }
   if (told) return Response.json({ answer: 'From what you told me:\n' + told.map((l) => '• ' + l).join('\n'), sources: [], at: new Date().toISOString(), told: told.length });
   const src = await sources(ask);
@@ -742,7 +742,9 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
         // no paid path: the open-web answer, as with the switch off (for an ask about Verse: its facts)
         const web = own ? await ownBody('') : self ? withAim(facts, (await selfP) && (await selfP).self, ask) : told ? 'From what you told me:\n' + told.map((l) => '• ' + l).join('\n') : fromWeb(src);
         await log({ model: null, outcome: outcome + '; model busy, open web' + (access.model ? '' : '; paid: ' + access.why), would: PAID_MODEL });
-        if (!web) return Response.json({ answer: null, sources: [], note: 'nothing on the web', route: route.kind, ...nearOut });
+        if (!web) return self
+          ? Response.json({ answer: '(my facts could not be read just now)', sources: [], at: new Date().toISOString(), route: route.kind, source: 'self', ...nearOut, note: 'model busy, my own facts', self: true })
+          : Response.json({ answer: null, sources: [], note: 'nothing on the web', route: route.kind, ...nearOut });
         if (own) keepCard(web);
         return Response.json({ answer: web, sources: pub, at: new Date().toISOString(), route: route.kind, source: self ? 'self' : told ? 'told' : 'open-web:wikipedia', ...nearOut, note: self ? 'model busy, my own facts' : told ? 'model busy, from what you told me' : 'model busy, from the web', ...(self ? { self: true } : {}), ...(told ? { told: told.length } : {}) });
       }
