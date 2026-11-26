@@ -6,7 +6,7 @@
 const W = 1200, H = 400;
 
 export function howToAskBanner() {
-  const ink = '#2b241c';
+  const ink = 'rgba(180,200,230,0.25)'; // the book's one schematic hairline colour (tools/book-art.mjs: strokes only, no fills)
   const stroke = (w = 2.4, op = 0.72, cap = 'round') => 'stroke="' + ink + '" stroke-width="' + w + '" stroke-opacity="' + op + '" fill="none" stroke-linecap="' + cap + '" stroke-linejoin="round"';
   // ask bar -> three arcs -> three silhouettes
   const beams = [
@@ -46,13 +46,13 @@ export function howToAskBanner() {
     +   ticks
     +   '<line x1="600" y1="150" x2="632" y2="122" ' + stroke(2.6, 0.6) + '/>'
     +   '<circle cx="600" cy="150" r="6" ' + stroke(2.0, 0.55) + '/>'
-    +   '<circle cx="632" cy="122" r="5" fill="' + ink + '" fill-opacity="0.18" ' + stroke(1.6, 0.45) + '/>'
+    +   '<circle cx="632" cy="122" r="5" fill="none" ' + stroke(1.6, 0.45) + '/>'
     + '</g>'
     // grid board (right)
     + '<g transform="translate(810 110)">'
     +   '<rect x="0" y="0" width="144" height="96" rx="10" ' + stroke(2.4, 0.6) + '/>'
     +   grid
-    +   '<rect x="36" y="24" width="36" height="24" rx="4" fill="' + ink + '" fill-opacity="0.08" ' + stroke(1.4, 0.3) + '/>'
+    +   '<rect x="36" y="24" width="36" height="24" rx="4" fill="none" ' + stroke(1.4, 0.3) + '/>'
     + '</g>'
     // ask bar at the foot
     + '<g>'
