@@ -534,3 +534,11 @@ async function drawFree() {
   } catch (_) { el.innerHTML = '<li><span class="row muted">The free bots did not load. <a href="/tools.json">See /tools.json</a></span></li>'; }
 }
 if (typeof document !== 'undefined') drawFree();
+
+if (typeof document !== 'undefined') {
+  const b = document.getElementById('copyBring'), pr = document.getElementById('bringPrompt'), say = document.getElementById('bringSay');
+  if (b && pr) b.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(pr.textContent.trim()); if (say) say.textContent = 'Copied.'; }
+    catch (_) { if (say) say.textContent = 'Select the prompt above to copy.'; }
+  });
+}

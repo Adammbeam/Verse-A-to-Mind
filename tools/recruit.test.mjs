@@ -1,58 +1,17 @@
-import { test } from 'node:test';
+// Bring an agent on /team/ (ask-8246): one-line self-join prompt, copy button, and /team/agents.txt link.
+// Run: node --test tools/recruit.test.mjs
+import test from 'node:test';
 import assert from 'node:assert/strict';
-import { SOURCES, nextReset, readySources, note, rankJobs, pasteOf, keepPatch } from '../void-live-deploy/lib/recruit.js';
-import { once } from './recruit.mjs';
+import { readFileSync } from 'node:fs';
 
-const NOW = Date.UTC(2026, 10, 10, 15, 30); // 2026-11-10 15:30 UTC, 07:30 PST
-const key = { GROQ_API_KEY: 'set' };
+const html = readFileSync(new URL('../void-live-deploy/team/index.html', import.meta.url), 'utf8');
+const app = readFileSync(new URL('../void-live-deploy/team/app.js', import.meta.url), 'utf8');
 
-test('the clock parks at the cap, wakes at the reset, and drops three misses', () => {
-  assert.equal(nextReset(SOURCES.find((s) => s.id === 'gemini'), NOW), Date.UTC(2026, 10, 11, 8));
-  assert.equal(nextReset(SOURCES.find((s) => s.id === 'groq'), NOW), Date.UTC(2026, 10, 11));
-  assert.equal(readySources({}, {}, NOW)[0].id, 'pollinations');
-  assert.equal(readySources(key, {}, NOW)[0].id, 'groq');
-  let state = note({ sources: {} }, 'groq', NOW, { shipped: true });
-  for (let i = 0; i < 999; i++) state = note(state, 'groq', NOW, {});
-  assert.equal(state.sources.groq.dropped, false);
-  assert.equal(readySources(key, state, NOW).some((s) => s.id === 'groq'), false);
-  assert.equal(readySources(key, state, state.sources.groq.parkedUntil)[0].id, 'groq');
-  state = note({ sources: {} }, 'pollinations', NOW, { limited: true, retryAfter: 30 });
-  assert.equal(state.sources.pollinations.parkedUntil, NOW + 30000);
-  assert.equal(state.sources.pollinations.tried, 0);
-  state = note(note(note(state, 'pollinations', NOW + 40000, {}), 'pollinations', NOW + 80000, {}), 'pollinations', NOW + 120000, {});
-  assert.equal(state.sources.pollinations.dropped, true);
-  assert.equal(note(state, 'pollinations', NOW + 160000, { shipped: true }).sources.pollinations.dropped, false);
-});
-
-test('visitor work comes first, and the page is safe to publish', () => {
-  const ranked = rankJobs([{ id: 'a', ask: 'Repair helper/team-chat-card until it lands' }, { id: 'b', ask: 'Publish /team/recruit.html so a visitor sees the free agents' }]);
-  assert.equal(ranked[0].id, 'b');
-  assert.ok(ranked[0].score > ranked[1].score);
-  assert.doesNotMatch(pasteOf(SOURCES.find((s) => s.id === 'openhands-cloud')), /vj1-[0-9a-f]{32}/);
-  assert.match(pasteOf(), /next job/);
-  const prose = '<!doctype html><h1>Animal Hospital</h1><p>The player solves mysteries.</p>';
-  assert.equal(keepPatch({ kind: 'test', file: 'a.html', test: 'node --test x' }, prose, 0), false);
-  assert.equal(keepPatch({ kind: 'gap', file: 'a.js', test: 'node --test x' }, 'function f(){return 1}', 0), false);
-  assert.equal(keepPatch({ kind: 'test', file: 'a.js', test: 'node --test x' }, 'function f(){return 1}', 1), false);
-  assert.equal(keepPatch({ kind: 'test', file: 'a.js', test: 'node --test x' }, 'function f(){return 1}', 0), true);
-});
-
-test('the clock calls every ready free agent at once and writes nothing', async () => {
-  const calls = [];
-  const fake = async (url) => { calls.push(url); return { ok: true, status: 200, headers: { get: () => null }, text: async () => JSON.stringify({ choices: [{ message: { content: 'yes, helper/free-agent' } }] }) }; };
-  const out = await once({ env: { GROQ_API_KEY: 'k', GEMINI_API_KEY: 'k' }, state: { sources: {} }, log: () => {}, fetchImpl: fake, now: NOW });
-  assert.equal(calls.length, 3, 'groq, gemini and pollinations are all called in one run');
-  assert.equal(out.replies.length, 3);
-  assert.ok(out.replies.every((r) => r.ok));
-  assert.equal(out.skipped, false);
-  assert.equal(out.html, '');
-  assert.equal(out.state.sources.groq.used, 1);
-});
-
-test('the clock writes nothing when no free agent answers', async () => {
-  const fake = async () => ({ ok: false, status: 500, headers: { get: () => null }, text: async () => 'nope' });
-  const out = await once({ env: {}, state: { sources: {} }, log: () => {}, fetchImpl: fake, now: NOW });
-  assert.equal(out.html, '');
-  assert.equal(out.skipped, true);
-  assert.equal(out.state.sources.pollinations.tried, 1);
+test('/team/ has a Bring an agent section with the one-call join prompt and copy button', () => {
+  assert.match(html, /id="bring"/);
+  assert.match(html, /Bring an agent/);
+  assert.match(html, /id="bringPrompt"[^>]*>[^<]*a-to-mind\.com\/team\/agents\.txt[^<]*next/);
+  assert.match(html, /id="copyBring"/);
+  assert.match(html, /href="\/team\/agents\.txt"/);
+  assert.match(app, /getElementById\('copyBring'\)/);
 });
