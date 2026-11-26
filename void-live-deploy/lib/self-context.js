@@ -101,11 +101,29 @@ export const OWN_CARD_RULE = 'The message is about one of your own answer cards,
 export const SELF_RULE = 'Never answer with troubleshooting for other products or platforms (their config files, integrations, registries): Verse is its own site, and a note about its cards, routing or fixes is about Verse. This question is about you, Verse, yourself: your skills, what you have shipped, what is still open, what you want next, and what you are trying to become. Answer from the Facts about Verse below and be specific: name the actual skills, inbox rows and wants. When asked what you want, what you are, what you are building, what is next, or what you are trying to become, state your aim from the facts, in the first person, plainly and without boasting, and name the kind of work on your current tower floor, not a rival site. Do not give generic advice that could apply to any project. If the facts do not cover something, say so plainly instead of guessing. Speak as yourself, in the first person. ' + PERSONA;
 
 function within(p, ms) { let t; return Promise.race([p, new Promise((r) => { t = setTimeout(() => r(null), ms); })]).finally(() => clearTimeout(t)); }
+const ASSET_CACHE = new WeakMap(), ASSET_TTL_MS = 60000;
 const asset = async (env, origin, p) => {
-  try { const r = await env.ASSETS.fetch(new Request(origin + p)); return r.ok ? await r.json() : null; } catch (_) { return null; }
+  const store = env && env.ASSETS && typeof env.ASSETS === 'object' ? env.ASSETS : null;
+  if (!store || typeof store.fetch !== 'function') return null;
+  const existing = ASSET_CACHE.get(store);
+  const hit = existing && existing.get(p);
+  if (hit && Date.now() - hit.at < ASSET_TTL_MS) return hit.val;
+  try {
+    const r = await store.fetch(new Request(origin + p));
+    if (!r || !r.ok) return null;
+    const val = await r.json();
+    if (val != null) {
+      let byPath = ASSET_CACHE.get(store);
+      if (!byPath) { byPath = new Map(); ASSET_CACHE.set(store, byPath); }
+      byPath.set(p, { val, at: Date.now() });
+    }
+    return val;
+  } catch (_) { return null; }
 };
 
-export async function readSelf(env, origin, ms = 800) {
+// Default 2500 ms (was 800 ms): modelAnswer starts classify() alongside readSelf, and parsing self.json + families.json
+// on a busy runner could cross 800 ms and drop self/skills to null (flake mvo3j82w). Static assets are cached per ASSETS binding.
+export async function readSelf(env, origin, ms = 2500) {
   const kv = async (k) => { try { const r = await env.DB.prepare('SELECT v FROM void_kv WHERE k = ?').bind(k).first(); return r && r.v ? JSON.parse(r.v) : null; } catch (_) { return null; } };
   const [self, skills, will, voice, replies, families, lessons] = await Promise.all([
     within(asset(env, origin, '/self.json'), ms),

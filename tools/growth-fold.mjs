@@ -6,6 +6,7 @@
 //   node tools/growth-fold.mjs --dry      say what would be folded, write nothing
 import { readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { LEDGER, ENTRIES, readEntries, foldInto, entryProblem, ledgerProblems } from './grow.mjs';
 
 export function fold({ ledger = LEDGER, dir = ENTRIES, keep = false, dry = false } = {}) {
@@ -19,7 +20,7 @@ export function fold({ ledger = LEDGER, dir = ENTRIES, keep = false, dry = false
   return { folded, files: waiting.length };
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === resolve(new URL(import.meta.url).pathname)) {
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const a = process.argv.slice(2);
   try { const r = fold({ keep: a.includes('--keep'), dry: a.includes('--dry') }); console.log('growth-fold: ' + r.files + ' file' + (r.files === 1 ? '' : 's') + ', ' + r.folded + ' new in the ledger' + (a.includes('--dry') ? ' (dry run)' : '')); }
   catch (e) { console.error('growth-fold: ' + e.message); process.exit(1); }
