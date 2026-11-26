@@ -1,0 +1,27 @@
+name: Verse merge
+
+on:
+  pull_request:
+    types: [labeled, opened, synchronize, reopened, ready_for_review]
+  workflow_run:
+    workflows: ["Verse check"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+
+jobs:
+  merge:
+    if: contains(github.event.pull_request.labels.*.name, 'automerge') || (github.event.workflow_run && github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: automerge
+        run: node tools/automerge.mjs
