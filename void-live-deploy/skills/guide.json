@@ -4834,10 +4834,11 @@
    "chapter": "words",
    "name": "sports-browse",
    "title": "Sports browse",
-   "line": "\"browse sports\", \"list of sports\": the sports Verse can show live scores for, and where the rest are",
+   "line": "\"browse sports\", \"list of sports\", or bare \"scores\": the sports Verse can show live scores for, and where the rest are",
    "examples": [
     "browse sports",
-    "list of sports"
+    "list of sports",
+    "scores"
    ],
    "tier": "proven",
    "why": "a self-test, 4 real asks in the benchmark",
