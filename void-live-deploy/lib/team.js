@@ -69,12 +69,27 @@ export const memberAsk = (job) => /^ask-\d+$/.test(String(job && job.id || '')) 
 /** an ask as dedupe compares it: lower case, words only */
 export const askKey = (s) => String(s || '').toLowerCase().replace(/https?:\/\/\S+/g, (u) => u.replace(/[?#].*$/, '')).replace(/[^a-z0-9:/.]+/g, ' ').trim().slice(0, 200);
 export const ownerAsk = (job) => /^team-\d+$/.test(String(job && job.id || '')) && String(job.target || '') === 'feature:' + job.id;
-/** the queued jobs an agent may take, best first: the owner's #work asks before every background job, oldest first, then the rest by worth;
+/** a week: the window a met want is kept, and the age window for a self-filed job's lift past stale background work */
+export const WEEK_MS = 7 * 864e5;
+/** a job Verse filed for itself (id want-*, or noted as wanted by Verse's brain) */
+export const selfFiled = (job) => /^want-/.test(String(job && job.id || '')) || /wanted by Verse's brain/i.test(String((job && job.note) || ''));
+/** the queued jobs an agent may take, best first. Three tiers: the owner's #work asks (oldest first), then the rest, then by worth.
+ *  Inside the second tier, a self-filed job sorts ahead of background jobs older than a week, only while the self-filed job itself
+ *  is under a week old; after that it falls back to the usual order (worth, then oldest first). Never above the owner's asks.
  *  skip: job ids this agent gave back or failed (it gets another) */
 export function rank(jobs, now, skip = []) {
   const no = new Set(skip);
+  const age = (j) => now - msOf(j && j.at);
+  const lift = (j) => selfFiled(j) && age(j) < WEEK_MS;
+  const staleBg = (j) => !selfFiled(j) && age(j) > WEEK_MS;
   return (jobs || []).filter((j) => j && j.state === 'queued' && TEAM_KINDS.includes(kindOf(j.target)) && !no.has(j.id) && triesOf(j.note) < MAX_TRIES)
-    .map((j) => ({ j, o: ownerAsk(j) ? 1 : 0, s: score(j, now) })).sort((a, b) => b.o - a.o || (a.o ? 0 : b.s - a.s) || msOf(a.j.at) - msOf(b.j.at)).map((x) => x.j);
+    .map((j) => ({ j, o: ownerAsk(j) ? 1 : 0, s: score(j, now) })).sort((a, b) => {
+      if (a.o !== b.o) return b.o - a.o;
+      if (a.o) return msOf(a.j.at) - msOf(b.j.at);
+      const aUp = lift(a.j) && staleBg(b.j), bUp = lift(b.j) && staleBg(a.j);
+      if (aUp !== bUp) return aUp ? -1 : 1;
+      return b.s - a.s || msOf(a.j.at) - msOf(b.j.at);
+    }).map((x) => x.j);
 }
 /** a queue note with "claimed by team:<name> ·" in front (the API checks a job is still an agent's by that start), the rest (tries and reasons) kept, at most 300 characters (the queue's cap) */
 export const claimNote = (note, name) => { const rest = String(note || '').replace(/^claimed by [^·]*·?\s*/i, '').trim(); return ('claimed by team:' + name + ' ·' + (rest ? ' ' + rest : '')).slice(0, 300); };

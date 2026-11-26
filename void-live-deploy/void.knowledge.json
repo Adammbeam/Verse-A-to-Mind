@@ -1,5 +1,14 @@
 [
   {
+    "id": "page:live-check-mcp-https-a-to-mind-com-api-mcp",
+    "from": "page",
+    "consumed": "live check: mcp (https://a-to-mind.com/api/mcp)",
+    "learned": "2026-11-25: worked; 30 tools listed",
+    "retain": "mcp depends on https://a-to-mind.com/api/mcp; its newest live check (2026-11-25) worked",
+    "at": "2026-11-25T05:02:27.340Z",
+    "seen": 1
+  },
+  {
     "id": "page:live-check-image-gen-a-to-mind-com-api-image-and",
     "from": "page",
     "consumed": "live check: image-gen (a-to-mind.com /api/image and /image/ (FLUX.2 klein-4b on Workers AI, …)",
@@ -15,15 +24,6 @@
     "learned": "2026-11-18: did not work; asked \"is AI video on at a-to-mind.com right now, and does the video page serve\"; why: credits",
     "retain": "video-gen depends on a-to-mind.com /api/clip and /video/ (the partner video model behind them on Workers AI); its newest live check (2026-11-18) did not work (credits)",
     "at": "2026-11-18T07:53:39.053Z",
-    "seen": 1
-  },
-  {
-    "id": "page:live-check-mcp-https-a-to-mind-com-api-mcp",
-    "from": "page",
-    "consumed": "live check: mcp (https://a-to-mind.com/api/mcp)",
-    "learned": "2026-11-18: worked; 30 tools listed",
-    "retain": "mcp depends on https://a-to-mind.com/api/mcp; its newest live check (2026-11-18) worked",
-    "at": "2026-11-18T00:41:12.899Z",
     "seen": 1
   },
   {

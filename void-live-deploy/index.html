@@ -2771,15 +2771,15 @@ say('nothing selected to remove');
       const about = page ? (page.title ? '<div class="sub">about: ' + esc(page.title) + '</div>' : '') + '<div class="sub page-sent">this page was sent to a-to-mind.com for this answer · not kept</div>' : '';
       const el = showPage((p) => { p.innerHTML = '<h2>' + esc(head) + '</h2>' + about + '<div class="sub">thinking…</div>'; });
       say(page ? 'reading the page' : 'looking up');
-      let j = null, sentBefore = false;
+      let j = null, sentBefore = false, priorSent = null;
       try {
         // signed in (the owner's key or your own member session): your notes and projects are checked for this ask on the server (never for a page ask)
         const who = page ? '' : (() => { try { return localStorage.getItem('a2m.void.owner.v1') || (JSON.parse(localStorage.getItem('a2m.void.me.v1') || 'null') || {}).token || ''; } catch (_) { return ''; } })();
         // a follow-up goes with the ask it follows and the start of what Verse said then (lib/brain-dialogue.js builtOn, lib/follow-ask.js),
         // so "how was that mountain formed" is answered about the mountain asked about before; that answer is never cached
-        let built = null; try { const hb = window.verseBrainHost; built = !page && hb && hb.builtOn ? hb.builtOn(text) : null; } catch (_) { built = null; }
+        let built = null; try { const hb = window.verseBrainHost; built = !page && hb && hb.carried ? hb.carried(text) : null; } catch (_) { built = null; } // only an ask that cannot stand alone (lib/follow-ask.js carries)
         const before = built && built.kind === 'follow' && built.prior && built.prior.ask ? { ask: String(built.prior.ask).slice(0, 160), answer: String(built.prior.answer || '').slice(0, 240) } : null;
-        sentBefore = !!before;
+        sentBefore = !!before; priorSent = before ? built.prior : null;
         const r = await fetch('/api/answer', { method: 'POST', headers: who ? { 'content-type': 'application/json', authorization: 'Bearer ' + who } : { 'content-type': 'application/json' }, body: JSON.stringify(page ? { ask: text, page } : before ? { ask: text, before } : { ask: text }) });
         if (r.ok || r.status === 429) j = await r.json();
       } catch (_) {}
@@ -2812,7 +2812,7 @@ say('nothing selected to remove');
       }
       if (j.desc) { el.dataset.cardDesc = String(j.desc).slice(0, 160); el.dataset.cardExtract = String(j.answer).slice(0, 160); if (j.series) el.dataset.cardSeries = String(j.series).slice(0, 60); keepCard(el); } // the kind the source says it is types the card (lib/card-kinds.js)
       addCopy(el, false);
-      if (!page) recallNote(el, text, j.answer, sentBefore);
+      if (!page) recallNote(el, text, j.answer, sentBefore && j.followed === true ? priorSent : null);
       say('');
       return 'answer';
     }
@@ -2823,18 +2823,21 @@ say('nothing selected to remove');
       const d = new Date(at), n = new Date(), day = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime(), gap = Math.round((day(n) - day(d)) / 86400000);
       return gap <= 0 ? 'earlier today' : gap === 1 ? 'yesterday' : gap < 7 ? 'on ' + d.toLocaleDateString('en-US', { weekday: 'long' }) : 'on ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
-    function recallNote(el, text, answer, sentBefore) {
+    function recallNote(el, text, answer, used) {
       const h = window.verseBrainHost; if (!h || !h.answered) return;
       let r = null; try { r = h.answered(text, answer); } catch (_) { r = null; }
+      if (used && used.ask) r = { kind: 'follow', prior: used }; // the ask the answer was written with, whatever the orb linked it to
+      else if (r && r.kind === 'follow') r = null; // no follow-up line for an earlier ask that was not used
       if (!r || !r.kind || !r.prior) return;
       const p = r.prior, n = document.createElement('div'); n.className = 'sub recall'; n.dataset.recall = r.kind;
       n.style.cssText = 'margin:0 0 8px;padding:6px 10px;border-left:2px solid #5fb8c9;color:#9fc4cc;font-size:13px';
       if (r.kind === 'repeat') {
         n.textContent = 'You asked this ' + whenSaid(p.at) + '.' + (p.answer ? ' I said: \u201c' + p.answer + '\u201d ' + (r.same ? 'My answer is the same now.' : 'Since then my answer changed; this is the new one.') : ' I had no answer for it then.');
       } else {
-        n.append('Following on from your ask ' + whenSaid(p.at) + ': ');
+        // only when the answer was written with the earlier ask (the reply's `followed`): a card never claims a link it did not use
+        n.append('Read with your earlier ask ');
         const a = document.createElement('a'); a.href = '#'; a.dataset.ask = p.ask; a.textContent = '\u201c' + p.ask + '\u201d'; n.append(a);
-        if (sentBefore) n.append('. I sent that ask with this one, to read this one in its light; it is not kept, and this answer is not cached.');
+        n.append(', sent from this device for this answer only.');
       }
       const h2e = el.querySelector('h2'); if (h2e) { let after = h2e; while (after.nextElementSibling && after.nextElementSibling.classList.contains('sub')) after = after.nextElementSibling; after.after(n); } else el.prepend(n);
     }
@@ -5139,7 +5142,7 @@ say('nothing selected to remove');
     // card-share and every module it reaches, all asked for at once at page start: imported level by level, its four levels queued behind the
     // skill files the lanes had in flight, and every ask waits for it before it is routed (watchdog #110: on a busy page it arrived 5 to 6 s in)
     // share-libs: tools/preload.mjs /lib/card-share.js
-    const SHARE_LIB_GRAPH = ['/lib/card-share.js', '/lib/card-image.js', '/lib/art-source.js', '/lib/card-art.js', '/lib/card-subject.js', '/lib/guide.js', '/lib/rule-registry.js', '/lib/art-rules.js', '/lib/merge-rules.js', '/lib/keeper.js', '/lib/qr.js', '/lib/card-custom-art.js'];
+    const SHARE_LIB_GRAPH = ['/lib/card-share.js', '/lib/card-image.js', '/lib/art-source.js', '/lib/card-art.js', '/lib/card-subject.js', '/lib/guide.js', '/lib/rule-registry.js', '/lib/art-rules.js', '/lib/merge-rules.js', '/lib/keeper.js', '/lib/qr.js'];
     for (const p of SHARE_LIB_GRAPH.slice(1)) import(p).catch(() => null);
     const shareReady = lazyImport(() => import('/lib/card-share.js').catch(() => null));
     const pasteReady = lazyImport(() => import('/lib/paste-kind.js').catch(() => null)); // what a paste is: report, card, note, ask or unclear (docs/RULES.md)

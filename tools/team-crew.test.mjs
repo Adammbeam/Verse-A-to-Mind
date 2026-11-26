@@ -183,7 +183,7 @@ test('a TV or radio idea is built once, by the blueprint lane: the want adopts t
   const idea = { h: 'abc123def456', topic: 'Art provenance tracker', note: 'Track who owned a painting.', show: 'Antiques Roadshow', value_cents: 900 };
   const w = C.wantsOf({ ideas: [idea] }).find((x) => x.lane === 'idea');
   assert.equal(w.target, 'tv:art-provenance-tracker'); assert.equal(C.jobOf(w).target, 'tv:art-provenance-tracker', 'filed in the blueprint lane, never as a feature: job beside it');
-  assert.match(w.why, /\/photos\/exif\//, 'art provenance is a mode of the photo page');
+  assert.match(w.why, /\/photos\/details\//, 'art provenance is a mode of the photo page');
   const env = world(); await crewTick(env, T0);
   // an older want (filed before this) whose own feature: job waits beside the lane's tv: job for the same idea
   const ins = (id, target, state) => env.DB.raw.prepare('INSERT INTO void_queue (id, ask, target, state, note, at, updated) VALUES (?, ?, ?, ?, ?, ?, ?)').run(id, 'build it', target, state, '', '2026-11-04T00:00:00Z', '2026-11-04T00:00:00Z');
@@ -199,7 +199,7 @@ test('a TV or radio idea is built once, by the blueprint lane: the want adopts t
   assert.deepEqual([q('want-idea-old2').target, q('want-idea-old2').state], ['tv:hvac-remote-management', 'queued'], 'no lane job yet: its own job moves into the lane');
   assert.deepEqual(await foldIdeaWants(env, T0 + 120e3), [], 'folded once');
   assert.deepEqual((await aimIdeaJobs(env, T0 + 180e3)).sort(), ['idea-old1', 'idea-old2']);
-  assert.match(rows(env, 'SELECT ask FROM void_queue WHERE id = ?', 'tv123')[0].ask, /Improve \/photos\/exif\/ as a mode/);
+  assert.match(rows(env, 'SELECT ask FROM void_queue WHERE id = ?', 'tv123')[0].ask, /Improve \/photos\/details\/ as a mode/);
   assert.match(rows(env, 'SELECT ask, note FROM void_queue WHERE id = ?', 'want-idea-old2')[0].ask, /Improve \/weather\/ as a mode/);
   assert.match(rows(env, 'SELECT note FROM void_queue WHERE id = ?', 'want-idea-old2')[0].note, /wanted by Verse/);
 });
@@ -263,4 +263,42 @@ test('a checklist-gap want stays open when old aspect-count wants are retired, a
   assert.deepEqual(retired, ['tower-finance']);
   assert.equal(rows(env, "SELECT state FROM void_team_wants WHERE key = 'floor-travel-journey-do-the-main-job'")[0].state, 'open');
   assert.equal(rows(env, "SELECT state FROM void_queue WHERE id = 'want-floor-travel-journey-do-the-main-job'")[0].state, 'queued');
+});
+
+test('a stale open want yields a MAX_OPEN slot only for a fresh floor-gap filing', () => {
+  const stale = T0 - 8 * 864e5, fresh = T0 - 1 * 864e5;
+  const ideas = Array.from({ length: 12 }, (_, i) => ({ key: 'idea-' + i, lane: 'idea', filed: stale + i, metric: 'joblive:j' + i }));
+  const gap = { key: 'floor-travel-journey-do-the-main-job', lane: 'tower', metric: { id: 'floorgap:travel|journey' } };
+  const drop = C.yieldFor(gap, ideas, T0);
+  assert.equal(drop && drop.key, 'idea-0', 'the oldest stale want yields the slot');
+  assert.equal(C.yieldFor({ key: 'exam-images', lane: 'exam', metric: { id: 'exam:images' } }, ideas, T0), null, 'a non-floor want does not take a slot');
+  assert.equal(C.yieldFor(gap, ideas.map((w) => ({ ...w, filed: fresh })), T0), null, 'a want still under 7 days is not set aside');
+  assert.equal(C.yieldFor(gap, [{ key: 'floor-travel-share', lane: 'tower', filed: stale, metric: { id: 'floorgap:travel|share' } }], T0), null, 'another floor-gap want is not evicted');
+  assert.ok(C.isFloorGap(gap) && !C.isFloorGap(ideas[0]));
+});
+
+test('a tick at MAX_OPEN sets aside a want open more than 7 days and files the floor gap', async () => {
+  const target = { id: 'travel: example-floor.test', background: [
+    { id: 'travel: example-floor.test', aspect: 'journey: do the main job and see the result', since: '2026-11-10', job: 'retry: script the journey' },
+  ] };
+  const env = world({ 'https://a-to-mind.com/tower.target.json': JSON.stringify(target) });
+  env.CREW_FETCH.pages['https://a-to-mind.com/'] = '<a href="/store/">store</a><a href="/team/">team</a>';
+  env.DB.raw.exec("CREATE TABLE IF NOT EXISTS void_team_wants (key TEXT PRIMARY KEY, lane TEXT NOT NULL, kind TEXT NOT NULL, title TEXT NOT NULL, label TEXT NOT NULL, metric TEXT NOT NULL, better TEXT NOT NULL, baseline REAL, latest REAL, cite TEXT NOT NULL DEFAULT '[]', private INTEGER NOT NULL DEFAULT 0, job TEXT NOT NULL, thread INTEGER NOT NULL DEFAULT 0, state TEXT NOT NULL, filed INTEGER NOT NULL, checked INTEGER NOT NULL DEFAULT 0, met_at INTEGER NOT NULL DEFAULT 0, reopened INTEGER NOT NULL DEFAULT 0, nag INTEGER NOT NULL DEFAULT 0)");
+  const filedAt = T0 - 8 * 864e5;
+  for (let i = 0; i < C.MAX_OPEN; i++) {
+    const id = 'want-idea-stale' + i;
+    env.DB.raw.prepare('INSERT INTO void_queue (id, ask, target, state, note, at, updated) VALUES (?, ?, ?, ?, ?, ?, ?)').run(id, 'Build idea ' + i, 'feature:' + id, 'queued', '', new Date(filedAt).toISOString(), new Date(filedAt).toISOString());
+    env.DB.raw.prepare("INSERT INTO void_team_wants (key, lane, kind, title, label, metric, better, baseline, latest, cite, private, job, thread, state, filed, checked) VALUES (?, 'idea', 'feature', ?, 'the build is live', ?, 'up', 0, 0, '[]', 0, ?, 0, 'open', ?, ?)").run('idea-stale' + i, 'Build idea ' + i, 'joblive:' + id, id, filedAt, filedAt);
+  }
+  const out = await crewTick(env, T0);
+  assert.ok(out.filed.includes('floor-travel-journey-do-the-main-job'), 'the tick files the floor gap: ' + (out.filed || []).join(','));
+  const aside = rows(env, "SELECT key, state FROM void_team_wants WHERE state = 'set aside'");
+  assert.equal(aside.length, 1, 'one stale want is set aside: ' + aside.map((r) => r.key).join(','));
+  assert.match(aside[0].key, /^idea-stale/);
+  const q = rows(env, "SELECT * FROM void_queue WHERE id = 'want-floor-travel-journey-do-the-main-job'")[0];
+  assert.equal(q.state, 'queued');
+  const dropped = rows(env, "SELECT state, note FROM void_queue WHERE id = ?", 'want-' + aside[0].key)[0];
+  assert.equal(dropped.state, 'set aside');
+  assert.match(dropped.note, /open more than 7 days/);
+  assert.equal(rows(env, "SELECT key FROM void_team_wants WHERE state = 'open'").length, C.MAX_OPEN, 'the cap itself is not raised');
 });

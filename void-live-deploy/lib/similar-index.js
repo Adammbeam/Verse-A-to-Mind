@@ -157,8 +157,8 @@ export default {
      "parody games",
      "is reversi public domain",
      "what games do you have",
-     "play a game",
-     "let's play a game"
+     "play scrabble",
+     "scrabble board game"
     ]
    },
    {
