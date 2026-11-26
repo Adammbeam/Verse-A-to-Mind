@@ -12,6 +12,7 @@
 //        upgrade: an order code + email; the server charges exactly the difference. The share itself is always decided from the
 //        provider-verified amount (Stripe amount_total, Gumroad ping price), never from these fields.
 import { isShareProduct, shareFor, itemKey, paidTotal, CREDITS_TABLE, zipStore } from '../../../lib/pay-share.js';
+import { keyStates } from '../../../lib/key-state.js';
 import { parsePing } from '../../../lib/earnings.js';
 import { ownerOk } from '../../../lib/guard.js';
 import { specialRails, instructions, verifyUsdcTx, usdcUnits, railsOf, USDC_BASE } from '../../../lib/alt-pay.js';
@@ -53,7 +54,7 @@ export async function onRequest(ctx) {
   const path = [].concat(params.path || []).join('/'), m = request.method;
   try {
     if (path === 'catalog' && m === 'GET') return J({ products: publicCatalog().map((p) => { const r = specialRails(productOf(p.id), env); return r.length ? { ...p, special: r } : p; }), provider: providerOf(env).provider }, 200, 'public, max-age=300');
-    if (path === 'status' && m === 'GET') { const s = providerOf(env); return J({ provider: s.provider, wanted: s.wanted, stripe_keys: s.stripeReady, signing_key: s.signing, orders_db: !!env.DB, files_bucket: !!env.FILMS, special_rails: Object.keys(railsOf(env)) }); }
+    if (path === 'status' && m === 'GET') { const s = providerOf(env); return J({ provider: s.provider, wanted: s.wanted, stripe_keys: s.stripeReady, signing_key: s.signing, orders_db: !!env.DB, files_bucket: !!env.FILMS, special_rails: Object.keys(railsOf(env)), keys: keyStates(env) }); }
     if (path === 'checkout' && m === 'POST') {
       const b = await request.json().catch(() => ({}));
       // product ids only: any price, amount, discount or coupon in the body is ignored, every amount comes from lib/store.js (lib/price-lock.js)

@@ -9,6 +9,7 @@
 // out, and the router moves to the next one and records the shortfall (lib/shortfall.js). Fail closed: no D1 means no slot is taken
 // and nothing is called (the caller keeps its own free fallback, the rule lib/daily-cap.js set).
 import { cap, peek } from './daily-cap.js';
+import { keyState } from './key-state.js';
 import { recordShortfall } from './shortfall.js';
 
 export const KINDS = ['llm', 'image', 'video', 'compute', 'storage', 'email', 'search', 'speech', 'dataset'];
@@ -30,7 +31,7 @@ export function reachable(r, env = {}) {
   if (a === 'program') return { ok: false, why: 'a program to apply for or claim: Atom acts, never routed' };
   const [type, name] = a.split(':');
   if (type === 'binding') { const keys = BINDING_ALIAS[name] || [name]; return keys.some((k) => env && env[k]) ? { ok: true, why: 'bound' } : { ok: false, why: 'binding ' + name + ' not on this deploy' }; }
-  if (type === 'key') return env && env[name] ? { ok: true, why: 'key set' } : { ok: false, why: 'needs ' + name + ' (one free key, added by Atom)' };
+  if (type === 'key') { const st = keyState(env, name); return st === 'set' ? { ok: true, why: 'key set' } : { ok: false, why: st === 'empty' ? name + ' is bound on this deploy but empty' : 'needs ' + name + ' (one free key, added by Atom)' }; }
   return { ok: false, why: 'unknown access' };
 }
 
