@@ -9,6 +9,6 @@ export function keyState(env, name) {
 }
 
 // the secrets the project's production environment lists (wrangler pages secret list); names are public in the repo already
-export const WATCHED_KEYS = ['SALT', 'READ_TOKEN', 'STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET', 'STRIPE_PRICE_ID', 'GROQ_API_KEY', 'GEMINI_API_KEY', 'GUMROAD_PING_KEY', 'GITHUB_WEBHOOK_SECRET'];
+export const WATCHED_KEYS = ['SALT', 'STORE_SIGNING_KEY', 'READ_TOKEN', 'STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET', 'STRIPE_PRICE_ID', 'GROQ_API_KEY', 'GEMINI_API_KEY', 'GUMROAD_PING_KEY', 'GITHUB_WEBHOOK_SECRET'];
 
 export const keyStates = (env, names = WATCHED_KEYS) => Object.fromEntries(names.map((n) => [n, keyState(env, n)]));
