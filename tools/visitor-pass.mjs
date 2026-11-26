@@ -32,7 +32,7 @@ export const ASKS = [
   { ask: 'recipe for scrambled eggs', skill: /recipe/, good: /egg/i },
   { ask: 'how do I make pasta', skill: /recipe/, good: /pasta|noodle|boil/i },
   { ask: 'news', skill: /news/, good: /news|headline|today/i },
-  { ask: 'play music', skill: /local-stations|radio/, good: /radio|station|stream/i },
+  { ask: 'play music', skill: /media-pick|local-stations|radio/, good: /preview|song|radio|station|stream/i }, // 2026-11-25: music now gives real song previews (skills/media-pick.js)
   { ask: 'tell me a joke', skill: /joke/, good: /joke|\?|!/ },
   { ask: 'tell me a riddle', skill: /joke|riddle/, good: /riddle|what|answer/i },
   { ask: 'directions from Lakeland FL to Tampa', skill: /distance|place|maps/, good: /tampa|lakeland|mile|km|route|map/i },
@@ -87,6 +87,10 @@ const USEFUL = (t) => {
   if (/[…]\s*$/.test(s) && s.length < 80) return false;
   return true;
 };
+
+/** a card still filling in: a lone ellipsis where the answer goes, or a skill's own "still working" line. `\b…\b` missed both (an ellipsis is no
+ *  word character), so "…" cards were judged before they filled (2026-11-25: what is pi, play sudoku, currency converter, play music). Pure. */
+export function isPending(text) { return /checking rates|thinking…?|(?:^|\s)…(?=\s|$)|checking each one is real…/i.test(bodyOf(text)); }
 
 /** One ask's verdict. Pure. row: { note, text, ms, layout }. A right answer counts even when a different skill wrote it. */
 export function judgeAsk(spec, row) {
@@ -251,7 +255,7 @@ export async function pass({ asks, profiles, site = SITE, shots, axe = '' } = {}
         while (Date.now() - start < cap) {
           await page.waitForTimeout(350);
           got = await readLoop(page, a.ask);
-          const pending = /checking rates|thinking…?|\b…\b/.test(bodyOf(got.text));
+          const pending = isPending(got.text);
           if (USEFUL(got.text) && !pending && (got.note || Date.now() - start > 1500)) break;
         }
         const row = judgeAsk(a, { ...got, ms: Date.now() - start, slow: !!spec.slow });
