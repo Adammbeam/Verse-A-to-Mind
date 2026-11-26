@@ -24,6 +24,12 @@
   ! Content-Security-Policy
   Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; connect-src 'self'; img-src data:; base-uri 'none'; form-action 'none'; frame-ancestors *; upgrade-insecure-requests
 
+# Phase (/phase/, lib/phase.js): the see-through layer. The site policy blocks the camera; here, and only here, the page may ask for it, so
+# you can put yourself into what you share. Screen and tab sharing is the browser's own prompt each time. Frames never leave the device.
+/phase/*
+  ! Permissions-Policy
+  Permissions-Policy: camera=(self), display-capture=(self), usb=(), serial=(), hid=(), midi=(self), payment=(self "https://gumroad.com"), geolocation=(self), microphone=(self), accelerometer=(), gyroscope=(), magnetometer=(), browsing-topics=()
+
 # the lab (/lab/*, tools/lab-import.mjs): small experiments that read the device's tilt and motion (deviceorientation, devicemotion); the site policy
 # blocks those sensors, so here, and only here, the page itself may use them. Nothing else in the policy changes.
 /lab/*
