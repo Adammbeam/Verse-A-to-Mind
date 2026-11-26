@@ -54,6 +54,7 @@ import { isPass } from '../../lib/pass-mark.js';
 import { planOf, runBot, routeFree, freeLlm, loadRegistry } from '../../lib/answer-free.js';
 import { isJokeAsk, jokeAnswer } from '../../lib/joke-answer.js';
 import { everydayAnswer } from '../../lib/everyday-answer.js';
+import { worldAnswer } from '../../lib/world-answer.js';
 import { beforeOf, points, FOLLOW_RULE, beforeBlock, mergeSources } from '../../lib/follow-ask.js';
 import { askShape, PASSAGE_LINE, fileDirective, DIRECTIVE_SAY, DIRECTIVE_DUP, DIRECTIVE_HELD, TALK_LINE } from '../../lib/ask-shape.js';
 import { askWords, grounded, isNameAsk, isNoAnswer, sourcesMatch, suggestedGuess, listRedirect, sectionHit, sectionText, linked } from '../../lib/no-answer.js';
@@ -481,6 +482,8 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
   const key = await sha(ask.toLowerCase());
   // the time, the date, a coin, dice, a random number, days until a day (lib/everyday-answer.js): the server's clock and crypto random, in the request's zone, never cached
   { const e = everydayAnswer(ask, { tz: request.cf && request.cf.timezone }); if (e) { edge.mark = BYPASS; return Response.json(e); } }
+  // weather, sunrise and sunset, and the time in a named place, and what a word means (lib/world-answer.js): live keyless sources, never cached
+  { const w = await worldAnswer(ask); if (w) { edge.mark = BYPASS; return Response.json(w); } }
   // the input's shape, read before classify or any self or errata path (lib/ask-shape.js): a passage or a directive never falls through to the fallback model
   const shape = askShape(ask);
   if (shape !== 'question') edge.mark = BYPASS; // a passage, a directive or talk is answered here and never kept, so the header says it went past the cache
