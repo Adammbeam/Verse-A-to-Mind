@@ -111,7 +111,11 @@ export function graph(h, now, us) {
   if (now > 0 && now < n) out += '<line x1="' + x(now).toFixed(1) + '" x2="' + x(now).toFixed(1) + '" y1="' + top + '" y2="' + (H - 24) + '" stroke="#ffffff" stroke-opacity=".6" stroke-dasharray="4 4"/>';
   out += '<polyline points="' + temps.map((t, i) => x(i).toFixed(1) + ',' + y(t).toFixed(1)).join(' ') + '" fill="none" stroke="#ffb347" stroke-width="3"/>';
   out += '<text x="2" y="' + (y(hi) + 6).toFixed(1) + '" font-size="19" fill="#8b90a0">' + hi + '°</text><text x="2" y="' + (y(lo) + 6).toFixed(1) + '" font-size="19" fill="#8b90a0">' + lo + '°</text></svg>';
-  return '<div class="wx-graph" data-share-skip style="margin-top:8px"><div style="color:#8b90a0;font-size:12px">The next ' + (Math.round(n / 24) === 1 ? 'day' : Math.round(n / 24) + ' days') + ', hour by hour. <span style="color:#ffb347">Orange line</span>: temperature. <span style="color:#5aa9e6">Blue bars</span>: chance of rain.</div>' + out + '</div>';
+  // the key explains the graph to a reader, so a copied card carries the same plain words (data-share-short),
+  // not an empty gap where the chart was (data-share-skip made "orange"/"temperature" go missing on copy)
+  const days = Math.round(n / 24) === 1 ? 'day' : Math.round(n / 24) + ' days';
+  const key = 'The next ' + days + ', hour by hour. Orange line: temperature. Blue bars: chance of rain.';
+  return '<div class="wx-graph" data-share-short="' + key + '" style="margin-top:8px"><div style="color:#8b90a0;font-size:12px">The next ' + days + ', hour by hour. <span style="color:#ffb347">Orange line</span>: temperature. <span style="color:#5aa9e6">Blue bars</span>: chance of rain.</div>' + out + '</div>';
 }
 
 function hereCoords() {

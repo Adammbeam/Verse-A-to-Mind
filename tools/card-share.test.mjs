@@ -8,6 +8,37 @@ test('copy text reads well and ends in one code line', () => {
   assert.match(t, /^What's New Pussycat\?/); assert.match(t, /Sources:/); assert.match(t, /a-to-mind\.com/);
   assert.equal(t.trim().split('\n').pop().startsWith(MARK), true);
 });
+test('copy card puts the words on the clipboard before a slow picture is drawn', async () => {
+  const { copyCard } = await import('../void-live-deploy/lib/card-share.js');
+  const text = shareText(card);
+  let release; const slow = new Promise((r) => { release = r; });
+  let clip = '', clipAtPicture = '', written = 0, pictured = 0;
+  globalThis.ClipboardItem = class { constructor(items) { this.items = items; } };
+  try {
+    const api = { writeText: async (t) => { clip = t; written++; }, write: async ([item]) => { clipAtPicture = clip; pictured++; clip = await item.items['text/plain'].text(); } };
+    const run = copyCard(text, () => slow, api);
+    await new Promise((r) => setImmediate(r));
+    assert.equal(clip, text, 'the words land while the picture is still being drawn');
+    assert.equal(written, 1);
+    release(new Blob(['png'], { type: 'image/png' }));
+    assert.equal(await run, 'copied');
+    assert.equal(pictured, 1);
+    assert.equal(clipAtPicture, text, 'the words were already there when the picture arrived');
+    assert.match(clip, /^What's New Pussycat/, 'the picture item carries the same text');
+  } finally { delete globalThis.ClipboardItem; }
+});
+test('copy card keeps the words when the picture cannot be drawn', async () => {
+  const { copyCard } = await import('../void-live-deploy/lib/card-share.js');
+  const text = shareText(card);
+  globalThis.ClipboardItem = class {};
+  try {
+    let clip = ''; const api = { writeText: async (t) => { clip = t; } };
+    assert.equal(await copyCard(text, () => Promise.reject(new Error('no picture')), api), 'copied');
+    assert.equal(clip, text);
+    assert.equal(await copyCard(text, undefined, api), 'copied');
+    assert.equal(await copyCard(text, undefined, {}), 'select and copy');
+  } finally { delete globalThis.ClipboardItem; }
+});
 test('pasting the copied text, or only its code, gives the card back (unicode, newlines)', () => {
   const back = parse(shareText(card)), bare = parse(codeOf(card));
   for (const d of [back, bare]) { assert.equal(d.t, card.t); assert.equal(d.k, card.k); assert.equal(d.b, card.b); assert.equal(d.src.length, 1, 'the source with no link is dropped'); assert.match(d.src[0].u, /^https:/); }
