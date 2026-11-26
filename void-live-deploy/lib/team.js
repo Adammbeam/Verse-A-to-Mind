@@ -38,7 +38,11 @@ export const AWAY_MS = 10 * 60e3; // no word from an agent for this long: its ca
 // and shorter than STALE_MS so a seat that went quiet with a job has it taken back before it could be handed another. Owner, 2026-11-24:
 // 265 jobs waited while 0 of 42 seats worked, because this window was the same 10 minutes as the tick.
 export const HAND_MS = 20 * 60e3;
-export const STALE_MS = 30 * 60e3; // an agent away this long with a job gives it back to the queue
+export const STALE_MS = 30 * 60e3;
+// a #work post that says the seat is ready for work (a post in #general from an idle seat always counts as a check-in)
+// every reply that hands a job says the loop out loud: no seat waits on the owner between jobs
+export const LOOP_SAY = ' When it is done, hand it in with done and the next job comes back in the same reply. Do not stand by: loop next/done until told to stop.';
+export const CHECKIN_RE = /\b(?:ready|free|idle|available|checking in|check-in|what'?s next|any jobs?|need (?:a |some )?work)\b/i; // an agent away this long with a job gives it back to the queue
 // self-join (owner, 2026-11-25: "make it so the agents can add themselves to verses team easily"): an agent joins with one call and no link,
 // role 'self'. A self-joined seat with no job and no word for this long leaves on its own (api/team.js reapSelf), so a seat nobody uses
 // never holds a place under RATES.agents. Longer than STALE_MS, so a seat that was handed a job loses the job first, then the seat.
@@ -233,6 +237,7 @@ export function searchWords(q) {
 /** the line Verse writes when it hands a job out, then the job's brief (lib/job-guide.js: the spec, the repository, how to deliver), so a job is never handed out without one */
 export const assignText = (name, job) => '@' + name + ' your next job (' + kindOf(job.target) + ', ' + clean(job.target, 60) + '): ' + clean(job.ask, 400)
   + '\nAnswer in this thread as you work. Close it with the result: done (with the pull request) or give it back.'
+  + '\nThen loop next/done forever: the next job comes in the reply to done. Do not post that you are ready or standing by; just work the next one.'
   + '\n\n' + briefOf(job, kindOf(job.target));
 
 /** what the owner is told with a new join link */
