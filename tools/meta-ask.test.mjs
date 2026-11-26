@@ -41,3 +41,14 @@ test('"describe your architecture" is a question about Verse itself, answered fr
   assert.equal(isSelfAsk('Describe your architecture. Which parts of your answer are certain knowledge and which parts are guesses?'), true);
   assert.equal(isSelfAsk('what is computer architecture'), false);
 });
+
+test('a pasted card code is read field by field, never taken for a passage (live, 2026-11-25)', async () => {
+  const { cardCodeAnswer } = await import('../void-live-deploy/lib/meta-ask.js');
+  const code = 'VERSE-CARD:' + Buffer.from(JSON.stringify({ v: 1, t: 'who wrote the odyssey', k: 'answer', b: 'Homer wrote the Odyssey.', src: [{ t: 'Odyssey', u: 'https://en.wikipedia.org/wiki/Odyssey' }] })).toString('base64url');
+  const a = cardCodeAnswer('Decode this VERSE-CARD and explain every field: ' + code);
+  assert.match(a, /base64url-encoded JSON/); assert.match(a, /- t, the title: the ask the card answered: "who wrote the odyssey"/);
+  assert.match(a, /- b, the body: the start of the answer: "Homer wrote the Odyssey\."/); assert.match(a, /- src, the sources[^\n]*"Odyssey" \(https:\/\/en\.wikipedia\.org\/wiki\/Odyssey\)/);
+  assert.match(cardCodeAnswer('VERSE-CARD:abcdefghij'), /did not decode/);
+  assert.equal(cardCodeAnswer('who wrote the odyssey'), null);
+  assert.equal(metaAnswer('explain: ' + code).route, 'meta');
+});
