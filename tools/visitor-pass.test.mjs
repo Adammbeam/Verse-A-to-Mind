@@ -39,3 +39,15 @@ test('sports scores names the NFL board, and hello in Spanish is kept for a slow
   assert.equal(pocketOf('hello', 'French'), 'Bonjour');
   assert.equal(pocketOf('serendipity', 'Spanish'), '');
 });
+
+test('a card still filling in is pending: a lone ellipsis or a skill\'s working line; a finished answer that trims with … is not', async () => {
+  const { isPending, ASKS, judgeAsk } = await import('./visitor-pass.mjs');
+  assert.equal(isPending('pi ANSWER — FROM VERSE … COPY CARD SAVE CARD SHARE ☆'), true);
+  assert.equal(isPending('Something to listen to ANSWER — FROM VERSE picking, then checking each one is real… COPY CARD'), true);
+  assert.equal(isPending('Pi CONCEPT Number, approximately 3.14 The number π is a mathematical constant, … commonly used for d… COPY CARD'), true, 'a lone … anywhere waits; the cap still ends the wait');
+  assert.equal(isPending('Pi. Number, approximately 3.14 The number π is a mathematical constant, commonly used for d… COPY CARD'), false);
+  assert.equal(isPending('A joke SKILL — WORDS AND THE WORLD A red and a blue ship collided.'), false);
+  const music = ASKS.find((a) => a.ask === 'play music');
+  assert.equal(judgeAsk(music, { note: 'media-pick', text: 'Something to listen to. every song below was found in a real source; open one to hear the 30-second preview Bohemian Rhapsody · Queen', ms: 900 }).ok, true);
+  assert.equal(judgeAsk(music, { note: 'local-stations', text: 'Local radio stations streaming now', ms: 900 }).ok, true);
+});
