@@ -39,6 +39,7 @@
 //
 // Every cache call fails open: no caches global (local dev, tests) or any cache error is the behaviour without this file, exactly. The key
 // and gate functions are pure; the cache is passed in, so tools/answer-edge.test.mjs runs them with a Map.
+import { assetBuildId } from './build-id.js';
 export const EDGE_SCHEMA = 'v1';
 export const EDGE_PATH = '/__answer-cache/';
 export const EDGE_HEADER = 'x-verse-cache';
@@ -117,14 +118,15 @@ export function buildIdOf(json) {
 }
 // one read of /build.json per isolate (a deploy starts new isolates); a failed read is not kept, so the next request tries again
 const builds = new Map();
-/** this deploy's build id, read from the site's own /build.json through env.ASSETS; '' when there is none. Never throws. */
+/** this deploy's build id, read from the site's own /build.json through env.ASSETS, else the shell files' hash; '' when neither. Never throws. */
 export async function buildId(env, origin, ms = 300) {
   if (builds.has(origin)) return builds.get(origin);
   try {
     if (!env || !env.ASSETS || typeof env.ASSETS.fetch !== 'function') return '';
     let t;
     const r = await Promise.race([env.ASSETS.fetch(new Request(origin + '/build.json')), new Promise((_, rej) => { t = setTimeout(() => rej(new Error('slow')), ms); })]).finally(() => clearTimeout(t));
-    const id = r && r.ok ? buildIdOf(await r.json()) : '';
+    // no /build.json in the files (no deploy step wrote one): the hash of the shell files this deploy serves (lib/build-id.js)
+    const id = r && r.ok ? buildIdOf(await r.json()) : buildIdOf({ id: await Promise.race([assetBuildId(env, origin), new Promise((res) => { t = setTimeout(() => res(''), ms); })]).finally(() => clearTimeout(t)) });
     if (id) builds.set(origin, id);
     return id;
   } catch (_) { return ''; }
