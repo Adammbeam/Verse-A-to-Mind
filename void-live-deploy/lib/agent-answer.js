@@ -41,6 +41,16 @@ const ASKING = /^(?:please\s+|can you\s+|could you\s+|would you\s+)?(?:what|why|
 export const hasPayload = (ask) => { const t = String(ask || ''); return /\d/.test(t) || /["\u201c\u201d`]|\bhttps?:\/\/|\n/.test(t) || /:\s*\S+(?:\s+\S+){2,}/.test(t) || /'[^']{12,}'/.test(t); };
 /** a question or a writing request with nothing to work on: the general answerer's job. Pure. */
 export const isKnowledgeAsk = (ask) => { const t = String(ask || '').trim(); return !!t && !hasPayload(t) && (ASKING.test(t) || /\?\s*$/.test(t)); };
+// A request to make a piece of text, whatever its topic. The held-out exam (tools/heldout-exam.mjs, 2026-11-26) found these asks weak on unseen
+// questions: the answer gave a menu of options instead of the one thing asked for, dropped the subject's own words, or ended mid-line. The rule
+// below is about the kind of ask, never about one question's words, so it generalises to writing asks the pool has not seen.
+const WRITE_VERB = /^(?:please\s+|can you\s+|could you\s+|would you\s+)?(?:write|draft|compose|rewrite|reword|rephrase|summari[sz]e)\b/i;
+const WRITE_MAKER = /^(?:please\s+|can you\s+|could you\s+|would you\s+)?(?:turn|make|give me|suggest|help me|create|need)\b/i;
+const WRITE_PIECE = /\b(?:email|e-mail|message|text|note|letter|bio|slogan|tagline|title|headline|subject line|poem|verse|story|apolog(?:y|ise|ize)|declin(?:e|y)|thank[- ]you|reminder|bullet(?:d)? list|linkedin|caption|tweet|reply|cover letter|summary|rewrit(?:e|ing))\b/i;
+/** a request for a piece of writing rather than a fact, a calculation or a thing to build. Pure. */
+export const isWritingAsk = (ask) => { const t = String(ask || '').trim(); return WRITE_VERB.test(t) || (WRITE_MAKER.test(t) && WRITE_PIECE.test(t)); };
+/** the extra rule for a writing ask: the shape, the subject's own words, and a whole last line. Pure. */
+export const WRITE_RULE = " For a writing request, give the finished piece in exactly the shape asked for — one line, two lines, or the number of items requested, not a menu of options unless asked. Keep the subject's own concrete words and every detail supplied. For a message, a greeting, the point, an option when declining, and a sign-off. Finish every line whole.";
 /** the bot needs input (its probe in the registry has one). A bot with none (a coin, a joke) can answer a bare ask. Pure. */
 const needsInput = (b) => !!(b && b.probe && String(b.probe.in || '').trim());
 /** can the bot take this ask at all? Its example input has digits and the ask has none: no. A knowledge ask with no payload and a bot that needs one: no. Pure. */
@@ -94,9 +104,12 @@ export function attemptsFor(ask, bots) {
   return [...specs.map((b) => ({ ...b, repair: false })), { ...GENERAL, repair: false }, { ...GENERAL, repair: true }];
 }
 /** the system line for one try. The answer pipeline answers the ask; a specialist does only its own job. Pure. */
-export function answerBrief(bot) {
+export function answerBrief(bot, ask = '') {
   const direct = 'You are Verse. Answer the task directly and concretely, from what you know. Lead with the answer in the first sentence, then only what a person needs to act on it. About 120 words or less, unless the person asks for depth (in detail, step by step, full, long, essay). No preamble or filler. Plain text. Give steps and tips as one short line each, and stop once the question is answered: no closing summary, no repeating the question or the steps. For a "difference between" question, say in one line what each one is or does and the main way they differ; do not pick a side. For an "A or B" choice, say what each one is, then recommend, with the one condition that changes the pick. For a health, medical, money or legal question, finish with what helps or who to ask (a doctor, a pharmacist, an adviser). For a how or why question about a method or mechanism (not a list of tips), name the one thing it does or compares each step and the one assumption it depends on, inside the answer, not as an opener. For a one-sentence summary, write one plain sentence of about 25 words that keeps every name, number and date. When the ask counts things (3 steps, three tips, a list), give exactly that many as a numbered list, 1. 2. 3., one per line. For a calculation, give the answer first, then one line showing how it checks. For writing tasks (an email, a note, a message), write the ready-to-send text: a greeting, the point, a next step or another option when you decline or say no, and a sign-off. When a request would mean getting into a place or a thing without its owner saying yes, do not help with that; suggest asking the owner, or a landlord or locksmith. When it asks for several things, name that many specific ones, each with a concrete detail a person could use. Do not reply with only words copied from the task. Never claim to have sent, paid, posted or deleted anything.';
-  if (!bot || bot.name === 'verse' || bot.repair) return bot && bot.repair ? 'You are Verse. The last answer did not do the task. ' + direct.slice('You are Verse. '.length) : direct;
+  if (!bot || bot.name === 'verse' || bot.repair) {
+    const base = bot && bot.repair ? 'You are Verse. The last answer did not do the task. ' + direct.slice('You are Verse. '.length) : direct;
+    return isWritingAsk(ask) ? base + WRITE_RULE : base;
+  }
   return 'You are Verse, a helpful agent. You are acting as the bot "' + bot.name + '"' + (bot.description ? ' (' + bot.description + ')' : '') + '. Do only that bot\'s job, fully and concretely. Lead with the result. Plain text, about 120 words or less. Never claim to have sent, paid, posted or deleted anything.';
 }
 /** a short reply that says what the bot is for, or asks for other input, instead of doing the ask. A long answer is never one. Pure. */
