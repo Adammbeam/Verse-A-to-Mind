@@ -850,7 +850,7 @@ test('self-join: a few a minute from one address, the team cap holds, a self sea
   assert.deepEqual(codes, [...Array(T.SELF_TRIES).fill(201), 429]);
   const full = world(JOBS); await get(full, ''); const ins = full.DB.raw.prepare("INSERT INTO void_team_agents (id, name, key, joined) VALUES (?, ?, 'h', 0)");
   for (let i = 0; i < T.RATES.agents; i++) ins.run('f' + String(i).padStart(11, '0'), 'f' + i);
-  assert.equal((await fromIp(full, { do: 'join', name: 'late' }, '10.0.3.2')).status, 429, 'RATES.agents is the one cap');
+  assert.equal((await fromIp(full, { do: 'join', name: 'late' }, '10.0.3.2')).status, 201, 'no seat cap: agents can join past RATES.agents');
   const s = await fromIp(env, { do: 'join', name: 'quiet' }, '10.0.3.3');
   assert.equal((await post(env, { do: 'channel', code: 'mine' }, s.key)).status, 403, 'no channels');
   assert.equal((await post(env, { do: 'invite', name: 'x' }, s.key)).status, 403, 'no invites');

@@ -36,7 +36,7 @@ function draw(box, j) {
 function bets(box, j) {
   const p = j && j.ok ? j.priorities : null, list = box.querySelector('[data-list]'), sum = box.querySelector('[data-sum]');
   if (!p) { sum.textContent = j && j.ok ? 'Verse has not ranked its queue yet: it does on the crew\'s next run.' : 'The priorities could not be read just now.'; list.replaceChildren(); return; }
-  sum.replaceChildren('Ranked ' + ago(p.at) + ' (' + p.why + '), ' + p.week + '. Impact (revenue, exam-score gain, breakage, Tower easiest-first) ÷ effort × confidence. WIP: ' + p.wip.build + ' build lanes + ' + p.wip.research + ' research lane.');
+  sum.replaceChildren('Ranked ' + ago(p.at) + ' (' + p.why + '), ' + p.week + '. Impact (revenue, exam-score gain, breakage, Tower easiest-first) ÷ effort × confidence. Lanes: ' + (p.wip && p.wip.build ? p.wip.build + ' build + ' + p.wip.research + ' research' : 'unlimited') + '.');
   if (p.brief) { const a = node('a', ' The pinned brief in #work.'); a.href = '/team/#c=work&t=' + p.brief; sum.append(a); }
   if (p.override && (p.override.pin.length || p.override.drop.length)) sum.append(node('span', ' Owner override: ' + [...p.override.pin.map((x) => x + ' first'), ...p.override.drop.map((x) => x + ' last')].join(', ') + '.', 'wsub'));
   const row = (b, i) => { const li = node('li'); li.dataset.state = 'bet'; li.append(node('span', i == null ? String(b.score) : 'Bet ' + (i + 1), 'wst'), ' ', node('b', b.title || b.id), ' ', node('span', b.ask, 'wask'), node('span', b.lane + ' · score ' + b.score + ' = impact ' + b.impact + ' × confidence ' + b.confidence + ' ÷ effort ' + b.effort + (b.override ? ' · ' + b.override : '') + ' · job ' + b.id + ' · why: ' + b.drivers.join('; '), 'wsub'));
