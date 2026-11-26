@@ -6,7 +6,7 @@
 import { kindOf } from './team.js';
 import { leverageOf } from './team-leverage.js';
 
-export const WIP = Object.freeze({ build: 3, research: 1 });
+export const WIP = Object.freeze({ build: Infinity, research: Infinity }); // no cap on build or research lanes; file reservations prevent clashes
 export const BETS_MAX = 3;
 export const OVERRIDE_MS = 7 * 864e5; // an owner override lasts a week unless the owner says otherwise
 const EFFORT = { heal: 1, flake: 1, review: 1, gap: 2, will: 2, voice: 2, auto: 2, versus: 3, feature: 3, novelty: 3 };
@@ -143,13 +143,15 @@ export const scoresOf = (ranked, max = 300) => Object.fromEntries((ranked || [])
 
 /** the WIP cap at hand-out: may an agent start this job, with these jobs being built by agents now? */
 export function wipAllows(job, building, laneById = {}) {
-  const lane = laneById[job.id] || laneOf(job, null), n = building.filter((b) => (laneById[b.id] || laneOf(b, null)) === lane).length;
-  return n < WIP[lane];
+  const lane = laneById[job.id] || laneOf(job, null), cap = WIP[lane];
+  if (!Number.isFinite(cap)) return true;
+  const n = building.filter((b) => (laneById[b.id] || laneOf(b, null)) === lane).length;
+  return n < cap;
 }
 
 /** the pinned brief, as Verse posts it in #work */
 export function briefText(p, week, why) {
-  const lines = ['Verse\'s priorities for ' + week + (why ? ' (' + why + ')' : '') + '. Scored by impact (revenue, exam-score gain, breakage, Tower easiest-first) ÷ effort × confidence. WIP: ' + WIP.build + ' build lanes + ' + WIP.research + ' research lane.'];
+  const lines = ['Verse\'s priorities for ' + week + (why ? ' (' + why + ')' : '') + '. Scored by impact (revenue, exam-score gain, breakage, Tower easiest-first) ÷ effort × confidence. Lanes: unlimited (jobs reserve their files so seats never clash).'];
   if (!p.bets.length) lines.push('No bet this week: nothing is on the queue.');
   p.bets.forEach((b, i) => lines.push('Bet ' + (i + 1) + ': ' + b.id + ' (' + b.lane + ', score ' + b.score + ' = impact ' + b.impact + ' × confidence ' + b.confidence + ' ÷ effort ' + b.effort + ')' + (b.override ? ' [' + b.override + ']' : '') + '. ' + b.ask
     + '\n   Why: ' + b.drivers.join('; ') + (b.evidence.length ? '\n   Evidence: ' + b.evidence.map((e) => e.what + ' ' + e.url).join(' · ') : '')));

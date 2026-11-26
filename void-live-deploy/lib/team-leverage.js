@@ -17,10 +17,16 @@ const INCOME = /\b(x402|paid|wallet|usdc|payment|pay ?per|402|store|checkout|gum
 const UNBLOCK = /\b(main (?:is )?red|red main|main green|keep main green|unblock|blocked|merge (?:gate|queue|train)|suite gate|automerge|stuck (?:pr|pull)|deploy (?:fails|failed|is red)|broken deploy)\b/i;
 const CHURN = /\b(wording|reword|typo|rename|spacing|padding|colou?r of|font size|whitespace|lint|prettier|comment(?:s)? only|tidy|cosmetic)\b/i;
 
-/** what a job touches: files, pages, pull requests, #work threads, and its target when the target names something. -> ['file:..', 'page:..', ..] */
+/** normalized repo file paths mentioned in text or a list, for file reservations. -> ['lib/x.js', ..] */
+export function filesOf(input) {
+  const text = Array.isArray(input) ? input.join(' ') : String(input || ''), out = new Set();
+  for (const m of text.matchAll(FILE)) out.add(m[1].replace(/^void-live-deploy\//, ''));
+  return [...out];
+}
+/** what a job touches: files (from ask or reserved in note), pages, pull requests, #work threads, and its target when the target names something. -> ['file:..', 'page:..', ..] */
 export function scopeOf(j) {
-  const ask = String(j && j.ask || ''), target = String(j && j.target || ''), out = new Set();
-  for (const m of ask.matchAll(FILE)) out.add('file:' + m[1].replace(/^void-live-deploy\//, ''));
+  const ask = String(j && j.ask || ''), note = String(j && j.note || ''), target = String(j && j.target || ''), out = new Set();
+  for (const f of filesOf(ask + ' ' + note)) out.add('file:' + f);
   for (const m of ask.matchAll(THREAD)) out.add('thread:' + Number(m[1]));
   const rest = ask.replace(THREAD, ' '), bare = rest.replace(/https?:\/\/(?!(?:www\.)?a-to-mind\.com)\S+/gi, (u) => (/\/pull\/\d+/.test(u) ? ' pull/' + /\/pull\/(\d+)/.exec(u)[1] + ' ' : ' ')).replace(FILE, ' ');
   for (const m of bare.matchAll(PR)) out.add('pr:' + Number(m[1]));
