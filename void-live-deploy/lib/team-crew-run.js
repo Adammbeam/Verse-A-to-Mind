@@ -9,7 +9,8 @@
 import * as C from './team-crew.js';
 import * as P from './team-priorities.js';
 import { slugOf, categoryOf, CATEGORIES } from './watch-build.js';
-import { TEAM_KINDS, kindOf } from './team.js';
+import { TEAM_KINDS, kindOf, rank } from './team.js';
+import * as LN from './team-lanes.js';
 import { readStatus } from '../functions/api/status.js';
 import { crewReady, crewWrite, pushAll, handIdle } from '../functions/api/team.js';
 
@@ -171,6 +172,13 @@ export async function aimIdeaJobs(env, now) {
   }
   return aimed;
 }
+/** the stock the clock keeps (lib/team-lanes.js capsFor): claimable jobs now against PER_SEAT a working seat; kept as 'stock' for the panel */
+export async function stockNow(env, now) {
+  let claimable = 0, seats = 0;
+  try { claimable = rank((await env.DB.prepare("SELECT id, ask, target, state, note, at FROM void_queue WHERE state = 'queued' ORDER BY at ASC LIMIT 1000").all()).results || [], now).length; } catch (_) { claimable = 0; }
+  try { seats = Number(((await env.DB.prepare("SELECT COUNT(*) AS n FROM void_team_agents WHERE off = 0 AND crew = 0 AND key != '' AND MAX(COALESCE(seen, 0), COALESCE(job_at, 0)) >= ?").bind(now - LN.ACTIVE_MS).first()) || {}).n || 0); } catch (_) { seats = 0; }
+  return { claimable, seats, ...LN.capsFor({ claimable, seats, baseFile: C.FILE_PER_TICK, baseOpen: C.MAX_OPEN }) };
+}
 const SLOT_WHY = 'Set aside: open more than 7 days, to make a slot for a job Verse filed from its current floor.';
 async function setAsideWant(env, w, now, why) {
   const at = new Date(now).toISOString();
@@ -178,15 +186,15 @@ async function setAsideWant(env, w, now, why) {
   if (w.job) await env.DB.prepare("UPDATE void_queue SET state = 'set aside', note = ?, updated = ? WHERE id = ? AND state IN ('queued', 'building')").bind(String(why).slice(0, 300), at, w.job).run().catch(() => null); // void-review: ok (same want)
   if (w.thread) await crewWrite(env, { c: 'work', by: 'verse', thread: w.thread, now, body: why });
 }
-async function fileWants(env, wants, bots, now) {
+async function fileWants(env, wants, bots, now, caps = { file: C.FILE_PER_TICK, open: C.MAX_OPEN }) {
   const { results } = await env.DB.prepare('SELECT key, state, filed, job, thread, metric, lane FROM void_team_wants').all();
   const have = new Set(results.map((r) => r.key));
   let openRows = (results || []).filter((r) => r.state === 'open');
   const filed = [];
   for (let w of wants) {
-    if (filed.length >= C.FILE_PER_TICK) break;
+    if (filed.length >= caps.file) break;
     if (have.has(w.key)) continue;
-    if (openRows.length + filed.length >= C.MAX_OPEN) {
+    if (openRows.length + filed.length >= caps.open) {
       const drop = C.yieldFor(w, openRows, now);
       if (!drop) break;
       await setAsideWant(env, drop, now, SLOT_WHY);
@@ -341,7 +349,9 @@ export async function crewTick(env, now = Date.now()) {
   await retireTowerWants(env, now).catch(() => []);
   await aimIdeaJobs(env, now).catch(() => []);
   const m = await measureOpen(env, ev, bots, now);
-  const filed = await fileWants(env, C.wantsOf(ev), bots, now);
+  const stock = await stockNow(env, now); // low stock: more wants a run and more open at once, scaled to the working seats
+  const filed = await fileWants(env, C.wantsOf(ev), bots, now, stock);
+  await setState(env, 'stock', { at: now, claimable: stock.claimable, seats: stock.seats, target: stock.target, low: stock.low, filed: filed.length }, now);
   // each due member's own job
   // the turn is taken before the work, so a run cut short does not repeat a job; the members work side by side
   for (const b of due) next[b.slug] = now + b.every * 60e3 - 60e3; // a minute early, so the 15-minute clock does not slip a turn
@@ -349,7 +359,7 @@ export async function crewTick(env, now = Date.now()) {
   const jobs = await Promise.all(due.filter((b) => duties[b.slug]).map((b) => job(env, b, run, TITLES[b.slug], duties[b.slug](env, ev, run, now), now)));
   const prio = await prioritizeRun(env, ev, now, { force: !!(await getState(env, 'override-new')) }).catch(() => null);
   await env.DB.prepare("DELETE FROM void_team_crew WHERE k = 'override-new'").run().catch(() => null);
-  const out = { at: ev.at, run, crew: bots.map((b) => b.name), filed, met: m.met, reopened: m.reopened, jobs, priorities: prio, ms: Date.now() - t0 };
+  const out = { at: ev.at, run, crew: bots.map((b) => b.name), filed, stock: { claimable: stock.claimable, target: stock.target, seats: stock.seats }, met: m.met, reopened: m.reopened, jobs, priorities: prio, ms: Date.now() - t0 };
   await setState(env, 'last', out, now);
   return out;
 }

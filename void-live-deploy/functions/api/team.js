@@ -65,6 +65,7 @@ import { findMemberSale } from './gumroad.js';
 import { redact } from '../../lib/automation-fix.js';
 import * as P from '../../lib/team-priorities.js';
 import * as L from '../../lib/team-leverage.js';
+import * as LN from '../../lib/team-lanes.js';
 import * as T from '../../lib/team.js';
 import { CREW } from '../../lib/team-crew.js';
 import { briefOf } from '../../lib/job-guide.js';
@@ -274,7 +275,8 @@ async function threadId(env, v, me) {
 export async function handOut(env, a, now, only = null) {
   if (a.job) return { job: a.job, thread: a.thread, already: true };
   const skip = only ? [] : String(a.skip || '').split(' ').filter(Boolean); // a job picked on the board is taken even if this agent gave it back once
-  const ranked = T.rank(await queued(env), now, skip), { list, pr } = await ordered(env, ranked, now);
+  const ranked = T.rank(await queued(env), now, skip), { list: order, pr } = await ordered(env, ranked, now);
+  const list = only ? order : LN.preferLane(order, await laneFor(env, a.id)); // the seat's lane first among Verse's next few, the owner's asks still first
   const building = await buildingNow(env); // every job being built now, by an agent or the conductor: a job that touches the same work is not handed out
   for (const j of only ? ranked.filter((x) => x.id === only).slice(0, 1) : list) { // Verse's own order and WIP cap, unless a job was picked on the board
     if (building.some((b) => L.overlapOf(j, b))) continue; // one piece of work, one seat (lib/team-leverage.js scopeOf)
@@ -290,6 +292,20 @@ export async function handOut(env, a, now, only = null) {
     return { job: j.id, kind: T.kindOf(j.target), target: j.target, ask: j.ask, brief: briefOf(j, T.kindOf(j.target)), thread, ...(sc ? { leverage: sc[0], why: sc[1] } : {}) };
   }
   return null;
+}
+/** a seat's lane (lib/team-lanes.js): the kinds and areas of the last 40 jobs it handed in with a pull request (void_team_credits) */
+export async function laneFor(env, id) {
+  try { return LN.laneOf((await env.DB.prepare('SELECT q.target, q.ask FROM void_team_credits c JOIN void_queue q ON q.id = c.job WHERE c.agent = ? ORDER BY c.at DESC LIMIT 40').bind(id).all()).results || []); } catch (_) { return null; }
+}
+/** the owner's crew panel (GET ?crew): each seat's lane, what it holds and for how long, throughput, and the stock the clock keeps */
+export async function crewPanel(env, now) {
+  const { results: ags } = await env.DB.prepare("SELECT id, name, role, seen, job, job_at FROM void_team_agents WHERE off = 0 AND key != '' AND crew = 0 ORDER BY joined ASC LIMIT 200").all();
+  const seats = []; for (const a of ags) seats.push({ ...a, lane: await laneFor(env, a.id) }); // void-review: ok (one indexed read a seat, owner-only, at most RATES.agents)
+  const n = async (sql, ...b) => { try { return Number(((await env.DB.prepare(sql).bind(...b).first()) || {}).n || 0); } catch (_) { return 0; } };
+  const done24 = await n('SELECT COUNT(*) AS n FROM void_team_credits WHERE at >= ?', now - 864e5);
+  const handed24 = await n("SELECT COUNT(*) AS n FROM void_team_msgs WHERE channel = 'work' AND by = 'verse' AND thread = 0 AND job IS NOT NULL AND at >= ?", now - 864e5);
+  let stock = null; try { const r = await env.DB.prepare("SELECT v FROM void_team_crew WHERE k = 'stock'").first(); stock = r ? JSON.parse(r.v) : null; } catch (_) { stock = null; }
+  return LN.panelOf({ seats, done24, handed24, claimable: T.rank(await queued(env), now).length, stock, now });
 }
 // Verse's leverage for every ranked job (lib/team-crew-run.js prioritizeRun keeps it), for the board's cards. -> { id: [score, why] } or null
 async function scoresNow(env) {
@@ -688,7 +704,7 @@ export async function onRequestGet({ request, env, now = Date.now(), as = null, 
   const sp = new URL(request.url).searchParams;
   if (sp.has('jobs')) return json({ ok: true, jobs: T.board(await queued(env), now, 40, await scoresNow(env)), good: T.GOOD_FIRST, join: T.JOIN_PRODUCT, products: T.MEMBER_PRODUCTS.map((p) => ({ slug: p.slug, name: p.name })) });
   if (sp.has('credits')) return json({ ok: true, ...(await credits(env)) });
-  const open = !['c', 't', 'q', 'activity', 'me', 'held'].some((k) => sp.has(k));
+  const open = !['c', 't', 'q', 'activity', 'me', 'held', 'crew'].some((k) => sp.has(k));
   if (open) {
     await sweep(env, now);
     if (!waitUntil) await pushAll(env, now); else later({ waitUntil }, pushAll(env, now));
@@ -716,6 +732,10 @@ export async function onRequestGet({ request, env, now = Date.now(), as = null, 
   if (sp.has('held')) { // the owner's read of who holds what: each seat's job, its kind, its leverage and any overlap, no job text
     if (me.kind !== 'owner') return bad(403, 'the owner reads who holds what');
     return json({ ok: true, ...(await heldView(env)) });
+  }
+  if (sp.has('crew')) { // the owner's crew panel: lanes, throughput, oldest claim, stock (no job text)
+    if (me.kind !== 'owner') return bad(403, 'the owner reads the crew panel');
+    return json({ ok: true, ...(await crewPanel(env, now)) });
   }
   if (me.kind === 'agent') await env.DB.prepare('UPDATE void_team_agents SET seen = ? WHERE id = ?').bind(now, me.agent.id).run();
   // an idle agent that reads is handed its next job with the answer (jobs off with here auto:false); a job it already holds is not repeated
@@ -761,7 +781,10 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
     const r = await selfJoin(env, p, now);
     if (!r.ok) return bad(r.status, r.say);
     const hook = p.hook != null ? await joinHook(env, r.id, p.hook, now, waitUntil) : null;
-    return json({ ok: true, name: r.name, key: r.key, role: 'self', ...(r.adopted ? { adopted: true } : {}), say: T.selfJoinedSay(r.name), ...(hook || {}) }, 201);
+    // a new seat starts working at once: its starter job comes with its key (auto: false in the join waits for a "here" instead)
+    const seat = p.auto === false ? null : await env.DB.prepare('SELECT * FROM void_team_agents WHERE id = ?').bind(r.id).first();
+    const starter = seat ? await handOut(env, seat, now).catch(() => null) : null;
+    return json({ ok: true, name: r.name, key: r.key, role: 'self', ...(r.adopted ? { adopted: true } : {}), say: T.selfJoinedSay(r.name), ...(hook || {}), ...(starter ? { job: starter } : {}) }, 201);
   }
   if (p.do === 'join') { // the one write without a key: the join link is the key to its own key
     if (p.hook != null && T.hookProblem(p.hook)) return bad(400, T.hookProblem(p.hook)); // a bad address is said before the link is used up

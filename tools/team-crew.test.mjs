@@ -93,8 +93,10 @@ test('the crew reads: links, sitemaps, feeds, sections, promos with a real measu
   for (const b of C.CREW) assert.ok(T.NAME_RE.test(b.name) && /^[0-9a-f]{12}$/.test(b.id) && T.CODE_RE.test(b.channel) && !T.RESERVED.includes(b.channel), b.name);
 });
 
+const stocked = (env, n) => { const add = env.DB.raw.prepare("INSERT INTO void_queue VALUES (?, ?, ?, 'queued', '', '2026-11-01T00:00:00Z', '2026-11-01T00:00:00Z')"); for (let i = 0; i < n; i++) add.run('stock-' + i, 'stock job ' + i, 'heal:stock-' + i); };
 test('a run seats the crew, files wants as queue jobs with #work threads, and each due member claims, works and closes its own job', async () => {
   const env = world();
+  stocked(env, 12); // a full stock (lib/team-lanes.js MIN_STOCK): the base two a run
   const out = await crewTick(env, T0);
   assert.equal(out.crew.length, C.CREW.length);
   const ags = rows(env, 'SELECT * FROM void_team_agents');
@@ -128,6 +130,16 @@ test('a run seats the crew, files wants as queue jobs with #work threads, and ea
   const pw = v.wants.find((w) => w.key.startsWith('misses-'));
   if (pw) assert.ok(pw.private && pw.baseline === null && pw.latest === null && !pw.cite.length);
   assert.equal(v.wants.find((w) => w.key === 'exam-images').baseline, 73.9);
+});
+
+test('a low stock files more a run, scaled to the shortfall, and the clock keeps the stock read for the owner\'s panel', async () => {
+  const env = world();
+  const out = await crewTick(env, T0);
+  assert.equal(out.stock.claimable, 0); assert.equal(out.stock.target, 12);
+  assert.ok(out.filed.length > 2, 'an empty board gets more than the base two: ' + out.filed.join(' '));
+  assert.ok(out.filed.includes('link-gone') && out.filed.includes('exam-images'), 'most urgent still first');
+  const kept = JSON.parse(rows(env, "SELECT v FROM void_team_crew WHERE k = 'stock'")[0].v);
+  assert.equal(kept.low, true); assert.equal(kept.filed, out.filed.length);
 });
 
 test('a want closes only when its number moves; handed in with the number unmoved, it goes back on the queue', async () => {
