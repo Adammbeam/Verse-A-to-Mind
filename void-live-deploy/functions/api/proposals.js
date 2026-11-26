@@ -86,7 +86,23 @@ export async function onRequestPatch({ request, env }) {
   const verdict = String((body && body.verdict) || '').slice(0, 500);
   const at = new Date().toISOString();
   await env.DB.prepare('update void_proposals set state = ?, verdict = ?, decided_at = ? where id = ?').bind(next, verdict, at, id).run();
+  if (next === 'shipped' || next === 'refused') await settleTeamJob(env, id, next, verdict, at).catch(() => null);
   return json({ ok: true, id, state: next, verdict });
+}
+
+/** a team seat's patch (functions/api/team.js 'patch' notes its job "patch by team:<name> · proposal <id>"): shipped closes the job and counts
+ *  for the seat; refused puts the job back on the queue with a failed try and the reason */
+async function settleTeamJob(env, id, state, verdict, at) {
+  const job = await env.DB.prepare("select id, note from void_queue where state = 'building' and note like ?").bind('patch by team:% · proposal ' + id + '%').first();
+  if (!job) return;
+  const name = (/^patch by team:([^ ·]+)/.exec(job.note) || [])[1] || '';
+  if (state === 'shipped') {
+    await env.DB.prepare("update void_queue set state = 'done', note = ?, updated = ? where id = ?").bind(('shipped from proposal ' + id + ' by team:' + name).slice(0, 300), at, job.id).run();
+    await env.DB.prepare('update void_team_agents set done = done + 1 where name = ?').bind(name).run().catch(() => null);
+  } else {
+    const tries = (Number((/\btries (\d+)\b/.exec(job.note) || [])[1]) || 0) + 1;
+    await env.DB.prepare("update void_queue set state = 'queued', note = ?, updated = ? where id = ?").bind(('tries ' + tries + ' · proposal ' + id + ' refused: ' + (verdict || 'it did not pass the gates')).slice(0, 300), at, job.id).run();
+  }
 }
 
 /** The diff itself, for the runner that has to apply it. Owner only, and never cached. */
