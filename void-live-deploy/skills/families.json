@@ -13,7 +13,7 @@
  "smoke_at": "2026-11-17",
  "bench_at": "2026-11-16",
  "totals": {
-  "experiment": 2,
+  "experiment": 3,
   "tested": 6,
   "checked": 18,
   "proven": 447
@@ -2837,7 +2837,7 @@
    "name": "The stage",
    "for": "notes, lists, links and how the stage looks and is arranged",
    "count": {
-    "experiment": 0,
+    "experiment": 1,
     "tested": 2,
     "checked": 0,
     "proven": 103
@@ -3798,6 +3798,14 @@
      "success_rate": 1,
      "promoted": "2026-10-29",
      "streak": 22
+    },
+    {
+     "name": "phase",
+     "tier": "experiment",
+     "why": "nothing checks it yet",
+     "last_tested": "2026-11-17",
+     "last_tested_by": "the daily smoke test",
+     "since": "2026-11-26"
     }
    ]
   },
