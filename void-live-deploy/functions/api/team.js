@@ -66,8 +66,10 @@ import { redact } from '../../lib/automation-fix.js';
 import * as P from '../../lib/team-priorities.js';
 import * as L from '../../lib/team-leverage.js';
 import * as LN from '../../lib/team-lanes.js';
+import * as PM from '../../lib/team-promote.js';
+import { FLOORS } from '../../lib/tower.js';
+import { CREW, rivalOf } from '../../lib/team-crew.js';
 import * as T from '../../lib/team.js';
-import { CREW } from '../../lib/team-crew.js';
 import { briefOf } from '../../lib/job-guide.js';
 import * as Dream from '../../lib/brain-dream.js';
 import { REPO } from '../../lib/verse-repo.js';
@@ -306,6 +308,40 @@ export async function crewPanel(env, now) {
   const handed24 = await n("SELECT COUNT(*) AS n FROM void_team_msgs WHERE channel = 'work' AND by = 'verse' AND thread = 0 AND job IS NOT NULL AND at >= ?", now - 864e5);
   let stock = null; try { const r = await env.DB.prepare("SELECT v FROM void_team_crew WHERE k = 'stock'").first(); stock = r ? JSON.parse(r.v) : null; } catch (_) { stock = null; }
   return LN.panelOf({ seats, done24, handed24, claimable: T.rank(await queued(env), now).length, stock, now });
+}
+/** Verse makes #ideas proposals jobs on its own clock (lib/team-promote.js vet: no secret, a concrete acceptance gate, not a duplicate, rate
+ *  caps, rival names out of the public text). A proposal that fails a guard gets one reply saying which and stays a proposal; one that waits
+ *  on a cap is tried again next tick. -> [{ id, job }] promoted this run */
+const NOT_YET = 'Not a job yet: ';
+export async function promoteIdeas(env, now = Date.now()) {
+  let rows = [];
+  try { rows = (await env.DB.prepare("SELECT m.id, m.by, m.body FROM void_team_msgs m WHERE m.channel = 'ideas' AND m.thread = 0 AND (m.job IS NULL OR m.job = '') AND m.by NOT IN ('verse') AND NOT EXISTS (SELECT 1 FROM void_team_msgs r WHERE r.thread = m.id AND r.by = 'verse' AND r.body LIKE ?) ORDER BY m.id ASC LIMIT 60").bind(NOT_YET + '%').all()).results || []; } catch (_) { return []; }
+  if (!rows.length) return [];
+  let open = [];
+  try { open = (await env.DB.prepare("SELECT id, ask, note FROM void_queue WHERE state IN ('queued', 'building')").all()).results || []; } catch (_) { return []; } // no build queue in this workspace
+  const openKeys = new Set(open.map((j) => T.askKey(j.ask))), rivals = [...new Set(FLOORS.map((f) => rivalOf(f.id)).filter(Boolean))];
+  const { by: names } = await namesOf(env), out = [], day = new Date(now - DAY).toISOString();
+  let promotedOpen = open.filter((j) => /^idea-\d+$/.test(j.id)).length;
+  for (const m of rows) {
+    if (out.length >= PM.PROMOTE.perTick) break;
+    const who = m.by === 'owner' ? 'the owner' : 'team:' + (names[m.by] || 'gone');
+    const authorToday = await env.DB.prepare("SELECT COUNT(*) AS n FROM void_queue WHERE id LIKE 'idea-%' AND note LIKE ? AND at > ?").bind('proposed in #ideas by ' + who + ' ·%', day).first().then((r) => Number(r.n) || 0).catch(() => 0); // void-review: ok (at most perTick proposals reach here a run)
+    const v = PM.vet(T.hideSecrets(m.body), { id: m.id, openKeys, rivals, authorToday, promotedOpen });
+    if (!v.ok) { if (!v.wait) await write(env, { c: 'ideas', by: 'verse', body: NOT_YET + v.why + '.', thread: m.id, now }); continue; } // void-review: ok (one reply a proposal, ever)
+    const id = 'idea-' + m.id, at = new Date(now).toISOString(), note = ('proposed in #ideas by ' + who + ' · made a job by Verse\'s guards · gate: ' + v.gate).slice(0, 300);
+    const r = await env.DB.prepare("INSERT OR IGNORE INTO void_queue (id, ask, target, state, note, at, updated) VALUES (?, ?, ?, 'queued', ?, ?, ?)").bind(id, v.ask, 'feature:' + id, note, at, at).run(); // void-review: ok (at most perTick a run)
+    await env.DB.prepare('UPDATE void_team_msgs SET job = ? WHERE id = ?').bind(id, m.id).run(); // void-review: ok (same)
+    if (r.meta.changes !== 1) continue;
+    await write(env, { c: 'ideas', by: 'verse', body: 'Verse made this a job (' + id + '): it passed the guards (no secret, an acceptance gate, not a duplicate). The next idle seat takes it, or claim it on the board.', thread: m.id, now }); // void-review: ok (same)
+    openKeys.add(T.askKey(v.ask)); promotedOpen++; out.push({ id: m.id, job: id });
+  }
+  return out;
+}
+/** a seat that may file a job directly: role lead, or one that has handed in LEAD_SHIPPED jobs with a pull request */
+async function leadNow(env, a) {
+  if (!a) return false;
+  const n = await env.DB.prepare('SELECT COUNT(*) AS n FROM void_team_credits WHERE agent = ?').bind(a.id).first().then((r) => Number(r.n) || 0).catch(() => 0);
+  return PM.isLead(a, n);
 }
 // Verse's leverage for every ranked job (lib/team-crew-run.js prioritizeRun keeps it), for the board's cards. -> { id: [score, why] } or null
 async function scoresNow(env) {
@@ -850,7 +886,7 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       return json({ ok: true, queued, say: queued.length ? queued.length + ' #work post' + (queued.length === 1 ? '' : 's') + ' put on the build queue' : 'every #work post of the owner is a job already' });
     }
     case 'file': { // an agent's (or the owner's) own top-level #work post as a job: { thread: <its id> }, or { body } to post it and file it at once
-      if (member) return bad(403, 'a member proposes in #ideas ({"do":"propose"}); the owner makes it a job');
+      if (member && !(await leadNow(env, a))) return bad(403, 'a member proposes in #ideas ({"do":"propose"}); Verse makes a proposal with an acceptance gate a job on its next tick');
       if (a) { const lim = await rated(env, a, now); if (lim) return bad(429, lim); }
       let msg = parseInt(p.thread, 10) || 0;
       if (!msg) {
