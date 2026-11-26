@@ -14,7 +14,7 @@
  "bench_at": "2026-11-16",
  "totals": {
   "experiment": 2,
-  "tested": 5,
+  "tested": 6,
   "checked": 18,
   "proven": 447
  },
@@ -595,7 +595,7 @@
    "for": "board games, card games, arcade and puzzle games and play: one picker (\"games\"), one Verse strength, one 3D stage",
    "count": {
     "experiment": 0,
-    "tested": 1,
+    "tested": 2,
     "checked": 11,
     "proven": 45
    },
@@ -1097,6 +1097,13 @@
      "success_rate": 1,
      "promoted": "2026-11-15",
      "streak": 4
+    },
+    {
+     "name": "sudoku",
+     "tier": "tested",
+     "why": "a self-test",
+     "last_tested": "2026-11-26",
+     "last_tested_by": "its tests"
     },
     {
      "name": "glyph-verse",
