@@ -46,6 +46,9 @@ test('the weather card: hours from the hour now, visibility as people read it, a
   const time = Array.from({ length: 168 }, (_, i) => { const d = new Date(Date.UTC(2026, 9, 26) + i * 36e5); return d.toISOString().slice(0, 13) + ':00'; });
   const g = graph({ time, temperature_2m: time.map((_, i) => 10 + (i % 24)), precipitation_probability: time.map((_, i) => (i < 10 ? 50 : 0)) }, 5, false);
   assert.match(g, /The next 7 days, hour by hour/); assert.equal((g.match(/<rect /g) || []).length, 10); assert.equal((g.match(/>(Sun|Mon|Tue|Wed|Thu|Fri|Sat)</g) || []).length, 7);
+  // a copied card carries the graph key's words too (the guard read "orange" and "temperature" as missing)
+  assert.doesNotMatch(g, /data-share-skip/);
+  assert.match(g, /data-share-short="The next 7 days, hour by hour\. Orange line: temperature\. Blue bars: chance of rain\."/);
   assert.equal(g.match(/points="([^"]+)"/)[1].split(' ').length, 168); assert.match(g, />33°</); assert.match(g, />10°</);
   assert.equal(graph({ time: ['x'], temperature_2m: [1] }, 0, false), '', 'one hour is no graph');
 });
