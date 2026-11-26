@@ -178,3 +178,5 @@
 # standard name for Starboard
 /dashboard /starboard/ 301
 /dashboard/ /starboard/ 301
+/games /arcade/ 301
+/games/ /arcade/ 301

@@ -131,7 +131,7 @@
  "tables": ["check all on the list","csv table: name,age ⏎ ann,30 ⏎ bo,25","drag a file onto the stage","make a table from a,b,c","make a table from name, age, city","paste csv: item;price ⏎ tea;3 ⏎ cake;5","remove checked items from the list","show the dropped files","sort the list","sum of column 2","table from csv: a,b ⏎ 1,2","transpose the table","turn the list into a table"],
  "qr-scan": ["qr code scanner","read a barcode","scan a barcode from a photo","scan a qr code"],
  "sql-query": ["query this csv","query this sqlite","query this table","run a query on this csv","sql","sql: select * from data"],
- "text-tools": ["are listen and silent anagrams","extract emails","extract emails: write to bob@example.com or ann@example.org","remove duplicate lines","remove duplicate lines: a ⏎ b ⏎ a","rot13 hello world","slugify hello world","sort these lines: pear ⏎ apple ⏎ fig","word frequency: the cat and the dog"],
+ "text-tools": ["are listen and silent anagrams","are silent and listen anagrams","extract emails","extract emails: write to bob@example.com or ann@example.org","remove duplicate lines","remove duplicate lines: a ⏎ b ⏎ a","rot13 hello world","slugify hello world","sort these lines: pear ⏎ apple ⏎ fig","word frequency: the cat and the dog"],
  "memory-graph": ["back up what you know about me","download my graph","export my memory","export my patterns as json","forget my patterns","import my memory","my patterns","preview my memory","start remembering","stop remembering","what are my interests","what do i usually ask for","what do you know about me","what's in my memory export"],
  "memory-preview": ["memory preview","show my memory snippets","show what you remember about me","what memories do i have"],
  "memory": ["ask my memory about python","forget that i prefer tabs over spaces","please remember that my standup is at 9:30 every day","privacy","remember anything about rust","remember that i prefer tabs over spaces","remember: the staging key lives in the team vault","verse, remember that i like my reports short","void, remember that i like my reports short","what did i build with react","what do you remember about the parser","which projects have i written in go"],
@@ -414,5 +414,12 @@
  "resume": ["make a cover letter","make a resume","resume builder","write a cover letter","write a professional email","write a resume"],
  "budget-planner": ["budget planner","expense tracker","make a budget","make an expense tracker","monthly budget","track my expenses"],
  "business-card": ["business card for ana ruiz","create a contact card","design my business card","make a business card"],
- "handoff-confidence": ["confidence for the reminder system","delivery confidence for client onboarding","handoff confidence for the invoice automation","how reliable is the delivery for support routing"]
+ "handoff-confidence": ["confidence for the reminder system","delivery confidence for client onboarding","handoff confidence for the invoice automation","how reliable is the delivery for support routing"],
+ "acronym": ["acronym of as soon as possible","expand lol","make an acronym for to be announced"],
+ "anagram": ["scramble the word hello"],
+ "client-stage-tracker": ["client stage tracker for marketing funnel","replacement ladder for the support process","stage tracker for client onboarding","track stages for invoice automation"],
+ "client-work-drop": ["client tasks that go away: invoice reminders","drop list for the support router","package the client tasks that drop for the crm sync","show the client work drop for weekly reports","what work drops for client onboarding"],
+ "fortune": ["fortune","fortune cookie","give me a fortune"],
+ "pig-latin": ["pig latin hello","piglatin the phrase good morning"],
+ "source-to-site": ["build a page from the handoff notes","notes to site for the support process","source to site for client status notes","turn this csv into a dashboard"]
 }
