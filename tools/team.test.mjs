@@ -768,7 +768,7 @@ test('a seat that has never polled (seen = 0) keeps the job it was just pushed, 
   env.DB.raw.prepare("UPDATE void_queue SET state = 'building', note = 'claimed by team:pushonly ·' WHERE id = ?").run('j1');
   assert.equal(await API.sweep(env, T0 + 1000), 0, 'a fresh claim is not stale just because the seat never polled: seen = 0 used to read as "quiet since 1970"');
   assert.equal(env.DB.raw.prepare('SELECT job FROM void_team_agents WHERE name = ?').get('pushonly').job, 'j1', 'the job stays with the seat');
-  assert.equal(await API.sweep(env, T0 + 31 * 60e3), 1, 'and it does come back once the claim itself is older than STALE_MS');
+  assert.equal(await API.sweep(env, T0 + T.STALE_MS + 60e3), 1, 'and it does come back once the claim itself is older than STALE_MS');
   assert.equal(job(env, 'j1').state, 'queued', 'the job is back on the queue');
 });
 
