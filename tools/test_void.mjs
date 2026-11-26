@@ -1918,7 +1918,7 @@ try {
     await E.ctx.setOffline(false); await E.p.waitForTimeout(500);
     const back = await E.p.evaluate(() => ({ ph: document.getElementById('input').placeholder, off: document.documentElement.classList.contains('void-offline') }));
     check('empty state: offline shows a calm amber halo and one plain line in the bar, locks nothing (a calculation still answers), and clears the moment the connection returns',
-      !online0.off && online0.ph === 'Ask anything' && off.off && /offline: skills that need the network will wait/.test(off.ph) && /255, 1[69]\d, \d+/.test(off.lens) && !off.dis && /\b36\b/.test(calcOff) && !back.off && back.ph === 'Ask anything', JSON.stringify({ online0, off, back, calc: calcOff.slice(0, 120) }));
+      !online0.off && online0.ph === 'Ask Verse' && off.off && /offline: skills that need the network will wait/.test(off.ph) && /255, 1[69]\d, \d+/.test(off.lens) && !off.dis && /\b36\b/.test(calcOff) && !back.off && back.ph === 'Ask Verse', JSON.stringify({ online0, off, back, calc: calcOff.slice(0, 120) }));
     // 2) the on-screen keyboard: with a mocked visual viewport 300 px shorter, the bar sits above it
     const vh = (await E.p.evaluate(() => innerHeight));
     await E.p.evaluate(() => { window.__vv.height = innerHeight - 300; window.__vv.dispatchEvent(new Event('resize')); }); await E.p.waitForTimeout(300);
@@ -7561,7 +7561,7 @@ try {
     await p.fill('#input', 'films'); const typed = await p.inputValue('#input');
     const letters = (seen.words || []).filter((w) => /[A-Za-z]/.test(w));
     check('blank home: a phone shows the void and the ask bar, and the only word is the placeholder',
-      seen.ph === 'Ask anything' && seen.stage && seen.bar && !seen.hero && !seen.nav && !seen.install && typed === 'films' && !letters.length
+      seen.ph === 'Ask Verse' && seen.stage && seen.bar && !seen.hero && !seen.nav && !seen.install && typed === 'films' && !letters.length
       && (await p.title()) === 'Verse · A-to-Mind' && !H.errors.length, JSON.stringify({ seen, letters, typed, errors: H.errors }));
     await H.ctx.close();
 
@@ -7658,7 +7658,7 @@ try {
       const P = phone ? await fresh({ phone: true }) : await fresh();
       await P.p.setViewportSize({ width: w, height: 800 });
       const home = await P.p.evaluate(() => { const h = document.querySelector('h1'), r = h && h.getBoundingClientRect(); return { ph: document.getElementById('input').placeholder, hero: !!(r && (r.width >= 2 || r.height >= 2)), nav: !!document.getElementById('verse-nav'), install: !!document.getElementById('verse-install') }; });
-      check('blank home at ' + w + ': the void and the ask bar', home.ph === 'Ask anything' && !home.hero && !home.nav && !home.install, JSON.stringify(home));
+      check('blank home at ' + w + ': the void and the ask bar', home.ph === 'Ask Verse' && !home.hero && !home.nav && !home.install, JSON.stringify(home));
       await P.ask('timer 5 min', 800); await P.ask('draw a cat', 1200); await P.ask('weather in Tokyo', 1200); await P.ask('how are you different', 900); await P.p.waitForTimeout(1300);
       const three = await named(P.p);
       check('three asks at ' + w + ' (' + pt + ') leave the timer, the cat and the weather open together', three.n >= 3 && three.timer && three.cat && three.weather && !P.errors.length, JSON.stringify(three));
