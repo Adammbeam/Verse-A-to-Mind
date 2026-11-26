@@ -4,6 +4,7 @@
 // its skills (skills/index.json) and its will (void_kv 'will', the same thing GET /api/will shows). All of it is already
 // public on a-to-mind.com; nothing owner-only (queue, earnings, spends) is read here. Also its games and card miniatures
 // (self.json) and what it last said about itself (void_kv 'voice', lib/voice.js), so "what feels weak about you?" gets its own words.
+import { lessonLines } from './brain-lessons.js';
 import { knowsFacts, voiceFacts, keptFacts } from './voice.js';
 import { PERSONA } from './persona.js';
 import { models, ANSWER_FALLBACK } from './models.js';
@@ -44,7 +45,7 @@ const BUILDERS = /\b(your|v0[1i]d'?s?|(?:verse|void)'?s?|verse'?s?)\s+builders?\
 // Verse's own money and growth ("you have earned your first $100, how would you spend it?", "how is your store doing"): its
 // facts (the store, the wishlist, what it has and wants) answer, not generic advice for a stranger. "you" must be the subject
 // or "your" must own the money, so "how should I spend $100" stays the visitor's own question.
-const MONEY = /\byou\s+(have\s+|'ve\s+|just\s+)?(earned|made|raised|sold|got)\b[^?.!]{0,40}(\$|dollars?|money|sales?|first)|\b(would|should|will|could)\s+you\s+(spend|invest|reinvest|use|buy)\b[^?.!]{0,30}\b(your|it|the money|earnings|first)\b|\byour\s+(earnings|revenue|income|budget|money|sales|store|first\s+\$?\d+)\b/i;
+const MONEY = /\byou\s+(have\s+|'ve\s+|just\s+)?(earned|made|raised|sold|got)\b[^?.!]{0,40}(\$|dollars?|money|sales?|first)|\b(would|should|will|could)\s+you\s+(spend|(?:re)?invest|use|buy)\b[^?.!]{0,30}\b(your|it|the money|earnings|first)\b|\byour\s+(earnings|revenue|income|budget|money|sales|store|first\s+\$?\d+)\b/i;
 // who or what Verse is ("who are you?", "are you an AI?", "what model are you?", "who created you?"): an identity probe is a fact
 // about Verse, answered from its own facts and persona, never a question for Wikipedia ("Who Are You" is also a song). Asked by
 // Verse's will, 2026-10-30: "Fix the self-skill router so it stops treating identity-based probes as questions instead of facts."
@@ -124,19 +125,21 @@ const asset = async (env, origin, p) => {
 // on a busy runner could cross 800 ms and drop self/skills to null (flake mvo3j82w). Static assets are cached per ASSETS binding.
 export async function readSelf(env, origin, ms = 2500) {
   const kv = async (k) => { try { const r = await env.DB.prepare('SELECT v FROM void_kv WHERE k = ?').bind(k).first(); return r && r.v ? JSON.parse(r.v) : null; } catch (_) { return null; } };
-  const [self, skills, will, voice, replies, families] = await Promise.all([
+  const [self, skills, will, voice, replies, families, lessons] = await Promise.all([
     within(asset(env, origin, '/self.json'), ms),
     within(asset(env, origin, '/skills/index.json'), ms),
     within(kv('will'), ms),
     within(kv('voice'), ms),
     within(kv('voice-replies'), ms),
     within(asset(env, origin, '/skills/families.json'), ms),
+    within(kv('lessons'), ms), // what its results taught it (lib/brain-lessons.js)
   ]);
-  return { self, skills: Array.isArray(skills) ? skills : null, will, voice: Array.isArray(voice) ? voice : null, replies: Array.isArray(replies) ? replies : null, families: families && Array.isArray(families.families) ? families : null };
+  return { self, skills: Array.isArray(skills) ? skills : null, will, voice: Array.isArray(voice) ? voice : null, replies: Array.isArray(replies) ? replies : null, families: families && Array.isArray(families.families) ? families : null, lessons: Array.isArray(lessons) ? lessons : null };
 }
 
-export function selfFacts({ self, skills, will, voice, replies, families } = {}, { card = false, note = '' } = {}) {
+export function selfFacts({ self, skills, will, voice, replies, families, lessons } = {}, { card = false, note = '' } = {}) {
   const parts = [];
+  if (lessons && lessons.length) parts.push('What my results taught me lately (each from a want I settled by its number):\n' + lessonLines(lessons, 5).join('\n'));
   const cf = card ? cardFacts(self, { note }) : '';
   if (cf) parts.push(cf);
   parts.push('What I aim to be: ' + ((self && self.aim) || AIM));

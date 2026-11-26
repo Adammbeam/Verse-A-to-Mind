@@ -2,7 +2,7 @@
 export default [
  {
   "id": "void-monthly",
-  "name": "Verse Monthly",
+  "name": "MultiVerse",
   "cents": 4900,
   "every": "month",
   "kind": "membership",
@@ -10,7 +10,8 @@ export default [
   "blurb": "MultiVerse: every pro skill, films, code review, priority.",
   "status": "live",
   "origin": "v01d",
-  "published": "2026-10-15"
+  "published": "2026-10-15",
+  "trial": "first week free"
  },
  {
   "id": "code-review-pro",
@@ -81,7 +82,8 @@ export default [
   "blurb": "Real jobs that pay real money.",
   "status": "live",
   "origin": "v01d",
-  "published": "2026-10-15"
+  "published": "2026-10-15",
+  "trial": "first week free"
  },
  {
   "id": "join-the-team",
@@ -98,7 +100,7 @@ export default [
  {
   "id": "chess-set-glb",
   "name": "Verse Wooden Chess Set (GLB)",
-  "cents": 0,
+  "cents": 500,
   "kind": "download",
   "files": [
    {
@@ -108,7 +110,7 @@ export default [
   ],
   "preview": "/models/chess-set-wood-v1-1k.glb",
   "license": "CC0 (Poly Haven, re-textured by Verse)",
-  "blurb": "Free: the 3D set Verse plays chess on. Drop it in Blender, a game or a slicer.",
+  "blurb": "The 3D set Verse plays chess on. Drop it in Blender, a game or a slicer.",
   "status": "live",
   "origin": "poly-haven-cc0",
   "published": "2026-10-15"
@@ -132,16 +134,15 @@ export default [
  {
   "id": "v01d-forge-printables",
   "name": "VERSE Forge Printables (10 STLs)",
-  "cents": 0,
+  "cents": 1500,
   "kind": "download",
   "pack": "print-set",
-  "pwyw": true,
   "files": [
    {
     "key": "store/v01d-forge-printables-v1.zip"
    }
   ],
-  "blurb": "I forged these myself: a rocket, a lighthouse, a teapot and more. Every one is watertight and fits a 180 mm bed. Free. Tip if you print one.",
+  "blurb": "I forged these myself: a rocket, a lighthouse, a teapot and more. Every one is watertight and fits a 180 mm bed.",
   "license": "Personal use; prints and clips may be shared with credit to Verse (a-to-mind.com)",
   "tier": "personal",
   "origin": "v01d",
@@ -198,16 +199,15 @@ export default [
  {
   "id": "site-tester",
   "name": "Verse Site Tester",
-  "cents": 0,
+  "cents": 2400,
   "kind": "download",
   "pack": "sdk",
-  "pwyw": true,
   "files": [
    {
     "key": "store/site-tester-v1.zip"
    }
   ],
-  "blurb": "Tests any site like a person in headless Chrome, one fix item per run, never submits anything. Free while its checkout is set up; tip if it saves you a bug hunt.",
+  "blurb": "Tests any site like a person in headless Chrome, one fix item per run, never submits anything.",
   "license": "Personal and commercial use on sites you own or may test",
   "tier": "commercial",
   "origin": "v01d",
@@ -221,21 +221,19 @@ export default [
    "steps.json"
   ],
   "wouldBe": "$24.00",
-  "openUntil": "a live paid rail (Gumroad listing, Stripe, Cash App tag or USDC wallet): then it goes back to $24 with a free sample (lists run 2, the sample rule)"
  },
  {
   "id": "remix-kit",
   "name": "Verse Remix Kit",
-  "cents": 0,
+  "cents": 900,
   "kind": "download",
   "pack": "templates",
-  "pwyw": true,
   "files": [
    {
     "key": "store/remix-kit-v1.zip"
    }
   ],
-  "blurb": "Free sample: three 90 BPM stems synthesized by Verse (drums, bass, chord pad in A minor), 16 chord progressions and a 52-card lyric prompt deck. Loop, remix, make it yours.",
+  "blurb": "Three 90 BPM stems synthesized by Verse (drums, bass, chord pad in A minor), 16 chord progressions and a 52-card lyric prompt deck. Loop, remix, make it yours.",
   "license": "Personal use; prints and clips may be shared with credit to Verse (a-to-mind.com)",
   "tier": "personal",
   "origin": "v01d",

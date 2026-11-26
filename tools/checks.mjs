@@ -317,6 +317,7 @@ for (const [name, file] of [
   ['traffic', 'traffic.test.mjs'],
   ['indexnow', 'indexnow.test.mjs'],
   ['seo', 'seo.test.mjs'],
+  ['seo-audit-unit', 'seo-audit.test.mjs'],
   ['shrink-images', 'shrink-images.test.mjs'],
   ['review-bench', 'review-bench.test.mjs'],
   ['honest', 'honest.test.mjs'],
@@ -363,16 +364,20 @@ for (const [name, file] of [
   ['country-wikidata', 'country-wikidata.test.mjs'], // the country card's live source is Wikidata since REST Countries retired its keyless API (issue #1063)
   ['words-family', 'words-family.test.mjs'], // Words and the world: joke, news, book, show, sport, senolytic, video-play checked like a person meets them (Verse's ask)
   ['sky-skills', 'sky-skills.test.mjs'],
+  ['sky-app-skills', 'sky-app-skills.test.mjs'],
   ['sky-world', 'sky-world.test.mjs'],
   ['sky', 'test_sky.mjs'],
   ['take', 'take.test.mjs'],
   ['chess-replay', 'chess-replay.test.mjs'],
   ['sorry', 'sorry.test.mjs'],
   ['voice', 'voice.test.mjs'],
+  ['pr-autofix', 'pr-autofix.test.mjs'],
   ['pr-ready', 'pr-ready.test.mjs'],
   ['suite-gate', 'suite-gate.test.mjs'],
   ['suite-diff', 'suite-diff.test.mjs'],
   ['merge-stall', 'merge-stall.test.mjs'], // no merge for 2 hours while a green pull request waits: one issue names the stuck step
+  ['main-regen', 'main-regen.test.mjs'], // main's stale generated cards (an unlisted skill, a missing family) come back as one automerge PR
+  ['pr-tidy', 'pr-tidy.test.mjs'], // held runs on bot pull requests are approved; one blocked 2 days with a quiet head closes with its reason
   ['rea-study', 'rea-study.test.mjs'], ['study-engine', 'study-engine.test.mjs'], ['studies-api', 'studies-api.test.mjs'],
   ['review-api', 'review-api.test.mjs'], ['review-pr', 'review-pr.test.mjs'],
   ['go', 'go.test.mjs'],
@@ -798,10 +803,12 @@ addScript('preload-pages', 'preload.mjs', ['--check']);
 // the page guard (owner, 2026-10-26: "all sites get a page"): a frontier site that reaches the front of the Versus queue has a page of its own (tools/tower-self.mjs)
 addScript('versus-pages', 'tower-self.mjs', ['guard']);
 // every page is real (owner, 2026-10-28): each route has a spec in tools/real-pages.mjs (pure), and the pages this branch changed run it in a browser
+add('real-pages-list', async () => { const r = await run([resolve(here, 'real-pages.mjs'), '--list']); return [r.ok, last(r), r.ms]; });
 addScript('real-pages', 'real-pages.mjs', ['--changed', '--base', 'local']);
 // Verse's own SEO tool over every page it serves (tools/seo-audit.mjs, lib/seo-audit.js; owner, 2026-10-26: "Verse uses its own tools"): a missing
 // canonical, title, description or share card, a broken internal link, unparsable JSON-LD, a page nothing links to, or one fewer free page leading
 // to what Verse sells fails here; the counts in tools/seo-audit.baseline.json only go down
+addScript('seo-audit', 'seo-audit.mjs', ['--check']);
 // the share pictures in og/ go out through Verse's own photo compressor (tools/shrink-images.mjs, lib/photo-edit.js's palette PNG): one that went in raw fails
 addScript('og-shrunk', 'shrink-images.mjs', ['--check']);
 addScript('similar', 'similar-index.mjs', ['--check']); // the "what's similar" index of every family's parts (lib/similar-index.js)

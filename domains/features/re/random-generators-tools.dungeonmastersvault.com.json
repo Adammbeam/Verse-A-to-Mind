@@ -1,0 +1,21 @@
+{
+ "site": "tools.dungeonmastersvault.com",
+ "url": "https://tools.dungeonmastersvault.com/",
+ "scanned": "2026-11-22",
+ "blocked": {
+  "kind": "unreachable",
+  "why": "page.goto: net::ERR_NAME_NOT_RESOLVED at https://tools.dungeonmastersvault.com/ Call log: - navigati"
+ },
+ "assetCount": 0,
+ "bytes": 0,
+ "robots": {
+  "disallow": [],
+  "sitemaps": [],
+  "crawlDelay": null
+ },
+ "storage": {
+  "local": [],
+  "session": [],
+  "idb": []
+ }
+}

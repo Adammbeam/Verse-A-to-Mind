@@ -52,19 +52,19 @@ test('over the site: duplicates, inbound counts, orphans and the pages that lead
 });
 
 test('the related row in the HTML is the same links the script draws, and the services lead to each other', () => {
-  assert.match(relatedLinks('/word-count/'), /href="\/stopwatch\/"[^>]*>Stopwatch and timer<\/a> <a href="\/fanfic\/">Fan fiction<\/a> <a href="\/tools\/">All tools<\/a>$/);
+  assert.match(relatedLinks('/word-count/'), /href="\/stopwatch\/"[^>]*>Stopwatch and timer<\/a> <a href="\/tools\/">All tools<\/a>$/);
   const html = '<main><nav id="related" aria-label="Related tools"></nav></main>';
   const once = withRelated(html, '/word-count/'); assert.match(once, /<nav id="related" aria-label="Related tools"><!-- related -->.*<!-- \/related --><\/nav>/);
   assert.equal(withRelated(once, '/word-count/'), once, 'written again, it is the same');
   assert.equal(withRelated('<main></main>', '/word-count/'), null);
   const more = moreTools('<a href="/color/">c</a>'); assert.ok(!more.includes('"/color/"') && more.includes('"/code-review/"') && more.includes('"/photos/"'));
-  // a tool built twice for two sites keeps one plain line, and the second page is linked as "page 2" so it is no orphan (lists run 15)
-  const single = moreTools(''); assert.equal((single.match(/>Unit converter: every unit at once, exact</g) || []).length, 1, 'a tool built twice for two sites keeps one plain line');
-  assert.match(single, /href="\/convert\/unit-converter-2\/">Unit converter: every unit at once, exact · page 2</, 'the second page is linked, not left an orphan');
+  // a leftover second page used to be listed as "page 2"; the convert family now keeps one plain line
+  const single = moreTools(''); assert.equal((single.match(/>Unit Converter</g) || []).length, 1, 'the convert family keeps one plain line');
+  assert.ok(!single.includes('/convert/unit-converter'), 'the old second convert pages are gone');
   // every row has the same "Open here" button as the hand-written rows (2026-10-30: 70 tools could only be left, not opened beside the others),
   // and the searches people make for it, for the page's find box
   assert.equal((more.match(/<li/g) || []).length, (more.match(/<button type="button" data-open="\//g) || []).length, 'each More tools row can be opened on the bench');
-  assert.ok(/<li data-find="[^"]*compress image online[^"]*"><a href="\/photos\/">Photo tools<\/a><button type="button" data-open="\/photos\/">Open here<\/button><\/li>/.test(more));
+  assert.ok(/<li data-find="[^"]*compress image online[^"]*"><a href="\/photos\/">Photo Editor<\/a><button type="button" data-open="\/photos\/">Open here<\/button><\/li>/.test(more));
   for (const p of OFFER_PAGES) { const row = offersRow(p); assert.ok(!row.includes('href="' + p + '"'), p); assert.match(row, /href="\/fix\/"/); }
 });
 

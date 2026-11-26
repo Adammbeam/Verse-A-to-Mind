@@ -5,7 +5,7 @@
  */
 import { bandMini } from '../lib/card-mini.js';
 import { swapAsk } from './swaps.js'; // "how to make buttermilk" is a pantry swap, not a dish
-import { BUILT_IN, exactly, fromMeal, scale, swapUnits } from '../lib/recipes.js';
+import { BUILT_IN, exactly, fromMeal, scale, swapUnits, gentler, thanksLine } from '../lib/recipes.js';
 import { grounded } from '../lib/ground.js';
 // what "make" and "cook" take that is not food ("how do i make money", "what can i make with my time")
 const NOT_FOOD = /\b(money|friends?|website|site|app|apps|game|games|video|account|living|difference|decisions?|choices?|sense|it|this|that|me|you|him|her|them|music|songs?|beats?|bots?|server|robot|mods?|slime|portal|potions?|paper|origami|time|love|plans?|lists?|calls?|payments?|changes?|progress|mistakes?|noise|space|room|tea\s+party|fire|soap|candles?)\b/i;
@@ -26,6 +26,10 @@ export function dishOf(text) {
   const n = fed && +fed[2] >= 1 && +fed[2] <= 200 ? +fed[2] : 0, asked = n ? fed[1] : t;
   m = asked.match(/^(?:(?:give|show|find)\s+me\s+)?(?:a\s+)?recipes?\s+(?:for|of)\s+(.{2,40})$/i) || asked.match(/^(?:a\s+)?(.{2,40}?)\s+recipes?$/i);
   if (m) return n ? { dish: m[1].replace(/^(?:a|an|some|the)\s+/i, '').trim(), by: 'name', servings: n } : { dish: m[1].replace(/^(?:a|an|some|the)\s+/i, '').trim(), by: 'name' };
+  // "receta de guacamole", "recette de crêpes", "Rezept für Pfannkuchen", "ricetta della carbonara", "receita de feijoada": the same ask in
+  // Spanish, French, German, Italian or Portuguese (the outcome exam's "receta de guacamole" reached another skill)
+  m = asked.match(/^(?:una\s+|la\s+)?(?:recetas?\s+(?:de(?:l)?|para)|recettes?\s+(?:de\s+la|de|du|des|d['’])|rezepte?\s+(?:für|fur|von)|ricett[ae]\s+(?:della|dello|delle|degli|del|di)|receitas?\s+(?:de|da|do))\s*(.{2,40})$/i);
+  if (m && !NOT_FOOD.test(m[1]) && !/\b(?:dinero|argent|geld|soldi|dinheiro|amigos|amis|freunde)\b/i.test(m[1])) return { dish: m[1].replace(/^(?:la|el|los|las|le|les|l['’]|der|die|das|il|lo|a|o|os|as)\s*/i, '').trim(), by: 'name', ...(n ? { servings: n } : {}) };
   // "how do i make guacamole", "how to cook rice", "how to bake banana bread"; not money, friends, a website…
   m = t.match(/^(?:how\s+(?:do\s+(?:i|you)|to|can\s+i|should\s+i)|best\s+way\s+to)\s+(?:make|cook|bake|prepare)\s+(?:a\s+|an\s+|some\s+|the\s+)?([a-z][a-z' -]{1,30})$/i);
   if (m && !NOT_FOOD.test(m[1])) return { dish: m[1].trim(), by: 'name' };
@@ -50,7 +54,7 @@ async function pageRecipe(q, el, api, base, pre) {
   let r = pre || (q.by === 'built' ? BUILT_IN.find((x) => x.name.toLowerCase() === q.dish.toLowerCase()) : null);
   if (q.by === 'mealdb' && !pre) { const j = await fetch(base + 'lookup.php?i=' + encodeURIComponent(q.id)).then((x) => x.json()); if (!api._pageStill(el)) return 'recipe'; r = fromMeal(j && j.meals && j.meals[0]); }
   if (!r) { el.innerHTML = '<h2>' + esc(q.dish) + '</h2><p>That recipe is not in the recipe service now.</p>'; return 'none'; }
-  const n = q.servings || r.servings, f = n / r.servings, line = (s) => swapUnits(scale(s, f), q.units), step = (s) => swapUnits(s, q.units);
+  const n = q.servings || r.servings, f = n / r.servings, line = (s) => swapUnits(scale(s, f), q.units), step = (s) => swapUnits(gentler(s), q.units);
   // TheMealDB gives no servings: its 4 is a guess, and the card says so, also when it scaled from it
   const guess = r.servingsGuessed ? (q.servings && n !== r.servings ? ' (scaled from a guessed ' + r.servings + ')' : ' (a guess)') : '';
   const sub = [n + ' ' + (r.yield || (n === 1 ? 'serving' : 'servings')) + guess, q.units === 'metric' ? 'metric' : 'US measures', r.area, r.category].filter(Boolean).join(' · ');
@@ -58,6 +62,7 @@ async function pageRecipe(q, el, api, base, pre) {
     + (r.image && /^https:\/\/www\.themealdb\.com\//.test(r.image) ? '<img alt="" src="' + esc(r.image) + '/preview">' : '')
     + '<div class="sub" style="margin-top:8px">Ingredients</div><ul>' + r.ingredients.map((x) => '<li>' + esc(line(x)) + '</li>').join('') + '</ul>'
     + '<div class="sub">Steps</div><ol>' + r.steps.slice(0, 20).map((x) => '<li style="margin:3px 0">' + esc(step(x)) + '</li>').join('') + '</ol>'
+    + '<p class="thanks" style="margin-top:10px;font-style:italic;opacity:.85">' + esc(r.thanks || thanksLine(r)) + '</p>'
     + (q.by === 'mealdb' ? '<div class="src">Source: <a href="https://www.themealdb.com/meal/' + encodeURIComponent(q.id) + '" target="_blank" rel="noopener">TheMealDB</a></div>' : '');
   // the card's page link opens this same recipe at these servings and units (lib/card-frame.js pageOfCard)
   el.dataset.page = '/recipes/?' + (q.by === 'mealdb' ? 'id=' + q.id : 'q=' + encodeURIComponent(r.id.replace(/-/g, ' '))) + (n !== r.servings ? '&servings=' + n : '') + '&units=' + q.units;

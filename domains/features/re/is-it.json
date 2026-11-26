@@ -1,0 +1,224 @@
+{
+ "site": "isitchristmas.com",
+ "url": "https://isitchristmas.com/",
+ "scanned": "2026-11-22",
+ "status": 200,
+ "assets": [
+  {
+   "f": "api.js",
+   "t": "js",
+   "b": 8264
+  },
+  {
+   "f": "browser.js",
+   "t": "js",
+   "b": 3232
+  },
+  {
+   "f": "christmas.js",
+   "t": "js",
+   "b": 46234
+  },
+  {
+   "f": "css.js",
+   "t": "js",
+   "b": 4022
+  },
+  {
+   "f": "emoji.js",
+   "t": "js",
+   "b": 62133
+  },
+  {
+   "f": "sockjs.min.js",
+   "t": "js",
+   "b": 33887
+  },
+  {
+   "f": "www.google-analytics.com/analytics.js",
+   "t": "js",
+   "b": 52310,
+   "ext": true
+  },
+  {
+   "f": "www.googletagmanager.com/js",
+   "t": "js",
+   "b": 488286,
+   "ext": true
+  }
+ ],
+ "assetCount": 8,
+ "bytes": 698368,
+ "html": {
+  "mobile": {
+   "title": "Is it Christmas?",
+   "lang": "en",
+   "manifest": "https://isitchristmas.com/manifest.json",
+   "feeds": 2,
+   "appleTouch": true,
+   "share": {
+    "og": 5,
+    "twitter": false,
+    "themeColor": true,
+    "appleCapable": false
+   }
+  },
+  "desktop": {}
+ },
+ "manifest": {
+  "name": "Is It Christmas?",
+  "display": "standalone",
+  "displayOverride": [],
+  "orientation": "",
+  "scope": "/",
+  "icons": 2,
+  "screenshots": 0,
+  "categories": [],
+  "shortcuts": [],
+  "shareTarget": null,
+  "fileHandlers": [],
+  "protocolHandlers": [],
+  "launchHandler": false,
+  "widgets": 0,
+  "relatedApps": 0,
+  "lang": ""
+ },
+ "serviceWorker": {
+  "url": "sw.js",
+  "bytes": 1006,
+  "workbox": false,
+  "precache": false,
+  "fetchHandler": true,
+  "skipWaiting": false,
+  "sync": false,
+  "periodicSync": false,
+  "push": false,
+  "notificationClick": false,
+  "cacheNames": []
+ },
+ "robots": {
+  "disallow": [
+   "/elves/",
+   "/toys/",
+   "/girls/",
+   "/boys/",
+   "/secrets/",
+   "/spies/",
+   "/truth/",
+   "/lies/"
+  ],
+  "sitemaps": [],
+  "crawlDelay": null
+ },
+ "code": [
+  {
+   "file": "sockjs.min.js",
+   "own": true,
+   "usesLocationSearch": true
+  }
+ ],
+ "hosts": [
+  {
+   "host": "sockjs.org",
+   "file": "sockjs.min.js",
+   "at": 33
+  },
+  {
+   "host": "www.emoji-cheat-sheet.com",
+   "file": "emoji.js",
+   "at": 16
+  },
+  {
+   "host": "www.hunlock.com",
+   "file": "css.js",
+   "at": 14
+  }
+ ],
+ "thirdParty": [
+  "sockjs.org",
+  "www.emoji-cheat-sheet.com",
+  "www.google-analytics.com",
+  "www.googletagmanager.com",
+  "www.hunlock.com"
+ ],
+ "services": [
+  "Google Analytics"
+ ],
+ "requests": [
+  "https://www.google-analytics.com/g/collect?_ee&_eu&_fv&_p&_s&_ss&cid&dl",
+  "https://www.google-analytics.com/j/collect?_gid&_r&_s&_slc&_u&_v&a&aip"
+ ],
+ "storage": {
+  "local": [],
+  "session": [],
+  "idb": []
+ },
+ "candidates": [
+  {
+   "name": "Installable web app (standalone)",
+   "kind": "pwa",
+   "tag": "observed",
+   "evidence": "manifest"
+  },
+  {
+   "name": "Works offline (service worker)",
+   "kind": "pwa",
+   "tag": "observed",
+   "evidence": "service worker sw.js"
+  },
+  {
+   "name": "RSS or Atom feed",
+   "kind": "share",
+   "tag": "observed",
+   "evidence": "link[type$=xml]"
+  },
+  {
+   "name": "Path kept from crawlers /boys/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /elves/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /girls/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /lies/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /secrets/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /spies/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /toys/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  },
+  {
+   "name": "Path kept from crawlers /truth/",
+   "kind": "route",
+   "tag": "observed",
+   "evidence": "robots.txt"
+  }
+ ]
+}

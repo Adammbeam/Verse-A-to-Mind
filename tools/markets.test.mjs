@@ -111,6 +111,16 @@ test('the endpoint: bounds, closed lists, a rate limit, and the old crypto list 
   assert.equal(cleanIds('bitcoin,Ethereum,bad id!'), 'bitcoin,ethereum', 'the crypto card keeps its list');
   assert.equal(wantFrom('max', NOW), 0); assert.ok(NOW - wantFrom('1m', NOW) >= 400 * DAYMS, 'at least a year of rows for the 52 weeks'); assert.ok(RANGES.includes('ytd'));
 });
+test('the crypto card\'s coin list prices in every fiat code the card reads, and a code it does not know is dollars', async () => {
+  const seen = [], real = globalThis.fetch;
+  globalThis.fetch = async (u) => { seen.push(String(u)); return resp([{ id: 'bitcoin', symbol: 'btc', name: 'Bitcoin', current_price: 5400000, price_change_percentage_24h: 0.5, last_updated: '2026-11-21T18:00:00Z' }]); }; // the coin list asks the source itself, not through fetchFn
+  try {
+    const ask = (qs) => onRequestGet({ request: new Request('https://a-to-mind.com/api/markets' + qs), env: {} });
+    const inr = await (await ask('?ids=bitcoin&vs=inr')).json();
+    assert.equal(inr.ok, true); assert.equal(inr.vs, 'inr'); assert.equal(inr.coins[0].price, 5400000); assert.equal(inr.coins[0].change24h, 0.5); assert.ok(seen[0].includes('vs_currency=inr'), seen[0]);
+    const bad = await (await ask('?ids=bitcoin&vs=xx')).json(); assert.equal(bad.vs, 'usd'); assert.ok(seen[1].includes('vs_currency=usd'), seen[1]);
+  } finally { globalThis.fetch = real; }
+});
 test('every source down: a day in the bundled record still has its close, said to be from the record; any other day is honestly nothing', async () => {
   const down = fake({ down: ['stooq.com', 'query1.finance.yahoo.com', 'api.coingecko.com', 'api.frankfurter.dev'] });
   const q = await lookQuote(resolve('spx'), '5y', '2024-12-31', down, NOW);

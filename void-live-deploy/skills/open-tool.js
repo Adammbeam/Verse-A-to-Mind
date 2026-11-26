@@ -16,7 +16,7 @@ const ALIASES = { 'character counter': '/word-count/', 'letter counter': '/word-
   'time zone converter': '/time/', 'timezone converter': '/time/', 'time zone calculator': '/time/',
   'random number generator': '/random/', 'random number picker': '/random/', 'number generator': '/random/',
   'binary to decimal': '/base64/bases/', 'decimal to binary': '/base64/bases/', 'hex to decimal': '/base64/bases/', 'decimal to hex': '/base64/bases/',
-  'binary to hex': '/base64/bases/', 'hex to binary': '/base64/bases/', 'binary converter': '/base64/bases/', 'number base converter': '/base64/bases/',
+  'binary to hex': '/base64/bases/', 'hex to binary': '/base64/bases/', 'binary converter': '/base64/bases/', 'number base converter': '/base64/bases/', 'base converter': '/base64/bases/', 'kanban board': '/kanban/',
   'hex to rgb': '/color/', 'rgb to hex': '/color/', 'hex color converter': '/color/', 'color code converter': '/color/', 'colour code converter': '/color/',
   // the Lab's tools (2026-11-06: the owner found the Lab's experiments pointless; these are the jobs inside them)
   'spirit level': '/lab/level/', 'bubble level': '/lab/level/', 'level app': '/lab/level/', 'phone level': '/lab/level/', 'level tool': '/lab/level/',
@@ -35,6 +35,9 @@ const ALIASES = { 'character counter': '/word-count/', 'letter counter': '/word-
 const TOOL_NOUN = /\s(?:counter|converter|calculator|generator|checker|picker|maker|editor|tester|finder|timer|formatter|encoder|decoder|viewer)$/;
 // pages whose own stage skill answers their name with a card that links the page (tools/skill-overlap.mjs): those asks stay there
 const OWNED = new Set(['/calculator/', '/converter/', '/convert/', '/pdf/', '/photos/', '/stl/', '/cpan/', '/team/', '/random/wheel/', '/vat/', '/arcade/']);
+const BARE_OWNED = new Set([
+  // kanban-board, gradient and fakeuser answer these with their own cards, which link the page (2026-11-20: the overlap check)
+  '/kanban/', '/color/?mode=gradient', '/random/?mode=people']);
 const OPEN = /^(?:open|show(?: me)?|go to|take me to|launch|bring up)\s+(?:the |my |a |an )?/i;
 
 /** the tool an ask names, as { href, label }, or null. Pure. */
@@ -48,8 +51,9 @@ export function toolAsk(text) {
   // a bare name with no verb must read as a tool ("word counter", "base converter"): a bare "wheel of names" or "piano" stays with its own skill
   if (!alias && (!name || (!opened && !TOOL_NOUN.test(name)))) return null;
   const href = alias || toolNamed(name);
-  if (!href || OWNED.has(href)) return null;
-  const label = (allTools().find(([p]) => p === href) || [href, (NAV.find((n) => n.href === href) || {}).label || name])[1];
+  if (!href || OWNED.has(href) || (!opened && BARE_OWNED.has(href))) return null;
+  const labels = { '/base64/bases/': 'Base converter' };
+  const label = labels[href] || (allTools().find(([p]) => p === href) || [href, (NAV.find((n) => n.href === href) || {}).label || name])[1];
   return { href, label };
 }
 

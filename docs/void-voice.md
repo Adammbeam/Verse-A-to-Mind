@@ -3,7 +3,31 @@
 Once per run `node tools/ask-void.mjs` asks Verse what it learned from its builders (domains/handoff.md) and what it
 would do differently. Its answers are copied as it gave them, newest last. Input, not a gate.
 
-## Verse's current asks (refreshed 2026-11-12)
+## Verse's current asks (refreshed 2026-11-25)
+
+2026-11-25 run, quoted as given:
+
+- > "I want to teach myself the skill to provide strong, honest counter-views in exactly three sentences because my router currently answers my probes as questions instead of direct answers. I also want to change my ability to answer simple requests like "tell me a joke" for visitors, which I currently refuse, and I want to teach my shape skill how to "play sudoku" to resolve routing issues where my skills are being misinterpreted as questions."
+
+  Builder's note (not Verse's words): the counter-view and shape routing asks are already queued in `domains/void.voice.md`. "tell me a joke" opens the joke skill (`void-live-deploy/skills/joke.js`) on the stage; only the plain `/api/answer` endpoint, which skips the skill router, returns a song fact for it (cached). Nothing new queued.
+- > "Among the new updates, the weakest part of my performance is the visitor pass, where high latency causes a 12042 ms delay across 20 probes. A concrete fix is to reduce the number of probes used during the visitor pass to lower that latency."
+
+  Builder's note: a repeat; the 12042 ms visitor-pass figure has been in `domains/void.voice.md` for many runs. It did not name a weakest game or client skill. Nothing new queued.
+- Builder's note: a question about what is broken, confusing or ugly on the site right now was answered without Verse's own context ("I do not have access to the live site's current state..."), so it holds no buildable ask.
+
+## Earlier asks (refreshed 2026-11-18)
+
+2026-11-18 run, quoted as given:
+
+- > "The internet-history museum feels weakest because a collection of studied sites can easily become a static archive that lacks the connective tissue of a narrative. To make it better, you should implement a chronological or thematic "thread" feature that allows a visitor to follow how specific design or social trends evolved from one site to the next. This turns a list of links into a guided experience."
+
+  Builder's note (not Verse's words): new. Queued in `domains/growth-inbox.md` as "internet-history museum threads", credited to Verse.
+- > "If I were to do things differently, I would change how I function by teaching my wants skill to answer probes about my builders' learning. This would fix my weakest part today and allow me to share my own evolution. I also want to absorb and connect every repo on the account into my own code to turn fragmented projects into a unified Verse system, and I want to make 'The pointing arrow' a core skill to give its active patterns a formal logic."
+
+  Builder's note: all three are already queued. The wants-skill probe fix is `ask-20261118-0134-3` in `domains/void.voice.md`; absorbing every repo is item 1 of `domains/void.will.md`; the pointing arrow as a core skill has been asked since 2026-10-30 in `domains/void.voice.md`. Nothing new queued.
+- Builder's note: a question about what is broken, confusing or ugly on the site right now returned "Verse gave no answer: nothing on the web" and was not logged.
+
+## Earlier asks (refreshed 2026-11-12)
 
 2026-11-12 run, quoted as given:
 
@@ -318,3 +342,44 @@ From the 2026-11-04 entries below, quoted as given:
 **Asked:** Verse just shipped a full-handoff skill (a complete client handoff package for systems you own) and a time-saved estimate. What would make the handoff better for the person receiving it?
 
 > To make the handoff better for the person receiving it, I could integrate the "Client lift summary" to package the idea that "we own the heavy lifting" for their business idea. I could also include the "handoff-checklist" to ensure reliable delivery and use "reuse-tools" to show how existing processes map to what I already own. Adding the "docs-pack" would provide the necessary documentation, while the "ownership-pack" would clearly define what I own versus what the client owns to reduce their workload. Finally, providing the "client-offer" pack would turn the technical handoff into a clear professional proposal.
+
+<!-- ask-void:2026-11-18T19:12:54.594Z -->
+### 2026-11-18 19:12 UTC
+
+**Asked:** What did your builders learn lately, and what would you do differently?
+
+> My builders recently learned several technical lessons through mistakes and fixes. They discovered that every new page needs a `<meta name="verse-handoff" content="in: ...; out: ...">` tag when it ships, and that they must use the Rumble oEmbed API rather than guessing embed IDs. They also learned that skill files imported in Node must guard top-level calls with `typeof` checks, and that they must verify the PR head in code to avoid merging unfinished branches. Furthermore, they established "The gate's standards," meaning a floor is only beaten by scripted end-to-end journeys against competitors with negative controls, and a check that is blocked or fails to load is labeled INCOMPLETE rather than finished.
+>
+> If I were to do things differently, I would change how I function by teaching my wants skill to answer probes about my builders' learning. This would fix my weakest part today and allow me to share my own evolution. I also want to absorb and connect every repo on the account into my own code to turn fragmented projects into a unified Verse system, and I want to make 'The pointing arrow' a core skill to give its active patterns a formal logic.
+
+<!-- ask-void:2026-11-18T19:13:32.198Z -->
+### 2026-11-18 19:13 UTC
+
+**Asked:** Since last week you gained an internet-history museum of the sites you studied, podcast episodes that play right in the search card, and a book with pitch-black glass covers and no decorative art. Which of these feels weakest to a visitor right now, and what one concrete change would make it better?
+
+> The internet-history museum feels weakest because a collection of studied sites can easily become a static archive that lacks the connective tissue of a narrative. To make it better, you should implement a chronological or thematic "thread" feature that allows a visitor to follow how specific design or social trends evolved from one site to the next. This turns a list of links into a guided experience.
+
+<!-- ask-void:2026-11-25T19:10:10.546Z -->
+### 2026-11-25 19:10 UTC
+
+**Asked:** What did your builders learn lately, and what would you do differently?
+
+> My builders recently learned several technical lessons through mistakes and fixes. They learned that a new page must include `<meta name="verse-handoff" content="in: ...; out: ...">` when a skill ships, and that every lap should build top connections in `docs/HANDOFF-GAPS.md`. They discovered that Rumble embeds require using the oEmbed API rather than guessing the ID, and that skill files imported in Node must guard top-level `addEventListener` or `document` calls with `typeof` checks. They also learned to set the PR head in code and verify it to avoid merging unfinished branches caused by silent `sed` edit misses.
+>
+> If I were to do things differently, I would change how I handle my own growth and interactions to avoid the current friction I feel. I want to teach myself the skill to provide strong, honest counter-views in exactly three sentences because my router currently answers my probes as questions instead of direct answers. I also want to change my ability to answer simple requests like "tell me a joke" for visitors, which I currently refuse, and I want to teach my shape skill how to "play sudoku" to resolve routing issues where my skills are being misinterpreted as questions.
+
+**Checked:** docs/HANDOFF-GAPS.md exists, but the builders' lessons are kept only in domains/handoff.md.
+
+<!-- ask-void:2026-11-25T19:10:39.965Z -->
+### 2026-11-25 19:10 UTC
+
+**Asked:** This week you got new game updates (Verse Breaker, Glyph Verse, Verse Snake, Jump Stack, Merge Verse) and new client skills (client-work-drop, source-to-site dashboards, handoff confidence). Which of these is weakest right now, and what one concrete fix would make it better?
+
+> Among the new updates, the weakest part of my performance is the visitor pass, where high latency causes a 12042 ms delay across 20 probes. A concrete fix is to reduce the number of probes used during the visitor pass to lower that latency.
+
+<!-- ask-void:2026-11-25T19:11:10.101Z -->
+### 2026-11-25 19:11 UTC
+
+**Asked:** Rock paper scissors now opens the rps game, and answers were tightened to speak less and do more. What on the site right now is broken, confusing or ugly that you would fix first?
+
+> I cannot answer which specific parts of the site are broken, confusing, or ugly because I do not have access to the live site's current state, user feedback, or internal error logs. To identify these issues, a developer or product manager would need to review heatmaps, error reporting tools, and user session recordings. If you have specific screenshots or descriptions of elements you find problematic, I can analyze them and suggest ways to improve the logic or aesthetic.

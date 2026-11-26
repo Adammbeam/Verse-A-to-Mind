@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="vs-tool"><link rel="stylesheet" href="/verse.css" media="screen">
+<html lang="en" class="vs-tool"><link rel="stylesheet" href="/verse.css" media="screen"><link rel="stylesheet" href="/brain/live.css">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -178,6 +178,7 @@
 <link rel="modulepreload" href="/lib/member-keep.js">
 <link rel="modulepreload" href="/brain/knows.js">
 <link rel="modulepreload" href="/lib/brain-knows.js">
+<link rel="modulepreload" href="/brain/live.js">
 <link rel="modulepreload" href="/team/wants.js">
 <link rel="modulepreload" href="/lib/team.js">
 <link rel="modulepreload" href="/lib/job-guide.js">
@@ -192,14 +193,20 @@
 <section id="mapView" aria-label="Verse Brain map, live: its organs, its attention and its working memory">
   <svg id="map" role="img" aria-label="The organs of Verse Brain, grouped by what they do around its attention. An organ lights when the attention gives it a turn, and a spark flies to the part of the working memory it writes into."></svg>
   <div id="mapSide">
-    <p class="note" style="margin:0">Each dot is an organ. It lights when Attention gives it a turn; a spark shows each real write into its working memory. Nothing here is acted: every light is a change in its state.</p>
     <ol id="feed" aria-live="off" aria-label="What changed in the brain, newest first"></ol>
     <form id="mapAsk"><label class="vh" for="mapWord">Tell it words or ask it why</label><textarea id="mapWord" maxlength="4000" rows="1" autocomplete="off" placeholder="Tell it a word, or ask what it is doing"></textarea><button type="submit">Think</button></form>
     <p class="note" id="mapCounts"></p>
   </div>
 </section>
 <section id="knows" hidden aria-label="What Verse knows">
-  <h1>What Verse knows</h1>
+  <section id="liveBrain" aria-labelledby="lbTitle">
+    <div class="lb-head"><h1 id="lbTitle">Verse's brain, live</h1><p class="lb-lede">Every part below is a real part of Verse. It lights up when that part really does something: a want chosen, a job done, a page checked, a lesson kept. Click a part to see what it holds right now.</p></div>
+    <div class="lb-body"><svg id="lbMap" viewBox="0 0 800 500" role="group" aria-label="The parts of Verse's brain and how they feed each other"></svg><aside id="lbSide" aria-live="polite"></aside></div>
+    <h2 class="lb-h">The newest real chain: what it sensed, wanted, did, and learned</h2><ol id="lbChain" class="lb-chain"></ol>
+    <h2 class="lb-h">Drives, with the number behind each</h2><ul id="lbDrives" class="lb-drives"></ul>
+    <p class="note" id="lbAt">Reading the live brain…</p>
+  </section>
+  <h2 class="k-h1">What Verse knows</h2>
   <p class="lede">Its wants right now, every skill and the page it powers, every tool page, every site it took on and what that taught it, the lessons it recalls when it proposes a fix, and what it did lately. Search it, or ask Verse.</p>
   <form id="kForm" role="search"><label class="vh" for="kFind">Search what Verse knows</label><input id="kFind" type="search" maxlength="120" autocomplete="off" placeholder="Search: pdf, baggage, convert, weather…"><a class="tb" id="kAsk" href="/">Ask Verse</a></form>
   <div id="kChips" role="toolbar" aria-label="Kinds"></div>
@@ -216,7 +223,8 @@
   <button type="button" class="tb" id="numBtn" aria-controls="live" aria-expanded="true">Hide numbers</button>
   <button type="button" class="tb" id="fs" aria-pressed="false">Fill the screen</button>
   <button type="button" class="tb" id="panelBtn" aria-controls="panel" aria-expanded="true">Hide panel</button>
-  <button type="button" class="tb" id="watchBtn" aria-pressed="false">Watch it think</button>
+  <a class="tb" id="liveBtn" href="/brain/?view=watch">Watch it think</a>
+  <button type="button" class="tb" id="watchBtn" aria-pressed="false" title="A model of a mind running in your browser. It is not Verse's own thinking.">Simulation</button>
   <a class="tb" id="exit" href="/">Leave</a>
 </header>
 <section id="live" aria-label="Live numbers from the brain" aria-live="off">
@@ -228,9 +236,9 @@
   <div id="panelHead"><h2>Verse Brain, full screen</h2></div>
   <p class="lede">The same brain as its card on the Verse stage: one workspace that twenty-nine organs share. Move over the field and it predicts you; where it guessed wrong turns red and its attention moves there. Tell it words, drag what it holds, say Good, ask it why, hum to it.</p>
   <div id="card"></div>
-  <details id="watchBox" open><summary>What it watches: Verse's own health</summary><p class="note">Every 15 minutes while this page or the stage is open, the brain reads the newest runs on main, the open pull requests and the open issues of Verse's public repository, what Verse's will decided to do next, whether its team is taking the jobs, and what Verse changed in the last day, which it writes in plain lines. A break pulls its attention to the skills that answer for it. <button type="button" id="lookBtn" class="undo">Look now</button></p><p class="note" id="next" hidden></p><p class="note" id="wrote" hidden></p><ul id="breaks"><li>It has not looked yet.</li></ul></details>
+  <details id="watchBox" open><summary>What it watches: Verse's own health</summary<p class="note" id="next" hidden></p><p class="note" id="wrote" hidden></p><ul id="breaks"><li>It has not looked yet.</li></ul></details>
   <details id="didBox" open><summary>What it did on Verse, and why</summary><p class="note" id="didSum">When more than one skill can answer an ask on the Verse stage, the brain picks which one does, and learns from whether you kept the card. Asks typed on tool pages are heard here too, and so is each break it sees in Verse's health. Each lesson can be undone, and each break marked seen.</p><ul id="did"><li>Nothing yet: ask Verse something on the stage.</li></ul></details>
-  <details id="dreamsBox" open><summary>What it dreams up: fixes, jobs and ideas</summary><p class="note">When you leave it alone, the brain turns what it holds into dreams: a break its watch saw becomes a fix, what Verse's will decided becomes a job, an organ that never gains becomes a fix, and a draft it left out becomes an idea. Each one says what it came from. Every few hours Verse posts the newest one, with its brief, to its team's #work channel, where an agent takes it as a job. Nothing is sent from this page.</p><p class="note" id="dreamsNote">It dreams a few seconds after the page opens.</p><ul id="dreams"><li>Waiting for its first dream.</li></ul></details>
+  <details id="dreamsBox" open><summary>What it dreams up: fixes, jobs and ideas</summary><p class="note" id="dreamsNote">It dreams a few seconds after the page opens.</p><ul id="dreams"><li>Waiting for its first dream.</li></ul></details>
   <details id="saysBox" open><summary>What it says about itself</summary><ul id="says"><li>Waking up.</li></ul></details>
   <noscript><p>Verse Brain runs in your browser with JavaScript; with it off there is no brain to show.</p></noscript>
   <!-- asks -->
@@ -238,14 +246,14 @@
 <!-- /asks -->
 <p id="member-offer" class="tk-row"><span class="tk-label">Your own Verse</span> <a href="/members/?from=brain">Members keep this brain: what it learns from you stays in your own Verse, with private skills</a></p>
 <script type="module">import { wireOffer } from '/lib/member-keep.js'; wireOffer('brain');</script>
-  <nav id="related" aria-label="Related tools"><!-- related --><span class="tk-label">Use with</span> <a href="/piano/">Piano</a> <a href="/tuner/">Tuner</a> <a href="/notes/">Notes</a> <a href="/rap/">Verse raps</a> <a href="/learn-to-draw/">Learn to draw</a> <a href="/tools/">All tools</a><!-- /related --></nav>
-  <p class="note" id="trust">Free, no account, no ads. It runs in your browser: what it learns is kept on this device, and nothing is sent. Forget clears it. Verse also speaks first here, from its own live state; only words you type to answer it are sent, to its answer engine, like any ask.</p>
+  <nav id="related" aria-label="Related tools"><!-- related --><span class="tk-label">Use with</span> <a href="/piano/">Piano</a> <a href="/tuner/">Tuner</a> <a href="/notes/">Notes</a> <a href="/rap/">Rap Generator</a> <a href="/learn-to-draw/">Learn to draw</a> <a href="/tools/">All tools</a><!-- /related --></nav>
   <footer><a href="/">Verse</a> · <a href="/tools/">every tool</a></footer>
 </main>
 <script type="module">
   // the page is whole before this runs. Knows (what Verse knows, searchable) is the first view; the simulation, /brain/app.js,
-  // /brain/map.js and /brain/dreams.js, loads only on "Watch it think", ?view=watch or ?t= (brain/knows.js)
+  // /brain/map.js and /brain/dreams.js, loads only on "Simulation", ?view=sim or ?t= (brain/knows.js); the live brain is /brain/live.js
   import '/brain/knows.js';
+  import '/brain/live.js';
   import '/team/wants.js';
   import '/brain/unbidden.js';
 </script>

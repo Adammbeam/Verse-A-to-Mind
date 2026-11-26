@@ -1,0 +1,94 @@
+{
+ "attempt": "live",
+ "occasion": 17,
+ "at": "2026-11-22T12:42:47.297Z",
+ "family": "make",
+ "skill": "image-gen",
+ "service": "a-to-mind.com /api/image and /image/ (FLUX.2 klein-4b on Workers AI, or the free painter, behind them)",
+ "ask": "can a visitor paint a picture on a-to-mind.com/image/ and change it with one typed line",
+ "request": [
+  "https://a-to-mind.com/api/image",
+  "https://a-to-mind.com/image/",
+  "https://a-to-mind.com/image/app.js"
+ ],
+ "status": 200,
+ "ms": 15415,
+ "checksPass": true,
+ "ok": true,
+ "left": 4,
+ "page": {
+  "status": 200,
+  "make": false,
+  "pics": false,
+  "app": false,
+  "handoff": false,
+  "gate": true
+ },
+ "opened": {
+  "status": 200,
+  "make": true,
+  "pics": true,
+  "app": true,
+  "handoff": true,
+  "gate": false
+ },
+ "script": {
+  "status": 200,
+  "changeIt": true,
+  "sendsChange": true,
+  "shrinks": true
+ },
+ "paint": {
+  "status": 200,
+  "state": "art",
+  "why": null,
+  "sayKnown": false,
+  "painter": "workers-ai",
+  "w": 1024,
+  "h": 1024,
+  "ref": "349875c7afd0cfb9a3c0c71bf37f0f5190d4cb7fd5f81f7ce9d408ee9b16ba69",
+  "cached": false,
+  "change": null,
+  "img": {
+   "type": "image/jpeg",
+   "bytes": 621409,
+   "w": 1024,
+   "h": 1024,
+   "sha256": "2cd48f2024f17fa281be3ad3a2660994157a80d2aed85d27e59b711d17888aad"
+  }
+ },
+ "copy": {
+  "ok": true,
+  "tool": "magick",
+  "type": "image/jpeg",
+  "w": 504,
+  "h": 504,
+  "bytes": 40721,
+  "why": ""
+ },
+ "change": {
+  "status": 200,
+  "state": "art",
+  "why": null,
+  "sayKnown": false,
+  "painter": "workers-ai",
+  "w": 1024,
+  "h": 1024,
+  "ref": "86bde0e2d2c67f65a3fed301d77e39db3814bb4a5deb9e8ad76e27979016497c",
+  "cached": false,
+  "change": "make the sky purple",
+  "img": {
+   "type": "image/jpeg",
+   "bytes": 507968,
+   "w": 1024,
+   "h": 1024,
+   "sha256": "a37d8b0f35b9878d6870caa01f5eeffda34a90f72b31e4a5c31ce70ef802045c"
+  }
+ },
+ "again": {
+  "state": "art",
+  "cached": true,
+  "same": true
+ },
+ "error": ""
+}

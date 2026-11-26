@@ -230,3 +230,14 @@ test('the 2026-10-30 16:19Z report is read as a report: what is live and verifie
   assert.equal(t.kind, 'status'); assert.deepEqual(t.failures, []);
   assert.equal(skill.match(REPORT_1030.toLowerCase(), REPORT_1030), true);
 });
+
+test('a pasted workflow design proposal with no PR numbers, SHAs, runs, or counts is not a CI report, and conditional lines are not failures', () => {
+  const proposal = [
+    'Right now, when merge-gate.yml or void-review.yml fails, the repo just drops a Repair <branch> job on /api/queue and waits for conductor.mjs or a team agent—which stalls whenever workers are offline.',
+    'Tier 2 — Fast Scoped AI Patch (~45s, only if Tier 1 is still red): passes the failing check log to the model stack and only pushes if it turns green.',
+    'Loop cap: reuse your existing tools/fix-cap.mjs (max 2 auto-fix attempts per PR) and fall back to a queue Repair job only if both tiers fail.',
+    'Want me to build tools/pr-autofix.mjs and .github/workflows/pr-autofix.yml on a helper/pr-autofix branch now?'
+    ].join('\n');
+  assert.equal(telemetryOf(proposal), null, 'abstract workflow proposal should not trigger "What is really true now"');
+  assert.deepEqual(failuresOf(proposal), [], 'conditional design sentences should not be listed as failures');
+  });

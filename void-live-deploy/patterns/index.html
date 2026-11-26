@@ -64,12 +64,6 @@
   <p>Share this test: <a id="share" style="overflow-wrap:anywhere" href="/patterns/?pattern=%5Cd%2B&amp;flags=&amp;sample=call%20555%20or%20911">/patterns/?pattern=%5Cd%2B&amp;flags=&amp;sample=call%20555%20or%20911</a></p>
   <p>More text tools: <a href="/base64/">Base64</a>, <a href="/word-count/">word counter</a>, <a href="/convert/">unit converter</a>, <a href="/rotate-letters/">rotate letters</a>.</p>
 
-  <h2>How to use it</h2>
-  <p>The sample starts as "call 555 or 911", and the pattern <code>\d+</code> means one or more digits. That finds 555 and 911. The first character of the sample is character 1, so 555 starts at character 6.</p>
-  <p>Put <code>(\d+)</code> in the pattern and <code>[$1]</code> in the replacement. The parentheses save the digits, and $1 puts them back inside brackets. Open that test here: <a href="/patterns/?pattern=(%5Cd%2B)&amp;sample=call%20555%20or%20911&amp;replace=%5B%241%5D">digits in brackets</a>. The result is "call [555] or [911]".</p>
-  <p>The flag i treats capital and small letters as the same. The flag m lets ^ and $ match the start and end of each line. The flag s lets a dot match a line break. The flag u turns on Unicode mode. This tester always lists every match, so you do not type g.</p>
-  <p>Copy matches puts "555 and 911" on the clipboard. The share link opens the same pattern, flags, sample, and replacement again. Press Test if scripts are off. The same address still holds the test.</p>
-
   <h2>The name</h2>
   <p>The name was registered on 15 August 2012. The registry record read on 13 November 2026 lists that registration at 14:35:32 UTC, a last change on 16 July 2026, and expiration on 15 August 2027. The registrar on that record is NameCheap, Inc. The name servers are dns1.registrar-servers.com and dns2.registrar-servers.com. The status is client transfer prohibited. Source: the registry RDAP record. The record does not name a person.</p>
 
@@ -83,9 +77,6 @@
 
   <h2>What came later</h2>
   <p>The project's own docs show six generations of the editor. They say the current application includes multiple test strings, a text pipeline, and a PCRE2 execution debugger. Source: regex101 docs, project history. The docs do not date each generation on that page.</p>
-
-  <h2>What this page leaves out</h2>
-  <p>This page runs JavaScript's regular expressions and nothing else. It does not step through an engine, it does not keep a library of patterns, and it does not run a quiz. The original's docs also describe more than one test string, a text pipeline, and a PCRE2 debugger. Those are not here. A pattern this page cannot read piece by piece is left as written, and the match list still uses the JavaScript result.</p>
 
   <nav class="with" aria-label="Use this with"><span>Use this with</span>
     <a href="/text-diff/?changed=555%20and%20911" data-base="/text-diff/" data-param="changed" data-from="#passed" data-fallback="555">Text Compare</a>

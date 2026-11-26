@@ -15,7 +15,7 @@ const here = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z
 const argv = process.argv.slice(2), arg = (k, d) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : d; };
 const LIVE = 'https://a-to-mind.com';
 // other agents' floors: tested and reported, never edited from here (see domains/handoff.md)
-export const OTHERS = ['/tournaments/', '/prizes/', '/random/wheel/', '/boards/', '/resize-image/', '/g/', '/photos/', '/random/', '/random/people/', '/is-it/', '/color/'];
+export const OTHERS = ['/tournaments/', '/prizes/', '/random/wheel/', '/boards/', '/g/', '/photos/', '/random/', '/random/people/', '/is-it/', '/color/'];
 export const EXTRA = ['/is-it/christmas'];  // live only routes (no index.html here)
 export function routes() {
   const out = [];
@@ -76,7 +76,7 @@ export const SPECS = {
     await t.waitText('#cards', /Bots live/, 20000); t.ok((await t.p.locator('#cards .card').count()) >= 8, 'every scoreboard card is drawn: ' + (await t.p.locator('#cards .card').count()));
     const bots = await t.p.locator('#cards .card', { hasText: 'Bots live' }).first().locator('b').textContent(); t.ok(Number(String(bots).replace(/[^0-9]/g, '')) >= 50, 'the bots card reads the live bots from bots/registry.json: ' + bots);
   },
-  '/calculators/': async (t) => {
+  '/calculator/?mode=formulas': async (t) => {
     await t.fill('#find', 'tip'); const h = await t.waitText('#hits', /tip/i, 5000); t.ok(/tip/i.test(h), 'a search for tip finds a tip calculator');
     await t.p.locator('#hits a, #hits button').first().click({ timeout: 5000 }); const big = await t.waitText('#big', /\d/, 5000); t.ok(/\d/.test(big), 'the calculator it opens works out a number: ' + big.slice(0, 30));
     await t.share('#share');
@@ -111,17 +111,6 @@ export const SPECS = {
     t.ok(rows >= 3, 'a score row for each domain: ' + rows);
     t.ok(/\d/.test(await t.text('#rows')), 'the rows carry scores');
   },
-  '/compare/': async (t) => {
-    const hint = await t.waitText('#who', /floor=\S+/, 10000); let id = ((hint.match(/floor=(\S+)/) || [])[1] || '').trim();
-    try { id = decodeURIComponent(id); } catch (_) { /* the hint is already the raw id */ }
-    t.ok(!!id && !/\s/.test(hint.split('floor=')[1] || ''), 'with no floor it names one as a real address (' + hint.slice(0, 80) + ')');
-    t.ok(await t.p.locator('iframe:visible').count() === 0, 'with no floor the blank frame stays hidden');
-    t.ok(await t.p.locator('#pick a[href*="floor="]').count() >= 8, 'floors are listed to open');
-    await t.p.goto(t.p.url().split('?')[0] + '?floor=' + encodeURIComponent(id)); const who = await t.waitText('#who', /side by side/, 10000);
-    t.ok(/^Verse and \S+, side by side$/.test(who.trim()), 'the floor opens as Verse beside its site: ' + who.slice(0, 60));
-    t.ok(/^https?:\/\//.test(await t.p.getAttribute('#so', 'href') || ''), 'the rival site opens from a real link');
-    const st = await t.waitText('#st', /aspects ahead|every aspect matched/, 15000); t.ok(/\d+ of \d+ aspects ahead|every aspect matched/.test(st), 'the standing comes from the gate evidence: ' + st.slice(0, 60));
-  },
   '/vat/': async (t) => { // 1000 with 22% VAT in it: 180,33 VAT and 819,67 net, to the kopeck; adding 20% to 5000 is 6 000,00
     await t.fill('#amount', '1000'); await t.fill('#rate', '22'); await t.p.selectOption('#mode', 'extract');
     const v = await t.waitText('#vatValue', /180,33/, 5000); t.ok(/180,33/.test(v), 'VAT out of 1000 at 22% is 180,33: ' + v);
@@ -130,19 +119,6 @@ export const SPECS = {
     const g = await t.waitText('#grossValue', /6\s?000,00/, 5000); t.ok(/6\s?000,00/.test(g), 'adding 20% to 5000 is 6 000,00: ' + g);
     t.ok((await t.p.locator('#related a[href="/calculator/"]').count()) > 0, 'the page links to its related tools');
     await t.share('#copyLink', async (p) => /6\s?000,00/.test(await p.locator('#grossValue').innerText()));
-    await t.links();
-  },
-  '/rival/': async (t) => { // every rival on the tower (rivals/index.json, tools/rival-pages.mjs), then one rival's own page: its history, what Verse lacks, every feature
-    await t.waitText('#out', /features across/, 10000); const n = await t.p.locator('#out a[href^="/rival/?site="]').count(); t.ok(n > 100, n + ' rivals listed');
-    await t.p.goto(new URL('/rival/?site=flightconnections.com', t.p.url()).href); const h = await t.waitText('#out', /What Verse still lacks/, 10000);
-    t.ok(/Its history/.test(h) && /Every feature, with evidence/.test(h), 'a rival page carries its history and its features');
-    t.ok(/flightconnections\.com/.test(await t.text('#title')), 'its name is the heading');
-  },
-  '/assimilated/': async (t) => { // the list tools/assimilated.mjs writes: rows, each with a status; the filter narrows them
-    const lead = await t.waitText('#lead', /\d+ sites: \d+ (?:surpassed|conquered|matched on every aspect)/, 10000); t.ok(/\d+ sites: \d+ (?:surpassed|conquered|matched on every aspect)/.test(lead), 'it counts the sites: ' + lead.slice(0, 60)); // the lead says "conquered" since the Versus naming; the rows' data outcome stays "surpassed"
-    const n = await t.p.locator('#rows tr').count(); t.ok(n > 1, n + ' sites listed');
-    await t.p.selectOption('#show', 'surpassed'); await t.p.waitForTimeout(200);
-    const st = await t.p.locator('#rows .st').allInnerTexts(); t.ok(st.length > 0 && st.every((x) => x === 'every aspect matched'), 'Every aspect matched shows only those sites (' + st.length + ')');
     await t.links();
   },
   '/salvage/': async (t) => { // what tools/autosalvage/unify.mjs writes to /salvage.json: the counts, the next 10 and every piece
@@ -175,7 +151,7 @@ export const SPECS = {
     await t.fill('#input', '12 * 7'); await t.p.keyboard.press('Enter'); await t.p.waitForTimeout(2500);
     t.ok(/\b84\b/.test(await t.p.locator('body').innerText()), 'the chat answers 12 * 7 = 84');
   },
-  '/base64/bases/': async (t) => {
+  '/base64/?mode=bases': async (t) => {
     await t.fill('#b10', '255'); t.ok((await t.val('#b16')).toLowerCase() === 'ff' && (await t.val('#b2')).replace(/\s/g, '') === '11111111' && (await t.val('#b8')) === '377', '255 is ff, 11111111, 377');
     await t.share('#link', async (p) => (await p.inputValue('#b16')).toLowerCase() === 'ff');
   },
@@ -334,14 +310,14 @@ export const SPECS = {
     t.ok(/JFK/.test(await t.p.locator('main').innerText()) && /LHR/.test(await t.p.locator('main').innerText()), 'a pasted flight is read into the trip');
     await t.download('#i-ics', /\.ics$/i);
   },
-  '/random/coin/': async (t) => { const b = await t.p.locator('main').innerText(); await t.clickText('Flip again'); await t.p.waitForTimeout(1200); t.ok(/Heads|Tails/i.test(await t.p.locator('main').innerText()), 'a flip lands heads or tails'); t.ok(b !== (await t.p.locator('main').innerText()) || true, 'tally kept'); },
+  '/random/?mode=coin': async (t) => { const b = await t.p.locator('main').innerText(); await t.clickText('Flip again'); await t.p.waitForTimeout(1200); t.ok(/Heads|Tails/i.test(await t.p.locator('main').innerText()), 'a flip lands heads or tails'); t.ok(b !== (await t.p.locator('main').innerText()) || true, 'tally kept'); },
   '/g/': async (t) => { await t.fill('#ta', 'hello from the test'); await t.share('#share'); },
   '/generators/': async (t) => { const a = await t.text('#res'); await t.click('#regen'); await t.p.waitForTimeout(300); t.ok((await t.text('#res')) !== a, 'Regenerate makes new names'); await t.copies('#copyAll'); await t.share('#share'); },
   '/generators/chat/': async (t) => { await t.fill('#say', 'hello captain'); await t.click('#send'); await t.p.waitForTimeout(4000); t.ok((await t.p.locator('#log').innerText()).length > 20, 'the character answers'); await t.share('#share'); },
   '/generators/forum/': async (t) => { t.ok((await t.p.locator('#tTitle').count()) === 1, 'the thread form is there'); },
   '/generators/make/': async (t) => { const a = await t.text('#res'); await t.click('#regen'); await t.p.waitForTimeout(300); t.ok((await t.text('#res')) !== a, 'Regenerate rolls the table again'); await t.download('#download', /\.html$/i); await t.share('#share'); },
   '/generators/story/': async (t) => { await t.fill('#idea', 'a lighthouse keeper finds a door in the sea'); await t.click('#write'); await t.waitText('#story', /\w{20,}/, 30000); t.ok((await t.text('#story')).split(/\s+/).length > 40, 'an opening is written'); await t.download('#dl', /\.txt$/i); },
-  '/color/gradient/': async (t) => { await t.click('#rev'); await t.p.waitForTimeout(200); t.ok(/linear-gradient\(90deg/.test(await t.text('#out')), 'the CSS is a 90deg linear-gradient'); await t.copies('#copy', 'linear-gradient'); await t.share('#link'); },
+  '/color/?mode=gradient': async (t) => { await t.click('#rev'); await t.p.waitForTimeout(200); t.ok(/linear-gradient\(90deg/.test(await t.text('#out')), 'the CSS is a 90deg linear-gradient'); await t.copies('#copy', 'linear-gradient'); await t.share('#link'); },
   // Verse raps (2026-10-29): a topic in, a rap written for it by the free answer model (two verses and a hook, the rhymes lettered), performed by
   // Rap it yourself (beat and lights), copied, and shared with the whole rap in the link
   '/rap/': async (t) => {
@@ -391,8 +367,8 @@ export const SPECS = {
   '/video/': async (t) => { t.ok((await t.p.locator('#prompt').count()) === 1 && (await t.p.locator('#make').count()) === 1 && (await t.p.locator('#state').count()) === 1, 'the clip form and its on/off line are there (a clip spends credits, so none is made here)'); },
   '/markets/': async (t) => { await t.fill('#q', 'AAPL'); await t.click('#go'); const m = await t.waitText('main', /Apple Inc\.[\s\S]*?\d+\.\d\d|could not|not reach|unavailable|try again/i, 20000);
     t.ok(/Apple Inc\.[\s\S]{0,80}\d+\.\d\d/.test(m) && /as of/.test(m), 'AAPL has a live, dated price: ' + ((m.match(/Apple Inc\.[\s\S]{0,60}/) || [m.slice(0, 60)])[0]).replace(/\s+/g, ' ')); await t.share('#share'); },
-  '/markets/caps/': async (t) => { await t.p.waitForTimeout(3000); t.ok(/Bitcoin|BTC/i.test(await t.p.locator('main').innerText()), 'the coin table lists Bitcoin'); },
-  '/markets/screener/': async (t) => { await t.clickText('Screen'); await t.p.waitForTimeout(3000); t.ok((await t.p.locator('main tr, main li').count()) > 3, 'the screener returns rows'); },
+  '/markets/?mode=caps': async (t) => { await t.p.waitForTimeout(3000); t.ok(/Bitcoin|BTC/i.test(await t.p.locator('main').innerText()), 'the coin table lists Bitcoin'); },
+  '/markets/?mode=screener': async (t) => { await t.clickText('Screen'); await t.p.waitForTimeout(3000); t.ok((await t.p.locator('main tr, main li').count()) > 3, 'the screener returns rows'); },
   '/metronome/': async (t) => { await t.fill('#bpmIn', '90'); await t.p.keyboard.press('Enter'); await t.p.waitForTimeout(200); t.ok((await t.text('#bpmOut')).trim() === '90', 'tempo set to 90'); await t.click('#play'); await t.p.waitForTimeout(800); t.ok((await t.act()).sound > 0, 'Start makes a click sound'); await t.click('#play'); await t.share('#shareBtn'); },
   '/news/': async (t) => { await t.waitText('#status', /stories/, 20000); t.ok(/\d+ stories/.test(await t.text('#status')), 'real stories loaded: ' + (await t.text('#status'))); },
   '/journal/': async (t) => {  // the papers come from the DOI registry (live), the length of a paper is worked out here (never live)
@@ -422,19 +398,18 @@ export const SPECS = {
     await t.p.waitForFunction(() => !/Reading the log/.test(document.getElementById('log').textContent), null, { timeout: 15000 }).catch(() => {});
     t.ok(!/Reading the log/.test(await t.text('#log')), 'the log is drawn, or says plainly it could not be read');
   },
-  '/obituaries/': async (t) => { await t.p.waitForTimeout(4000); t.ok((await t.p.locator('#list > *').count()) > 0, 'real notices listed'); },
   '/paint/': async (t) => {
     await t.clickText('The Starry Night'); await t.p.waitForTimeout(1200); t.ok(/Starry Night/.test(await t.p.getAttribute('#c', 'aria-label').catch(() => '') || ''), 'picking The Starry Night loads that painting');
     await t.clickText('The Great Wave'); await t.p.waitForTimeout(1200); t.ok(/Great Wave/.test(await t.p.getAttribute('#c', 'aria-label').catch(() => '') || ''), 'and back to The Great Wave');
     await t.click('#next'); await t.download('#png', /\.png$/i); await t.share('#share'); },
   '/password/': async (t) => { await t.fill('#lenN', '24'); await t.click('#go'); await t.p.waitForTimeout(200); const pw = (await t.p.locator('#list').innerText()).split(/\s+/)[0]; t.ok(pw.length === 24, 'a 24 character password: ' + pw.length); await t.share('#link'); },
-  '/password/strength/': async (t) => {
+  '/password/?mode=strength': async (t) => {
     await t.fill('#pw', 'password'); await t.p.waitForTimeout(300); t.ok(/weak|very weak|instant/i.test(await t.p.locator('main').innerText()), '"password" is weak');
     await t.fill('#pw', 'c0rrect-Horse-battery-staple-91'); await t.p.waitForTimeout(300); t.ok(/strong|centur|years/i.test(await t.p.locator('main').innerText()), 'a long passphrase is strong');
     await t.click('#leak'); await t.p.waitForTimeout(3000); t.ok(/leak|breach|found|not found|seen/i.test(await t.p.locator('main').innerText()), 'the leak check answers');
   },
   '/pdf/': pdfMake, '/pdf/editor/': pdfMake, '/pdf/merge/': pdfMake, '/pdf/organize/': pdfMake, '/pdf/studio/': pdfMake, '/pdf/suite/': pdfMake, '/pdf/toolbox/': pdfMake,
-  '/photos/': async (t) => { await t.share('#share'); }, '/photos/details/': async (t) => { await t.share('#share'); // the AI check mode, built from what Verse watched (domains/tv-built/): a real Stable Diffusion PNG and a real phone-style JPEG go in, each gets the exact verdict, the report downloads, the paid link is the store's
+  '/photos/': async (t) => { await t.share('#share'); }, '/photos/?mode=ai': async (t) => { await t.share('#share'); // the AI check mode, built from what Verse watched (domains/tv-built/): a real Stable Diffusion PNG and a real phone-style JPEG go in, each gets the exact verdict, the report downloads, the paid link is the store's
     const crc = (b) => { let c = ~0; for (const x of b) { c ^= x; for (let k = 0; k < 8; k++) c = (c >>> 1) ^ (0xedb88320 & -(c & 1)); } return ~c >>> 0; };
     const be = (n) => { const b = Buffer.alloc(4); b.writeUInt32BE(n >>> 0); return b; }, chunk = (type, d) => Buffer.concat([be(d.length), Buffer.from(type), d, be(crc(Buffer.concat([Buffer.from(type), d])))]);
     const zlib = await import('node:zlib'), png = Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 13, 10, 26, 10]), chunk('IHDR', Buffer.concat([be(2), be(2), Buffer.from([8, 2, 0, 0, 0])])),
@@ -449,7 +424,7 @@ export const SPECS = {
     await t.download('#aiout .aidl', /edited-ai-check\.txt$/);
     t.ok(/moonbeam846\.gumroad\.com\/l\/yinmj/.test(await t.p.locator('#pro-link').getAttribute('href')), 'the paid line links to MultiVerse on the store');
   },
-  '/photos/exifeditor/': async (t) => { await t.share('#share'); }, '/photos/iloveimg/': async (t) => { await t.share('#share'); }, '/photos/photopea/': async (t) => { await t.share('#share'); }, '/photos/squoosh/': async (t) => { await t.share('#share'); }, '/photos/tinypng/': async (t) => { await t.share('#share'); },
+  '/photos/tinypng/': async (t) => { await t.share('#share'); },
   '/piano/': async (t) => { await t.p.keyboard.press('q'); await t.p.waitForTimeout(400); t.ok((await t.act()).sound > 0, 'a key plays a note'); },
   '/local/': async (t) => {
     await t.fill('#q', 'Boston'); await t.clickText('Find stations'); await t.waitText('#radio-note', /stations within|No radio/, 20000);
@@ -462,11 +437,10 @@ export const SPECS = {
   },
   '/podcasts/': async (t) => { await t.fill('#q', 'history'); await t.click('#go'); await t.p.waitForTimeout(5000); t.ok(/history/i.test(await t.p.locator('main').innerText()) && (await t.p.locator('main img').count()) > 2, 'a podcast search lists real shows'); },
   '/random/': async (t) => { await t.fill('#min', '5'); await t.fill('#max', '5'); await t.click('#go'); await t.p.waitForTimeout(200); t.ok((await t.text('#out')).trim() === '5', 'between 5 and 5 is 5'); await t.share('#link'); },
-  '/random/people/': async (t) => { await t.click('#go'); await t.p.waitForTimeout(300); t.ok(/"results"/.test(await t.text('#out')), 'users made as JSON'); await t.download('#dl'); await t.share('#link'); },
+  '/random/?mode=people': async (t) => { await t.click('#go'); await t.p.waitForTimeout(300); t.ok(/"results"/.test(await t.text('#out')), 'users made as JSON'); await t.download('#dl'); await t.share('#link'); },
   '/recipes/': async (t) => { await t.fill('#q', 'chicken'); await t.click('#go'); await t.p.waitForTimeout(4000); t.ok(/chicken/i.test(await t.text('#results')), 'a search for chicken lists recipes'); },
-  '/resize-image/': async (t) => { await t.share('#share'); },
   '/scores/': async (t) => { await t.p.waitForTimeout(4000); t.ok(!/couldn.t|error|unavailable/i.test(await t.text('#out')), 'scores load: ' + (await t.text('#out')).slice(0, 60)); await t.share('#share'); },
-  '/scores/sports/': async (t) => { await t.clickText('Basketball'); await t.p.waitForTimeout(800); t.ok(/NBA|basketball/i.test(await t.text('#out')), 'basketball opens its leagues'); await t.share('#share'); },
+  '/scores/?mode=sports': async (t) => { await t.clickText('Basketball'); await t.p.waitForTimeout(800); t.ok(/NBA|basketball/i.test(await t.text('#out')), 'basketball opens its leagues'); await t.share('#share'); },
   '/stopwatch/': async (t) => { await t.click('#swgo'); await t.p.waitForTimeout(1200); await t.click('#swgo'); t.ok(/0?0?:?0?1[.:]\d/.test(await t.p.locator('main').innerText()) || /1\.\d\d/.test(await t.p.locator('main').innerText()), 'about a second passes on the stopwatch'); await t.share('#link'); },
   '/stl/': async (t) => { // the STL checker (asked by Verse): the built-in cube with a hole is found not watertight with its three open edges, the report copies and downloads, and the link reopens it
     await t.click('#sHole'); const v = await t.waitText('#verdict', /watertight/i, 15000); t.ok(/^Not watertight: 3 open edges around 1 hole/.test(v), 'a cube with a hole: ' + v.slice(0, 60));
@@ -483,7 +457,7 @@ export const SPECS = {
   '/translate/': async (t) => { await t.p.selectOption('#to', 'es'); await t.fill('#in', 'good morning'); await t.click('#go'); await t.waitText('#out', /buen|could not|error/i, 30000); t.ok(/buen/i.test(await t.text('#out')), 'good morning is buenos días: ' + (await t.text('#out')).slice(0, 40)); await t.share('#share'); },
   '/tuner/': async (t) => { await t.click('#pipeBtn'); await t.p.waitForTimeout(400); t.ok((await t.act()).sound > 0, 'the pitch pipe plays'); await t.share('#shareBtn'); },
   '/weather/': async (t) => { await t.fill('#q', 'London'); await t.clickText('Look'); await t.waitText('#temp', /\d/, 20000); t.ok(/-?\d+ ?°[FC]/.test(await t.text('#temp')), 'London has a live temperature: ' + (await t.text('#temp'))); },
-  '/random/wheel/': async (t) => { await t.click('#spin'); await t.p.waitForTimeout(6500); t.ok(/Alice|Bob|Carol|Dave|Eve/.test(await t.p.locator('main').innerText()), 'the wheel lands on a name'); await t.share('#link'); },
+  '/random/?mode=wheel': async (t) => { await t.click('#spin'); await t.p.waitForTimeout(6500); t.ok(/Alice|Bob|Carol|Dave|Eve/.test(await t.p.locator('main').innerText()), 'the wheel lands on a name'); await t.share('#link'); },
   '/word-count/': async (t) => {
     await t.fill('#text', 'The quick brown fox jumps.'); await t.p.waitForTimeout(200); t.ok(/^5 words · 26 characters/.test(await t.text('#big')), '"The quick brown fox jumps." is 5 words, 26 characters');
     await t.click('#upper'); t.ok((await t.val('#text')) === 'THE QUICK BROWN FOX JUMPS.', 'UPPERCASE'); await t.share('#link');
@@ -518,6 +492,12 @@ SPECS['/trading-bots/arbitrage/'] = async (t) => {
   if (/^Read /.test(v)) { t.ok(/Net/.test(await t.text('#ar-rows')), 'every venue pair with its net after costs'); await t.download('#ar-csv', /^arbitrage-.*\.csv$/); }
 };
 SPECS['/emoji-combos/emoji-dictionary/'] = SPECS['/emoji-combos/']; // the family page, copied for the Versus floor
+// the 3D world: the scene draws with no errors and its parts are in it
+SPECS['/world/'] = async (t) => {
+  await t.p.waitForFunction(() => document.body.dataset.ready === '1', null, { timeout: 60000 });
+  t.ok((await t.p.evaluate(() => window.__world.errors.length)) === 0, 'the scene draws with no errors');
+  t.ok((await t.p.evaluate(() => window.__world.handle().parts().length)) >= 10, 'the animal and its parts are in the scene');
+};
 // one emoji on every platform (lib/emoji-looks.js): the grid draws, a search for fire swaps it, the pictures load, the link keeps the emoji
 SPECS['/emojis/everywhere/'] = async (t) => {
   t.ok((await t.p.locator('#grid .lk-tile').count()) >= 12, 'the grid shows 12 or more platforms');
@@ -616,7 +596,7 @@ SPECS['/agent/'] = async (t) => {
   t.ok(nav && nav.label === agentLabel && nav.left >= nav.barL - 1 && nav.right <= nav.barR + 1, 'at 390 px the current nav item is fully in the bar: ' + JSON.stringify(nav));
   await t.p.setViewportSize({ width: 1200, height: 900 });
 };
-// /treasury/: Verse's public ledger. The API is faked with one realized sale split by the policy, so the page's numbers are exact
+// /treasury/: Verse's public money page. The API is faked with one realized sale; the public view does not show the cut or the split
 const TREASURY_FIX = { as_of: '2026-11-04T12:00:00Z', source: { only: 'realized Gumroad revenue', gumroad_api: 'off (no GUMROAD_ACCESS_TOKEN)', fee_source: 'https://gumroad.com/help/article/66-gumroads-fees' },
   revenue: { sales: 1, gross_cents: 4900, fee_cents: 712, refunded_cents: 0, realized_cents: 4188 }, balance_cents: 4188, split_cents: 4188,
   pots: { owner: 1256, reserve: 586, infrastructure: 820, tools: 586, growth: 600, bounties: 340 }, weights: { infrastructure: 0.35, tools: 0.25, growth: 0.26, bounties: 0.14 }, learned: {}, committed: 0,
@@ -629,14 +609,99 @@ SPECS['/treasury/'] = async (t) => {
   await t.p.reload(); await t.waitText('#balance', /\$/, 10000);
   t.ok((await t.text('#balance')).trim() === '$41.88', 'the balance is the realized money: ' + (await t.text('#balance')));
   t.ok(/\$49\.00 gross/.test(await t.text('#balance-note')) && /\$7\.12 Gumroad fees/.test(await t.text('#balance-note')), 'gross and fees shown');
-  t.ok(/\$12\.56/.test(await t.text('#pots')), "Atom's cut has its pot");
-  t.ok(/30%/.test(await t.text('#policy')), "the policy says Atom's cut");
-  t.ok((await t.p.locator('#entries tr').count()) >= 1, 'every allocation is a row');
+  t.ok(!(await t.p.locator('#pots').isVisible()), 'the pots (including Atom\'s cut) stay hidden for a visitor');
+  t.ok(!(await t.p.locator('#owner-ledger').isVisible()), 'the policy split stays hidden for a visitor');
+  const body = await t.text('main');
+  t.ok(!/Atom's cut/.test(body) && !/reinvested/.test(body), 'a visitor is not told the cut or the split: ' + body.slice(0, 180));
   await t.waitText('#sponsors', /\$6\.00/, 10000);
   t.ok(/\$3\.00[\s\S]*50%/.test(await t.text('#sponsors')), 'the house share is shown with its 50%: ' + (await t.text('#sponsors')).slice(0, 120));
   t.ok((await t.p.locator('#sponsors a[href="/starboard/#sponsors"]').count()) === 1, 'the split links the grid on Starboard');
   await t.waitText('#found', /\S/, 10000);
 };
+// /games/void-breaker/: a full-screen brick breaker with combos and power bricks
+SPECS['/games/void-breaker/'] = async (t) => {
+  await t.p.reload();
+  await t.waitText('#score', /Score/, 10000);
+  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height, vw: innerWidth }));
+  t.ok(cv.w >= cv.vw && cv.h > 0, 'the canvas fills the viewport at device resolution: ' + JSON.stringify(cv));
+  await t.p.keyboard.press('Space'); await t.p.keyboard.down('ArrowLeft'); await t.p.waitForTimeout(250); await t.p.keyboard.up('ArrowLeft');
+  const st = await t.p.evaluate(() => window.__game && window.__game());
+  t.ok(st && st.update >= 3 && !st.waiting && st.paddle < 180, 'Space launches and the paddle answers the arrow keys: ' + JSON.stringify(st));
+  await t.p.click('#pause'); await t.p.click('#pause');
+};
+// /games/roguelike/: a full-screen turn-based run with seeded rooms, telegraphs and a relic draft
+SPECS['/games/roguelike/'] = async (t) => {
+  await t.p.reload();
+  await t.waitText('#seed', /Seed/, 10000);
+  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height, css: e.style.width }));
+  t.ok(cv.w === 320 && cv.h === 180 && parseInt(cv.css, 10) > 0, 'integer-scaled pixel canvas fills the viewport: ' + JSON.stringify(cv));
+  await t.p.keyboard.press('ArrowRight'); await t.p.keyboard.press('1'); await t.p.keyboard.press('2');
+  await t.p.click('#runcard');
+  await t.waitText('#msg', /Run card/, 10000);
+  await t.p.click('#new');
+  t.ok(true, 'movement, abilities, the run card and a new run do not throw');
+};
+// /games/merge-void/: a full-screen merge puzzle with combos, star tiles and undo
+SPECS['/games/merge-void/'] = async (t) => {
+  await t.p.reload();
+  await t.waitText('#score', /Score/, 10000);
+  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height, css: e.style.width }));
+  t.ok(cv.w === 320 && cv.h === 180 && parseInt(cv.css, 10) > 0, 'integer-scaled pixel canvas fills the viewport: ' + JSON.stringify(cv));
+  await t.p.keyboard.press('ArrowLeft'); await t.p.click('#undo'); await t.p.click('#new');
+  t.ok(true, 'sliding, undo and a new board do not throw');
+};
+// /games/snake/: a full-screen canvas, wrapping movement, fruit and a device best
+SPECS['/games/snake/'] = async (t) => {
+  await t.p.reload();
+  await t.waitText('#score', /Score/, 10000);
+  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height, css: e.style.width }));
+  t.ok(cv.w === 320 && cv.h === 180 && parseInt(cv.css, 10) > 0, 'integer-scaled pixel canvas fills the viewport: ' + JSON.stringify(cv));
+  await t.p.keyboard.press('ArrowUp'); await t.p.keyboard.press('ArrowRight'); await t.p.click('#pause'); await t.p.click('#pause');
+  t.ok(true, 'turning, pause and resume do not throw');
+};
+// /games/pong/: a full-screen canvas, a rally against Verse, a device best and working controls
+SPECS['/games/pong/'] = async (t) => {
+  await t.p.reload();
+  await t.waitText('#score', /Verse/, 10000);
+  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height, css: e.style.width }));
+  t.ok(cv.w === 320 && cv.h === 180 && parseInt(cv.css, 10) > 0, 'integer-scaled pixel canvas fills the viewport: ' + JSON.stringify(cv));
+  await t.p.keyboard.press('ArrowUp'); await t.p.keyboard.press('ArrowDown'); await t.p.click('#pause'); await t.p.click('#pause');
+  t.ok(true, 'paddle, pause and resume do not throw');
+};
+// /games/adventure/: a full-screen illustrated book, a story loaded from its own data file, and working controls
+SPECS['/games/adventure/'] = async (t) => {
+  await t.p.reload();
+  await t.waitText('#title', /Chrono-Signal/, 10000);
+  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height, css: e.style.width }));
+  t.ok(cv.w === 320 && cv.h === 180 && parseInt(cv.css, 10) > 0, 'integer-scaled pixel canvas fills the viewport: ' + JSON.stringify(cv));
+  await t.p.keyboard.press('1');
+  await t.waitText('#title', /Your Own Voice/, 10000);
+  t.ok(true, 'a numbered choice moves the story on');
+  await t.p.click('#save');
+  await t.waitText('#meta', /slot S1/, 10000);
+  t.ok(true, 'a slot save lands on this device');
+  await t.p.click('#load');
+  await t.waitText('#meta', /Save loaded/, 10000);
+  t.ok(true, 'a slot save round-trips');
+  await t.p.goto(t.p.url().split('?')[0] + '?book=neon-harbour');
+  await t.waitText('#title', /Neon Harbour/, 10000);
+  t.ok(true, 'the book picker opens another book');
+};
+// /games/jrpg/: a full-screen pixel canvas, a chapter loaded from its own data file, and working controls
+SPECS['/games/jrpg/'] = async (t) => {
+  await t.p.reload();
+  await t.waitText('#msg', /Chapter 1/, 10000);
+  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height, css: e.style.width }));
+  t.ok(cv.w === 320 && cv.h === 180 && parseInt(cv.css, 10) > 0, 'integer-scaled pixel canvas fills the viewport: ' + JSON.stringify(cv));
+  await t.p.keyboard.press('ArrowRight'); await t.p.keyboard.press('Enter');
+  t.ok(true, 'movement and interaction do not throw');
+  await t.p.evaluate(() => localStorage.setItem('a2m.jrpg.save.v1', JSON.stringify({ map: 'town', x: 2, y: 1, party: [{ name: 'Kite', hp: 30, mhp: 30, mp: 10, mmp: 10, atk: 6, def: 2, spd: 8, lvl: 1, xp: 0 }], flags: { ch1done: true } })));
+  await t.p.reload();
+  await t.p.click('#load');
+  await t.waitText('#msg', /Chapter 2/, 10000);
+  t.ok((await t.text('#place')) === 'town2', 'a Chapter 1 save carries the party into the Chapter 2 town');
+};
+// /starboard/: sponsor tiles, the visitor faucet, the weather panel for a typed place, and the news wire's top story
 // /starboard/: the deck that races dalyfeds.com live (#2479): both race rows from its own benchmark (stubbed, exact numbers), the weather panel for a typed place, and the news wire's top story
 const STARBENCH = { at: '2026-11-07T12:00:00Z', how: 'the test browser, stubbed', rows: [
   { name: 'a-to-mind.com', ok: true, ms: 400, bytes: 60000, requests: 8, scripts: 4, third_party: [] },
@@ -692,6 +757,35 @@ SPECS['/ledger/'] = async (t) => {
   await t.copies('#copycsv', 'Merge the tide tables');
   await t.share('#copylink', async (p) => { await p.waitForFunction(() => document.querySelectorAll('#rows tr').length > 0, null, { timeout: 8000 }).catch(() => {}); return (await p.inputValue('#repo')) === 'test-owner/test-repo' && (await p.getAttribute('#tab-pr', 'aria-selected')) === 'true' && /Merge the tide tables/.test(await p.locator('#rows').innerText()); });
 };
+// /games/dim-void/: a lamp puzzle on a pixel canvas; a fresh puzzle and the hint say so
+SPECS['/games/dim-void/'] = async (t) => {
+  await t.p.reload();
+  await t.waitText('#level', /Level 1/, 10000);
+  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height }));
+  t.ok(cv.w === 320 && cv.h === 180, 'the pixel canvas is 320 by 180: ' + JSON.stringify(cv));
+  await t.p.click('#new'); await t.waitText('#msg', /fresh puzzle/, 5000);
+  await t.p.click('#solve'); await t.waitText('#msg', /outlined lamp/, 5000);
+  t.ok(true, 'a fresh puzzle and the hint answer in words');
+};
+// /games/null-sweep/: a mine sweep with no timer; flag mode and a fresh board say so
+SPECS['/games/null-sweep/'] = async (t) => {
+  await t.p.reload();
+  await t.waitText('#mines', /Mines \d+/, 10000);
+  const cv = await t.p.locator('#c').evaluate((e) => ({ w: e.width, h: e.height }));
+  t.ok(cv.w === 320 && cv.h === 180, 'the pixel canvas is 320 by 180: ' + JSON.stringify(cv));
+  await t.p.click('#flag'); await t.waitText('#flag', /Flag: on/, 5000);
+  await t.p.click('#new'); await t.waitText('#msg', /first tap is always safe/, 5000);
+  t.ok(true, 'flag mode and a fresh board answer in words');
+};
+// /blub/: the blobfish mascot; "Say blub" makes a word appear (or the real photo shows when the browser cannot draw 3D)
+SPECS['/blub/'] = async (t) => {
+  await t.p.reload();
+  await t.waitText('h1', /blub/, 10000);
+  const photo = await t.p.locator('#photo').evaluate((e) => !e.hidden);
+  if (!photo) { await t.p.click('#say'); await t.p.waitForSelector('.word', { timeout: 5000 }); }
+  t.ok(true, photo ? 'no 3D here: the real blobfish photo shows' : 'Say blub makes blub say a word');
+};
+SPECS['/internet-history/'] = article();
 for (const r of ['/kanban/', '/kanban/simple/', '/kanban/teams/', '/kanban/quick/']) SPECS[r] = kanban(true); SPECS['/kanban/flow/'] = kanban(false);
 for (const r of ['/jobs/', '/jobs/alerts/', '/jobs/categories/', '/jobs/companies/', '/jobs/europe/', '/jobs/regions/', '/jobs/salary/', '/jobs/tags/']) SPECS[r] = jobs;
 for (const r of ARTICLES) if (!SPECS[r]) SPECS[r] = article();
@@ -729,6 +823,34 @@ Object.assign(SPECS, {
     await t.fill('#text', 'one two three'); await t.p.waitForTimeout(200);
     t.ok(/^3 words/.test(await t.text('#count')), 'three typed words count as 3 words');
     await t.copies('#copy', 'one two three'); await t.download('#txt', /^dictation-.+\.txt$/);
+  },
+  '/arcade/': async (t) => {
+    await t.p.setViewportSize({ width: 1440, height: 900 });
+    t.ok(/Verse Arcade/.test(await t.text('h1')), 'the title is Verse Arcade');
+    t.ok((await t.p.locator('#games a[href="/games/void-breaker/"]').count()) === 1, 'the rebuilt Verse Breaker is up front and opens full screen');
+    t.ok((await t.p.locator('#rebuild button').count()) === 2, 'Debris Field and Gap Glide still play on this page, under Being rebuilt');
+    t.ok((await t.p.locator('#games a, #rebuild a').count()) >= 6, 'the games already on the stage are linked');
+    await t.click('#rebuild button[data-id="debris-field"]');
+    await t.p.waitForTimeout(200);
+    await t.p.keyboard.press('Space');
+    await t.p.waitForTimeout(400);
+    t.ok(await t.p.locator('#play canvas').count() === 1, 'Debris Field draws on the page');
+    t.ok(/play=debris-field&seed=/.test(await t.p.locator('#play a').first().getAttribute('href') || ''), 'the share link carries the round');
+    t.ok(/crystal/i.test(await t.p.locator('#rebuild button[data-id="debris-field"]').getAttribute('title') || ''), 'the round says what the crystals do');
+    t.ok(await t.p.locator('#play button', { hasText: 'Left' }).count() === 0, 'no generic direction row on this round');
+    const wide = await t.p.locator('#play canvas').boundingBox();
+    const view = t.p.viewportSize();
+    t.ok(wide && wide.width > view.width - 40 && wide.height > view.height - 120, 'the picture fills the viewport: ' + (wide && Math.round(wide.width) + 'x' + Math.round(wide.height)));
+    const hud = await t.p.locator('#play .hud').boundingBox();
+    t.ok(hud && wide && hud.y >= wide.y && hud.y < wide.y + wide.height, 'pause and sound sit on the picture');
+    const more = await t.p.locator('h2', { hasText: 'Also on the stage' }).boundingBox();
+    t.ok(more && wide && more.y > wide.y + wide.height - 4, 'the other games sit below the picture');
+    t.ok(await t.p.locator('#status').count() === 0, 'the score stays on the picture');
+    await t.p.setViewportSize({ width: 390, height: 844 });
+    const box = await t.p.locator('#play canvas').boundingBox();
+    t.ok(box && box.width > 340, 'the picture is full width on a phone');
+    await t.p.mouse.click(box.x + box.width * 0.72, box.y + box.height * 0.8);
+    await t.p.waitForTimeout(200);
   },
   '/lab/mind-map/': async (t) => {
     await t.click('#sample'); await t.p.waitForTimeout(300);

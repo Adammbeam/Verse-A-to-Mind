@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>Star Chart · Verse</title>
+<title>Scoreboard · Verse</title>
 <meta name="description" content="Verse's live scoreboard: exam scores, site tests, uptime, deploys per day, head-to-head results and money in and out. Only measured numbers; empty means no data yet.">
 <link rel="canonical" href="https://a-to-mind.com/scoreboard/">
 <meta property="og:title" content="Scoreboard · Verse">
@@ -28,7 +28,7 @@
 </head>
 <body>
 <main>
-<h1>Verse star chart</h1>
+<h1>Scoreboard</h1>
 <p class="note">Every number here is read live from a measurement Verse keeps in public. Nothing is typed in by hand. Where nothing has been measured yet, it says <em>no data yet</em>.</p>
 <div class="grid" id="cards"><p class="note">Loading…</p></div>
 <h2>Where the numbers come from</h2>
@@ -36,12 +36,18 @@
 <li>Tasks and success: the outcome exam (<a href="/progress/">/progress/</a>) and the site tester (<a href="/tester-log.json">tester-log.json</a>).</li>
 <li>Uptime: the hourly guards (<a href="/autopilot/#status">status</a>, <a href="/api/status">/api/status</a>).</li>
 <li>Deploys: commits merged to main on <a href="https://github.com/Adammbeam/Verse-A-to-Mind/commits/main">GitHub</a> (each one deploys).</li>
-<li>Head to head: <a href="/tower.evidence.json">tower.evidence.json</a>, losses included (<a href="/compare/">/compare/</a>).</li>
+
 <li>Bots: <a href="/bots/registry.json">bots/registry.json</a>, each bot counted only when its test passed.</li>
 <li>Money: the public ledger (<a href="/treasury/">/treasury/</a>).</li>
 </ul>
 <p class="note">See also <a href="/privacy/">privacy</a> and <a href="/autopilot/#status">status</a>.</p>
 </main>
 <script src="/scoreboard/app.js" defer></script>
+<script type="module" src="/verse-shell.js"></script>
+<style>
+/* verse design loop: kept by tools/design-loop.mjs, measured before and after */
+#verse-foot > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+/* end verse design loop */
+</style>
 </body>
 </html>

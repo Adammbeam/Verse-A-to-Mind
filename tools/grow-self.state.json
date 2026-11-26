@@ -1,15 +1,15 @@
 {
   "status": "open",
-  "run": "44333898107",
-  "at": "2026-11-18T15:21:20Z",
-  "what": "Verse hardened itself: 2 benchmark ask(s) for connect-flows.  Why these: automation-status (only 1 benchmark ask, evidence tier: checked); connect-flows (only 1 benchmark ask, evidence tier: checked); full-handoff (only 2 benchmark asks, evidence tier: checked); handoff-ready (only 1 benchmark ask, evidence tier: checked); ownership-pack (only 1 benchmark ask, evidence tier: checked). New phrases: “connect the systems for invoice reminders” now opens connect-flows; “map connections for the support router” now opens connect-flows. Did not route: automation status for invoice reminders; status of the automations Verse owns for support; client handoff pack on onboarding flow; is this system handoff ready.",
-  "try": "connect the systems for invoice reminders",
+  "run": "45128744500",
+  "at": "2026-11-23T07:07:44Z",
+  "what": "Verse hardened itself: 13 benchmark ask(s) for we-own-it-pack, before-after-pack, full-lift-plan, monitor-receipt, process-lift-pack.  Why these: chart (only 2 benchmark asks, evidence tier: experiment, a visitor plays with it); we-own-it-pack (no benchmark ask, evidence tier: experiment, a business tool (a small share of the work)); before-after-pack (no benchmark ask, evidence tier: tested, a business tool (a small share of the work)); full-lift-plan (no benchmark ask, evidence tier: tested, a business tool (a small share of the work)); monitor-receipt (no benchmark ask, evidence tier: tested, a business tool (a small share of the work)); process-lift-pack (no benchmark ask, evidence tier: tested, a business tool (a small share of the work)). New phrases: “we-own-it for SaaS support” now opens we-own-it-pack; “before after pack for client onboarding” now opens before-after-pack; “package the before and after for invoice automation” now opens before-after-pack; “show the lift from client work to Verse owns it for support routing” now opens before-after-pack; “full lift plan for my idea: automate invoice reminders” now opens full-lift-plan; “ownership plan for client onboarding system” now opens full-lift-plan; “what systems does Verse own for this business idea” now opens full-lift-plan; “monitor receipt for the onboarding automation” now opens monitor-receipt; “client monitor receipt for invoice flow” now opens monitor-receipt; “receipt of monitors for weekly reports” now opens monitor-receipt; “process lift pack for client onboarding” now opens process-lift-pack; “package the hard work for invoice automation” now opens process-lift-pack; “verse does the lift for support routing” now opens process-lift-pack. Did not route: line chart jan 10, feb 14, mar 9; verse does it pack for my invoice idea; package the hard work for client onboarding.",
+  "try": "we-own-it for SaaS support",
   "closedAt": null,
   "proof": null,
   "note": "",
   "previous": {
-    "at": "2026-11-18T13:06:47Z",
-    "try": "show the data flows for client onboarding",
-    "closedAt": "2026-11-18T15:21:08Z"
+    "at": "2026-11-23T05:05:31Z",
+    "try": "budget planner",
+    "closedAt": "2026-11-23T07:07:25Z"
   }
 }

@@ -634,6 +634,20 @@
    "weight": 575846,
    "at": "2026-10-30"
   },
+  "arema.mx": {
+   "bytes": 3479382,
+   "controls": 523,
+   "scripts": 6,
+   "styles": 2,
+   "nodes": 26,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 49728,
+   "shell": "none",
+   "weight": 3491642,
+   "at": "2026-11-18"
+  },
   "arfonts.net": {
    "bytes": 851519,
    "controls": 123,
@@ -5714,7 +5728,7 @@
    "shell": "none",
    "text": 7,
    "weight": 8,
-   "at": "2026-11-18"
+   "at": "2026-11-24"
   },
   "flagcounter.com": {
    "bytes": 150690,
@@ -6871,6 +6885,20 @@
    "weight": 531472,
    "at": "2026-10-30"
   },
+  "hostingnovapyme30.com": {
+   "bytes": 1503,
+   "controls": 4,
+   "scripts": 0,
+   "styles": 1,
+   "nodes": 36,
+   "routes": 0,
+   "htmlControls": 4,
+   "counted": "rendered",
+   "text": 78,
+   "shell": "none",
+   "weight": 1863,
+   "at": "2026-11-23"
+  },
   "hotwheelsmonstertruckslive.com": {
    "bytes": 3328995,
    "controls": 1465,
@@ -7044,7 +7072,7 @@
    "at": "2026-10-30"
   },
   "icanhazip.com": {
-   "bytes": 15,
+   "bytes": 14,
    "controls": 0,
    "scripts": 0,
    "styles": 0,
@@ -7053,9 +7081,9 @@
    "htmlControls": 0,
    "counted": "plain",
    "shell": "none",
-   "text": 14,
-   "weight": 15,
-   "at": "2026-11-18"
+   "text": 13,
+   "weight": 14,
+   "at": "2026-11-24"
   },
   "icloud.com": {
    "bytes": 3791879,
@@ -7465,6 +7493,20 @@
    "weight": 916645,
    "at": "2026-10-30"
   },
+  "ixora.ru": {
+   "bytes": 1634769,
+   "controls": 14,
+   "scripts": 6,
+   "styles": 4,
+   "nodes": 24,
+   "routes": 3,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 3423,
+   "shell": "none",
+   "weight": 1648509,
+   "at": "2026-11-23"
+  },
   "jamrolledicecream.com": {
    "bytes": 886894,
    "controls": 660,
@@ -7517,6 +7559,20 @@
    "shell": "none",
    "weight": 29697,
    "at": "2026-11-16"
+  },
+  "jlwockee.xyz": {
+   "bytes": 2156,
+   "controls": 1,
+   "scripts": 0,
+   "styles": 1,
+   "nodes": 11,
+   "routes": 0,
+   "htmlControls": 1,
+   "counted": "rendered",
+   "text": 53,
+   "shell": "none",
+   "weight": 2266,
+   "at": "2026-11-24"
   },
   "jobicy.com": {
    "bytes": 494905,
@@ -8644,6 +8700,20 @@
    "shell": "none",
    "weight": 2722896,
    "at": "2026-10-30"
+  },
+  "meetmarlo.com": {
+   "bytes": 20641,
+   "controls": 91,
+   "scripts": 6,
+   "styles": 3,
+   "nodes": 22,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 4202,
+   "shell": "none",
+   "weight": 32861,
+   "at": "2026-11-19"
   },
   "mega.co.nz": {
    "bytes": 2771,
@@ -9955,6 +10025,20 @@
    "refused": true,
    "at": "2026-10-29"
   },
+  "perfect-webspace.de": {
+   "bytes": 4028,
+   "controls": 5,
+   "scripts": 2,
+   "styles": 1,
+   "nodes": 24,
+   "routes": 0,
+   "htmlControls": 5,
+   "counted": "rendered",
+   "text": 379,
+   "shell": "none",
+   "weight": 8268,
+   "at": "2026-11-24"
+  },
   "photofolio.com": {
    "bytes": 95371,
    "controls": 28,
@@ -10305,11 +10389,11 @@
    "nodes": 0,
    "routes": 0,
    "htmlControls": 0,
-   "counted": "plain",
+   "counted": "unrendered",
    "shell": "none",
    "text": 37,
    "weight": 70,
-   "at": "2026-11-18"
+   "at": "2026-11-23"
   },
   "proton.me": {
    "bytes": 835896,
@@ -11087,6 +11171,20 @@
    "refused": true,
    "at": "2026-11-13"
   },
+  "satco.biz": {
+   "bytes": 60006,
+   "controls": 0,
+   "scripts": 0,
+   "styles": 2,
+   "nodes": 12,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 32,
+   "shell": "none",
+   "weight": 60126,
+   "at": "2026-11-21"
+  },
   "satisfactory-calculator.com": {
    "bytes": 689362,
    "controls": 93,
@@ -11649,6 +11747,20 @@
    "weight": 665430,
    "at": "2026-10-30"
   },
+  "soldns.de": {
+   "bytes": 15,
+   "controls": 0,
+   "scripts": 0,
+   "styles": 0,
+   "nodes": 0,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 15,
+   "shell": "none",
+   "weight": 15,
+   "at": "2026-11-22"
+  },
   "songgenerator.io": {
    "bytes": 1230000,
    "controls": 60,
@@ -11934,6 +12046,20 @@
    "shell": "none",
    "weight": 795371,
    "at": "2026-10-30"
+  },
+  "startekinfo.com": {
+   "bytes": 3892219,
+   "controls": 12,
+   "scripts": 5,
+   "styles": 3,
+   "nodes": 21,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 738,
+   "shell": "none",
+   "weight": 3902429,
+   "at": "2026-11-21"
   },
   "stealthex.io": {
    "bytes": 1452630,
@@ -13256,6 +13382,10 @@
    "shell": "none",
    "weight": 3425,
    "at": "2026-11-09"
+  },
+  "turfburn.info": {
+   "refused": true,
+   "at": "2026-11-22"
   },
   "turkishexporter.com.tr": {
    "refused": true,
@@ -15553,6 +15683,20 @@
    "weight": 159920,
    "at": "2026-11-14"
   },
+  "xx9.com": {
+   "bytes": 2141015,
+   "controls": 28,
+   "scripts": 13,
+   "styles": 4,
+   "nodes": 59,
+   "routes": 0,
+   "htmlControls": 0,
+   "counted": "rendered",
+   "text": 4519,
+   "shell": "none",
+   "weight": 2167605,
+   "at": "2026-11-24"
+  },
   "y-exe.jp": {
    "bytes": 250436,
    "controls": 14,
@@ -15667,6 +15811,10 @@
    "shell": "none",
    "weight": 720051,
    "at": "2026-10-30"
+  },
+  "youmark.jp": {
+   "refused": true,
+   "at": "2026-11-18"
   },
   "younit.kr": {
    "refused": true,

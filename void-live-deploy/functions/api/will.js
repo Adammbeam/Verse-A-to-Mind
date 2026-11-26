@@ -15,10 +15,13 @@ import { redact, INJECTION_RULE } from '../../lib/automation-fix.js';
 import { readShortfalls, shortfallLine, recordShortfall, reasonOf } from '../../lib/shortfall.js';
 import { models } from '../../lib/models.js';
 import { honestBecause } from '../../lib/honest.js';
-import { tower, towerLine, towerArgs } from '../../lib/tower.js';
+import { tower, countsOf, towerArgs } from '../../lib/tower.js';
+// the public line says how far Versus is, never which site it is on (no rival names on public pages; the owner's Tower names it)
+const towerCounts = (t) => { const c = countsOf(t); return 'Versus: ' + c.assimilated + ' assimilated · ' + (c.remaining + (c.current ? 1 : 0)) + ' floors remaining'; };
 import { nextStep, advance, candidateOf, publicLap, overhaulWeights, onlySiteLine } from '../../lib/lap.js';
 import { hotOf } from '../../lib/churn.js';
 import { slug, pickWant, skippedNote, sinceOf, WILL_SCHEMA, noPaths, coveredByName, coveredByBuilt } from '../../lib/will-guard.js';
+import { recentBuilt, freshWants } from '../../lib/will-card.js';
 import { WILL_LAST_SQL, lastRun } from '../../lib/will-last.js';
 import { betterPair, blank, tick as selfTick, weigh } from '../../lib/self-model.js';
 const MODEL = models('will');
@@ -33,20 +36,21 @@ export async function onRequestGet({ request, env }) {
   try {
     const asset = async (path) => { const r = await env.ASSETS.fetch(new Request(new URL(path, request.url))); return r.ok ? r.json() : null; };
     const [ledger, answered] = await Promise.all([asset('/void.growth.json'), asset('/void.asks.json')]);
-    if (ledger) { const s = splitBuilt(will.wants, ledger, answered && answered.links); will.wants = s.open; if (s.got.length) will.got = s.got; }
+    if (ledger) { const s = splitBuilt(will.wants, ledger, answered && answered.links); will.wants = s.open; if (s.got.length) will.got = s.got; will.recent = recentBuilt({ got: will.got, ledger }, 5); }
   } catch (_) { /* the ledger could not be read: the will as it was chosen */ }
+  if (!Array.isArray(will.recent)) will.recent = recentBuilt({ got: will.got }, 5);
   // the will's last run (lib/will-last.js, for the growth card's today view): the newest tried will job's title, state and the PR or the
   // reason it did not ship. An open read of one queue row, cut to that public shape (its why redacted); the rest of the queue
   // stays owner only (functions/api/queue.js). It costs one indexed SELECT per read, behind the same 60-second public cache.
   try { const last = lastRun(await env.DB.prepare(WILL_LAST_SQL).first(), redact); if (last) will.lastRun = last; } catch (_) { /* no queue table yet */ }
   // the public lap tracker (counts only): ?lap=1, or will.lap on every read
   let only = null; try { const inv = await (await env.ASSETS.fetch(new Request(new URL('/lap.items.json', request.url)))).json(); if (inv && inv.onlySite) only = { counts: inv.onlySiteCounts, line: onlySiteLine(inv.onlySiteCounts), categories: inv.onlySite.map((r) => ({ category: r.category, status: r.status, skills: r.skills })) }; } catch (_) { /* no inventory */ }
-  try { const raw = await env.DB.prepare("SELECT v FROM void_kv WHERE k = 'lap'").first('v'); will.lap = publicLap(raw ? JSON.parse(raw) : null, only); try { const file = async (p) => { try { const r = await env.ASSETS.fetch(new Request(new URL(p, request.url))); return r.ok ? r.json() : null; } catch (_) { return null; } }; const [ev, fr, rk, sz, tg, ft, gn, pa] = await Promise.all(['/tower.evidence.json', '/tower.frontier.json', '/tower.rank.json', '/tower.size.json', '/tower.target.json', '/tower.features.json', '/tower.gone.json', '/parity.json'].map(file)); if (!ev) throw new Error('no tower evidence'); const t = tower(...towerArgs((only && only.categories || []).map((c) => ({ category: c.category, status: c.status, skills: c.skills })), { ev, fr, rk, sz, tg, ft, gn, pa })); will.lap.tower = { line: towerLine(t), floor: t.marker, floors: t.total, beaten: t.beaten }; } catch (_) { /* no tower evidence */ } } catch (_) { /* no lap yet */ }
+  try { const raw = await env.DB.prepare("SELECT v FROM void_kv WHERE k = 'lap'").first('v'); will.lap = publicLap(raw ? JSON.parse(raw) : null, only); try { const file = async (p) => { try { const r = await env.ASSETS.fetch(new Request(new URL(p, request.url))); return r.ok ? r.json() : null; } catch (_) { return null; } }; const [ev, fr, rk, sz, tg, ft, gn, pa] = await Promise.all(['/tower.evidence.json', '/tower.frontier.json', '/tower.rank.json', '/tower.size.json', '/tower.target.json', '/tower.features.json', '/tower.gone.json', '/parity.json'].map(file)); if (!ev) throw new Error('no tower evidence'); const t = tower(...towerArgs((only && only.categories || []).map((c) => ({ category: c.category, status: c.status, skills: c.skills })), { ev, fr, rk, sz, tg, ft, gn, pa })); will.lap.tower = { line: towerCounts(t), floor: t.marker, floors: t.total, beaten: t.beaten }; } catch (_) { /* no tower evidence */ } } catch (_) { /* no lap yet */ }
   if (new URL(request.url).searchParams.has('lap')) return Response.json(will.lap || publicLap(null), { headers: { 'cache-control': 'public, max-age=60' } });
   return Response.json(will, { headers: { 'cache-control': 'public, max-age=60' } });
 }
 
-export async function onRequestPost({ request, env }) {
+export async function onRequestPost({ request, env, waitUntil }) {
   if (!(await ok(request, env))) return new Response('no', { status: 401 });
   let b = {}; try { b = JSON.parse(await request.text()); } catch (_) {}
   if (+b.schema !== WILL_SCHEMA) return new Response('out of date writer: update the checkout (tools/will.py sends schema ' + WILL_SCHEMA + ')', { status: 409 });
@@ -94,6 +98,17 @@ export async function onRequestPost({ request, env }) {
   const clip = (t, n) => { const x = String(t || '').trim(); return x.length <= n ? x : x.slice(0, n - 1).replace(/\s+\S*$/, '') + '…'; };
   const noMoney = (t) => String(t || '').replace(/[$€£]\s?\d[\d,.]*(\s?(k|m|\/\s?mo(nth)?|a month|per month))?/gi, 'what I earned').replace(/\b(budget|earnings?|profits?|revenue|sales total)\b/gi, 'what I earned');
   const will = { at, wants: wants.map((w) => ({ kind: w.c.kind, title: w.c.title, ...(w.c.source ? { source: w.c.source } : {}), i_want: clip(noPaths(redact(noMoney(w.i_want))), 220), because: clip(noPaths(redact(noMoney(honestBecause(w.because, w.c.why)))), 200), evidence: clip(noPaths(redact(noMoney(w.c.why))), 200) })) };
+  // a want the ledger already names as built is not saved as current, and leftover candidates fill the list so the card stays fresh
+  try {
+    const file = async (p) => { if (!env.ASSETS) return null; const r = await env.ASSETS.fetch(new Request(new URL(p, request.url))); return r.ok ? r.json() : null; };
+    const [ledger, answered] = await Promise.all([file('/void.growth.json'), file('/void.asks.json')]);
+    const links = (answered && answered.links) || [];
+    const leftover = cands.filter((c) => !will.wants.some((w) => w.title === c.title)).map((c) => ({ kind: c.kind, title: c.title, why: c.why, source: c.source, because: c.why }));
+    const fresh = freshWants(will.wants, leftover, ledger, links, 3, splitBuilt);
+    will.wants = fresh.wants.map((w) => ({ kind: w.kind || '', title: w.title, ...(w.source ? { source: w.source } : {}), i_want: clip(noPaths(redact(noMoney(w.i_want))), 220), because: clip(noPaths(redact(noMoney(honestBecause(w.because, w.evidence || w.because)))), 200), evidence: clip(noPaths(redact(noMoney(w.evidence || w.because || ''))), 200) }));
+    if (fresh.got.length) will.got = fresh.got;
+    will.recent = recentBuilt({ got: will.got, ledger }, 5);
+  } catch (_) { /* the will as chosen still saves */ }
   await env.DB.prepare("INSERT INTO void_kv (k, v) VALUES ('will', ?) ON CONFLICT(k) DO UPDATE SET v = excluded.v").bind(JSON.stringify(will)).run();
   // a will job nobody has touched in STALE_DAYS makes way for the newest top want: it is set aside (kept, with why), not deleted
   await env.DB.prepare("UPDATE void_queue SET state = 'set aside', note = substr('set aside: untouched for ' || ? || ' days, a newer want takes its place · ' || COALESCE(note, ''), 1, 300), updated = ? WHERE target LIKE 'will:%' AND state IN ('queued','building') AND COALESCE(updated, at) < ?")
@@ -137,5 +152,8 @@ export async function onRequestPost({ request, env }) {
     const stepped = selfTick(prev ? JSON.parse(prev) : blank(at), { better: betterPair(better), exam, will: { open: will.wants.length }, goals: will.wants.map((w) => w.i_want || w.title) }, at);
     await env.DB.prepare("INSERT INTO void_kv (k, v) VALUES ('self-model', ?) ON CONFLICT(k) DO UPDATE SET v = excluded.v").bind(JSON.stringify(stepped.self)).run();
   } catch (_) { /* the will is already saved */ }
+  // the hourly will run also wakes the brain's sleep (functions/api/brain.js readBrain sleeps when the last note is 20+ hours old), so a
+  // note is written every night even when nobody opens /brain/; a failed sleep never touches this answer
+  if (waitUntil) waitUntil(import('./brain.js').then((m) => m.readBrain(request, env)).catch(() => null));
   return Response.json({ ...will, queued, open: open ? open.id : null, ...(skipped.length ? { skipped } : {}), ...(chosenWant.overCap ? { overCap: chosenWant.overCap } : {}) });
 }

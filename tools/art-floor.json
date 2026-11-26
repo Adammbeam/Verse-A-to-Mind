@@ -5,17 +5,17 @@
   "hues": 100,
   "unique": 100,
   "weight": 100,
-  "motif": 94.1,
+  "motif": 94.3,
   "ladder": 100
  },
  "pixels": {
   "composite": 74,
   "chrome": "156",
   "metrics": {
-   "tonal": 98.8,
-   "colour": 81.6,
+   "tonal": 99,
+   "colour": 81.7,
    "detail": 100,
-   "focus": 13.9
+   "focus": 15.5
   }
  }
 }

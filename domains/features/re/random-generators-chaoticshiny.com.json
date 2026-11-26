@@ -1,0 +1,40 @@
+{
+ "site": "www.chaoticshiny.com",
+ "url": "https://www.chaoticshiny.com/",
+ "scanned": "2026-11-22",
+ "status": 200,
+ "assets": [
+  {
+   "f": "style.css",
+   "t": "css",
+   "b": 1978
+  }
+ ],
+ "assetCount": 1,
+ "bytes": 1978,
+ "html": {
+  "mobile": {
+   "title": "Chaotic Shiny - Writing and RPG-Related ",
+   "lang": "",
+   "manifest": null,
+   "share": {
+    "og": 0,
+    "twitter": false,
+    "themeColor": false,
+    "appleCapable": false
+   },
+   "noscript": true
+  },
+  "desktop": {}
+ },
+ "robots": {
+  "disallow": [],
+  "sitemaps": [],
+  "crawlDelay": null
+ },
+ "storage": {
+  "local": [],
+  "session": [],
+  "idb": []
+ }
+}

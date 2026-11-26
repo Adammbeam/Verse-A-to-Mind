@@ -73,3 +73,5 @@ export function draw(g, s) {
   dot(s.verse, '#b79bff'); dot(s.you, '#4fe3e3');
 }
 export const how = 'Cross to the far curb. Arrow keys or the buttons step one cell, and a block in a lane sends you back to the start. Verse crosses the same lanes and only steps onto a clear cell. The first one to the far curb wins. A link can hand a friend the same lanes.';
+
+export const whatsNew = 'Update 1: You now feel the tension of the race as Verse matches your every move, making every narrow gap a thrilling sprint to the finish.';

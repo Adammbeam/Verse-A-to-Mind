@@ -1,10 +1,10 @@
 {
  "about": "The sweep for the smallest sites of all (tools/easiest-sites.mjs --small): each run reads the next slice of the Tranco top million from cursor, one plain GET of each home page, and keeps the ones with at most 5 controls and 20000 bytes that are real pages. smallest is the 500 smallest found so far, fewest controls first, then the fewer bytes.",
  "source": "https://tranco-list.eu/top-1m.csv.zip",
- "cursor": 160000,
- "swept": 1127950,
+ "cursor": 640000,
+ "swept": 1596263,
  "lap": 1,
- "at": "2026-11-18",
+ "at": "2026-11-24",
  "smallest": [
   {
    "rank": 400033,
@@ -50,6 +50,15 @@
    "words": 1,
    "title": "52.188.87.11",
    "plain": true
+  },
+  {
+   "rank": 480044,
+   "host": "soldns.de",
+   "controls": 0,
+   "bytes": 15,
+   "words": 2,
+   "title": "ACCESS REJECTED",
+   "plain": false
   },
   {
    "rank": 841239,
@@ -160,6 +169,15 @@
    "plain": false
   },
   {
+   "rank": 400282,
+   "host": "satco.biz",
+   "controls": 0,
+   "bytes": 662,
+   "words": 8,
+   "title": "South Arkansas Telephone Company",
+   "plain": false
+  },
+  {
    "rank": 4309,
    "host": "zmaticoo.com",
    "controls": 0,
@@ -247,6 +265,15 @@
    "bytes": 1083,
    "words": 22,
    "title": "Site en Maintenance",
+   "plain": false
+  },
+  {
+   "rank": 160009,
+   "host": "youmark.jp",
+   "controls": 0,
+   "bytes": 1090,
+   "words": 10,
+   "title": "������� �C�l��",
    "plain": false
   },
   {
@@ -355,6 +382,15 @@
    "bytes": 2116,
    "words": 3,
    "title": "Data Privacy Framework",
+   "plain": false
+  },
+  {
+   "rank": 160055,
+   "host": "arema.mx",
+   "controls": 0,
+   "bytes": 2544,
+   "words": 2,
+   "title": "AREMA Ticket",
    "plain": false
   },
   {
@@ -511,6 +547,15 @@
    "plain": false
   },
   {
+   "rank": 160058,
+   "host": "meetmarlo.com",
+   "controls": 0,
+   "bytes": 4459,
+   "words": 1,
+   "title": "MARLO",
+   "plain": false
+  },
+  {
    "rank": 960004,
    "host": "businessesusa.com",
    "controls": 0,
@@ -664,6 +709,15 @@
    "plain": false
   },
   {
+   "rank": 600012,
+   "host": "xx9.com",
+   "controls": 0,
+   "bytes": 8753,
+   "words": 2,
+   "title": "主播视频",
+   "plain": false
+  },
+  {
    "rank": 841567,
    "host": "xplatform.com.br",
    "controls": 0,
@@ -763,6 +817,15 @@
    "plain": false
   },
   {
+   "rank": 520003,
+   "host": "ixora.ru",
+   "controls": 0,
+   "bytes": 12403,
+   "words": 3,
+   "title": "Аналитическая платформа Ixora",
+   "plain": false
+  },
+  {
    "rank": 170,
    "host": "skybridge.click",
    "controls": 0,
@@ -805,6 +868,15 @@
    "bytes": 14765,
    "words": 4,
    "title": "PhotoFolio®: Design A Website",
+   "plain": false
+  },
+  {
+   "rank": 360023,
+   "host": "startekinfo.com",
+   "controls": 0,
+   "bytes": 14954,
+   "words": 2,
+   "title": "StarTek Info",
    "plain": false
   },
   {
@@ -943,6 +1015,15 @@
    "plain": false
   },
   {
+   "rank": 600048,
+   "host": "jlwockee.xyz",
+   "controls": 1,
+   "bytes": 2156,
+   "words": 7,
+   "title": "JLWOCKEE X X CREATIONS",
+   "plain": false
+  },
+  {
    "rank": 4273,
    "host": "registry.in",
    "controls": 1,
@@ -1078,6 +1159,15 @@
    "plain": false
   },
   {
+   "rank": 440003,
+   "host": "turfburn.info",
+   "controls": 3,
+   "bytes": 1888,
+   "words": 133,
+   "title": "TurfBurn.info paid access",
+   "plain": false
+  },
+  {
    "rank": 513,
    "host": "share.google",
    "controls": 3,
@@ -1159,6 +1249,24 @@
    "plain": false
   },
   {
+   "rank": 600056,
+   "host": "magnetocell-server.com",
+   "controls": 4,
+   "bytes": 482,
+   "words": 11,
+   "title": "Index of /",
+   "plain": false
+  },
+  {
+   "rank": 520066,
+   "host": "hostingnovapyme30.com",
+   "controls": 4,
+   "bytes": 1503,
+   "words": 8,
+   "title": "hostingnovapyme30.com",
+   "plain": false
+  },
+  {
    "rank": 391,
    "host": "live-video.net",
    "controls": 4,
@@ -1228,6 +1336,15 @@
    "bytes": 2252,
    "words": 10,
    "title": "维沃移动通信有限公司",
+   "plain": false
+  },
+  {
+   "rank": 560005,
+   "host": "perfect-webspace.de",
+   "controls": 5,
+   "bytes": 4028,
+   "words": 47,
+   "title": "Glowfish &middot; Domain registriert",
    "plain": false
   },
   {

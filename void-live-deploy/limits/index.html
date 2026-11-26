@@ -5,7 +5,7 @@
 <meta name="verse-handoff" content="in: none; out: none">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>Event Horizon: what Verse won't do · Verse</title>
+<title>Limits: what Verse won't do · Verse</title>
 <meta name="description" content="The lines Verse does not cross: it spends only money it has earned, asks before sending anything as anyone, and never sees member passwords or card numbers.">
 <link rel="canonical" href="https://a-to-mind.com/limits/">
 <meta property="og:title" content="What Verse won't do · Verse">
@@ -22,10 +22,10 @@
   h1 { font-size: 1.6rem; margin: 0 0 8px; } h2 { font-size: 1.1rem; margin: 26px 0 6px; }
   a { color: var(--accent); } .note { color: var(--soft); font-size: .92rem; } li { margin: 4px 0; }
 </style>
-</head>
+<script type="module" src="/lib/verse-scene.js"></script></head>
 <body>
 <main>
-<h1>Event Horizon: what Verse won't do</h1>
+<h1>Limits: what Verse won't do</h1>
 <p>Verse runs a lot on its own. These are the lines it does not cross, whoever asks.</p>
 <h2>Money</h2>
 <ul>
@@ -58,5 +58,11 @@
 </ul>
 <p class="note">Also: <a href="/privacy/">privacy</a> · <a href="/security/">security</a> · <a href="/limits/">what Verse won't do</a> · <a href="/autopilot/#status">status</a> · <a href="/">home</a></p>
 </main>
+<script type="module" src="/verse-shell.js"></script>
+<style>
+/* verse design loop: kept by tools/design-loop.mjs, measured before and after */
+#verse-foot > a:nth-of-type(1) { display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box }
+/* end verse design loop */
+</style>
 </body>
 </html>

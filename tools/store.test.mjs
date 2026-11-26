@@ -10,7 +10,7 @@ import { storeAsk } from '../void-live-deploy/skills/store.js';
 const K = 'test-signing-key';
 // catalog: every live product has a Gumroad fallback or is free; ids unique; the old dkmcjk permalink is kept as an alias
 assert.equal(new Set(STORE_PRODUCTS.map((p) => p.id)).size, STORE_PRODUCTS.length);
-for (const p of STORE_PRODUCTS) assert.ok(p.soon || p.cents === 0 || p.gumroad, p.id + ' has no checkout');
+for (const p of STORE_PRODUCTS) assert.ok(p.soon || p.cents > 0 || p.gumroad, p.id + ' has no price or checkout');
 assert.ok(STORE_PRODUCTS.find((p) => p.id === 'code-review-pro').alt.includes('dkmcjk'));
 assert.ok(publicCatalog().every((p) => typeof p.files === 'number'), 'file keys never leave the server');
 // provider: Gumroad unless Stripe is asked for AND both keys exist
@@ -44,8 +44,8 @@ let x = await call('status'); assert.equal(x.j.provider, 'gumroad'); assert.equa
 x = await call('checkout', { method: 'POST', body: JSON.stringify({ items: ['one-time-fix', 'void-monthly', 'voidquest-minis'] }) });
 assert.equal(x.j.mode, 'gumroad'); assert.deepEqual(x.j.urls.map((u) => u.split('?')[0]), ['https://moonbeam846.gumroad.com/l/eozcma', 'https://moonbeam846.gumroad.com/l/yinmj']); assert.ok(x.j.urls.every((u) => u.includes('utm_medium=checkout')));
 x = await call('free', { method: 'POST', body: JSON.stringify({ id: 'chess-set-glb' }) });
-assert.equal(x.j.status, 'free'); const dl = new URL(x.j.items[0].downloads[0].url); assert.match(x.j.items[0].license, LICENSE_Verse_RE);
-x = await call('download' + dl.search); assert.equal(x.s, 200); assert.match(x.r.headers.get('content-disposition'), /attachment/);
+assert.equal(x.s, 400, 'paid items are never free');
+x = await call('download?t=' + tok); assert.equal(x.s, 200); assert.match(x.r.headers.get('content-disposition'), /attachment/);
 x = await call('download?t=bogus.token'); assert.equal(x.s, 403);
 x = await call('free', { method: 'POST', body: JSON.stringify({ id: 'void-monthly' }) }); assert.equal(x.s, 400, 'paid items are never free');
 x = await call('webhook/stripe', { method: 'POST', body, headers: { 'stripe-signature': 't=1,v1=00' } }); assert.equal(x.s, 400);

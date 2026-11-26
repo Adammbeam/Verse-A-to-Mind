@@ -1,0 +1,700 @@
+{
+ "site": "www.queerpoems.com",
+ "url": "https://www.queerpoems.com/",
+ "scanned": "2026-11-22",
+ "status": 302,
+ "assets": [
+  {
+   "f": "googleads.g.doubleclick.net/",
+   "t": "js",
+   "b": 6559,
+   "ext": true
+  },
+  {
+   "f": "js.sentry-cdn.[token].min.js",
+   "t": "js",
+   "b": 2852,
+   "ext": true
+  },
+  {
+   "f": "static.cloudflareinsights.com/beacon.min.js",
+   "t": "js",
+   "b": 31853,
+   "ext": true
+  },
+  {
+   "f": "static.cloudflareinsights.[token]",
+   "t": "js",
+   "b": 31853,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/12467.d1c6fb79.css",
+   "t": "css",
+   "b": 30110,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/24395.9fb4dde5.css",
+   "t": "css",
+   "b": 36600,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/d201.css",
+   "t": "css",
+   "b": 17516,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/a986ed.css",
+   "t": "css",
+   "b": 57348,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/38900.7ff634af.css",
+   "t": "css",
+   "b": 17773,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/44642.e9b2e19d.css",
+   "t": "css",
+   "b": 38825,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/b411.css",
+   "t": "css",
+   "b": 20493,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/53936.4f4de89a.css",
+   "t": "css",
+   "b": 22940,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/.css",
+   "t": "css",
+   "b": 26859,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/55871.c3185e37.css",
+   "t": "css",
+   "b": 21962,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/60612.b990cb82.css",
+   "t": "css",
+   "b": 34198,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/62460.da2ea599.css",
+   "t": "css",
+   "b": 21962,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/cb8d.css",
+   "t": "css",
+   "b": 20027,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/e6.css",
+   "t": "css",
+   "b": 29856,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/65979.e84094f6.css",
+   "t": "css",
+   "b": 177815,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/c8ab19.css",
+   "t": "css",
+   "b": 22607,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/c8112.css",
+   "t": "css",
+   "b": 29640,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/b18706.css",
+   "t": "css",
+   "b": 39380,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/8794.ee093ff9.css",
+   "t": "css",
+   "b": 43786,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/99361.1bd537a4.css",
+   "t": "css",
+   "b": 54684,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/99972.6fa049ec.css",
+   "t": "css",
+   "b": 54404,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/a845e1.css",
+   "t": "css",
+   "b": 3815,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/29598.a71df3a9.css",
+   "t": "css",
+   "b": 475,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/ec59f1.css",
+   "t": "css",
+   "b": 947,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/33723.9b28a1de.css",
+   "t": "css",
+   "b": 14859,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/42293.1f120fce.css",
+   "t": "css",
+   "b": 37165,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/f66429.css",
+   "t": "css",
+   "b": 2444,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/44166.de163362.css",
+   "t": "css",
+   "b": 265,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/bed0.css",
+   "t": "css",
+   "b": 1757,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/80756.5e241e6e.css",
+   "t": "css",
+   "b": 291,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/a374ea.css",
+   "t": "css",
+   "b": 4782,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/96506.1dc60274.css",
+   "t": "css",
+   "b": 6269,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/login-EmailTypoHandler.2590039e.css",
+   "t": "css",
+   "b": 766,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/main-MainAppEmbed.858c916f.css",
+   "t": "css",
+   "b": 30827,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/main-home-routes.f86f0492.css",
+   "t": "css",
+   "b": 8998,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/substack-PublicationSearch.026b85b7.css",
+   "t": "css",
+   "b": 9356,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/reactWelcome.1e67df76.css",
+   "t": "css",
+   "b": 16584,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/10366.d6676f0c.js",
+   "t": "js",
+   "b": 26787,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/119.e85f7b41.js",
+   "t": "js",
+   "b": 15373,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/.js",
+   "t": "js",
+   "b": 26143,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/f89e1.js",
+   "t": "js",
+   "b": 10875,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/1264.86beca62.js",
+   "t": "js",
+   "b": 24709,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/1323.bf7c13e0.js",
+   "t": "js",
+   "b": 13148,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/13382.2fea2cdb.js",
+   "t": "js",
+   "b": 7415,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/1351.21d95f35.js",
+   "t": "js",
+   "b": 60224,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/14498.e3ec46a1.js",
+   "t": "js",
+   "b": 15974,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/15051.6dc347b0.js",
+   "t": "js",
+   "b": 7249,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/16278.7ed628a5.js",
+   "t": "js",
+   "b": 12804,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/e7bb.js",
+   "t": "js",
+   "b": 53523,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/c8a.js",
+   "t": "js",
+   "b": 15773,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/e96383.js",
+   "t": "js",
+   "b": 25444,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/b8e0.js",
+   "t": "js",
+   "b": 26350,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/18946.3d7615f0.js",
+   "t": "js",
+   "b": 42702,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/1909.5f76ee95.js",
+   "t": "js",
+   "b": 42965,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/19403.f3015ad8.js",
+   "t": "js",
+   "b": 141393,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/19617.cf3cff83.js",
+   "t": "js",
+   "b": 9290,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/e4114a.js",
+   "t": "js",
+   "b": 7889,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/19960.5f8a7ca9.js",
+   "t": "js",
+   "b": 2331,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/a4c391.js",
+   "t": "js",
+   "b": 17891,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/21566.c67613d4.js",
+   "t": "js",
+   "b": 12147,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/22109.0e11f702.js",
+   "t": "js",
+   "b": 32018,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/22618.a64da5ff.js",
+   "t": "js",
+   "b": 5478,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/fdca.js",
+   "t": "js",
+   "b": 9555,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/a.js",
+   "t": "js",
+   "b": 7649,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/24395.5e5aa526.js",
+   "t": "js",
+   "b": 187479,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/25212.8f207e45.js",
+   "t": "js",
+   "b": 18130,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/26573.d8b40982.js",
+   "t": "js",
+   "b": 11592,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/e6e94.js",
+   "t": "js",
+   "b": 12580,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/c89f2.js",
+   "t": "js",
+   "b": 8342,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/29278.7ac3f584.js",
+   "t": "js",
+   "b": 25316,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/b90f8.js",
+   "t": "js",
+   "b": 132146,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/30826.9b7abe02.js",
+   "t": "js",
+   "b": 9879,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/31191.ec2dcf1a.js",
+   "t": "js",
+   "b": 12887,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/32423.f5ed1cd7.js",
+   "t": "js",
+   "b": 17187,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/f1e20d.js",
+   "t": "js",
+   "b": 168949,
+   "ext": true
+  },
+  {
+   "f": "substackcdn.com/33337.4b95a3c4.js",
+   "t": "js",
+   "b": 20233,
+   "ext": true
+  }
+ ],
+ "assetCount": 238,
+ "bytes": 8521845,
+ "html": {
+  "mobile": {
+   "title": "Queer Poem-A-Day | Substack",
+   "lang": "en",
+   "manifest": null,
+   "feeds": 1,
+   "canonical": true,
+   "appleTouch": true,
+   "share": {
+    "og": 5,
+    "twitter": true,
+    "themeColor": true,
+    "appleCapable": false
+   },
+   "iframes": [
+    "www.googletagmanager.com",
+    "substack.com",
+    "substack.com"
+   ],
+   "inputTypes": {
+    "email": 2
+   },
+   "forms": 2,
+   "ariaLabels": [
+    "Archive sort tabs",
+    "Close",
+    "Email",
+    "Facebook",
+    "Instagram",
+    "Like (10)",
+    "Like (11)",
+    "Like (13)",
+    "Like (15)",
+    "Like (16)",
+    "Like (17)",
+    "Like (20)",
+    "Like (23)",
+    "Like (24)",
+    "Like (33)",
+    "Notifications",
+    "Post preview for “Interrupta: Two” by Ko",
+    "Post preview for “Volta [we left]” by My",
+    "Post preview for “You don’t want the cow",
+    "Post preview for “muscle” by Vivek Shray",
+    "Search",
+    "Tabs",
+    "View comments (0)",
+    "View comments (1)",
+    "View comments (3)",
+    "View comments (4)",
+    "View comments (6)"
+   ],
+   "roles": {
+    "tab": 3
+   },
+   "live": true,
+   "noscript": true
+  },
+  "desktop": {
+   "inputTypes": {
+    "email": 3
+   },
+   "forms": 3,
+   "ariaLabels": [
+    "Archive sort tabs",
+    "Close",
+    "Email",
+    "Facebook",
+    "Instagram",
+    "Like (10)",
+    "Like (11)",
+    "Like (13)",
+    "Like (15)",
+    "Like (16)",
+    "Like (17)",
+    "Like (20)",
+    "Like (23)",
+    "Like (24)",
+    "Like (33)",
+    "Notifications",
+    "Post preview for “Interrupta: Two” by Ko",
+    "Post preview for “Volta [we left]” by My",
+    "Post preview for “You don’t want the cow",
+    "Post preview for “muscle” by Vivek Shray",
+    "Search",
+    "Share Publication",
+    "Tabs",
+    "View comments (0)",
+    "View comments (1)",
+    "View comments (3)",
+    "View comments (4)",
+    "View comments (6)"
+   ]
+  }
+ },
+ "controls": [
+  {
+   "l": "Close",
+   "w": "d"
+  },
+  {
+   "l": "No thanks",
+   "w": "md"
+  },
+  {
+   "l": "Subscribe",
+   "w": "md"
+  },
+  {
+   "l": "Subscribe in the app",
+   "w": "m"
+  }
+ ],
+ "robots": {
+  "disallow": [],
+  "sitemaps": [],
+  "crawlDelay": null
+ },
+ "thirdParty": [
+  "ad.doubleclick.net",
+  "cloudflareinsights.com",
+  "googleads.g.doubleclick.net",
+  "js.sentry-cdn.com",
+  "static.cloudflareinsights.com",
+  "substackcdn.com",
+  "www.datadoghq-browser-agent.com",
+  "www.google-analytics.com",
+  "www.google.com",
+  "www.googletagmanager.com"
+ ],
+ "services": [
+  "Ads",
+  "Cloudflare",
+  "Google Analytics"
+ ],
+ "requests": [
+  "https://ad.doubleclick.net/ccm/s/collect?auid&fmt&gtm",
+  "https://www.google-analytics.com/g/collect?_ee&_fv&_nsi&_p&_s&_ss&cid&dl",
+  "https://www.google.com/ccm/collect?apvc&auid&dl&dma&dt&en&fmt&frm",
+  "https://www.queerpoems.[token]",
+  "https://www.queerpoems.com/api/v1/homepage_data"
+ ],
+ "storage": {
+  "local": [
+   "_gcl_ls",
+   "substack_ref",
+   "substack_ref_url"
+  ],
+  "session": [
+   "substack_ref",
+   "substack_ref_url"
+  ],
+  "idb": []
+ },
+ "candidates": [
+  {
+   "name": "RSS or Atom feed",
+   "kind": "share",
+   "tag": "observed",
+   "evidence": "link[type$=xml]"
+  },
+  {
+   "name": "Embeds substack.com",
+   "kind": "embed",
+   "tag": "observed",
+   "evidence": "iframe"
+  },
+  {
+   "name": "Embeds www.googletagmanager.com",
+   "kind": "embed",
+   "tag": "observed",
+   "evidence": "iframe"
+  },
+  {
+   "name": "API call www.queerpoems.com/api/v1/homepage_data",
+   "kind": "api",
+   "tag": "observed",
+   "evidence": "network"
+  },
+  {
+   "name": "Input of type email",
+   "kind": "input",
+   "tag": "observed",
+   "evidence": "input[type=email] x2"
+  },
+  {
+   "name": "Remembers a setting in the browser: _gcl_ls",
+   "kind": "storage",
+   "tag": "observed",
+   "evidence": "localStorage"
+  },
+  {
+   "name": "Remembers a setting in the browser: substack_ref",
+   "kind": "storage",
+   "tag": "observed",
+   "evidence": "localStorage"
+  },
+  {
+   "name": "Remembers a setting in the browser: substack_ref_url",
+   "kind": "storage",
+   "tag": "observed",
+   "evidence": "localStorage"
+  },
+  {
+   "name": "Screen reader announcements (aria-live)",
+   "kind": "a11y",
+   "tag": "observed",
+   "evidence": "[aria-live]"
+  }
+ ]
+}

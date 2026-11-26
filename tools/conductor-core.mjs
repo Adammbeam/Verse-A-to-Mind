@@ -13,6 +13,8 @@
 // Nothing here reads the network or the clock; tools/conductor.mjs feeds it and acts on what it returns. Tests: tools/conductor.test.mjs.
 
 import { rankAdjust } from '../void-live-deploy/lib/visible.js';
+import { overlapOf } from '../void-live-deploy/lib/team-leverage.js';
+import { TEAM_KINDS } from '../void-live-deploy/lib/team.js';
 
 const H = 3600000;
 
@@ -263,4 +265,38 @@ export function plan({ jobs = [], wf = {}, handed = {}, now, exam }) {
     out.start.push({ id: j.id, kind: kindOf(j.target), wf: r.wf, input: r.input, claims: r.claims, score: Math.round(score(j, now, exam)) });
   }
   return out;
+}
+
+// ---- the last hand-out of the queue: a seat on the team page (functions/api/team.js handIdle + pushAll) and this tick's own starts get
+// first refusal. handIdle and pushAll only take TEAM_KINDS, every one of which has a route; this fallback takes only jobs with NO route
+// ("bot:" and "route:" among the 265 waiting on 2026-11-24), so those two functions return zero for it by construction. The conductor
+// claims it with an owner tag and sends it to verse-job.yml. One piece of work at a time, with a lease so a dead run cannot hold the lane. ----
+export const FALLBACK_OWNER = 'conductor verse-job'; // the queue's note starts "claimed by conductor verse-job ·"
+export const FALLBACK_LEASE_MS = 75 * 60e3; // verse-job.yml's job step allows 60 minutes; 15 more before a claim is called left behind
+const FALLBACK_NOTE = /claimed by conductor verse-job/i;
+
+/** what to do with an earlier fallback claim, and whether this tick may take another. Pure. */
+export function fallbackLease({ jobs = [], fallback = null, now, leaseMs = FALLBACK_LEASE_MS }) {
+  if (!fallback || !fallback.id) return { requeue: null, clear: false, due: true };
+  const j = jobs.find((x) => x.id === fallback.id);
+  if (!j || j.state !== 'building' || !FALLBACK_NOTE.test(j.note || '')) return { requeue: null, clear: true, due: true };
+  if (now - (fallback.at || 0) < leaseMs) return { requeue: null, clear: false, due: false };
+  // a run that died left the job building: count one try and put it back, so one job cannot hold the coder's one lane for ever
+  return { requeue: { id: j.id, note: withTries(j.note, triesOf(j.note) + 1, 'verse-job fallback lease expired') }, clear: true, due: true };
+}
+
+/** one fallback per tick, and never while this tick started another job or an older claim is still leased. Pure. */
+export const fallbackAllowed = ({ started = [], active = null, due = false, candidate = null }) => !started.length && !active && due && !!candidate;
+
+/** the front unroutable queued job for that fallback: one piece of work at a time, only while the coder may run.
+ *  A routable job is plan()'s business (and a seat's), so it is never taken here. Pure. */
+export function fallbackJob({ jobs = [], wf = {}, now, skip = [] }) {
+  const coder = wf[AGENT] || {}, lap = wf[LAP] || {};
+  if (!coder.exists || coder.busy || lap.busy || coder.paused || coder.noModel) return null;
+  if (coder.fails >= FAIL_STREAK && now - (coder.last || 0) < RETRY_BROKEN_H * H) return null;
+  const no = new Set(skip), building = jobs.filter((j) => j.state === 'building' && !no.has(j.id));
+  return jobs.filter((j) => j.state === 'queued' && !no.has(j.id) && triesOf(j.note) < MAX_TRIES
+      && !routeOf(j) && !TEAM_KINDS.includes(kindOf(j.target))) // handIdle and pushAll cannot take these: they have no route
+    .sort((a, b) => score(b, now) - score(a, now) || ms(a.at) - ms(b.at))
+    .find((j) => !building.some((b) => overlapOf(j, b))) || null;
 }

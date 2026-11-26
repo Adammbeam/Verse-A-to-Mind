@@ -110,7 +110,7 @@ test('the rating words are the four tiers, each with a meaning for the front mat
 test('the reader: pages render to HTML with try-it asks as data-ask links, the contents jump by page', () => {
   const b = sample(), esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
   const timer = pageHtml(b.pages.find((p) => p.name === 'timer'), b, esc);
-  assert.match(timer, /data-ask="set a timer for 5 minutes"/); assert.match(timer, /Countdowns on the stage/); assert.match(timer, /proven/); assert.match(timer, /<svg class="gglyph"/);
+  assert.match(timer, /data-ask="set a timer for 5 minutes"/); assert.match(timer, /Countdowns on the stage/); assert.match(timer, /proven/); assert.doesNotMatch(timer, /<svg/, 'a book page carries no picture (pitch-black glass, 2026-11-18)');
   assert.match(pageHtml(b.pages[2], b, esc), /nothing checks it yet/, 'the legend says what each word means');
   assert.match(pageHtml(b.pages[1], b, esc), /data-ask="what is a black hole"/, 'how to ask lists the page\'s own built-ins');
   const toc = tocHtml(b, esc); assert.match(toc, /data-page="5"/); assert.match(toc, /Time/);
@@ -132,7 +132,7 @@ test('completeness: the real book has every skill in skills/index.json (families
   const where = {}; for (const p of b.pages) if (p.kind === 'skill') where[p.name] = (where[p.name] || 0) + 1;
   const missing = members.filter((n) => !where[n]), twice = Object.entries(where).filter(([, c]) => c > 1).map(([n]) => n);
   assert.deepEqual(missing, [], 'skills on no page'); assert.deepEqual(twice, [], 'skills on two pages'); assert.deepEqual(b.unplaced, []);
-  assert.equal(b.totals.skills, members.length);
+  assert.equal(b.totals.skills, new Set(members).size); // a family part may also be a routed skill (delivery-pack): it still owns one page
   const games = gamesOf(readFileSync(resolve(root, 'void-live-deploy/skills/rack.js'), 'utf8'));
   for (const g of games) assert.ok(b.pages.some((p) => p.game && p.game.title === g.title), g.title + ' is in the games chapter');
   const minis = readdirSync(resolve(root, 'void-live-deploy/skills/mini')).filter((f) => f.endsWith('.js') && f !== 'sample.js').map((f) => f.replace(/\.js$/, ''));

@@ -15,10 +15,13 @@ export const LIMITS = {
   treasury: { rpm: 30, body: 2000 }, // Verse's treasury (functions/api/treasury.js): public reads, owner-only small JSON actions
   credits: { rpm: 30, body: 2000 }, // internal credits (functions/api/credits/): a claim or the public feed, no payout
   mcp: { rpm: 60, body: 64000 }, // Verse as an MCP server (functions/api/mcp.js): read-only tools; a review_code call carries up to 60,000 characters of code
+  workshop: { rpm: 30, body: 64000 }, // the owner workshop MCP (functions/api/workshop.js): the same body room as mcp, owner only
   a2a: { rpm: 30, body: 8000 }, // Verse as an A2A agent (functions/api/a2a.js): one text message in, ask_void's answer out
   apibot: { rpm: 60, body: 0 }, // GET only: the free API bots' relay (functions/api/apibot.js): an API id from a closed list and one input in, that API's reply out; 30 cache misses a minute per connection in the route, good answers edge-cached ten minutes
   free: { rpm: 30, body: 0 }, // the free-resource registry and its quota status (functions/api/free.js): GET only
   answer: { rpm: 30, body: 20000 },
+  brain: { rpm: 30, body: 0 }, // GET only: the live brain on /brain/ (functions/api/brain.js); the page reads every 30 s, one edge copy a minute for everyone
+  loops: { rpm: 30, body: 0 }, // GET only, owner only: every loop Verse runs (functions/api/loops.js, tools/loop-census.mjs); one read of the conductor's record
   unbidden: { rpm: 20, body: 0 }, // GET only: Verse speaks first on /brain/ (functions/api/unbidden.js); the page reads once a minute, a line is written at most once every 3 minutes for everyone and 240 times a day in all
   agent: { rpm: 90, body: 4000 }, // Verse's agent (functions/api/agent.js): the page polls the live feed every 2 s; a task is up to 1,000 characters, 20 a day per visitor in the route
   // Versus by itself asks Verse's own model here (functions/api/tower-self.js, owner only): up to 24,000 characters of site text and a 4,000-character
@@ -49,6 +52,7 @@ export const LIMITS = {
   aurora: { rpm: 30, body: 0 }, // GET only, no input, edge-cached 15 min: the most a stranger can do is read a number
   joins: { rpm: 30, body: 0 }, // GET only, no input, one COUNT read, cached a minute: the member count and the newest join's time (functions/api/joins.js)
   routes: { rpm: 30, body: 0 }, // owner-only: the router's decisions (GET)
+  searches: { rpm: 60, body: 4000 }, // the Searches log (functions/api/searches.js): one ask in, the owner reads the list; the route slices the body to 2000
   earnings: { rpm: 30, body: 0 },
   queue: { rpm: 60, body: 4000 },
   bench: { rpm: 30, body: 10000 }, // owner-only (functions/api/bench.js): model bake-off chunks of 8 built-in asks, or { route } with up to 16 asks of at most 300 characters (frontier #9)
@@ -56,6 +60,7 @@ export const LIMITS = {
   approval: { rpm: 60, body: 8000 },
   will: { rpm: 60, body: 64000 },
   catalog: { rpm: 60, body: 1000 },
+  buy: { rpm: 60, body: 1000 }, // offer clicks and showings (functions/api/buy.js): a GET redirect and a body-less beacon
   productsearch: { rpm: 30, body: 0 }, // GET only: a query in, matching catalog products out (functions/api/productsearch.js)
   passkey: { rpm: 60, body: 20000 },
   mine: { rpm: 120, body: 900200 },
