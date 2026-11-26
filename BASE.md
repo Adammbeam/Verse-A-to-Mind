@@ -6,7 +6,7 @@ One repo, one ledger, one surface. Everything else either feeds Verse or gets re
 
 | What | Where | Why |
 |---|---|---|
-| The surface | `void.html` in `atomeam/void-loop` (copied to `void-live-deploy/index.html` and `void-live-deploy/void.html`), deployed to a-to-mind.com by `.github/workflows/deploy.yml` on every merge to main | Any session can push; no laptop in the loop |
+| The surface | `void.html` in `Adammbeam/Verse-A-to-Mind` (copied to `void-live-deploy/index.html` and `void-live-deploy/void.html`), deployed to a-to-mind.com by `.github/workflows/deploy.yml` on every merge to main | Any session can push; no laptop in the loop |
 | How Verse has grown | `void-live-deploy/void.growth.json` (append-only), served at `/void.growth.json` | Summonable on the surface with `growth` |
 | What Verse owns in the cloud | The section **The estate, reverse-engineered (2026-10-25)** at the end of this file: every binding, the endpoints on it, the free-tier limits, the cliffs and the live inventory. `void.estate.json`, the copy the surface would summon with `estate`, is still unwritten (frontier #7) | The cleanup list lives here, not in chat |
 | The agent brief | `STANDING.md` | Tells agents what to do; never what not to do |
