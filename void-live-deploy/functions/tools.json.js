@@ -10,27 +10,72 @@ export const CORE = [ // the page's own built-ins; the book's "How to ask" page 
   { name: 'keep', description: 'Keep, name, remove or re-run what is on screen.', examples: ['keep this', 'call this trip', 'take this off', 'same again', 'undo'] },
 ];
 const HIDDEN = new Set(['rebuild-map']);
+const BATCH = 24;
+const MEM_TTL_MS = 300_000;
+const MEM_CACHE = new WeakMap(); // env.ASSETS -> Map<origin, { body, at }>
+
+async function mapBatched(items, size, fn) {
+  const out = new Array(items.length);
+  for (let i = 0; i < items.length; i += size) {
+    const slice = items.slice(i, i + size);
+    const vals = await Promise.all(slice.map((item, j) => fn(item, i + j)));
+    for (let j = 0; j < vals.length; j++) out[i + j] = vals[j];
+  }
+  return out;
+}
+
+const HEADERS = {
+  'content-type': 'application/json; charset=utf-8',
+  'access-control-allow-origin': '*',
+  'cache-control': 'public, max-age=300, stale-while-revalidate=3600',
+};
 
 export async function onRequestGet({ request, env }) {
   const origin = new URL(request.url).origin;
+  const assets = env && env.ASSETS;
+  if (assets && typeof assets === 'object') {
+    const byOrigin = MEM_CACHE.get(assets);
+    const hit = byOrigin && byOrigin.get(origin);
+    if (hit && Date.now() - hit.at < MEM_TTL_MS) return new Response(hit.body, { headers: HEADERS });
+  }
   const cacheKey = new Request(origin + '/tools.json');
   try { if (typeof caches !== 'undefined' && caches.default) { const hit = await caches.default.match(cacheKey); if (hit) return hit; } } catch (_) {}
-  const get = async (p) => { const r = await env.ASSETS.fetch(new Request(origin + p)); return r.ok ? r.text() : ''; };
+
+  const fetched = new Map();
+  const get = async (p) => {
+    if (fetched.has(p)) return fetched.get(p);
+    try {
+      const r = await assets.fetch(new Request(origin + p));
+      const txt = r.ok ? await r.text() : '';
+      fetched.set(p, txt);
+      return txt;
+    } catch (_) {
+      fetched.set(p, '');
+      return '';
+    }
+  };
+
   const tools = CORE.map((t) => ({ ...t }));
   try {
     const indexStr = await get('/skills/index.json');
     if (!indexStr) throw new Error('No index');
     const index = JSON.parse(indexStr);
+    // Fetch every indexed skill in bounded parallel batches once, caching its source for metadata extraction below.
+    const indexSrcs = await mapBatched(index, BATCH, (name) => get('/skills/' + name + '.js'));
     const names = [];
-    for (const name of index) {
-      const src = await get('/skills/' + name + '.js');
+    for (let i = 0; i < index.length; i++) {
+      const name = index[i], src = indexSrcs[i];
       if (!src) continue;
       const fam = src.match(/^\s*\*\s*parts:\s*\[([^\]]*)\]/m);
-      if (fam) names.push(...Array.from(fam[1].matchAll(/'([a-z0-9-]+)'/g)).map((x) => x[1])); else names.push(name);
+      if (fam) names.push(...Array.from(fam[1].matchAll(/'([a-z0-9-]+)'/g)).map((x) => x[1]));
+      else names.push(name);
     }
-    for (const name of names) {
-      if (HIDDEN.has(name)) continue;
-      const src = await get('/skills/' + name + '.js');
+    const visible = names.filter((name) => !HIDDEN.has(name));
+    const missing = [...new Set(visible.filter((name) => !fetched.has('/skills/' + name + '.js')))];
+    if (missing.length) await mapBatched(missing, BATCH, (name) => get('/skills/' + name + '.js'));
+
+    for (const name of visible) {
+      const src = fetched.get('/skills/' + name + '.js');
       if (!src) continue;
       const m = src.match(/examples\s*:\s*\[([^\]]*)\]/);
       const examples = m ? Array.from(m[1].matchAll(/'((?:[^'\\]|\\.)*)'|"((?:[^"\\]|\\.)*)"/g)).map((x) => (x[1] ?? x[2]).replace(/\\'/g, "'")) : [];
@@ -46,7 +91,13 @@ export async function onRequestGet({ request, env }) {
     mcp: { endpoint: origin + '/api/mcp', transport: 'streamable HTTP, POST JSON-RPC, JSON replies', protocolVersion: PROTOCOL, tools: MCP_TOOLS.map(({ name, title, description, inputSchema, annotations }) => ({ name, title, description, inputSchema, annotations })) },
     tools: tools.map((t) => ({ ...t, try: t.examples.slice(0, 3).map((e) => origin + '/?q=' + encodeURIComponent(e)) })),
   };
-  const res = new Response(JSON.stringify(out, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8', 'access-control-allow-origin': '*', 'cache-control': 'public, max-age=300' } });
+  const body = JSON.stringify(out, null, 2);
+  if (assets && typeof assets === 'object') {
+    let byOrigin = MEM_CACHE.get(assets);
+    if (!byOrigin) { byOrigin = new Map(); MEM_CACHE.set(assets, byOrigin); }
+    byOrigin.set(origin, { body, at: Date.now() });
+  }
+  const res = new Response(body, { headers: HEADERS });
   try { if (typeof caches !== 'undefined' && caches.default) await caches.default.put(cacheKey, res.clone()); } catch (_) {}
   return res;
 }

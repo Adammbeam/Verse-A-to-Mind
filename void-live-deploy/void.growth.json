@@ -19214,5 +19214,6 @@
   {"at": "2026-11-26T00:43:56Z", "by": "claude", "kind": "build", "what": "Phase: Verse as see-through glass over a shared tab, screen, video or page; it reads and acts on it, puts a character or you into it, records a clip, and keeps what it picked up in the Satchel", "try": "phase in"},
   {"at": "2026-11-26T13:00:37Z", "by": "antigravity", "kind": "fix", "what": "Fixed What's New ledger folding on Windows (tools/growth-fold.mjs fileURLToPath) and hardened self-grounding readSelf (mvo3j82w) with 2500ms budget + per-ASSETS JSON cache"},
   {"at": "2026-11-26T13:12:19Z", "by": "antigravity", "kind": "fix", "what": "Guaranteed self asks never fall through to Wikipedia or \"nothing on the web\" when the model is busy or off (mvo3j8ok)"},
-  {"at": "2026-11-26T13:21:21Z", "by": "antigravity", "kind": "fix", "what": "Isolated the large shared-page CORE block onto its own dedicated shard when n >= 4 so one shard never runs past the 1,680 s suite budget (mw2k6aqf)"}
+  {"at": "2026-11-26T13:21:21Z", "by": "antigravity", "kind": "fix", "what": "Isolated the large shared-page CORE block onto its own dedicated shard when n >= 4 so one shard never runs past the 1,680 s suite budget (mw2k6aqf)"},
+  {"at": "2026-11-26T13:30:06Z", "by": "antigravity", "kind": "fix", "what": "Eliminated duplicate serial skill fetches in /tools.json using bounded parallel batches and per-ASSETS memory caching so /tools.json answers in milliseconds instead of timing out at 10s (want-page-tools-json)"}
 ]
