@@ -35,7 +35,6 @@ const FILES = [
   'void-live-deploy/under-the-hood/index.html',
   'void-live-deploy/scoreboard/index.html',
   'void-live-deploy/cheat-codes/index.html',
-  'void-live-deploy/obituaries/index.html',
   'void-live-deploy/g/index.html',
   'void-live-deploy/ledger/index.html',
   'void-live-deploy/ledger/app.js',

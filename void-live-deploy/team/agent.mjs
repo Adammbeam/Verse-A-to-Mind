@@ -25,7 +25,7 @@
 //        have Verse POST each job to an address of your own, signed, so you need not stay online. The push secret is saved to
 //        ~/.verse-team-hook-secret (only you can read it) and never printed. Check each push with verifyPush (exported here).
 //
-// The key: VERSE_TEAM_KEY, else ~/.verse-team-key. VERSE_TEAM_API points it elsewhere (default https://a-to-mind.com/api/team). The key is
+// The key: ~/.verse-team-key (VERSE_TEAM_KEY_FILE moves it), else VERSE_TEAM_KEY. VERSE_TEAM_API points it elsewhere (default https://a-to-mind.com/api/team). The key is
 // never printed, logged or put in an address. Playbook: docs/playbooks/team.md. Tests: tools/team.test.mjs.
 import { spawn } from 'node:child_process';
 import { createHmac, timingSafeEqual } from 'node:crypto';
@@ -174,12 +174,19 @@ async function main(argv) {
   if (cmd === 'join') {
     const j = await join(args[0]);
     if (!j.ok || !KEY_RE.test(j.key || '')) { console.error('Did not join: ' + (j.say || 'no key came back')); return 1; }
+    let had = ''; try { had = readFileSync(KEY_FILE(), 'utf8').trim(); } catch (_) {}
+    if (KEY_RE.test(had)) console.error('Note: ' + KEY_FILE() + ' held the key of another seat; it now holds this one. One seat per agent: next time keep the key and skip join.');
     writeFileSync(KEY_FILE(), j.key + '\n', { mode: 0o600 });
     console.log('Joined Verse\'s team chat as ' + j.name + '. Your key is saved to ' + KEY_FILE() + ' (only you can read it). Next: node agent.mjs next --wait (an agent in a tool shell), or node agent.mjs work in a terminal you watch');
     return 0;
   }
-  let key = process.env.VERSE_TEAM_KEY || '';
-  if (!key) { try { key = readFileSync(KEY_FILE(), 'utf8').trim(); } catch (_) { key = ''; } }
+  // the key file wins over VERSE_TEAM_KEY: join and rekey save the new key to the file, so a VERSE_TEAM_KEY left in the environment (set
+  // by hand, or handed to a job's agent by `work --run`) held the old key and every call after a join said "replaced" (Beam, 2026-11-26:
+  // seven seats joined, each used once). VERSE_TEAM_KEY is used only when there is no key file.
+  let key = '';
+  try { key = readFileSync(KEY_FILE(), 'utf8').trim(); } catch (_) { key = ''; }
+  if (!KEY_RE.test(key)) key = process.env.VERSE_TEAM_KEY || '';
+  else if (process.env.VERSE_TEAM_KEY && process.env.VERSE_TEAM_KEY.trim() !== key) console.error('Using the key in ' + KEY_FILE() + ' (your last join or rekey); VERSE_TEAM_KEY holds a different, older key: unset it.');
   if (!KEY_RE.test(key)) { console.error('No key yet: run node agent.mjs join <the join link the owner gave you>, or set VERSE_TEAM_KEY.'); return 2; }
   const o = { key };
   switch (cmd) {

@@ -665,7 +665,8 @@ import { spawn as spawnChild } from 'node:child_process';
 import { createServer } from 'node:http';
 const AGENT = new URL('../void-live-deploy/team/agent.mjs', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 const runAgent = (args, env = {}) => new Promise((res) => {
-  const p = spawnChild(process.execPath, [AGENT, ...args], { env: { ...process.env, VERSE_TEAM_KEY: 'vt1.' + 'a'.repeat(12) + '.' + 'b'.repeat(32), ...env }, stdio: ['ignore', 'pipe', 'pipe'] });
+  // no key file of the machine running the tests is read (the key file wins over VERSE_TEAM_KEY)
+  const p = spawnChild(process.execPath, [AGENT, ...args], { env: { ...process.env, VERSE_TEAM_KEY: 'vt1.' + 'a'.repeat(12) + '.' + 'b'.repeat(32), VERSE_TEAM_KEY_FILE: '/nonexistent/verse-team-key', ...env }, stdio: ['ignore', 'pipe', 'pipe'] });
   let out = '', err = ''; p.stdout.on('data', (d) => { out += d; }); p.stderr.on('data', (d) => { err += d; });
   p.on('close', (code) => res({ code, out, err }));
 });
@@ -949,5 +950,21 @@ test('next --wait wakes when a message arrives, even with no job', async () => {
     assert.match(r.out, /@Bea land the patch/);
     assert.match(r.out, /say /);
     assert.equal(n, 2, 'it asked again until a message came');
+  } finally { srv.close(); }
+});
+
+test('the key file wins over a VERSE_TEAM_KEY left in the environment: after a join the new key is used, not the old one (Beam, 2026-11-26)', async () => {
+  const { mkdtempSync, writeFileSync } = await import('node:fs'), { tmpdir } = await import('node:os'), { join: pj } = await import('node:path');
+  const fileKey = 'vt1.' + 'c'.repeat(12) + '.' + 'd'.repeat(32), file = pj(mkdtempSync(pj(tmpdir(), 'vtk-')), 'key');
+  writeFileSync(file, fileKey + '\n');
+  let sent = '';
+  const srv = createServer((req, res) => { sent = req.headers.authorization || ''; res.setHeader('content-type', 'application/json'); res.end(JSON.stringify({ ok: true, me: { name: 'x' } })); });
+  await new Promise((r) => srv.listen(0, '127.0.0.1', r));
+  try {
+    const r = await runAgent(['me'], { VERSE_TEAM_KEY_FILE: file, VERSE_TEAM_API: 'http://127.0.0.1:' + srv.address().port + '/api/team' });
+    assert.equal(r.code, 0);
+    assert.equal(sent, 'Bearer ' + fileKey, 'the saved key is sent');
+    assert.match(r.err, /VERSE_TEAM_KEY holds a different, older key/, 'and it says to unset the old one');
+    assert.doesNotMatch(r.out + r.err, /dddd/, 'no key is printed');
   } finally { srv.close(); }
 });
