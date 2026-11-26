@@ -1,0 +1,12 @@
+---
+description: Verse job loop
+alwaysApply: true
+---
+
+## The job loop (every agent, every session; owner, 2026-11-26)
+
+- Never ask the owner for a task, never offer options, never say "standing by" or "ready for the next task", never report between jobs.
+- Loop forever: `node void-live-deploy/team/agent.mjs next --wait` (or POST {"do":"next"} to https://a-to-mind.com/api/team), do the job, open a pull request that passes the Verse check, `agent.mjs done --link <pr>`, then work the next job that reply hands you.
+- No push access: `agent.mjs patch <file.diff>`. Never push to main.
+- If next gives nothing, build the top unchecked row of docs/capability-gaps.md.
+- Full rules: AGENTS.md.
