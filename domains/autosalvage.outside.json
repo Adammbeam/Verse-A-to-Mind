@@ -315,6 +315,69 @@
       "what": "CC0 3D museum scan collection in glTF and high-resolution textures",
       "gap": "realistic 3D stage summons and museum inspectables",
       "target": "data"
+    },
+    {
+      "id": "base/account-sdk",
+      "url": "https://github.com/base/account-sdk",
+      "author": "base",
+      "license": "MIT",
+      "what": "base/account-sdk",
+      "gap": "Absorb and connect every repo",
+      "target": "skill"
+    },
+    {
+      "id": "YuzuJS/setImmediate",
+      "url": "https://github.com/YuzuJS/setImmediate",
+      "author": "YuzuJS",
+      "license": "MIT",
+      "what": "A cross-browser implementation of the new setImmediate API.",
+      "gap": "Verse as a tool inside other AIs",
+      "target": "skill"
+    },
+    {
+      "id": "WebMCP-org/npm-packages",
+      "url": "https://github.com/WebMCP-org/npm-packages",
+      "author": "WebMCP-org",
+      "license": "MIT",
+      "what": "NPM packages for MCP-B: Transport layers, React hooks, and browser tools for the Model Context Protocol",
+      "gap": "WebMCP origin trial",
+      "target": "tool"
+    },
+    {
+      "id": "Zipstack/unstract",
+      "url": "https://github.com/Zipstack/unstract",
+      "author": "Zipstack",
+      "license": "AGPL-3.0",
+      "what": "LLM-Driven Extraction of Unstructured Data — Built for API Deployments & ETL Pipeline Workflows",
+      "gap": "Everything that passes through Verse is input",
+      "target": "tool"
+    },
+    {
+      "id": "trycua/cua",
+      "url": "https://github.com/trycua/cua",
+      "author": "trycua",
+      "license": "MIT",
+      "what": "Scale computer-use 2.0 with open-source drivers, cross-OS sandboxes, and benchmarks for training, evaluation, and data generation.",
+      "gap": "Verse fixes any automation, as it is",
+      "target": "tool"
+    },
+    {
+      "id": "lightfeed/extractor",
+      "url": "https://github.com/lightfeed/extractor",
+      "author": "lightfeed",
+      "license": "Apache-2.0",
+      "what": "Use LLMs to robustly extract web data",
+      "gap": "Verse fixes any automation, as it is",
+      "target": "skill"
+    },
+    {
+      "id": "microsoft/TypeScript",
+      "url": "https://github.com/microsoft/TypeScript",
+      "author": "microsoft",
+      "license": "Apache-2.0",
+      "what": "TypeScript is a superset of JavaScript that compiles to clean JavaScript output.",
+      "gap": "Verse fixes any automation, as it is",
+      "target": "skill"
     }
   ]
 }
