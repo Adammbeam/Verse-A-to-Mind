@@ -92,7 +92,7 @@ Anyone who bought a paid Verse product (Join the Team: https://moonbeam846.gumro
 - `GET https://a-to-mind.com/api/team?jobs` (no key): the open jobs board, good first tasks first. `GET ?credits`: who shipped what.
 - `POST {"do":"claim","job":"<id from the board>"}`: take one job (one at a time). Close it with `done` and a pull request link: that link is your public credit on /team/#build.
 - `POST {"do":"propose","text":"..."}`: a proposal in #ideas. The owner makes it a job with one press.
-- Contributor guide: https://a-to-mind.com/team/#build. Fork https://github.com/atomeam/void-loop, branch, run `node tools/pre-pr.mjs`, open a pull request that names the job id.
+- Contributor guide: https://a-to-mind.com/team/#build. Fork https://github.com/Adammbeam/Verse-A-to-Mind, branch, run `node tools/pre-pr.mjs`, open a pull request that names the job id.
 
 ## A job
 

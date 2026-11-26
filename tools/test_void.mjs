@@ -6740,14 +6740,19 @@ try {
   // the quiz (skills/quiz.js, frontier #17) is a learning card: never in the saved stage after a reload unless the visitor
   // kept that one card ("keep this quiz"); the gears it quizzed on are saved as always (void.html keptThings)
   if (want("the quiz (skills/quiz.js, frontier #17) is a learning card: never in the saved stage after")) { const Z = await fresh();
-    await Z.ask('explain gears', 900); await Z.ask('quiz me on this', 900);
     const saved = () => Z.p.evaluate(() => Object.values(JSON.parse(localStorage.getItem('a2m.void.state.v1') || '{}')).map((t) => t.kind));
-    const shown = await Z.p.$eval('.quiz-card .quiz-prompt', (e) => e.innerText).catch(() => '');
+    const promptOf = () => Z.p.$eval('.quiz-card .quiz-prompt', (e) => e.innerText).catch(() => '');
+    await Z.ask('explain gears', 900); await until(() => Z.p.$eval('.gears-card', () => true).catch(() => false), 8000);
+    await Z.ask('quiz me on this', 900);
+    // $eval throws at once when the node is missing (it does not wait), so a single read after a guessed 900 ms is empty
+    // when the card lands a beat later; run alone it is in time and the suite calls that healed (main, flake:quiz-card-asks-the-gear-card-s-own)
+    const shown = (await until(async () => { const t = await promptOf(); return /16-tooth driver and a 32-tooth driven gear/.test(t) ? t : ''; }, 8000)) || '';
     // every skill in before the reload is read (data-skills="ready", not a guessed 900 ms): the quiz skill is loaded and still draws no
     // card, and the saved gears are up for the next "quiz me on this" (main's verify, 2026-10-30: at 900 ms the gears were not in yet)
     await Z.p.reload(); await skillsUp(Z.p, 300);
     const afterReload = { saved: await saved(), cards: await Z.p.$$eval('.quiz-card', (d) => d.length) };
-    await Z.ask('quiz me on this', 900); await Z.ask('keep this quiz', 600);
+    await Z.ask('quiz me on this', 900); await until(promptOf, 8000); await Z.ask('keep this quiz', 600);
+    await until(async () => (await saved()).includes('quiz'), 4000); // keep writes the card before this reload, not after a guessed 600 ms
     await Z.p.reload(); await skillsUp(Z.p, 300); await until(() => Z.p.$$eval('.quiz-card', (d) => d.length), 6000); // the kept quiz draws once skills/quiz.js is in
     const afterKeep = { saved: await saved(), cards: await Z.p.$$eval('.quiz-card', (d) => d.length) };
     check('quiz card: asks the gear card\'s own question, is not in the saved stage after a reload, and is after "keep this quiz"',

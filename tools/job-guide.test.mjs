@@ -29,7 +29,7 @@ test('a versus job for a site with no floor has the five parts of a spec', () =>
   assert.match(s, /node tools\/checks\.mjs --changed/);
   const b = briefOf(NEW, 'versus');
   assert.ok(b.includes(s), 'the brief carries the spec');
-  assert.match(b, /^Deliver: a pull request to atomeam\/void-loop main with the label automerge/m);
+  assert.match(b, /^Deliver: a pull request to Adammbeam\/Verse-A-to-Mind main with the label automerge/m);
   assert.ok(!/data row on the shared page generator/.test(b), 'no family exists for this site, so the brief does not ask for a family row');
   assert.ok(!/tries \d|claimed by/i.test(b), 'the claim bookkeeping is not part of the note');
 });
