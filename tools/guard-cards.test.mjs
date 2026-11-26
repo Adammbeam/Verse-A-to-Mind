@@ -51,3 +51,18 @@ test('only the card text counts: the badges, stats, memory note and reply box be
   assert.equal(copyOk(visible, 'Guacamole Skill Body and mind three avocados mashed roughly').ok, true);
   assert.equal(copyOk(visible, 'Guacamole').ok, false);
 });
+
+test('a clipboard read that belongs to another card is its own cause, never text this card lost', async () => {
+  const { sameCard, judge } = await import('./guards/cards.mjs');
+  const card = 'Pancakes\nSKILL — BODY AND MIND\nIngredients\nflour, baking powder, sugar and salt';
+  const mine = 'Pancakes\nSkill — Body and mind\n\nIngredients\n\nflour, baking powder, sugar and salt';
+  const theirs = 'Guacamole\nSkill — Body and mind\n\nthree avocados mashed roughly';
+  assert.equal(sameCard(card, mine), true, 'this card\'s own copy');
+  assert.equal(sameCard(card, theirs), false, 'the card copied a moment earlier, or in another tab');
+  assert.equal(sameCard(card, 'clipboard: permission denied'), false);
+  assert.equal(sameCard(card, ''), false);
+  // a read that never held this card's text is not evidence the copy lost anything
+  assert.deepEqual(judge({ card: true, expectArt: false, copy: { ok: false, share: 0, cut: false, landed: false } }), ['copy did not land']);
+  // and a real cut is still reported as a cut
+  assert.deepEqual(judge({ card: true, expectArt: false, copy: { ok: false, share: 0.4, cut: true } }), ['copied card cut off']);
+});
