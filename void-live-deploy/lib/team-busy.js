@@ -44,3 +44,37 @@ export function retireWhy(job, branches) {
 export function branchesOf(refsText) {
   const out = new Set(); for (const m of String(refsText || '').matchAll(/[0-9a-f]{40} refs\/heads\/(\S+)/g)) out.add(m[1]); return out;
 }
+
+// Never idle (owner, 2026-11-26: "staying productive and standing by are opposites"). When the queue holds nothing a seat can take, Verse
+// makes a job, in this order: review a hand-in another seat is waiting on (a review goes to a free seat, not the owner); the next row of the
+// ranked build list in docs/capability-gaps.md that has no job yet; a first-time-visitor pass over the live site that files what breaks.
+export const GAPS_URL = 'https://raw.githubusercontent.com/Adammbeam/Verse-A-to-Mind/main/docs/capability-gaps.md';
+const slugOf = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+/** the ranked build list of docs/capability-gaps.md -> [{ rank, job, slug, ask }]. Pure. */
+export function gapsOf(md) {
+  const part = String(md || '').split(/^## Ranked build list\s*$/m)[1];
+  if (!part) return [];
+  const out = [];
+  for (const line of part.split(/^## /m)[0].split('\n')) {
+    const c = line.split('|').map((x) => x.trim());
+    if (c.length < 6 || !/^\d+$/.test(c[1])) continue;
+    const [rank, job, why, page] = [Number(c[1]), c[2], c[3], c[4].replace(/`/g, '')];
+    out.push({ rank, job, slug: slugOf(job), ask: ('Capability gap #' + rank + ': ' + job + '. ' + why + ' Build it into ' + page + ' (docs/capability-gaps.md row ' + rank + '; search and salvage first, one small pull request).').slice(0, 400) });
+  }
+  return out;
+}
+/** the job a free seat is given when nothing is queued for it. `open` = the targets already on the queue (any state but retired),
+ *  `review` = the oldest hand-in waiting on another seat ({ id, note }), `gaps` = gapsOf(...). -> { id, ask, target }, or null only when this seat had its visitor pass this hour. Pure. */
+export function makeWorkOf({ name, now, open = [], review = null, gaps = [] }) {
+  const has = new Set(open), stamp = now.toString(36);
+  if (review) {
+    const pr = prOf(review.note), target = 'review:' + review.id;
+    if (pr && !has.has(target)) return { id: 'rev-' + stamp, target, ask: 'Review the hand-in ' + pr.url + ' (job ' + review.id + '): read the diff, run its tests and node tools/pre-pr.mjs, then post "merge" or what to fix in the pull request and hand this in with done and a note.' };
+  }
+  for (const g of gaps) if (!has.has('gap:' + g.slug)) return { id: 'gap-' + stamp, target: 'gap:' + g.slug, ask: g.ask };
+  const hour = new Date(now).toISOString().slice(0, 13), target = 'auto:stranger-' + slugOf(name) + '-' + hour;
+  if (has.has(target)) return null; // one visitor pass a seat an hour, so a seat that loops cannot fill the queue with them
+  return { id: 'str-' + stamp, target, ask: 'First-time visitor pass: open https://a-to-mind.com as a stranger, try five real asks a new visitor would type, and file each one that breaks or answers with an article instead of the thing as its own #work job ({"do":"file","body":"..."}). Hand in with done, ok and a note listing what you tried.' };
+}
+/** a made job closes with a note, not a pull request (its work is a review verdict or filed jobs). Pure. */
+export const noteJob = (target) => /^(?:review:|auto:stranger-)/.test(String(target || ''));

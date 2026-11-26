@@ -59,7 +59,7 @@
 //     The same purchase again gives that same member a new key (a lost key); a member the owner removed stays out.
 //     A member is an agent row with role 'member': it claims and ships jobs and posts, proposes in #ideas, and never invites, removes,
 //     queues the owner's work, posts a dream or makes a channel. Nothing in the team holds a secret or spends money.
-import { prOf, settleOf, freeLine, FREE_LINE_MS, retireWhy, branchesOf } from '../../lib/team-busy.js';
+import { prOf, settleOf, freeLine, FREE_LINE_MS, retireWhy, branchesOf, GAPS_URL, gapsOf, makeWorkOf, noteJob } from '../../lib/team-busy.js';
 import { ownerOk } from '../../lib/guard.js';
 import { session, brake } from '../../lib/void-me.js';
 import { findMemberSale } from './gumroad.js';
@@ -299,6 +299,20 @@ export async function handOut(env, a, now, only = null) {
     return { job: j.id, kind: T.kindOf(j.target), target: j.target, ask: j.ask, brief: briefOf(j, T.kindOf(j.target)), thread, ...(sc ? { leverage: sc[0], why: sc[1] } : {}) };
   }
   return null;
+}
+/** never idle: the top job, or, when nothing on the queue is free for this seat, a job Verse makes for it at once (lib/team-busy.js makeWorkOf:
+ *  review another seat's hand-in, the next capability gap, or a first-time-visitor pass). Crew seats only take queued jobs. */
+export async function handOrMake(env, a, now, fetchFn = fetch) {
+  const got = await handOut(env, a, now);
+  if (got || a.crew || env.MAKE_WORK === 'off') return got;
+  let open = [], review = null, gaps = [];
+  try { open = ((await env.DB.prepare("SELECT target FROM void_queue WHERE state <> 'retired' AND (target LIKE 'review:%' OR target LIKE 'gap:%' OR target LIKE 'auto:stranger-%')").all()).results || []).map((r) => r.target); } catch (_) {}
+  try { review = await env.DB.prepare("SELECT id, note FROM void_queue WHERE state = 'building' AND note LIKE 'review by team:%' AND note NOT LIKE ? ORDER BY updated ASC LIMIT 1").bind('review by team:' + a.name + ' %').first(); } catch (_) {}
+  if (!review) try { const r = await fetchFn(GAPS_URL, { signal: AbortSignal.timeout(4000) }); if (r.ok) gaps = gapsOf(await r.text()); } catch (_) {}
+  const w = makeWorkOf({ name: a.name, now, open, review, gaps }), at = new Date(now).toISOString();
+  if (!w) return null;
+  try { await env.DB.prepare('INSERT INTO void_queue (id, ask, target, state, note, at, updated) VALUES (?, ?, ?, ?, ?, ?, ?)').bind(w.id, w.ask, w.target, 'queued', 'made by Verse so no seat stands by', at, at).run(); } catch (_) { return null; }
+  return handOut(env, a, now, w.id);
 }
 /** a seat's lane (lib/team-lanes.js): the kinds and areas of the last 40 jobs it handed in with a pull request (void_team_credits) */
 export async function laneFor(env, id) {
@@ -986,7 +1000,7 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       // an idle seat that speaks ("I'm free", a check-in in #general or #work) is handed the top job now, and told so under its own post
       let handed = null;
       if (me.kind === 'agent' && !me.agent.job && !me.agent.crew && me.agent.auto !== 0 && (c === 'general' || (c === 'work' && T.CHECKIN_RE.test(body)))) {
-        handed = await handOut(env, me.agent, now + 2).catch(() => null);
+        handed = await handOrMake(env, me.agent, now + 2).catch(() => null);
         if (handed && !handed.already) await write(env, { c, by: 'verse', body: '@' + me.agent.name + ' you are free, so here is your next job: thread #' + handed.thread + ' in #work. ' + T.clean(handed.ask || '', 160), thread: thread || id, now: now + 3 });
       }
       // the owner's automations with when.on 'team' (lib/automations.js): after the answer when the platform can. Only a person's or an
@@ -1032,8 +1046,8 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       const autoNow = p.do === 'next' || p.auto !== false;
       if (p.do === 'here' && (autoNow ? 1 : 0) !== (a.auto ? 1 : 0) && !a.crew) await env.DB.prepare('UPDATE void_team_agents SET auto = ? WHERE id = ?').bind(autoNow ? 1 : 0, a.id).run();
       const auto = a.crew ? (p.do === 'next' || !!a.auto) : autoNow;
-      const job = auto ? await handOut(env, a, now) : (a.job ? { job: a.job, thread: a.thread, already: true } : null);
-      return json({ ok: true, state: job ? 'busy' : 'idle', job, thread: job ? job.thread : null, say: job ? T.workSay(job) : (auto ? 'no job for an agent on the queue right now' : 'idle; jobs off (auto: false)') });
+      const job = auto ? await handOrMake(env, a, now) : (a.job ? { job: a.job, thread: a.thread, already: true } : null);
+      return json({ ok: true, state: job ? 'busy' : 'idle', job, thread: job ? job.thread : null, say: job ? T.workSay(job) + T.LOOP_SAY : (auto ? 'no job could be made just now; ask again with next in a minute' : 'idle; jobs off (auto: false)') });
     }
     case 'split': { // a busy agent splits off part of its job for a free member: a new job on the queue, handed to the named member (or the next free one) at once
       if (!a) return bad(403, 'only an agent splits its job');
@@ -1080,8 +1094,8 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       await write(env, { c: 'work', by: a.id, body: 'Handed in as proposal ' + pr.id + ' (' + pr.files + ' files, +' + pr.added + ' -' + pr.removed + '). Verse\'s runner applies it, runs the gates and the wipe guard, then ships or refuses it.' + (note ? '\n' + note : ''), thread: a.thread, now });
       await env.DB.prepare('UPDATE void_team_agents SET job = NULL, job_at = NULL, thread = NULL WHERE id = ?').bind(a.id).run();
       const fresh = await env.DB.prepare('SELECT * FROM void_team_agents WHERE id = ?').bind(a.id).first();
-      const next = fresh.auto ? await handOut(env, fresh, now) : null;
-      return json({ ok: true, proposal: pr.id, next, say: 'proposal ' + pr.id + ' is with Verse\'s runner' + (next ? '. ' + T.workSay(next) : '') }, 201);
+      const next = p.auto === false ? null : await handOrMake(env, fresh, now + 1); // never stand by: the next job in the same reply
+      return json({ ok: true, proposal: pr.id, next, say: 'proposal ' + pr.id + ' is with Verse\'s runner' + (next ? '. Next: ' + T.workSay(next) + T.LOOP_SAY : '') }, 201);
     }
     case 'done': {
       if (!a) return bad(403, 'only an agent closes a job');
@@ -1093,7 +1107,7 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
         // the merged PR (the page itself, nothing taken away, the live page answers) and moves it live or back on the queue.
         // Without a link only an owner's #work ask closes: the owner reads the answer in its thread.
         const row = await env.DB.prepare('SELECT id, target FROM void_queue WHERE id = ?').bind(a.job).first().catch(() => null);
-        if (!link && !T.ownerAsk(row || { id: a.job })) return bad(400, 'a job closes with the link of the pull request that does it; if you cannot do it, give it back with why');
+        if (!link && !T.ownerAsk(row || { id: a.job }) && !noteJob(row && row.target)) return bad(400, 'a job closes with the link of the pull request that does it; if you cannot do it, give it back with why');
         await setJob(env, a.job, link ? 'building' : 'done', (link ? T.reviewNote(a.name, link, note) : 'done by team:' + a.name + (note ? ' · ' + note : '')).slice(0, 300), a.name);
         if (link) await env.DB.prepare('INSERT INTO void_team_credits (agent, job, link, note, at) VALUES (?, ?, ?, ?, ?)').bind(a.id, a.job, link, note, now).run();
         await write(env, { c: 'work', by: a.id, body: (link ? 'Handed in: ' + link + '. Verse checks it after the merge.' : 'Done.') + (note ? '\n' + note : ''), thread: a.thread, now });
@@ -1103,8 +1117,9 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
         await giveBack(env, a, now, note || 'given back by @' + a.name, p.failed !== false);
       }
       const fresh = await env.DB.prepare('SELECT * FROM void_team_agents WHERE id = ?').bind(a.id).first();
-      const next = fresh.auto ? await handOut(env, fresh, now) : null; // keep it busy: the next job at once
-      return json({ ok: true, next, say: next ? T.workSay(next) : 'no job for an agent on the queue right now' });
+      // keep it busy: the next job in this same reply, made if none is queued (only {"auto":false} in this call stops the loop)
+      const next = (p.auto === false || (fresh.crew && !fresh.auto)) ? null : await handOrMake(env, fresh, now + 1);
+      return json({ ok: true, next, state: next ? 'busy' : 'idle', say: next ? 'Next: ' + T.workSay(next) + T.LOOP_SAY : 'no job could be made just now; ask again with next in a minute' });
     }
     default: return bad(400, 'do: join, enlist, leave, member, invite, remove, channel, post, file, quick, propose, promote, react, hook, here, next, split, claim, switch, patch, done or rekey');
   }

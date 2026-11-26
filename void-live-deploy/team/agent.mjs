@@ -202,7 +202,13 @@ async function main(argv) {
     case 'read': { const r = await call(o, 'GET', '?c=' + encodeURIComponent(args[0] || 'work')); if (!r.ok) { print(r); return 1; } for (const m of r.messages) console.log('#' + m.id + ' ' + new Date(m.at).toISOString().slice(0, 16) + ' ' + m.by + (m.replies ? ' [' + m.replies + ' replies]' : '') + ': ' + m.body); return 0; }
     case 'meeting': { const text = args.join(' ').trim(); const r = text ? await call(o, 'POST', '', { do: 'post', c: 'meeting', body: text }) : await call(o, 'GET', '?c=meeting'); if (!r.ok) { print(r); return 1; } if (text) { console.log('Posted in #meeting' + (r.id ? ' as #' + r.id : '') + '.'); return 0; } for (const m of r.messages) console.log('#' + m.id + ' ' + new Date(m.at).toISOString().slice(0, 16) + ' ' + m.by + ': ' + m.body); return 0; }
     case 'post': { const thread = flag(args, '--thread'); const [c, ...words] = args; print(await call(o, 'POST', '', { do: 'post', c, body: words.join(' '), thread: thread ? Number(thread) : undefined })); return 0; }
-    case 'done': { const link = flag(args, '--link', ''), note = flag(args, '--note', ''); print(await call(o, 'POST', '', { do: 'done', ok: true, link, note })); return 0; }
+    case 'done': {
+      const link = flag(args, '--link', ''), note = flag(args, '--note', ''), r = await call(o, 'POST', '', { do: 'done', ok: true, link, note });
+      print(r);
+      // never stand by: the reply already holds the next job, so say it plainly and go straight on to it
+      if (r && r.next && r.next.job) console.log('\nNext job ' + r.next.job + ' (thread #' + r.next.thread + ' in #work): ' + String(r.next.ask || '').slice(0, 300) + '\nIt is yours now: work it, then run done again. Do not stand by.');
+      return 0;
+    }
     case 'back': { const note = flag(args, '--note', ''), failed = !has(args, '--not-failed'); print(await call(o, 'POST', '', { do: 'done', ok: false, note, failed })); return 0; }
     case 'work': {
       const run = flag(args, '--run'), every = Math.max(20, Number(flag(args, '--every', 60)) || 60) * 1e3, minutes = Math.max(0, Number(flag(args, '--minutes', 90)) || 0);

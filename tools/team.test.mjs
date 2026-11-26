@@ -24,7 +24,7 @@ function world(jobs = []) {
   DB.raw.exec('CREATE TABLE void_queue (id TEXT PRIMARY KEY, ask TEXT, target TEXT, state TEXT, note TEXT, at TEXT, updated TEXT)');
   const add = DB.raw.prepare('INSERT INTO void_queue VALUES (?, ?, ?, ?, ?, ?, ?)');
   for (const j of jobs) add.run(j.id, j.ask, j.target, j.state || 'queued', j.note || '', j.at || '2026-10-28T00:00:00Z', j.at || '2026-10-28T00:00:00Z');
-  return { DB, SALT: 'test-salt', READ_TOKEN: OWNER };
+  return { DB, SALT: 'test-salt', READ_TOKEN: OWNER, MAKE_WORK: 'off' }; // the never-idle maker has its own test below
 }
 const req = (method, q = '', body, key) => new Request('https://verse.test/api/team' + q, { method, headers: { 'content-type': 'application/json', ...(key ? { authorization: 'Bearer ' + key } : {}) }, body: body ? JSON.stringify(body) : undefined });
 const get = async (env, q, key, now = T0) => { const r = await API.onRequestGet({ env, request: req('GET', q, null, key), now }); return { status: r.status, ...(await r.json()) }; };
@@ -861,4 +861,25 @@ test('self-join: a few a minute from one address, the team cap holds, a self sea
   assert.equal((await fromIp(env, { do: 'join', name: 'leaver' }, '10.0.3.5')).status, 201, 'a self seat that left frees its name');
   await API.sweep(env, T0 + T.SELF_IDLE_MS + 5000);
   assert.equal(seat(env, 'quiet').off, 1, 'an idle self seat leaves on its own'); assert.equal((await get(env, '?me', s.key, T0 + T.SELF_IDLE_MS + 6000)).me, null);
+});
+
+test('never idle: a seat that hands in gets its next job in the same reply, and with nothing queued Verse makes one (a review, a capability gap, a visitor pass)', async () => {
+  const env = world([JOBS[0]]); delete env.MAKE_WORK;
+  const real = globalThis.fetch;
+  globalThis.fetch = async () => new Response('## Ranked build list\n\n| Rank | Job | Why | Page | Salvage | Notes |\n| ---: | --- | --- | --- | --- | --- |\n| 1 | Transcribe audio | People ask for it. | `/lab/dictation/` | none | x |\n');
+  try {
+    const g = (await admit(env, 'Gee')).key;
+    const h = await post(env, { do: 'here' }, g);
+    assert.equal(h.job.job, 'j1', 'the queued job first');
+    assert.match(h.say, /Do not stand by/);
+    const d = await post(env, { do: 'done', ok: true, link: 'https://github.com/Adammbeam/Verse-A-to-Mind/pull/9' }, g, T0 + 1000);
+    assert.ok(d.next && d.next.job, 'the next job is in the same reply as done');
+    assert.match(d.next.target, /^gap:transcribe-audio$/, 'its own hand-in is not its review, so the next capability gap');
+    const e = (await admit(env, 'Eye')).key;
+    const r = await post(env, { do: 'here' }, e, T0 + 2000);
+    assert.equal(r.job.target, 'review:j1', 'a free seat reviews the hand-in another seat is waiting on');
+    const v = await post(env, { do: 'done', ok: true, note: 'merge: read the diff, tests pass' }, e, T0 + 3000);
+    assert.equal(v.ok, true, 'a review closes with a note, no pull request');
+    assert.match(v.next.target, /^auto:stranger-eye-/, 'gap taken, review done: a first-time-visitor pass');
+  } finally { globalThis.fetch = real; }
 });
