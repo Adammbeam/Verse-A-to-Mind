@@ -10,14 +10,14 @@ import skill from '../void-live-deploy/skills/v01d-fixes.js';
 
 const TOKEN = 'owner-token-for-tests-1234567890';
 const body = (c, where = 'void-live-deploy/skills/rides.js lines 42, 57') => "Verse's own model proposed this change ... Why, in Verse's words: the matcher only knew ride words. Verse's confidence: " + c + '. Where: ' + where + '. Labelled ...';
-const pr = (n, c, labels) => ({ number: n, title: 'Verse fixes its rides skill: learn to handle "x"', html_url: 'https://github.com/atomeam/void-loop/pull/' + n, body: body(c), labels: labels.map((name) => ({ name })) });
+const pr = (n, c, labels) => ({ number: n, title: 'Verse fixes its rides skill: learn to handle "x"', html_url: 'https://github.com/Adammbeam/Verse-A-to-Mind/pull/' + n, body: body(c), labels: labels.map((name) => ({ name })) });
 
 test('a fix is read from its pull request: confidence, where, why, and whether it waits; only Verse\'s own count', () => {
   const f = fixOf(pr(901, '0.62', ['made by Verse', WAITS]));
-  assert.deepEqual(f, { number: 901, title: 'Verse fixes its rides skill: learn to handle "x"', url: 'https://github.com/atomeam/void-loop/pull/901', confidence: 0.62, where: 'void-live-deploy/skills/rides.js lines 42, 57', why: 'the matcher only knew ride words', risk: null, riskWhy: '', draft: false, waits: true, merges: false });
+  assert.deepEqual(f, { number: 901, title: 'Verse fixes its rides skill: learn to handle "x"', url: 'https://github.com/Adammbeam/Verse-A-to-Mind/pull/901', confidence: 0.62, where: 'void-live-deploy/skills/rides.js lines 42, 57', why: 'the matcher only knew ride words', risk: null, riskWhy: '', draft: false, waits: true, merges: false });
   assert.equal(fixOf(pr(902, 'none given', ['made by Verse', WAITS])).confidence, null);
   assert.equal(fixOf(pr(903, '0.9', ['automerge'])), null, 'not made by Verse');
-  assert.equal(fixOf({ ...pr(904, '0.9', ['made by Verse']), html_url: 'https://evil.example/x' }).url, 'https://github.com/atomeam/void-loop/pull/904');
+  assert.equal(fixOf({ ...pr(904, '0.9', ['made by Verse']), html_url: 'https://evil.example/x' }).url, 'https://github.com/Adammbeam/Verse-A-to-Mind/pull/904');
   const list = fixesOf([pr(10, '0.95', ['made by Verse', 'automerge']), pr(11, '0.7', ['made by Verse', WAITS]), pr(12, '0.4', ['made by Verse', WAITS]), pr(13, '0.99', ['other'])]);
   assert.deepEqual(list.map((f) => f.number), [12, 11, 10], 'waiting first, least sure first');
 });
@@ -41,14 +41,14 @@ test('approve: owner only, needs a pull request number, a GitHub key, and a pull
   assert.equal((await route.onRequestPost({ request: req({ pr: 'x', op: 'approve' }), env: { READ_TOKEN: TOKEN } })).status, 400);
   assert.equal((await route.onRequestPost({ request: req({ pr: 5, op: 'merge' }), env: { READ_TOKEN: TOKEN } })).status, 400);
   const none = await route.onRequestPost({ request: req({ pr: 5, op: 'approve' }), env: { READ_TOKEN: TOKEN } });
-  assert.equal(none.status, 503); assert.equal((await none.json()).url, 'https://github.com/atomeam/void-loop/pull/5');
+  assert.equal(none.status, 503); assert.equal((await none.json()).url, 'https://github.com/Adammbeam/Verse-A-to-Mind/pull/5');
   const calls = [], real = globalThis.fetch;
   const fake = (labels, state = 'open') => async (u, o = {}) => { calls.push([o.method || 'GET', String(u).replace('https://api.github.com', ''), o.body || '']); return /\/pulls\/\d+$/.test(u) ? Response.json({ state, labels: labels.map((name) => ({ name })) }) : new Response('{}', { status: 200 }); };
   try {
     globalThis.fetch = fake(['made by Verse', WAITS]);
     const ok = await route.onRequestPost({ request: req({ pr: 901, op: 'approve' }), env: { READ_TOKEN: TOKEN, GITHUB_TOKEN: 'gh-test' } });
     assert.equal(ok.status, 200);
-    assert.deepEqual(calls.map((c) => c.slice(0, 2)), [['GET', '/repos/atomeam/void-loop/pulls/901'], ['POST', '/repos/atomeam/void-loop/issues/901/labels'], ['DELETE', '/repos/atomeam/void-loop/issues/901/labels/waits%20for%20owner']]);
+    assert.deepEqual(calls.map((c) => c.slice(0, 2)), [['GET', '/repos/Adammbeam/Verse-A-to-Mind/pulls/901'], ['POST', '/repos/Adammbeam/Verse-A-to-Mind/issues/901/labels'], ['DELETE', '/repos/Adammbeam/Verse-A-to-Mind/issues/901/labels/waits%20for%20owner']]);
     assert.equal(calls[1][2], JSON.stringify({ labels: ['automerge'] }));
     calls.length = 0; globalThis.fetch = fake(['automerge']);
     assert.equal((await route.onRequestPost({ request: req({ pr: 902, op: 'approve' }), env: { READ_TOKEN: TOKEN, GITHUB_TOKEN: 'gh-test' } })).status, 502, 'a pull request Verse did not make is never approved here');
@@ -78,7 +78,7 @@ test('the card reads the risk and the draft state from the pull request', () => 
 });
 test('the workflow puts a passing fix on main whatever the confidence, and says the risk in the commit and the output', () => {
   // Actions may not open pull requests in this repo (2026-10-19). Confidence is recorded; it does not hold the merge (Atom, 2026-11-04).
-  const wf = readFileSync(new URL('../.github/workflows/propose-fix.yml', import.meta.url), 'utf8');
+  const wf = readFileSync(new URL('../.github/workflows-parked/propose-fix.yml', import.meta.url), 'utf8');
   assert.match(wf, /Risk: \$RISK\./); assert.match(wf, /risk=\$\(node -p/);
   assert.match(wf, /console\.log\("automerge"\)/); assert.match(wf, /git push -q origin HEAD:main/); assert.match(wf, /branch="v01d\/fix-/);
   assert.doesNotMatch(wf, HUMAN_WAIT); assert.doesNotMatch(wf, /gh pr create/);

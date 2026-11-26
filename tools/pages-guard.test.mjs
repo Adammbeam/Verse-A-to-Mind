@@ -36,14 +36,14 @@ test('Git builds are turned off for production and previews, other settings kept
   assert.equal(c.production_branch, 'main');
 });
 test('deploy.yml pauses Git builds, smoke checks tools.json and /api/answer, and rolls back on failure', () => {
-  const y = readFileSync(new URL('../.github/workflows/deploy.yml', import.meta.url), 'utf8');
+  const y = readFileSync(new URL('../.github/workflows-parked/deploy.yml', import.meta.url), 'utf8');
   assert.ok(y.indexOf('pages-guard.mjs pause-git') > -1 && y.indexOf('pages-guard.mjs pause-git') < y.indexOf('id: deploy'));
   assert.match(y, /pages-guard\.mjs check "\$URL"/);
   assert.match(y, /pages-guard\.mjs check https:\/\/a-to-mind\.com/);
   assert.match(y, /if: failure\(\) && steps\.deploy\.outcome == 'success'[^\n]*\n[\s\S]{0,400}pages-guard\.mjs heal --bad "\$BAD"/);
 });
 test('pages-guard.yml runs after every push to main and on a schedule, with no person in the loop', () => {
-  const y = readFileSync(new URL('../.github/workflows/pages-guard.yml', import.meta.url), 'utf8');
+  const y = readFileSync(new URL('../.github/workflows-parked/pages-guard.yml', import.meta.url), 'utf8');
   assert.match(y, /branches: \[main\]/); assert.match(y, /cron:/); assert.match(y, /pages-guard\.mjs guard/);
   assert.doesNotMatch(y, /environment:|workflow_dispatch:\s*\n\s+inputs:\s*\n\s+approve/);
 });

@@ -108,6 +108,6 @@ test('the tool: the request from repo data, fresh asks only, probe: jobs within 
 test('the route is marked internal and limited; the workflow needs only the owner token and queues nothing when it is missing', () => {
   assert.match(readFileSync(new URL('./openapi-check.mjs', import.meta.url), 'utf8'), /'\/api\/probe-asks'/);
   assert.match(readFileSync(new URL('../void-live-deploy/lib/guard.js', import.meta.url), 'utf8'), /'probe-asks': \{ rpm: \d+, body: \d+ \}/);
-  const wf = readFileSync(new URL('../.github/workflows/probe-asks.yml', import.meta.url), 'utf8');
+  const wf = readFileSync(new URL('../.github/workflows-parked/probe-asks.yml', import.meta.url), 'utf8');
   assert.match(wf, /VOID_OWNER_TOKEN: \$\{\{ secrets\.VOID_OWNER_TOKEN \}\}/); assert.match(wf, /node tools\/probe-asks\.mjs/); assert.match(wf, /contents: read/); assert.doesNotMatch(wf, /OPENROUTER|ANTHROPIC|secrets\.(?!VOID_OWNER_TOKEN)/);
 });
