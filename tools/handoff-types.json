@@ -45,7 +45,7 @@
   "/pdf/": "in: image, text; out: image, text",
 
   "/photos/": "in: image; out: image, color",
-  "/photos/exif/": "in: image; out: image, color",
+  "/photos/details/": "in: image; out: image, color",
   "/photos/exifeditor/": "in: image; out: image, color",
   "/photos/iloveimg/": "in: image; out: image, color",
   "/photos/photopea/": "in: image; out: image, color",
