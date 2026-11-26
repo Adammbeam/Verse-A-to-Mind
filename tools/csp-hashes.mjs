@@ -63,7 +63,7 @@ export function rules() {
   // /vat/ only registers the service worker. The site-wide policy already allows that line.
   // /research/ is one page. Its own rule was what put the page hashes plus the committed headers at 101 of Cloudflare's 100.
   // The site-wide policy still allows its inline script.
-  return out.filter((x) => !x.startsWith('/vat/\n') && !x.startsWith('/research/\n'));
+  return out.filter((x) => !x.startsWith('/vat/\n') && !x.startsWith('/research/\n') && !x.startsWith('/tower.searches/\n') && !x.startsWith('/line-speed/\n'));
 }
 if (import.meta.url === 'file://' + process.argv[1]) {
   const r = rules(), text = MARK + '\n' + r.join('\n\n') + '\n';

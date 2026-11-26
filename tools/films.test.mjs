@@ -141,7 +141,7 @@ test('film metadata: the asks it takes, and each film as { id, day, experiment, 
   const m = filmMeta({ id: '20261014-anomalous-event-timeline-4-r6', at: '2026-10-14T16:33:31Z', title: 'T', tags: 'Verse, AI', description: 'Try it.\n\nHow it is built: https://github.com/atomeam/void-loop/blob/main/void-live-deploy/fringe/anomalous-event-timeline-4.html\n\nmore' });
   assert.deepEqual(m, { id: '20261014-anomalous-event-timeline-4-r6', day: '2026-10-14', experiment: 'anomalous-event-timeline-4', title: 'T', tags: ['Verse', 'AI'],
     source: 'https://github.com/atomeam/void-loop/blob/main/void-live-deploy/fringe/anomalous-event-timeline-4.html', watch: 'https://a-to-mind.com/films/' });
-  assert.equal(filmMeta({ id: '20261015-miss-board-4-r9', title: 'x', tags: '', description: '' }).source, 'https://github.com/atomeam/void-loop/blob/main/void-live-deploy/fringe/miss-board-4.html', 'an older film without the line still links its experiment');
+  assert.equal(filmMeta({ id: '20261015-miss-board-4-r9', title: 'x', tags: '', description: '' }).source, 'https://github.com/Adammbeam/Verse-A-to-Mind/blob/main/void-live-deploy/fringe/miss-board-4.html', 'an older film without the line still links its experiment');
 });
 
 test('a film that has not passed the quality gate stays unlisted: stored, seen only by the owner (owner, 2026-11-03: "verses videos are bad")', async () => {

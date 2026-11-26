@@ -121,7 +121,7 @@ test('the tool: the oldest open probe: job, the skill\'s own asks replayed with 
 test('the route is marked internal and limited; the workflow keeps the write token away from anything a model wrote', () => {
   assert.match(readFileSync(new URL('./openapi-check.mjs', import.meta.url), 'utf8'), /'\/api\/propose-fix'/);
   assert.match(readFileSync(new URL('../void-live-deploy/lib/guard.js', import.meta.url), 'utf8'), /'propose-fix': \{ rpm: \d+, body: \d+ \}/);
-  const wf = readFileSync(new URL('../.github/workflows/propose-fix.yml', import.meta.url), 'utf8');
+  const wf = readFileSync(new URL('../.github/workflows-parked/propose-fix.yml', import.meta.url), 'utf8');
   const [propose, pr] = wf.split(/\n  pull-request:\n/);
   assert.match(propose, /node tools\/propose-fix\.mjs/); assert.match(propose, /VOID_OWNER_TOKEN: \$\{\{ secrets\.VOID_OWNER_TOKEN \}\}/); assert.doesNotMatch(propose, /contents: write|pull-requests: write/);
   assert.match(pr, /contents: write/); assert.match(pr, /git apply/); assert.doesNotMatch(pr, /node tools\/|npm |bench\.mjs/); assert.match(pr, /console\.log\("automerge"\)/, 'confidence is recorded; it does not hold the merge (Atom, 2026-11-04)'); assert.match(pr, /git push -q origin HEAD:main/, 'a passing fix goes onto main: its review ran in the propose job (2026-10-19: Actions may not open pull requests here)');
@@ -140,7 +140,7 @@ test('evidence (asked by Verse): each edit names its file, its line number and t
   assert.deepEqual(ev.map((e) => e.line), [5, 8]); assert.equal(ev[0].file, 'void-live-deploy/skills/words.js'); assert.match(ev[0].was, /^return \/\^\(\?:rhymes/);
   assert.equal(whereOf(ev), 'void-live-deploy/skills/words.js lines 5, 8'); assert.equal(whereOf(ev.slice(0, 1)), 'void-live-deploy/skills/words.js line 5'); assert.equal(whereOf([]), '');
   assert.deepEqual(evidenceOf(SOURCE, [{ find: 'not in the file', replace: 'x' }], 'words'), []);
-  const wf = readFileSync(new URL('../.github/workflows/propose-fix.yml', import.meta.url), 'utf8');
+  const wf = readFileSync(new URL('../.github/workflows-parked/propose-fix.yml', import.meta.url), 'utf8');
   assert.match(wf, /Verse's confidence: \$CONFIDENCE\. Where: \$WHERE\./, 'the pull request Verse opens says how sure it was and where');
 });
 
@@ -156,7 +156,7 @@ test('lets go: a routing correction passes only when the edited skill, loaded fr
 });
 
 test('the confidence gate (Atom, 2026-11-04): confidence is written down, and every passing fix goes onto main', () => {
-  const wf = readFileSync(new URL('../.github/workflows/propose-fix.yml', import.meta.url), 'utf8');
+  const wf = readFileSync(new URL('../.github/workflows-parked/propose-fix.yml', import.meta.url), 'utf8');
   const m = /gate=\$\(node -e '([^']+)' "\$CONFIDENCE"\)/.exec(wf); assert.ok(m, 'the gate is computed from the confidence');
   const gate = (c) => { let out = ''; const log = console.log; console.log = (x) => { out = x; }; try { new Function('process', m[1])({ argv: ['node', c] }); } finally { console.log = log; } return out; };
   assert.equal(gate('0.8'), 'automerge'); assert.equal(gate('0.93'), 'automerge'); assert.equal(gate('0.79'), 'automerge'); assert.equal(gate('none given'), 'automerge'); assert.equal(gate(''), 'automerge');
@@ -165,7 +165,7 @@ test('the confidence gate (Atom, 2026-11-04): confidence is written down, and ev
 });
 
 test('the workflow installs packages before its checks (the Claude brain test imports the SDK; the daily fix run failed at this step until 2026-10-16)', async () => {
-  const wf = (await import('node:fs')).readFileSync(new URL('../.github/workflows/propose-fix.yml', import.meta.url), 'utf8');
+  const wf = (await import('node:fs')).readFileSync(new URL('../.github/workflows-parked/propose-fix.yml', import.meta.url), 'utf8');
   assert.ok(wf.indexOf('npm ci --no-audit') > 0 && wf.indexOf('npm ci --no-audit') < wf.indexOf('node --test tools/propose-fix.test.mjs'));
 });
 
@@ -275,6 +275,6 @@ test('the ledger line says when the ask came from a probe, so the growth card co
   const { measure } = await import('../void-live-deploy/lib/better.js');
   const now = Date.parse('2026-10-30T20:00:00Z'), line = (what) => ({ at: '2026-10-30T19:00:00Z', by: 'verse', kind: 'fix', what });
   assert.equal(measure({ ledger: [line(ledgerWhat(t, 'probe')), line(ledgerWhat(t, 'miss'))], now }).probeFixes, 1, 'the growth card counts the probe\'s fix and only it');
-  const wf = (await import('node:fs')).readFileSync(new URL('../.github/workflows/propose-fix.yml', import.meta.url), 'utf8');
+  const wf = (await import('node:fs')).readFileSync(new URL('../.github/workflows-parked/propose-fix.yml', import.meta.url), 'utf8');
   assert.match(wf, /grow\.mjs fix "\$\{LEDGER:-\$TITLE\}"/, 'the workflow writes the ledger line, not the bare title');
 });

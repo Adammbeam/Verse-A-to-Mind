@@ -67,7 +67,7 @@ const req = (body, key) => new Request('https://verse.test/api/team', { method: 
 const post = async (env, body, key, now = T0) => { const r = await API.onRequestPost({ env, request: req(body, key), now }); return { status: r.status, ...(await r.json()) }; };
 const get = async (env, q, now = T0) => { const r = await API.onRequestGet({ env, request: new Request('https://verse.test/api/team' + q), now }); return r.json(); };
 async function world(jobs) {
-  const DB = d1(), env = { DB, SALT: 's', READ_TOKEN: OWNER };
+  const DB = d1(), env = { DB, SALT: 's', READ_TOKEN: OWNER, MAKE_WORK: 'off' };
   DB.raw.exec('CREATE TABLE void_queue (id TEXT PRIMARY KEY, ask TEXT, target TEXT, state TEXT, note TEXT, at TEXT, updated TEXT)');
   const add = DB.raw.prepare('INSERT INTO void_queue VALUES (?, ?, ?, ?, ?, ?, ?)');
   for (const j of jobs) add.run(j.id, j.ask, j.target, j.state, j.note, j.at, j.updated || j.at);
