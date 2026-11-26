@@ -35,7 +35,7 @@ test('no unrequested center mesh: the star points are the only fullscreen draw',
 
 test('the ask bar stands alone: #input is there and nothing telemetry-flavored covers it', () => {
   const html = read('void-live-deploy/void.html');
-  assert.match(html, /<input[^>]*id="input"[^>]*placeholder="Ask anything"/, 'the ask input is present');
+  assert.match(html, /<input[^>]*id="input"[^>]*placeholder="Ask Verse"/, 'the ask input is present');
   assert.ok(!/id="[^"]*(tlm|telemetry-hud|hud-readout)[^"]*"/.test(html), 'no overlay ids near the ask bar');
 });
 
