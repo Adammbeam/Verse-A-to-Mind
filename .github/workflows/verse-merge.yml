@@ -1,27 +1,40 @@
 name: Verse merge
-
 on:
-  pull_request:
-    types: [labeled, opened, synchronize, reopened, ready_for_review]
   workflow_run:
     workflows: ["Verse check"]
     types: [completed]
-
 permissions:
   contents: write
   pull-requests: write
-  checks: read
-
 jobs:
   merge:
-    if: contains(github.event.pull_request.labels.*.name, 'automerge') || (github.event.workflow_run && github.event.workflow_run.conclusion == 'success')
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: automerge
-        run: node tools/automerge.mjs
+      - name: merge when green
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          HEAD_REPO: ${{ github.event.workflow_run.head_repository.full_name }}
+        run: |
+          set -eu
+          [ "$HEAD_REPO" = "$REPO" ] || { echo "a fork: a person merges it"; exit 0; }
+          n=$(gh api "repos/$REPO/commits/$HEAD_SHA/pulls" --jq '.[] | select(.state=="open") | .number' | head -n1)
+          [ -n "$n" ] || { echo "no open pull request for $HEAD_SHA"; exit 0; }
+          pr=$(gh api "repos/$REPO/pulls/$n")
+          head=$(echo "$pr" | jq -r .head.sha); author=$(echo "$pr" | jq -r .user.login); draft=$(echo "$pr" | jq -r .draft)
+          labels=$(echo "$pr" | jq -r '[.labels[].name] | join(",")'); title=$(echo "$pr" | jq -r .title)
+          [ "$head" = "$HEAD_SHA" ] || { echo "#$n has a newer commit; its own check decides"; exit 0; }
+          [ "$draft" = "false" ] || { echo "#$n is a draft"; exit 0; }
+          ok=no
+          case ",$labels," in *,automerge,*) ok=yes ;; esac
+          if [ "$author" = "dependabot[bot]" ]; then
+            ok=yes
+            for pair in $(echo "$title $(echo "$pr" | jq -r .body)" | grep -oE 'from [v]?[0-9]+(\.[0-9]+)* to [v]?[0-9]+' | sed -E 's/from v?([0-9]+)[^ ]* to v?([0-9]+)/\1:\2/'); do
+              [ "${pair%%:*}" = "${pair##*:}" ] || ok=no
+            done
+          fi
+          [ "$ok" = yes ] || { echo "#$n is not labelled automerge (or is a major version bump)"; exit 0; }
+          gh pr merge "$n" -R "$REPO" --squash --match-head-commit "$HEAD_SHA" && echo "merged #$n"
