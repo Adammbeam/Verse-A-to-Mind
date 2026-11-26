@@ -1,4 +1,5 @@
-// GET /tools.json — Verse's callable tools, built live from /skills so it never drifts.
+// GET /tools.json — Verse's callable tools, served from prebuilt /tools.static.json (1 asset fetch, <150 ms) with live
+// batched rebuild from /skills as fallback when the prebuilt snapshot is absent.
 // Each tool is called by opening https://a-to-mind.com/?q=<ask>. Agents can also call Verse's read-only tools over MCP
 // (functions/api/mcp.js, lib/mcp.js): the `mcp` field names the endpoint and lists those tools, from the same table tools/list serves.
 import { TOOLS as MCP_TOOLS, PROTOCOL } from '../lib/mcp.js';
@@ -9,10 +10,18 @@ export const CORE = [ // the page's own built-ins; the book's "How to ask" page 
   { name: 'look', description: "Change the person's own Verse (kept in their browser, and on every device once they say \"remember me\" and make a passkey).", examples: ['make my void deep blue', 'add stars', 'quieter font', 'reset my void'] },
   { name: 'keep', description: 'Keep, name, remove or re-run what is on screen.', examples: ['keep this', 'call this trip', 'take this off', 'same again', 'undo'] },
 ];
-const HIDDEN = new Set(['rebuild-map']);
+export const HIDDEN = new Set(['rebuild-map']);
+const DEFAULT_ORIGIN = 'https://a-to-mind.com';
 const BATCH = 24;
 const MEM_TTL_MS = 300_000;
 const MEM_CACHE = new WeakMap(); // env.ASSETS -> Map<origin, { body, at }>
+
+export function parseSkillMeta(name, src) {
+  const m = src.match(/examples\s*:\s*\[([^\]]*)\]/);
+  const examples = m ? Array.from(m[1].matchAll(/'((?:[^'\\]|\\.)*)'|"((?:[^"\\]|\\.)*)"/g)).map((x) => (x[1] ?? x[2]).replace(/\\'/g, "'")) : [];
+  const d = src.match(/^\s*\*\s*\w[\w-]*\s+skill\s+[—-]\s+(.+)$/m);
+  return { name: name === 'place' ? 'map' : name, description: d ? d[1].trim() : name, examples };
+}
 
 async function mapBatched(items, size, fn) {
   const out = new Array(items.length);
@@ -41,6 +50,27 @@ export async function onRequestGet({ request, env }) {
   const cacheKey = new Request(origin + '/tools.json');
   try { if (typeof caches !== 'undefined' && caches.default) { const hit = await caches.default.match(cacheKey); if (hit) return hit; } } catch (_) {}
 
+  // Fast path: serve prebuilt /tools.static.json in a single asset fetch (~50-150 ms cold instead of 400+ fetches).
+  if (assets && typeof assets.fetch === 'function') {
+    try {
+      const pre = await assets.fetch(new Request(origin + '/tools.static.json'));
+      if (pre && pre.ok) {
+        let body = await pre.text();
+        if (body && body.trim().startsWith('{')) {
+          if (origin !== DEFAULT_ORIGIN) body = body.split(DEFAULT_ORIGIN).join(origin);
+          if (typeof assets === 'object') {
+            let byOrigin = MEM_CACHE.get(assets);
+            if (!byOrigin) { byOrigin = new Map(); MEM_CACHE.set(assets, byOrigin); }
+            byOrigin.set(origin, { body, at: Date.now() });
+          }
+          const res = new Response(body, { headers: HEADERS });
+          try { if (typeof caches !== 'undefined' && caches.default) await caches.default.put(cacheKey, res.clone()); } catch (_) {}
+          return res;
+        }
+      }
+    } catch (_) {}
+  }
+
   const fetched = new Map();
   const get = async (p) => {
     if (fetched.has(p)) return fetched.get(p);
@@ -60,7 +90,6 @@ export async function onRequestGet({ request, env }) {
     const indexStr = await get('/skills/index.json');
     if (!indexStr) throw new Error('No index');
     const index = JSON.parse(indexStr);
-    // Fetch every indexed skill in bounded parallel batches once, caching its source for metadata extraction below.
     const indexSrcs = await mapBatched(index, BATCH, (name) => get('/skills/' + name + '.js'));
     const names = [];
     for (let i = 0; i < index.length; i++) {
@@ -77,10 +106,7 @@ export async function onRequestGet({ request, env }) {
     for (const name of visible) {
       const src = fetched.get('/skills/' + name + '.js');
       if (!src) continue;
-      const m = src.match(/examples\s*:\s*\[([^\]]*)\]/);
-      const examples = m ? Array.from(m[1].matchAll(/'((?:[^'\\]|\\.)*)'|"((?:[^"\\]|\\.)*)"/g)).map((x) => (x[1] ?? x[2]).replace(/\\'/g, "'")) : [];
-      const d = src.match(/^\s*\*\s*\w[\w-]*\s+skill\s+[—-]\s+(.+)$/m);
-      tools.push({ name: name === 'place' ? 'map' : name, description: d ? d[1].trim() : name, examples });
+      tools.push(parseSkillMeta(name, src));
     }
   } catch (e) {
     console.error('Failed to build tools.json:', e);

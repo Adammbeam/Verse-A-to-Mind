@@ -19217,5 +19217,6 @@
   {"at": "2026-11-26T13:21:21Z", "by": "antigravity", "kind": "fix", "what": "Isolated the large shared-page CORE block onto its own dedicated shard when n >= 4 so one shard never runs past the 1,680 s suite budget (mw2k6aqf)"},
   {"at": "2026-11-26T13:30:06Z", "by": "antigravity", "kind": "fix", "what": "Eliminated duplicate serial skill fetches in /tools.json using bounded parallel batches and per-ASSETS memory caching so /tools.json answers in milliseconds instead of timing out at 10s (want-page-tools-json)"},
   {"at": "2026-11-26T14:03:24Z", "by": "antigravity", "kind": "grow", "what": "Raised sports exam coverage: off-day/off-season team score asks fall back to 7-day results/schedule or league standings, Spanish/French/German team asks parse cleanly, bare \"scores\" opens a league picker, and team cards link to live standings (want-exam-sports)"},
-  {"at": "2026-11-26T14:20:24Z", "by": "antigravity", "kind": "grow", "what": "Built /line-speed/ (download, upload, latency and jitter against Verse edge, with scripts-off form support) (team-2886)"}
+  {"at": "2026-11-26T14:20:24Z", "by": "antigravity", "kind": "grow", "what": "Built /line-speed/ (download, upload, latency and jitter against Verse edge, with scripts-off form support) (team-2886)"},
+  {"at": "2026-11-26T14:22:18Z", "by": "antigravity", "kind": "grow", "what": "Prebuilt void-live-deploy/tools.static.json (tools/build-tools-json.mjs) and wired GET /tools.json to serve it in one asset fetch with live fallback (team-3565)"}
 ]
