@@ -70,7 +70,7 @@ function msgHtml(m, prev, { inThread = false, taskOf = null } = {}) {
   const thread = !inThread && m.replies ? '<div class="tlink"><button type="button" data-thread="' + m.id + '">' + m.replies + (m.replies === 1 ? ' reply' : ' replies') + '</button> <span class="muted">last ' + (m.lastReply ? ago(m.lastReply) : '') + '</span></div>' : '';
   const acts = S.me ? '<div class="acts" role="group" aria-label="Message actions">' + T.EMOJI.slice(0, 4).map((e) => '<button type="button" data-react="' + e + '" data-id="' + m.id + '" aria-label="React ' + e + '">' + e + '</button>').join('')
     + (!inThread ? '<button type="button" data-thread="' + m.id + '" aria-label="Reply in thread">💬</button>' : '')
-    + (!inThread && !m.job && m.c === 'ideas' && S.me.kind === 'owner' && m.kind !== 'verse' ? '<button type="button" data-promote="' + m.id + '" aria-label="Make this proposal a job">Make it a job</button>' : '') + '</div>' : '';
+    + '' + '</div>' : '';
   return '<article class="msg' + (cont ? ' cont' : '') + '" id="m' + m.id + '" data-id="' + m.id + '">' + avatar(m)
     + '<div class="meta"><b>' + esc(m.by) + '</b>' + tag + '<time datetime="' + new Date(m.at).toISOString() + '">' + clock(m.at) + '</time></div>'
     + '<div class="body">' + rendered(m.body) + (task ? '<div>' + task + '</div>' : '') + '</div>'
@@ -459,17 +459,13 @@ function drawBuild() {
   drawBoard(); drawCredits();
 }
 document.addEventListener('click', async (e) => {
-  const c = e.target.closest('[data-claim]'), jf = e.target.closest('[data-joinfirst]'), pr = e.target.closest('[data-promote]');
+  const c = e.target.closest('[data-claim]'), jf = e.target.closest('[data-joinfirst]');
   if (jf) { $('joinBox').scrollIntoView({ block: 'center' }); $('mname').focus(); return; }
   if (c) {
     c.disabled = true; const r = await api('', { do: 'claim', job: c.dataset.claim });
     if (!r.ok) { $('boardLine').textContent = r.say || 'Not claimed.'; c.disabled = false; drawBoard(); return; }
     S.me.job = r.job.job; S.me.thread = r.thread; $('boardLine').textContent = 'Yours: ' + r.job.job + '. Its thread is open in #work.';
     drawBoard(); location.hash = 'c=work&t=' + r.thread; return;
-  }
-  if (pr && S.me && S.me.kind === 'owner') {
-    pr.disabled = true; const r = await api('', { do: 'promote', id: Number(pr.dataset.promote) });
-    pr.textContent = r.ok ? 'A job: ' + r.job : (r.say || 'not made a job'); if (r.ok) { drawBoard(); openChannel(S.view.c, { keep: true }); }
   }
 });
 $('mjoin').addEventListener('submit', async (e) => {

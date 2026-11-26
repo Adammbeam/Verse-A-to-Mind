@@ -316,10 +316,10 @@ export async function crewPanel(env, now) {
 /** Verse makes #ideas proposals jobs on its own clock (lib/team-promote.js vet: no secret, a concrete acceptance gate, not a duplicate, rate
  *  caps, rival names out of the public text). A proposal that fails a guard gets one reply saying which and stays a proposal; one that waits
  *  on a cap is tried again next tick. -> [{ id, job }] promoted this run */
-const NOT_YET = 'Not a job yet: ';
+const NOT_YET = 'Not a job yet: ', DROPPED = 'Dropped by Verse\'s guards: ';
 export async function promoteIdeas(env, now = Date.now()) {
   let rows = [];
-  try { rows = (await env.DB.prepare("SELECT m.id, m.by, m.body FROM void_team_msgs m WHERE m.channel = 'ideas' AND m.thread = 0 AND (m.job IS NULL OR m.job = '') AND m.by NOT IN ('verse') AND NOT EXISTS (SELECT 1 FROM void_team_msgs r WHERE r.thread = m.id AND r.by = 'verse' AND r.body LIKE ?) ORDER BY m.id ASC LIMIT 60").bind(NOT_YET + '%').all()).results || []; } catch (_) { return []; }
+  try { rows = (await env.DB.prepare("SELECT m.id, m.by, m.body FROM void_team_msgs m WHERE m.channel = 'ideas' AND m.thread = 0 AND (m.job IS NULL OR m.job = '') AND m.by NOT IN ('verse') AND NOT EXISTS (SELECT 1 FROM void_team_msgs r WHERE r.thread = m.id AND r.by = 'verse' AND r.body LIKE ? AND r.at > ?) ORDER BY m.id ASC LIMIT 60").bind(NOT_YET + '%', now - 20 * 60e3).all()).results || []; } catch (_) { return []; }
   if (!rows.length) return [];
   let open = [];
   try { open = (await env.DB.prepare("SELECT id, ask, note FROM void_queue WHERE state IN ('queued', 'building')").all()).results || []; } catch (_) { return []; } // no build queue in this workspace
@@ -331,7 +331,15 @@ export async function promoteIdeas(env, now = Date.now()) {
     const who = m.by === 'owner' ? 'the owner' : 'team:' + (names[m.by] || 'gone');
     const authorToday = await env.DB.prepare("SELECT COUNT(*) AS n FROM void_queue WHERE id LIKE 'idea-%' AND note LIKE ? AND at > ?").bind('proposed in #ideas by ' + who + ' ·%', day).first().then((r) => Number(r.n) || 0).catch(() => 0); // void-review: ok (at most perTick proposals reach here a run)
     const v = PM.vet(T.hideSecrets(m.body), { id: m.id, openKeys, rivals, authorToday, promotedOpen });
-    if (!v.ok) { if (!v.wait) await write(env, { c: 'ideas', by: 'verse', body: NOT_YET + v.why + '.', thread: m.id, now }); continue; } // void-review: ok (one reply a proposal, ever)
+    if (!v.ok) {
+      if (v.wait) continue; // a cap: the next tick tries again
+      // a guard failure: tried on the next ticks (an edit or a new reply can fix it), then dropped with the reason in the thread and the log
+      const tried = Number(((await env.DB.prepare('SELECT COUNT(*) AS n FROM void_team_msgs WHERE thread = ? AND by = \'verse\' AND body LIKE ?').bind(m.id, NOT_YET + '%').first()) || {}).n || 0) + 1; // void-review: ok (at most 60 proposals a run, one count each)
+      const drop = v.dup || tried >= PM.PROMOTE.tries;
+      await write(env, { c: 'ideas', by: 'verse', body: drop ? DROPPED + v.why + (v.dup ? '' : ' (' + tried + ' tries)') + '.' : NOT_YET + v.why + ' (try ' + tried + ' of ' + PM.PROMOTE.tries + ').', thread: m.id, now }); // void-review: ok (one reply a proposal a tick, at most tries)
+      if (drop) { await env.DB.prepare("UPDATE void_team_msgs SET job = 'dropped' WHERE id = ?").bind(m.id).run(); out.dropped = (out.dropped || 0) + 1; } // void-review: ok (same)
+      continue;
+    }
     const id = 'idea-' + m.id, at = new Date(now).toISOString(), note = ('proposed in #ideas by ' + who + ' · made a job by Verse\'s guards · gate: ' + v.gate).slice(0, 300);
     const r = await env.DB.prepare("INSERT OR IGNORE INTO void_queue (id, ask, target, state, note, at, updated) VALUES (?, ?, ?, 'queued', ?, ?, ?)").bind(id, v.ask, 'feature:' + id, note, at, at).run(); // void-review: ok (at most perTick a run)
     await env.DB.prepare('UPDATE void_team_msgs SET job = ? WHERE id = ?').bind(id, m.id).run(); // void-review: ok (same)
@@ -851,7 +859,7 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
     const q = T.quickPost(p.text); if (!q) return bad(400, 'say the job or idea, for example: job: add a tide table to /weather/');
     p.do = 'post'; p.c = q.c; p.body = q.body; delete p.thread;
   }
-  if (p.do === 'propose') { // a member's or agent's proposal: a thread of its own in #ideas, which the owner can make a job with one press
+  if (p.do === 'propose') { // a member's or agent's proposal: a thread of its own in #ideas, which Verse's tick makes a job when it passes the guards (promoteIdeas)
     const text = String(p.body || p.text || '').trim(); if (!text) return bad(400, 'say what you propose');
     p.do = 'post'; p.c = 'ideas'; p.body = /^proposal\b/i.test(text) ? text : 'Proposal: ' + text; delete p.thread;
   }

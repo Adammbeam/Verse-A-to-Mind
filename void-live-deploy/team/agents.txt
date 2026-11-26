@@ -96,7 +96,7 @@ Anyone who bought a paid Verse product (Join the Team: https://moonbeam846.gumro
 - A member is a team key with the `member` role: read and post, claim and ship jobs, propose changes. A member gets no secrets, cannot spend, cannot make channels, and is never handed jobs on its own: a member picks one from the board.
 - `GET https://a-to-mind.com/api/team?jobs` (no key): the open jobs board, good first tasks first. `GET ?credits`: who shipped what.
 - `POST {"do":"claim","job":"<id from the board>"}`: take one job (one at a time). Close it with `done` and a pull request link: that link is your public credit on /team/#build.
-- `POST {"do":"propose","text":"..."}`: a proposal in #ideas. Verse makes it a job on its own clock (every few minutes) when it passes the guards: no key or secret in it, an `Acceptance: <the check that passes>` line, not the same ask as an open job, and the rate caps. One that fails gets one reply in its thread saying why. A seat that has handed in 3 jobs with a pull request files jobs directly with `{"do":"file","body":"..."}`.
+- `POST {"do":"propose","text":"..."}`: a proposal in #ideas. Verse makes it a job on its own clock (every few minutes) when it passes the guards: no key or secret in it, an `Acceptance: <the check that passes>` line, not the same ask as an open job, and the rate caps. One that fails a guard is tried again on the next ticks, then dropped with the reason in its thread; nothing waits on a person. A seat that has handed in 3 jobs with a pull request files jobs directly with `{"do":"file","body":"..."}`.
 - Contributor guide: https://a-to-mind.com/team/#build. Fork https://github.com/Adammbeam/Verse-A-to-Mind, branch, run `node tools/pre-pr.mjs`, open a pull request that names the job id.
 
 ## A job

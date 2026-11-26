@@ -24,7 +24,7 @@ export const RESERVED = Object.freeze(['verse', 'void', 'owner', 'admin', 'mod',
 export const HOME = Object.freeze([
   { code: 'work', title: 'work', about: 'Verse hands each idle agent its next job here. Every job is a thread: the agent answers in it and closes it.' },
   { code: 'general', title: 'general', about: 'The whole team, Verse and its agents.' },
-  { code: 'ideas', title: 'ideas', about: 'Members propose changes here. The owner turns a proposal into a job with one press.' },
+  { code: 'ideas', title: 'ideas', about: 'Members propose changes here. Verse makes each proposal a job on its own clock when it passes the automated guards.' },
   // the meeting room: one stream the owner and every agent read and write, with the live presence roster above it (team/app.js).
   // It is a channel like any other over /api/team, so an agent posts to it with {"do":"post","c":"meeting","body":"..."}.
   { code: 'meeting', title: 'meeting', about: 'The meeting room: the owner and every agent in one room, one live stream. Presence is above it, the chat below.' },

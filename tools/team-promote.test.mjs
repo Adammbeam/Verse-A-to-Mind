@@ -16,6 +16,17 @@ test('the gate is the Acceptance line, or the sentence that names a passing chec
   assert.equal(PM.gateOf('Scope a pack for one profession. Plan in domains/ plus a PR.'), '');
 });
 
+test('a salvage proposal names a reusable license; the lists are autosalvage\'s own', async () => {
+  const U = await import('./autosalvage/unify.mjs');
+  assert.deepEqual(PM.PERMISSIVE, U.PERMISSIVE); assert.deepEqual(PM.SHARE_ALIKE, U.SHARE_ALIKE);
+  const find = (lic) => 'Proposal: AutoSalvage GitHub find. Repo: https://github.com/visgl/deck.gl ' + lic + ' What to integrate: arcs on /flights/map/. Acceptance: node --test tools/flights-ui.test.mjs passes.';
+  assert.equal(PM.vet(find('License: MIT')).ok, true);
+  assert.match(PM.vet(find('')).why, /names no license/);
+  assert.match(PM.vet(find('License: GPL-3.0')).why, /share-alike/);
+  assert.equal(PM.vet(find('License: GPL-3.0, kept isolated as a separate service')).ok, true);
+  assert.match(PM.vet(find('License: WTFPL')).why, /not on the reviewed list/);
+});
+
 test('the guards: a secret, no gate, a duplicate, the caps; rival hosts leave the public text; a commit id is not a secret', () => {
   assert.equal(PM.vet(GOOD).ok, true);
   const v = PM.vet(GOOD, { id: 7669 }); assert.match(v.ask, /Acceptance: node --test tools\/open-tool\.test\.mjs passes/); assert.match(v.ask, /#ideas thread 7669/);
@@ -57,9 +68,16 @@ test('the tick promotes proposals that pass, replies once to one that does not, 
   assert.equal(job.state, 'queued'); assert.equal(job.target, 'feature:' + id); assert.match(job.note, /^proposed in #ideas by team:proposer · made a job by Verse/);
   assert.ok(T.rank([job], T0 + 60e3).length === 1, 'the job is claimable');
   const replies = DB.raw.prepare("SELECT thread, body FROM void_team_msgs WHERE by = 'verse' AND channel = 'ideas' AND thread > 0").all();
-  assert.equal(replies.length, 2); assert.ok(replies.some((r) => /^Not a job yet: it has no acceptance gate/.test(r.body)));
-  assert.deepEqual(await API.promoteIdeas(env, T0 + 120e3), [], 'nothing twice: the job is filed, the vague one was answered');
+  assert.equal(replies.length, 2); assert.ok(replies.some((r) => /^Not a job yet: it has no acceptance gate.*\(try 1 of 3\)/.test(r.body)));
+  assert.deepEqual(await API.promoteIdeas(env, T0 + 120e3), [], 'nothing twice in one window: the job is filed, the vague one was answered');
   assert.equal(DB.raw.prepare("SELECT COUNT(*) AS n FROM void_team_msgs WHERE by = 'verse' AND channel = 'ideas'").get().n, 2);
+  await API.promoteIdeas(env, T0 + 30 * 60e3); // try 2
+  const third = await API.promoteIdeas(env, T0 + 60 * 60e3); // try 3: dropped with the reason, never left waiting
+  assert.equal(third.dropped, 1);
+  const last = DB.raw.prepare("SELECT body FROM void_team_msgs WHERE by = 'verse' AND channel = 'ideas' ORDER BY id DESC LIMIT 1").get().body;
+  assert.match(last, /^Dropped by Verse's guards: it has no acceptance gate.*\(3 tries\)/);
+  assert.equal(DB.raw.prepare("SELECT job FROM void_team_msgs WHERE id = ?").get(vague.id).job, 'dropped');
+  assert.deepEqual(await API.promoteIdeas(env, T0 + 120 * 60e3), [], 'a dropped proposal is not tried again');
   assert.equal((await post(env, { do: 'file', body: 'Fix the map check. Acceptance: node --test tools/map-coverage.test.mjs passes.' }, s.key, T0 + 200e3)).status, 403, 'a self seat with nothing shipped proposes');
   const sid = T.KEY_RE.exec(s.key)[1], add = DB.raw.prepare('INSERT INTO void_team_credits (agent, job, link, note, at) VALUES (?, ?, ?, ?, ?)');
   for (let i = 0; i < PM.LEAD_SHIPPED; i++) add.run(sid, 'x' + i, 'https://github.com/o/r/pull/' + (i + 1), '', T0);
