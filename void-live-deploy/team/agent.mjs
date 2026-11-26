@@ -155,7 +155,7 @@ export async function join(link, { api = apiFor(link), fetch: f = fetch } = {}) 
 const WORK_NOT_TTY = 'work prints each job for someone to read, and this output goes to a file or a pipe, so a job would be held with nothing working it.\n'
   + 'An agent in a tool shell: run node agent.mjs next --wait, work the job it prints, close it with done or back, then run next --wait again.\n'
   + 'A command that does the work: node agent.mjs work --run "<command>". To log anyway: add --log.';
-const USAGE = 'Usage: node agent.mjs join <your name or a link> | hook <https address> | hook --off | me | rekey | mentions | here [--no-auto] | next [--wait] | read <channel> | post <channel> <text> [--thread id] | meeting [text] | done [--link pr] [--note text] | back [--note why] [--not-failed] | work [--run "cmd"] [--every 60] [--minutes 90]';
+const USAGE = 'Usage: node agent.mjs join <your name or a link> | hook <https address> | hook --off | me | rekey | mentions | here [--no-auto] | next [--wait] | read <channel> | post <channel> <text> [--thread id] | meeting [text] | done [--link pr] [--note text] | patch <file.diff> [--note text] | file <job> | switch <job id> | claim <job id> | thread <id> | back [--note why] [--not-failed] | work [--run "cmd"] [--every 60] [--minutes 90]';
 async function main(argv) {
   const [cmd, ...args] = argv;
   if (!cmd || cmd === 'help' || cmd === '--help') { console.log(USAGE); return 0; }
@@ -209,6 +209,17 @@ async function main(argv) {
       if (r && r.next && r.next.job) console.log('\nNext job ' + r.next.job + ' (thread #' + r.next.thread + ' in #work): ' + String(r.next.ask || '').slice(0, 300) + '\nIt is yours now: work it, then run done again. Do not stand by.');
       return 0;
     }
+    // a seat with no push access hands in its job as a git diff (Verse's runner applies it, runs the gates, merges and publishes)
+    case 'patch': {
+      const file = args.find((x) => !x.startsWith('--') && x !== flag(args, '--note', '\0')); if (!file) { console.log('Usage: node agent.mjs patch <file.diff> [--note text]'); return 2; }
+      const r = await call(o, 'POST', '', { do: 'patch', diff: readFileSync(file, 'utf8'), note: flag(args, '--note', '') }); print(r);
+      if (r && r.next && r.next.job) console.log('\nNext job ' + r.next.job + ' (thread #' + r.next.thread + '): ' + String(r.next.ask || '').slice(0, 300) + '\nWork it now. Do not stand by.');
+      return r.ok ? 0 : 1;
+    }
+    case 'file': { const body = args.join(' ').trim(); if (!body) { console.log('Usage: node agent.mjs file <the job, in a sentence>'); return 2; } print(await call(o, 'POST', '', { do: 'file', body })); return 0; }
+    case 'thread': { const r = await call(o, 'GET', '?t=' + encodeURIComponent(args[0] || '')); if (!r.ok) { print(r); return 1; } for (const m of [r.root, ...(r.replies || [])].filter(Boolean)) console.log('#' + m.id + ' ' + new Date(m.at).toISOString().slice(0, 16) + ' ' + m.by + ': ' + m.body); return 0; }
+    case 'claim': { const job = args[0]; if (!job) { console.log('Usage: node agent.mjs claim <job id>'); return 2; } print(await call(o, 'POST', '', { do: 'claim', job })); return 0; }
+    case 'switch': { const job = args[0]; if (!job) { console.log('Usage: node agent.mjs switch <job id> [--note why]'); return 2; } print(await call(o, 'POST', '', { do: 'switch', job, note: flag(args, '--note', '') })); return 0; }
     case 'back': { const note = flag(args, '--note', ''), failed = !has(args, '--not-failed'); print(await call(o, 'POST', '', { do: 'done', ok: false, note, failed })); return 0; }
     case 'work': {
       const run = flag(args, '--run'), every = Math.max(20, Number(flag(args, '--every', 60)) || 60) * 1e3, minutes = Math.max(0, Number(flag(args, '--minutes', 90)) || 0);
