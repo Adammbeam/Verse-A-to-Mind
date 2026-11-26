@@ -50,3 +50,27 @@ test('/tools.json fetches skills in parallel without duplicate fetches and cache
   const hitsAfter = [...hits.values()].reduce((a, b) => a + b, 0);
   assert.equal(hitsAfter, hitsBefore, 'in-isolate cache avoids re-fetching ASSETS');
 });
+
+import fs from 'node:fs';
+
+test('/tools.json serves prebuilt /tools.static.json in a single asset fetch and rewrites non-default origins (team-3565)', async () => {
+  const prebuilt = fs.readFileSync(new URL('../void-live-deploy/tools.static.json', import.meta.url), 'utf8');
+  const parsed = JSON.parse(prebuilt);
+  assert.ok(parsed.tools.length > 100, 'prebuilt tools.static.json holds 100+ tools');
+
+  const seen = [];
+  const ASSETS = {
+    fetch: async (rq) => {
+      const p = new URL(rq.url).pathname;
+      seen.push(p);
+      if (p === '/tools.static.json') return new Response(prebuilt, { status: 200 });
+      return new Response('', { status: 404 });
+    },
+  };
+  const r = await onRequestGet({ request: new Request('https://preview.example.com/tools.json'), env: { ASSETS } });
+  assert.equal(r.status, 200);
+  assert.deepEqual(seen, ['/tools.static.json'], 'single asset fetch only');
+  const body = await r.json();
+  assert.equal(body.mcp.endpoint, 'https://preview.example.com/api/mcp');
+  assert.equal(body.tools.length, parsed.tools.length);
+});
