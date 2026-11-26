@@ -1,6 +1,6 @@
 ---
 name: steward
-description: How to drive a pull request on atomeam/void-loop (Verse) to merged - the automerge label, Verse's review and its false positives, conflicts, a red suite, flakes. Read before acting on CI or review events on a Verse PR.
+description: How to drive a pull request on Adammbeam/Verse-A-to-Mind (Verse) to merged - the automerge label, Verse's review and its false positives, conflicts, a red suite, flakes. Read before acting on CI or review events on a Verse PR.
 ---
 
 # Driving a Verse PR to merged

@@ -92,7 +92,7 @@
   import { obituaryStatus, siteSlug, hasMemorial } from '/lib/obituary.js';
   const $ = (id) => document.getElementById(id);
   const get = (u) => fetch(u, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
-  const REPO = 'https://github.com/atomeam/void-loop/blob/main/';
+  const REPO = 'https://github.com/Adammbeam/Verse-A-to-Mind/blob/main/';
   let all = [], parity = {};
   async function draw() {
     const [inv, ev, par] = await Promise.all([get('/lap.items.json'), get('/tower.evidence.json'), get('/parity.json')]);

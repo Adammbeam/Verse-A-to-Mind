@@ -7,8 +7,8 @@ It is three runnable pieces, not a deployment diary: a self-healing autonomous p
 ## Try it in 60 seconds
 
 ```sh
-git clone https://github.com/atomeam/void-loop.git
-cd void-loop && npm ci
+git clone https://github.com/Adammbeam/Verse-A-to-Mind.git
+cd Verse-A-to-Mind && npm ci
 VOID_SKIP_BENCH=1 node tools/checks.mjs --changed
 ```
 
