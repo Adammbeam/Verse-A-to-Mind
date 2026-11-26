@@ -54,6 +54,7 @@ import { telemetryOf } from '../../lib/telemetry.js';
 import { isPass } from '../../lib/pass-mark.js';
 import { planOf, runBot, routeFree, freeLlm, loadRegistry } from '../../lib/answer-free.js';
 import { isJokeAsk, jokeAnswer } from '../../lib/joke-answer.js';
+import { metaAnswer, isMakeAsk } from '../../lib/meta-ask.js';
 import { everydayAnswer } from '../../lib/everyday-answer.js';
 import { worldAnswer } from '../../lib/world-answer.js';
 import { beforeOf, carries, points, FOLLOW_RULE, beforeBlock, mergeSources } from '../../lib/follow-ask.js';
@@ -478,6 +479,8 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
   if (isPayAsk(ask)) return Response.json({ answer: payAnswer(), sources: [], note: 'pay-honest' }); // verified payment facts only (lib/pay-honest.js)
   if (isPriceChangeAsk(ask)) return Response.json({ answer: priceLockAnswer(), sources: [], note: 'price-lock' }); // prices come only from store data (lib/price-lock.js)
   if (body.page && typeof body.page === 'object') return pageAnswer(request, env, ask, body.page);
+  // a request for a reasoning test, or a question about what Verse remembers, gets the test or the truth about memory (lib/meta-ask.js), never a search
+  { const m = metaAnswer(ask); if (m) { edge.mark = BYPASS; return Response.json({ ...m, at: new Date().toISOString() }); } }
   // a follow-up's earlier ask, from the visitor's device (lib/follow-ask.js): an answer written with it is theirs alone, never cached
   // only when the new ask actually follows it (lib/follow-ask.js carries): a self-contained ask is answered as asked, and the reply says which
   const offered = beforeOf(body, ask), before = offered && carries(ask, offered) ? offered : null;
@@ -522,7 +525,7 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
     const hit = masked || self || told || before ? null : await env.DB.prepare('SELECT answer, sources, at FROM void_answers WHERE id = ? AND at > ?').bind(key, new Date(Date.now() - TTL_DAYS * 864e5).toISOString()).first();
     // an answer cached before sources were filtered is filtered on the way out (lib/cite.js)
     // a cached answer that cites a caveat or a notation was written before lib/answer-honesty.js checked them: it is answered again, not served
-    if (hit && !isNoAnswer(hit.answer) && !citesUnbacked(hit.answer) && !talksLimits(hit.answer)) { const c = keepCited(dropFiller(dropUnbackedActs(hit.answer)) || hit.answer, JSON.parse(hit.sources)), out = { answer: c.answer, sources: linked(c.sources), at: hit.at, cached: true, source: 'cache:d1' }; if (edgeKeep) edgeKeep(out, hit.at); return Response.json(out); } // a refusal cached before this check is not served again
+    if (hit && !isNoAnswer(hit.answer) && !citesUnbacked(hit.answer) && !talksLimits(hit.answer) && !(isMakeAsk(ask) && hit.sources !== '[]')) { const c = keepCited(dropFiller(dropUnbackedActs(hit.answer)) || hit.answer, JSON.parse(hit.sources)), out = { answer: c.answer, sources: linked(c.sources), at: hit.at, cached: true, source: 'cache:d1' }; if (edgeKeep) edgeKeep(out, hit.at); return Response.json(out); } // a refusal cached before this check is not served again
   } catch (_) {}
   if (await rateLimited(request, env)) return Response.json({ answer: null, sources: [], note: 'slow down' }, { status: 429 });
   if (plan && plan.kind === 'api') { const r = await routeFree(ask, { env, registry: await loadRegistry(env, request.url) }).catch(() => null); if (r) return Response.json(r); } // out, failed or empty: the model answers
@@ -611,7 +614,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   // a follow-up that points back ("how was that mountain formed") also reads the earlier ask's sources, taken in turn with its own
   const follows = before && !self && !note && !isPaste(ask) ? before : null;
   const earlierP = follows && points(ask) ? sources(follows.ask).catch(() => []) : null; // searched beside the new ask's own, not after it
-  let src = self || isPaste(ask) || note ? [] : await bounded(sources(ask), SOURCES_MS, []); // a slow Wikipedia never holds the answer (lib/answer-speed.js)
+  let src = self || isPaste(ask) || note || isMakeAsk(ask) ? [] : await bounded(sources(ask), SOURCES_MS, []); // a slow Wikipedia never holds the answer (lib/answer-speed.js)
   if (earlierP) src = mergeSources([await bounded(earlierP, SOURCES_MS, []), src]);
   const srcAt = Date.now();
   const route = await settle(routeP, t0 + BUDGET_MS);

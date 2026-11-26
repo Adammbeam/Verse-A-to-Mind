@@ -9,7 +9,7 @@ import { PERSONA } from './persona.js';
 import { models, ANSWER_FALLBACK } from './models.js';
 // What Verse is trying to become, in its own words: a fact it always reads, humble, with no rival names and no boast.
 export const AIM = 'I aim to be the one place people need for the things they come to the web for, taking them on one kind of work at a time, doing each kind as well as the best place for that kind does, saying honestly where I still fall short, and keeping at it on my own.';
-const SELF_NOUN = /\b(wish\s*list|improvement budget|growth[- ]inbox|outcome cards?|scouting[- ]reports?|your (will|wants|skills|board|plans?|roadmap|growth|inbox|features?|backlog|priorit(y|ies)|frontier|open (asks|items|work)|asks|to-?do list)|about yourself)\b/i;
+const SELF_NOUN = /\b(wish\s*list|improvement budget|growth[- ]inbox|outcome cards?|scouting[- ]reports?|your (own )?(architecture|internals|inner workings|tech stack)|your (will|wants|skills|board|plans?|roadmap|growth|inbox|features?|backlog|priorit(y|ies)|frontier|open (asks|items|work)|asks|to-?do list)|about yourself)\b/i;
 // "your frontier" and "your open asks" (2026-11-25: "what is still open on your frontier?" got "nothing on the web"); a bare "frontier" (the airline, the final one) stays a question
 // "Verse" (once "Verse") the product, capitalised, or a-to-mind; never C's void pointer / void function
 const NAMED = /\bVoid\b|\bVerse\b|\ba-to-mind\b/;
