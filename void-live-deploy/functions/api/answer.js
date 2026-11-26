@@ -27,7 +27,7 @@ import { PAID_MODEL, BUDGET_MS, STRONG_TIMEOUT_MS, SKILLS, classify, settle, pai
 import { nearOf } from '../../lib/near-miss.js';
 import { clefRoute, clefOn, mergeRoute, clefYesNo } from '../../lib/clef.js';
 import { recordShortfall, reasonOf } from '../../lib/shortfall.js';
-import { isSelfAsk, isCardCorrection, readSelf, selfFacts, cardLists, SELF_RULE, OWN_CARD_RULE } from '../../lib/self-context.js';
+import { isSelfAsk, isCardCorrection, readSelf, selfFacts, cardLists, SELF_RULE, OWN_CARD_RULE, withAim } from '../../lib/self-context.js';
 import { ownCardAnswer, fetchPulls, keptCards } from '../../lib/own-card.js';
 import { ASK_MAX, QUERY_MAX, supportedOnly, hasCorrection, CORRECTION_RULE, ACT_RULE, FILLER_RULE, dropUnbackedActs, dropFiller, dropErrataVoice, INVENT_RULE, dropUnbackedClaims, citesUnbacked, titledReadings } from '../../lib/answer-honesty.js';
 import { measureOf, measureRule, withMeasure } from '../../lib/measure-ask.js';
@@ -533,7 +533,8 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
   if (modelsOn(env)) return modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, told, edgeKeep, before, !!offered);
   if (self) {
     // no model: the facts themselves are the answer (Wikipedia knows nothing about Verse)
-    const facts = selfFacts(await readSelf(env, new URL(request.url).origin));
+    const got = await readSelf(env, new URL(request.url).origin);
+    const facts = withAim(selfFacts(got), got && got.self, ask);
     if (facts) return Response.json({ answer: facts, sources: [], at: new Date().toISOString(), self: true });
   }
   if (told) return Response.json({ answer: 'From what you told me:\n' + told.map((l) => '• ' + l).join('\n'), sources: [], at: new Date().toISOString(), told: told.length });
@@ -721,7 +722,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
       const paid = answer ? answer : access.model ? await tryPaid(access, 'free allowance out') : '';
       if (!paid) {
         // no paid path: the open-web answer, as with the switch off (for an ask about Verse: its facts)
-        const web = own ? await ownBody('') : self ? facts : told ? 'From what you told me:\n' + told.map((l) => '• ' + l).join('\n') : fromWeb(src);
+        const web = own ? await ownBody('') : self ? withAim(facts, (await selfP) && (await selfP).self, ask) : told ? 'From what you told me:\n' + told.map((l) => '• ' + l).join('\n') : fromWeb(src);
         await log({ model: null, outcome: outcome + '; model busy, open web' + (access.model ? '' : '; paid: ' + access.why), would: PAID_MODEL });
         if (!web) return Response.json({ answer: null, sources: [], note: 'nothing on the web', route: route.kind, ...nearOut });
         if (own) keepCard(web);
@@ -762,6 +763,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   if (sectioned && src[0] && answer) answer = grounded(answer, src[0].text); // a list-page section: only what its text says
   answer = scrubOut(answer, env); // no env value or key shape leaves in a model's words, whatever the model was told (lib/keeper.js)
   if (own) { answer = scrubOut(await ownBody(answer), env); keepCard(answer); } // the lead the note gave reason for, then the lists from my records
+  if (self) { const got = await selfP; answer = withAim(answer, got && got.self, ask); } // the aim is composed in code, ahead of or alongside the model's words
   const at = new Date().toISOString();
   // the cache write finishes after the answer has gone out (waitUntil), not before: nobody waits on D1 for an answer they already have
   if (!masked && !self && !told && !before) try {

@@ -171,12 +171,27 @@ export async function aimIdeaJobs(env, now) {
   }
   return aimed;
 }
+const SLOT_WHY = 'Set aside: open more than 7 days, to make a slot for a job Verse filed from its current floor.';
+async function setAsideWant(env, w, now, why) {
+  const at = new Date(now).toISOString();
+  await env.DB.prepare("UPDATE void_team_wants SET state = 'set aside', checked = ? WHERE key = ?").bind(now, w.key).run(); // void-review: ok (at most one stale open want a filing, to free a MAX_OPEN slot)
+  if (w.job) await env.DB.prepare("UPDATE void_queue SET state = 'set aside', note = ?, updated = ? WHERE id = ? AND state IN ('queued', 'building')").bind(String(why).slice(0, 300), at, w.job).run().catch(() => null); // void-review: ok (same want)
+  if (w.thread) await crewWrite(env, { c: 'work', by: 'verse', thread: w.thread, now, body: why });
+}
 async function fileWants(env, wants, bots, now) {
-  const { results } = await env.DB.prepare('SELECT key, state FROM void_team_wants').all();
-  const have = new Set(results.map((r) => r.key)), open = results.filter((r) => r.state === 'open').length, filed = [];
+  const { results } = await env.DB.prepare('SELECT key, state, filed, job, thread, metric, lane FROM void_team_wants').all();
+  const have = new Set(results.map((r) => r.key));
+  let openRows = (results || []).filter((r) => r.state === 'open');
+  const filed = [];
   for (let w of wants) {
-    if (filed.length >= C.FILE_PER_TICK || open + filed.length >= C.MAX_OPEN) break;
+    if (filed.length >= C.FILE_PER_TICK) break;
     if (have.has(w.key)) continue;
+    if (openRows.length + filed.length >= C.MAX_OPEN) {
+      const drop = C.yieldFor(w, openRows, now);
+      if (!drop) break;
+      await setAsideWant(env, drop, now, SLOT_WHY);
+      openRows = openRows.filter((r) => r.key !== drop.key);
+    }
     const j = { ...C.jobOf(w) }, at = new Date(now).toISOString(), bot = bots.find((b) => b.lane === w.lane) || C.byLane(w.lane);
     const had = w.target ? await adoptable(env, w.target) : null;
     if (had) { j.id = had.id; w = { ...w, metric: { ...w.metric, id: 'joblive:' + had.id } }; } // the lane's own job builds it: no second job

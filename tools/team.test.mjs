@@ -55,6 +55,22 @@ test('the kinds an agent takes are the coder\'s, weighted as the conductor weigh
   assert.equal(LIMITS.team.rpm > 0 && LIMITS.team.body >= 8000, true, 'the guard has a line for /api/team');
 });
 
+test('a self-filed job is ahead of stale background work, never ahead of the owner, and only while it is itself under 7 days old', () => {
+  const iso = (ms) => new Date(ms).toISOString();
+  const self = { id: 'want-floor-travel-journey-do-the-main-job', ask: 'Close the open journey on the travel floor', target: 'versus:want-floor-travel-journey-do-the-main-job', state: 'queued', note: "wanted by Verse's brain · measured by journey", at: iso(T0 - 1 * 864e5) };
+  const owner = { id: 'team-9', ask: 'the owner asked', target: 'feature:team-9', state: 'queued', at: iso(T0 - 0.5 * 864e5) };
+  const staleHeal = { id: 'j-old-heal', ask: 'an old failing check', target: 'heal:old', state: 'queued', at: iso(T0 - 8 * 864e5) };
+  const oldSelf = { ...self, id: 'want-floor-old', at: iso(T0 - 8 * 864e5) };
+  // (a) a fresh owner ask beats a self job
+  assert.equal(T.rank([self, owner], T0)[0].id, 'team-9');
+  // (b) a self job beats an 8-day-old background job
+  assert.equal(T.rank([staleHeal, self], T0)[0].id, self.id);
+  // (c) an 8-day-old self job does not beat it (usual worth: heal before versus)
+  assert.deepEqual(T.rank([staleHeal, oldSelf], T0).map((j) => j.id), ['j-old-heal', 'want-floor-old']);
+  assert.equal(T.WEEK_MS, 7 * 864e5);
+  assert.ok(T.selfFiled(self) && T.selfFiled({ id: 'x', note: "wanted by Verse's brain", target: 'feature:x' }) && !T.selfFiled(staleHeal));
+});
+
 test('a body is escaped before it is formatted: no tag, attribute or script survives; real members and channels light up', () => {
   const h = T.render('<img src=x onerror=alert(1)> *bold* `<b>` @Scout @nobody #work #nochan https://example.com/a?b=1&c="x" javascript:alert(1)', { names: ['scout'], channels: ['work'] });
   assert.ok(!/<img|<b>&lt;|href="javascript/.test(h), h);
