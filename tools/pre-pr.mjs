@@ -15,6 +15,8 @@ import { APPEND_JSON, APPEND_TEXT } from './records.mjs';
 import { COMMON } from './collide.mjs';
 import { publicRivalHits } from './rival-public.mjs';
 import { wipeRefusal, skillIndexGaps, allowWipe } from './wipe-guard.mjs';
+// the branch a pull request goes into: origin/main, or PRE_PR_BASE (e.g. verse/main in a clone whose origin is the old repo; set GH_REPO to match)
+const BASE = process.env.PRE_PR_BASE || 'origin/main';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const git = (args) => spawnSync('git', args, { cwd: root, encoding: 'utf8', maxBuffer: 64 << 20, timeout: 120e3 });
@@ -27,13 +29,13 @@ const NOT_COUNTED = [/^growth\/entries\//, /^void-live-deploy\/incidents\/entrie
 export const SHARED_OK = [...new Set([...COMMON, ...APPEND_JSON, ...APPEND_TEXT, 'docs/MAP.md', 'tools/families.mjs'])];
 
 /** commits on `upstream` that `head` does not have. Null when git cannot say. */
-export function behindCount(upstream = 'origin/main', head = 'HEAD', run = git) {
+export function behindCount(upstream = BASE, head = 'HEAD', run = git) {
   const r = run(['rev-list', '--count', head + '..' + upstream]);
   if (r.status !== 0) return null;
   return Number(String(r.stdout || '').trim());
 }
 
-export function branchFiles(upstream = 'origin/main', run = git) {
+export function branchFiles(upstream = BASE, run = git) {
   const r = run(['diff', '--name-only', upstream + '...HEAD']);
   if (r.status !== 0) return null;
   return String(r.stdout || '').split('\n').map((s) => s.trim()).filter(Boolean);
@@ -95,8 +97,8 @@ function main() {
   const behind = behindCount();
   if (behind === null) { console.error('pre-pr: fetch origin main first (git fetch origin main)'); process.exit(2); }
   const files = branchFiles();
-  const numstat = git(['diff', '--numstat', '--ignore-cr-at-eol', 'origin/main...HEAD']); // a line-ending-only change (CRLF to LF) is not a changed line, so the cap never blocks a normalisation
-  if (!files || numstat.status !== 0) { console.error('pre-pr: could not read the diff against origin/main'); process.exit(2); }
+  const numstat = git(['diff', '--numstat', '--ignore-cr-at-eol', BASE + '...HEAD']); // a line-ending-only change (CRLF to LF) is not a changed line, so the cap never blocks a normalisation
+  if (!files || numstat.status !== 0) { console.error('pre-pr: could not read the diff against ' + BASE); process.exit(2); }
   const prs = process.env.PRE_PR_OFFLINE === '1' ? null : openPrs();
   const branch = String(git(['rev-parse', '--abbrev-ref', 'HEAD']).stdout || '').trim();
   const head = process.env.PRE_PR_BRANCH || branch;
@@ -118,15 +120,15 @@ function main() {
     const indexOk = !needIndex || /index\.json matches/.test(text);
     if (outs.every((r) => r.status === 0) && !/lags/.test(text) && indexOk) fresh.push(...BOOK);
   }
-  const del = git(['diff', '--name-only', '--diff-filter=D', 'origin/main...HEAD']);
-  const tree = git(['ls-tree', '-r', '--name-only', 'origin/main']);
+  const del = git(['diff', '--name-only', '--diff-filter=D', BASE + '...HEAD']);
+  const tree = git(['ls-tree', '-r', '--name-only', BASE]);
   const deleted = del.status === 0 ? String(del.stdout || '').split('\n').filter(Boolean).length : 0;
   const treeSize = tree.status === 0 ? String(tree.stdout || '').split('\n').filter(Boolean).length : 0;
   let indexNames = [];
   try {
     const src = (files || []).includes('void-live-deploy/skills/index.json')
       ? git(['show', 'HEAD:void-live-deploy/skills/index.json'])
-      : git(['show', 'origin/main:void-live-deploy/skills/index.json']);
+      : git(['show', BASE + ':void-live-deploy/skills/index.json']);
     if (src.status === 0) indexNames = JSON.parse(src.stdout);
   } catch (_) {}
   const out = refusals({ behind, files, numstat: numstat.stdout, prs, self, fresh, deleted, treeSize, allowWipe: allowWipe(), indexNames });
