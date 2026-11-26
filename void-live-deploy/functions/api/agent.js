@@ -83,7 +83,7 @@ async function pipelineAnswer(env, origin, ask) {
 // 429 or a spent quota), then, only when all of those are out and the pot holds money, the strong model paid for from the pot. Thinking stays off on Workers AI: with
 // it on, Gemma 4 can spend the whole budget and return nothing. Each answer is logged with who gave it and what it cost (a step, the task's tier, a per-provider count).
 async function replyFrom(env, db, id, tier, bot, ask, opts = {}) {
-  const messages = [{ role: 'system', content: answerBrief(bot) }, { role: 'user', content: ask }];
+  const messages = [{ role: 'system', content: answerBrief(bot, ask) }, { role: 'user', content: ask }];
   const runOpts = { messages, max_tokens: 700, chat_template_kwargs: { enable_thinking: false }, reasoning_effort: 'low' };
   const said = async (via, name, model, cents) => { await countVia(env, via); await step(db, id, 'Answered by ' + name + ' (' + model + '): ' + (cents ? 'paid from the pot, ' + cents + ' cent' + (cents === 1 ? '' : 's') : 'free, 0 cents') + '.', { tier: (cents ? 'paid' : 'free') + ' via ' + via }); };
   let why = '';
