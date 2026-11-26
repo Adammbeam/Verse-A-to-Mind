@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" class="vs-tool">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phase · Verse</title>
+<meta name="description" content="Verse as a see-through layer over a tab, a window, a screen or a video: read what is under it, put a character or yourself into it, record a clip. It stays on your device.">
+<link rel="canonical" href="https://a-to-mind.com/phase/">
+<meta name="verse-handoff" content="in: text; out: image, text">
+<meta property="og:title" content="Phase · Verse">
+<meta property="og:url" content="https://a-to-mind.com/phase/">
+<meta property="og:image" content="https://a-to-mind.com/og.png">
+<style>
+  html, body { margin: 0; height: 100%; background: #050509; color: #e8ecf4; font: 15px/1.45 system-ui, sans-serif; overflow: hidden; }
+  #under { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; }
+  #view { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: contain; touch-action: none; }
+  /* the glass: a dim layer you see through; it darkens only while nothing is shared */
+  #glass { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(#0b0b1466, #050509cc); transition: opacity .4s; }
+  body.seeing #glass { opacity: .25; }
+  .dock { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); width: min(720px, calc(100% - 20px)); box-sizing: border-box;
+    background: #10121cbb; backdrop-filter: blur(10px); border: 1px solid #ffffff22; border-radius: 16px; padding: 10px 12px; }
+  .row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: 4px 0; }
+  button, select, input[type=text] { font: inherit; padding: 6px 12px; border-radius: 999px; border: 1px solid #ffffff33; background: #ffffff12; color: inherit; cursor: pointer; }
+  input[type=text] { cursor: text; flex: 1; min-width: 120px; }
+  button[aria-pressed=true] { background: #d7e4ff; color: #111; }
+  .sub { color: #a9b0c4; font-size: 13px; }
+  #out { max-height: 32vh; overflow: auto; white-space: pre-wrap; }
+  #out mark { background: #ffe066; color: #111; }
+  a { color: #9cc0ff; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<video id="under" muted playsinline autoplay></video>
+<canvas id="view" aria-label="What Phase sees, with anything you placed on it"></canvas>
+<div id="glass"></div>
+<div class="dock" role="region" aria-label="Phase">
+  <div class="row">
+    <button id="share" data-phase-share>Share a tab or screen</button>
+    <label><button id="file-btn" type="button">Open a video</button><input id="file" type="file" accept="video/*,image/*" hidden></label>
+    <span class="sub" id="status" role="status" aria-live="polite">Phase sees only what you share. It stays on this device.</span>
+  </div>
+  <div class="row" role="tablist" aria-label="Modes">
+    <button data-mode="read" aria-pressed="true">Read and act</button>
+    <button data-mode="compose" aria-pressed="false">Step in</button>
+    <button data-mode="play" aria-pressed="false">Play as P2</button>
+    <button data-mode="satchel" aria-pressed="false">Satchel</button>
+  </div>
+  <div id="panel"></div>
+  <div id="out" class="sub" aria-live="polite"></div>
+</div>
+<script type="module" src="/phase/app.js"></script>
+<script src="/visit.js" defer></script>
+</body>
+</html>
