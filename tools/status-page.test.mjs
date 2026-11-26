@@ -82,3 +82,14 @@ test('the panel times Verse\'s pages and its APIs, every probe a cheap read, and
   const a = readFileSync(new URL('../void-live-deploy/autopilot/app.js', import.meta.url), 'utf8');
   assert.match(a, /probeSummary/); assert.match(a, /APIs and feeds/);
 });
+
+import fs from 'node:fs';
+test('hourly-deploy-green guards live Pages /build.json directly rather than a parked GitHub badge', () => {
+  const hourly = JSON.parse(fs.readFileSync(new URL('../automations/hourly.json', import.meta.url), 'utf8'));
+  const rule = hourly.rules.find((r) => r.id === 'hourly-deploy-green');
+  assert.ok(rule, 'hourly-deploy-green rule exists');
+  assert.equal(rule.do[0].watch.url, 'https://a-to-mind.com/build.json');
+  const g = S.GUARDS.find((x) => x.id === 'hourly-deploy-green');
+  assert.equal(g.page, true);
+  assert.ok(!/GitHub badge/i.test(g.what));
+});

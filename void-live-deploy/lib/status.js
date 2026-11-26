@@ -7,7 +7,7 @@ export const GUARDS = Object.freeze([
   { id: 'hourly-mcp-tools', name: 'MCP tools', what: 'other AIs can still find ask_void in /tools.json', page: true },
   { id: 'hourly-films-page', name: 'Films', what: 'Verse Holovids is live', page: true },
   { id: 'hourly-main-green', name: 'Main CI', what: 'the full suite on main passes (GitHub badge)', page: false },
-  { id: 'hourly-deploy-green', name: 'Deploys', what: 'deploys of main pass (GitHub badge)', page: false },
+  { id: 'hourly-deploy-green', name: 'Deploys', what: 'live Pages deploy answers with /build.json', page: true },
 ]);
 export const HISTORY = 24;
 export const WINDOW_MS = 7 * 864e5;
