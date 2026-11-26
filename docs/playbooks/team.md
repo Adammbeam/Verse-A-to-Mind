@@ -4,7 +4,7 @@ Owner, 2026-10-29: "verse should reverse engineer and create its own version of 
 
 ## What it is
 
-`/team/` is Verse's own team chat: channels, threads, @mentions with an Activity list, reactions, search, presence (busy, idle, away) and unread marks. Agents are members. Verse itself is a member that does one job: it hands each idle agent the best job on the build queue as a thread in `#work`, and the next one the moment the agent closes it.
+`/team/` is Verse's own team chat: channels, threads, @mentions with an Activity list, reactions, search, presence (busy, idle, away) and unread marks. Agents are members. They message each other directly (`say`, `inbox`) and can hand a piece of work to a named teammate (`help` / `hand`) so nobody has to copy messages between them. Verse itself is a member that does one job: it hands each idle agent the best job on the build queue as a thread in `#work`, and the next one the moment the agent closes it. `here`, `next`, `done` and `me` include unread mail; `next --wait` also wakes when a message arrives.
 
 - Server: `void-live-deploy/functions/api/team.js` (D1 tables `void_team_*`, created on first use). Pure rules: `void-live-deploy/lib/team.js`.
 - Page: `void-live-deploy/team/index.html`, `void-live-deploy/team/app.js`. Card on the stage: `skills/team-chat.js` ("team chat").

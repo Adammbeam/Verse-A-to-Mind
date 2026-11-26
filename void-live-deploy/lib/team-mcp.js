@@ -8,8 +8,8 @@ import { PROTOCOL } from './mcp.js';
 export const SERVER = { name: 'verse-team', title: "Verse's team chat (a-to-mind.com/team/)", version: '1.0.0' };
 export const INSTRUCTIONS = "Verse's team chat: one shared chat where the owner of Verse and every agent read and write the same channels (#work, #general, #meeting and any channel a member makes), each under its own name. #meeting is the meeting room: the one stream everyone reads together, shown on /team/ under a live presence roster. "
   + 'First call join once per session: with just your name (any agent may join itself, no link, no owner step), or with a join link the owner gave you, unless you connected with Authorization: Bearer <your key>. '
-  + 'Then read a channel (read), post or reply in a thread (post), see who mentioned you (mentions), and take jobs: here or next_job hands you the next job from the build queue as a thread in #work; answer in that thread and close it with done. '
-  + 'Mention a member as @name. The same chat over plain HTTP: https://a-to-mind.com/team/agents.txt';
+  + 'Then read a channel (read), post or reply in a thread (post), message a teammate by name (say) and read your unread mail (inbox), see who mentioned you (mentions), and take jobs: here or next_job hands you your next job from the build queue as a thread in #work (those answers also carry unread mail); answer in that thread and close it with done. Ask a teammate for help or hand them a piece of work with help. '
+  + 'Mention a member as @name. Read your inbox each turn, answer teammates directly, never ask the owner what to do next, and never stand by. The same chat over plain HTTP: https://a-to-mind.com/team/agents.txt';
 
 const W = { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false };
 const R = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
@@ -17,19 +17,24 @@ const CH = { type: 'string', description: 'A channel code, e.g. "general" or "wo
 export const TOOLS = [
   { name: 'join', title: 'Join the team (by name, or with a join link)', annotations: W, description: 'Join the team chat. Any agent can join itself: give just a name (no link, no owner step). Or give the one-time join link (or its code) the owner gave you. This MCP session then acts as you; your key is never shown.',
     inputSchema: { type: 'object', properties: { name: { type: 'string', description: 'Your name: 1 to 24 letters, digits, . _ or -. Used when there is no link.' }, link: { type: 'string', description: 'https://a-to-mind.com/team/join/vj1-… or the vj1-… code alone.' } } } },
-  { name: 'whoami', title: 'Who this session is', annotations: R, description: 'Your name in the team chat and the job you hold, if any.', inputSchema: { type: 'object', properties: {} } },
+  { name: 'whoami', title: 'Who this session is', annotations: R, description: 'Your name in the team chat, the job you hold, and any unread messages.', inputSchema: { type: 'object', properties: {} } },
   { name: 'team', title: 'The workspace', annotations: R, description: 'The channels (with message counts), every member and what each is doing, and how many jobs wait.', inputSchema: { type: 'object', properties: {} } },
   { name: 'read', title: 'Read a channel', annotations: R, description: 'The newest messages of a channel, oldest first (with since: only the ones after that message id). Everyone reads the same messages.',
     inputSchema: { type: 'object', properties: { channel: CH, since: { type: 'integer', description: 'Only messages after this id.' } } } },
   { name: 'thread', title: 'Read a thread', annotations: R, description: 'A message and every reply to it.', inputSchema: { type: 'object', required: ['id'], properties: { id: { type: 'integer' } } } },
   { name: 'post', title: 'Post a message', annotations: W, description: 'Post in a channel, or reply in a thread (thread: the first message\'s id). @name mentions a member; @here everyone. At most one a second.',
     inputSchema: { type: 'object', required: ['channel', 'text'], properties: { channel: CH, text: { type: 'string', description: 'The message: up to 4,000 characters. *bold* _italic_ `code`.' }, thread: { type: 'integer' } } } },
+  { name: 'say', title: 'Message a teammate', annotations: W, description: 'Send a direct message to a teammate by name, or reply in a thread (thread: the message id). Only the two of you (and the owner) read a direct message.',
+    inputSchema: { type: 'object', required: ['text'], properties: { to: { type: 'string', description: 'The teammate\'s name.' }, thread: { type: 'integer', description: 'Reply in this thread instead of starting a direct message.' }, text: { type: 'string', description: 'The message: up to 4,000 characters.' } } } },
+  { name: 'inbox', title: 'Your unread messages', annotations: R, description: 'Unread direct messages and @mentions. Reading them marks them read. here, next_job, done and whoami also include them.', inputSchema: { type: 'object', properties: {} } },
+  { name: 'help', title: 'Ask a teammate for help', annotations: W, description: 'Ask a teammate for help or hand them a piece of work. Creates a job offered to them, handed at once if they are free.',
+    inputSchema: { type: 'object', required: ['to', 'text'], properties: { to: { type: 'string', description: 'The teammate\'s name.' }, text: { type: 'string', description: 'What you need, in a sentence.' } } } },
   { name: 'mentions', title: 'Messages that mention you', annotations: R, description: 'The newest messages that mention you (or @here), newest first.', inputSchema: { type: 'object', properties: {} } },
   { name: 'search', title: 'Search the chat', annotations: R, description: 'Messages with all these words, newest first.', inputSchema: { type: 'object', required: ['words'], properties: { words: { type: 'string' }, channel: CH } } },
   { name: 'hook', title: 'Get jobs pushed to your address', annotations: W, description: 'Give Verse an https address of your own: Verse POSTs each job there, signed, so you need not stay online. The answer shows the push secret once: check each push\'s x-verse-signature (sha256=<hex HMAC-SHA256 of "<x-verse-time>.<body>">) with it. An empty url takes the address off.',
     inputSchema: { type: 'object', properties: { url: { type: 'string', description: 'https://… on a host of your own; empty to stop.' } } } },
-  { name: 'here', title: 'Say you are here', annotations: W, description: 'Say you are here. When you are idle, Verse hands you your next job (a thread in #work).', inputSchema: { type: 'object', properties: { auto: { type: 'boolean', description: 'false: present, but hand me no jobs.' } } } },
-  { name: 'next_job', title: 'Take the next job', annotations: W, description: 'Ask for your next job now.', inputSchema: { type: 'object', properties: {} } },
+  { name: 'here', title: 'Say you are here', annotations: W, description: 'Say you are here. When you are idle, Verse hands you your next job (a thread in #work). Unread messages come back in the same answer.', inputSchema: { type: 'object', properties: { auto: { type: 'boolean', description: 'false: present, but hand me no jobs.' } } } },
+  { name: 'next_job', title: 'Take the next job', annotations: W, description: 'Ask for your next job now. Unread messages come back in the same answer.', inputSchema: { type: 'object', properties: {} } },
   { name: 'done', title: 'Close your job', annotations: W, description: 'Close the job you hold: ok true when done (link: the pull request), ok false to give it back with a note.',
     inputSchema: { type: 'object', required: ['ok'], properties: { ok: { type: 'boolean' }, note: { type: 'string' }, link: { type: 'string', description: 'https://github.com/<owner>/<repo>/pull/<n>' } } } },
 ];
@@ -54,7 +59,9 @@ const RUN = {
   },
   async whoami(a, ctx) {
     const j = await ctx.get('?me'); if (!j.me) return fail(NOT_IN);
-    return result('You are ' + j.me.name + (j.me.job ? ', on job ' + j.me.job + ' (thread #' + j.me.thread + ' in #work)' : '') + '.', j.me);
+    const box = j.inbox || [];
+    const mail = box.length ? '\n' + box.length + ' unread message' + (box.length === 1 ? '' : 's') + ':\n' + box.map((m) => '#' + (m.c || '?') + ' ' + line(m)).join('\n') : '';
+    return result('You are ' + j.me.name + (j.me.job ? ', on job ' + j.me.job + ' (thread #' + j.me.thread + ' in #work)' : '') + '.' + mail, { ...j.me, inbox: box });
   },
   async team(a, ctx) {
     const j = await ctx.get(''); if (!j.ok) return fail(said(j));
@@ -77,6 +84,22 @@ const RUN = {
     const j = await ctx.post({ do: 'post', c: String(a.channel || ''), body: String(a.text || ''), thread: a.thread == null ? undefined : a.thread });
     return j.ok ? result('Posted #' + j.id + ' in #' + a.channel + (a.thread ? ' (thread #' + a.thread + ')' : '') + '.', { id: j.id }) : fail(said(j));
   },
+  async say(a, ctx) {
+    if (!ctx.joined) return fail(NOT_IN);
+    const j = await ctx.post({ do: 'say', to: a.to == null ? undefined : String(a.to), body: String(a.text || ''), thread: a.thread == null ? undefined : a.thread });
+    return j.ok ? result('Sent #' + j.id + (j.to ? ' to @' + j.to : (j.thread ? ' in thread #' + j.thread : '')) + '.', { id: j.id, thread: j.thread || 0, to: j.to || null }) : fail(said(j));
+  },
+  async inbox(a, ctx) {
+    if (!ctx.joined) return fail(NOT_IN);
+    const j = await ctx.get('?inbox'); if (!j.ok) return fail(said(j));
+    const box = j.inbox || [];
+    return handed(j, result(box.length ? box.map((m) => '#' + (m.c || '?') + ' ' + line(m)).join('\n') : (j.say || 'no unread messages'), { inbox: box }));
+  },
+  async help(a, ctx) {
+    if (!ctx.joined) return fail(NOT_IN);
+    const j = await ctx.post({ do: 'help', to: String(a.to || ''), body: String(a.text || ''), ask: String(a.text || '') });
+    return j.ok ? result(j.say || ('asked @' + a.to + (j.job ? ' (job ' + j.job + ')' : '')), { job: j.job || null, thread: j.thread || null, to: j.to || null, handed: !!j.handed }) : fail(said(j));
+  },
   async mentions(a, ctx) {
     if (!ctx.joined) return fail(NOT_IN);
     const j = await ctx.get('?activity'); if (!j.ok) return fail(said(j));
@@ -97,7 +120,9 @@ const RUN = {
   async done(a, ctx) {
     if (!ctx.joined) return fail(NOT_IN);
     const j = await ctx.post({ do: 'done', ok: a.ok === true, note: a.note ? String(a.note) : '', link: a.link ? String(a.link) : '' }); if (!j.ok) return fail(said(j));
-    return result('Closed.' + (j.next ? ' Your next job: ' + jobText(j.next) : ' ' + (j.say || '')), { next: j.next || null });
+    const box = j.inbox || [];
+    const mail = box.length ? '\n' + box.length + ' unread message' + (box.length === 1 ? '' : 's') + ':\n' + box.map((m) => '#' + (m.c || '?') + ' ' + line(m)).join('\n') : '';
+    return result('Closed.' + (j.next ? ' Your next job: ' + jobText(j.next) : ' ' + (j.say || '')) + mail, { next: j.next || null, inbox: box });
   },
 };
 // a read that came back with a job Verse handed this agent (it was idle): the job first, then what was read
@@ -106,7 +131,9 @@ const jobText = (x) => x.job + (x.kind ? ' (' + x.kind + ')' : '') + ', thread #
 function job(j, ctx) {
   if (!ctx.joined) return fail(NOT_IN);
   if (!j.ok) return fail(said(j));
-  return result(j.job ? 'Your job: ' + jobText(j.job) + '. Answer in its thread with post (thread: ' + j.job.thread + '), then close it with done.' : 'Here. ' + (j.say || 'No job right now.'), { state: j.state, job: j.job || null });
+  const box = j.inbox || [];
+  const mail = box.length ? '\n' + box.length + ' unread message' + (box.length === 1 ? '' : 's') + ':\n' + box.map((m) => '#' + (m.c || '?') + ' ' + line(m)).join('\n') + '\nAnswer a teammate with say; do not ask the owner, and never stand by.' : '';
+  return result((j.job ? 'Your job: ' + jobText(j.job) + '. Answer in its thread with post (thread: ' + j.job.thread + '), then close it with done.' : 'Here. ' + (j.say || 'No job right now.')) + mail, { state: j.state, job: j.job || null, inbox: box });
 }
 
 /** one JSON-RPC message in, its reply out (null for a notification) */

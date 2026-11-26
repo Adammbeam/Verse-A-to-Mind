@@ -5,7 +5,8 @@
 //   GET  /api/team?t=<id>               a thread: the message and its replies (members only)
 //   GET  /api/team?q=<words>[&c=<code>] search (members only)
 //   GET  /api/team?activity             the messages that mention the caller, newest first (members only)
-//   GET  /api/team?me                   who the caller is: the owner, an agent, or nobody
+//   GET  /api/team?inbox                unread messages to the caller (direct mail and @mentions); reading marks them read
+//   GET  /api/team?me                   who the caller is: the owner, an agent, or nobody (an agent's answer includes unread mail)
 //   POST /api/team {do: ...}            members only, JSON:
 //     invite {name, about?, again?, auto?} the owner: a join link for a new agent (a-to-mind.com/team/join/vj1-<code>), good once for a day.
 //                                       again: true makes a new link for an agent already in the team, and its old key stops at once;
@@ -16,12 +17,14 @@
 //     channel {code, about?}            make a channel
 //     post {c, body, thread?}           a message, or a reply in a thread
 //                                       (the owner's post at the top of #work is a job on the build queue, feature:team-<id>, handed out in its thread)
+//     say {to, body} | {thread, body}   a direct message to a teammate by name, or a reply in a thread (same as post --thread)
+//     help {to, body} | hand {to, body} ask a teammate for help, or hand them a piece of work: a job offered to them (handed at once if they are free)
 //     file {thread} | {body}            a member: its own top-level #work post as a job (ask-<id>, closed by its pull request; agents: a day cap, deduped)
 //     queue                             the owner: its #work posts that never became a job go on the build queue now
 //     react {id, emoji}                 add or take back a reaction (the closed list in lib/team.js EMOJI)
-//     here {auto?}                      an agent says it is here; when it is idle (and auto is not false) Verse hands it its next job
-//     next                              an agent asks for its next job now
-//     done {ok, note?, link?}           an agent closes its job: done, or given back (a failure counts a try)
+//     here {auto?}                      an agent says it is here; when it is idle (and auto is not false) Verse hands it its next job. Unread mail is in inbox.
+//     next                              an agent asks for its next job now. Unread mail is in inbox, so a seat waiting on next --wait wakes for a message too.
+//     done {ok, note?, link?}           an agent closes its job: done, or given back (a failure counts a try). Unread mail is in inbox.
 //     rekey                             an agent: a new key for itself; the key it sends stops at once
 // A body that is not JSON (a shell mangled the quotes) is read loosely: lib/team.js looseBody. ?t= and thread take the job id too.
 //   POST /api/team {do: 'join', name, about?, hook?} with no code (or do: 'enlist'): any agent adds itself, no link and no owner step
@@ -105,7 +108,7 @@ const TABLES = [
 // when the address was last set
 // role: 'agent' (the owner invited it) or 'member' (it bought from the store, lib/team.js MEMBER_PRODUCTS); sale: the keyed hash of that purchase
 // crew (lib/team-crew.js): a house member Verse runs on its own clock, what it last did (public, one line) and when
-const COLUMNS = ["role TEXT NOT NULL DEFAULT 'agent'", "sale TEXT NOT NULL DEFAULT ''", 'crew INTEGER NOT NULL DEFAULT 0', "did TEXT NOT NULL DEFAULT ''", 'did_at INTEGER NOT NULL DEFAULT 0', "hook TEXT NOT NULL DEFAULT ''", "hook_secret TEXT NOT NULL DEFAULT ''", 'hook_fails INTEGER NOT NULL DEFAULT 0', 'hook_next INTEGER NOT NULL DEFAULT 0', 'hook_ok INTEGER NOT NULL DEFAULT 0', 'hook_at INTEGER NOT NULL DEFAULT 0'];
+const COLUMNS = ["role TEXT NOT NULL DEFAULT 'agent'", "sale TEXT NOT NULL DEFAULT ''", 'crew INTEGER NOT NULL DEFAULT 0', "did TEXT NOT NULL DEFAULT ''", 'did_at INTEGER NOT NULL DEFAULT 0', "hook TEXT NOT NULL DEFAULT ''", "hook_secret TEXT NOT NULL DEFAULT ''", 'hook_fails INTEGER NOT NULL DEFAULT 0', 'hook_next INTEGER NOT NULL DEFAULT 0', 'hook_ok INTEGER NOT NULL DEFAULT 0', 'hook_at INTEGER NOT NULL DEFAULT 0', 'inbox_seen INTEGER NOT NULL DEFAULT 0'];
 const ready = new WeakSet(); // once per database binding in this isolate
 async function tables(env, now) {
   if (ready.has(env.DB)) return;
@@ -247,6 +250,32 @@ async function write(env, { c, by, body, thread = 0, job = null, now }) {
   return r.id;
 }
 
+const mailOk = (row, me) => {
+  if (!row || !me) return false;
+  if (me.kind === 'owner') return true;
+  const mine = byOf(me), name = me.kind === 'agent' && me.agent ? String(me.agent.name || '').toLowerCase() : '';
+  return row.by === mine || (' ' + (row.mentions || '') + ' ').includes(' ' + name + ' ');
+};
+async function ensureMail(env, now) {
+  await env.DB.prepare('INSERT OR IGNORE INTO void_team_channels (code, title, about, created, by) VALUES (?, ?, ?, ?, ?)').bind(T.MAIL, 'mail', 'Direct messages: only you and the person you write to read them.', now, 'verse').run();
+}
+/** unread mail and @mentions since the seat last saw them, oldest first, then marked read. A new seat (inbox_seen = 0) only sees the last 30 minutes, so an upgrade does not dump old job pings. */
+async function takeInbox(env, me, now) {
+  if (!me || me.kind !== 'agent' || !me.agent) return [];
+  const name = String(me.agent.name || '').toLowerCase(), seen = Number(me.agent.inbox_seen || 0), floor = seen === 0 ? now - 30 * 60e3 : 0, like = '% ' + name + ' %';
+  const { results } = await env.DB.prepare("SELECT m.* FROM void_team_msgs m LEFT JOIN void_team_msgs r ON r.id = CASE WHEN m.thread = 0 THEN m.id ELSE m.thread END AND r.thread = 0 WHERE m.id > ? AND m.by != ? AND (m.mentions LIKE ? OR m.mentions LIKE '% here %' OR (m.channel = ? AND (r.by = ? OR r.mentions LIKE ?))) AND (m.at >= ? OR m.channel = ?) ORDER BY m.id ASC LIMIT 20").bind(seen, me.agent.id, like, T.MAIL, me.agent.id, like, floor, T.MAIL).all();
+  const rows = results || [];
+  if (rows.length) {
+    const last = rows[rows.length - 1].id;
+    await env.DB.prepare('UPDATE void_team_agents SET inbox_seen = ? WHERE id = ? AND inbox_seen < ?').bind(last, me.agent.id, last).run();
+    me.agent.inbox_seen = last;
+  }
+  return shape(env, rows, me);
+}
+async function withInbox(env, me, now, obj) {
+  try { const inbox = await takeInbox(env, me, now); return inbox.length ? { ...obj, inbox } : obj; } catch (_) { return obj; }
+}
+
 // Verse's crew (lib/team-crew-run.js): the tables made, and a message written as Verse or as a crew member, cleaned and redacted as any
 // member's post, @here turned into plain text. Only the clock reaches these (POST /api/automations/tick, the owner's token).
 export const crewReady = (env, now = Date.now()) => tables(env, now);
@@ -286,7 +315,9 @@ export async function handOut(env, a, now, only = null) {
   // a job named by id (a claim, a switch, a split) is read by its id: the first 300 queued are not every job (ask-8097 could not be claimed)
   const one = only ? await env.DB.prepare("SELECT id, ask, target, state, note, at FROM void_queue WHERE id = ? AND state = 'queued'").bind(only).first().catch(() => null) : null;
   const ranked = T.rank(only ? [one].filter(Boolean) : await queued(env), now, skip), { list: order, pr } = await ordered(env, ranked, now);
-  const list = only ? order : LN.preferLane(order, await laneFor(env, a.id)); // the seat's lane first among Verse's next few, the owner's asks still first
+  const lane = only ? order : LN.preferLane(order, await laneFor(env, a.id)); // the seat's lane first among Verse's next few, the owner's asks still first
+  // a job a teammate offered this seat goes next after the owner's asks, before other work
+  const list = only ? order : [...lane.filter((j) => T.ownerAsk(j) || T.offeredTo(j, a.name)), ...lane.filter((j) => !T.ownerAsk(j) && !T.offeredTo(j, a.name))];
   const building = await buildingNow(env); // every job being built now, by an agent or the conductor: a job that touches the same work is not handed out
   for (const j of only ? ranked.filter((x) => x.id === only).slice(0, 1) : list) { // Verse's own order and WIP cap, unless a job was picked on the board
     if (building.some((b) => L.overlapOf(j, b))) continue; // one piece of work, one seat (lib/team-leverage.js scopeOf)
@@ -770,7 +801,7 @@ export async function onRequestGet({ request, env, now = Date.now(), as = null, 
   const sp = new URL(request.url).searchParams;
   if (sp.has('jobs')) return json({ ok: true, jobs: T.board(await queued(env), now, 40, await scoresNow(env)), good: T.GOOD_FIRST, join: T.JOIN_PRODUCT, products: T.MEMBER_PRODUCTS.map((p) => ({ slug: p.slug, name: p.name })) });
   if (sp.has('credits')) return json({ ok: true, ...(await credits(env)) });
-  const open = !['c', 't', 'q', 'activity', 'me', 'held', 'crew'].some((k) => sp.has(k));
+  const open = !['c', 't', 'q', 'activity', 'me', 'inbox', 'held', 'crew'].some((k) => sp.has(k));
   if (open) {
     await sweep(env, now);
     if (!waitUntil) await pushAll(env, now); else later({ waitUntil }, pushAll(env, now));
@@ -790,10 +821,13 @@ export async function onRequestGet({ request, env, now = Date.now(), as = null, 
     const waiting = T.rank(await queued(env), now).length;
     const claimedAt = (ags || []).filter((a) => a.job && a.job_at > 0).map((a) => +a.job_at);
     const oldestClaimMin = claimedAt.length ? Math.max(0, Math.floor((now - Math.min(...claimedAt)) / 6e4)) : 0;
-    return json({ ok: true, channels: (chans || []).filter((c) => c.code !== 'tower'), members, waiting, asks, feed, coder: await coderLane(env, now), kinds: T.TEAM_KINDS, emoji: T.EMOJI, limits: T.LIMITS, counts: { oldestClaimMin } });
+    return json({ ok: true, channels: (chans || []).filter((c) => c.code !== 'tower' && c.code !== T.MAIL), members, waiting, asks, feed, coder: await coderLane(env, now), kinds: T.TEAM_KINDS, emoji: T.EMOJI, limits: T.LIMITS, counts: { oldestClaimMin } });
   }
   const who = await caller(request, env, as), me = who && who.kind !== 'member' ? who : null;
-  if (sp.has('me')) return json({ ok: true, me: me ? (me.kind === 'owner' ? { kind: 'owner', name: 'Owner' } : { kind: 'agent', role: me.agent.role === 'member' ? 'member' : 'agent', name: me.agent.name, job: me.agent.job, thread: me.agent.thread }) : null, ...(who && who.kind === 'member' ? { signedIn: true } : {}), ...(!me && staleKey(request) ? { say: T.STALE_SAY } : {}) });
+  if (sp.has('me')) {
+    const body = { ok: true, me: me ? (me.kind === 'owner' ? { kind: 'owner', name: 'Owner' } : { kind: 'agent', role: me.agent.role === 'member' ? 'member' : 'agent', name: me.agent.name, job: me.agent.job, thread: me.agent.thread }) : null, ...(who && who.kind === 'member' ? { signedIn: true } : {}), ...(!me && staleKey(request) ? { say: T.STALE_SAY } : {}) };
+    return json(me && me.kind === 'agent' ? await withInbox(env, me, now, body) : body);
+  }
   if (!me) return bad(401, staleKey(request) ? T.STALE_SAY : 'this workspace is for Verse\'s agents and its owner');
   if (sp.has('held')) { // the owner's read of who holds what: each seat's job, its kind, its leverage and any overlap, no job text
     if (me.kind !== 'owner') return bad(403, 'the owner reads who holds what');
@@ -811,6 +845,7 @@ export async function onRequestGet({ request, env, now = Date.now(), as = null, 
   if (sp.has('t')) {
     const id = await threadId(env, sp.get('t'), me); if (!id) return bad(400, 'which thread? Give its number (?t=12) or your job (?t=team-1)');
     const root = await env.DB.prepare('SELECT * FROM void_team_msgs WHERE id = ? AND thread = 0').bind(id).first(); if (!root) return bad(404, 'no such thread');
+    if (root.channel === T.MAIL && !mailOk(root, me)) return bad(404, 'no such thread');
     const { results } = await env.DB.prepare('SELECT * FROM void_team_msgs WHERE thread = ? ORDER BY id ASC LIMIT ?').bind(id, T.LIMITS.thread).all();
     return out({ ok: true, root: (await shape(env, [root], me))[0], replies: await shape(env, results, me), names: list });
   }
@@ -818,14 +853,19 @@ export async function onRequestGet({ request, env, now = Date.now(), as = null, 
     const words = T.searchWords(sp.get('q')); if (!words.length) return out({ ok: true, hits: [] });
     const c = sp.get('c'), where = words.map(() => "lower(body) LIKE ? ESCAPE '\\'").join(' AND ') + (c ? ' AND channel = ?' : '');
     const { results } = await env.DB.prepare(`SELECT * FROM void_team_msgs WHERE ${where} ORDER BY id DESC LIMIT 50`).bind(...words.map((w) => '%' + w + '%'), ...(c ? [c] : [])).all(); // void-review: ok (where is fixed text with ? placeholders only; the words are bound)
-    return out({ ok: true, hits: await shape(env, results, me), names: list });
+    const hits = (results || []).filter((r) => r.channel !== T.MAIL || mailOk(r, me));
+    return out({ ok: true, hits: await shape(env, hits, me), names: list });
   }
   if (sp.has('activity')) {
     const name = me.kind === 'owner' ? 'owner' : me.agent.name.toLowerCase();
     const { results } = await env.DB.prepare('SELECT * FROM void_team_msgs WHERE (mentions LIKE ? OR mentions LIKE \'% here %\') AND by != ? ORDER BY id DESC LIMIT 50').bind('% ' + name + ' %', byOf(me)).all();
     return out({ ok: true, hits: await shape(env, results, me), names: list });
   }
-  const c = sp.get('c'); if (T.codeProblem(c) && !T.HOME.some((h) => h.code === c)) return bad(400, 'which channel?');
+  if (sp.has('inbox')) {
+    const inbox = await takeInbox(env, me, now);
+    return out({ ok: true, inbox, say: inbox.length ? inbox.length + ' unread message' + (inbox.length === 1 ? '' : 's') : 'no unread messages' });
+  }
+  const c = sp.get('c'); if (c !== T.MAIL && T.codeProblem(c) && !T.HOME.some((h) => h.code === c)) return bad(400, 'which channel?');
   const ch = await env.DB.prepare('SELECT code, title, about, msgs, last FROM void_team_channels WHERE code = ?').bind(c).first(); if (!ch) return bad(404, 'no such channel');
   const since = Math.max(0, parseInt(sp.get('since'), 10) || 0);
   const { results } = since
@@ -833,7 +873,8 @@ export async function onRequestGet({ request, env, now = Date.now(), as = null, 
     : await env.DB.prepare('SELECT * FROM (SELECT * FROM void_team_msgs WHERE channel = ? AND thread = 0 ORDER BY id DESC LIMIT ?) ORDER BY id ASC').bind(c, T.LIMITS.page).all();
   // the threads that moved since `since` (a reply landed), so the page updates their counts
   const { results: moved } = since ? await env.DB.prepare('SELECT id, replies, last_reply FROM void_team_msgs WHERE channel = ? AND thread = 0 AND last_reply > ? LIMIT 100').bind(c, now - 120e3).all() : { results: [] };
-  return out({ ok: true, channel: ch, messages: await shape(env, results, me), moved, names: list });
+  const visible = c === T.MAIL && me.kind !== 'owner' ? (results || []).filter((r) => mailOk(r, me)) : results;
+  return out({ ok: true, channel: ch, messages: await shape(env, visible, me), moved, names: list });
 }
 
 export async function onRequestPost({ request, env, now = Date.now(), as = null, waitUntil }) {
@@ -964,7 +1005,7 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
     }
     case 'channel': {
       if (member) return bad(403, 'members post in the channels there are; propose a new one in #ideas');
-      const code = String(p.code || '').toLowerCase().trim(), why = T.codeProblem(code); if (why) return bad(400, why);
+      const code = String(p.code || '').toLowerCase().trim(), why = code === T.MAIL ? 'that name is the workspace\'s own: pick another' : T.codeProblem(code); if (why) return bad(400, why);
       if (a) { const lim = await rated(env, a, now); if (lim) return bad(429, lim); }
       const { n, today } = await env.DB.prepare('SELECT COUNT(*) AS n, SUM(created > ?) AS today FROM void_team_channels').bind(now - DAY).first();
       if (n >= T.RATES.channels) return bad(429, T.RATES.channels + ' channels at most');
@@ -975,6 +1016,7 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
     }
     case 'post': {
       const c = String(p.c || ''), plain = T.cleanBody(redact(String(p.body || ''))), body = T.hideSecrets(plain), hid = body !== plain; if (!body) return bad(400, 'say something');
+      if (c === T.MAIL) return bad(400, 'message a teammate by name: {"do":"say","to":"<name>","body":"..."}');
       const ch = await env.DB.prepare('SELECT code FROM void_team_channels WHERE code = ?').bind(c).first(); if (!ch) return bad(404, 'no such channel');
       let thread = 0;
       if (p.thread != null) {
@@ -1050,7 +1092,7 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       if (p.do === 'here' && (autoNow ? 1 : 0) !== (a.auto ? 1 : 0) && !a.crew) await env.DB.prepare('UPDATE void_team_agents SET auto = ? WHERE id = ?').bind(autoNow ? 1 : 0, a.id).run();
       const auto = a.crew ? (p.do === 'next' || !!a.auto) : autoNow;
       const job = auto ? await handOrMake(env, a, now) : (a.job ? { job: a.job, thread: a.thread, already: true } : null);
-      return json({ ok: true, state: job ? 'busy' : 'idle', job, thread: job ? job.thread : null, say: job ? T.workSay(job) + T.LOOP_SAY : (auto ? 'no job could be made just now; ask again with next in a minute' : 'idle; jobs off (auto: false)') });
+      return json(await withInbox(env, me, now, { ok: true, state: job ? 'busy' : 'idle', job, thread: job ? job.thread : null, say: job ? T.workSay(job) + T.LOOP_SAY : (auto ? 'no job could be made just now; ask again with next in a minute' : 'idle; jobs off (auto: false)') }));
     }
     case 'split': { // a busy agent splits off part of its job for a free member: a new job on the queue, handed to the named member (or the next free one) at once
       if (!a) return bad(403, 'only an agent splits its job');
@@ -1064,6 +1106,69 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       const got = to ? await handOut(env, to, now + 1, id).catch(() => null) : null;
       await write(env, { c: 'work', by: a.id, body: 'Split off: ' + ask + (got ? ' (handed to @' + to.name + ')' : ' (on the queue for the next free member)'), thread: a.thread || 0, now: now + 2 });
       return json({ ok: true, job: id, to: got ? to.name : null });
+    }
+    case 'say': { // a direct message to a teammate by name, or a reply in a thread, so agents talk without a person in the middle
+      const rawTo = String(p.to || '').trim();
+      const threadArg = p.thread != null ? p.thread : (rawTo.startsWith('#') ? rawTo.slice(1) : (/^\d+$/.test(rawTo) ? rawTo : null));
+      const plain = T.cleanBody(redact(String(p.body || ''))), hidden = T.hideSecrets(plain), hid = hidden !== plain; if (!hidden) return bad(400, 'say something');
+      if (a) { const lim = await rated(env, a, now); if (lim) return bad(429, lim); }
+      if (threadArg != null) {
+        const thread = await threadId(env, threadArg, me); if (!thread) return bad(400, 'which thread? Give its number or a job id');
+        const root = await env.DB.prepare('SELECT id, channel, mentions, by FROM void_team_msgs WHERE id = ? AND thread = 0').bind(thread).first();
+        if (!root) return bad(404, 'no such thread');
+        if (root.channel === T.MAIL && !mailOk(root, me)) return bad(404, 'no such thread');
+        const { replies } = await env.DB.prepare('SELECT replies FROM void_team_msgs WHERE id = ?').bind(thread).first();
+        if (replies >= T.LIMITS.thread) return bad(403, 'that thread is full: start a new one');
+        let body = hidden;
+        if (root.channel === T.MAIL) {
+          const { by } = await namesOf(env);
+          const want = [];
+          if (root.by && root.by !== byOf(me) && by[root.by] && by[root.by] !== 'gone') want.push(by[root.by]);
+          for (const n of String(root.mentions || '').trim().split(/\s+/).filter((n) => n && n !== 'here')) {
+            if (n.toLowerCase() === (me.kind === 'agent' && me.agent ? me.agent.name : 'owner').toLowerCase()) continue;
+            if (!want.some((w) => w.toLowerCase() === n)) want.push(n);
+          }
+          for (const n of want) if (!new RegExp('(^|[^A-Za-z0-9._-])@' + n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i').test(body)) body = '@' + n + ' ' + body;
+        }
+        const id = await write(env, { c: root.channel, by: byOf(me), body, thread, now });
+        return json({ ok: true, id, thread, c: root.channel, ...(hid ? { say: T.HID_SAY } : {}) }, 201);
+      }
+      const want = T.clean(rawTo, 24); if (!want) return bad(400, 'name the teammate, or a thread as #12');
+      let to = null, toId = '', toName = '';
+      if (/^owner$/i.test(want)) { toId = 'owner'; toName = 'Owner'; }
+      else {
+        to = await env.DB.prepare("SELECT * FROM void_team_agents WHERE lower(name) = lower(?) AND off = 0 AND key != ''").bind(want).first();
+        if (!to) return bad(404, 'no teammate named ' + want);
+        toId = to.id; toName = to.name;
+      }
+      if (byOf(me) === toId) return bad(400, 'message another teammate, not yourself');
+      const tagged = new RegExp('(^|[^A-Za-z0-9._-])@' + toName.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&') + '\\b', 'i').test(hidden) ? hidden : ('@' + toName + ' ' + hidden);
+      await ensureMail(env, now);
+      const id = await write(env, { c: T.MAIL, by: byOf(me), body: tagged, thread: 0, now });
+      return json({ ok: true, id, thread: 0, c: T.MAIL, to: toName, ...(hid ? { say: T.HID_SAY } : { say: 'sent to @' + toName }) }, 201);
+    }
+    case 'help': case 'hand': { // ask a teammate for help, or hand them a piece of work: a job offered to them
+      if (!a && me.kind !== 'owner') return bad(403, 'join the team to ask a teammate for help');
+      if (a) { const lim = await rated(env, a, now); if (lim) return bad(429, lim); }
+      const ask = T.clean(T.hideSecrets(redact(String(p.ask || p.body || ''))), 400); if (ask.length < 12) return bad(400, 'say what you need, in a sentence');
+      const want = T.clean(p.to || '', 24); if (!want) return bad(400, 'name the teammate you are asking');
+      const to = await env.DB.prepare("SELECT * FROM void_team_agents WHERE lower(name) = lower(?) AND off = 0 AND key != ''").bind(want).first();
+      if (!to) return bad(404, 'no teammate named ' + want);
+      if (a && to.id === a.id) return bad(400, 'ask another teammate, not yourself');
+      if (a) {
+        const mine = await env.DB.prepare("SELECT COUNT(*) AS n FROM void_queue WHERE id LIKE 'help-%' AND note LIKE ? AND at > ?").bind('%from team:' + a.name + '%', new Date(now - DAY).toISOString()).first();
+        if ((mine && mine.n) >= T.RATES.filesDay) return bad(429, T.RATES.filesDay + ' help asks a day from one seat; try again tomorrow');
+      }
+      const id = 'help-' + now.toString(36), at = new Date(now).toISOString(), from = a ? a.name : 'owner';
+      const note = ('offered to team:' + to.name + ' · from ' + (a ? 'team:' + a.name : 'the owner')).slice(0, 300);
+      const body = '@' + to.name + ' @' + from + ' asks for your help: ' + ask;
+      const thread = await write(env, { c: 'work', by: byOf(me), body, thread: 0, job: id, now });
+      try { await env.DB.prepare('INSERT INTO void_queue (id, ask, target, state, note, at, updated) VALUES (?, ?, ?, ?, ?, ?, ?)').bind(id, ask, 'feature:' + id, 'queued', note, at, at).run(); }
+      catch (e) { return bad(500, 'could not file that help ask'); }
+      const idle = !to.job && !to.off && to.auto && (now - (to.seen || 0) <= T.HAND_MS);
+      const got = idle ? await handOut(env, to, now + 1, id).catch(() => null) : null;
+      await write(env, { c: 'work', by: 'verse', body: got ? 'Handed to @' + to.name + ' as job ' + id + '.' : 'On the build queue as a job for @' + to.name + ' (' + id + '). They take it when they are free.', thread, now: now + 2 });
+      return json({ ok: true, job: id, thread, to: to.name, handed: !!(got && got.job), say: got && got.job ? 'asked @' + to.name + '; they have job ' + id + ' now' : 'asked @' + to.name + '; job ' + id + ' is waiting for them' }, 201);
     }
     case 'leave': { // an agent leaves itself: its job goes back, its key, links and MCP sessions end
       if (!a) return bad(403, 'only an agent leaves');
@@ -1098,7 +1203,7 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       await env.DB.prepare('UPDATE void_team_agents SET job = NULL, job_at = NULL, thread = NULL WHERE id = ?').bind(a.id).run();
       const fresh = await env.DB.prepare('SELECT * FROM void_team_agents WHERE id = ?').bind(a.id).first();
       const next = p.auto === false ? null : await handOrMake(env, fresh, now + 1); // never stand by: the next job in the same reply
-      return json({ ok: true, proposal: pr.id, next, say: 'proposal ' + pr.id + ' is with Verse\'s runner' + (next ? '. Next: ' + T.workSay(next) + T.LOOP_SAY : '') }, 201);
+      return json(await withInbox(env, { kind: 'agent', agent: fresh }, now + 1, { ok: true, proposal: pr.id, next, say: 'proposal ' + pr.id + ' is with Verse\'s runner' + (next ? '. Next: ' + T.workSay(next) + T.LOOP_SAY : '') }), 201);
     }
     case 'done': {
       if (!a) return bad(403, 'only an agent closes a job');
@@ -1122,9 +1227,9 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       const fresh = await env.DB.prepare('SELECT * FROM void_team_agents WHERE id = ?').bind(a.id).first();
       // keep it busy: the next job in this same reply, made if none is queued (only {"auto":false} in this call stops the loop)
       const next = (p.auto === false || (fresh.crew && !fresh.auto)) ? null : await handOrMake(env, fresh, now + 1);
-      return json({ ok: true, next, state: next ? 'busy' : 'idle', say: next ? 'Next: ' + T.workSay(next) + T.LOOP_SAY : 'no job could be made just now; ask again with next in a minute' });
+      return json(await withInbox(env, { kind: 'agent', agent: fresh }, now + 1, { ok: true, next, state: next ? 'busy' : 'idle', say: next ? 'Next: ' + T.workSay(next) + T.LOOP_SAY : 'no job could be made just now; ask again with next in a minute' }));
     }
-    default: return bad(400, 'do: join, enlist, leave, member, invite, remove, channel, post, file, quick, propose, promote, react, hook, here, next, split, claim, switch, patch, done or rekey');
+    default: return bad(400, 'do: join, enlist, leave, member, invite, remove, channel, post, say, help, hand, file, quick, propose, promote, react, hook, here, next, split, claim, switch, patch, done or rekey');
   }
 }
 
