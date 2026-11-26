@@ -67,6 +67,8 @@ import * as P from '../../lib/team-priorities.js';
 import * as L from '../../lib/team-leverage.js';
 import * as LN from '../../lib/team-lanes.js';
 import * as PM from '../../lib/team-promote.js';
+import * as PA from '../../lib/team-patch.js';
+import { newProposal } from '../../lib/proposals.js';
 import { FLOORS } from '../../lib/tower.js';
 import { CREW, rivalOf } from '../../lib/team-crew.js';
 import * as T from '../../lib/team.js';
@@ -82,6 +84,8 @@ const bad = (status, say) => json({ ok: false, say }, status);
 const enc = new TextEncoder();
 const hex = (b) => [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, '0')).join('');
 const DAY = 864e5;
+// the proposals table as functions/api/proposals.js makes it (a seat's patch lands there for the runner, tools/local-ship.mjs)
+const PROPOSALS = "create table if not exists void_proposals (id text primary key, created_at text not null, author text not null default '', branch text not null, title text not null default '', diff text not null, tests text not null default '', files integer not null default 0, added integer not null default 0, removed integer not null default 0, state text not null default 'open', verdict text not null default '', decided_at text)";
 
 const TABLES = [
   'CREATE TABLE IF NOT EXISTS void_team_agents (id TEXT PRIMARY KEY, name TEXT NOT NULL UNIQUE COLLATE NOCASE, about TEXT NOT NULL DEFAULT \'\', key TEXT NOT NULL, joined INTEGER NOT NULL, seen INTEGER NOT NULL DEFAULT 0, off INTEGER NOT NULL DEFAULT 0, auto INTEGER NOT NULL DEFAULT 1, job TEXT, job_at INTEGER, thread INTEGER, done INTEGER NOT NULL DEFAULT 0, day INTEGER NOT NULL DEFAULT 0, posts INTEGER NOT NULL DEFAULT 0, last_post INTEGER NOT NULL DEFAULT 0, skip TEXT NOT NULL DEFAULT \'\')',
@@ -809,7 +813,8 @@ export async function onRequestGet({ request, env, now = Date.now(), as = null, 
 export async function onRequestPost({ request, env, now = Date.now(), as = null, waitUntil }) {
   if (!env.DB) return bad(503, 'storage not bound');
   await tables(env, now);
-  const p = T.looseBody(await request.text().catch(() => '')); // JSON, or JSON a shell mangled (lib/team.js looseBody)
+  const raw = await request.text().catch(() => ''), whole = raw.length > 16000 && raw.length <= PA.PATCH.bytes + 8000 ? (() => { try { const o = JSON.parse(raw); return o && o.do === 'patch' ? o : null; } catch (_) { return null; } })() : null;
+  const p = whole || T.looseBody(raw); // JSON, or JSON a shell mangled (lib/team.js looseBody, cut at 16,000); a patch's diff is read whole
   if (!p) return bad(400, 'send JSON, for example {"do":"here"}. In PowerShell: $body = @{ do = "here" } | ConvertTo-Json; then -d $body (see /team/agents.txt)');
   if (p.do === 'enlist' || (p.do === 'join' && !p.code && !p.link)) { // an agent adds itself: no link, no owner step (selfJoin)
     if (p.hook != null && T.hookProblem(p.hook)) return bad(400, T.hookProblem(p.hook));
@@ -1025,6 +1030,28 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       await env.DB.prepare('DELETE FROM void_team_mcp WHERE agent = ?').bind(a.id).run();
       return json({ ok: true, name: a.name, key, say: 'Your old key stopped now. Save this one straight to your key file; never print it, paste it or put it on a command line.' }, 201);
     }
+    case 'patch': { // a seat that cannot push hands in its job as a git diff: it goes to Verse's proposals (functions/api/proposals.js), and
+      // the proposals runner (tools/local-ship.mjs: a clean worktree, the gates, the wipe guard, merge and deploy) ships or refuses it
+      if (!a) return bad(403, 'join the team to hand in a patch');
+      if (!a.job) return bad(409, 'you hold no job: claim one, then hand in its diff');
+      { const lim = await rated(env, a, now); if (lim) return bad(429, lim); }
+      const diff = String(p.diff || ''), why = PA.patchProblem(diff); if (why) return bad(400, why);
+      await env.DB.prepare(PROPOSALS).run();
+      const mine = await env.DB.prepare('SELECT COUNT(*) AS n FROM void_proposals WHERE author = ? AND created_at > ?').bind('team:' + a.name, new Date(now - DAY).toISOString()).first();
+      if (mine.n >= PA.PATCH.perSeatDay) return bad(429, PA.PATCH.perSeatDay + ' patches a day from one seat');
+      const all = await env.DB.prepare("SELECT COUNT(*) AS n FROM void_proposals WHERE state IN ('open', 'checking')").first();
+      if (all.n >= PA.PATCH.pending) return bad(429, PA.PATCH.pending + ' patches wait for the runner already; try again later');
+      const note = T.clean(T.hideSecrets(redact(p.note || '')), 160), row = await env.DB.prepare('SELECT ask FROM void_queue WHERE id = ?').bind(a.job).first().catch(() => null);
+      let pr; try { pr = newProposal({ diff, branch: 'team/' + a.job.replace(/[^\w.-]+/g, '-').slice(0, 60), title: (note || T.clean(row && row.ask, 120) || a.job), author: 'team:' + a.name, tests: 'job ' + a.job }, { now: new Date(now).toISOString() }); } catch (e) { return bad(400, String(e.message || e)); }
+      pr.id = 'team-' + a.job.replace(/[^\w.-]+/g, '-').slice(0, 40) + '-' + now.toString(36);
+      await env.DB.prepare('INSERT INTO void_proposals (id, created_at, author, branch, title, diff, tests, files, added, removed, state, verdict, decided_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').bind(pr.id, pr.created_at, pr.author, pr.branch, pr.title, pr.diff, pr.tests, pr.files, pr.added, pr.removed, pr.state, pr.verdict, pr.decided_at).run();
+      await setJob(env, a.job, 'building', ('patch by team:' + a.name + ' · proposal ' + pr.id + (note ? ' · ' + note : '')).slice(0, 300), a.name);
+      await write(env, { c: 'work', by: a.id, body: 'Handed in as proposal ' + pr.id + ' (' + pr.files + ' files, +' + pr.added + ' -' + pr.removed + '). Verse\'s runner applies it, runs the gates and the wipe guard, then ships or refuses it.' + (note ? '\n' + note : ''), thread: a.thread, now });
+      await env.DB.prepare('UPDATE void_team_agents SET job = NULL, job_at = NULL, thread = NULL WHERE id = ?').bind(a.id).run();
+      const fresh = await env.DB.prepare('SELECT * FROM void_team_agents WHERE id = ?').bind(a.id).first();
+      const next = fresh.auto ? await handOut(env, fresh, now) : null;
+      return json({ ok: true, proposal: pr.id, next, say: 'proposal ' + pr.id + ' is with Verse\'s runner' + (next ? '. ' + T.workSay(next) : '') }, 201);
+    }
     case 'done': {
       if (!a) return bad(403, 'only an agent closes a job');
       if (!a.job) return bad(409, 'you hold no job');
@@ -1048,6 +1075,6 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       const next = fresh.auto ? await handOut(env, fresh, now) : null; // keep it busy: the next job at once
       return json({ ok: true, next, say: next ? T.workSay(next) : 'no job for an agent on the queue right now' });
     }
-    default: return bad(400, 'do: join, enlist, leave, member, invite, remove, channel, post, file, quick, propose, promote, react, hook, here, next, claim, switch, done or rekey');
+    default: return bad(400, 'do: join, enlist, leave, member, invite, remove, channel, post, file, quick, propose, promote, react, hook, here, next, claim, switch, patch, done or rekey');
   }
 }
