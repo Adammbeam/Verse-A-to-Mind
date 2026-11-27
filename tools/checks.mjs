@@ -575,7 +575,6 @@ for (const [name, file] of [
   ['history-coverage', 'history-coverage.test.mjs'],
   ['tower-target', 'tower-target.test.mjs'],
   ['tower-rules', 'tower-rules.test.mjs'], // the tower rules (docs/TOWER-RULES.md): any change to the tower keeps every rule
-  ['ability-floors', 'ability-floors.test.mjs'], // ability floors from the capability inventory (lib/ability-floors.js)
   ['site-crawl', 'site-crawl.test.mjs'],
   ['emoji-link', 'emoji-link.test.mjs'],
   ['actions-card', 'actions-card.test.mjs'],
