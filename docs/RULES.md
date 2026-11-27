@@ -10,6 +10,20 @@ is never a cost to cut: Verse grows toward doing everything. Nothing is retired,
 salvage shelf because people did not use it or because there are many: real use only ever adds (an experiment opened on
 many days becomes a candidate for a core skill, `tools/lab-use.mjs`), it never takes away.
 
+## Gate the pull request before the push, not in CI (2026-11-27)
+
+A branch that carried deploy-generated copies (`self.json`, the dependency map and the book) and 400+ changed lines passed
+the builder's checks locally, then failed the Verse check on the PR. `finish.mjs` now runs `tools/pre-pr.mjs --check-only`
+offline between the fast checks and the push, so the same refusals stop a run before it opens a PR. `merge-main.mjs` puts
+the deploy-only copies back to main after a merge instead of committing them, and `tools/regen-paths.mjs` is the one list
+of what a refresh writes. A hand-opened PR runs the gate too; an assistant does not open one without it.
+
+## Long commands start in the background (2026-11-27)
+
+Full check runs, whole browser suites, large builds and repeated live probes are started in the background on the first
+call. The agent continues with other work and reads the completion notice; it does not poll, sleep on a foreground command,
+or retry a failed program launch in a loop. An OS error from a spawn is final and gets surfaced.
+
 ## A paste is a report, an ask or unclear; never a guess (owner, 2026-10-30)
 Adam pasted a copied "What is really true now" card with a long note under it. Verse reopened the frozen card, still at
 "checking GitHub", and dropped the note. An earlier status note came back as a stock answer about Verse's secret names.

@@ -25,7 +25,9 @@ export function against(files, prs, common = COMMON) {
     .map((p) => ({ ...p, real: p.shared.filter((f) => !common.includes(f)) })).sort((a, b) => b.real.length - a.real.length);
 }
 // files nearly every PR appends to: a shared one is usually a clean merge (one line per entry), still worth a pull --rebase
-export const COMMON = ['domains/handoff.md', 'tools/checks.mjs', 'void-live-deploy/void.growth.json', 'docs/void-voice.md'];
+// tools/test_void.mjs is one section per run: every page change adds to it and merge-main.mjs settles the adds.
+// Treating it as shared keeps a queue of small PRs from blocking each other on the same browser suite.
+export const COMMON = ['domains/handoff.md', 'tools/checks.mjs', 'tools/test_void.mjs', 'void-live-deploy/void.growth.json', 'docs/void-voice.md'];
 
 const gh = (path) => execFileSync('gh', ['api', '--paginate', path, '--jq', '.[]'], { encoding: 'utf8', maxBuffer: 64 << 20 }).split('\n').filter(Boolean).map((l) => JSON.parse(l));
 // The conflict heatmap (asked by Verse, ask-20261015-0612-1: "which skill files are currently under high-frequency edit pressure"):

@@ -11,6 +11,7 @@ import { spawnSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { generatedTouched, BUILD_OUTPUTS } from './generated.mjs';
+import { DEPLOY_ONLY } from './regen-paths.mjs';
 import { APPEND_JSON, APPEND_TEXT } from './records.mjs';
 import { COMMON } from './collide.mjs';
 import { publicRivalHits } from './rival-public.mjs';
@@ -71,7 +72,8 @@ export function refusals({ behind, files, numstat, prs, self, max = MAX_LINES, f
   if (wipe) out.push(wipe);
   const gaps = skillIndexGaps({ files, indexNames });
   if (gaps.length) out.push('these new skills are not in void-live-deploy/skills/index.json (deploy.yml is parked, so the ask bar will not see them): ' + gaps.join(', ') + '. Run node tools/skills-index.mjs --write and include the index in the commit.');
-  const freshSet = new Set(fresh);
+  // a deploy-only copy is never fresh enough for a pull request: it names the newest commit, a time window or live facts
+  const freshSet = new Set(fresh.filter((f) => !DEPLOY_ONLY.includes(f)));
   const generated = generatedTouched(files).filter((f) => !freshSet.has(f));
   if (generated.length) out.push('these are written at deploy, from their own sources. Take them out of the commit:\n  ' + generated.join('\n  ') +
     '\nsources: skills/order/ (the index), growth/entries/ (the ledger), incidents/entries/ (one file per suite run), tower-evidence/ (one file per floor). Then node tools/refresh.mjs on the deploy, not in the pull request.');
@@ -105,22 +107,17 @@ function main() {
   const branch = String(git(['rev-parse', '--abbrev-ref', 'HEAD']).stdout || '').trim();
   const head = process.env.PRE_PR_BRANCH || branch;
   const self = args.includes('--pr') ? Number(args[args.indexOf('--pr') + 1]) : (prs || []).find((p) => p.head === head)?.number ?? null;
-  // families.json and guide.json are generated. A commit may carry them when they are exactly what the generators write
-  // (a skill was placed). A hand edit or a stale copy still says "lags" or exits 1, and is refused.
-  const BOOK = ['void-live-deploy/skills/families.json', 'void-live-deploy/skills/guide.json', 'void-live-deploy/skills/what.json', 'void-live-deploy/skills/index.json', 'void-live-deploy/skills/lineage.json'];
+  // A generated output may ride in a pull request only when it is exactly what its source writes now.
+  // tools/refresh.mjs --check asks every non-volatile generator that same question in one run (the question
+  // main's own refresh check asks); a stale or hand-edited copy still fails and is refused. The volatile
+  // copies in DEPLOY_ONLY are refused even when a generator calls them current: they name the newest commit
+  // or a time window and only the deploy can settle them.
+  const touchedGenerated = generatedTouched(files);
   const fresh = [];
-  if ((files || []).some((f) => BOOK.includes(f))) {
-    const runs = [
-      ['tools/families.mjs', '--check'],
-      ['tools/guide.mjs', '--check'],
-      ['tools/what-skills.mjs', '--check'],
-      ['tools/skills-index.mjs', '--check'],
-    ];
-    const outs = runs.map((a) => spawnSync(process.execPath, [resolve(root, a[0]), a[1]], { cwd: root, encoding: 'utf8' }));
-    const text = outs.map((r) => String(r.stdout || '') + String(r.stderr || '')).join('\n');
-    const needIndex = (files || []).some((f) => f === 'void-live-deploy/skills/index.json' || f === 'void-live-deploy/skills/lineage.json');
-    const indexOk = !needIndex || /index\.json matches/.test(text);
-    if (outs.every((r) => r.status === 0) && !/lags/.test(text) && indexOk) fresh.push(...BOOK);
+  if (touchedGenerated.length && !touchedGenerated.some((f) => DEPLOY_ONLY.includes(f))) {
+    const r = spawnSync(process.execPath, [resolve(root, 'tools', 'refresh.mjs'), '--check'], { cwd: root, encoding: 'utf8' });
+    const text = String(r.stdout || '') + String(r.stderr || '');
+    if (r.status === 0 && !/FAIL|stale:/.test(text)) fresh.push(...touchedGenerated);
   }
   const del = git(['diff', '--name-only', '--diff-filter=D', BASE + '...HEAD']);
   const tree = git(['ls-tree', '-r', '--name-only', BASE]);

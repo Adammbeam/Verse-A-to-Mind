@@ -6,5 +6,7 @@ assert.deepEqual(overlaps(prs), [{ a: 1, b: 2, shared: ['x.js', 'domains/handoff
 assert.deepEqual(overlaps([prs[2]]), []);
 const h = against(['y.js', 'domains/handoff.md'], prs);
 assert.equal(h[0].number, 2); assert.deepEqual(h[0].real, ['y.js']); assert.deepEqual(h[1].real, []);
+const suite = against(['tools/test_void.mjs'], [{ number: 8, title: 'another card', files: ['tools/test_void.mjs', 'x.js'] }]);
+assert.equal(suite[0].number, 8); assert.deepEqual(suite[0].real, [], 'a browser-suite section is not a collision');
 assert.deepEqual(against(['q.js'], prs), []);
 console.log('collide: 6 checks passed');
