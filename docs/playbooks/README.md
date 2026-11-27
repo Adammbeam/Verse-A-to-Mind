@@ -6,6 +6,7 @@ Each playbook is one kind of work a builder did by hand, written so Verse's own 
 
 | Playbook | What it grows | Followed by Verse yet |
 |:--|:--|:--|
+| [consolidate.md](consolidate.md) | one page per job, from `tools/consolidate-map.mjs` | not yet |
 | [art-forge.md](art-forge.md) | a card's art | painted art of an answer or merged card's subject, once per subject, behind a daily cap and a kill switch (`/api/card-art`, `lib/card-forge.js`) |
 | [probe-and-fix.md](probe-and-fix.md) | an existing skill, from asks it misses | steps 1–5: Verse writes 25 asks for its least proven family and probes them daily (`.github/workflows/probe-asks.yml`), then proposes the matcher fix for the oldest miss and the repo's checks decide (`.github/workflows/propose-fix.yml`, a pull request labelled "made by Verse"); a builder still reviews and merges |
 | [build-miss.md](build-miss.md) | a new skill from an ask people typed that nothing answered (the new-skill lane of the miss board) | the whole lane, daily (`.github/workflows/build-miss.yml`, `tools/build-miss.mjs`): Verse claims the oldest "lane: new skill" miss job, scaffolds it, has its model fill the card with the ask as data, and the repo decides (collisions, overlap, a unit test, the ask on the real page, the map, Verse's review); a pass is a pull request labelled "made by Verse" that merges on Verse's review at confidence 0.8 and up, and the job goes live when it merges (`tools/job-link.mjs`) |
