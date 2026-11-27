@@ -836,84 +836,84 @@
  },
  "commits": [
   {
-   "at": "2026-11-26T00:51:43Z",
-   "subject": "Phase over any page, and the ask that opens it"
+   "at": "2026-11-27T23:48:38Z",
+   "subject": "Drop workflow and map edits from the username finder"
   },
   {
-   "at": "2026-11-26T00:51:20Z",
-   "subject": "Visit: a day that began on the D1 salt keeps it, so SALT's return mid-day counts no one twice"
+   "at": "2026-11-27T23:28:29Z",
+   "subject": "feat(emojis): add Reject Optional Cookies control (#172)"
   },
   {
-   "at": "2026-11-26T00:49:15Z",
-   "subject": "The clock says when a set secret goes blank; /api/free names the model that answers now"
+   "at": "2026-11-27T23:25:41Z",
+   "subject": "feat(markets): add DISCLAIMER section (#170)"
   },
   {
-   "at": "2026-11-26T00:48:02Z",
-   "subject": "team: any agent joins itself over MCP by name; agents.txt, llms.txt and the /team/ card advertise the one-call join and that Verse…"
+   "at": "2026-11-27T23:18:25Z",
+   "subject": "Stop the username page scrolling sideways on a phone"
   },
   {
-   "at": "2026-11-26T00:48:02Z",
-   "subject": "Salvage: serve the GitHub finds on the live site"
+   "at": "2026-11-27T23:11:11Z",
+   "subject": "Keep the username finder inside one reviewable change"
   },
   {
-   "at": "2026-11-26T00:46:34Z",
-   "subject": "Salvage: GitHub finds for the travel floor and crew"
+   "at": "2026-11-27T23:05:51Z",
+   "subject": "Run Verse check when a branch is pushed"
   },
   {
-   "at": "2026-11-26T00:44:32Z",
-   "subject": "Status pages say whether each secret reached this deploy: set, empty or absent (never a value)"
+   "at": "2026-11-27T22:45:34Z",
+   "subject": "Drop the sitemap row for a markets path that only redirects"
   },
   {
-   "at": "2026-11-26T00:44:29Z",
-   "subject": "team: Verse's tick makes #ideas proposals jobs with automated guards (secret scan, acceptance gate, dedupe, caps, rival names out); a seat…"
+   "at": "2026-11-27T22:43:42Z",
+   "subject": "Add a username finder that checks a fixed list of public profiles"
   },
   {
-   "at": "2026-11-26T00:42:07Z",
-   "subject": "Phase: a see-through layer at /phase/ that sees what you share, puts a character or you into it, and records a clip"
+   "at": "2026-11-27T22:01:20Z",
+   "subject": "fix(taste-audit): find installed Chrome/Chromium executables (#141)"
   },
   {
-   "at": "2026-11-26T00:41:00Z",
-   "subject": "crew: lanes from closed work steer the hand-out, a starter job on self-join, stock scaled to working seats, owner crew panel API"
+   "at": "2026-11-27T21:34:03Z",
+   "subject": "Fix book-art dynamic import for Windows file:// URLs (#140)"
   },
   {
-   "at": "2026-11-26T00:38:51Z",
-   "subject": "Test: the suite-end catch names the last check that ran"
+   "at": "2026-11-27T21:32:39Z",
+   "subject": "Pin the growth-log overlap fix end to end in pre-pr's refusals (#138)"
   },
   {
-   "at": "2026-11-26T00:36:25Z",
-   "subject": "Self: always state the aim, and file a floor-gap job past stale wants"
+   "at": "2026-11-27T21:32:24Z",
+   "subject": "Auto-post: landing tick posts one #general line per new change on main (#134)"
   },
   {
-   "at": "2026-11-26T00:33:50Z",
-   "subject": "meta-ask: a pasted card code is read field by field, not taken for a passage"
+   "at": "2026-11-27T20:47:54Z",
+   "subject": "feat(record): make next film epic - fast hook, zoom, less dead time, punchy captions, loop ending (#135)"
   },
   {
-   "at": "2026-11-26T00:32:44Z",
-   "subject": "Refresh every generated card (node tools/refresh.mjs --keep-going)"
+   "at": "2026-11-27T20:45:02Z",
+   "subject": "Document the fixed calendar date regex and test literal titles (#133)"
   },
   {
-   "at": "2026-11-26T00:30:45Z",
-   "subject": "meta-ask: a reasoning test gets a puzzle, memory gets the truth, a make ask is written not looked up"
+   "at": "2026-11-27T20:39:23Z",
+   "subject": "Add team handoff notes for job lease timeouts (#129)"
   },
   {
-   "at": "2026-11-26T00:29:53Z",
-   "subject": "Regenerate the preload graph and the similar index (both stale on main)"
+   "at": "2026-11-27T20:36:40Z",
+   "subject": "feat(share): add portable VERSE-STAGE: stage codes bypassing unbound SHARE relay (#128)"
   },
   {
-   "at": "2026-11-26T00:28:40Z",
-   "subject": "follow-ask: carry an earlier ask only when the new one cannot stand alone"
+   "at": "2026-11-27T20:34:43Z",
+   "subject": "Add morning shift report module and daily tick for #general and the Tower (#131)"
   },
   {
-   "at": "2026-11-26T00:28:01Z",
-   "subject": "bench-live: an honesty benchmark against the live answer engine, three states"
+   "at": "2026-11-27T20:34:35Z",
+   "subject": "Add quiet-agent nudge module and tests (#general 11159 job 9) (#130)"
   },
   {
-   "at": "2026-11-26T00:27:34Z",
-   "subject": "Answer engine: a slow source or free model no longer holds an uncached answer"
+   "at": "2026-11-27T20:29:33Z",
+   "subject": "Add team wake-up bell library and ping logger (#125)"
   },
   {
-   "at": "2026-11-26T00:27:31Z",
-   "subject": "Point agent-facing guides and live pages at Verse-A-to-Mind"
+   "at": "2026-11-27T20:28:58Z",
+   "subject": "Add team seat skill tags and skill-aware job matching (#127)"
   }
  ],
  "builders": {
