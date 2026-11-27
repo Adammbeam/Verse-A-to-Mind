@@ -108,14 +108,18 @@
     return { id: String(b.id || Math.random().toString(36).slice(2, 10)), name: String(b.name || 'Bill').slice(0, 60), cat: CATS.indexOf(b.cat) >= 0 ? b.cat : 'Other', amt: amt, due: day(b.due) };
   }
   function load() {
-    try {
-      const s = JSON.parse(localStorage.getItem(KEY) || 'null');
-      if (!s || typeof s !== 'object') return blank();
-      return { income: num(s.income), save: num(s.save), bills: Array.isArray(s.bills) ? s.bills.map(clean).filter(Boolean) : [] };
-    } catch (e) { return blank(); }
+    let s = null;
+    try { s = JSON.parse(localStorage.getItem(KEY) || 'null'); }
+    catch (e) { return blank(); }
+    if (!s || typeof s !== 'object') return blank();
+    const bills = Array.isArray(s.bills) ? s.bills.map(clean).filter(Boolean) : [];
+    return { income: num(s.income), save: num(s.save), bills: bills };
   }
   const state = load();
-  function persist() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function persist() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); }
+    catch (e) { console.warn('The spending plan stayed in this tab.'); }
+  }
   function totals() {
     let bills = 0; for (let i = 0; i < state.bills.length; i++) bills += state.bills[i].amt;
     bills = Math.round(bills * 100) / 100;
