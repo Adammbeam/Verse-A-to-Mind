@@ -19,14 +19,13 @@ export function bookOf(text) {
 }
 async function run(text, api) {
   const { showPage, esc } = api;
-  const get = api.fetch || fetch;
   const q = bookOf(text);
   if (!q) return 'none';
   const el = showPage((p) => { p.innerHTML = '<h2>Books</h2><div class="sub">…</div>'; });
   try {
     let subject = '';
     if (q.like) { // the book first, then its most specific subject
-      const b = await get('https://openlibrary.org/search.json?limit=1&fields=title,subject&q=' + encodeURIComponent(q.q)).then((r) => r.json());
+      const b = await fetch('https://openlibrary.org/search.json?limit=1&fields=title,subject&q=' + encodeURIComponent(q.q)).then((r) => r.json());
       const subs = ((b && b.docs && b.docs[0] && b.docs[0].subject) || []).filter((s) => !/^(fiction|general|accessible book|protected daisy|in library|large type books|open library staff picks|english fiction|american fiction)/i.test(s));
       subject = subs[0] || '';
       if (!subject) throw 0;
@@ -36,7 +35,7 @@ async function run(text, api) {
       : q.author ? 'https://openlibrary.org/search.json?limit=5&fields=key,title,author_name,first_publish_year&title=' + encodeURIComponent(q.q)
       : subject ? 'https://openlibrary.org/search.json?limit=8&subject=' + encodeURIComponent(subject)
       : 'https://openlibrary.org/search.json?limit=5&q=' + encodeURIComponent(q.q);
-    const j = await get(url).then((r) => r.json());
+    const j = await fetch(url).then((r) => r.json());
     if (!api._pageStill(el)) return 'book';
     const same = (x) => String(x || '').toLowerCase().replace(/^the\s+/, '') === q.q.toLowerCase();
     const docs = q.isbn ? (j && j.title ? [j] : []) : ((j && j.docs) || []).filter((d) => d.title && !(q.like && same(d.title)));
