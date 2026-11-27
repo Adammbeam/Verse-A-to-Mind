@@ -4,6 +4,7 @@
 //   node tools/local-ship.mjs --check         apply each patch in a throwaway worktree and run the gates, then report back
 //   node tools/local-ship.mjs --ship          the same, and when a patch is green: merge it, deploy, report shipped
 //   node tools/local-ship.mjs --id <id> --ship    one proposal only
+//   node tools/local-ship.mjs --to-store          apply each open proposal onto the code store's main and push as cr/proposal-<id>
 //
 // Why this exists rather than a GitHub Action: on 2026-11-24 the account was flagged, Actions returned 422, and a green patch had no
 // way to be proven. This runs on a machine that has git and wrangler, which is the part the edge cannot do.
@@ -16,6 +17,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { wipeRefusal, deletedNames, allowWipe } from './wipe-guard.mjs';
+import * as CS from './codestore.mjs';
 
 const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 && process.argv[i + 1] && !process.argv[i + 1].startsWith('--') ? process.argv[i + 1] : d; };
 const has = (k) => process.argv.includes(k);
@@ -73,6 +75,40 @@ export async function prove(p, { root = process.cwd(), run = sh } = {}) {
   }
 }
 
+
+/** Turn a proposal id into a valid code-store change-request ref name (cr/proposal-<id>). Pure. */
+export function crRefOf(id) {
+  const clean = String(id || 'unknown').replace(/[^a-zA-Z0-9._-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 31) || 'unknown';
+  return 'cr/proposal-' + clean;
+}
+
+/**
+ * Apply one open proposal onto the code store's main in a clean clone, commit, and push as cr/proposal-<id>
+ * so tools/verse-runner.mjs checks and lands it like any change request. Returns { ok, cr, sha?, why }.
+ */
+export async function toStore(p, { key = CS.keyOf(), run = sh, clone = CS.clone, push = CS.push, f = fetch } = {}) {
+  const cr = crRefOf(p && p.id);
+  if (!key) return { ok: false, cr, why: 'no code-store key (set VERSE_KEY, ~/.verse-team-key, or VOID_OWNER_TOKEN)' };
+  const dir = mkdtempSync(join(tmpdir(), 'proposal-store-'));
+  const repoDir = join(dir, 'repo');
+  try {
+    try { await clone(key, repoDir); } catch (e) { return { ok: false, cr, why: 'clone failed: ' + String(e && e.message || e).split('\n')[0] }; }
+    const apply = run('git', ['apply', '--index', '-'], { cwd: repoDir, input: String(p.diff || '') });
+    if (!apply.ok) return { ok: false, cr, why: 'the patch does not apply: ' + apply.out.trim().split('\n')[0] };
+    const del = run('git', ['diff', '--cached', '--name-only', '--diff-filter=D'], { cwd: repoDir });
+    const tree = run('git', ['ls-tree', '-r', '--name-only', 'HEAD'], { cwd: repoDir });
+    const wipe = wipeRefusal({ deleted: deletedNames(del.ok ? del.out : '').length, treeSize: tree.ok ? String(tree.out || '').split('\n').filter(Boolean).length : 0, allow: allowWipe() });
+    if (wipe) return { ok: false, cr, why: wipe };
+    const msg = ('proposal ' + p.id + (p.title ? ': ' + p.title : '')).slice(0, 140);
+    const commit = run('git', ['-c', 'user.email=runner@local', '-c', 'user.name=verse-runner', 'commit', '-m', msg], { cwd: repoDir });
+    if (!commit.ok) return { ok: false, cr, why: 'the patch would not commit: ' + commit.out.trim().split('\n')[0] };
+    const pushed = await push({ key, ref: 'HEAD', to: cr, cwd: repoDir, f });
+    return { ok: true, cr, sha: pushed.sha, why: 'change request ' + cr + ' (' + String(pushed.sha || '').slice(0, 7) + ')' };
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
 async function main() {
   const list = await api('?state=open');
   const wanted = arg('--id', '');
@@ -81,8 +117,15 @@ async function main() {
   let bad = 0;
   for (const p of picks) {
     console.log('#' + p.id + ' ' + p.title + ' → ' + p.branch + ' · ' + p.files + ' files, +' + p.added + ' −' + p.removed);
-    if (!has('--check') && !has('--ship')) { console.log('  (dry: pass --check to prove it, --ship to land it)'); continue; }
+    if (!has('--check') && !has('--ship') && !has('--to-store')) { console.log('  (dry: pass --check to prove it, --to-store to push a change request, --ship to land it)'); continue; }
     const full = (await api('?id=' + encodeURIComponent(p.id))).proposal;
+    if (has('--to-store')) {
+      const r = await toStore(full);
+      console.log('  ' + (r.ok ? 'pushed' : 'red') + ': ' + r.why);
+      if (!r.ok) { bad++; await api('', { method: 'PATCH', body: JSON.stringify({ id: p.id, action: 'refuse', verdict: r.why.slice(0, 400) }) }); continue; }
+      await api('', { method: 'PATCH', body: JSON.stringify({ id: p.id, action: 'check', verdict: r.why.slice(0, 400) }) });
+      continue;
+    }
     const r = await prove(full);
     console.log('  ' + (r.ok ? 'green' : 'red') + ': ' + r.why);
     if (!r.ok) { bad++; await api('', { method: 'PATCH', body: JSON.stringify({ id: p.id, action: 'refuse', verdict: r.why.slice(0, 400) }) }); continue; }
