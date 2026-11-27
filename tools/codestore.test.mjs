@@ -6,7 +6,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DatabaseSync } from 'node:sqlite';
 import { createServer } from 'node:http';
-import { execFileSync, execFile } from 'node:child_process';
+import { execFileSync, execFile, spawnSync } from 'node:child_process';
 import { promisify } from 'node:util';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -103,4 +103,71 @@ test('the clock files one mirror job when the store is behind GitHub main, and n
   assert.equal(await codestoreTick(e, 2, refs), 'job open', 'one mirror job at a time');
   assert.equal(await codestoreTick(e, 3, offline), 'unknown', 'GitHub unreadable: nothing filed');
   assert.equal(await codestoreTick({ DB: e.DB }, 4, refs), 'no store');
+});
+
+test('with no CODE bucket bound, the packs live in FILMS under verse-code/ (no new bucket needed to start)', async () => {
+  const films = r2(), e = { DB: d1(), FILMS: films, READ_TOKEN: OWNER, SALT: 's' }, { srv, url } = await serve(e), src = repo();
+  const prev = process.env.CODE_URL; process.env.CODE_URL = url;
+  try {
+    const p = await push({ key: OWNER, cwd: src });
+    assert.equal(p.ok, true); assert.ok([...films.m.keys()].every((k) => k.startsWith('verse-code/verse.git/objects/pack/')), 'every key under verse-code/');
+  } finally { process.env.CODE_URL = prev; srv.close(); rmSync(src, { recursive: true, force: true }); }
+});
+
+test('GitHub-free landing: a change request is merged onto main, checked, lands by compare and swap, deploys, and a failed health check rolls back', async () => {
+  const R = await import('./verse-runner.mjs');
+  const e = env(), { srv, url } = await serve(e), src = repo(), prev = { ...process.env };
+  process.env.CODE_URL = url;
+  const realGit = (cmd, args, opts) => { const r = spawnSync(cmd, args, { encoding: 'utf8', ...opts }); return { ok: r.status === 0, out: String(r.stdout || '') + String(r.stderr || '') }; };
+  const calls = [], run = (cmd, args, opts) => { calls.push(cmd + ' ' + args.slice(0, 3).join(' ')); return cmd === 'git' ? realGit(cmd, args, opts) : { ok: true, out: '' }; }; // the gates and wrangler stand in
+  try {
+    await push({ key: OWNER, cwd: src });
+    g(src, 'checkout', '-qb', 'feat'); writeFileSync(join(src, 'c.txt'), 'three\n'); g(src, 'add', '.'); g(src, 'commit', '-qm', 'three');
+    assert.equal((await push({ key: OWNER, cwd: src, ref: 'HEAD', to: 'cr/seat/three' })).ok, true, 'a change request is a branch in the store');
+    let st = await (await fetch(url + '/status', { headers: { authorization: 'Bearer ' + OWNER } })).json();
+    assert.deepEqual(st.changes.map((c) => c.name), ['refs/heads/cr/seat/three']);
+    assert.equal(R.nextChange(st).name, 'refs/heads/cr/seat/three');
+    // no Cloudflare token: it lands and says it did not deploy
+    delete process.env.CLOUDFLARE_API_TOKEN; delete process.env.CLOUDFLARE_ACCOUNT_ID;
+    const a = await R.runOnce({ key: OWNER, run, say: () => {} });
+    assert.equal(a.ok, true); assert.equal(a.deployed, false);
+    st = await (await fetch(url + '/status', { headers: { authorization: 'Bearer ' + OWNER } })).json();
+    assert.equal(st.main, a.landed, 'main is the checked merge'); assert.equal(st.checks[0].state, 'green');
+    assert.ok(calls.some((c) => c.startsWith('node tools/review-pr.mjs')) && calls.some((c) => c.startsWith('node tools/merge-gate.mjs')), 'the gates ran');
+    assert.equal(R.nextChange(st), null, 'a checked commit is not run twice');
+    // a second change: it deploys; health fails; the last good deploy comes back
+    await fetch(url + '/deploys', { method: 'POST', headers: { authorization: 'Bearer ' + OWNER, 'content-type': 'application/json' }, body: JSON.stringify({ sha: a.landed, deployment: 'good-deploy-1', state: 'live', url: 'https://good.a-to-mind.pages.dev' }) });
+    g(src, 'checkout', '-q', 'main'); g(src, 'checkout', '-qb', 'feat2'); writeFileSync(join(src, 'd.txt'), 'four\n'); g(src, 'add', '.'); g(src, 'commit', '-qm', 'four');
+    await push({ key: OWNER, cwd: src, ref: 'HEAD', to: 'cr/seat/four' });
+    process.env.CLOUDFLARE_API_TOKEN = 'cf-test'; process.env.CLOUDFLARE_ACCOUNT_ID = 'acct'; // secret-scan: ok
+    const cfCalls = [];
+    const f = async (u, o = {}) => {
+      const s = String(u);
+      if (s.startsWith('https://api.cloudflare.com/')) { cfCalls.push((o.method || 'GET') + ' ' + s.replace(/^.*\/projects\/[^/]+/, '')); return Response.json({ success: true, result: s.includes('/deployments?') ? [{ id: 'new-deploy-2', url: 'https://new.a-to-mind.pages.dev' }] : {} }); }
+      if (s.startsWith('https://a-to-mind.com/api/health')) return Response.json({ ok: false }, { status: 503 });
+      return fetch(u, o);
+    };
+    const b = await R.runOnce({ key: OWNER, run, f, say: () => {}, waitMs: 1 }); // no real waits between health tries
+    assert.equal(b.rolledBack, 'good-deploy-1');
+    assert.ok(calls.some((c) => c === 'npx --yes wrangler pages'), 'deployed with wrangler pages deploy (Direct Upload)');
+    assert.deepEqual(cfCalls, ['GET /deployments?env=production&per_page=1', 'POST /deployments/good-deploy-1/rollback']);
+    st = await (await fetch(url + '/status', { headers: { authorization: 'Bearer ' + OWNER } })).json();
+    assert.equal(st.deploys[0].state, 'rolled back'); assert.equal(st.deploys[0].deployment, 'new-deploy-2');
+    // a change request that no longer merges is red and never lands
+    g(src, 'checkout', '-q', 'main'); g(src, 'checkout', '-qb', 'clash'); writeFileSync(join(src, 'd.txt'), 'other\n'); g(src, 'add', '.'); g(src, 'commit', '-qm', 'clash');
+    await push({ key: OWNER, cwd: src, ref: 'HEAD', to: 'cr/seat/zclash' });
+    const main0 = st.main, c = await R.runOnce({ key: OWNER, run, f, say: () => {}, waitMs: 1 });
+    assert.equal(c.ok, false); assert.match(c.check.why, /does not merge onto main/);
+    st = await (await fetch(url + '/status', { headers: { authorization: 'Bearer ' + OWNER } })).json();
+    assert.equal(st.main, main0, 'main did not move'); assert.equal(st.checks[0].state, 'red');
+  } finally { for (const k of ['CODE_URL', 'CLOUDFLARE_API_TOKEN', 'CLOUDFLARE_ACCOUNT_ID']) { if (prev[k] === undefined) delete process.env[k]; else process.env[k] = prev[k]; } srv.close(); rmSync(src, { recursive: true, force: true }); }
+});
+
+test('reports are the owner\'s only and checked; afterDeploy keeps a healthy deploy', async () => {
+  const R = await import('./verse-runner.mjs');
+  assert.equal(C.checkOf({ ref: 'refs/heads/cr/a', sha: 'a'.repeat(40), state: 'green' }).ok, true);
+  assert.equal(C.checkOf({ ref: 'x', sha: 'a'.repeat(40), state: 'green' }).ok, false);
+  assert.equal(C.deployOf({ sha: 'a'.repeat(40), deployment: 'abc123', state: 'live', url: 'https://evil.example' }).ok, false);
+  assert.equal(R.afterDeploy({ ok: true }, null), 'keep'); assert.equal(R.afterDeploy({ ok: false }, null), 'nothing to roll back to');
+  assert.ok(C.isCr('refs/heads/cr/beam/fix-1')); assert.ok(!C.isCr('refs/heads/main'));
 });
