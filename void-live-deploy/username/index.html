@@ -6,8 +6,7 @@
 <meta name="color-scheme" content="dark">
 <title>Username finder · Verse</title>
 <meta name="description" content="Type a public name. Verse asks a fixed list of major sites whether a profile page is there, and marks each one found, not found, or could not be checked.">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Verse">
+<link rel="canonical" href="https://a-to-mind.com/username/">
 <meta property="og:title" content="Username finder · Verse">
 <meta property="og:description" content="A fixed list of public profile pages, each marked found, not found, or could not be checked. The name is not kept.">
 <meta property="og:url" content="https://a-to-mind.com/username/">
@@ -16,55 +15,66 @@
 <link rel="stylesheet" href="/verse.css">
 <style>
   body { margin: 0; background: var(--bg, #0b0a10); color: var(--d-ink, #ecebf5); }
-  main { max-width: 720px; }
-  h1 { font-size: 22px; margin: 0 0 8px; }
-  p { margin: 0 0 12px; }
-  form { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; margin: 0 0 12px; }
-  label { display: block; font-size: 13px; color: var(--d-ink-2, #a3a0b3); margin-bottom: 4px; }
-  .field { flex: 1 1 220px; }
-  input, button { font: inherit; font-size: 16px; color: inherit; background: transparent; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; padding: 0 14px; min-height: 44px; box-sizing: border-box; }
-  input { width: 100%; }
-  button { cursor: pointer; background: rgb(var(--d-key, 165 139 255) / .2); }
-  button:disabled { opacity: .6; cursor: progress; }
-  #say { min-height: 1.4em; color: var(--d-ink-2, #a3a0b3); }
+  main { max-width: 720px; } h1 { font-size: 22px; margin: 0 0 8px; }
+  form { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; margin: 12px 0; }
+  label { display: block; font-size: 13px; margin-bottom: 4px; }
+  input, button { font: inherit; font-size: 16px; color: inherit; background: transparent; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; min-height: 44px; padding: 0 14px; }
+  input { width: 100%; } .field { flex: 1 1 220px; } button { cursor: pointer; }
   ul { list-style: none; margin: 8px 0 16px; padding: 0; display: grid; gap: 8px; }
-  li { display: flex; justify-content: space-between; gap: 12px; align-items: center; border-radius: 14px; padding: 8px 12px; background: var(--d-glass, rgba(255,255,255,.04)); box-shadow: var(--d-lift, none); }
-  li a { color: inherit; font-weight: 600; }
-  .st { font-size: 14px; white-space: nowrap; }
-  li[data-result="found"] .st { color: #8ee0b0; }
-  li[data-result="missing"] .st { color: var(--d-ink-3, #8a8798); }
-  li[data-result="unchecked"] .st { color: #e6c27a; }
-  .note { color: var(--d-ink-2, #a3a0b3); font-size: 14px; }
-  footer { color: var(--d-ink-3, #8a8798); font-size: 13px; margin-top: 18px; }
-  footer a { color: rgb(var(--d-key, 165 139 255)); }
-  a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid rgb(var(--d-key, 165 139 255)); outline-offset: 2px; }
+  li { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 8px 12px; border-radius: 14px; background: rgba(255,255,255,.04); }
+  li[data-result="found"] .st { color: #8ee0b0; } li[data-result="unchecked"] .st { color: #e6c27a; }
+  .note, footer { color: var(--d-ink-3, #8a8798); font-size: 14px; } footer a, nav a { color: rgb(var(--d-key, 165 139 255)); }
 </style>
-<style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}</style>
 <script src="/visit.js" defer></script>
-<!-- seo -->
-<link rel="canonical" href="https://a-to-mind.com/username/">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Username finder","url":"https://a-to-mind.com/username/","description":"Type a public name and Verse asks a fixed list of major sites whether a profile page for that name is there. Each site comes back found, not found, or could not be checked, with a link to the page it asked. The list is fixed, a name you type is never turned into an address of your choosing, and the name is not kept.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"keywords":"username finder, check if a username is taken, find a username on public sites, is this username available, public profile name check, search a name across sites","publisher":{"@type":"Organization","name":"Verse","url":"https://a-to-mind.com/"},"potentialAction":{"@type":"ViewAction","target":{"@type":"EntryPoint","urlTemplate":"https://a-to-mind.com/username/?name={name}"},"name-input":"required name=name"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Verse","item":"https://a-to-mind.com/"},{"@type":"ListItem","position":2,"name":"Username finder","item":"https://a-to-mind.com/username/"}]}]}</script>
-<!-- /seo -->
 </head>
 <body class="vs-stand">
 <main class="vs-page">
   <h1>Username finder</h1>
-  <p>Type a name people use in public. Verse asks a short fixed list of major sites whether a profile page for that name is there, then marks each one found, not found, or could not be checked.</p>
+  <p>Type a name people use in public. Verse asks a short fixed list of major sites whether a profile page is there, then marks each one found, not found, or could not be checked.</p>
   <form id="find" method="get" action="/username/">
-    <div class="field"><label for="name">Public name</label>
-      <input id="name" name="name" maxlength="39" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="octocat" required></div>
+    <div class="field"><label for="name">Public name</label><input id="name" name="name" maxlength="39" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="octocat" required></div>
     <button type="submit" id="go">Check this name</button>
   </form>
   <p id="say" role="status" aria-live="polite"></p>
   <ul id="sites"></ul>
-  <p class="note">The list does not change with what you type, and Verse does not follow an address you supply. The name is sent once so those public pages can be asked, and it is not kept. A page that answers is not proof of who holds the name. A site that blocks the check, or uses a different shape of name, stays at could not be checked, with its link so you can look.</p>
-  <!-- asks -->
-<nav id="asks" class="tk-row" aria-label="Common asks"><span class="tk-label">Common asks</span><a href="/username/?name=octocat">octocat</a><a href="/username/?name=torvalds">torvalds</a><a href="/username/?name=ada">ada</a><a href="/username/?name=grace">grace</a><a href="/username/?name=linus">linus</a><a href="/username/?name=verse">verse</a></nav>
-<!-- /asks -->
-<nav id="related" aria-label="Related tools"><!-- related --><span class="tk-label">Use with</span> <a href="/generators/">Generators</a> <a href="/password/">Password generator</a> <a href="/notes/">Notes</a> <a href="/tools/">All tools</a><!-- /related --></nav>
+  <p class="note">The list does not change with what you type, and Verse does not follow an address you supply. The name is sent once so those public pages can be asked, and it is not kept. A page that answers is not proof of who holds the name.</p>
+  <nav id="related" aria-label="Related tools"><span class="tk-label">Use with</span> <a href="/generators/">Generators</a> <a href="/password/">Password generator</a> <a href="/notes/">Notes</a> <a href="/tools/">All tools</a></nav>
   <footer><a href="/">Verse</a> · <a href="/tools/">every tool</a></footer>
 </main>
-<script type="module" src="/username/app.js"></script>
+<script type="module">
+const $ = (id) => document.getElementById(id);
+const WORD = { found: 'Found', missing: 'Not found', unchecked: "Couldn't check" };
+const ORDER = { found: 0, missing: 1, unchecked: 2 };
+function safeProfile(url) {
+  try { const u = new URL(url); if (u.protocol !== 'https:' || u.username || u.password || (u.port && u.port !== '443')) return ''; return u.href; }
+  catch (_) { return ''; }
+}
+function paint(sites) {
+  $('sites').replaceChildren(...[...(sites || [])].sort((a, b) => (ORDER[a.result] ?? 9) - (ORDER[b.result] ?? 9)).map((site) => {
+    const li = document.createElement('li'); li.dataset.result = WORD[site.result] ? site.result : 'unchecked';
+    const href = safeProfile(site.url), name = document.createElement(href ? 'a' : 'span');
+    name.textContent = site.name || 'Site';
+    if (href) { name.href = href; name.rel = 'noopener noreferrer'; name.target = '_blank'; }
+    const st = document.createElement('span'); st.className = 'st'; st.textContent = WORD[site.result] || WORD.unchecked;
+    li.append(name, st); return li;
+  }));
+}
+async function run(name) {
+  const say = $('say'), go = $('go'); say.textContent = 'Asking the list…'; go.disabled = true; $('sites').replaceChildren();
+  try {
+    const res = await fetch('/api/username?name=' + encodeURIComponent(name), { headers: { accept: 'application/json' } });
+    const data = await res.json();
+    if (!res.ok || !data.ok) { say.textContent = data.say || 'That name could not be checked.'; return; }
+    try { history.replaceState(null, '', location.pathname + '?name=' + encodeURIComponent(data.name || name)); } catch (_) { /* the result is on the page */ }
+    say.textContent = 'Found on ' + data.found + (data.found === 1 ? ' site. ' : ' sites. ') + 'Not found on ' + data.missing + ". Couldn't check " + data.unchecked + '.';
+    paint(data.sites);
+  } catch (_) { say.textContent = 'Verse could not finish the check. Try again in a moment.'; }
+  finally { go.disabled = false; }
+}
+$('find').addEventListener('submit', (e) => { e.preventDefault(); const name = $('name').value.trim(); if (!name) { $('say').textContent = 'Type a public name first.'; return; } run(name); });
+const preset = new URLSearchParams(location.search).get('name');
+if (preset) { $('name').value = preset; run(preset.trim()); }
+</script>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => {}); });</script>
 </body>
 </html>
