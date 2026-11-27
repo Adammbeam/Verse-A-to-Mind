@@ -62,4 +62,6 @@ test('the ask bar routes, and the page is registered everywhere a tool page is',
   assert.equal(TOOLS['/news/'], 'News'); assert.ok(RELATED['/news/'].every((p) => TOOLS[p])); assert.ok(CARD_ASK['/news/']);
   assert.ok(PAGES.some((p) => p.path === '/news/' && p.asks.length >= 5)); assert.ok(/'\/news\/'/.test(fs.readFileSync(path.join(root, 'sw.js'), 'utf8')));
   const html = fs.readFileSync(path.join(root, 'news', 'index.html'), 'utf8'); assert.ok(/aria-busy="true"/.test(html) && /type="module"/.test(html) && /addEventListener\('load'/.test(html)); assert.ok(/<link rel="canonical" href="https:\/\/a-to-mind.com\/news\/">/.test(html));
+  assert.ok(/id="artBox"[^>]*background:transparent/.test(html), 'art placeholder stays reserved but not a gray empty box');
+  assert.match(html, /img\.onerror\s*=\s*\(\)\s*=>\s*\{[\s\S]*?box\.hidden = true/, 'broken art hides the box instead of leaving a blank frame');
 });
