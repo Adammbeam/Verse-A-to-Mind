@@ -212,6 +212,10 @@ export const PAGES = Object.freeze(firstOfEach([
     asks: ['verse arcade', 'play a game against verse', 'debris field', 'daily arcade game', 'play debris field'],
     action: { template: '/arcade/?play={play}', input: 'play' },
     links: [['Debris Field', '/arcade/?play=debris-field'], ['Daily Debris Field', '/arcade/?play=debris-field&daily=1'], ['Debris Field, seed 4', '/arcade/?play=debris-field&seed=4'], ['Debris Field, seed 9', '/arcade/?play=debris-field&seed=9'], ['Debris Field, seed 2', '/arcade/?play=debris-field&seed=2']] },
+  { path: '/username/', name: 'Username finder', does: 'Type a public name and Verse asks a fixed list of major sites whether a profile page for that name is there. Each site comes back found, not found, or could not be checked, with a link to the page it asked. The list is fixed, a name you type is never turned into an address of your choosing, and the name is not kept.',
+    asks: ['username finder', 'check if a username is taken', 'find a username on public sites', 'is this username available', 'public profile name check', 'search a name across sites'],
+    action: { template: '/username/?name={name}', input: 'name' },
+    links: [['octocat', '/username/?name=octocat'], ['torvalds', '/username/?name=torvalds'], ['ada', '/username/?name=ada'], ['grace', '/username/?name=grace'], ['linus', '/username/?name=linus'], ['verse', '/username/?name=verse']] },
   { path: '/tools/', name: 'Tools', does: 'Every tool Verse has built, each a page of its own, and they work together: color, chance, time, words and numbers, passwords and images. Free, private, offline after one visit.',
     asks: ['free online tools', 'online utilities', 'web tools without ads', 'tools that work offline', 'converter and generator tools'] },
 ]));
