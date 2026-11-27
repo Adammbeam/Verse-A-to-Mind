@@ -126,7 +126,6 @@ export const INTERNAL = {
       '/api/sponsors': "sponsor grid, Verse's own",
       '/api/x402/sponsor/{plan}': "sponsor plan, Verse's own",
       '/api/sitebench': "sitebench, measured live (lib/sitebench.js)",
-  '/api/security-check': "the site safety check on /security/check/: one bare public hostname in, a plain-words scorecard of HTTPS, headers, cookies, security.txt and SPF/DMARC out, GET only, private addresses refused, nothing stored (functions/api/security-check.js, lib/security-check.js); the page is the only caller",
   '/api/apibot': "the /bots/ page's relay for the few free APIs that send no CORS header: an id from a closed list, that API's own host only",
 };
 
