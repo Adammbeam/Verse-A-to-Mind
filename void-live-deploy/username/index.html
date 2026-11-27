@@ -18,8 +18,9 @@
   main { max-width: 720px; } h1 { font-size: 22px; margin: 0 0 8px; }
   form { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; margin: 12px 0; }
   label { display: block; font-size: 13px; margin-bottom: 4px; }
-  input, button { font: inherit; font-size: 16px; color: inherit; background: transparent; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; min-height: 44px; padding: 0 14px; }
-  input { width: 100%; } .field { flex: 1 1 220px; } button { cursor: pointer; }
+  input, button { font: inherit; font-size: 16px; color: inherit; background: transparent; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; min-height: 44px; padding: 0 14px; box-sizing: border-box; }
+  input { width: 100%; max-width: 100%; } .field { flex: 1 1 12rem; min-width: 0; } button { cursor: pointer; }
+  nav { display: flex; flex-wrap: wrap; gap: 8px; }
   ul { list-style: none; margin: 8px 0 16px; padding: 0; display: grid; gap: 8px; }
   li { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 8px 12px; border-radius: 14px; background: rgba(255,255,255,.04); }
   li[data-result="found"] .st { color: #8ee0b0; } li[data-result="unchecked"] .st { color: #e6c27a; }
