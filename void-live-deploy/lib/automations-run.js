@@ -264,3 +264,6 @@ export async function tick(env, now = Date.now(), opts = {}) {
   }
   return { at, checked: rows.length, ran };
 }
+
+export * from './landing-post.js';
+export { default } from './landing-post.js';

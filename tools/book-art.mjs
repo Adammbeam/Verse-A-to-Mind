@@ -28,7 +28,6 @@ export function bookArtFaults(html, where = 'page') {
 
 /** every page of the real book, typeset, and the covers. */
 export async function auditBook(root = resolve(dirname(fileURLToPath(import.meta.url)), '..')) {
-  // a dynamic import needs a file:// URL on Windows, not a drive-letter path
   const { pageHtml, coverHtml, backCoverHtml } = await import(pathToFileURL(resolve(root, 'void-live-deploy/lib/tome.js')).href);
   const book = JSON.parse(readFileSync(resolve(root, 'void-live-deploy/skills/guide.json'), 'utf8'));
   const esc = (v) => String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
