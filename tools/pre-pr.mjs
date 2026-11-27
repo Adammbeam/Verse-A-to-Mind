@@ -26,7 +26,7 @@ export const MAX_LINES = 400;
 // written by a run, one small file each, or appended by every bot: never what makes a PR hard to review or land
 const NOT_COUNTED = [/^growth\/entries\//, /^void-live-deploy\/incidents\/entries\//, /^void-live-deploy\/tower-evidence\//, /^void-live-deploy\/skills\/order\//, /(^|\/)package-lock\.json$/];
 /** files every PR may share with another open PR: the shared ledgers, the records tools/merge-main.mjs merges by keeping both sides, the map, and the skill-family list (one added skill; merge-main.mjs and the merge gate settle it). */
-export const SHARED_OK = [...new Set([...COMMON, ...APPEND_JSON, ...APPEND_TEXT, 'docs/MAP.md', 'tools/families.mjs'])];
+export const SHARED_OK = [...new Set([...COMMON, ...APPEND_JSON, ...APPEND_TEXT, 'docs/MAP.md', 'tools/families.mjs', 'void-live-deploy/growth.atom', 'void-live-deploy/growth.proof.json', 'growth.atom', 'growth.proof.json'])];
 
 /** commits on `upstream` that `head` does not have. Null when git cannot say. */
 export function behindCount(upstream = BASE, head = 'HEAD', run = git) {
@@ -55,9 +55,11 @@ export function diffSize(numstat) {
   return { lines: counted.reduce((s, x) => s + x.n, 0), counted: counted.sort((a, b) => b.n - a.n) };
 }
 
+const isSharedEntry = (f) => f.startsWith('growth/entries/') || f.startsWith('void-live-deploy/growth/entries/');
+
 /** the open PRs (not `self`) that change one of `files`, with the shared files that are not SHARED_OK. prs: [{ number, title, files }]. Pure. */
 export function overlapping(files, prs, self = null, ok = SHARED_OK) {
-  const mine = new Set((files || []).filter((f) => !ok.includes(f)));
+  const mine = new Set((files || []).filter((f) => !ok.includes(f) && !isSharedEntry(f)));
   return (prs || []).filter((p) => p.number !== self).map((p) => ({ number: p.number, title: p.title, shared: (p.files || []).filter((f) => mine.has(f)) })).filter((p) => p.shared.length);
 }
 
