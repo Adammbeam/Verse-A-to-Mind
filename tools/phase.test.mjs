@@ -2,7 +2,7 @@
 import test from 'node:test'; import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import { readFileSync } from 'node:fs';
-import { phaseAsk, phaseLink, keyMask, applyMask, place, clipType, clipName, packPage, unpackPage, numbersOf, satchelAdd, satchelGet, satchelPut, SATCHEL_MAX, PAGE_MAX, findSpans, cssColor, phaseTone, placeNote } from '../void-live-deploy/lib/phase.js';
+import { phaseAsk, phaseLink, keyMask, applyMask, place, clipType, clipName, packPage, unpackPage, numbersOf, satchelAdd, satchelGet, satchelPut, SATCHEL_MAX, PAGE_MAX, findSpans } from '../void-live-deploy/lib/phase.js';
 
 test('asks that open Phase, and which put you in the scene', () => {
   for (const a of ['phase', 'Phase.', 'see through', 'see-through mode', 'turn on phase', 'satchel']) assert.deepEqual(phaseAsk(a), { in: false }, a);
@@ -53,58 +53,30 @@ test('the Satchel keeps the newest first, capped, in this browser only', () => {
   mem.set('verse_satchel', '{oops'); assert.deepEqual(satchelGet(store), []);
 });
 
-test('a find keeps every match, and a second phrase is not thrown off by the first', () => {
+test('a find keeps every match, and the next phrase is not thrown off', () => {
   const page = 'Invoice 42 is due. The second line also says invoice 42.';
   assert.deepEqual(findSpans(page, 'invoice'), [[0, 7], [45, 52]]);
   assert.deepEqual(findSpans(page, 'invoice 42'), [[0, 10], [45, 55]]);
   assert.deepEqual(findSpans(page, 'invoice'), [[0, 7], [45, 52]]);
   assert.deepEqual(findSpans('', 'a'), []);
-  assert.deepEqual(findSpans('aaaa', 'aa', 2), [[0, 2], [2, 4]]);
 });
 
-test('a note takes the page colours and sits on the words, above the ask bar', () => {
-  assert.deepEqual(cssColor('rgb(244, 239, 230)'), { r: 244, g: 239, b: 230, a: 1 });
-  assert.equal(cssColor('rgba(10, 20, 30, 0.5)').a, 0.5);
-  assert.equal(cssColor('rgb(1 2 3 / 40%)').a, 0.4);
-  assert.equal(cssColor('transparent'), null);
-  const light = phaseTone({ r: 42, g: 36, b: 28, a: 1 }, { r: 244, g: 239, b: 230, a: 1 });
-  assert.equal(light.scheme, 'light');
-  assert.match(light.ink, /^rgba\(42,36,28,/);
-  assert.match(light.wash, /^rgba\(/);
-  const dark = phaseTone({ r: 231, g: 226, b: 216, a: 1 }, { r: 18, g: 21, b: 28, a: 1 });
-  assert.equal(dark.scheme, 'dark');
-  assert.match(dark.line, /0\.7\)$/);
-  const above = placeNote({ x: 80, y: 240, w: 120, h: 28 }, { w: 180, h: 36 }, { w: 800, h: 700 }, 640);
-  assert.equal(above.top, 240 - 36 - 8);
-  const flipped = placeNote({ x: 80, y: 12, w: 120, h: 20 }, { w: 180, h: 36 }, { w: 800, h: 700 }, 640);
-  assert.equal(flipped.top, 12 + 20 + 8);
-  const clear = placeNote({ x: 700, y: 500, w: 80, h: 20 }, { w: 200, h: 80 }, { w: 800, h: 700 }, 560);
-  assert.ok(clear.top + 80 <= 560 - 8, 'note stays above the ask bar');
-  assert.ok(clear.left + 200 <= 800 - 8, 'note stays inside the view');
-});
-
-test('the overlay script carries the same helpers it cannot import', () => {
+test('the overlay underlines with the same scan and does not restyle the ask line', () => {
   const src = readFileSync(new URL('../void-live-deploy/phase/overlay.js', import.meta.url), 'utf8');
-  const grab = (name) => {
-    const start = src.indexOf('function ' + name);
-    assert.ok(start > 0, name);
-    let depth = 0;
-    for (let j = src.indexOf('{', start); j < src.length; j++) {
-      if (src[j] === '{') depth++;
-      else if (src[j] === '}') { depth--; if (!depth) return src.slice(start, j + 1); }
-    }
-    throw new Error('unclosed ' + name);
-  };
+  const start = src.indexOf('function findSpans');
+  assert.ok(start > 0);
+  let depth = 0, end = start;
+  for (let j = src.indexOf('{', start); j < src.length; j++) {
+    if (src[j] === '{') depth++;
+    else if (src[j] === '}') { depth--; if (!depth) { end = j + 1; break; } }
+  }
   const box = {};
   vm.createContext(box);
-  vm.runInContext([grab('findSpans'), grab('cssColor'), grab('phaseTone'), grab('placeNote'), 'this.api = { findSpans, cssColor, phaseTone, placeNote };'].join('\n'), box);
-  const same = (a, b) => assert.equal(JSON.stringify(a), JSON.stringify(b));
+  vm.runInContext(src.slice(start, end) + '\nthis.findSpans = findSpans;', box);
   const page = 'Invoice 42 is due. The second line also says invoice 42.';
-  same(box.api.findSpans(page, 'invoice 42'), findSpans(page, 'invoice 42'));
-  same(box.api.cssColor('rgb(1 2 3 / 40%)'), cssColor('rgb(1 2 3 / 40%)'));
-  const fg = { r: 42, g: 36, b: 28, a: 1 }, bg = { r: 244, g: 239, b: 230, a: 1 };
-  same(box.api.phaseTone(fg, bg), phaseTone(fg, bg));
-  same(box.api.placeNote({ x: 700, y: 500, w: 80, h: 20 }, { w: 200, h: 80 }, { w: 800, h: 700 }, 560), placeNote({ x: 700, y: 500, w: 80, h: 20 }, { w: 200, h: 80 }, { w: 800, h: 700 }, 560));
-  assert.match(src, /It reads the words only when you ask/);
-  assert.doesNotMatch(src, /words read, here in your browser/);
+  assert.equal(JSON.stringify(box.findSpans(page, 'invoice 42')), JSON.stringify(findSpans(page, 'invoice 42')));
+  assert.match(src, /text-decoration:underline/);
+  assert.match(src, /background:#10121ccc/);
+  assert.doesNotMatch(src, /--ph-wash|--phase-veil|phaseBlend/);
+  assert.match(src, /document\.body\.normalize/);
 });

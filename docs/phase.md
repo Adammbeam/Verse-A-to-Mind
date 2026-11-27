@@ -36,15 +36,13 @@ On `/phase/`:
 
 On any other page, the bookmarklet (a `javascript:` link you drag to the bookmarks bar) injects `overlay.js`:
 
-- **Find** underlines the words, in that element's own ink, and puts a short note on the first match.
-- **Numbers** lists the figures. The distinctive ones (money, percents, longer numbers) get the same underline, and a one-line note sits on the first of those. The list itself stays in the ask line.
+- **Find** underlines the words in the page's own type. It does not paint them yellow, and it puts the phrase back together before the next find, so a longer phrase still matches.
+- **Numbers** lists the figures in the ask line.
 - **Fill** writes into the one box whose label matches, and does not send the form.
 - **Click** presses a button, and refuses one that pays, buys, deletes, sends, or submits a form.
 - **Take to Verse** opens `/phase/` with the words in the address's `#fragment`. A browser does not send that part to a server. The Phase page reads it and then drops it from the address.
 
-The ask line takes the page's own background, ink and type, with a soft halo instead of a hard border. The page under it stays clickable. The line itself, and a note while it is open, take the clicks.
-
-Closing the layer, or pressing Escape in the ask, clears the underlines and the note.
+The ask line is still the dark bar. A separate change gives it the page's colour and a feathered edge. This one does not.
 
 ## How it is wired
 
@@ -72,14 +70,15 @@ Checked live on 2026-11-27 with headless Chrome: `/phase/` at 1280×800 and at 3
 | Overlay bar, before | Failed. Same dark slab (`rgba(16, 18, 28, 0.73)`, 1px white border) on cream paper and on a dark page | Hard | Glued to the bottom, not to the words | The field was clear, and on a phone the placeholder was cut off | Failed. On open it read the whole page and said how many words it had |
 | Yellow mark, before | Failed. A default `<mark>`, bright yellow on both pages | Hard | On the word, but it restyled the word and split its text. `find invoice` then `find invoice 42` returned 0 matches |  | Only after a find |
 | `/phase/` dock | Matches Verse's own black stage. It will stay that dark slab over a light window you share | Radius, hard border | A bottom panel, 187px on the desktop pass, 314px on the phone | The controls are the page. They fit, and they cover a lot of a phone | Share, open, and Summarize are presses. The compositor draws continuously even when nothing is shared |
-| Overlay after this change | The bar and the note take the page's computed background, ink and font. Cream page, cream bar. Dark page, dark bar. The underline is that ink at 70% | Halo and a feathered line, no border | The underline sits under the match. A one-line note sits on the first match. A second find still lands (2 matches, then 2 matches, on the invoice page) | The field keeps a visible well and a focus ring. The shorter placeholder fits a 390px phone | No read on open. No underline until a command. Marks and the greeting were checked before the first command |
+| Find, after this change | The words stay the page's own type. The match is an underline, not a yellow mark | The line is the text's own underline | On the words. A second find still lands, because the first one no longer leaves the phrase split | The ask line is not restyled here. Its colour is a separate change | Only after a find |
 
-Reduced motion: the new overlay sets no transition and no animation (`transition-duration: 0s` under `prefers-reduced-motion: reduce`). The `/phase/` glass still fades in 0.4s, and the page opts into a view transition, with no reduced-motion gate. That stays on the list below.
+Reduced motion: the find scrolls with `behavior: 'auto'`. It adds no animation. The `/phase/` glass still fades in 0.4s, and the page opts into a view transition, with no reduced-motion gate. That stays on the list below.
 
 What is still weak, after this change:
 
-- The note can sit on the line above a match when that line is close (on a phone, "1 match" overlaps the bottom of the heading). It does not yet hunt for a gap that is actually empty.
-- Numbers are still a loose scan. On the invoice page the list included the day, the year, and a broken label ("nd line also says invoice"). Only the distinctive figures are underlined.
+- The ask line is still the same dark bar. Giving it the page's colour and a feathered edge is a separate change, and this one does not touch that styling.
+- Opening the overlay still reads the page and reports a word count before you ask.
+- Numbers are still a loose scan. On the invoice page the list included the day, the year, and a broken label ("nd line also says invoice").
 - `/phase/` itself is still a dock pasted on the bottom. Over a shared light window it will not take that window's light.
 - The compositor keeps drawing, including a full `getImageData` pass while the camera is keyed, even when the tab is hidden or nothing is shared.
 - Play as P2 does not play. The bookmarklet cannot be installed by dragging on a phone, so a phone visitor only has `/phase/` and screen share.
@@ -118,4 +117,4 @@ Each one is a single pull request, under about 400 lines, and each one should be
 8. **A phone path that is not a bookmarklet.** The empty `/phase/` state says, in one sentence, that a phone shares the screen or opens a file, because a bookmark cannot be dragged there. The dock becomes a scroll region so a keyboard cannot trap the controls.
 9. **Signed Windows package.** The installer, the signature, and the one-sentence privacy line. The binary still only opens Phase. No auto-capture.
 
-This change ships the overlay row of the score: notes in the page's own ink, on the words, a second find that still lands, an ask line in the page's colours, and no read until you ask.
+This change ships the find: an underline on the words, and a second find that still lands. It does not restyle the ask line.
