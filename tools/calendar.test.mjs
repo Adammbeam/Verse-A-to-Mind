@@ -236,6 +236,12 @@ test('text to speech is not a calendar event, even when the words include today'
   assert.equal(parseCalendar('speak at the conference on Tuesday').kind, 'add', 'speaking at an event stays on the calendar');
 });
 
+test('regex characters in an event title stay literal; the date parser compiles only its fixed fragments', async () => {
+  const { parseCalendar } = await import('../void-live-deploy/skills/calendar.js');
+  assert.equal(parseCalendar('add .*( to my calendar tomorrow at noon').title, '.*(');
+  assert.equal(parseCalendar('meeting [x] on Tuesday at 3').title, 'Meeting [x]');
+});
+
 test('the stage calendar card sways while new, then settles still so its days hold under a pointer and the frame loop stops', async () => {
   const { swayAmp, SWAY_HOLD, SWAY_FADE } = await import('../void-live-deploy/skills/calendar3d.js');
   assert.equal(swayAmp(0), 3);

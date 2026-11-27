@@ -56,3 +56,32 @@ test('a tree wipe is refused, and a new skill must be in the index', async () =>
   assert.match(gap, /index.json/);
   assert.deepEqual(refusals({ behind: 0, files: ['void-live-deploy/skills/order/1896-stage-pdf'], numstat: '0\t0\tvoid-live-deploy/skills/order/1896-stage-pdf', prs: [], indexNames: ['stage-pdf'] }), []);
 });
+
+test('growth feeds, proof files and growth entries are shared-ok across open PRs', async () => {
+  const { SHARED_OK, overlapping } = await import('./pre-pr.mjs');
+  for (const f of ['void-live-deploy/growth.atom', 'void-live-deploy/growth.proof.json', 'growth.atom', 'growth.proof.json']) {
+    assert.ok(SHARED_OK.includes(f), f + ' is in SHARED_OK');
+  }
+  const sharedFiles = [
+    'void-live-deploy/growth.atom',
+    'void-live-deploy/growth.proof.json',
+    'growth.atom',
+    'growth.proof.json',
+    'growth/entries/2026-11-27-a.json',
+    'void-live-deploy/growth/entries/2026-11-27-b.json',
+  ];
+  const prs = [{ number: 42, title: 'other growth PR', files: [...sharedFiles, 'tools/other.mjs'] }];
+  assert.deepEqual(overlapping(sharedFiles, prs), []);
+  assert.deepEqual(overlapping([...sharedFiles, 'tools/other.mjs'], prs), [{ number: 42, title: 'other growth PR', shared: ['tools/other.mjs'] }]);
+});
+
+test('a PR that shares only growth run logs with an open PR clears every refusal; a look-alike path does not', async () => {
+  const { refusals, overlapping } = await import('./pre-pr.mjs');
+  const logs = ['void-live-deploy/growth.atom', 'void-live-deploy/growth.proof.json', 'growth/entries/20261127T002210Z-opencode-1576f528.json', 'void-live-deploy/growth/entries/x.json'];
+  const prs = [{ number: 112, title: 'to-store', files: [...logs, 'tools/local-ship.mjs'] }];
+  // the #112 / #114 case from the 2026-11-27 audit: only run logs in common, so the PR may open
+  assert.deepEqual(refusals({ behind: 0, files: [...logs, 'team/app.js'], numstat: '3\t0\tteam/app.js', prs }), []);
+  // a path that only looks like a run log is still a clash
+  const near = overlapping(['growth/entries-old/x.json', 'void-live-deploy/growth.atom.bak'], [{ number: 7, title: 'x', files: ['growth/entries-old/x.json', 'void-live-deploy/growth.atom.bak'] }]);
+  assert.deepEqual(near[0].shared, ['growth/entries-old/x.json', 'void-live-deploy/growth.atom.bak']);
+});
