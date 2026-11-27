@@ -180,7 +180,3 @@
 /dashboard/ /starboard/ 301
 /games /arcade/ 301
 /games/ /arcade/ 301
-
-# consolidation-map: the second colour picker is the colour page. The function at functions/color/colour-picker-tool keeps ?c= (the colour). This rule is the same address.
-/color/colour-picker-tool /color/ 301
-/color/colour-picker-tool/ /color/ 301
