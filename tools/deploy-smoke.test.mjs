@@ -3,9 +3,9 @@
 // 2026-10-18 failed at "did not serve the tested void.html" (run 39198120938) while the page was served correctly.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 
-const yml = readFileSync(new URL('../.github/workflows/deploy.yml', import.meta.url), 'utf8');
+const yml = readFileSync((existsSync(new URL('../.github/workflows/deploy.yml', import.meta.url)) ? new URL('../.github/workflows/deploy.yml', import.meta.url) : new URL('../.github/workflows-parked/deploy.yml', import.meta.url)) /* parked 2026-11-25 */, 'utf8');
 const smoke = yml.slice(yml.indexOf('Smoke check the deployment'), yml.indexOf('Smoke check the deployment') + 1500);
 
 test('the preview smoke check compares with the uploaded copy', () => {
