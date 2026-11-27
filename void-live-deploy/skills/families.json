@@ -14,7 +14,7 @@
  "bench_at": "2026-11-24",
  "totals": {
   "experiment": 3,
-  "tested": 21,
+  "tested": 22,
   "checked": 18,
   "proven": 459
  },
@@ -204,7 +204,7 @@
     {
      "name": "image-gen",
      "tier": "proven",
-     "why": "a self-test, 3 real asks in the benchmark, 8 live findings, 2026-11-23",
+     "why": "a self-test, 3 real asks in the benchmark",
      "last_tested": "2026-11-24",
      "last_tested_by": "the benchmark",
      "success_rate": 1,
@@ -1216,9 +1216,9 @@
     {
      "name": "baggage",
      "tier": "proven",
-     "why": "a self-test, 3 real asks in the benchmark, 11 live findings, 2026-11-24",
+     "why": "a self-test, 3 real asks in the benchmark",
      "last_tested": "2026-11-24",
-     "last_tested_by": "a live call",
+     "last_tested_by": "the benchmark",
      "success_rate": 1,
      "promoted": "2026-10-30",
      "streak": 24
@@ -2881,9 +2881,9 @@
     {
      "name": "rides",
      "tier": "proven",
-     "why": "a self-test, 3 browser-suite mentions, 3 real asks in the benchmark, 44 live findings, 2026-11-24",
+     "why": "a self-test, 3 browser-suite mentions, 3 real asks in the benchmark",
      "last_tested": "2026-11-24",
-     "last_tested_by": "a live call",
+     "last_tested_by": "the benchmark",
      "success_rate": 1,
      "streak": 35
     },
@@ -3933,7 +3933,7 @@
    "for": "how Verse grows, what it wants, what it can do and sell, and acting on your behalf",
    "count": {
     "experiment": 2,
-    "tested": 9,
+    "tested": 10,
     "checked": 6,
     "proven": 97
    },
@@ -5005,6 +5005,13 @@
      "tier": "tested",
      "why": "a self-test",
      "last_tested": "2026-11-26",
+     "last_tested_by": "its tests"
+    },
+    {
+     "name": "eml-handoff",
+     "tier": "tested",
+     "why": "a self-test",
+     "last_tested": "2026-11-27",
      "last_tested_by": "its tests"
     }
    ]
