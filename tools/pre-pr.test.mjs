@@ -56,3 +56,21 @@ test('a tree wipe is refused, and a new skill must be in the index', async () =>
   assert.match(gap, /index.json/);
   assert.deepEqual(refusals({ behind: 0, files: ['void-live-deploy/skills/order/1896-stage-pdf'], numstat: '0\t0\tvoid-live-deploy/skills/order/1896-stage-pdf', prs: [], indexNames: ['stage-pdf'] }), []);
 });
+
+test('growth feeds, proof files and growth entries are shared-ok across open PRs', async () => {
+  const { SHARED_OK, overlapping } = await import('./pre-pr.mjs');
+  for (const f of ['void-live-deploy/growth.atom', 'void-live-deploy/growth.proof.json', 'growth.atom', 'growth.proof.json']) {
+    assert.ok(SHARED_OK.includes(f), f + ' is in SHARED_OK');
+  }
+  const sharedFiles = [
+    'void-live-deploy/growth.atom',
+    'void-live-deploy/growth.proof.json',
+    'growth.atom',
+    'growth.proof.json',
+    'growth/entries/2026-11-27-a.json',
+    'void-live-deploy/growth/entries/2026-11-27-b.json',
+  ];
+  const prs = [{ number: 42, title: 'other growth PR', files: [...sharedFiles, 'tools/other.mjs'] }];
+  assert.deepEqual(overlapping(sharedFiles, prs), []);
+  assert.deepEqual(overlapping([...sharedFiles, 'tools/other.mjs'], prs), [{ number: 42, title: 'other growth PR', shared: ['tools/other.mjs'] }]);
+});

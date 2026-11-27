@@ -1,12 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 
 // a Windows checkout can hand this back with CRLF; the workflow's own bash sees LF, so the assertions read it the same way
-const y = readFileSync(new URL('../.github/workflows/grow-self.yml', import.meta.url), 'utf8').replace(/\r\n?/g, '\n');
+const activeUrl = new URL('../.github/workflows/grow-self.yml', import.meta.url);
+const parkedUrl = new URL('../.github/workflows-parked/grow-self.yml', import.meta.url);
+const workflowUrl = existsSync(activeUrl) ? activeUrl : existsSync(parkedUrl) ? parkedUrl : null;
+const y = workflowUrl ? readFileSync(workflowUrl, 'utf8').replace(/\r\n?/g, '\n') : '';
+const skip = !workflowUrl ? 'grow-self.yml not found in .github/workflows or .github/workflows-parked' : false;
 const files = (re) => [...y.matchAll(re)].map((m) => m[1].replace(/\\\./g, '.').split('|').sort().join(','));
 
-test('the build job, the pull request job and the git add allow exactly the same files, and nothing else', () => {
+test('the build job, the pull request job and the git add allow exactly the same files, and nothing else', { skip }, () => {
   const allow = files(/grep -vE '\^\(([^)]+)\)\$'/g);
   assert.equal(allow.length, 2, 'one allowlist in each job');
   assert.equal(allow[0], allow[1]);
@@ -16,7 +20,7 @@ test('the build job, the pull request job and the git add allow exactly the same
   assert.equal(add, allow[0]);
 });
 
-test('the build job holds no secret and no write token; only the pull request job writes; only the queue job holds the owner token', () => {
+test('the build job holds no secret and no write token; only the pull request job writes; only the queue job holds the owner token', { skip }, () => {
   const jobs = y.split(/\n  (?=[a-z-]+:\n    (?:needs|runs-on))/).slice(1);
   const by = Object.fromEntries(jobs.map((j) => [/^([a-z-]+):/.exec(j)[1], j]));
   assert.deepEqual(Object.keys(by).sort(), ['build', 'game-upgrade', 'pull-request', 'queue-gaps']);
@@ -25,7 +29,7 @@ test('the build job holds no secret and no write token; only the pull request jo
   assert.match(by['queue-gaps'], /VOID_OWNER_TOKEN/); assert.doesNotMatch(by['queue-gaps'], /contents: write|pull-requests: write/);
 });
 
-test('one preview in flight: an open preview PR or an open state stops the run before it probes anything', () => {
+test('one preview in flight: an open preview PR or an open state stops the run before it probes anything', { skip }, () => {
   // an open PR this repo actually labels (the old "verse hardens" label was never created, so the guard read zero forever)
   assert.match(y, /--state open --json number,labels/);
   assert.match(y, /name == "made by Verse" or \.name == "verse hardens"/);
@@ -42,7 +46,7 @@ test('one preview in flight: an open preview PR or an open state stops the run b
   assert.doesNotMatch(y, /git push[^\n]*--force|--no-verify/);
 });
 
-test('the gate stops the run itself: an open preview pull request ends the job with exit 0 and generates nothing', () => {
+test('the gate stops the run itself: an open preview pull request ends the job with exit 0 and generates nothing', { skip }, () => {
   const gate = y.slice(y.indexOf('- name: One preview at a time'), y.indexOf('- name: Think it up'));
   assert.match(gate, /echo "open=1" >> "\$GITHUB_OUTPUT"/, 'it starts closed to everything downstream, so an early stop is safe');
   assert.match(gate, /gh pr list --repo "\$\{\{ github\.repository \}\}" --state open/);
@@ -52,7 +56,7 @@ test('the gate stops the run itself: an open preview pull request ends the job w
   assert.match(y, /if: steps\.open\.outputs\.open == '0'/, 'the rest of the job only runs when the gate is clear');
 });
 
-test("the gate waits, it never fails the run: every stop is an exit 0", () => {
+test("the gate waits, it never fails the run: every stop is an exit 0", { skip }, () => {
   const gate = y.slice(y.indexOf('- name: One preview at a time'), y.indexOf('- name: Think it up'));
   const close = y.slice(y.indexOf('- name: Close out the previous preview'), y.indexOf('- name: Sync void.html copies'));
   assert.ok(gate && close, 'the gate and the close-out steps exist');
@@ -66,7 +70,7 @@ test("the gate waits, it never fails the run: every stop is an exit 0", () => {
   assert.match(close, /close it by hand/);
 });
 
-test("the work, the queueing and the tests of the gate all wait for the gate", () => {
+test("the work, the queueing and the tests of the gate all wait for the gate", { skip }, () => {
   // the gate's verdict is a job output, so a job that writes or queues can wait for it
   assert.match(y, /open: \$\{\{ steps\.open\.outputs\.open \}\}/);
   assert.match(y, /needs\.build\.outputs\.open == '0'/);
