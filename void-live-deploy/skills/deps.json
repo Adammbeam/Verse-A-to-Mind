@@ -1,12 +1,12 @@
 {
  "note": "Who imports whom under void-live-deploy/ (tools/deps.mjs, from the import lines; asked by Verse). libs: each lib file with the skills that depend on it, directly or through another file (skills), directly (direct), and every dependant of any kind (dependants). files: each file's imports, the files that import it (importedBy) and the ones that reach it through them (reachedBy).",
- "counted": 1471,
+ "counted": 1505,
  "libs": [
   {
    "file": "lib/stage-pack.js",
-   "skills": 65,
+   "skills": 66,
    "direct": 52,
-   "dependants": 89,
+   "dependants": 113,
    "tests": 6
   },
   {
@@ -34,7 +34,7 @@
    "file": "lib/image-safety.js",
    "skills": 32,
    "direct": 0,
-   "dependants": 198,
+   "dependants": 219,
    "tests": 1
   },
   {
@@ -48,21 +48,21 @@
    "file": "lib/keeper.js",
    "skills": 31,
    "direct": 0,
-   "dependants": 190,
+   "dependants": 211,
    "tests": 1
   },
   {
    "file": "lib/merge-rules.js",
    "skills": 31,
    "direct": 1,
-   "dependants": 190,
+   "dependants": 211,
    "tests": 1
   },
   {
    "file": "lib/art-rules.js",
    "skills": 31,
    "direct": 0,
-   "dependants": 189,
+   "dependants": 210,
    "tests": 8
   },
   {
@@ -234,6 +234,20 @@
    "tests": 1
   },
   {
+   "file": "lib/self-sites.js",
+   "skills": 10,
+   "direct": 0,
+   "dependants": 92,
+   "tests": 2
+  },
+  {
+   "file": "lib/verse-repo.js",
+   "skills": 10,
+   "direct": 1,
+   "dependants": 59,
+   "tests": 1
+  },
+  {
    "file": "lib/better.js",
    "skills": 10,
    "direct": 2,
@@ -241,17 +255,10 @@
    "tests": 4
   },
   {
-   "file": "lib/self-sites.js",
+   "file": "lib/stage-find.js",
    "skills": 10,
-   "direct": 0,
-   "dependants": 38,
-   "tests": 2
-  },
-  {
-   "file": "lib/verse-repo.js",
-   "skills": 10,
-   "direct": 1,
-   "dependants": 38,
+   "direct": 4,
+   "dependants": 53,
    "tests": 1
   },
   {
@@ -336,13 +343,6 @@
    "skills": 9,
    "direct": 1,
    "dependants": 53,
-   "tests": 1
-  },
-  {
-   "file": "lib/stage-find.js",
-   "skills": 9,
-   "direct": 4,
-   "dependants": 29,
    "tests": 1
   },
   {
@@ -545,8 +545,15 @@
    "file": "lib/telemetry.js",
    "skills": 5,
    "direct": 1,
-   "dependants": 119,
+   "dependants": 141,
    "tests": 2
+  },
+  {
+   "file": "lib/stage-port.js",
+   "skills": 5,
+   "direct": 3,
+   "dependants": 46,
+   "tests": 1
   },
   {
    "file": "lib/textdiff.js",
@@ -678,21 +685,21 @@
    "file": "lib/verse-secrets.js",
    "skills": 4,
    "direct": 0,
-   "dependants": 119,
+   "dependants": 141,
    "tests": 1
   },
   {
    "file": "lib/note-ask.js",
    "skills": 4,
    "direct": 0,
-   "dependants": 118,
+   "dependants": 140,
    "tests": 1
   },
   {
    "file": "lib/automation-fix.js",
    "skills": 4,
    "direct": 0,
-   "dependants": 116,
+   "dependants": 138,
    "tests": 9
   },
   {
@@ -721,13 +728,6 @@
    "skills": 4,
    "direct": 0,
    "dependants": 40,
-   "tests": 1
-  },
-  {
-   "file": "lib/stage-port.js",
-   "skills": 4,
-   "direct": 3,
-   "dependants": 22,
    "tests": 1
   },
   {
@@ -881,7 +881,7 @@
    "file": "lib/ics.js",
    "skills": 3,
    "direct": 2,
-   "dependants": 9,
+   "dependants": 10,
    "tests": 1
   },
   {
@@ -1049,8 +1049,78 @@
    "file": "lib/image-gen.js",
    "skills": 2,
    "direct": 1,
-   "dependants": 129,
+   "dependants": 150,
    "tests": 4
+  },
+  {
+   "file": "lib/tower-controls.js",
+   "skills": 2,
+   "direct": 0,
+   "dependants": 78,
+   "tests": 1
+  },
+  {
+   "file": "lib/gate-badge.js",
+   "skills": 2,
+   "direct": 0,
+   "dependants": 77,
+   "tests": 2
+  },
+  {
+   "file": "lib/obituary.js",
+   "skills": 2,
+   "direct": 0,
+   "dependants": 77,
+   "tests": 2
+  },
+  {
+   "file": "lib/tower-journeys.js",
+   "skills": 2,
+   "direct": 0,
+   "dependants": 77,
+   "tests": 3
+  },
+  {
+   "file": "lib/tower-topic.js",
+   "skills": 2,
+   "direct": 0,
+   "dependants": 77,
+   "tests": 1
+  },
+  {
+   "file": "lib/tower-weight.js",
+   "skills": 2,
+   "direct": 0,
+   "dependants": 77,
+   "tests": 1
+  },
+  {
+   "file": "lib/tower.js",
+   "skills": 2,
+   "direct": 1,
+   "dependants": 76,
+   "tests": 36
+  },
+  {
+   "file": "lib/gumroad.js",
+   "skills": 2,
+   "direct": 1,
+   "dependants": 67,
+   "tests": 5
+  },
+  {
+   "file": "lib/store-db.js",
+   "skills": 2,
+   "direct": 0,
+   "dependants": 63,
+   "tests": 3
+  },
+  {
+   "file": "lib/products.js",
+   "skills": 2,
+   "direct": 1,
+   "dependants": 54,
+   "tests": 3
   },
   {
    "file": "lib/alt-pay.js",
@@ -1060,11 +1130,11 @@
    "tests": 2
   },
   {
-   "file": "lib/gumroad.js",
+   "file": "lib/watch.js",
    "skills": 2,
    "direct": 1,
    "dependants": 46,
-   "tests": 5
+   "tests": 2
   },
   {
    "file": "lib/compose.js",
@@ -1079,13 +1149,6 @@
    "direct": 0,
    "dependants": 43,
    "tests": 1
-  },
-  {
-   "file": "lib/store-db.js",
-   "skills": 2,
-   "direct": 0,
-   "dependants": 42,
-   "tests": 3
   },
   {
    "file": "lib/store-products.js",
@@ -1121,69 +1184,6 @@
    "direct": 1,
    "dependants": 37,
    "tests": 2
-  },
-  {
-   "file": "lib/products.js",
-   "skills": 2,
-   "direct": 1,
-   "dependants": 33,
-   "tests": 3
-  },
-  {
-   "file": "lib/watch.js",
-   "skills": 2,
-   "direct": 1,
-   "dependants": 25,
-   "tests": 2
-  },
-  {
-   "file": "lib/tower-controls.js",
-   "skills": 2,
-   "direct": 0,
-   "dependants": 24,
-   "tests": 1
-  },
-  {
-   "file": "lib/gate-badge.js",
-   "skills": 2,
-   "direct": 0,
-   "dependants": 23,
-   "tests": 2
-  },
-  {
-   "file": "lib/obituary.js",
-   "skills": 2,
-   "direct": 0,
-   "dependants": 23,
-   "tests": 2
-  },
-  {
-   "file": "lib/tower-journeys.js",
-   "skills": 2,
-   "direct": 0,
-   "dependants": 23,
-   "tests": 3
-  },
-  {
-   "file": "lib/tower-topic.js",
-   "skills": 2,
-   "direct": 0,
-   "dependants": 23,
-   "tests": 1
-  },
-  {
-   "file": "lib/tower-weight.js",
-   "skills": 2,
-   "direct": 0,
-   "dependants": 23,
-   "tests": 1
-  },
-  {
-   "file": "lib/tower.js",
-   "skills": 2,
-   "direct": 1,
-   "dependants": 22,
-   "tests": 36
   },
   {
    "file": "lib/recipe-respect.js",
@@ -1452,11 +1452,25 @@
    "tests": 20
   },
   {
+   "file": "lib/actions.js",
+   "skills": 1,
+   "direct": 0,
+   "dependants": 54,
+   "tests": 2
+  },
+  {
    "file": "lib/ask-same.js",
    "skills": 1,
    "direct": 1,
    "dependants": 45,
    "tests": 2
+  },
+  {
+   "file": "lib/automations.js",
+   "skills": 1,
+   "direct": 0,
+   "dependants": 44,
+   "tests": 6
   },
   {
    "file": "lib/follow-ask.js",
@@ -1494,7 +1508,21 @@
    "tests": 2
   },
   {
+   "file": "lib/versus-sign.js",
+   "skills": 1,
+   "direct": 1,
+   "dependants": 38,
+   "tests": 0
+  },
+  {
    "file": "lib/tally.js",
+   "skills": 1,
+   "direct": 1,
+   "dependants": 37,
+   "tests": 1
+  },
+  {
+   "file": "lib/versus-floor.js",
    "skills": 1,
    "direct": 1,
    "dependants": 37,
@@ -1543,25 +1571,11 @@
    "tests": 2
   },
   {
-   "file": "lib/actions.js",
-   "skills": 1,
-   "direct": 0,
-   "dependants": 33,
-   "tests": 2
-  },
-  {
    "file": "lib/brain-workspace.js",
    "skills": 1,
    "direct": 1,
    "dependants": 27,
    "tests": 2
-  },
-  {
-   "file": "lib/automations.js",
-   "skills": 1,
-   "direct": 0,
-   "dependants": 23,
-   "tests": 6
   },
   {
    "file": "lib/studio.js",
@@ -1785,14 +1799,7 @@
    "skills": 1,
    "direct": 1,
    "dependants": 5,
-   "tests": 6
-  },
-  {
-   "file": "lib/versus-sign.js",
-   "skills": 1,
-   "direct": 1,
-   "dependants": 5,
-   "tests": 0
+   "tests": 7
   },
   {
    "file": "lib/video-mux.js",
@@ -1861,13 +1868,6 @@
    "file": "lib/transition.js",
    "skills": 1,
    "direct": 0,
-   "dependants": 4,
-   "tests": 1
-  },
-  {
-   "file": "lib/versus-floor.js",
-   "skills": 1,
-   "direct": 1,
    "dependants": 4,
    "tests": 1
   },
@@ -2474,6 +2474,13 @@
    "tests": 2
   },
   {
+   "file": "lib/stage-code.js",
+   "skills": 1,
+   "direct": 1,
+   "dependants": 1,
+   "tests": 1
+  },
+  {
    "file": "lib/stigmergy-law.js",
    "skills": 1,
    "direct": 1,
@@ -2575,49 +2582,49 @@
    "file": "lib/owner-accounts.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 125,
+   "dependants": 146,
    "tests": 0
   },
   {
    "file": "lib/guard.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 124,
-   "tests": 37
+   "dependants": 145,
+   "tests": 38
   },
   {
    "file": "lib/pages.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 79,
+   "dependants": 100,
    "tests": 1
   },
   {
    "file": "lib/webauthn.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 79,
+   "dependants": 100,
    "tests": 0
   },
   {
    "file": "lib/void-me.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 78,
+   "dependants": 99,
    "tests": 11
   },
   {
    "file": "lib/http.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 77,
+   "dependants": 98,
    "tests": 1
   },
   {
    "file": "lib/earnings.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 62,
+   "dependants": 83,
    "tests": 0
   },
   {
@@ -2635,11 +2642,32 @@
    "tests": 7
   },
   {
+   "file": "lib/watch-build.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 51,
+   "tests": 2
+  },
+  {
+   "file": "lib/job-guide.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 49,
+   "tests": 4
+  },
+  {
    "file": "lib/persona.js",
    "skills": 0,
    "direct": 0,
    "dependants": 48,
    "tests": 0
+  },
+  {
+   "file": "lib/team.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 48,
+   "tests": 13
   },
   {
    "file": "lib/shortfall.js",
@@ -2684,6 +2712,20 @@
    "tests": 10
   },
   {
+   "file": "lib/team-leverage.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 40,
+   "tests": 1
+  },
+  {
+   "file": "lib/proposals.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 39,
+   "tests": 1
+  },
+  {
    "file": "lib/router.js",
    "skills": 0,
    "direct": 0,
@@ -2691,18 +2733,88 @@
    "tests": 7
   },
   {
-   "file": "lib/free-router.js",
+   "file": "lib/sale-jobs.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 36,
+   "dependants": 39,
+   "tests": 1
+  },
+  {
+   "file": "lib/team-promote.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 39,
+   "tests": 1
+  },
+  {
+   "file": "lib/automations-run.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 38,
+   "tests": 6
+  },
+  {
+   "file": "lib/brain-dream.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 38,
+   "tests": 1
+  },
+  {
+   "file": "lib/landing-post.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 38,
+   "tests": 1
+  },
+  {
+   "file": "lib/team-busy.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 38,
+   "tests": 1
+  },
+  {
+   "file": "lib/team-crew.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 38,
+   "tests": 1
+  },
+  {
+   "file": "lib/team-lanes.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 38,
+   "tests": 1
+  },
+  {
+   "file": "lib/team-patch.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 38,
+   "tests": 1
+  },
+  {
+   "file": "lib/team-priorities.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 38,
    "tests": 2
   },
   {
    "file": "lib/build-id.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 35,
+   "dependants": 36,
    "tests": 1
+  },
+  {
+   "file": "lib/free-router.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 36,
+   "tests": 2
   },
   {
    "file": "lib/memory-core.js",
@@ -2723,7 +2835,21 @@
    "skills": 0,
    "direct": 0,
    "dependants": 35,
-   "tests": 14
+   "tests": 15
+  },
+  {
+   "file": "lib/universe-seeds.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 35,
+   "tests": 4
+  },
+  {
+   "file": "lib/universe.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 35,
+   "tests": 4
   },
   {
    "file": "lib/ai-gateway.js",
@@ -2766,6 +2892,13 @@
    "direct": 0,
    "dependants": 34,
    "tests": 1
+  },
+  {
+   "file": "lib/scrub-sites.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 34,
+   "tests": 4
   },
   {
    "file": "lib/searches.js",
@@ -2947,83 +3080,6 @@
    "skills": 0,
    "direct": 0,
    "dependants": 25,
-   "tests": 1
-  },
-  {
-   "file": "lib/watch-build.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 25,
-   "tests": 2
-  },
-  {
-   "file": "lib/job-guide.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 23,
-   "tests": 4
-  },
-  {
-   "file": "lib/team.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 22,
-   "tests": 11
-  },
-  {
-   "file": "lib/team-leverage.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 19,
-   "tests": 1
-  },
-  {
-   "file": "lib/sale-jobs.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 18,
-   "tests": 1
-  },
-  {
-   "file": "lib/automations-run.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 17,
-   "tests": 6
-  },
-  {
-   "file": "lib/brain-dream.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 17,
-   "tests": 1
-  },
-  {
-   "file": "lib/team-crew.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 17,
-   "tests": 1
-  },
-  {
-   "file": "lib/team-lanes.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 17,
-   "tests": 1
-  },
-  {
-   "file": "lib/team-priorities.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 17,
-   "tests": 2
-  },
-  {
-   "file": "lib/team-promote.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 17,
    "tests": 1
   },
   {
@@ -3237,6 +3293,13 @@
    "tests": 2
   },
   {
+   "file": "lib/codestore.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 3,
+   "tests": 1
+  },
+  {
    "file": "lib/comments.js",
    "skills": 0,
    "direct": 0,
@@ -3356,6 +3419,13 @@
    "tests": 2
   },
   {
+   "file": "lib/flights-core.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 2,
+   "tests": 2
+  },
+  {
    "file": "lib/honest.js",
    "skills": 0,
    "direct": 0,
@@ -3410,20 +3480,6 @@
    "direct": 0,
    "dependants": 2,
    "tests": 0
-  },
-  {
-   "file": "lib/universe-seeds.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 2,
-   "tests": 4
-  },
-  {
-   "file": "lib/universe.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 2,
-   "tests": 4
   },
   {
    "file": "lib/used.js",
@@ -3531,6 +3587,13 @@
    "tests": 1
   },
   {
+   "file": "lib/codestore-tick.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 1,
+   "tests": 1
+  },
+  {
    "file": "lib/daily-photo.js",
    "skills": 0,
    "direct": 0,
@@ -3566,14 +3629,14 @@
    "tests": 1
   },
   {
-   "file": "lib/flights-core.js",
+   "file": "lib/flights-de.js",
    "skills": 0,
    "direct": 0,
    "dependants": 1,
    "tests": 1
   },
   {
-   "file": "lib/flights-de.js",
+   "file": "lib/flights-vector.js",
    "skills": 0,
    "direct": 0,
    "dependants": 1,
@@ -3657,13 +3720,6 @@
    "tests": 1
   },
   {
-   "file": "lib/proposals.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 1,
-   "tests": 1
-  },
-  {
    "file": "lib/propose-fix.js",
    "skills": 0,
    "direct": 0,
@@ -3713,13 +3769,6 @@
    "tests": 2
   },
   {
-   "file": "lib/scrub-sites.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 1,
-   "tests": 3
-  },
-  {
    "file": "lib/self-blocks.js",
    "skills": 0,
    "direct": 0,
@@ -3760,6 +3809,13 @@
    "direct": 0,
    "dependants": 1,
    "tests": 2
+  },
+  {
+   "file": "lib/team-rally.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 1,
+   "tests": 1
   },
   {
    "file": "lib/text-diff-page.js",
@@ -3860,6 +3916,41 @@
    "tests": 1
   },
   {
+   "file": "lib/auto-post-landing.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
+   "file": "lib/auto-post-main.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
+   "file": "lib/auto-post-tick.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
+   "file": "lib/auto-post.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
+   "file": "lib/autoPost.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
    "file": "lib/avatar.js",
    "skills": 0,
    "direct": 0,
@@ -3945,6 +4036,13 @@
   },
   {
    "file": "lib/card-stage.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
+   "file": "lib/change-landing.js",
    "skills": 0,
    "direct": 0,
    "dependants": 0,
@@ -4039,7 +4137,7 @@
    "skills": 0,
    "direct": 0,
    "dependants": 0,
-   "tests": 3
+   "tests": 4
   },
   {
    "file": "lib/explore-more.js",
@@ -4196,6 +4294,48 @@
    "tests": 1
   },
   {
+   "file": "lib/landing-auto-post.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
+   "file": "lib/landing-tick.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
+   "file": "lib/landing.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
+   "file": "lib/landingpost.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
+   "file": "lib/landings-post.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
+   "file": "lib/landings.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
    "file": "lib/ledger.js",
    "skills": 0,
    "direct": 0,
@@ -4208,6 +4348,34 @@
    "direct": 0,
    "dependants": 0,
    "tests": 1
+  },
+  {
+   "file": "lib/main-auto-post.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
+   "file": "lib/main-landing-post.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
+   "file": "lib/main-landing-tick.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
+   "file": "lib/main-landing.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
   },
   {
    "file": "lib/markets-card.js",
@@ -4343,6 +4511,13 @@
    "tests": 1
   },
   {
+   "file": "lib/post-landing.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 0
+  },
+  {
    "file": "lib/pw-handover.js",
    "skills": 0,
    "direct": 0,
@@ -4389,7 +4564,7 @@
    "skills": 0,
    "direct": 0,
    "dependants": 0,
-   "tests": 1
+   "tests": 0
   },
   {
    "file": "lib/refusal.js",
@@ -4519,6 +4694,48 @@
   },
   {
    "file": "lib/systems.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 1
+  },
+  {
+   "file": "lib/team-claim-board.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 1
+  },
+  {
+   "file": "lib/team-handoff-notes.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 1
+  },
+  {
+   "file": "lib/team-quiet-nudge.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 1
+  },
+  {
+   "file": "lib/team-shift-report.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 1
+  },
+  {
+   "file": "lib/team-skills.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 0,
+   "tests": 1
+  },
+  {
+   "file": "lib/team-wake.js",
    "skills": 0,
    "direct": 0,
    "dependants": 0,
@@ -4733,6 +4950,7 @@
     "lib/answer-speed.js",
     "lib/ai-gateway.js",
     "lib/keeper.js",
+    "lib/scrub-sites.js",
     "lib/privacy.js",
     "lib/router.js",
     "lib/near-miss.js",
@@ -4881,8 +5099,10 @@
     "lib/automations-run.js",
     "lib/team-crew-run.js",
     "functions/api/team.js",
+    "lib/codestore-tick.js",
     "lib/verse-runs.js",
-    "lib/key-watch.js"
+    "lib/key-watch.js",
+    "lib/team-rally.js"
    ],
    "importedBy": []
   },
@@ -5262,10 +5482,31 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
-    "lib/team-crew-run.js"
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-crew-run.js",
+    "lib/team-rally.js"
    ]
   },
   "functions/api/handoff.js": {
@@ -5273,6 +5514,12 @@
     "lib/actions.js",
     "lib/automation-fix.js",
     "lib/sale-jobs.js"
+   ],
+   "importedBy": []
+  },
+  "functions/api/health.js": {
+   "imports": [
+    "lib/build-id.js"
    ],
    "importedBy": []
   },
@@ -5947,6 +6194,7 @@
   },
   "functions/api/team.js": {
    "imports": [
+    "lib/team-busy.js",
     "lib/guard.js",
     "lib/void-me.js",
     "functions/api/gumroad.js",
@@ -5955,6 +6203,8 @@
     "lib/team-leverage.js",
     "lib/team-lanes.js",
     "lib/team-promote.js",
+    "lib/team-patch.js",
+    "lib/proposals.js",
     "lib/tower.js",
     "lib/team-crew.js",
     "lib/team.js",
@@ -5967,10 +6217,13 @@
    ],
    "importedBy": [
     "functions/api/automations/tick.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/team-crew-run.js"
+    "lib/landing-post.js",
+    "lib/team-crew-run.js",
+    "lib/team-rally.js"
    ],
    "reachedBy": [
     "functions/api/approval.js",
@@ -5984,7 +6237,25 @@
     "functions/api/team.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
-    "functions/api/will.js"
+    "functions/api/will.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js"
    ]
   },
   "functions/api/tower-self.js": {
@@ -6225,6 +6496,18 @@
    ],
    "importedBy": []
   },
+  "functions/code/[[path]].js": {
+   "imports": [
+    "functions/api/team.js",
+    "lib/codestore.js"
+   ],
+   "importedBy": [
+    "lib/codestore-tick.js"
+   ],
+   "reachedBy": [
+    "functions/api/automations/tick.js"
+   ]
+  },
   "functions/directions/index.js": {
    "imports": [
     "lib/drive.js",
@@ -6272,6 +6555,10 @@
    "imports": [
     "skills/is-it.js"
    ],
+   "importedBy": []
+  },
+  "functions/line-speed/index.js": {
+   "imports": [],
    "importedBy": []
   },
   "functions/meanings/index.js": {
@@ -6425,10 +6712,31 @@
     "functions/api/team.js",
     "functions/api/unbidden.js",
     "functions/api/workshop.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/refusal.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "skills/miss-jobs.js"
    ]
   },
@@ -7026,6 +7334,7 @@
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
     "functions/c/[clip].js",
+    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
@@ -7035,6 +7344,11 @@
     "lib/about-skill.js",
     "lib/agent-cap.js",
     "lib/ask-shape.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
     "lib/brain-everywhere.js",
@@ -7042,15 +7356,29 @@
     "lib/built-detail.js",
     "lib/card-frame.js",
     "lib/card-share.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
     "lib/comments-ui.js",
     "lib/credits.js",
     "lib/duel-rules.js",
     "lib/fix-audit.js",
     "lib/guard.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
     "lib/memory-scope.js",
     "lib/owner-gate.js",
     "lib/page-pass.js",
     "lib/paid-access.js",
+    "lib/post-landing.js",
     "lib/rap-listen.js",
     "lib/rap-song.js",
     "lib/rap-stage.js",
@@ -7059,6 +7387,7 @@
     "lib/rap.js",
     "lib/self-context.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "lib/term-card.js",
     "lib/verse-log.js",
     "lib/verse-world-bridge.js",
@@ -7400,6 +7729,36 @@
     "functions/api/aurora.js"
    ]
   },
+  "lib/auto-post-landing.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
+  },
+  "lib/auto-post-main.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
+  },
+  "lib/auto-post-tick.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
+  },
+  "lib/auto-post.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
+  },
+  "lib/autoPost.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
+  },
   "lib/automation-fix.js": {
    "imports": [
     "lib/telemetry.js",
@@ -7498,6 +7857,7 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
+    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
@@ -7505,20 +7865,41 @@
     "functions/tools.json.js",
     "lib/a2a.js",
     "lib/ask-shape.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
     "lib/built-detail.js",
+    "lib/change-landing.js",
     "lib/clef.js",
+    "lib/codestore-tick.js",
     "lib/jobs-core.js",
     "lib/jobs-ui.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
     "lib/mcp.js",
     "lib/meaning-recall.js",
     "lib/memory-scope.js",
     "lib/own-card.js",
     "lib/paid-access.js",
+    "lib/post-landing.js",
     "lib/routine-skill.js",
     "lib/self-context.js",
     "lib/team-crew-run.js",
     "lib/team-mcp.js",
+    "lib/team-patch.js",
+    "lib/team-rally.js",
     "lib/verse-log.js",
     "skills/incident-autopsy.js",
     "skills/repo.js",
@@ -7532,7 +7913,8 @@
     "lib/automations.js",
     "lib/watch.js",
     "lib/guard.js",
-    "functions/api/team.js"
+    "functions/api/team.js",
+    "lib/landing-post.js"
    ],
    "importedBy": [
     "functions/api/approval.js",
@@ -7550,10 +7932,31 @@
     "functions/api/members.js",
     "functions/api/unbidden.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
-    "lib/team-crew-run.js"
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-crew-run.js",
+    "lib/team-rally.js"
    ]
   },
   "lib/automations.js": {
@@ -7580,11 +7983,32 @@
     "functions/api/members.js",
     "functions/api/unbidden.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/approval-core.js",
     "lib/approval-gate.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "skills/approve-card.js"
    ]
   },
@@ -7993,10 +8417,31 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
-    "lib/team-crew-run.js"
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-crew-run.js",
+    "lib/team-rally.js"
    ]
   },
   "lib/brain-everywhere.js": {
@@ -8640,6 +9085,7 @@
   "lib/build-id.js": {
    "imports": [],
    "importedBy": [
+    "functions/api/health.js",
     "functions/build.json.js",
     "lib/answer-edge.js"
    ],
@@ -9231,6 +9677,12 @@
     "lib/card-stage.js"
    ]
   },
+  "lib/change-landing.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
+  },
   "lib/character.js": {
    "imports": [
     "lib/art-rules.js"
@@ -9493,6 +9945,25 @@
     "lib/memory-scope.js",
     "lib/paid-access.js",
     "lib/team-mcp.js"
+   ]
+  },
+  "lib/codestore-tick.js": {
+   "imports": [
+    "lib/codestore.js",
+    "functions/code/[[path]].js"
+   ],
+   "importedBy": [
+    "functions/api/automations/tick.js"
+   ]
+  },
+  "lib/codestore.js": {
+   "imports": [],
+   "importedBy": [
+    "functions/code/[[path]].js",
+    "lib/codestore-tick.js"
+   ],
+   "reachedBy": [
+    "functions/api/automations/tick.js"
    ]
   },
   "lib/coins.js": {
@@ -10235,14 +10706,35 @@
     "functions/api/weather.js",
     "functions/api/workshop.js",
     "functions/api/x402/[service].js",
+    "functions/code/[[path]].js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
+    "lib/change-landing.js",
     "lib/clef.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
     "lib/meaning-recall.js",
-    "lib/team-crew-run.js"
+    "lib/post-landing.js",
+    "lib/team-crew-run.js",
+    "lib/team-rally.js"
    ]
   },
   "lib/echo-vault.js": {
@@ -10815,7 +11307,8 @@
     "lib/ics.js"
    ],
    "importedBy": [
-    "lib/flights-ui.js"
+    "lib/flights-ui.js",
+    "lib/flights-vector.js"
    ]
   },
   "lib/flights-de.js": {
@@ -10827,10 +11320,19 @@
   "lib/flights-ui.js": {
    "imports": [
     "lib/flights-core.js",
+    "lib/flights-vector.js",
     "lib/flights-de.js",
     "lib/flights-coast.js"
    ],
    "importedBy": []
+  },
+  "lib/flights-vector.js": {
+   "imports": [
+    "lib/flights-core.js"
+   ],
+   "importedBy": [
+    "lib/flights-ui.js"
+   ]
   },
   "lib/flip-card.js": {
    "imports": [
@@ -11100,26 +11602,80 @@
     "lib/tower.js"
    ],
    "reachedBy": [
+    "functions/api/a2a.js",
+    "functions/api/answer.js",
+    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
+    "functions/api/bench.js",
+    "functions/api/blueprint.js",
     "functions/api/brain.js",
+    "functions/api/card-art.js",
+    "functions/api/clip.js",
     "functions/api/crew.js",
+    "functions/api/daily-art.js",
+    "functions/api/feed.js",
+    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
+    "functions/api/image.js",
+    "functions/api/local.js",
+    "functions/api/markets.js",
+    "functions/api/mcp.js",
+    "functions/api/meanings.js",
     "functions/api/members.js",
+    "functions/api/merge.js",
+    "functions/api/news.js",
+    "functions/api/podcasts.js",
+    "functions/api/rapvoice.js",
+    "functions/api/recipeimport.js",
+    "functions/api/recipes.js",
     "functions/api/reflect.js",
+    "functions/api/repo.js",
+    "functions/api/report.js",
+    "functions/api/scores.js",
+    "functions/api/sing.js",
+    "functions/api/sportsearch.js",
     "functions/api/team.js",
+    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
+    "functions/api/watchalong.js",
+    "functions/api/weather.js",
     "functions/api/will.js",
+    "functions/api/workshop.js",
+    "functions/api/x402/[service].js",
+    "functions/code/[[path]].js",
+    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/bench-asks.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
     "lib/echo-vault.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/scrub-sites.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "skills/cartoon.js",
     "skills/walker.js"
    ]
@@ -11332,13 +11888,34 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
+    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/bench-asks.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "lib/versus-moved.js"
    ]
   },
@@ -11463,14 +12040,35 @@
     "functions/api/will.js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
+    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
     "lib/credits.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
     "lib/paid-access.js",
+    "lib/post-landing.js",
     "lib/products.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "skills/shop.js"
    ]
   },
@@ -11694,13 +12292,34 @@
     "functions/api/will.js",
     "functions/api/workshop.js",
     "functions/api/x402/[service].js",
+    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
-    "lib/team-crew-run.js"
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-crew-run.js",
+    "lib/team-rally.js"
    ]
   },
   "lib/ics.js": {
@@ -11715,6 +12334,7 @@
    "reachedBy": [
     "functions/api/jobs.js",
     "lib/flights-ui.js",
+    "lib/flights-vector.js",
     "lib/jobs-ui.js",
     "skills/work.js"
    ]
@@ -11856,6 +12476,7 @@
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
     "functions/c/[clip].js",
+    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
@@ -11863,14 +12484,34 @@
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/agent-cap.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
     "lib/credits.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
     "lib/memory-scope.js",
     "lib/owner-gate.js",
     "lib/page-pass.js",
     "lib/paid-access.js",
+    "lib/post-landing.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "lib/versus-moved.js",
     "lib/void-me.js",
     "skills/video-gen.js"
@@ -12004,6 +12645,7 @@
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
     "functions/c/[clip].js",
+    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
@@ -12013,6 +12655,11 @@
     "lib/about-skill.js",
     "lib/agent-cap.js",
     "lib/ask-shape.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
     "lib/autopsy.js",
     "lib/bench-asks.js",
@@ -12023,7 +12670,9 @@
     "lib/card-image.js",
     "lib/card-look.js",
     "lib/card-share.js",
+    "lib/change-landing.js",
     "lib/character.js",
+    "lib/codestore-tick.js",
     "lib/comments-ui.js",
     "lib/comments.js",
     "lib/cos-20.js",
@@ -12032,10 +12681,22 @@
     "lib/duel-rules.js",
     "lib/fix-audit.js",
     "lib/guard.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
     "lib/memory-scope.js",
     "lib/owner-gate.js",
     "lib/page-pass.js",
     "lib/paid-access.js",
+    "lib/post-landing.js",
     "lib/rap-listen.js",
     "lib/rap-song.js",
     "lib/rap-stage.js",
@@ -12046,6 +12707,7 @@
     "lib/self-context.js",
     "lib/story.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "lib/term-card.js",
     "lib/verse-log.js",
     "lib/verse-world-bridge.js",
@@ -12200,15 +12862,41 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-claim-board.js",
     "lib/team-crew-run.js",
     "lib/team-crew.js",
+    "lib/team-handoff-notes.js",
     "lib/team-lanes.js",
     "lib/team-leverage.js",
+    "lib/team-patch.js",
     "lib/team-priorities.js",
-    "lib/team-promote.js"
+    "lib/team-promote.js",
+    "lib/team-rally.js",
+    "lib/team-skills.js",
+    "lib/team-wake.js"
    ]
   },
   "lib/job-regions.js": {
@@ -12526,6 +13214,7 @@
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
     "functions/c/[clip].js",
+    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
@@ -12535,6 +13224,11 @@
     "lib/about-skill.js",
     "lib/agent-cap.js",
     "lib/ask-shape.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
     "lib/autopsy.js",
     "lib/bench-asks.js",
@@ -12546,7 +13240,9 @@
     "lib/card-image.js",
     "lib/card-look.js",
     "lib/card-share.js",
+    "lib/change-landing.js",
     "lib/character.js",
+    "lib/codestore-tick.js",
     "lib/comments-ui.js",
     "lib/comments.js",
     "lib/credits.js",
@@ -12554,10 +13250,22 @@
     "lib/duel-rules.js",
     "lib/fix-audit.js",
     "lib/guard.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
     "lib/memory-scope.js",
     "lib/owner-gate.js",
     "lib/page-pass.js",
     "lib/paid-access.js",
+    "lib/post-landing.js",
     "lib/rap-listen.js",
     "lib/rap-song.js",
     "lib/rap-stage.js",
@@ -12567,6 +13275,7 @@
     "lib/self-context.js",
     "lib/story.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "lib/term-card.js",
     "lib/verse-log.js",
     "lib/verse-world-bridge.js",
@@ -12763,6 +13472,89 @@
     "skills/showcase.js",
     "skills/walker.js"
    ]
+  },
+  "lib/landing-auto-post.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
+  },
+  "lib/landing-post.js": {
+   "imports": [
+    "functions/api/team.js"
+   ],
+   "importedBy": [
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
+    "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js"
+   ],
+   "reachedBy": [
+    "functions/api/approval.js",
+    "functions/api/automations.js",
+    "functions/api/automations/tick.js",
+    "functions/api/brain.js",
+    "functions/api/crew.js",
+    "functions/api/github-events.js",
+    "functions/api/gumroad.js",
+    "functions/api/hook/[id].js",
+    "functions/api/members.js",
+    "functions/api/team.js",
+    "functions/api/unbidden.js",
+    "functions/api/watch.js",
+    "functions/api/will.js",
+    "functions/code/[[path]].js",
+    "functions/team/join/[code].js",
+    "functions/team/mcp.js",
+    "lib/codestore-tick.js",
+    "lib/landing-post.js",
+    "lib/team-crew-run.js",
+    "lib/team-rally.js"
+   ]
+  },
+  "lib/landing-tick.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
+  },
+  "lib/landing.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
+  },
+  "lib/landingpost.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
+  },
+  "lib/landings-post.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
+  },
+  "lib/landings.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
   },
   "lib/lap.js": {
    "imports": [],
@@ -13074,6 +13866,30 @@
   },
   "lib/loop-share.js": {
    "imports": [],
+   "importedBy": []
+  },
+  "lib/main-auto-post.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
+  },
+  "lib/main-landing-post.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
+  },
+  "lib/main-landing-tick.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
+  },
+  "lib/main-landing.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
    "importedBy": []
   },
   "lib/markdown.js": {
@@ -13629,6 +14445,7 @@
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
     "functions/c/[clip].js",
+    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
@@ -13638,6 +14455,11 @@
     "lib/about-skill.js",
     "lib/agent-cap.js",
     "lib/ask-shape.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
     "lib/autopsy.js",
     "lib/bench-asks.js",
@@ -13649,7 +14471,9 @@
     "lib/card-image.js",
     "lib/card-look.js",
     "lib/card-share.js",
+    "lib/change-landing.js",
     "lib/character.js",
+    "lib/codestore-tick.js",
     "lib/comments-ui.js",
     "lib/comments.js",
     "lib/credits.js",
@@ -13658,10 +14482,22 @@
     "lib/fix-audit.js",
     "lib/guard.js",
     "lib/image-gen.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
     "lib/memory-scope.js",
     "lib/owner-gate.js",
     "lib/page-pass.js",
     "lib/paid-access.js",
+    "lib/post-landing.js",
     "lib/rap-listen.js",
     "lib/rap-song.js",
     "lib/rap-stage.js",
@@ -13671,6 +14507,7 @@
     "lib/self-context.js",
     "lib/story.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "lib/term-card.js",
     "lib/verse-log.js",
     "lib/verse-world-bridge.js",
@@ -14293,6 +15130,7 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
+    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
@@ -14301,21 +15139,40 @@
     "lib/a2a.js",
     "lib/actions-failure.js",
     "lib/ask-shape.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
     "lib/built-detail.js",
+    "lib/change-landing.js",
     "lib/clef.js",
     "lib/code-review.js",
+    "lib/codestore-tick.js",
     "lib/correction-fix.js",
     "lib/job-draft.js",
     "lib/jobs-core.js",
     "lib/jobs-ui.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
     "lib/mcp.js",
     "lib/meaning-recall.js",
     "lib/members.js",
     "lib/memory-scope.js",
     "lib/own-card.js",
     "lib/paid-access.js",
+    "lib/post-landing.js",
     "lib/privacy.js",
     "lib/probe-asks.js",
     "lib/propose-fix.js",
@@ -14327,7 +15184,9 @@
     "lib/shared-routines.js",
     "lib/team-crew-run.js",
     "lib/team-mcp.js",
+    "lib/team-patch.js",
     "lib/team-promote.js",
+    "lib/team-rally.js",
     "lib/verse-log.js",
     "lib/voice.js",
     "skills/incident-autopsy.js",
@@ -14407,26 +15266,80 @@
     "lib/tower.js"
    ],
    "reachedBy": [
+    "functions/api/a2a.js",
+    "functions/api/answer.js",
+    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
+    "functions/api/bench.js",
+    "functions/api/blueprint.js",
     "functions/api/brain.js",
+    "functions/api/card-art.js",
+    "functions/api/clip.js",
     "functions/api/crew.js",
+    "functions/api/daily-art.js",
+    "functions/api/feed.js",
+    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
+    "functions/api/image.js",
+    "functions/api/local.js",
+    "functions/api/markets.js",
+    "functions/api/mcp.js",
+    "functions/api/meanings.js",
     "functions/api/members.js",
+    "functions/api/merge.js",
+    "functions/api/news.js",
+    "functions/api/podcasts.js",
+    "functions/api/rapvoice.js",
+    "functions/api/recipeimport.js",
+    "functions/api/recipes.js",
     "functions/api/reflect.js",
+    "functions/api/repo.js",
+    "functions/api/report.js",
+    "functions/api/scores.js",
+    "functions/api/sing.js",
+    "functions/api/sportsearch.js",
     "functions/api/team.js",
+    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
+    "functions/api/watchalong.js",
+    "functions/api/weather.js",
     "functions/api/will.js",
+    "functions/api/workshop.js",
+    "functions/api/x402/[service].js",
+    "functions/code/[[path]].js",
+    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/bench-asks.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
     "lib/echo-vault.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/scrub-sites.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "skills/cartoon.js",
     "skills/walker.js"
    ]
@@ -14653,6 +15566,7 @@
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
     "functions/c/[clip].js",
+    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
@@ -14660,14 +15574,34 @@
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/agent-cap.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
     "lib/credits.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
     "lib/memory-scope.js",
     "lib/owner-gate.js",
     "lib/page-pass.js",
     "lib/paid-access.js",
+    "lib/post-landing.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "lib/versus-moved.js",
     "lib/void-me.js"
    ]
@@ -14837,17 +15771,38 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
+    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
     "lib/credits.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
     "lib/memory-scope.js",
     "lib/page-pass.js",
     "lib/paid-access.js",
+    "lib/post-landing.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "lib/versus-moved.js"
    ]
   },
@@ -15375,6 +16330,12 @@
     "skills/pointing-arrow.js"
    ]
   },
+  "lib/post-landing.js": {
+   "imports": [
+    "lib/landing-post.js"
+   ],
+   "importedBy": []
+  },
   "lib/practice.js": {
    "imports": [],
    "importedBy": [
@@ -15617,11 +16578,32 @@
     "functions/api/will.js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
+    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "skills/shop.js"
    ]
   },
@@ -15678,7 +16660,47 @@
   "lib/proposals.js": {
    "imports": [],
    "importedBy": [
-    "functions/api/proposals.js"
+    "functions/api/proposals.js",
+    "functions/api/team.js"
+   ],
+   "reachedBy": [
+    "functions/api/approval.js",
+    "functions/api/automations.js",
+    "functions/api/automations/tick.js",
+    "functions/api/brain.js",
+    "functions/api/crew.js",
+    "functions/api/github-events.js",
+    "functions/api/gumroad.js",
+    "functions/api/hook/[id].js",
+    "functions/api/members.js",
+    "functions/api/unbidden.js",
+    "functions/api/watch.js",
+    "functions/api/will.js",
+    "functions/code/[[path]].js",
+    "functions/team/join/[code].js",
+    "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
+    "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-crew-run.js",
+    "lib/team-rally.js"
    ]
   },
   "lib/propose-fix.js": {
@@ -16675,10 +17697,31 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
-    "lib/team-crew-run.js"
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-crew-run.js",
+    "lib/team-rally.js"
    ]
   },
   "lib/scene-advance.js": {
@@ -16711,7 +17754,42 @@
     "lib/universe.js"
    ],
    "importedBy": [
+    "functions/api/answer.js",
     "functions/api/reflect.js"
+   ],
+   "reachedBy": [
+    "functions/api/a2a.js",
+    "functions/api/apibot.js",
+    "functions/api/bench.js",
+    "functions/api/blueprint.js",
+    "functions/api/card-art.js",
+    "functions/api/clip.js",
+    "functions/api/daily-art.js",
+    "functions/api/feed.js",
+    "functions/api/gallery.js",
+    "functions/api/image.js",
+    "functions/api/local.js",
+    "functions/api/markets.js",
+    "functions/api/mcp.js",
+    "functions/api/meanings.js",
+    "functions/api/merge.js",
+    "functions/api/news.js",
+    "functions/api/podcasts.js",
+    "functions/api/rapvoice.js",
+    "functions/api/recipeimport.js",
+    "functions/api/recipes.js",
+    "functions/api/repo.js",
+    "functions/api/report.js",
+    "functions/api/scores.js",
+    "functions/api/sing.js",
+    "functions/api/sportsearch.js",
+    "functions/api/translate.js",
+    "functions/api/watchalong.js",
+    "functions/api/weather.js",
+    "functions/api/workshop.js",
+    "functions/api/x402/[service].js",
+    "functions/meanings/index.js",
+    "lib/bench-asks.js"
    ]
   },
   "lib/searches.js": {
@@ -16831,30 +17909,84 @@
     "lib/tower.js"
    ],
    "reachedBy": [
+    "functions/api/a2a.js",
+    "functions/api/answer.js",
+    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
+    "functions/api/bench.js",
+    "functions/api/blueprint.js",
     "functions/api/brain.js",
+    "functions/api/card-art.js",
+    "functions/api/clip.js",
     "functions/api/crew.js",
+    "functions/api/daily-art.js",
+    "functions/api/feed.js",
+    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
+    "functions/api/image.js",
+    "functions/api/local.js",
+    "functions/api/markets.js",
+    "functions/api/mcp.js",
+    "functions/api/meanings.js",
     "functions/api/members.js",
+    "functions/api/merge.js",
+    "functions/api/news.js",
+    "functions/api/podcasts.js",
+    "functions/api/rapvoice.js",
+    "functions/api/recipeimport.js",
+    "functions/api/recipes.js",
     "functions/api/reflect.js",
+    "functions/api/repo.js",
+    "functions/api/report.js",
+    "functions/api/scores.js",
+    "functions/api/sing.js",
+    "functions/api/sportsearch.js",
     "functions/api/team.js",
+    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
+    "functions/api/watchalong.js",
+    "functions/api/weather.js",
     "functions/api/will.js",
+    "functions/api/workshop.js",
+    "functions/api/x402/[service].js",
+    "functions/code/[[path]].js",
     "functions/ip/index.js",
+    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/bench-asks.js",
     "lib/card-frame.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
     "lib/duel-rules.js",
     "lib/echo-vault.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/scrub-sites.js",
     "lib/seo.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "lib/term-card.js",
     "lib/toolkit.js",
     "skills/about-skill.js",
@@ -17455,11 +18587,21 @@
     "skills/fly.js"
    ]
   },
+  "lib/stage-code.js": {
+   "imports": [
+    "lib/stage-port.js",
+    "lib/stage-find.js"
+   ],
+   "importedBy": [
+    "skills/share.js"
+   ]
+  },
   "lib/stage-find.js": {
    "imports": [
     "lib/stage-pack.js"
    ],
    "importedBy": [
+    "lib/stage-code.js",
     "lib/stage-port.js",
     "lib/stage-watch.js",
     "skills/bookmarks.js",
@@ -17481,13 +18623,36 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/team-crew-run.js",
+    "lib/team-patch.js",
     "lib/team-promote.js",
+    "lib/team-rally.js",
     "skills/copy-stack.js",
     "skills/quick-tools.js",
+    "skills/share.js",
     "skills/stage-export.js",
     "skills/stage-out.js",
     "skills/stage-pdf.js"
@@ -17623,12 +18788,35 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/stage-code.js",
     "lib/stage-watch.js",
     "lib/team-crew-run.js",
+    "lib/team-patch.js",
     "lib/team-promote.js",
+    "lib/team-rally.js",
     "skills/bookmarks.js",
     "skills/copy-stack.js",
     "skills/date-math.js",
@@ -17638,6 +18826,7 @@
     "skills/merge-void.js",
     "skills/null-sweep.js",
     "skills/quick-tools.js",
+    "skills/share.js",
     "skills/stage-find.js",
     "skills/stage-out.js",
     "skills/stage-pdf.js",
@@ -17650,6 +18839,7 @@
     "lib/stage-find.js"
    ],
    "importedBy": [
+    "lib/stage-code.js",
     "lib/team-promote.js",
     "skills/copy-stack.js",
     "skills/stage-export.js",
@@ -17669,10 +18859,33 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/team-crew-run.js",
+    "lib/team-patch.js",
+    "lib/team-rally.js",
+    "skills/share.js",
     "skills/stage-out.js"
    ]
   },
@@ -17928,13 +19141,34 @@
     "functions/api/will.js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
+    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
     "lib/paid-access.js",
+    "lib/post-landing.js",
     "lib/sale-jobs.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "skills/services.js",
     "skills/shop.js"
    ]
@@ -18347,6 +19581,57 @@
     "skills/pick-for-me.js"
    ]
   },
+  "lib/team-busy.js": {
+   "imports": [],
+   "importedBy": [
+    "functions/api/team.js"
+   ],
+   "reachedBy": [
+    "functions/api/approval.js",
+    "functions/api/automations.js",
+    "functions/api/automations/tick.js",
+    "functions/api/brain.js",
+    "functions/api/crew.js",
+    "functions/api/github-events.js",
+    "functions/api/gumroad.js",
+    "functions/api/hook/[id].js",
+    "functions/api/members.js",
+    "functions/api/unbidden.js",
+    "functions/api/watch.js",
+    "functions/api/will.js",
+    "functions/code/[[path]].js",
+    "functions/team/join/[code].js",
+    "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
+    "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-crew-run.js",
+    "lib/team-rally.js"
+   ]
+  },
+  "lib/team-claim-board.js": {
+   "imports": [
+    "lib/team.js"
+   ],
+   "importedBy": []
+  },
   "lib/team-crew-run.js": {
    "imports": [
     "lib/brain-lessons.js",
@@ -18390,10 +19675,37 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
-    "lib/automations-run.js"
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
+    "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-rally.js"
    ]
+  },
+  "lib/team-handoff-notes.js": {
+   "imports": [
+    "lib/team.js"
+   ],
+   "importedBy": []
   },
   "lib/team-lanes.js": {
    "imports": [
@@ -18417,9 +19729,30 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
-    "lib/automations-run.js"
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
+    "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-rally.js"
    ]
   },
   "lib/team-leverage.js": {
@@ -18444,10 +19777,31 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
-    "lib/team-crew-run.js"
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-crew-run.js",
+    "lib/team-rally.js"
    ]
   },
   "lib/team-mcp.js": {
@@ -18456,6 +19810,53 @@
    ],
    "importedBy": [
     "functions/team/mcp.js"
+   ]
+  },
+  "lib/team-patch.js": {
+   "imports": [
+    "lib/team-promote.js"
+   ],
+   "importedBy": [
+    "functions/api/team.js"
+   ],
+   "reachedBy": [
+    "functions/api/approval.js",
+    "functions/api/automations.js",
+    "functions/api/automations/tick.js",
+    "functions/api/brain.js",
+    "functions/api/crew.js",
+    "functions/api/github-events.js",
+    "functions/api/gumroad.js",
+    "functions/api/hook/[id].js",
+    "functions/api/members.js",
+    "functions/api/unbidden.js",
+    "functions/api/watch.js",
+    "functions/api/will.js",
+    "functions/code/[[path]].js",
+    "functions/team/join/[code].js",
+    "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
+    "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-crew-run.js",
+    "lib/team-rally.js"
    ]
   },
   "lib/team-priorities.js": {
@@ -18480,9 +19881,30 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
-    "lib/automations-run.js"
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
+    "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-rally.js"
    ]
   },
   "lib/team-promote.js": {
@@ -18492,7 +19914,8 @@
     "lib/automation-fix.js"
    ],
    "importedBy": [
-    "functions/api/team.js"
+    "functions/api/team.js",
+    "lib/team-patch.js"
    ],
    "reachedBy": [
     "functions/api/approval.js",
@@ -18507,11 +19930,61 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
-    "lib/team-crew-run.js"
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-crew-run.js",
+    "lib/team-rally.js"
    ]
+  },
+  "lib/team-quiet-nudge.js": {
+   "imports": [],
+   "importedBy": []
+  },
+  "lib/team-rally.js": {
+   "imports": [
+    "lib/team.js",
+    "functions/api/team.js"
+   ],
+   "importedBy": [
+    "functions/api/automations/tick.js"
+   ]
+  },
+  "lib/team-shift-report.js": {
+   "imports": [],
+   "importedBy": []
+  },
+  "lib/team-skills.js": {
+   "imports": [
+    "lib/team.js"
+   ],
+   "importedBy": []
+  },
+  "lib/team-wake.js": {
+   "imports": [
+    "lib/team.js"
+   ],
+   "importedBy": []
   },
   "lib/team.js": {
    "imports": [
@@ -18521,12 +19994,17 @@
     "functions/api/team.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/team-claim-board.js",
     "lib/team-crew-run.js",
     "lib/team-crew.js",
+    "lib/team-handoff-notes.js",
     "lib/team-lanes.js",
     "lib/team-leverage.js",
     "lib/team-priorities.js",
-    "lib/team-promote.js"
+    "lib/team-promote.js",
+    "lib/team-rally.js",
+    "lib/team-skills.js",
+    "lib/team-wake.js"
    ],
    "reachedBy": [
     "functions/api/approval.js",
@@ -18541,7 +20019,28 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "lib/automations-run.js"
+    "functions/code/[[path]].js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
+    "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-patch.js"
    ]
   },
   "lib/technical-context.js": {
@@ -18639,6 +20138,7 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
+    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
@@ -18647,21 +20147,40 @@
     "lib/a2a.js",
     "lib/actions-failure.js",
     "lib/ask-shape.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
     "lib/built-detail.js",
+    "lib/change-landing.js",
     "lib/clef.js",
     "lib/code-review.js",
+    "lib/codestore-tick.js",
     "lib/correction-fix.js",
     "lib/job-draft.js",
     "lib/jobs-core.js",
     "lib/jobs-ui.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
     "lib/mcp.js",
     "lib/meaning-recall.js",
     "lib/members.js",
     "lib/memory-scope.js",
     "lib/own-card.js",
     "lib/paid-access.js",
+    "lib/post-landing.js",
     "lib/privacy.js",
     "lib/probe-asks.js",
     "lib/propose-fix.js",
@@ -18673,7 +20192,9 @@
     "lib/shared-routines.js",
     "lib/team-crew-run.js",
     "lib/team-mcp.js",
+    "lib/team-patch.js",
     "lib/team-promote.js",
+    "lib/team-rally.js",
     "lib/verse-log.js",
     "lib/voice.js",
     "skills/incident-autopsy.js",
@@ -18936,26 +20457,80 @@
     "lib/tower.js"
    ],
    "reachedBy": [
+    "functions/api/a2a.js",
+    "functions/api/answer.js",
+    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
+    "functions/api/bench.js",
+    "functions/api/blueprint.js",
     "functions/api/brain.js",
+    "functions/api/card-art.js",
+    "functions/api/clip.js",
     "functions/api/crew.js",
+    "functions/api/daily-art.js",
+    "functions/api/feed.js",
+    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
+    "functions/api/image.js",
+    "functions/api/local.js",
+    "functions/api/markets.js",
+    "functions/api/mcp.js",
+    "functions/api/meanings.js",
     "functions/api/members.js",
+    "functions/api/merge.js",
+    "functions/api/news.js",
+    "functions/api/podcasts.js",
+    "functions/api/rapvoice.js",
+    "functions/api/recipeimport.js",
+    "functions/api/recipes.js",
     "functions/api/reflect.js",
+    "functions/api/repo.js",
+    "functions/api/report.js",
+    "functions/api/scores.js",
+    "functions/api/sing.js",
+    "functions/api/sportsearch.js",
     "functions/api/team.js",
+    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
+    "functions/api/watchalong.js",
+    "functions/api/weather.js",
     "functions/api/will.js",
+    "functions/api/workshop.js",
+    "functions/api/x402/[service].js",
+    "functions/code/[[path]].js",
+    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/bench-asks.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
     "lib/echo-vault.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/scrub-sites.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "skills/cartoon.js",
     "skills/walker.js"
    ]
@@ -18976,26 +20551,80 @@
     "lib/tower.js"
    ],
    "reachedBy": [
+    "functions/api/a2a.js",
+    "functions/api/answer.js",
+    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
+    "functions/api/bench.js",
+    "functions/api/blueprint.js",
     "functions/api/brain.js",
+    "functions/api/card-art.js",
+    "functions/api/clip.js",
     "functions/api/crew.js",
+    "functions/api/daily-art.js",
+    "functions/api/feed.js",
+    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
+    "functions/api/image.js",
+    "functions/api/local.js",
+    "functions/api/markets.js",
+    "functions/api/mcp.js",
+    "functions/api/meanings.js",
     "functions/api/members.js",
+    "functions/api/merge.js",
+    "functions/api/news.js",
+    "functions/api/podcasts.js",
+    "functions/api/rapvoice.js",
+    "functions/api/recipeimport.js",
+    "functions/api/recipes.js",
     "functions/api/reflect.js",
+    "functions/api/repo.js",
+    "functions/api/report.js",
+    "functions/api/scores.js",
+    "functions/api/sing.js",
+    "functions/api/sportsearch.js",
     "functions/api/team.js",
+    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
+    "functions/api/watchalong.js",
+    "functions/api/weather.js",
     "functions/api/will.js",
+    "functions/api/workshop.js",
+    "functions/api/x402/[service].js",
+    "functions/code/[[path]].js",
+    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/bench-asks.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
     "lib/echo-vault.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/scrub-sites.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "skills/cartoon.js",
     "skills/walker.js"
    ]
@@ -19010,26 +20639,80 @@
     "lib/tower.js"
    ],
    "reachedBy": [
+    "functions/api/a2a.js",
+    "functions/api/answer.js",
+    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
+    "functions/api/bench.js",
+    "functions/api/blueprint.js",
     "functions/api/brain.js",
+    "functions/api/card-art.js",
+    "functions/api/clip.js",
     "functions/api/crew.js",
+    "functions/api/daily-art.js",
+    "functions/api/feed.js",
+    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
+    "functions/api/image.js",
+    "functions/api/local.js",
+    "functions/api/markets.js",
+    "functions/api/mcp.js",
+    "functions/api/meanings.js",
     "functions/api/members.js",
+    "functions/api/merge.js",
+    "functions/api/news.js",
+    "functions/api/podcasts.js",
+    "functions/api/rapvoice.js",
+    "functions/api/recipeimport.js",
+    "functions/api/recipes.js",
     "functions/api/reflect.js",
+    "functions/api/repo.js",
+    "functions/api/report.js",
+    "functions/api/scores.js",
+    "functions/api/sing.js",
+    "functions/api/sportsearch.js",
     "functions/api/team.js",
+    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
+    "functions/api/watchalong.js",
+    "functions/api/weather.js",
     "functions/api/will.js",
+    "functions/api/workshop.js",
+    "functions/api/x402/[service].js",
+    "functions/code/[[path]].js",
+    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/bench-asks.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
     "lib/echo-vault.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/scrub-sites.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "skills/cartoon.js",
     "skills/walker.js"
    ]
@@ -19040,26 +20723,80 @@
     "lib/tower.js"
    ],
    "reachedBy": [
+    "functions/api/a2a.js",
+    "functions/api/answer.js",
+    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
+    "functions/api/bench.js",
+    "functions/api/blueprint.js",
     "functions/api/brain.js",
+    "functions/api/card-art.js",
+    "functions/api/clip.js",
     "functions/api/crew.js",
+    "functions/api/daily-art.js",
+    "functions/api/feed.js",
+    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
+    "functions/api/image.js",
+    "functions/api/local.js",
+    "functions/api/markets.js",
+    "functions/api/mcp.js",
+    "functions/api/meanings.js",
     "functions/api/members.js",
+    "functions/api/merge.js",
+    "functions/api/news.js",
+    "functions/api/podcasts.js",
+    "functions/api/rapvoice.js",
+    "functions/api/recipeimport.js",
+    "functions/api/recipes.js",
     "functions/api/reflect.js",
+    "functions/api/repo.js",
+    "functions/api/report.js",
+    "functions/api/scores.js",
+    "functions/api/sing.js",
+    "functions/api/sportsearch.js",
     "functions/api/team.js",
+    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
+    "functions/api/watchalong.js",
+    "functions/api/weather.js",
     "functions/api/will.js",
+    "functions/api/workshop.js",
+    "functions/api/x402/[service].js",
+    "functions/code/[[path]].js",
+    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/bench-asks.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
     "lib/echo-vault.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/scrub-sites.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "skills/cartoon.js",
     "skills/walker.js"
    ]
@@ -19085,22 +20822,76 @@
     "skills/walker.js"
    ],
    "reachedBy": [
+    "functions/api/a2a.js",
+    "functions/api/answer.js",
+    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
+    "functions/api/bench.js",
+    "functions/api/blueprint.js",
     "functions/api/brain.js",
+    "functions/api/card-art.js",
+    "functions/api/clip.js",
     "functions/api/crew.js",
+    "functions/api/daily-art.js",
+    "functions/api/feed.js",
+    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
+    "functions/api/image.js",
+    "functions/api/local.js",
+    "functions/api/markets.js",
+    "functions/api/mcp.js",
+    "functions/api/meanings.js",
     "functions/api/members.js",
+    "functions/api/merge.js",
+    "functions/api/news.js",
+    "functions/api/podcasts.js",
+    "functions/api/rapvoice.js",
+    "functions/api/recipeimport.js",
+    "functions/api/recipes.js",
     "functions/api/reflect.js",
+    "functions/api/repo.js",
+    "functions/api/report.js",
+    "functions/api/scores.js",
+    "functions/api/sing.js",
+    "functions/api/sportsearch.js",
+    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
+    "functions/api/watchalong.js",
+    "functions/api/weather.js",
+    "functions/api/workshop.js",
+    "functions/api/x402/[service].js",
+    "functions/code/[[path]].js",
+    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/bench-asks.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "skills/cartoon.js"
    ]
   },
@@ -19276,7 +21067,40 @@
     "lib/scrub-sites.js"
    ],
    "reachedBy": [
-    "functions/api/reflect.js"
+    "functions/api/a2a.js",
+    "functions/api/answer.js",
+    "functions/api/apibot.js",
+    "functions/api/bench.js",
+    "functions/api/blueprint.js",
+    "functions/api/card-art.js",
+    "functions/api/clip.js",
+    "functions/api/daily-art.js",
+    "functions/api/feed.js",
+    "functions/api/gallery.js",
+    "functions/api/image.js",
+    "functions/api/local.js",
+    "functions/api/markets.js",
+    "functions/api/mcp.js",
+    "functions/api/meanings.js",
+    "functions/api/merge.js",
+    "functions/api/news.js",
+    "functions/api/podcasts.js",
+    "functions/api/rapvoice.js",
+    "functions/api/recipeimport.js",
+    "functions/api/recipes.js",
+    "functions/api/reflect.js",
+    "functions/api/repo.js",
+    "functions/api/report.js",
+    "functions/api/scores.js",
+    "functions/api/sing.js",
+    "functions/api/sportsearch.js",
+    "functions/api/translate.js",
+    "functions/api/watchalong.js",
+    "functions/api/weather.js",
+    "functions/api/workshop.js",
+    "functions/api/x402/[service].js",
+    "functions/meanings/index.js",
+    "lib/bench-asks.js"
    ]
   },
   "lib/universe.js": {
@@ -19285,7 +21109,40 @@
     "lib/scrub-sites.js"
    ],
    "reachedBy": [
-    "functions/api/reflect.js"
+    "functions/api/a2a.js",
+    "functions/api/answer.js",
+    "functions/api/apibot.js",
+    "functions/api/bench.js",
+    "functions/api/blueprint.js",
+    "functions/api/card-art.js",
+    "functions/api/clip.js",
+    "functions/api/daily-art.js",
+    "functions/api/feed.js",
+    "functions/api/gallery.js",
+    "functions/api/image.js",
+    "functions/api/local.js",
+    "functions/api/markets.js",
+    "functions/api/mcp.js",
+    "functions/api/meanings.js",
+    "functions/api/merge.js",
+    "functions/api/news.js",
+    "functions/api/podcasts.js",
+    "functions/api/rapvoice.js",
+    "functions/api/recipeimport.js",
+    "functions/api/recipes.js",
+    "functions/api/reflect.js",
+    "functions/api/repo.js",
+    "functions/api/report.js",
+    "functions/api/scores.js",
+    "functions/api/sing.js",
+    "functions/api/sportsearch.js",
+    "functions/api/translate.js",
+    "functions/api/watchalong.js",
+    "functions/api/weather.js",
+    "functions/api/workshop.js",
+    "functions/api/x402/[service].js",
+    "functions/meanings/index.js",
+    "lib/bench-asks.js"
    ]
   },
   "lib/used.js": {
@@ -19354,8 +21211,14 @@
     "functions/api/members.js",
     "functions/api/watch.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
     "lib/brain-dialogue.js",
     "lib/brain-everywhere.js",
@@ -19365,7 +21228,22 @@
     "lib/brain-organs.js",
     "lib/brain-route.js",
     "lib/brain.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "skills/client-status-pack.js",
     "skills/client-status.js",
     "skills/delivery-board.js",
@@ -19471,6 +21349,7 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
+    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
@@ -19479,16 +21358,34 @@
     "lib/a2a.js",
     "lib/actions-failure.js",
     "lib/ask-shape.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automation-fix.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
     "lib/built-detail.js",
+    "lib/change-landing.js",
     "lib/clef.js",
     "lib/code-review.js",
+    "lib/codestore-tick.js",
     "lib/correction-fix.js",
     "lib/job-draft.js",
     "lib/jobs-core.js",
     "lib/jobs-ui.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
     "lib/mcp.js",
     "lib/meaning-recall.js",
     "lib/members.js",
@@ -19496,6 +21393,7 @@
     "lib/own-card.js",
     "lib/paid-access.js",
     "lib/paste-kind.js",
+    "lib/post-landing.js",
     "lib/privacy.js",
     "lib/probe-asks.js",
     "lib/propose-fix.js",
@@ -19507,7 +21405,9 @@
     "lib/shared-routines.js",
     "lib/team-crew-run.js",
     "lib/team-mcp.js",
+    "lib/team-patch.js",
     "lib/team-promote.js",
+    "lib/team-rally.js",
     "lib/verse-log.js",
     "lib/voice.js",
     "skills/incident-autopsy.js",
@@ -19576,7 +21476,40 @@
     "skills/tower.js"
    ],
    "reachedBy": [
-    "functions/api/reflect.js"
+    "functions/api/a2a.js",
+    "functions/api/answer.js",
+    "functions/api/apibot.js",
+    "functions/api/bench.js",
+    "functions/api/blueprint.js",
+    "functions/api/card-art.js",
+    "functions/api/clip.js",
+    "functions/api/daily-art.js",
+    "functions/api/feed.js",
+    "functions/api/gallery.js",
+    "functions/api/image.js",
+    "functions/api/local.js",
+    "functions/api/markets.js",
+    "functions/api/mcp.js",
+    "functions/api/meanings.js",
+    "functions/api/merge.js",
+    "functions/api/news.js",
+    "functions/api/podcasts.js",
+    "functions/api/rapvoice.js",
+    "functions/api/recipeimport.js",
+    "functions/api/recipes.js",
+    "functions/api/reflect.js",
+    "functions/api/repo.js",
+    "functions/api/report.js",
+    "functions/api/scores.js",
+    "functions/api/sing.js",
+    "functions/api/sportsearch.js",
+    "functions/api/translate.js",
+    "functions/api/watchalong.js",
+    "functions/api/weather.js",
+    "functions/api/workshop.js",
+    "functions/api/x402/[service].js",
+    "functions/meanings/index.js",
+    "lib/bench-asks.js"
    ]
   },
   "lib/versus-moved.js": {
@@ -19594,8 +21527,41 @@
     "skills/tower.js"
    ],
    "reachedBy": [
+    "functions/api/a2a.js",
+    "functions/api/answer.js",
+    "functions/api/apibot.js",
+    "functions/api/bench.js",
+    "functions/api/blueprint.js",
+    "functions/api/card-art.js",
+    "functions/api/clip.js",
+    "functions/api/daily-art.js",
+    "functions/api/feed.js",
+    "functions/api/gallery.js",
+    "functions/api/image.js",
+    "functions/api/local.js",
+    "functions/api/markets.js",
+    "functions/api/mcp.js",
+    "functions/api/meanings.js",
+    "functions/api/merge.js",
+    "functions/api/news.js",
+    "functions/api/podcasts.js",
+    "functions/api/rapvoice.js",
+    "functions/api/recipeimport.js",
+    "functions/api/recipes.js",
     "functions/api/reflect.js",
+    "functions/api/repo.js",
+    "functions/api/report.js",
+    "functions/api/scores.js",
+    "functions/api/sing.js",
+    "functions/api/sportsearch.js",
+    "functions/api/translate.js",
     "functions/api/versus-floor.js",
+    "functions/api/watchalong.js",
+    "functions/api/weather.js",
+    "functions/api/workshop.js",
+    "functions/api/x402/[service].js",
+    "functions/meanings/index.js",
+    "lib/bench-asks.js",
     "lib/scrub-sites.js"
    ]
   },
@@ -19817,12 +21783,33 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
+    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "lib/versus-moved.js"
    ]
   },
@@ -19892,13 +21879,39 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
+    "lib/team-claim-board.js",
+    "lib/team-handoff-notes.js",
     "lib/team-lanes.js",
     "lib/team-leverage.js",
+    "lib/team-patch.js",
     "lib/team-priorities.js",
     "lib/team-promote.js",
+    "lib/team-rally.js",
+    "lib/team-skills.js",
+    "lib/team-wake.js",
     "lib/team.js"
    ]
   },
@@ -19924,13 +21937,34 @@
     "functions/api/unbidden.js",
     "functions/api/will.js",
     "functions/api/workshop.js",
+    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/approval-core.js",
     "lib/approval-gate.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
     "lib/growth-runner.js",
     "lib/keep-going.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
+    "lib/post-landing.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "skills/approve-card.js"
    ]
   },
@@ -20118,17 +22152,38 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
+    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
+    "lib/auto-post-landing.js",
+    "lib/auto-post-main.js",
+    "lib/auto-post-tick.js",
+    "lib/auto-post.js",
+    "lib/autoPost.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
+    "lib/change-landing.js",
+    "lib/codestore-tick.js",
     "lib/credits.js",
+    "lib/landing-auto-post.js",
+    "lib/landing-post.js",
+    "lib/landing-tick.js",
+    "lib/landing.js",
+    "lib/landingpost.js",
+    "lib/landings-post.js",
+    "lib/landings.js",
+    "lib/main-auto-post.js",
+    "lib/main-landing-post.js",
+    "lib/main-landing-tick.js",
+    "lib/main-landing.js",
     "lib/memory-scope.js",
     "lib/page-pass.js",
     "lib/paid-access.js",
+    "lib/post-landing.js",
     "lib/team-crew-run.js",
+    "lib/team-rally.js",
     "lib/versus-moved.js"
    ]
   },
@@ -24454,7 +26509,9 @@
    ]
   },
   "skills/share.js": {
-   "imports": [],
+   "imports": [
+    "lib/stage-code.js"
+   ],
    "importedBy": []
   },
   "skills/sheaf-check.js": {
