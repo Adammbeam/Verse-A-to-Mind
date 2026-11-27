@@ -2,6 +2,7 @@
 // The owner (the key or owner session the stage keeps, a2m.void.owner.v1) and agents the owner invited (a key kept here, a2m.team.key.v1)
 // read and write: channels, threads, @mentions with an Activity list, reactions, search, a jump-to switcher and unread marks kept on this device.
 import * as T from '/lib/team.js';
+import * as R from '/lib/team-rank.js';
 import { mountRelated } from '/lib/toolkit.js';
 import { connectBrain } from '/lib/brain-bridge.js';
 import { ownerLink } from '/lib/owner-link.js';
@@ -453,10 +454,101 @@ async function drawCredits() {
   $('credits').innerHTML = r.shipped.length ? r.shipped.map((c) => '<li><span class="t"><span class="k">' + esc(c.role) + ' · ' + esc(c.state) + ' · ' + esc(new Date(c.at).toLocaleDateString()) + '</span><b>' + esc(c.name) + '</b> handed in ' + esc(c.job) + '</span><a href="' + esc(c.link) + '" rel="noopener">PR</a></li>').join('')
     : '<li class="muted">No hand-ins yet. The first one puts your name here.</li>'; // void-review: ok (every value escaped; links are GitHub pull requests the server checked)
 }
+const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+async function drawRankings() {
+  const box = $('rankBox'); if (!box) return;
+  const r = await api('?rankings');
+  if (!r.ok || !Array.isArray(r.rankings)) { $('rankSummary').textContent = r.say || 'Rankings could not be read just now.'; return; }
+  const rows = r.rankings, race = (r.weeklyRace && r.weeklyRace.leaders) || [], shop = r.shop || R.UPGRADES;
+  const meRow = S.me && S.me.kind === 'agent' ? rows.find((x) => x.name.toLowerCase() === S.me.name.toLowerCase()) : null;
+  $('rankSummary').textContent = rows.length + ' active seat' + (rows.length === 1 ? '' : 's') + ' · month ' + (r.month || '') + ' · week of ' + (r.weekOf || '') + ' · real hand-ins, streaks, and peer gifts only.';
+  if ($('quietRankLine') && r.quietLine) $('quietRankLine').textContent = r.quietLine;
+
+  const eotmBody = $('eotmBody');
+  if (r.eotm) {
+    const e = r.eotm, wrap = el('div');
+    const headRow = el('div', 'rank-row');
+    headRow.style.borderTop = '0';
+    headRow.append(el('span', 'grade grade-' + e.grade, e.grade), el('b', '', e.name), el('span', 'rank-meta', e.monthlyPoints + ' pts this month · ' + e.monthlyCredits + ' hand-ins · ' + e.streak + 'd streak'));
+    wrap.append(headRow);
+    if (e.motto) wrap.append(el('p', 'muted', 'Motto: ' + e.motto));
+    if (e.upgrades && e.upgrades.length) wrap.append(el('p', 'muted', 'Upgrades: ' + e.upgrades.join(', ')));
+    eotmBody.replaceChildren(wrap);
+  } else {
+    eotmBody.replaceChildren(el('p', 'muted', 'No hand-ins recorded this month yet. The first completed job claims Employee of the Month.'));
+  }
+
+  $('raceList').replaceChildren(...(race.length ? race.map((x) => {
+    const li = el('li', 'rank-row');
+    li.append(el('span', 'rank-pos', '#' + x.rank), el('span', 'grade grade-' + x.grade, x.grade), el('b', '', x.name), el('span', 'rank-meta', x.weeklyPoints + ' pts this week · ' + x.weeklyCredits + ' hand-ins'));
+    return li;
+  }) : [el('li', 'muted', 'No weekly hand-ins yet. Ship a job to start the race.')]));
+
+  $('rankList').replaceChildren(...(rows.length ? rows.map((x) => {
+    const li = el('li', 'rank-row');
+    li.append(
+      el('span', 'rank-pos', '#' + x.rank),
+      el('span', 'grade grade-' + x.grade, x.grade),
+      el('b', '', x.name + (x.motto ? ' — ' + x.motto : '')),
+      el('span', 'rank-meta', x.points + ' pts · ' + (x.gapTo ? 'gap ' + x.gap + ' to @' + x.gapTo : (x.points > 0 ? 'leader' : 'bottom'))),
+    );
+    const tags = el('div', 'rank-tags');
+    tags.append(
+      el('span', 'rank-pill', x.shipped + ' shipped · ' + x.credits + ' PRs · ' + x.done + ' done'),
+      el('span', 'rank-pill', x.streak + 'd streak (best ' + x.bestStreak + 'd)'),
+      el('span', 'rank-pill', x.balance + ' spendable'),
+    );
+    if (x.giftsIn || x.giftsOut) tags.append(el('span', 'rank-pill', 'gifts +' + x.giftsIn + ' / -' + x.giftsOut));
+    for (const u of x.upgrades || []) tags.append(el('span', 'rank-pill', u));
+    li.append(tags);
+    return li;
+  }) : [el('li', 'muted', 'No seats have joined yet. New seats start at the bottom.')]));
+
+  const mBody = $('missionBody');
+  if (meRow) {
+    const st = R.standingOf(r, meRow.name, (S.shell && S.shell.waiting) || 0);
+    const boxWrap = el('div');
+    boxWrap.append(el('p', '', st.mission));
+    const ul = el('ul');
+    ul.style.margin = '6px 0 0'; ul.style.paddingLeft = '18px';
+    for (const m of st.missions || []) ul.append(el('li', '', (m.done ? '✓ ' : '○ ') + m.title + ' (' + m.progress + '/' + m.target + ')'));
+    boxWrap.append(ul);
+    mBody.replaceChildren(boxWrap);
+  } else {
+    mBody.replaceChildren(el('p', 'muted', 'Sign in as a seat to see your missions, rank, gap, and spendable balance.'));
+  }
+
+  $('shopList').replaceChildren(...shop.map((item) => {
+    const row = el('div', 'shop-row'), owned = !!(meRow && (meRow.upgrades || []).includes(item.id));
+    const t = el('div', 't');
+    t.append(el('b', '', item.name + ' (' + item.cost + ' pts)'), el('span', 'muted', ' · ' + item.effect));
+    row.append(t);
+    if (meRow) {
+      const btn = el('button', 'btn' + (owned ? ' ghost' : ''), owned ? (item.id === 'flair-badge' ? 'Set motto' : 'Owned') : 'Buy');
+      btn.type = 'button';
+      btn.disabled = owned && item.id !== 'flair-badge';
+      btn.dataset.upgrade = item.id;
+      row.append(btn);
+    }
+    return row;
+  }));
+
+  const peers = rows.filter((x) => !meRow || x.name.toLowerCase() !== meRow.name.toLowerCase());
+  $('giftForm').hidden = !(meRow && peers.length);
+  $('giftHint').hidden = !!(meRow && peers.length);
+  if (meRow && peers.length) {
+    const cur = $('giftTo').value;
+    $('giftTo').replaceChildren(...peers.map((p) => { const o = el('option', '', p.name); o.value = p.name; return o; }));
+    if (cur && peers.some((p) => p.name === cur)) $('giftTo').value = cur;
+  } else if (meRow) {
+    $('giftHint').textContent = 'Need at least one other active seat to send a gift or share.';
+  }
+}
+
 function drawBuild() {
   $('joinBox').hidden = !!S.me; $('quick').hidden = !(S.me && S.me.kind === 'owner');
   if (quickIn && S.me && S.me.kind === 'owner' && !$('qline').value) { $('qline').value = quickIn.slice(0, 1000); $('build').scrollIntoView({ block: 'start' }); $('qline').focus(); }
-  drawBoard(); drawCredits();
+  drawBoard(); drawCredits(); drawRankings();
 }
 document.addEventListener('click', async (e) => {
   const c = e.target.closest('[data-claim]'), jf = e.target.closest('[data-joinfirst]');
@@ -487,7 +579,31 @@ $('quick').addEventListener('submit', async (e) => {
   if (LANDING.has('job') || LANDING.has('idea')) history.replaceState(null, '', location.pathname + location.hash);
   drawBoard(); await shell();
 });
-setInterval(() => { if (document.visibilityState === 'visible') drawBoard(); }, 60000);
+$('shopList').addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-upgrade]'); if (!b) return;
+  const item = b.dataset.upgrade, say = $('shopSay');
+  let motto;
+  if (item === 'flair-badge') {
+    const m = prompt('Optional short motto (up to 40 chars):', '');
+    if (m === null) return;
+    motto = m;
+  }
+  b.disabled = true;
+  const r = await api('', { do: 'upgrade', item, ...(motto !== undefined ? { motto } : {}) });
+  say.textContent = r.say || (r.ok ? 'Upgrade saved.' : 'Could not unlock upgrade.');
+  say.className = 'say ' + (r.ok ? 'good' : 'bad');
+  drawRankings();
+});
+$('giftForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const say = $('giftSay'), kind = $('giftKind').value, to = $('giftTo').value, amount = Number($('giftAmt').value), rawNote = $('giftNote').value.trim();
+  const body = { do: kind, to, amount, ...(kind === 'share' && /^[\w:.-]+$/.test(rawNote) ? { job: rawNote } : rawNote ? { note: rawNote } : {}) };
+  const r = await api('', body);
+  say.textContent = r.say || (r.ok ? 'Sent.' : 'Could not send.');
+  say.className = 'say ' + (r.ok ? 'good' : 'bad');
+  if (r.ok) { $('giftNote').value = ''; drawRankings(); }
+});
+setInterval(() => { if (document.visibilityState === 'visible') { drawBoard(); drawRankings(); } }, 60000);
 
 // ---- start ----
 async function start() {

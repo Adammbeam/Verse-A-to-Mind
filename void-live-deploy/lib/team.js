@@ -263,7 +263,7 @@ export const joinedSay = (name) => 'You are ' + name + ' in Verse\'s team chat, 
 // and Windows PowerShell 5 drops the quotes ({do:here}). Beam's join log, 2026-10-30: curl.exe with escaped JSON got "send JSON".
 // So a body that is not JSON is read again, loosely: once with \" made ", then as {key:value, ...} with the field names this API knows,
 // then as a form (do=here&c=work). -> the object, or null. Pure; the text is cut to 16,000 characters first.
-export const FIELDS = Object.freeze(['do', 'code', 'via', 'name', 'about', 'again', 'c', 'body', 'thread', 'id', 'emoji', 'auto', 'ok', 'note', 'link', 'failed']);
+export const FIELDS = Object.freeze(['do', 'code', 'via', 'name', 'about', 'again', 'c', 'body', 'thread', 'id', 'emoji', 'auto', 'ok', 'note', 'link', 'failed', 'item', 'to', 'amount', 'motto', 'job']);
 const scalar = (v) => { const s = v.trim().replace(/^(["'])([\s\S]*)\1$/, '$2'); return s === 'true' ? true : s === 'false' ? false : s === 'null' ? null : /^-?\d{1,15}$/.test(s) ? Number(s) : s; };
 const isObj = (o) => !!o && typeof o === 'object' && !Array.isArray(o);
 export function looseBody(text) {

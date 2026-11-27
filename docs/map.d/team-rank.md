@@ -1,0 +1,1 @@
+- **Team rankings (`void-live-deploy/lib/team-rank.js`, `tools/team-rank.test.mjs`):** live rankings board, Employee of the Month, mission briefings, S/A/B/C grades, real seat upgrades shop, teammate gifts and shares, UTC-day streaks, and weekly race on `/team/` and `/api/team`.
