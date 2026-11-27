@@ -25,9 +25,14 @@ export const GATES = [['review', 'node', ['tools/review-pr.mjs', '--gate']], ['m
 const sh = (cmd, args, opts = {}) => { const r = spawnSync(cmd, args, { encoding: 'utf8', maxBuffer: 1 << 26, ...opts }); return { ok: r.status === 0, out: String(r.stdout || '') + String(r.stderr || '') }; };
 const tail = (s, n = 3) => String(s || '').trim().split('\n').slice(-n).join(' ').slice(0, 400);
 
-/** the change request to run next: the oldest-named one with no check at its commit yet. status: the store's /status. Pure. */
+/** the change request to run next: the oldest-named one whose latest check is not green or running. status: the store's /status. Pure. */
 export function nextChange(status, only = null) {
-  const done = new Set((status.checks || []).filter((c) => c.state !== 'running').map((c) => c.ref + ' ' + c.sha));
+  const latest = new Map();
+  for (const c of status.checks || []) {
+    const key = c.ref + ' ' + c.sha, old = latest.get(key);
+    if (!old || c.at >= old.at) latest.set(key, c);
+  }
+  const done = new Set([...latest].filter(([, c]) => c.state === 'green' || c.state === 'running').map(([key]) => key));
   return (status.changes || []).filter((r) => !only || r.name === 'refs/heads/' + only).filter((r) => !done.has(r.name + ' ' + r.sha)).sort((a, b) => (a.name < b.name ? -1 : 1))[0] || null;
 }
 /** what to do after a deploy, from the health answer: 'keep' | 'rollback' | 'nothing to roll back to'. Pure. */
@@ -53,9 +58,15 @@ const cf = async (path, { method = 'GET', f = fetch } = {}) => {
   const r = await f('https://api.cloudflare.com/client/v4/accounts/' + process.env.CLOUDFLARE_ACCOUNT_ID + '/pages/projects/' + PROJECT() + path, { method, headers: { authorization: 'Bearer ' + process.env.CLOUDFLARE_API_TOKEN } });
   const j = await r.json().catch(() => ({})); if (!r.ok || j.success === false) throw new Error('Cloudflare ' + method + ' ' + path + ': ' + r.status + ' ' + ((j.errors && j.errors[0] && j.errors[0].message) || '')); return j.result;
 };
+/** the wrangler command for this machine: Windows needs cmd.exe to run the npx.cmd shim. Pure. */
+export function deployCommand(sha, platform = process.platform) {
+  const args = ['--yes', 'wrangler', 'pages', 'deploy', 'void-live-deploy', '--project-name', PROJECT(), '--branch', 'main', '--commit-hash', sha, '--commit-message', 'verse-runner ' + sha.slice(0, 9)];
+  return platform === 'win32' ? { cmd: 'cmd.exe', args: ['/c', 'npx', ...args] } : { cmd: 'npx', args };
+}
 /** deploy `dir`/void-live-deploy to Pages production, then the newest deployment's id and url */
 export async function deploy(dir, sha, { run = sh, f = fetch } = {}) {
-  const d = run('npx', ['--yes', 'wrangler', 'pages', 'deploy', 'void-live-deploy', '--project-name', PROJECT(), '--branch', 'main', '--commit-hash', sha, '--commit-message', 'verse-runner ' + sha.slice(0, 9)], { cwd: dir, env: process.env });
+  const { cmd, args } = deployCommand(sha);
+  const d = run(cmd, args, { cwd: dir, env: process.env });
   if (!d.ok) return { ok: false, why: 'wrangler pages deploy failed: ' + tail(d.out) };
   const list = await cf('/deployments?env=production&per_page=1', { f }), top = (list || [])[0];
   return top ? { ok: true, deployment: top.id, url: top.url } : { ok: false, why: 'deployed, but the deployment list was empty' };
@@ -77,11 +88,23 @@ export async function runOnce({ checkOnly = false, only = null, key = CS.keyOf()
   try {
     await CS.clone(key, join(dir, 'r'));
     const r = join(dir, 'r'), c = check(r, cr, { run });
-    say((c.ok ? 'green: ' : 'red: ') + cr.name + ' ' + cr.sha.slice(0, 9) + (c.ok ? '' : ' (' + c.why + ')'));
+    say((c.ok ? 'checked: ' : 'red: ') + cr.name + ' ' + cr.sha.slice(0, 9) + (c.ok ? '' : ' (' + c.why + ')'));
     if (checkOnly) return { ok: c.ok, check: c };
-    await report(key, 'checks', { ref: cr.name, sha: cr.sha, state: c.ok ? 'green' : 'red', summary: c.why }, f);
-    if (!c.ok) return { ok: false, check: c };
-    const moved = await CS.push({ key, ref: c.sha, to: 'main', cwd: r, f }); // compare and swap: a main that moved meanwhile refuses, the next pass re-checks
+    if (!c.ok) {
+      await report(key, 'checks', { ref: cr.name, sha: cr.sha, state: 'red', summary: c.why }, f);
+      return { ok: false, check: c };
+    }
+    await report(key, 'checks', { ref: cr.name, sha: cr.sha, state: 'running', summary: c.why }, f);
+    let moved;
+    try { moved = await CS.push({ key, ref: c.sha, to: 'main', cwd: r, f }); } // compare and swap: a main that moved meanwhile refuses, the next pass re-checks
+    catch (e) {
+      const why = 'main move failed: ' + String(e && e.message || e);
+      await report(key, 'checks', { ref: cr.name, sha: cr.sha, state: 'red', summary: why }, f);
+      say('red: ' + why);
+      return { ok: false, check: c, why };
+    }
+    await report(key, 'checks', { ref: cr.name, sha: cr.sha, state: 'green', summary: c.why }, f);
+    say('green: ' + cr.name + ' ' + cr.sha.slice(0, 9));
     say('main is ' + moved.sha.slice(0, 9));
     if (!process.env.CLOUDFLARE_API_TOKEN || !process.env.CLOUDFLARE_ACCOUNT_ID) { say('Not deployed: CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID are not set on this runner.'); return { ok: true, landed: c.sha, deployed: false }; }
     const good = (await CS.status(key, f)).deploys || [], last = good.find((d) => d.state === 'live') || null; // newest first

@@ -20,7 +20,6 @@ export const LIMITS = {
   a2a: { rpm: 30, body: 8000 }, // Verse as an A2A agent (functions/api/a2a.js): one text message in, ask_void's answer out
   apibot: { rpm: 60, body: 0 }, // GET only: the free API bots' relay (functions/api/apibot.js): an API id from a closed list and one input in, that API's reply out; 30 cache misses a minute per connection in the route, good answers edge-cached ten minutes
   health: { rpm: 120, body: 0 }, // GET only: is this deploy up (functions/api/health.js), JSON for the GitHub-free runner's check after a deploy
-  proposals: { rpm: 30, body: 130000 }, // Verse's proposals (functions/api/proposals.js): a diff to prove and ship, owner or team key; the list is the owner's. It had no limit since #66
   free: { rpm: 30, body: 0 }, // the free-resource registry and its quota status (functions/api/free.js): GET only
   answer: { rpm: 30, body: 20000 },
   brain: { rpm: 30, body: 0 }, // GET only: the live brain on /brain/ (functions/api/brain.js); the page reads every 30 s, one edge copy a minute for everyone
