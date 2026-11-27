@@ -26,7 +26,8 @@ export async function ownerModel() {
     if (!r.ok) return null;
     await openFiles(token);
     const model = await r.json(), { gapText, modelFrom } = await import('../lib/versus-floor.js');
-    const [exam, self, nightly] = await Promise.all([readJson('/exam/latest.json'), readJson('/self.json'), readJson('/progress/nightly.json')]);
-    return modelFrom(model, gapText({ exam, nightly, wants: self && self.open }));
+    const [exam, self, nightly, abilities] = await Promise.all([readJson('/exam/latest.json'), readJson('/self.json'), readJson('/progress/nightly.json'), readJson('/tower.abilities.json')]);
+    const { attachAbilities } = await import('../lib/ability-floors.js');
+    return attachAbilities(modelFrom(model, gapText({ exam, nightly, wants: self && self.open })), abilities);
   } catch (_) { return null; }
 }
