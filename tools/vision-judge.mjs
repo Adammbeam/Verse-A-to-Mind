@@ -1,7 +1,14 @@
 #!/usr/bin/env node
 // Vision judge: what a visitor sees, measured, before a pull request that touches a surface can merge (tools/merge-gate.mjs).
 // Headless Chrome opens each changed surface at 1280x800 (desktop) and 390x844 (phone), takes a screenshot, and checks it with
-// deterministic pixel and DOM measures only (no model, no invented score):
+// deterministic pixel and DOM measures only (no model, no invented score). When this machine has no Chrome, the same viewports
+// are shot through Cloudflare Browser Rendering (POST /browser-rendering/screenshot). The account id and token come from the
+// environment only (CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN, or CLOUDFLARE_AI_TOKEN when that is the one set) and are
+// never written into a result, a log line or a file. With neither Chrome nor those variables the run returns
+// skipped: no browser available and does not throw.
+// The local Chrome path measures the DOM too (console, scroll, clipped text, media) and masks the ask bar. The remote path
+// judges the frame it got back (dark theme, blank, near-black, star dots). Hard-edge stays a local check: it was calibrated
+// with that mask, and the screenshot endpoint does not return an element box.
 //   every surface: zero page errors and console errors; no sideways scroll; no clipped text (a text box cut off with no ellipsis);
 //   a dark page (the Verse theme: the page background's luminance at most DARK); not a blank render (some pixels differ from the
 //   most common colour); media on the page has no load error.
@@ -12,6 +19,7 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import zlib from 'node:zlib';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
@@ -136,6 +144,140 @@ export function judge(pathname, vp, dom, px) {
 }
 
 // ---- the browser part ----
+const PNG_SIG = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+
+/** RGBA pixels of an 8-bit RGB or RGBA PNG, or null when the bytes are not one this judge can read. Pure. */
+export function decodePng(buf) {
+  const b = Buffer.isBuffer(buf) ? buf : Buffer.from(buf || []);
+  if (b.length < 8 || !b.subarray(0, 8).equals(PNG_SIG)) return null;
+  let w = 0, h = 0, depth = 0, color = 0, interlace = 0;
+  const idat = [];
+  let o = 8;
+  while (o + 12 <= b.length) {
+    const len = b.readUInt32BE(o); o += 4;
+    const type = b.toString('ascii', o, o + 4); o += 4;
+    if (o + len + 4 > b.length) return null;
+    const data = b.subarray(o, o + len); o += len + 4;
+    if (type === 'IHDR') {
+      if (data.length < 13) return null;
+      w = data.readUInt32BE(0); h = data.readUInt32BE(4); depth = data[8]; color = data[9]; interlace = data[12];
+    } else if (type === 'IDAT') idat.push(data);
+    else if (type === 'IEND') break;
+  }
+  const bpp = color === 6 ? 4 : color === 2 ? 3 : 0;
+  if (!w || !h || depth !== 8 || !bpp || interlace || w > 4096 || h > 4096) return null;
+  let raw;
+  try { raw = zlib.inflateSync(Buffer.concat(idat)); } catch (_) { return null; }
+  const stride = w * bpp, row = stride + 1;
+  if (raw.length < h * row) return null;
+  const out = new Uint8ClampedArray(w * h * 4), prior = new Uint8Array(stride);
+  const paeth = (a, c, d) => { const p = a + c - d, pa = Math.abs(p - a), pb = Math.abs(p - c), pc = Math.abs(p - d); return pa <= pb && pa <= pc ? a : pb <= pc ? c : d; };
+  for (let y = 0; y < h; y++) {
+    const f = raw[y * row], scan = raw.subarray(y * row + 1, y * row + 1 + stride), recon = new Uint8Array(stride);
+    for (let i = 0; i < stride; i++) {
+      const left = i >= bpp ? recon[i - bpp] : 0, up = prior[i], ul = i >= bpp ? prior[i - bpp] : 0, v = scan[i];
+      let x;
+      if (f === 0) x = v;
+      else if (f === 1) x = v + left;
+      else if (f === 2) x = v + up;
+      else if (f === 3) x = v + ((left + up) >> 1);
+      else if (f === 4) x = v + paeth(left, up, ul);
+      else return null;
+      recon[i] = x & 255;
+    }
+    for (let x = 0; x < w; x++) {
+      const s = x * bpp, d = (y * w + x) * 4;
+      out[d] = recon[s]; out[d + 1] = recon[s + 1]; out[d + 2] = recon[s + 2]; out[d + 3] = bpp === 4 ? recon[s + 3] : 255;
+    }
+    prior.set(recon);
+  }
+  return { width: w, height: h, data: out };
+}
+
+/** luminance of the most common colour in a frame, 0..1. The remote shot has no computed style, so the theme is read off the pixels. */
+function modeLuminance(data, w, h) {
+  const counts = new Map();
+  let best = 0, key = 0;
+  for (let i = 0; i < w * h; i++) {
+    const r = data[i * 4], g = data[i * 4 + 1], b = data[i * 4 + 2];
+    const k = (r >> 3) << 10 | (g >> 3) << 5 | (b >> 3), c = (counts.get(k) || 0) + 1;
+    counts.set(k, c);
+    if (c > best) { best = c; key = k; }
+  }
+  return +luminance(((key >> 10) & 31) << 3, ((key >> 5) & 31) << 3, (key & 31) << 3).toFixed(4);
+}
+
+/** the page file a surface is, or '' when it is missing or the path escapes the directory. */
+function pageFile(dir, pathname) {
+  const rel = pathname === '/' ? 'index.html' : String(pathname || '/').replace(/^\//, '').replace(/\/?$/, '/') + 'index.html';
+  const rootDir = path.resolve(dir), file = path.resolve(rootDir, rel);
+  if (file !== rootDir && !file.startsWith(rootDir + path.sep)) return '';
+  try { return fs.readFileSync(file, 'utf8'); } catch (_) { return ''; }
+}
+
+/** Cloudflare Browser Rendering credentials, or null. Read from the environment only; nothing here is a default key. */
+export function renderingCreds(env = process.env) {
+  const account = String((env && env.CLOUDFLARE_ACCOUNT_ID) || '').trim();
+  const token = String((env && (env.CLOUDFLARE_API_TOKEN || env.CLOUDFLARE_AI_TOKEN)) || '').trim();
+  if (!account || !token) return null;
+  return { account, token };
+}
+
+export function screenshotUrl(account) {
+  return 'https://api.cloudflare.com/client/v4/accounts/' + encodeURIComponent(account) + '/browser-rendering/screenshot';
+}
+
+/** one viewport, as PNG bytes, from the REST screenshot endpoint. The token is sent and then dropped. */
+export async function browserRenderingShot({ account, token, html, viewport, phase = '', fetchImpl = globalThis.fetch }) {
+  const body = {
+    html: String(html || ''),
+    viewport: { width: viewport.width, height: viewport.height, deviceScaleFactor: 1 },
+    screenshotOptions: { type: 'png' },
+    gotoOptions: { waitUntil: 'load', timeout: 30000 },
+  };
+  if (phase) body.addScriptTag = [{ content: 'document.documentElement.dataset.phase=' + JSON.stringify(phase) }];
+  const res = await fetchImpl(screenshotUrl(account), {
+    method: 'POST',
+    headers: { authorization: 'Bearer ' + token, 'content-type': 'application/json', accept: 'image/png' },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(45000),
+  });
+  if (!res || !res.ok) {
+    if (res && res.text) await res.text().catch(() => {});
+    const err = new Error('browser rendering screenshot failed'); err.status = res && res.status; throw err;
+  }
+  const type = String((res.headers && res.headers.get && res.headers.get('content-type')) || '');
+  const bytes = Buffer.from(await res.arrayBuffer());
+  if (type.includes('json') || bytes[0] === 0x7b) {
+    let raw = '';
+    try {
+      const j = JSON.parse(bytes.toString('utf8'));
+      raw = j && (typeof j.result === 'string' ? j.result : (j.result && (j.result.screenshot || j.result.image))) || '';
+    } catch (_) { raw = ''; }
+    if (!raw) { const err = new Error('browser rendering screenshot failed'); err.status = res.status; throw err; }
+    return Buffer.from(raw, 'base64');
+  }
+  return bytes;
+}
+
+/** one row per surface and viewport when nothing can take a picture. */
+export function noBrowserResult(paths) {
+  return (paths || []).flatMap((p) => VIEWPORTS.map((vp) => ({
+    path: p, viewport: vp.name, via: 'none', skipped: 'no browser available', px: null, failures: [],
+  })));
+}
+
+/** a local Chrome binary, or '' when this machine has none. */
+export async function findChrome(env = process.env, exists = fs.existsSync) {
+  let bundled = '';
+  try { bundled = (await import('playwright-core')).chromium.executablePath(); } catch (_) {}
+  return [env && env.VOID_TEST_BROWSER, '/usr/bin/google-chrome', bundled].find((p) => p && exists(p)) || '';
+}
+
+async function launchChrome(exe) {
+  const { chromium } = await import('playwright-core');
+  return chromium.launch({ executablePath: exe, args: ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+}
 const DOM = () => {
   const vis = (e) => { const r = e.getBoundingClientRect(), s = getComputedStyle(e); return r.width > 1 && r.height > 1 && s.visibility !== 'hidden' && s.display !== 'none' && +s.opacity > 0.05 && r.bottom > 0 && r.right > 0 && r.top < innerHeight && r.left < innerWidth && !e.closest('[aria-hidden="true"]'); };
   const name = (e) => e.tagName.toLowerCase() + (e.id ? '#' + e.id : '') + (e.className && typeof e.className === 'string' ? '.' + e.className.trim().split(/\s+/)[0] : '');
@@ -181,12 +323,6 @@ function serve(dir) {
   }).listen(0, '127.0.0.1', () => ok(s)); });
 }
 
-async function browser() {
-  const { chromium } = await import('playwright-core');
-  const exe = [process.env.VOID_TEST_BROWSER, '/usr/bin/google-chrome', (() => { try { return chromium.executablePath(); } catch (_) { return ''; } })()].find((p) => p && fs.existsSync(p));
-  if (!exe) throw new Error('no Chrome found (set VOID_TEST_BROWSER)');
-  return chromium.launch({ executablePath: exe, args: ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
-}
 
 /** the pixel measures of a PNG, decoded and counted in a blank page (pixelStats runs there as written here, so the numbers match the tests) */
 async function measure(b, png, mask) {
@@ -201,10 +337,16 @@ async function measure(b, png, mask) {
   } finally { await pg.close(); }
 }
 
-/** open every surface at both viewports and judge it; offline: any request off the local server is answered empty. */
-export async function run({ paths, dir = path.join(root, 'void-live-deploy'), shots = '', ask = '', phase = '' } = {}) {
-  const server = await serve(dir), base = 'http://127.0.0.1:' + server.address().port, b = await browser(), results = [];
+function shotName(p, ask, vp) {
+  return (p.replace(/\W+/g, '-').replace(/^-|-$/g, '') || 'landing') + (ask ? '-' + ask.replace(/\W+/g, '-') : '') + '-' + vp + '.png';
+}
+
+/** local Chrome: open every surface at both viewports and judge the DOM and the frame. Offline: any request off the local server is answered empty. */
+async function runLocal({ paths, dir, shots, ask, phase, exe, launch }) {
+  const server = await serve(dir), base = 'http://127.0.0.1:' + server.address().port, results = [];
+  let b;
   try {
+    b = await launch(exe);
     for (const p of paths) for (const vp of VIEWPORTS) {
       const ctx = await b.newContext({ viewport: { width: vp.width, height: vp.height }, reducedMotion: 'reduce' });
       await ctx.route((u) => !u.href.startsWith(base), (r) => r.fulfill({ status: 204, body: '' }));
@@ -219,14 +361,47 @@ export async function run({ paths, dir = path.join(root, 'void-live-deploy'), sh
       const dom = { ...(await page.evaluate(DOM).catch((e) => ({ scrollX: 0, clipped: [], bg: 0, media: [], mask: null, fail: e.message }))), errors };
       dom.media = [...dom.media, ...unplayable];
       const png = await page.screenshot();
-      if (shots) { fs.mkdirSync(shots, { recursive: true }); fs.writeFileSync(path.join(shots, (p.replace(/\W+/g, '-').replace(/^-|-$/g, '') || 'landing') + (ask ? '-' + ask.replace(/\W+/g, '-') : '') + '-' + vp.name + '.png'), png); }
+      if (shots) { fs.mkdirSync(shots, { recursive: true }); fs.writeFileSync(path.join(shots, shotName(p, ask, vp.name)), png); }
       const px = await measure(b, png, dom.mask);
       const pagePhase = p === '/' ? await page.evaluate(() => document.documentElement.getAttribute('data-phase') || '') : '';
-      results.push({ path: p, viewport: vp.name, px, phase: pagePhase, dom: { ...dom, mask: undefined }, failures: judge(p, vp.name, dom, px) });
+      results.push({ path: p, viewport: vp.name, via: 'chrome', px, phase: pagePhase, dom: { ...dom, mask: undefined }, failures: judge(p, vp.name, dom, px) });
       await ctx.close();
     }
-  } finally { await b.close(); server.close(); }
+  } finally { if (b) await b.close(); server.close(); }
   return results;
+}
+
+/** no local Chrome: one REST screenshot per viewport, then the same pixel measures. DOM checks that need a page handle are not invented. */
+async function runRemote({ paths, dir, shots, phase, env, fetchImpl }) {
+  const creds = renderingCreds(env), results = [];
+  for (const p of paths) for (const vp of VIEWPORTS) {
+    const at = p + ' @ ' + vp.name;
+    try {
+      const html = pageFile(dir, p);
+      if (!html) { results.push({ path: p, viewport: vp.name, via: 'browser-rendering', px: null, failures: [at + ': no page file to screenshot'] }); continue; }
+      const png = await browserRenderingShot({ account: creds.account, token: creds.token, html, viewport: vp, phase, fetchImpl });
+      if (shots) { fs.mkdirSync(shots, { recursive: true }); fs.writeFileSync(path.join(shots, shotName(p, '', vp.name)), png); }
+      const frame = decodePng(png);
+      if (!frame) { results.push({ path: p, viewport: vp.name, via: 'browser-rendering', px: null, failures: [at + ': screenshot was not a readable png'] }); continue; }
+      const px = pixelStats(frame.data, frame.width, frame.height, null);
+      const dom = { errors: [], scrollX: 0, clipped: [], bg: modeLuminance(frame.data, frame.width, frame.height), media: [], mask: null };
+      // hard-edge was calibrated with the ask bar masked out; this endpoint returns the picture and no element box, so that number is kept and not failed
+      const failures = judge(p, vp.name, dom, px).filter((f) => !(p === '/' && /harsh hard-edged/.test(f)));
+      results.push({ path: p, viewport: vp.name, via: 'browser-rendering', px, phase: phase || '', dom: { ...dom, mask: undefined }, failures });
+    } catch (e) {
+      const why = e && e.status ? 'browser rendering screenshot failed: HTTP ' + e.status : 'browser rendering screenshot failed';
+      results.push({ path: p, viewport: vp.name, via: 'browser-rendering', px: null, failures: [at + ': ' + why] });
+    }
+  }
+  return results;
+}
+
+/** open every surface at both viewports and judge it. Local Chrome when this machine has one; otherwise Browser Rendering; otherwise a skip, never a throw. */
+export async function run({ paths, dir = path.join(root, 'void-live-deploy'), shots = '', ask = '', phase = '', env = process.env, fetch: fetchImpl, chrome, launch } = {}) {
+  const exe = chrome !== undefined && chrome !== null ? chrome : await findChrome(env);
+  if (exe) return runLocal({ paths, dir, shots, ask, phase, exe, launch: launch || launchChrome });
+  if (!renderingCreds(env)) return noBrowserResult(paths);
+  return runRemote({ paths, dir, shots, phase, env, fetchImpl: fetchImpl || globalThis.fetch });
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -239,10 +414,19 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   }
   if (!paths.length) { console.log('vision-judge: no surface changed'); process.exit(0); }
   const results = await run({ paths, shots: arg('--shots'), phase: arg('--phase') });
+  if (results.length && results.every((r) => r.skipped)) {
+    const payload = { skipped: 'no browser available', results };
+    console.log(process.argv.includes('--json') ? JSON.stringify(payload, null, 1) : 'skipped: no browser available');
+    process.exit(0);
+  }
   for (const ask of looks) results.push(...(await run({ paths: ['/'], shots: arg('--shots'), ask })).map((r) => ({ ...r, path: '/ (' + ask + ')', failures: r.failures.map((f) => f.replace(/^\/ @/, '/ (' + ask + ') @')) })));
   const bad = results.flatMap((r) => r.failures);
-  if (process.argv.includes('--json')) console.log(JSON.stringify(results.map((r) => ({ path: r.path, viewport: r.viewport, px: r.px, failures: r.failures })), null, 1));
-  for (const r of results) console.log((r.failures.length ? 'FAIL ' : 'ok   ') + r.path + ' @ ' + r.viewport + '  mean ' + r.px.mean + ', off-colour ' + r.px.offMode + ', hard-edge ' + r.px.hardEdge + (r.phase ? '  phase ' + r.phase : ''));
+  if (process.argv.includes('--json')) console.log(JSON.stringify(results.map((r) => ({ path: r.path, viewport: r.viewport, via: r.via || '', skipped: r.skipped || '', px: r.px, failures: r.failures })), null, 1));
+  for (const r of results) {
+    if (r.skipped) console.log('skipped: no browser available  ' + r.path + ' @ ' + r.viewport);
+    else if (!r.px) console.log('FAIL ' + r.path + ' @ ' + r.viewport + '  ' + (r.failures[0] || 'no screenshot'));
+    else console.log((r.failures.length ? 'FAIL ' : 'ok   ') + r.path + ' @ ' + r.viewport + '  mean ' + r.px.mean + ', off-colour ' + r.px.offMode + ', hard-edge ' + r.px.hardEdge + (r.phase ? '  phase ' + r.phase : '') + (r.via === 'browser-rendering' ? '  via browser-rendering' : ''));
+  }
   for (const f of bad) console.error('vision-judge: ' + f);
   process.exit(bad.length ? 1 : 0);
 }

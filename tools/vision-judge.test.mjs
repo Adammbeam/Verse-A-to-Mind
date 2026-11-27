@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
-import { surfacesOf, liveSurfacesOf, redirectDestOf, pixelStats, judge, run, LIMITS } from './vision-judge.mjs';
+import { surfacesOf, liveSurfacesOf, redirectDestOf, pixelStats, judge, run, decodePng, renderingCreds, LIMITS } from './vision-judge.mjs';
 
 const frame = (w, h, f) => { const d = new Uint8ClampedArray(w * h * 4); for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const v = f(x, y), i = (y * w + x) * 4; d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255; } return d; };
 
@@ -62,6 +63,145 @@ test('in a real browser: a white landing fails; a dark page with text passes', {
   const land = r.filter((x) => x.path === '/').flatMap((x) => x.failures), ok = r.filter((x) => x.path === '/ok/').flatMap((x) => x.failures);
   assert.ok(land.some((f) => /not the dark theme/.test(f)), land.join('\n'));
   assert.deepEqual(ok, []);
+});
+
+function crc32(buf) {
+  let c = ~0;
+  for (let i = 0; i < buf.length; i++) { c ^= buf[i]; for (let k = 0; k < 8; k++) c = (c >>> 1) ^ (0xedb88320 & -(c & 1)); }
+  return ~c >>> 0;
+}
+function pngChunk(type, data) {
+  const t = Buffer.from(type), len = Buffer.alloc(4), crc = Buffer.alloc(4);
+  len.writeUInt32BE(data.length); crc.writeUInt32BE(crc32(Buffer.concat([t, data])));
+  return Buffer.concat([len, t, data, crc]);
+}
+/** a tiny RGBA PNG (filter 0) so the Browser Rendering mock can hand back bytes the judge decodes. */
+function pngOf(w, h, f) {
+  const raw = Buffer.alloc(h * (1 + w * 4));
+  for (let y = 0; y < h; y++) {
+    raw[y * (1 + w * 4)] = 0;
+    for (let x = 0; x < w; x++) {
+      const v = f(x, y), i = y * (1 + w * 4) + 1 + x * 4;
+      raw[i] = raw[i + 1] = raw[i + 2] = v; raw[i + 3] = 255;
+    }
+  }
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(w, 0); ihdr.writeUInt32BE(h, 4); ihdr[8] = 8; ihdr[9] = 6;
+  return Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), pngChunk('IHDR', ihdr), pngChunk('IDAT', zlib.deflateSync(raw)), pngChunk('IEND', Buffer.alloc(0))]);
+}
+function pngResponse(png, status = 200) {
+  const bytes = png.buffer.slice(png.byteOffset, png.byteOffset + png.byteLength);
+  return { ok: status >= 200 && status < 300, status, headers: { get: (h) => (String(h).toLowerCase() === 'content-type' ? 'image/png' : '') }, async arrayBuffer() { return bytes; }, async text() { return ''; } };
+}
+function fakeChrome() {
+  const page = {
+    on() {},
+    async goto() {},
+    async waitForTimeout() {},
+    async fill() {},
+    async press() {},
+    mouse: { async move() {} },
+    async screenshot() { return Buffer.from([0]); },
+    async close() {},
+    async evaluate(fn, arg) {
+      if (arg && arg.fn) return { mean: 0.02, offMode: 0.2, bright: 0, hardEdge: 0, dots: 0, hardDots: 0 };
+      const s = Function.prototype.toString.call(fn);
+      if (s.includes('did not play')) return [];
+      if (s.includes('scrollWidth')) return { scrollX: 0, clipped: [], bg: 0.01, media: [], mask: null };
+      return '';
+    },
+  };
+  return {
+    async newContext() { return { route() {}, async newPage() { return page; }, async close() {} }; },
+    async newPage() { return page; },
+    async close() {},
+  };
+}
+
+test('local Chrome path screenshots with the local browser and does not call Cloudflare', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'vj-local-'));
+  fs.writeFileSync(path.join(dir, 'index.html'), '<!doctype html><title>local</title>');
+  let fetches = 0;
+  const launched = [];
+  const token = 'made-up-token-value'; // secret-scan: ok (a made-up token for the test)
+  const r = await run({
+    paths: ['/'], dir, chrome: '/tmp/fake-chrome',
+    env: { CLOUDFLARE_ACCOUNT_ID: 'acct-test-1', CLOUDFLARE_API_TOKEN: token },
+    fetch: async () => { fetches += 1; throw new Error('network'); },
+    launch: async (exe) => { launched.push(exe); return fakeChrome(); },
+  });
+  assert.deepEqual(launched, ['/tmp/fake-chrome']);
+  assert.equal(fetches, 0);
+  assert.equal(r.length, 2);
+  assert.ok(r.every((row) => row.via === 'chrome' && !row.skipped && row.px && row.px.mean === 0.02));
+  assert.equal(JSON.stringify(r).includes(token), false);
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
+test('with no local Chrome, the screenshot comes from Cloudflare Browser Rendering', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'vj-cf-'));
+  fs.writeFileSync(path.join(dir, 'index.html'), '<!doctype html><title>remote-marker</title><p>dark page</p>');
+  const token = 'made-up-token-value'; // secret-scan: ok (a made-up token for the test)
+  const env = { CLOUDFLARE_ACCOUNT_ID: 'acct-test-1', CLOUDFLARE_API_TOKEN: token };
+  assert.equal(renderingCreds({ CLOUDFLARE_ACCOUNT_ID: 'acct-test-1' }), null);
+  assert.equal(renderingCreds({ CLOUDFLARE_API_TOKEN: token }), null);
+  assert.equal(renderingCreds({ CLOUDFLARE_ACCOUNT_ID: 'acct-test-1', CLOUDFLARE_AI_TOKEN: token }).token, token);
+  const dark = pngOf(32, 32, (x, y) => ((x + y) % 17 === 0 ? 48 : 8));
+  const decoded = decodePng(dark);
+  assert.equal(decoded.width, 32);
+  assert.equal(decoded.data[0], 48);
+  assert.equal(decoded.data[4], 8);
+  const sub = Buffer.from([1, 10, 20, 30, 255, 0, 0, 0, 0]);
+  const ihdr = Buffer.alloc(13); ihdr.writeUInt32BE(2, 0); ihdr.writeUInt32BE(1, 4); ihdr[8] = 8; ihdr[9] = 6;
+  const subPng = Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), pngChunk('IHDR', ihdr), pngChunk('IDAT', zlib.deflateSync(sub)), pngChunk('IEND', Buffer.alloc(0))]);
+  const subFrame = decodePng(subPng);
+  assert.equal(subFrame.data[0], 10); assert.equal(subFrame.data[4], 10); assert.equal(subFrame.data[7], 255);
+  const calls = [];
+  const r = await run({
+    paths: ['/'], dir, chrome: '', env,
+    fetch: async (url, init) => { calls.push({ url, init }); return pngResponse(dark); },
+  });
+  assert.equal(calls.length, 2);
+  assert.ok(r.every((row) => row.via === 'browser-rendering' && !row.skipped && row.failures.length === 0), JSON.stringify(r));
+  assert.ok(r[0].px.mean < LIMITS.NEAR_BLACK);
+  for (const c of calls) {
+    assert.match(c.url, /\/accounts\/acct-test-1\/browser-rendering\/screenshot$/);
+    assert.equal(c.init.method, 'POST');
+    assert.equal(c.init.headers.authorization, 'Bearer ' + token);
+    const body = JSON.parse(c.init.body);
+    assert.ok(body.viewport.width === 1280 || body.viewport.width === 390);
+    assert.equal(body.viewport.height, body.viewport.width === 1280 ? 800 : 844);
+    assert.equal(body.screenshotOptions.type, 'png');
+    assert.match(body.html, /remote-marker/);
+    assert.equal(JSON.stringify(body).includes(token), false);
+  }
+  assert.equal(JSON.stringify(r).includes(token), false);
+  const asJson = await run({
+    paths: ['/'], dir, chrome: '', env,
+    fetch: async () => ({ ok: true, status: 200, headers: { get: () => 'application/json' }, async arrayBuffer() { return Buffer.from(JSON.stringify({ success: true, result: dark.toString('base64') })); }, async text() { return ''; } }),
+  });
+  assert.ok(asJson.every((row) => row.via === 'browser-rendering' && row.failures.length === 0), JSON.stringify(asJson));
+  const light = pngOf(32, 32, (x, y) => ((x + y) % 17 === 0 ? 8 : 240));
+  const bad = await run({ paths: ['/'], dir, chrome: '', env, fetch: async () => pngResponse(light) });
+  assert.ok(bad.some((row) => row.failures.some((f) => /not the dark theme|not near-black/.test(f))), JSON.stringify(bad));
+  const down = await run({ paths: ['/'], dir, chrome: '', env, fetch: async () => pngResponse(Buffer.alloc(0), 503) });
+  assert.equal(down.length, 2);
+  assert.ok(down.every((row) => row.failures.some((f) => f.includes('HTTP 503')) && !JSON.stringify(row).includes(token)));
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
+test('with no Chrome and no Cloudflare credentials, the judge returns skipped: no browser available', async () => {
+  let fetches = 0, launches = 0;
+  const r = await run({
+    paths: ['/', '/films/'], chrome: '', dir: os.tmpdir(),
+    env: { CLOUDFLARE_ACCOUNT_ID: '', CLOUDFLARE_API_TOKEN: '', CLOUDFLARE_AI_TOKEN: '', VOID_TEST_BROWSER: '/usr/bin/google-chrome' },
+    fetch: async () => { fetches += 1; throw new Error('network'); },
+    launch: async () => { launches += 1; throw new Error('should not launch'); },
+  });
+  assert.equal(fetches, 0);
+  assert.equal(launches, 0);
+  assert.equal(r.length, 4);
+  assert.ok(r.every((row) => row.skipped === 'no browser available' && row.via === 'none' && row.failures.length === 0 && row.px === null));
 });
 
 test('the landing horizon stays soft at night on a phone', { skip: !chrome && 'no Chrome here' }, async () => {
