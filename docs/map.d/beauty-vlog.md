@@ -1,0 +1,1 @@
+- `tools/beauty-vlog.mjs` (a 30 to 45 second vertical glow-up from a day's before and after screenshots and `script.md`; test `tools/beauty-vlog.test.mjs`): the stars line is a tease, then a labeled side-by-side shows the real fix. See `docs/beauty-vlog.md`.
