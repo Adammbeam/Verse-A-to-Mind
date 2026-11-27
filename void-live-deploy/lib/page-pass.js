@@ -11,7 +11,7 @@ export const LOOKUP = 'universe_monthly';
 export const CENTS = 2000;
 export const TABLE = 'CREATE TABLE IF NOT EXISTS void_uni (sub TEXT PRIMARY KEY, status TEXT NOT NULL, until_ms INTEGER NOT NULL DEFAULT 0, updated TEXT NOT NULL)';
 const PASS_MS = 30 * 864e5;
-const OPEN = ['/api', '/.well-known', '/privacy', '/security', '/limits', '/members', '/store', '/credits', '/terms', '/refund', '/legal', '/emoji'];
+const OPEN = ['/api', '/.well-known', '/privacy', '/security', '/limits', '/members', '/store', '/credits', '/terms', '/refund', '/legal', '/emoji', '/team'];
 const ASSET = /\.(?:js|mjs|css|map|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp3|mp4|webm|wasm|json|txt|xml|webmanifest|pdf|atom|rss|gz|br)$/i;
 const enc = new TextEncoder();
 const hex = (b) => [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, '0')).join('');

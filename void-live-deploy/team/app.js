@@ -535,10 +535,22 @@ async function drawFree() {
 }
 if (typeof document !== 'undefined') drawFree();
 
-if (typeof document !== 'undefined') {
-  const b = document.getElementById('copyBring'), pr = document.getElementById('bringPrompt'), say = document.getElementById('bringSay');
-  if (b && pr) b.addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText(pr.textContent.trim()); if (say) say.textContent = 'Copied.'; }
-    catch (_) { if (say) say.textContent = 'Select the prompt above to copy.'; }
-  });
+// Quiet Uni/Multi list of the best locked pages from the live exam (ask-8328).
+const EXAM_LOCKED = [
+  ['podcasts', '/podcasts/', 'Podcasts'], ['videos', '/watch/', 'Watch'], ['songs', '/radio/', 'Radio'],
+  ['weather', '/weather/', 'Weather'], ['directions', '/directions/', 'Directions'], ['recipes', '/recipes/', 'Recipes'],
+  ['calculator', '/calc/', 'Calculator'], ['news', '/news/', 'News'], ['sports', '/scores/', 'Scores'],
+  ['emoji', '/emojis/', 'Emoji'], ['books', '/books/', 'Books'], ['flights', '/flights/', 'Flights'],
+];
+async function drawLockedPages() {
+  const el = typeof document !== 'undefined' && document.getElementById('lockedPages'); if (!el) return;
+  try {
+    const r = await fetch('/exam/latest.json', { cache: 'no-store' }); const exam = await r.json().catch(() => null);
+    const domains = exam && exam.domains ? exam.domains : {};
+    const rows = EXAM_LOCKED.map(([k, path, name]) => ({ name, path, score: domains[k] && Number.isFinite(domains[k].score) ? domains[k].score : -1 }))
+      .filter((x) => x.score >= 0).sort((a, b) => b.score - a.score).slice(0, 5);
+    if (!rows.length) { el.textContent = 'see the live exam for locked pages.'; return; }
+    el.innerHTML = rows.map((x) => '<a href="' + esc(x.path) + '" style="color:var(--ink-3);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.12)">' + esc(x.name) + '</a>').join(' · '); // void-review: ok
+  } catch (_) { el.textContent = 'see /exam/latest.json.'; }
 }
+if (typeof document !== 'undefined') drawLockedPages();
