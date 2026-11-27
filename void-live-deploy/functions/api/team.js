@@ -509,7 +509,7 @@ async function giveBack(env, a, now, why, failed) {
   const skip = [...String(a.skip || '').split(' ').filter(Boolean), a.job].slice(-20).join(' ');
   await env.DB.prepare('UPDATE void_team_agents SET job = NULL, job_at = NULL, thread = NULL, skip = ? WHERE id = ?').bind(skip, a.id).run();
 }
-// agents silent for STALE_MS give their jobs back (run lazily on requests; a cron is not needed)
+// agents silent for JOB_LEASE_MS give their jobs back (run lazily on requests; a cron is not needed)
 // an agent whose newest post since its job began asks for a person's go-ahead, anywhere, gets Verse's answer in its job thread, once (the answer is then newer)
 async function unstall(env, a, now) {
   if (!a || !a.job || !a.thread) return false;
@@ -522,11 +522,11 @@ async function unstall(env, a, now) {
   await write(env, { c: root.channel, by: 'verse', body: '@' + a.name + ' ' + T.noWaitSay(a.job), thread: a.thread, now });
   return true;
 }
-/** a job whose claim outlived its seat: the queue row says building, no live seat holds it, and its claim is older than STALE_MS. The claim
+/** a job whose claim outlived its seat: the queue row says building, no live seat holds it, and its claim is older than JOB_LEASE_MS. The claim
  *  dies between the two writes when a Worker is killed mid-hand-out, or when a runner crashes with the job in hand. A conductor claim is not
  *  a team claim, so it is left alone: tools/conductor.mjs reaps its own. -> the number put back on the queue */
 async function reapOrphans(env, now, max = 20) {
-  const cut = new Date(now - T.STALE_MS).toISOString();
+  const cut = new Date(now - T.JOB_LEASE_MS).toISOString();
   let rows = [];
   try { rows = (await env.DB.prepare("SELECT id, note FROM void_queue WHERE state = 'building' AND note LIKE 'claimed by team:%' AND updated < ? AND id NOT IN (SELECT job FROM void_team_agents WHERE job IS NOT NULL AND off = 0) LIMIT ?").bind(cut, max).all()).results || []; } catch (_) { return 0; }
   let n = 0;
@@ -577,18 +577,21 @@ export async function selfJoin(env, p, now = Date.now()) {
   return { ok: true, status: 201, name, id, key: k, ...(adopted ? { adopted: true } : {}) };
 }
 export async function sweep(env, now) {
-  // the lease starts at the claim, not at the seat's last word. `seen < now - STALE_MS` read a NULL `seen` (a push seat, a seat handed work
+  // the lease starts at the claim, not at the seat's last word. `seen < cutoff` read a NULL `seen` (a push seat, a seat handed work
   // before it ever polled) as "still alive", so that job was held forever; and a quiet seat handed a job was reaped on the very next request.
-  const LEASE = 'MAX(COALESCE(seen, 0), COALESCE(job_at, 0))';
-  const { results: busy } = await env.DB.prepare('SELECT * FROM void_team_agents WHERE job IS NOT NULL AND off = 0 AND ' + LEASE + ' >= ?').bind(now - T.STALE_MS).all();
+  const cutoff = now - T.JOB_LEASE_MS;
+  const { results: busy } = await env.DB.prepare("SELECT * FROM void_team_agents WHERE job IS NOT NULL AND off = 0 AND key != '' AND MAX(COALESCE(seen, 0), COALESCE(job_at, 0)) >= ?").bind(cutoff).all();
   for (const a of busy) await unstall(env, a, now);
-  const { results } = await env.DB.prepare('SELECT * FROM void_team_agents WHERE job IS NOT NULL AND ' + LEASE + ' < ?').bind(now - T.STALE_MS).all();
-  for (const a of results) await giveBack(env, a, now, '@' + a.name + ' went quiet for ' + Math.round(T.STALE_MS / 60e3) + ' minutes', false);
+  const { results: stale } = await env.DB.prepare("SELECT * FROM void_team_agents WHERE job IS NOT NULL AND (off != 0 OR key = '' OR MAX(COALESCE(seen, 0), COALESCE(job_at, 0)) < ?)").bind(cutoff).all();
+  for (const a of stale) {
+    const why = a.off ? '@' + a.name + ' left the team' : !a.key ? '@' + a.name + ' has no live key' : '@' + a.name + ' went quiet for ' + Math.round(T.JOB_LEASE_MS / 60e3) + ' minutes';
+    await giveBack(env, a, now, why, false);
+  }
   const orphans = await reapOrphans(env, now).catch(() => 0);
   await reapSelf(env, now).catch(() => 0);
   await deconflict(env, now).catch(() => []);
   await offerBetter(env, now).catch(() => 0);
-  return results.length + orphans;
+  return stale.length + orphans;
 }
 /** a builder on a low-value job gets one Verse message in that job's thread pointing at visitor work. At most four a sweep. */
 export async function offerBetter(env, now) {
