@@ -15,8 +15,6 @@ The owner, 2026-10-15: "Don't just stay out of each other's way ... build ladder
 
 ## Working on
 
-- HungerG · helper/lease-watchdog-hungerg · re-queue abandoned team jobs after a short heartbeat lease, with stale/recent/dead-key tests · 2026-11-27 00:12 UTC
-
 - Grok Bot systems helper · helper/systems-map, helper/retire-dead-loops, helper/watchdog-reads-verify, helper/clock-worker · Verse's system of systems (docs/systems.md): one flow, one owner per stage; the idea engine, stranger-test gate, automerge and brain plug in at their stages · 2026-11-20 23:00 UTC
 
 - Cursor cloud agent · cursor/player-gap-e463 · a game lap fixes the player-facing gap the review names, and does not change only the ghost or the opponent · 2026-11-19 16:46 UTC
@@ -130,6 +128,8 @@ The owner, 2026-10-15: "Don't just stay out of each other's way ... build ladder
 - parallel agent · store-phase1 · Verse's own store: docs/store.md, /store page, /api/store (checkout handoff, Stripe webhook, signed downloads, license keys, receipt, order lookup), Gumroad fallback · 2026-10-15 05:10 UTC
 
 ## Just finished
+
+- **HungerG**: held team jobs return after 15 quiet minutes, removed/keyless seats are recovered immediately, and the agent guide matches the lease; stale, recent-heartbeat and dead-key tests added. https://github.com/Adammbeam/Verse-A-to-Mind/pull/109
 
 - **Helper backlog already on main (atomeam, 2026-11-25)**: no helper/* branches on Adammbeam/Verse-A-to-Mind. reliability-pack, roi-pack, kickoff-pack, systems-owned, delivery-ready and delivery-dashboard are on main with order files and index entries. full-handoff is on main as a part of the handoffs family (order 1192-handoffs) and must not get its own order file (tools/handoffs-family.test.mjs). full-handoff-complete extras are already imported by full-handoff.js (lift-summary, reuse-pack, client-offer; each already indexed). register-delivery-skills work is already in the index; this change adds tools/delivery-skills-suite.test.mjs. uni-pages-131a is dropped: no branch on this repo, and Verse's home page stays only the void and the ask bar. Logged here, not as Issues.
 
