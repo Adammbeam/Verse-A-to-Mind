@@ -12745,6 +12745,41 @@ try {
     }
     check('connected: every floor page links to at least four sibling Verse tools, so no new floor is a dead end', pages > 150 && !dead.length, JSON.stringify({ pages, dead: dead.slice(0, 10), more: dead.length }));
   }
+  // a ticker's reading on /markets/: Buy, Sell, Watch and Unavailable, from a mocked quote (the price sources are not on this machine)
+  if (want('ticker reading: the markets quote shows Buy, Sell, Watch or Unavailable from a mocked price, with the reasons')) {
+    const Z = await fresh();
+    const note = 'Not financial advice. This is a reading of past prices.';
+    const readings = {
+      AAPL: { call: 'buy', label: 'Buy', reasons: ['Over the last 63 sessions the price went from 130.00 to 174.00, up 33.8%.'], disclaimer: note, say: '' },
+      MSFT: { call: 'sell', label: 'Sell', reasons: ['Over the last 63 sessions the price went from 160.00 to 128.00, down 20.0%.'], disclaimer: note, say: '' },
+      KO: { call: 'watch', label: 'Watch', reasons: ['Over the last 63 sessions the price went from 100.00 to 100.00, up 0.0%.'], disclaimer: note, say: '' },
+    };
+    const quote = (sym, verdict) => ({ ok: true, sym, kind: 'stock', name: sym, currency: 'USD', range: '1y', price: 174, change: 1, pct: 0.5, prev: 173, source: 'Stooq', delayed: true, asOf: Date.UTC(2026, 9, 23), points: [[Date.UTC(2026, 9, 22), 170], [Date.UTC(2026, 9, 23), 174]], verdict });
+    await Z.ctx.route(/\/api\/markets/, (r) => {
+      const s = (new URL(r.request().url()).searchParams.get('s') || '').toUpperCase();
+      if (readings[s]) return r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(quote(s, readings[s])) });
+      if (s) return r.fulfill({ status: 404, contentType: 'application/json', body: JSON.stringify({ ok: false, kind: 'none', sym: s, say: 'No price for ' + s + ' from the free sources just now.' }) });
+      return r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":false,"kind":"away"}' });
+    });
+    await Z.p.goto(base + 'markets/?s=AAPL');
+    await Z.p.waitForFunction(() => { const e = document.getElementById('vdCall'); return e && e.textContent === 'Buy'; });
+    const buy = await Z.p.$eval('#verdict', (e) => e.innerText);
+    await Z.p.fill('#q', 'MSFT'); await Z.p.click('#go');
+    await Z.p.waitForFunction(() => document.getElementById('vdCall').textContent === 'Sell');
+    const sell = await Z.p.$eval('#verdict', (e) => e.innerText);
+    await Z.p.fill('#q', 'KO'); await Z.p.click('#go');
+    await Z.p.waitForFunction(() => document.getElementById('vdCall').textContent === 'Watch');
+    const watch = await Z.p.$eval('#verdict', (e) => e.innerText);
+    await Z.p.fill('#q', 'ZZZ'); await Z.p.click('#go');
+    await Z.p.waitForFunction(() => document.getElementById('vdCall').textContent === 'Unavailable');
+    const none = await Z.p.$eval('#verdict', (e) => e.innerText);
+    check('ticker reading: the markets quote shows Buy, Sell, Watch or Unavailable from a mocked price, with the reasons',
+      /Buy/.test(buy) && /63 sessions/.test(buy) && /33\.8%/.test(buy) && /Not financial advice/.test(buy)
+      && /Sell/.test(sell) && /down 20\.0%/.test(sell) && /Watch/.test(watch) && /0\.0%/.test(watch)
+      && /Unavailable/.test(none) && /guessed/.test(none) && !Z.errors.length,
+      JSON.stringify({ buy, sell, watch, none, errors: Z.errors }));
+    await Z.ctx.close();
+  }
 } catch (e) {
   // always, --only included: a section that throws is a failure, never "0/0 passed" (finish.mjs's first shot runs --only)
   check('suite ran to the end', false, String(e && e.message) + ' (while running: ' + (watch.lastCheck || 'nothing yet') + ')');

@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { capsRows, scanRows, screen, resolve, parseStooqDaily, parseYahoo, summarize, closeOn, thin, fmtPrice, fmtBig, fmtMove, fmtDay, chartPath, comparePaths, cleanList, rowsFromFx, rowsFromPrices, RANGES, COINS } from '../void-live-deploy/lib/markets.js';
 import { onRequestGet, lookQuote, wantFrom, cleanIds, STRIP, parseSpark, overlay, coarse } from '../void-live-deploy/functions/api/markets.js';
+import { verdictOf, cikOf, annualEps, trailingPe, VERDICT_DISCLAIMER } from '../void-live-deploy/lib/markets-verdict.js';
 import { routeAsk, TOOLS, RELATED } from '../void-live-deploy/lib/toolkit.js';
 import { PAGES } from '../void-live-deploy/lib/seo.js';
 
@@ -104,7 +105,7 @@ test('the endpoint: bounds, closed lists, a rate limit, and the old crypto list 
   assert.equal((await ask('?s=aapl&r=1y')).status, 200); const j = await (await ask('?s=aapl&r=5d')).json(); assert.equal(j.range, '5d');
   for (const qs of ['?s=http://evil.example', '?s=aapl&r=10y', '?s=aapl&r=1y&on=2030-01-01', '?s=aapl&r=1y&on=2024-02-30', '?s=aapl&r=1y&on=garbage', '?s=' + 'a'.repeat(300), '?s=']) assert.equal((await ask(qs)).status, 400, qs);
   const before = calls.length; await ask('?s=aapl%0d%0aHost:%20x&r=1y'); assert.equal(calls.length, before, 'a refused symbol costs no upstream call');
-  const hosts = new Set(calls.map((u) => new URL(u).host)); for (const h of hosts) assert.ok(['stooq.com', 'query1.finance.yahoo.com', 'api.coingecko.com', 'api.frankfurter.dev'].includes(h), h);
+  const hosts = new Set(calls.map((u) => new URL(u).host)); for (const h of hosts) assert.ok(['stooq.com', 'query1.finance.yahoo.com', 'api.coingecko.com', 'api.frankfurter.dev', 'www.sec.gov', 'data.sec.gov'].includes(h), h);
   const strip = await (await ask('?strip=1')).json(); assert.equal(strip.ok, true); assert.ok(strip.quotes.length >= 4); assert.deepEqual(strip.quotes.map((x) => x.sym).slice(0, 3), STRIP.slice(0, 3));
   const mv = await (await ask('?movers=1')).json(); assert.equal(mv.ok, true); assert.equal(mv.up.length, 3); assert.equal(mv.down.length, 3);
   assert.equal((await ask('?s=aapl&r=1y', { fetchFn: fake({ down: ['stooq.com', 'query1.finance.yahoo.com'] }) })).status, 404, 'no price is not cached as an answer');
@@ -223,4 +224,65 @@ test('registered everywhere a page must be: the ask bar, the service worker, the
   assert.ok(PAGES.some((p) => p.path === '/markets/')); assert.match(fs.readFileSync(path.join(root, 'sw.js'), 'utf8'), /'\/markets\/'/);
   const html = fs.readFileSync(path.join(root, 'markets', 'index.html'), 'utf8');
   assert.match(html, /\$\('qs'\)\.textContent = q\.sym \+ ' · ' \+ \(\{ stock: 'Stock or ETF', index: 'Index'/, 'the header says the symbol and its kind before anything else'); assert.match(html, /not financial advice/i); assert.match(html, /delayed/i); assert.equal((html.match(/not financial advice/gi) || []).length, 1, 'said once');
+  assert.match(html, /id="verdict"/); assert.match(html, /paintVerdict/);
+});
+
+const ramp = (n, a, b) => Array.from({ length: n }, (_, i) => (n === 1 ? b : a + (b - a) * i / (n - 1)));
+const flatN = (n, v) => Array.from({ length: n }, () => v);
+const bars = (closes) => closes.map((c, i) => ({ t: NOW - (closes.length - 1 - i) * DAYMS, o: c, h: c, l: c, c, v: 1e6 }));
+const buyCloses = ramp(337, 100, 130).concat(ramp(34, 130, 180), ramp(29, 180, 174));
+const sellCloses = flatN(281, 175).concat(ramp(30, 175, 90), ramp(26, 90, 160), ramp(63, 160, 128));
+const csvOf = (closes) => ['Date,Open,High,Low,Close,Volume', ...closes.map((c, i) => [new Date(NOW - (closes.length - 1 - i) * DAYMS).toISOString().slice(0, 10), c, c, c, c, 1000000].join(','))].join('\n');
+const joined = (v) => (v.reasons || []).join('\n');
+
+test('a ticker reading from mocked daily prices: Buy, Sell, Watch, and Unavailable, each with the numbers or an honest gap', () => {
+  const buy = verdictOf(bars(buyCloses), { kind: 'stock', filing: 'asked', eps: 174 / 20 });
+  assert.equal(buy.call, 'buy'); assert.equal(buy.label, 'Buy'); assert.equal(buy.reasons.length, 5); assert.equal(buy.disclaimer, VERDICT_DISCLAIMER);
+  assert.match(joined(buy), /63 sessions/); assert.match(joined(buy), /174\.00/); assert.match(joined(buy), /50 sessions/); assert.match(joined(buy), /200 sessions/);
+  assert.match(joined(buy), /52-week high is 180\.00/); assert.match(joined(buy), /Trailing price to earnings is 20\.0/); assert.match(buy.disclaimer, /Not financial advice/);
+  for (const r of buy.reasons) assert.match(r, /\d/, r);
+  const sell = verdictOf(bars(sellCloses), { kind: 'stock', filing: 'asked' });
+  assert.equal(sell.call, 'sell'); assert.equal(sell.label, 'Sell'); assert.match(joined(sell), /down 20\.0%/); assert.match(joined(sell), /below both/); assert.match(joined(sell), /left out/);
+  const watch = verdictOf(bars(flatN(400, 100)), { kind: 'stock', filing: 'skip' });
+  assert.equal(watch.call, 'watch'); assert.equal(watch.label, 'Watch'); assert.match(joined(watch), /level with both/); assert.match(joined(watch), /up 0\.0%/);
+  const onHigh = buyCloses.slice(); onHigh[onHigh.length - 1] = 180;
+  const stretched = verdictOf(bars(onHigh), { kind: 'stock', filing: 'skip' });
+  assert.equal(stretched.call, 'watch'); assert.match(joined(stretched), /rather than a Buy/);
+  const rich = verdictOf(bars(buyCloses), { kind: 'stock', filing: 'asked', eps: 174 / 50 });
+  assert.equal(rich.call, 'watch'); assert.match(joined(rich), /above 35/); assert.match(joined(rich), /rather than a Buy/);
+  const cheap = verdictOf(bars(sellCloses), { kind: 'stock', filing: 'asked', eps: 12.8 });
+  assert.equal(cheap.call, 'watch'); assert.match(joined(cheap), /under 15/); assert.match(joined(cheap), /rather than a Sell/);
+  const missing = verdictOf(bars(ramp(40, 100, 180)), { kind: 'stock', filing: 'asked' });
+  assert.equal(missing.call, 'unavailable'); assert.equal(missing.label, 'Unavailable'); assert.deepEqual(missing.reasons, []); assert.match(missing.say, /40 sessions/); assert.match(missing.say, /guessed/); assert.match(missing.disclaimer, /Not financial advice/);
+  const fx = verdictOf(bars(buyCloses), { kind: 'fx', filing: 'asked', eps: 8 });
+  assert.equal(fx.call, 'unavailable'); assert.match(fx.say, /currency pair/); assert.equal(fx.reasons.length, 0, 'a pair does not borrow the share numbers');
+  const index = verdictOf(bars(buyCloses), { kind: 'index' });
+  assert.equal(index.call, 'buy'); assert.match(joined(index), /not a company/);
+  assert.equal(trailingPe(174, 8.7).toFixed(1), '20.0'); assert.equal(trailingPe(174, -1), null); assert.equal(trailingPe(0, 2), null);
+});
+test('filings: the CIK and the annual earnings figure are read from the mocked files, and a missing figure is not invented', () => {
+  assert.equal(cikOf({ 0: { cik_str: 320193, ticker: 'AAPL', title: 'Apple Inc.' }, 1: { cik_str: 789019, ticker: 'MSFT' } }, 'aapl'), 320193);
+  assert.equal(cikOf({ 0: { cik_str: 320193, ticker: 'AAPL' } }, 'MSFT'), null); assert.equal(cikOf(null, 'AAPL'), null); assert.equal(cikOf({ 0: { ticker: 'AAPL', cik_str: 'nope' } }, 'AAPL'), null);
+  const year = { form: '10-K', fp: 'FY', start: '2024-09-28', end: '2025-09-27', val: 6.5 };
+  assert.equal(annualEps({ units: { 'USD/shares': [year, { ...year, end: '2024-09-27', val: 5, start: '2023-09-30' }, { form: '10-Q', fp: 'Q1', start: '2025-09-28', end: '2025-12-27', val: 99 }] } }), 6.5, 'the latest full year, not a quarter');
+  assert.equal(annualEps({ units: { 'USD/shares': [{ form: '10-Q', fp: 'Q3', start: '2025-01-01', end: '2025-09-27', val: 4 }] } }), null); assert.equal(annualEps({}), null);
+});
+test('the quote carries the reading: filings add the multiple, a refusal leaves it out, and the path is the fixed filings URL', async () => {
+  const concept = { units: { 'USD/shares': [{ form: '10-K', fp: 'FY', start: '2024-09-28', end: '2025-09-27', val: 8.7 }] } };
+  const q = await lookQuote(resolve('aapl'), '1y', null, fake({ stooq: csvOf(buyCloses), concept }), NOW, { filing: true });
+  assert.equal(q.ok, true); assert.equal(q.verdict.call, 'buy'); assert.match(joined(q.verdict), /20\.0/); assert.equal(q.rows, undefined);
+  const made = calls.filter((u) => u.includes('sec.gov'));
+  assert.ok(made.some((u) => u.includes('https://www.sec.gov/files/company_tickers.json')), made.join(' '));
+  assert.ok(made.some((u) => /https:\/\/data\.sec\.gov\/api\/xbrl\/companyconcept\/CIK0000320193\/us-gaap\/EarningsPerShareDiluted\.json/.test(u)), made.join(' '));
+  const before = calls.length;
+  const down = await lookQuote(resolve('aapl'), '1y', null, fake({ stooq: csvOf(buyCloses), down: ['www.sec.gov', 'data.sec.gov'] }), NOW, { filing: true });
+  assert.equal(down.verdict.call, 'buy'); assert.match(joined(down.verdict), /left out/); assert.ok(!calls.slice(before).some((u) => u.includes('data.sec.gov')), 'no concept call when the ticker file does not answer');
+  const unknown = await lookQuote(resolve('aapl'), '1y', null, fake({ stooq: csvOf(buyCloses), tickers: { 0: { cik_str: 789019, ticker: 'MSFT' } } }), NOW, { filing: true });
+  assert.match(joined(unknown.verdict), /left out/);
+  const loss = await lookQuote(resolve('aapl'), '1y', null, fake({ stooq: csvOf(buyCloses), concept: { units: { 'USD/shares': [{ form: '10-K', fp: 'FY', start: '2024-09-28', end: '2025-09-27', val: -1.2 }] } } }), NOW, { filing: true });
+  assert.equal(loss.verdict.call, 'buy'); assert.match(joined(loss.verdict), /no positive price-to-earnings/);
+  const pair = await lookQuote(resolve('eurusd'), '1y', null, fake(), NOW, { filing: true });
+  assert.equal(pair.verdict.call, 'unavailable'); assert.match(pair.verdict.say, /currency pair/);
+  const thin = await lookQuote(resolve('aapl'), '1y', null, fake({ stooq: csvOf(ramp(10, 10, 12)) }), NOW, { filing: true });
+  assert.equal(thin.ok, true); assert.equal(thin.verdict.call, 'unavailable'); assert.match(thin.verdict.say, /guessed/);
 });

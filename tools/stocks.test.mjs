@@ -72,3 +72,16 @@ test('run: no price says so and still opens Markets; a dead service; a page left
   await withFetch({}, async (urls) => { const api = apiOf(); assert.equal(await stocks.run('stock market', api), 'none'); assert.equal(urls.length, 0); assert.equal(api.pages.length, 0); });
   assert.ok(!cardHtml(stockAsk('apple stock price'), { ok: true, name: '<b>x</b>', price: 1, source: '<i>' }, esc).includes('<b>'), 'what the service says is escaped');
 });
+
+test('the card shows Buy, Sell, Watch and Unavailable from the quote, and escapes a reason', () => {
+  const r = stockAsk('apple stock price'), base = { ok: true, name: 'Apple', price: 174, change: 1, pct: 0.5, source: 'Stooq', points: [] };
+  const note = 'Not financial advice. This is a reading of past prices.';
+  for (const [label, bit] of [['Buy', 'up 33.8%'], ['Sell', 'down 20.0%'], ['Watch', 'up 0.0%']]) {
+    const h = cardHtml(r, { ...base, verdict: { call: label.toLowerCase(), label, reasons: ['Over the last 63 sessions the price moved, ' + bit + '.'], disclaimer: note, say: '' } }, esc);
+    assert.ok(h.includes('<b>' + label + '</b>'), h); assert.ok(h.includes(bit), h); assert.ok(h.includes('Not financial advice'), h);
+  }
+  const gone = cardHtml(r, { ...base, verdict: { call: 'unavailable', label: 'Unavailable', reasons: [], say: 'Not enough daily prices came back (10 sessions). No number is guessed.', disclaimer: note } }, esc);
+  assert.ok(gone.includes('<b>Unavailable</b>') && gone.includes('10 sessions') && gone.includes('guessed'), gone);
+  const nasty = cardHtml(r, { ...base, verdict: { call: 'watch', label: 'Watch', reasons: ['<img src=x onerror=alert(1)>'], disclaimer: '<script>' } }, esc);
+  assert.ok(!nasty.includes('<img') && !nasty.includes('<script>'), nasty);
+});

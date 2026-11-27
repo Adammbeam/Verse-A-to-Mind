@@ -4,7 +4,7 @@
  * "apple stock price", "TSLA stock", "stock price of nvidia", "aapl price", "how is the s&p 500 today". The card opens the Markets page on the
  * same symbol (data-page), and the Markets page's card asks for this one (lib/markets-card.js). Coins stay with crypto.js, currency pairs with
  * convert. A word that is only a ticker by accident ("beef stock" is broth) is a stock only when it is a name Markets knows or is typed as a
- * ticker (TSLA, $tsla). Read-only: no trades, no advice.
+ * ticker (TSLA, $tsla). Read-only: no trades. The card shows the quote's reading (Buy, Sell or Watch) and says it is not advice.
  */
 import { resolve, NAMES, fmtPrice, fmtMove, fmtDay, sparkD } from '../lib/markets.js';
 
@@ -60,10 +60,13 @@ export function cardHtml(r, j, esc) {
     return head + sub + '<p>' + esc(say) + '</p>';
   }
   const up = (j.change || 0) >= 0, col = up ? '#7fd6a0' : '#ff8a8a', vals = (j.points || []).map((p) => p[1]), d = sparkD(vals, 240, 48);
+  const v = j.verdict, items = v && v.label ? (v.reasons || []).slice(0, 5).map((t) => '<li>' + esc(t) + '</li>').join('') : '';
+  const reading = v && v.label ? '<p><b>' + esc(v.label) + '</b></p>' + (items ? '<ol>' + items + '</ol>' : (v.say ? '<p>' + esc(v.say) + '</p>' : '')) + '<p class="src">' + esc(v.disclaimer || 'Not financial advice.') + '</p>' : '';
   return head + sub
     + '<div style="font-size:48px;font-weight:300;line-height:1.15;margin:6px 0 4px">' + esc(fmtPrice(j.price)) + '</div>'
     + (j.change != null ? '<p style="color:' + col + '">' + (up ? '▲ ' : '▼ ') + esc(fmtMove(j.change, j.pct)) + ' on the day</p>' : '')
     + (d ? '<svg width="240" height="48" viewBox="0 0 240 48" role="img" aria-label="The last five days"><path d="' + d + '" fill="none" stroke="' + col + '" stroke-width="1.5"/></svg>' : '')
+    + reading
     + '<div class="src">Source: ' + esc(j.source || 'Markets') + ' · data may be delayed' + (j.asOf ? ' · as of ' + esc(fmtDay(j.asOf)) : '') + ' · not advice</div>';
 }
 

@@ -16,7 +16,7 @@ export function csvFixture({ last = 188.5, prev = 180, hiDay = 230, loDay = 90 }
 export const resp = (body, ok = true) => ({ ok, status: ok ? 200 : 500, text: async () => (typeof body === 'string' ? body : JSON.stringify(body)), json: async () => (typeof body === 'string' ? JSON.parse(body) : body) });
 export const calls = [];
 /** a fake network: routes by host; `down` hosts answer 500; `stooq` can be a key wall */
-export function fake({ down = [], stooq = csvFixture(), yahoo, gecko, fx } = {}) {
+export function fake({ down = [], stooq = csvFixture(), yahoo, gecko, fx, tickers, concept } = {}) {
   return async (url) => {
     calls.push(String(url)); const u = new URL(url);
     if (down.includes(u.host)) return resp('', false);
@@ -31,6 +31,8 @@ export function fake({ down = [], stooq = csvFixture(), yahoo, gecko, fx } = {})
       if (/^\/v1\/\d{4}-\d{2}-\d{2}$/.test(u.pathname)) return resp({ date: '2024-12-30', rates: { [u.searchParams.get('symbols')]: 0.9652 } });
       return resp(fx || { rates: Object.fromEntries(Array.from({ length: 300 }, (_, i) => [new Date(NOW - (300 - i) * DAYMS).toISOString().slice(0, 10), { [u.searchParams.get('symbols')]: 0.9 + i / 3000 }])) });
     }
+    if (u.host === 'www.sec.gov') return u.pathname === '/files/company_tickers.json' ? resp(tickers || { 0: { cik_str: 320193, ticker: 'AAPL', title: 'Apple Inc.' } }) : resp('', false);
+    if (u.host === 'data.sec.gov') return /\/companyconcept\/CIK\d{10}\/us-gaap\/EarningsPerShareDiluted\.json$/.test(u.pathname) ? resp(concept === undefined ? { units: { 'USD/shares': [{ form: '10-K', fp: 'FY', start: '2024-09-28', end: '2025-09-27', val: 6.5 }] } } : concept) : resp('', false);
     throw new Error('unexpected host ' + u.host);
   };
 }
