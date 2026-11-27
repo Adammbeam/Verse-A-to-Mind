@@ -118,7 +118,7 @@ test('six hours: green merges, a conflict is rebased, a red check is named, a yo
 // A ready pull request keeps GitHub auto-merge on. The bot still squash-merges, and the old suite wait does not run.
 // suite-gate.yml lives on main and checks the pull request out itself, so the suite is dispatched from main (#2315).
 test('the automerge workflow squash-merges without waiting for the suite, and keeps the hourly run', () => {
-  const yml = readFileSync(new URL('../.github/workflows/automerge.yml', import.meta.url), 'utf8');
+  const yml = readFileSync(new URL('../.github/workflows-parked/automerge.yml', import.meta.url), 'utf8');
   const src = readFileSync(new URL('./automerge.mjs', import.meta.url), 'utf8');
   assert.match(yml, /pull-requests: write/, 'file .github/workflows/automerge.yml keeps pull-requests: write');
   assert.match(yml, /17 \* \* \* \*/, 'file .github/workflows/automerge.yml keeps the hourly run');
@@ -183,7 +183,7 @@ test('a merge-policy failure names the rule and the file, branch or label', () =
 // "sweep" group and replaced the waiting sweep, and the suite gate's own result ("Suite on main", on main, no pull request) was skipped
 // by the job "if" and by idleEvent. So no new batch went to the suite and nothing merged.
 test('a suite gate result sweeps, and an idle run on main never replaces the waiting sweep', () => {
-  const yml = readFileSync(new URL('../.github/workflows/automerge.yml', import.meta.url), 'utf8');
+  const yml = readFileSync(new URL('../.github/workflows-parked/automerge.yml', import.meta.url), 'utf8');
   const src = readFileSync(new URL('./automerge.mjs', import.meta.url), 'utf8');
   const group = yml.match(/^\s*group: (.+)$/m)[1];
   assert.match(group, /head_branch == 'main' && github\.event\.workflow_run\.name != 'Suite on main' && github\.event\.workflow_run\.name != 'Verse verify' && format\('idle-\{0\}', github\.run_id\)\) \|\| 'sweep'/);
