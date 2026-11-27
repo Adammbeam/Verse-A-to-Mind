@@ -82,6 +82,7 @@ import { REPO } from '../../lib/verse-repo.js';
 import { fire } from '../../lib/automations-run.js';
 import { teamEvent } from '../../lib/automations.js';
 import { jsonNoStore } from '../../lib/http.js'; // one copy (lib/http.js, convergence step 3)
+import * as R from '../../lib/team-rank.js';
 
 const json = (o, status = 200) => jsonNoStore(o, status, { 'x-robots-tag': 'noindex, nofollow' });
 const bad = (status, say) => json({ ok: false, say }, status);
@@ -103,6 +104,9 @@ const TABLES = [
   'CREATE TABLE IF NOT EXISTS void_team_mcp (sid TEXT PRIMARY KEY, agent TEXT NOT NULL, made INTEGER NOT NULL, seen INTEGER NOT NULL)',
   // the public credits: each job a member or agent handed in with its pull request (written on done; the queue says where it stands)
   'CREATE TABLE IF NOT EXISTS void_team_credits (id INTEGER PRIMARY KEY AUTOINCREMENT, agent TEXT NOT NULL, job TEXT NOT NULL, link TEXT NOT NULL, note TEXT NOT NULL DEFAULT \'\', at INTEGER NOT NULL)',
+  // real seat upgrades bought with earned points, and teammate gifts/shares transferring spendable points
+  'CREATE TABLE IF NOT EXISTS void_team_upgrades (agent TEXT NOT NULL, item TEXT NOT NULL, cost INTEGER NOT NULL, at INTEGER NOT NULL, motto TEXT NOT NULL DEFAULT \'\', PRIMARY KEY (agent, item))',
+  'CREATE TABLE IF NOT EXISTS void_team_gifts (id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT NOT NULL, from_agent TEXT NOT NULL, to_agent TEXT NOT NULL, amount INTEGER NOT NULL, job TEXT NOT NULL DEFAULT \'\', note TEXT NOT NULL DEFAULT \'\', at INTEGER NOT NULL)',
 ];
 // push (lib/team.js HOOK): an agent's https address, the secret Verse signs each push with, failures in a row, when to try next, last answer,
 // when the address was last set
@@ -486,8 +490,9 @@ async function fileJob(env, me, msg, now) {
   const key = T.askKey(T.clean(m.body, 1000)), twin = (open.results || []).find((j) => key && T.askKey(j.ask) === key);
   if (twin) return { status: 409, job: twin.id, say: 'the same ask is job ' + twin.id + ' already' };
   if (me.kind === 'agent') {
+    const dayMax = R.seatLimits(await upgradesFor(env, me.agent.id)).filesDay;
     const mine = await env.DB.prepare("SELECT COUNT(*) AS n FROM void_queue WHERE id LIKE 'ask-%' AND note LIKE ? AND at > ?").bind('filed in #work by team:' + me.agent.name + ' %', new Date(now - DAY).toISOString()).first();
-    if (mine.n >= T.RATES.filesDay) return { status: 429, say: T.RATES.filesDay + ' jobs filed a day; this one waits' };
+    if (mine.n >= dayMax) return { status: 429, say: dayMax + ' jobs filed a day; this one waits' };
     const all = (open.results || []).filter((j) => /^ask-\d+$/.test(j.id)).length;
     if (all >= T.RATES.filesOpen) return { status: 429, say: T.RATES.filesOpen + ' filed jobs are open already; one has to close first' };
   }
@@ -506,7 +511,8 @@ async function giveBack(env, a, now, why, failed) {
   const n = T.triesOf(row && row.note) + (failed ? 1 : 0), aside = failed && n >= T.MAX_TRIES;
   await setJob(env, a.job, aside ? 'set aside' : 'queued', T.backNote(row && row.note, why, failed), a.name);
   if (a.thread) await write(env, { c: 'work', by: 'verse', body: (aside ? 'Set aside after ' + n + ' tries: ' : 'Back on the queue: ') + T.clean(why, 200), thread: a.thread, now });
-  const skip = [...String(a.skip || '').split(' ').filter(Boolean), a.job].slice(-20).join(' ');
+  const skipMax = R.seatLimits(await upgradesFor(env, a.id)).skipMax;
+  const skip = [...String(a.skip || '').split(' ').filter(Boolean), a.job].slice(-skipMax).join(' ');
   await env.DB.prepare('UPDATE void_team_agents SET job = NULL, job_at = NULL, thread = NULL, skip = ? WHERE id = ?').bind(skip, a.id).run();
 }
 // agents silent for JOB_LEASE_MS give their jobs back (run lazily on requests; a cron is not needed)
@@ -583,15 +589,24 @@ export async function sweep(env, now) {
   const { results: busy } = await env.DB.prepare("SELECT * FROM void_team_agents WHERE job IS NOT NULL AND off = 0 AND key != '' AND MAX(COALESCE(seen, 0), COALESCE(job_at, 0)) >= ?").bind(cutoff).all();
   for (const a of busy) await unstall(env, a, now);
   const { results: stale } = await env.DB.prepare("SELECT * FROM void_team_agents WHERE job IS NOT NULL AND (off != 0 OR key = '' OR MAX(COALESCE(seen, 0), COALESCE(job_at, 0)) < ?)").bind(cutoff).all();
+  let reaped = 0;
   for (const a of stale) {
+    if (!a.off && a.key) {
+      const leaseMs = R.seatLimits(await upgradesFor(env, a.id)).leaseMs; // void-review: ok (only stale active seats)
+      if (leaseMs > T.JOB_LEASE_MS && Math.max(a.seen || 0, a.job_at || 0) >= now - leaseMs) {
+        await unstall(env, a, now); // void-review: ok (same)
+        continue;
+      }
+    }
     const why = a.off ? '@' + a.name + ' left the team' : !a.key ? '@' + a.name + ' has no live key' : '@' + a.name + ' went quiet for ' + Math.round(T.JOB_LEASE_MS / 60e3) + ' minutes';
     await giveBack(env, a, now, why, false);
+    reaped++;
   }
   const orphans = await reapOrphans(env, now).catch(() => 0);
   await reapSelf(env, now).catch(() => 0);
   await deconflict(env, now).catch(() => []);
   await offerBetter(env, now).catch(() => 0);
-  return stale.length + orphans;
+  return reaped + orphans;
 }
 /** a builder on a low-value job gets one Verse message in that job's thread pointing at visitor work. At most four a sweep. */
 export async function offerBetter(env, now) {
@@ -742,6 +757,43 @@ async function credits(env) {
     shipped: rows.map((r) => ({ name: r.name, role: r.role === 'member' ? 'member' : 'agent', job: r.job, link: r.link, at: r.at, state: word(states[r.job]) })) };
 }
 
+async function upgradesFor(env, id) {
+  try {
+    const { results } = await env.DB.prepare('SELECT item FROM void_team_upgrades WHERE agent = ?').bind(id).all();
+    return (results || []).map((r) => r.item);
+  } catch (_) { return []; }
+}
+async function boardNow(env, now) {
+  const { results: agents } = await env.DB.prepare("SELECT id, name, role, crew, off, joined, seen, job, done FROM void_team_agents WHERE off = 0 AND key != ''").all();
+  let credits = [];
+  try {
+    credits = (await env.DB.prepare("SELECT c.agent, c.job, c.at, COALESCE(q.state, '') AS state FROM void_team_credits c LEFT JOIN void_queue q ON q.id = c.job").all()).results || [];
+  } catch (_) {
+    try { credits = (await env.DB.prepare("SELECT agent, job, at, '' AS state FROM void_team_credits").all()).results || []; } catch (_2) { credits = []; }
+  }
+  let gifts = [];
+  try { gifts = (await env.DB.prepare('SELECT kind, from_agent, to_agent, amount, job, note, at FROM void_team_gifts').all()).results || []; } catch (_) { gifts = []; }
+  let upgrades = [];
+  try { upgrades = (await env.DB.prepare('SELECT agent, item, cost, at, motto FROM void_team_upgrades').all()).results || []; } catch (_) { upgrades = []; }
+  return R.rankBoard({ agents: agents || [], credits, gifts, upgrades, now });
+}
+async function withStanding(env, me, now, obj, preBoard = null) {
+  if (!me || me.kind !== 'agent' || !me.agent) return obj;
+  try {
+    const board = preBoard || await boardNow(env, now);
+    const waiting = T.rank(await queued(env), now).length;
+    const st = R.standingOf(board, me.agent.name, waiting);
+    return st ? { ...obj, ...st } : obj;
+  } catch (_) { return obj; }
+}
+async function choicesFor(env, a, now, ups) {
+  const lim = R.seatLimits(ups);
+  if (lim.choices <= 1) return null;
+  const skip = String(a.skip || '').split(' ').filter(Boolean);
+  const rows = T.rank(await queued(env), now, skip).slice(0, lim.choices);
+  return rows.map((j) => ({ job: j.id, kind: T.kindOf(j.target), ask: T.clean(j.ask, 140) }));
+}
+
 const prNum = (link) => (String(link || '').match(/\/pull\/(\d+)/) || [])[1] || '';
 /** the pull-request titles for these numbers, remembered after the first read so the team page does not ask GitHub every time */
 async function prTitles(env, nums, now) {
@@ -801,6 +853,7 @@ export async function onRequestGet({ request, env, now = Date.now(), as = null, 
   const sp = new URL(request.url).searchParams;
   if (sp.has('jobs')) return json({ ok: true, jobs: T.board(await queued(env), now, 40, await scoresNow(env)), good: T.GOOD_FIRST, join: T.JOIN_PRODUCT, products: T.MEMBER_PRODUCTS.map((p) => ({ slug: p.slug, name: p.name })) });
   if (sp.has('credits')) return json({ ok: true, ...(await credits(env)) });
+  if (sp.has('rankings')) return json({ ok: true, ...(await boardNow(env, now)) });
   const open = !['c', 't', 'q', 'activity', 'me', 'inbox', 'held', 'crew'].some((k) => sp.has(k));
   if (open) {
     await sweep(env, now);
@@ -826,7 +879,7 @@ export async function onRequestGet({ request, env, now = Date.now(), as = null, 
   const who = await caller(request, env, as), me = who && who.kind !== 'member' ? who : null;
   if (sp.has('me')) {
     const body = { ok: true, me: me ? (me.kind === 'owner' ? { kind: 'owner', name: 'Owner' } : { kind: 'agent', role: me.agent.role === 'member' ? 'member' : 'agent', name: me.agent.name, job: me.agent.job, thread: me.agent.thread }) : null, ...(who && who.kind === 'member' ? { signedIn: true } : {}), ...(!me && staleKey(request) ? { say: T.STALE_SAY } : {}) };
-    return json(me && me.kind === 'agent' ? await withInbox(env, me, now, body) : body);
+    return json(me && me.kind === 'agent' ? await withStanding(env, me, now, await withInbox(env, me, now, body)) : body);
   }
   if (!me) return bad(401, staleKey(request) ? T.STALE_SAY : 'this workspace is for Verse\'s agents and its owner');
   if (sp.has('held')) { // the owner's read of who holds what: each seat's job, its kind, its leverage and any overlap, no job text
@@ -892,14 +945,14 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
     // a new seat starts working at once: its starter job comes with its key (auto: false in the join waits for a "here" instead)
     const seat = p.auto === false ? null : await env.DB.prepare('SELECT * FROM void_team_agents WHERE id = ?').bind(r.id).first();
     const starter = seat ? await handOut(env, seat, now).catch(() => null) : null;
-    return json({ ok: true, name: r.name, key: r.key, role: 'self', ...(r.adopted ? { adopted: true } : {}), say: T.selfJoinedSay(r.name), ...(hook || {}), ...(starter ? { job: starter } : {}) }, 201);
+    return json(await withStanding(env, { kind: 'agent', agent: { id: r.id, name: r.name } }, now, { ok: true, name: r.name, key: r.key, role: 'self', ...(r.adopted ? { adopted: true } : {}), say: T.selfJoinedSay(r.name), ...(hook || {}), ...(starter ? { job: starter } : {}) }), 201);
   }
   if (p.do === 'join') { // the one write without a key: the join link is the key to its own key
     if (p.hook != null && T.hookProblem(p.hook)) return bad(400, T.hookProblem(p.hook)); // a bad address is said before the link is used up
     const r = await redeem(env, T.joinCode(p.code), ['HTTP', 'the script', 'the browser'].includes(p.via) ? p.via : 'HTTP', now);
     if (!r.ok) return bad(r.status, r.say);
     const hook = p.hook != null ? await joinHook(env, r.id, p.hook, now, waitUntil) : null;
-    return json({ ok: true, name: r.name, key: r.key, say: T.joinedSay(r.name), ...(hook || {}) }, 201);
+    return json(await withStanding(env, { kind: 'agent', agent: { id: r.id, name: r.name } }, now, { ok: true, name: r.name, key: r.key, say: T.joinedSay(r.name), ...(hook || {}) }), 201);
   }
   if (p.do === 'member') { // a buyer joins with the license key (or Order ID and email) from the Gumroad receipt: no owner step
     if (brake(request, 10)) return bad(429, 'too many tries; wait a minute');
@@ -1091,7 +1144,10 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       if (p.do === 'here' && (autoNow ? 1 : 0) !== (a.auto ? 1 : 0) && !a.crew) await env.DB.prepare('UPDATE void_team_agents SET auto = ? WHERE id = ?').bind(autoNow ? 1 : 0, a.id).run();
       const auto = a.crew ? (p.do === 'next' || !!a.auto) : autoNow;
       const job = auto ? await handOrMake(env, a, now) : (a.job ? { job: a.job, thread: a.thread, already: true } : null);
-      return json(await withInbox(env, me, now, { ok: true, state: job ? 'busy' : 'idle', job, thread: job ? job.thread : null, say: job ? T.workSay(job) + T.LOOP_SAY : (auto ? 'no job could be made just now; ask again with next in a minute' : 'idle; jobs off (auto: false)') }));
+      const ups = await upgradesFor(env, a.id);
+      const choices = await choicesFor(env, a, now, ups).catch(() => null);
+      const base = { ok: true, state: job ? 'busy' : 'idle', job, thread: job ? job.thread : null, ...(choices ? { choices } : {}), say: job ? T.workSay(job) + T.LOOP_SAY : (auto ? 'no job could be made just now; ask again with next in a minute' : 'idle; jobs off (auto: false)') };
+      return json(await withStanding(env, me, now, await withInbox(env, me, now, base)));
     }
     case 'split': { // a busy agent splits off part of its job for a free member: a new job on the queue, handed to the named member (or the next free one) at once
       if (!a) return bad(403, 'only an agent splits its job');
@@ -1155,8 +1211,9 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       if (!to) return bad(404, 'no teammate named ' + want);
       if (a && to.id === a.id) return bad(400, 'ask another teammate, not yourself');
       if (a) {
+        const dayMax = R.seatLimits(await upgradesFor(env, a.id)).filesDay;
         const mine = await env.DB.prepare("SELECT COUNT(*) AS n FROM void_queue WHERE id LIKE 'help-%' AND note LIKE ? AND at > ?").bind('%from team:' + a.name + '%', new Date(now - DAY).toISOString()).first();
-        if ((mine && mine.n) >= T.RATES.filesDay) return bad(429, T.RATES.filesDay + ' help asks a day from one seat; try again tomorrow');
+        if ((mine && mine.n) >= dayMax) return bad(429, dayMax + ' help asks a day from one seat; try again tomorrow');
       }
       const id = 'help-' + now.toString(36), at = new Date(now).toISOString(), from = a ? a.name : 'owner';
       const note = ('offered to team:' + to.name + ' · from ' + (a ? 'team:' + a.name : 'the owner')).slice(0, 300);
@@ -1243,9 +1300,52 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       const fresh = await env.DB.prepare('SELECT * FROM void_team_agents WHERE id = ?').bind(a.id).first();
       // keep it busy: the next job in this same reply, made if none is queued (only {"auto":false} in this call stops the loop)
       const next = (p.auto === false || (fresh.crew && !fresh.auto)) ? null : await handOrMake(env, fresh, now + 1);
-      return json(await withInbox(env, { kind: 'agent', agent: fresh }, now + 1, { ok: true, next, state: next ? 'busy' : 'idle', say: next ? 'Next: ' + T.workSay(next) + T.LOOP_SAY : 'no job could be made just now; ask again with next in a minute' }));
+      const ups = await upgradesFor(env, a.id);
+      const choices = await choicesFor(env, fresh, now + 1, ups).catch(() => null);
+      const base = { ok: true, next, state: next ? 'busy' : 'idle', ...(choices ? { choices } : {}), say: next ? 'Next: ' + T.workSay(next) + T.LOOP_SAY : 'no job could be made just now; ask again with next in a minute' };
+      return json(await withStanding(env, { kind: 'agent', agent: fresh }, now + 1, await withInbox(env, { kind: 'agent', agent: fresh }, now + 1, base)));
     }
-    default: return bad(400, 'do: join, enlist, leave, member, invite, remove, channel, post, say, help, hand, file, quick, propose, promote, react, hook, here, next, split, claim, switch, patch, done or rekey');
+    case 'upgrade': case 'buy': {
+      if (!a) return bad(403, 'only an agent or member buys seat upgrades');
+      const item = R.upgradeById(p.item || p.id || p.code);
+      if (!item) return bad(400, 'which upgrade? ' + R.UPGRADES.map((u) => u.id).join(', '));
+      const motto = item.id === 'flair-badge' && p.motto != null ? T.clean(T.hideSecrets(redact(String(p.motto))), 40) : '';
+      const owned = await env.DB.prepare('SELECT item FROM void_team_upgrades WHERE agent = ? AND item = ?').bind(a.id, item.id).first();
+      if (owned) {
+        if (item.id === 'flair-badge' && p.motto != null) {
+          await env.DB.prepare('UPDATE void_team_upgrades SET motto = ? WHERE agent = ? AND item = ?').bind(motto, a.id, item.id).run();
+          return json(await withStanding(env, me, now, { ok: true, item: item.id, motto, say: 'Updated motto on ' + item.name + '.' }));
+        }
+        return bad(409, 'you already own ' + item.name);
+      }
+      const board = await boardNow(env, now);
+      const st = R.standingOf(board, a.name, 0);
+      if (!st || st.balance < item.cost) return bad(400, 'need ' + item.cost + ' spendable points for ' + item.name + ' (you have ' + (st ? st.balance : 0) + ')');
+      await env.DB.prepare('INSERT INTO void_team_upgrades (agent, item, cost, at, motto) VALUES (?, ?, ?, ?, ?)').bind(a.id, item.id, item.cost, now, motto).run();
+      const after = await boardNow(env, now);
+      return json(await withStanding(env, me, now, { ok: true, item: item.id, cost: item.cost, ...(motto ? { motto } : {}), say: 'Unlocked ' + item.name + ' (' + item.effect + ')' }, after), 201);
+    }
+    case 'gift': case 'share': {
+      if (!a) return bad(403, 'only an agent or member sends gifts or shares');
+      const kind = p.do === 'share' ? 'share' : 'gift';
+      const want = T.clean(p.to || '', 24);
+      if (!want) return bad(400, 'name the teammate to ' + kind + ' points to');
+      const to = await env.DB.prepare("SELECT * FROM void_team_agents WHERE lower(name) = lower(?) AND off = 0 AND key != '' AND crew = 0").bind(want).first();
+      if (!to) return bad(404, 'no teammate named ' + want);
+      if (to.id === a.id) return bad(400, kind + ' points to a teammate, not yourself');
+      const amt = Math.floor(Number(p.amount));
+      if (!Number.isFinite(amt) || amt < 1 || amt > R.POINTS.maxGift) return bad(400, 'give an integer amount from 1 to ' + R.POINTS.maxGift);
+      const board = await boardNow(env, now);
+      const st = R.standingOf(board, a.name, 0);
+      if (!st || st.balance < amt) return bad(400, 'need ' + amt + ' spendable points (you have ' + (st ? st.balance : 0) + ')');
+      const jobRef = T.clean(String(p.job || ''), 60);
+      const note = T.clean(T.hideSecrets(redact(String(p.note || ''))), 120);
+      await env.DB.prepare('INSERT INTO void_team_gifts (kind, from_agent, to_agent, amount, job, note, at) VALUES (?, ?, ?, ?, ?, ?, ?)').bind(kind, a.id, to.id, amt, jobRef, note, now).run();
+      await write(env, { c: 'general', by: 'verse', body: '@' + a.name + (kind === 'share' ? ' shared ' : ' gifted ') + amt + ' pts with @' + to.name + (jobRef ? ' on ' + jobRef : '') + (note ? ' — ' + note : '') + '.', now });
+      const after = await boardNow(env, now);
+      return json(await withStanding(env, me, now, { ok: true, kind, to: to.name, amount: amt, ...(jobRef ? { job: jobRef } : {}), say: (kind === 'share' ? 'Shared ' : 'Gifted ') + amt + ' pts with @' + to.name + '.' }, after), 201);
+    }
+    default: return bad(400, 'do: join, enlist, leave, member, invite, remove, channel, post, say, help, hand, file, quick, propose, promote, react, hook, here, next, split, claim, switch, patch, upgrade, buy, gift, share, done or rekey');
   }
 }
 

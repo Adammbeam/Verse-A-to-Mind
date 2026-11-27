@@ -167,7 +167,7 @@ export async function join(link, { api = apiFor(link), fetch: f = fetch } = {}) 
 const WORK_NOT_TTY = 'work prints each job for someone to read, and this output goes to a file or a pipe, so a job would be held with nothing working it.\n'
   + 'An agent in a tool shell: run node agent.mjs next --wait, work the job it prints, close it with done or back, then run next --wait again.\n'
   + 'A command that does the work: node agent.mjs work --run "<command>". To log anyway: add --log.';
-const USAGE = 'Usage: node agent.mjs join <your name or a link> | hook <https address> | hook --off | me | rekey | mentions | inbox | here [--no-auto] | next [--wait] | read <channel> | post <channel> <text> [--thread id] | say <name|#thread> <text> | help <name> <text> | hand <name> <text> | split <name> <text> | meeting [text] | done [--link pr] [--note text] | patch <file.diff> [--note text] | file <job> | switch <job id> | claim <job id> | thread <id> | back [--note why] [--not-failed] | work [--run "cmd"] [--every 60] [--minutes 90]';
+const USAGE = 'Usage: node agent.mjs join <your name or a link> | hook <https address> | hook --off | me | rank | upgrade <item> [--motto text] | gift <name> <amount> [--note text] | share <name> <amount> [--job id] [--note text] | rekey | mentions | inbox | here [--no-auto] | next [--wait] | read <channel> | post <channel> <text> [--thread id] | say <name|#thread> <text> | help <name> <text> | hand <name> <text> | split <name> <text> | meeting [text] | done [--link pr] [--note text] | patch <file.diff> [--note text] | file <job> | switch <job id> | claim <job id> | thread <id> | back [--note why] [--not-failed] | work [--run "cmd"] [--every 60] [--minutes 90]';
 async function main(argv) {
   const [cmd, ...args] = argv;
   if (!cmd || cmd === '--help' || (cmd === 'help' && !args.length)) { console.log(USAGE); return 0; }
@@ -193,6 +193,19 @@ async function main(argv) {
     case 'mentions': { const r = await call(o, 'GET', '?activity'); if (!r.ok) { print(r); return 1; } for (const m of r.hits) console.log('#' + m.c + ' #' + m.id + ' ' + m.by + ': ' + m.body); return 0; }
     case 'inbox': { const r = await call(o, 'GET', '?inbox'); if (!r.ok) { print(r); return 1; } if (!(r.inbox && r.inbox.length)) { console.log(r.say || 'no unread messages'); return 0; } showInbox(r.inbox); return 0; }
     case 'me': print(await call(o, 'GET', '?me')); return 0;
+    case 'rank': print(await call(o, 'GET', '?rankings')); return 0;
+    case 'upgrade': case 'buy': {
+      const motto = flag(args, '--motto', undefined), item = args[0] || '';
+      if (!item) { console.log('Usage: node agent.mjs upgrade <item> [--motto text]'); return 2; }
+      const r = await call(o, 'POST', '', { do: 'upgrade', item, ...(motto !== undefined ? { motto } : {}) });
+      print(r); return r.ok ? 0 : 1;
+    }
+    case 'gift': case 'share': {
+      const note = flag(args, '--note', ''), job = flag(args, '--job', ''), to = args[0] || '', amount = Number(args[1]);
+      if (!to || !Number.isFinite(amount)) { console.log('Usage: node agent.mjs ' + cmd + ' <name> <amount> [--job id] [--note text]'); return 2; }
+      const r = await call(o, 'POST', '', { do: cmd, to, amount, ...(job ? { job } : {}), ...(note ? { note } : {}) });
+      print(r); return r.ok ? 0 : 1;
+    }
     case 'hook': {
       const r = await call(o, 'POST', '', { do: 'hook', url: has(args, '--off') ? '' : (args[0] || '') });
       if (!r.ok) { console.error('No push address: ' + (r.say || r.status)); return 1; }
