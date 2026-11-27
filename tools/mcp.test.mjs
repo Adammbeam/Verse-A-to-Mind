@@ -330,3 +330,28 @@ test('mcp: no tool sends, spends or forgets, and a call that asks to is refused'
     assert.match(r.error.message, /does not send, spend or forget/);
   }
 });
+
+test('mcp skills: skill_book runs the book skill\'s own code against Open Library, names Verse in the user-agent, and refuses unrelated asks', async () => {
+  const real = globalThis.fetch, seen = [];
+  globalThis.fetch = async (u, o = {}) => {
+    const url = String(u); seen.push({ url, ua: new Headers(o.headers || {}).get('user-agent') });
+    if (url.startsWith('https://openlibrary.org/search.json')) {
+      return Response.json({ docs: [{ key: '/works/OL66554W', title: 'Pride and Prejudice', author_name: ['Jane Austen'], first_publish_year: 1813 }] });
+    }
+    return new Response('', { status: 404 });
+  };
+  try {
+    const res = await onRequestPost({ request: new Request('https://a-to-mind.com/api/mcp', { method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'skill_book', arguments: { ask: 'who wrote pride and prejudice' } } }) }), env: {} });
+    const j = await res.json();
+    assert.equal(j.result.isError, false, JSON.stringify(j));
+    assert.match(j.result.content[0].text, /^Pride and Prejudice\nPride and Prejudice was written by Jane Austen, first published in 1813\.[\s\S]*Sources:\n- Pride and Prejudice: https:\/\/openlibrary\.org\/works\/OL66554W[\s\S]*The book skill on its card: https:\/\/a-to-mind\.com\/\?q=who%20wrote%20pride%20and%20prejudice$/);
+    assert.deepEqual([j.result.structuredContent.skill, j.result.structuredContent.path], ['book', 'skill_code']);
+    const ol = seen.filter((x) => x.url.includes('openlibrary.org'));
+    assert.ok(ol.length, 'the skill reached Open Library'); for (const x of ol) assert.match(x.ua, /^Verse\/1 \(https:\/\/a-to-mind\.com/);
+    const wrong = await onRequestPost({ request: new Request('https://a-to-mind.com/api/mcp', { method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'skill_book', arguments: { ask: 'define serendipity' } } }) }), env: {} });
+    const wj = await wrong.json();
+    assert.equal(wj.result.isError, true); assert.match(wj.result.content[0].text, /not an ask the book skill takes/);
+  } finally { globalThis.fetch = real; }
+});
