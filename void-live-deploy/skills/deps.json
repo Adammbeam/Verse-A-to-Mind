@@ -1,12 +1,12 @@
 {
  "note": "Who imports whom under void-live-deploy/ (tools/deps.mjs, from the import lines; asked by Verse). libs: each lib file with the skills that depend on it, directly or through another file (skills), directly (direct), and every dependant of any kind (dependants). files: each file's imports, the files that import it (importedBy) and the ones that reach it through them (reachedBy).",
- "counted": 1486,
+ "counted": 1471,
  "libs": [
   {
    "file": "lib/stage-pack.js",
-   "skills": 66,
+   "skills": 65,
    "direct": 52,
-   "dependants": 95,
+   "dependants": 89,
    "tests": 6
   },
   {
@@ -34,7 +34,7 @@
    "file": "lib/image-safety.js",
    "skills": 32,
    "direct": 0,
-   "dependants": 201,
+   "dependants": 198,
    "tests": 1
   },
   {
@@ -48,21 +48,21 @@
    "file": "lib/keeper.js",
    "skills": 31,
    "direct": 0,
-   "dependants": 193,
+   "dependants": 190,
    "tests": 1
   },
   {
    "file": "lib/merge-rules.js",
    "skills": 31,
    "direct": 1,
-   "dependants": 193,
+   "dependants": 190,
    "tests": 1
   },
   {
    "file": "lib/art-rules.js",
    "skills": 31,
    "direct": 0,
-   "dependants": 192,
+   "dependants": 189,
    "tests": 8
   },
   {
@@ -234,13 +234,6 @@
    "tests": 1
   },
   {
-   "file": "lib/self-sites.js",
-   "skills": 10,
-   "direct": 0,
-   "dependants": 74,
-   "tests": 2
-  },
-  {
    "file": "lib/better.js",
    "skills": 10,
    "direct": 2,
@@ -248,17 +241,17 @@
    "tests": 4
   },
   {
+   "file": "lib/self-sites.js",
+   "skills": 10,
+   "direct": 0,
+   "dependants": 38,
+   "tests": 2
+  },
+  {
    "file": "lib/verse-repo.js",
    "skills": 10,
    "direct": 1,
-   "dependants": 41,
-   "tests": 1
-  },
-  {
-   "file": "lib/stage-find.js",
-   "skills": 10,
-   "direct": 4,
-   "dependants": 35,
+   "dependants": 38,
    "tests": 1
   },
   {
@@ -343,6 +336,13 @@
    "skills": 9,
    "direct": 1,
    "dependants": 53,
+   "tests": 1
+  },
+  {
+   "file": "lib/stage-find.js",
+   "skills": 9,
+   "direct": 4,
+   "dependants": 29,
    "tests": 1
   },
   {
@@ -545,15 +545,8 @@
    "file": "lib/telemetry.js",
    "skills": 5,
    "direct": 1,
-   "dependants": 123,
+   "dependants": 119,
    "tests": 2
-  },
-  {
-   "file": "lib/stage-port.js",
-   "skills": 5,
-   "direct": 3,
-   "dependants": 28,
-   "tests": 1
   },
   {
    "file": "lib/textdiff.js",
@@ -685,21 +678,21 @@
    "file": "lib/verse-secrets.js",
    "skills": 4,
    "direct": 0,
-   "dependants": 123,
+   "dependants": 119,
    "tests": 1
   },
   {
    "file": "lib/note-ask.js",
    "skills": 4,
    "direct": 0,
-   "dependants": 122,
+   "dependants": 118,
    "tests": 1
   },
   {
    "file": "lib/automation-fix.js",
    "skills": 4,
    "direct": 0,
-   "dependants": 120,
+   "dependants": 116,
    "tests": 9
   },
   {
@@ -728,6 +721,13 @@
    "skills": 4,
    "direct": 0,
    "dependants": 40,
+   "tests": 1
+  },
+  {
+   "file": "lib/stage-port.js",
+   "skills": 4,
+   "direct": 3,
+   "dependants": 22,
    "tests": 1
   },
   {
@@ -1049,57 +1049,8 @@
    "file": "lib/image-gen.js",
    "skills": 2,
    "direct": 1,
-   "dependants": 132,
+   "dependants": 129,
    "tests": 4
-  },
-  {
-   "file": "lib/tower-controls.js",
-   "skills": 2,
-   "direct": 0,
-   "dependants": 60,
-   "tests": 1
-  },
-  {
-   "file": "lib/gate-badge.js",
-   "skills": 2,
-   "direct": 0,
-   "dependants": 59,
-   "tests": 2
-  },
-  {
-   "file": "lib/obituary.js",
-   "skills": 2,
-   "direct": 0,
-   "dependants": 59,
-   "tests": 2
-  },
-  {
-   "file": "lib/tower-journeys.js",
-   "skills": 2,
-   "direct": 0,
-   "dependants": 59,
-   "tests": 3
-  },
-  {
-   "file": "lib/tower-topic.js",
-   "skills": 2,
-   "direct": 0,
-   "dependants": 59,
-   "tests": 1
-  },
-  {
-   "file": "lib/tower-weight.js",
-   "skills": 2,
-   "direct": 0,
-   "dependants": 59,
-   "tests": 1
-  },
-  {
-   "file": "lib/tower.js",
-   "skills": 2,
-   "direct": 1,
-   "dependants": 58,
-   "tests": 36
   },
   {
    "file": "lib/alt-pay.js",
@@ -1112,15 +1063,8 @@
    "file": "lib/gumroad.js",
    "skills": 2,
    "direct": 1,
-   "dependants": 49,
+   "dependants": 46,
    "tests": 5
-  },
-  {
-   "file": "lib/store-db.js",
-   "skills": 2,
-   "direct": 0,
-   "dependants": 45,
-   "tests": 3
   },
   {
    "file": "lib/compose.js",
@@ -1135,6 +1079,13 @@
    "direct": 0,
    "dependants": 43,
    "tests": 1
+  },
+  {
+   "file": "lib/store-db.js",
+   "skills": 2,
+   "direct": 0,
+   "dependants": 42,
+   "tests": 3
   },
   {
    "file": "lib/store-products.js",
@@ -1175,15 +1126,64 @@
    "file": "lib/products.js",
    "skills": 2,
    "direct": 1,
-   "dependants": 36,
+   "dependants": 33,
    "tests": 3
   },
   {
    "file": "lib/watch.js",
    "skills": 2,
    "direct": 1,
-   "dependants": 28,
+   "dependants": 25,
    "tests": 2
+  },
+  {
+   "file": "lib/tower-controls.js",
+   "skills": 2,
+   "direct": 0,
+   "dependants": 24,
+   "tests": 1
+  },
+  {
+   "file": "lib/gate-badge.js",
+   "skills": 2,
+   "direct": 0,
+   "dependants": 23,
+   "tests": 2
+  },
+  {
+   "file": "lib/obituary.js",
+   "skills": 2,
+   "direct": 0,
+   "dependants": 23,
+   "tests": 2
+  },
+  {
+   "file": "lib/tower-journeys.js",
+   "skills": 2,
+   "direct": 0,
+   "dependants": 23,
+   "tests": 3
+  },
+  {
+   "file": "lib/tower-topic.js",
+   "skills": 2,
+   "direct": 0,
+   "dependants": 23,
+   "tests": 1
+  },
+  {
+   "file": "lib/tower-weight.js",
+   "skills": 2,
+   "direct": 0,
+   "dependants": 23,
+   "tests": 1
+  },
+  {
+   "file": "lib/tower.js",
+   "skills": 2,
+   "direct": 1,
+   "dependants": 22,
+   "tests": 36
   },
   {
    "file": "lib/recipe-respect.js",
@@ -1494,32 +1494,11 @@
    "tests": 2
   },
   {
-   "file": "lib/versus-sign.js",
-   "skills": 1,
-   "direct": 1,
-   "dependants": 38,
-   "tests": 0
-  },
-  {
    "file": "lib/tally.js",
    "skills": 1,
    "direct": 1,
    "dependants": 37,
    "tests": 1
-  },
-  {
-   "file": "lib/versus-floor.js",
-   "skills": 1,
-   "direct": 1,
-   "dependants": 37,
-   "tests": 1
-  },
-  {
-   "file": "lib/actions.js",
-   "skills": 1,
-   "direct": 0,
-   "dependants": 36,
-   "tests": 2
   },
   {
    "file": "lib/coins.js",
@@ -1564,6 +1543,13 @@
    "tests": 2
   },
   {
+   "file": "lib/actions.js",
+   "skills": 1,
+   "direct": 0,
+   "dependants": 33,
+   "tests": 2
+  },
+  {
    "file": "lib/brain-workspace.js",
    "skills": 1,
    "direct": 1,
@@ -1574,7 +1560,7 @@
    "file": "lib/automations.js",
    "skills": 1,
    "direct": 0,
-   "dependants": 26,
+   "dependants": 23,
    "tests": 6
   },
   {
@@ -1799,7 +1785,14 @@
    "skills": 1,
    "direct": 1,
    "dependants": 5,
-   "tests": 7
+   "tests": 6
+  },
+  {
+   "file": "lib/versus-sign.js",
+   "skills": 1,
+   "direct": 1,
+   "dependants": 5,
+   "tests": 0
   },
   {
    "file": "lib/video-mux.js",
@@ -1868,6 +1861,13 @@
    "file": "lib/transition.js",
    "skills": 1,
    "direct": 0,
+   "dependants": 4,
+   "tests": 1
+  },
+  {
+   "file": "lib/versus-floor.js",
+   "skills": 1,
+   "direct": 1,
    "dependants": 4,
    "tests": 1
   },
@@ -2474,13 +2474,6 @@
    "tests": 2
   },
   {
-   "file": "lib/stage-code.js",
-   "skills": 1,
-   "direct": 1,
-   "dependants": 1,
-   "tests": 1
-  },
-  {
    "file": "lib/stigmergy-law.js",
    "skills": 1,
    "direct": 1,
@@ -2582,49 +2575,49 @@
    "file": "lib/owner-accounts.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 128,
+   "dependants": 125,
    "tests": 0
   },
   {
    "file": "lib/guard.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 127,
-   "tests": 38
+   "dependants": 124,
+   "tests": 37
   },
   {
    "file": "lib/pages.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 82,
+   "dependants": 79,
    "tests": 1
   },
   {
    "file": "lib/webauthn.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 82,
+   "dependants": 79,
    "tests": 0
   },
   {
    "file": "lib/void-me.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 81,
+   "dependants": 78,
    "tests": 11
   },
   {
    "file": "lib/http.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 80,
+   "dependants": 77,
    "tests": 1
   },
   {
    "file": "lib/earnings.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 65,
+   "dependants": 62,
    "tests": 0
   },
   {
@@ -2698,18 +2691,18 @@
    "tests": 7
   },
   {
-   "file": "lib/build-id.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 36,
-   "tests": 1
-  },
-  {
    "file": "lib/free-router.js",
    "skills": 0,
    "direct": 0,
    "dependants": 36,
    "tests": 2
+  },
+  {
+   "file": "lib/build-id.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 35,
+   "tests": 1
   },
   {
    "file": "lib/memory-core.js",
@@ -2730,21 +2723,7 @@
    "skills": 0,
    "direct": 0,
    "dependants": 35,
-   "tests": 15
-  },
-  {
-   "file": "lib/universe-seeds.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 35,
-   "tests": 4
-  },
-  {
-   "file": "lib/universe.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 35,
-   "tests": 4
+   "tests": 14
   },
   {
    "file": "lib/ai-gateway.js",
@@ -2787,13 +2766,6 @@
    "direct": 0,
    "dependants": 34,
    "tests": 1
-  },
-  {
-   "file": "lib/scrub-sites.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 34,
-   "tests": 4
   },
   {
    "file": "lib/searches.js",
@@ -2964,32 +2936,11 @@
    "tests": 1
   },
   {
-   "file": "lib/watch-build.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 33,
-   "tests": 2
-  },
-  {
    "file": "lib/world-answer.js",
    "skills": 0,
    "direct": 0,
    "dependants": 33,
    "tests": 1
-  },
-  {
-   "file": "lib/job-guide.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 31,
-   "tests": 4
-  },
-  {
-   "file": "lib/team.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 30,
-   "tests": 13
   },
   {
    "file": "lib/db.js",
@@ -2999,81 +2950,81 @@
    "tests": 1
   },
   {
-   "file": "lib/team-leverage.js",
+   "file": "lib/watch-build.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 25,
+   "tests": 2
+  },
+  {
+   "file": "lib/job-guide.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 23,
+   "tests": 4
+  },
+  {
+   "file": "lib/team.js",
    "skills": 0,
    "direct": 0,
    "dependants": 22,
-   "tests": 1
+   "tests": 11
   },
   {
-   "file": "lib/proposals.js",
+   "file": "lib/team-leverage.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 21,
+   "dependants": 19,
    "tests": 1
   },
   {
    "file": "lib/sale-jobs.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 21,
-   "tests": 1
-  },
-  {
-   "file": "lib/team-promote.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 21,
+   "dependants": 18,
    "tests": 1
   },
   {
    "file": "lib/automations-run.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 20,
+   "dependants": 17,
    "tests": 6
   },
   {
    "file": "lib/brain-dream.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 20,
-   "tests": 1
-  },
-  {
-   "file": "lib/team-busy.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 20,
+   "dependants": 17,
    "tests": 1
   },
   {
    "file": "lib/team-crew.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 20,
+   "dependants": 17,
    "tests": 1
   },
   {
    "file": "lib/team-lanes.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 20,
-   "tests": 1
-  },
-  {
-   "file": "lib/team-patch.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 20,
+   "dependants": 17,
    "tests": 1
   },
   {
    "file": "lib/team-priorities.js",
    "skills": 0,
    "direct": 0,
-   "dependants": 20,
+   "dependants": 17,
    "tests": 2
+  },
+  {
+   "file": "lib/team-promote.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 17,
+   "tests": 1
   },
   {
    "file": "lib/x402.js",
@@ -3286,13 +3237,6 @@
    "tests": 2
   },
   {
-   "file": "lib/codestore.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 3,
-   "tests": 1
-  },
-  {
    "file": "lib/comments.js",
    "skills": 0,
    "direct": 0,
@@ -3468,6 +3412,20 @@
    "tests": 0
   },
   {
+   "file": "lib/universe-seeds.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 2,
+   "tests": 4
+  },
+  {
+   "file": "lib/universe.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 2,
+   "tests": 4
+  },
+  {
    "file": "lib/used.js",
    "skills": 0,
    "direct": 0,
@@ -3567,13 +3525,6 @@
   },
   {
    "file": "lib/clips.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 1,
-   "tests": 1
-  },
-  {
-   "file": "lib/codestore-tick.js",
    "skills": 0,
    "direct": 0,
    "dependants": 1,
@@ -3706,6 +3657,13 @@
    "tests": 1
   },
   {
+   "file": "lib/proposals.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 1,
+   "tests": 1
+  },
+  {
    "file": "lib/propose-fix.js",
    "skills": 0,
    "direct": 0,
@@ -3755,6 +3713,13 @@
    "tests": 2
   },
   {
+   "file": "lib/scrub-sites.js",
+   "skills": 0,
+   "direct": 0,
+   "dependants": 1,
+   "tests": 3
+  },
+  {
    "file": "lib/self-blocks.js",
    "skills": 0,
    "direct": 0,
@@ -3795,13 +3760,6 @@
    "direct": 0,
    "dependants": 1,
    "tests": 2
-  },
-  {
-   "file": "lib/team-rally.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 1,
-   "tests": 1
   },
   {
    "file": "lib/text-diff-page.js",
@@ -4081,7 +4039,7 @@
    "skills": 0,
    "direct": 0,
    "dependants": 0,
-   "tests": 4
+   "tests": 3
   },
   {
    "file": "lib/explore-more.js",
@@ -4431,7 +4389,7 @@
    "skills": 0,
    "direct": 0,
    "dependants": 0,
-   "tests": 0
+   "tests": 1
   },
   {
    "file": "lib/refusal.js",
@@ -4561,48 +4519,6 @@
   },
   {
    "file": "lib/systems.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 0,
-   "tests": 1
-  },
-  {
-   "file": "lib/team-claim-board.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 0,
-   "tests": 1
-  },
-  {
-   "file": "lib/team-handoff-notes.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 0,
-   "tests": 1
-  },
-  {
-   "file": "lib/team-quiet-nudge.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 0,
-   "tests": 1
-  },
-  {
-   "file": "lib/team-shift-report.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 0,
-   "tests": 1
-  },
-  {
-   "file": "lib/team-skills.js",
-   "skills": 0,
-   "direct": 0,
-   "dependants": 0,
-   "tests": 1
-  },
-  {
-   "file": "lib/team-wake.js",
    "skills": 0,
    "direct": 0,
    "dependants": 0,
@@ -4817,7 +4733,6 @@
     "lib/answer-speed.js",
     "lib/ai-gateway.js",
     "lib/keeper.js",
-    "lib/scrub-sites.js",
     "lib/privacy.js",
     "lib/router.js",
     "lib/near-miss.js",
@@ -4966,10 +4881,8 @@
     "lib/automations-run.js",
     "lib/team-crew-run.js",
     "functions/api/team.js",
-    "lib/codestore-tick.js",
     "lib/verse-runs.js",
-    "lib/key-watch.js",
-    "lib/team-rally.js"
+    "lib/key-watch.js"
    ],
    "importedBy": []
   },
@@ -5349,13 +5262,10 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/team-crew-run.js",
-    "lib/team-rally.js"
+    "lib/team-crew-run.js"
    ]
   },
   "functions/api/handoff.js": {
@@ -5363,12 +5273,6 @@
     "lib/actions.js",
     "lib/automation-fix.js",
     "lib/sale-jobs.js"
-   ],
-   "importedBy": []
-  },
-  "functions/api/health.js": {
-   "imports": [
-    "lib/build-id.js"
    ],
    "importedBy": []
   },
@@ -6043,7 +5947,6 @@
   },
   "functions/api/team.js": {
    "imports": [
-    "lib/team-busy.js",
     "lib/guard.js",
     "lib/void-me.js",
     "functions/api/gumroad.js",
@@ -6052,8 +5955,6 @@
     "lib/team-leverage.js",
     "lib/team-lanes.js",
     "lib/team-promote.js",
-    "lib/team-patch.js",
-    "lib/proposals.js",
     "lib/tower.js",
     "lib/team-crew.js",
     "lib/team.js",
@@ -6066,12 +5967,10 @@
    ],
    "importedBy": [
     "functions/api/automations/tick.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/team-crew-run.js",
-    "lib/team-rally.js"
+    "lib/team-crew-run.js"
    ],
    "reachedBy": [
     "functions/api/approval.js",
@@ -6085,8 +5984,7 @@
     "functions/api/team.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
-    "functions/api/will.js",
-    "lib/codestore-tick.js"
+    "functions/api/will.js"
    ]
   },
   "functions/api/tower-self.js": {
@@ -6327,18 +6225,6 @@
    ],
    "importedBy": []
   },
-  "functions/code/[[path]].js": {
-   "imports": [
-    "functions/api/team.js",
-    "lib/codestore.js"
-   ],
-   "importedBy": [
-    "lib/codestore-tick.js"
-   ],
-   "reachedBy": [
-    "functions/api/automations/tick.js"
-   ]
-  },
   "functions/directions/index.js": {
    "imports": [
     "lib/drive.js",
@@ -6386,10 +6272,6 @@
    "imports": [
     "skills/is-it.js"
    ],
-   "importedBy": []
-  },
-  "functions/line-speed/index.js": {
-   "imports": [],
    "importedBy": []
   },
   "functions/meanings/index.js": {
@@ -6543,13 +6425,10 @@
     "functions/api/team.js",
     "functions/api/unbidden.js",
     "functions/api/workshop.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
-    "lib/codestore-tick.js",
     "lib/refusal.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "skills/miss-jobs.js"
    ]
   },
@@ -7147,7 +7026,6 @@
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
     "functions/c/[clip].js",
-    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
@@ -7164,7 +7042,6 @@
     "lib/built-detail.js",
     "lib/card-frame.js",
     "lib/card-share.js",
-    "lib/codestore-tick.js",
     "lib/comments-ui.js",
     "lib/credits.js",
     "lib/duel-rules.js",
@@ -7182,7 +7059,6 @@
     "lib/rap.js",
     "lib/self-context.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "lib/term-card.js",
     "lib/verse-log.js",
     "lib/verse-world-bridge.js",
@@ -7622,7 +7498,6 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
-    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
@@ -7633,7 +7508,6 @@
     "lib/automations-run.js",
     "lib/built-detail.js",
     "lib/clef.js",
-    "lib/codestore-tick.js",
     "lib/jobs-core.js",
     "lib/jobs-ui.js",
     "lib/mcp.js",
@@ -7645,8 +7519,6 @@
     "lib/self-context.js",
     "lib/team-crew-run.js",
     "lib/team-mcp.js",
-    "lib/team-patch.js",
-    "lib/team-rally.js",
     "lib/verse-log.js",
     "skills/incident-autopsy.js",
     "skills/repo.js",
@@ -7678,13 +7550,10 @@
     "functions/api/members.js",
     "functions/api/unbidden.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/team-crew-run.js",
-    "lib/team-rally.js"
+    "lib/team-crew-run.js"
    ]
   },
   "lib/automations.js": {
@@ -7711,14 +7580,11 @@
     "functions/api/members.js",
     "functions/api/unbidden.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/approval-core.js",
     "lib/approval-gate.js",
-    "lib/codestore-tick.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "skills/approve-card.js"
    ]
   },
@@ -8127,13 +7993,10 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/team-crew-run.js",
-    "lib/team-rally.js"
+    "lib/team-crew-run.js"
    ]
   },
   "lib/brain-everywhere.js": {
@@ -8777,7 +8640,6 @@
   "lib/build-id.js": {
    "imports": [],
    "importedBy": [
-    "functions/api/health.js",
     "functions/build.json.js",
     "lib/answer-edge.js"
    ],
@@ -9633,25 +9495,6 @@
     "lib/team-mcp.js"
    ]
   },
-  "lib/codestore-tick.js": {
-   "imports": [
-    "lib/codestore.js",
-    "functions/code/[[path]].js"
-   ],
-   "importedBy": [
-    "functions/api/automations/tick.js"
-   ]
-  },
-  "lib/codestore.js": {
-   "imports": [],
-   "importedBy": [
-    "functions/code/[[path]].js",
-    "lib/codestore-tick.js"
-   ],
-   "reachedBy": [
-    "functions/api/automations/tick.js"
-   ]
-  },
   "lib/coins.js": {
    "imports": [],
    "importedBy": [
@@ -10392,17 +10235,14 @@
     "functions/api/weather.js",
     "functions/api/workshop.js",
     "functions/api/x402/[service].js",
-    "functions/code/[[path]].js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
     "lib/clef.js",
-    "lib/codestore-tick.js",
     "lib/meaning-recall.js",
-    "lib/team-crew-run.js",
-    "lib/team-rally.js"
+    "lib/team-crew-run.js"
    ]
   },
   "lib/echo-vault.js": {
@@ -11260,62 +11100,26 @@
     "lib/tower.js"
    ],
    "reachedBy": [
-    "functions/api/a2a.js",
-    "functions/api/answer.js",
-    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
-    "functions/api/bench.js",
-    "functions/api/blueprint.js",
     "functions/api/brain.js",
-    "functions/api/card-art.js",
-    "functions/api/clip.js",
     "functions/api/crew.js",
-    "functions/api/daily-art.js",
-    "functions/api/feed.js",
-    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
-    "functions/api/image.js",
-    "functions/api/local.js",
-    "functions/api/markets.js",
-    "functions/api/mcp.js",
-    "functions/api/meanings.js",
     "functions/api/members.js",
-    "functions/api/merge.js",
-    "functions/api/news.js",
-    "functions/api/podcasts.js",
-    "functions/api/rapvoice.js",
-    "functions/api/recipeimport.js",
-    "functions/api/recipes.js",
     "functions/api/reflect.js",
-    "functions/api/repo.js",
-    "functions/api/report.js",
-    "functions/api/scores.js",
-    "functions/api/sing.js",
-    "functions/api/sportsearch.js",
     "functions/api/team.js",
-    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
-    "functions/api/watchalong.js",
-    "functions/api/weather.js",
     "functions/api/will.js",
-    "functions/api/workshop.js",
-    "functions/api/x402/[service].js",
-    "functions/code/[[path]].js",
-    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/bench-asks.js",
-    "lib/codestore-tick.js",
     "lib/echo-vault.js",
     "lib/scrub-sites.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "skills/cartoon.js",
     "skills/walker.js"
    ]
@@ -11528,16 +11332,13 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
-    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/bench-asks.js",
-    "lib/codestore-tick.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "lib/versus-moved.js"
    ]
   },
@@ -11662,17 +11463,14 @@
     "functions/api/will.js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
-    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/codestore-tick.js",
     "lib/credits.js",
     "lib/paid-access.js",
     "lib/products.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "skills/shop.js"
    ]
   },
@@ -11896,16 +11694,13 @@
     "functions/api/will.js",
     "functions/api/workshop.js",
     "functions/api/x402/[service].js",
-    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
-    "lib/codestore-tick.js",
-    "lib/team-crew-run.js",
-    "lib/team-rally.js"
+    "lib/team-crew-run.js"
    ]
   },
   "lib/ics.js": {
@@ -12061,7 +11856,6 @@
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
     "functions/c/[clip].js",
-    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
@@ -12071,14 +11865,12 @@
     "lib/agent-cap.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
-    "lib/codestore-tick.js",
     "lib/credits.js",
     "lib/memory-scope.js",
     "lib/owner-gate.js",
     "lib/page-pass.js",
     "lib/paid-access.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "lib/versus-moved.js",
     "lib/void-me.js",
     "skills/video-gen.js"
@@ -12212,7 +12004,6 @@
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
     "functions/c/[clip].js",
-    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
@@ -12233,7 +12024,6 @@
     "lib/card-look.js",
     "lib/card-share.js",
     "lib/character.js",
-    "lib/codestore-tick.js",
     "lib/comments-ui.js",
     "lib/comments.js",
     "lib/cos-20.js",
@@ -12256,7 +12046,6 @@
     "lib/self-context.js",
     "lib/story.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "lib/term-card.js",
     "lib/verse-log.js",
     "lib/verse-world-bridge.js",
@@ -12411,23 +12200,15 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/team-claim-board.js",
     "lib/team-crew-run.js",
     "lib/team-crew.js",
-    "lib/team-handoff-notes.js",
     "lib/team-lanes.js",
     "lib/team-leverage.js",
-    "lib/team-patch.js",
     "lib/team-priorities.js",
-    "lib/team-promote.js",
-    "lib/team-rally.js",
-    "lib/team-skills.js",
-    "lib/team-wake.js"
+    "lib/team-promote.js"
    ]
   },
   "lib/job-regions.js": {
@@ -12745,7 +12526,6 @@
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
     "functions/c/[clip].js",
-    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
@@ -12767,7 +12547,6 @@
     "lib/card-look.js",
     "lib/card-share.js",
     "lib/character.js",
-    "lib/codestore-tick.js",
     "lib/comments-ui.js",
     "lib/comments.js",
     "lib/credits.js",
@@ -12788,7 +12567,6 @@
     "lib/self-context.js",
     "lib/story.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "lib/term-card.js",
     "lib/verse-log.js",
     "lib/verse-world-bridge.js",
@@ -13851,7 +13629,6 @@
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
     "functions/c/[clip].js",
-    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
@@ -13873,7 +13650,6 @@
     "lib/card-look.js",
     "lib/card-share.js",
     "lib/character.js",
-    "lib/codestore-tick.js",
     "lib/comments-ui.js",
     "lib/comments.js",
     "lib/credits.js",
@@ -13895,7 +13671,6 @@
     "lib/self-context.js",
     "lib/story.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "lib/term-card.js",
     "lib/verse-log.js",
     "lib/verse-world-bridge.js",
@@ -14518,7 +14293,6 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
-    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
@@ -14532,7 +14306,6 @@
     "lib/built-detail.js",
     "lib/clef.js",
     "lib/code-review.js",
-    "lib/codestore-tick.js",
     "lib/correction-fix.js",
     "lib/job-draft.js",
     "lib/jobs-core.js",
@@ -14554,9 +14327,7 @@
     "lib/shared-routines.js",
     "lib/team-crew-run.js",
     "lib/team-mcp.js",
-    "lib/team-patch.js",
     "lib/team-promote.js",
-    "lib/team-rally.js",
     "lib/verse-log.js",
     "lib/voice.js",
     "skills/incident-autopsy.js",
@@ -14636,62 +14407,26 @@
     "lib/tower.js"
    ],
    "reachedBy": [
-    "functions/api/a2a.js",
-    "functions/api/answer.js",
-    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
-    "functions/api/bench.js",
-    "functions/api/blueprint.js",
     "functions/api/brain.js",
-    "functions/api/card-art.js",
-    "functions/api/clip.js",
     "functions/api/crew.js",
-    "functions/api/daily-art.js",
-    "functions/api/feed.js",
-    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
-    "functions/api/image.js",
-    "functions/api/local.js",
-    "functions/api/markets.js",
-    "functions/api/mcp.js",
-    "functions/api/meanings.js",
     "functions/api/members.js",
-    "functions/api/merge.js",
-    "functions/api/news.js",
-    "functions/api/podcasts.js",
-    "functions/api/rapvoice.js",
-    "functions/api/recipeimport.js",
-    "functions/api/recipes.js",
     "functions/api/reflect.js",
-    "functions/api/repo.js",
-    "functions/api/report.js",
-    "functions/api/scores.js",
-    "functions/api/sing.js",
-    "functions/api/sportsearch.js",
     "functions/api/team.js",
-    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
-    "functions/api/watchalong.js",
-    "functions/api/weather.js",
     "functions/api/will.js",
-    "functions/api/workshop.js",
-    "functions/api/x402/[service].js",
-    "functions/code/[[path]].js",
-    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/bench-asks.js",
-    "lib/codestore-tick.js",
     "lib/echo-vault.js",
     "lib/scrub-sites.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "skills/cartoon.js",
     "skills/walker.js"
    ]
@@ -14918,7 +14653,6 @@
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
     "functions/c/[clip].js",
-    "functions/code/[[path]].js",
     "functions/fanfic/rss.js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
@@ -14928,14 +14662,12 @@
     "lib/agent-cap.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
-    "lib/codestore-tick.js",
     "lib/credits.js",
     "lib/memory-scope.js",
     "lib/owner-gate.js",
     "lib/page-pass.js",
     "lib/paid-access.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "lib/versus-moved.js",
     "lib/void-me.js"
    ]
@@ -15105,20 +14837,17 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
-    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
-    "lib/codestore-tick.js",
     "lib/credits.js",
     "lib/memory-scope.js",
     "lib/page-pass.js",
     "lib/paid-access.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "lib/versus-moved.js"
    ]
   },
@@ -15888,14 +15617,11 @@
     "functions/api/will.js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
-    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/codestore-tick.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "skills/shop.js"
    ]
   },
@@ -15952,29 +15678,7 @@
   "lib/proposals.js": {
    "imports": [],
    "importedBy": [
-    "functions/api/proposals.js",
-    "functions/api/team.js"
-   ],
-   "reachedBy": [
-    "functions/api/approval.js",
-    "functions/api/automations.js",
-    "functions/api/automations/tick.js",
-    "functions/api/brain.js",
-    "functions/api/crew.js",
-    "functions/api/github-events.js",
-    "functions/api/gumroad.js",
-    "functions/api/hook/[id].js",
-    "functions/api/members.js",
-    "functions/api/unbidden.js",
-    "functions/api/watch.js",
-    "functions/api/will.js",
-    "functions/code/[[path]].js",
-    "functions/team/join/[code].js",
-    "functions/team/mcp.js",
-    "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/team-crew-run.js",
-    "lib/team-rally.js"
+    "functions/api/proposals.js"
    ]
   },
   "lib/propose-fix.js": {
@@ -16971,13 +16675,10 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/team-crew-run.js",
-    "lib/team-rally.js"
+    "lib/team-crew-run.js"
    ]
   },
   "lib/scene-advance.js": {
@@ -17010,42 +16711,7 @@
     "lib/universe.js"
    ],
    "importedBy": [
-    "functions/api/answer.js",
     "functions/api/reflect.js"
-   ],
-   "reachedBy": [
-    "functions/api/a2a.js",
-    "functions/api/apibot.js",
-    "functions/api/bench.js",
-    "functions/api/blueprint.js",
-    "functions/api/card-art.js",
-    "functions/api/clip.js",
-    "functions/api/daily-art.js",
-    "functions/api/feed.js",
-    "functions/api/gallery.js",
-    "functions/api/image.js",
-    "functions/api/local.js",
-    "functions/api/markets.js",
-    "functions/api/mcp.js",
-    "functions/api/meanings.js",
-    "functions/api/merge.js",
-    "functions/api/news.js",
-    "functions/api/podcasts.js",
-    "functions/api/rapvoice.js",
-    "functions/api/recipeimport.js",
-    "functions/api/recipes.js",
-    "functions/api/repo.js",
-    "functions/api/report.js",
-    "functions/api/scores.js",
-    "functions/api/sing.js",
-    "functions/api/sportsearch.js",
-    "functions/api/translate.js",
-    "functions/api/watchalong.js",
-    "functions/api/weather.js",
-    "functions/api/workshop.js",
-    "functions/api/x402/[service].js",
-    "functions/meanings/index.js",
-    "lib/bench-asks.js"
    ]
   },
   "lib/searches.js": {
@@ -17165,66 +16831,30 @@
     "lib/tower.js"
    ],
    "reachedBy": [
-    "functions/api/a2a.js",
-    "functions/api/answer.js",
-    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
-    "functions/api/bench.js",
-    "functions/api/blueprint.js",
     "functions/api/brain.js",
-    "functions/api/card-art.js",
-    "functions/api/clip.js",
     "functions/api/crew.js",
-    "functions/api/daily-art.js",
-    "functions/api/feed.js",
-    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
-    "functions/api/image.js",
-    "functions/api/local.js",
-    "functions/api/markets.js",
-    "functions/api/mcp.js",
-    "functions/api/meanings.js",
     "functions/api/members.js",
-    "functions/api/merge.js",
-    "functions/api/news.js",
-    "functions/api/podcasts.js",
-    "functions/api/rapvoice.js",
-    "functions/api/recipeimport.js",
-    "functions/api/recipes.js",
     "functions/api/reflect.js",
-    "functions/api/repo.js",
-    "functions/api/report.js",
-    "functions/api/scores.js",
-    "functions/api/sing.js",
-    "functions/api/sportsearch.js",
     "functions/api/team.js",
-    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
-    "functions/api/watchalong.js",
-    "functions/api/weather.js",
     "functions/api/will.js",
-    "functions/api/workshop.js",
-    "functions/api/x402/[service].js",
-    "functions/code/[[path]].js",
     "functions/ip/index.js",
-    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/bench-asks.js",
     "lib/card-frame.js",
-    "lib/codestore-tick.js",
     "lib/duel-rules.js",
     "lib/echo-vault.js",
     "lib/scrub-sites.js",
     "lib/seo.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "lib/term-card.js",
     "lib/toolkit.js",
     "skills/about-skill.js",
@@ -17825,21 +17455,11 @@
     "skills/fly.js"
    ]
   },
-  "lib/stage-code.js": {
-   "imports": [
-    "lib/stage-port.js",
-    "lib/stage-find.js"
-   ],
-   "importedBy": [
-    "skills/share.js"
-   ]
-  },
   "lib/stage-find.js": {
    "imports": [
     "lib/stage-pack.js"
    ],
    "importedBy": [
-    "lib/stage-code.js",
     "lib/stage-port.js",
     "lib/stage-watch.js",
     "skills/bookmarks.js",
@@ -17861,18 +17481,13 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/codestore-tick.js",
     "lib/team-crew-run.js",
-    "lib/team-patch.js",
     "lib/team-promote.js",
-    "lib/team-rally.js",
     "skills/copy-stack.js",
     "skills/quick-tools.js",
-    "skills/share.js",
     "skills/stage-export.js",
     "skills/stage-out.js",
     "skills/stage-pdf.js"
@@ -18008,17 +17623,12 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/stage-code.js",
     "lib/stage-watch.js",
     "lib/team-crew-run.js",
-    "lib/team-patch.js",
     "lib/team-promote.js",
-    "lib/team-rally.js",
     "skills/bookmarks.js",
     "skills/copy-stack.js",
     "skills/date-math.js",
@@ -18028,7 +17638,6 @@
     "skills/merge-void.js",
     "skills/null-sweep.js",
     "skills/quick-tools.js",
-    "skills/share.js",
     "skills/stage-find.js",
     "skills/stage-out.js",
     "skills/stage-pdf.js",
@@ -18041,7 +17650,6 @@
     "lib/stage-find.js"
    ],
    "importedBy": [
-    "lib/stage-code.js",
     "lib/team-promote.js",
     "skills/copy-stack.js",
     "skills/stage-export.js",
@@ -18061,15 +17669,10 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/codestore-tick.js",
     "lib/team-crew-run.js",
-    "lib/team-patch.js",
-    "lib/team-rally.js",
-    "skills/share.js",
     "skills/stage-out.js"
    ]
   },
@@ -18325,16 +17928,13 @@
     "functions/api/will.js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
-    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/codestore-tick.js",
     "lib/paid-access.js",
     "lib/sale-jobs.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "skills/services.js",
     "skills/shop.js"
    ]
@@ -18747,39 +18347,6 @@
     "skills/pick-for-me.js"
    ]
   },
-  "lib/team-busy.js": {
-   "imports": [],
-   "importedBy": [
-    "functions/api/team.js"
-   ],
-   "reachedBy": [
-    "functions/api/approval.js",
-    "functions/api/automations.js",
-    "functions/api/automations/tick.js",
-    "functions/api/brain.js",
-    "functions/api/crew.js",
-    "functions/api/github-events.js",
-    "functions/api/gumroad.js",
-    "functions/api/hook/[id].js",
-    "functions/api/members.js",
-    "functions/api/unbidden.js",
-    "functions/api/watch.js",
-    "functions/api/will.js",
-    "functions/code/[[path]].js",
-    "functions/team/join/[code].js",
-    "functions/team/mcp.js",
-    "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/team-crew-run.js",
-    "lib/team-rally.js"
-   ]
-  },
-  "lib/team-claim-board.js": {
-   "imports": [
-    "lib/team.js"
-   ],
-   "importedBy": []
-  },
   "lib/team-crew-run.js": {
    "imports": [
     "lib/brain-lessons.js",
@@ -18823,19 +18390,10 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
-    "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/team-rally.js"
+    "lib/automations-run.js"
    ]
-  },
-  "lib/team-handoff-notes.js": {
-   "imports": [
-    "lib/team.js"
-   ],
-   "importedBy": []
   },
   "lib/team-lanes.js": {
    "imports": [
@@ -18859,12 +18417,9 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
-    "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/team-rally.js"
+    "lib/automations-run.js"
    ]
   },
   "lib/team-leverage.js": {
@@ -18889,13 +18444,10 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/team-crew-run.js",
-    "lib/team-rally.js"
+    "lib/team-crew-run.js"
    ]
   },
   "lib/team-mcp.js": {
@@ -18904,35 +18456,6 @@
    ],
    "importedBy": [
     "functions/team/mcp.js"
-   ]
-  },
-  "lib/team-patch.js": {
-   "imports": [
-    "lib/team-promote.js"
-   ],
-   "importedBy": [
-    "functions/api/team.js"
-   ],
-   "reachedBy": [
-    "functions/api/approval.js",
-    "functions/api/automations.js",
-    "functions/api/automations/tick.js",
-    "functions/api/brain.js",
-    "functions/api/crew.js",
-    "functions/api/github-events.js",
-    "functions/api/gumroad.js",
-    "functions/api/hook/[id].js",
-    "functions/api/members.js",
-    "functions/api/unbidden.js",
-    "functions/api/watch.js",
-    "functions/api/will.js",
-    "functions/code/[[path]].js",
-    "functions/team/join/[code].js",
-    "functions/team/mcp.js",
-    "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/team-crew-run.js",
-    "lib/team-rally.js"
    ]
   },
   "lib/team-priorities.js": {
@@ -18957,12 +18480,9 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
-    "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/team-rally.js"
+    "lib/automations-run.js"
    ]
   },
   "lib/team-promote.js": {
@@ -18972,8 +18492,7 @@
     "lib/automation-fix.js"
    ],
    "importedBy": [
-    "functions/api/team.js",
-    "lib/team-patch.js"
+    "functions/api/team.js"
    ],
    "reachedBy": [
     "functions/api/approval.js",
@@ -18988,43 +18507,11 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/team-crew-run.js",
-    "lib/team-rally.js"
+    "lib/team-crew-run.js"
    ]
-  },
-  "lib/team-quiet-nudge.js": {
-   "imports": [],
-   "importedBy": []
-  },
-  "lib/team-rally.js": {
-   "imports": [
-    "lib/team.js",
-    "functions/api/team.js"
-   ],
-   "importedBy": [
-    "functions/api/automations/tick.js"
-   ]
-  },
-  "lib/team-shift-report.js": {
-   "imports": [],
-   "importedBy": []
-  },
-  "lib/team-skills.js": {
-   "imports": [
-    "lib/team.js"
-   ],
-   "importedBy": []
-  },
-  "lib/team-wake.js": {
-   "imports": [
-    "lib/team.js"
-   ],
-   "importedBy": []
   },
   "lib/team.js": {
    "imports": [
@@ -19034,17 +18521,12 @@
     "functions/api/team.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
-    "lib/team-claim-board.js",
     "lib/team-crew-run.js",
     "lib/team-crew.js",
-    "lib/team-handoff-notes.js",
     "lib/team-lanes.js",
     "lib/team-leverage.js",
     "lib/team-priorities.js",
-    "lib/team-promote.js",
-    "lib/team-rally.js",
-    "lib/team-skills.js",
-    "lib/team-wake.js"
+    "lib/team-promote.js"
    ],
    "reachedBy": [
     "functions/api/approval.js",
@@ -19059,10 +18541,7 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
-    "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/team-patch.js"
+    "lib/automations-run.js"
    ]
   },
   "lib/technical-context.js": {
@@ -19160,7 +18639,6 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
-    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
@@ -19174,7 +18652,6 @@
     "lib/built-detail.js",
     "lib/clef.js",
     "lib/code-review.js",
-    "lib/codestore-tick.js",
     "lib/correction-fix.js",
     "lib/job-draft.js",
     "lib/jobs-core.js",
@@ -19196,9 +18673,7 @@
     "lib/shared-routines.js",
     "lib/team-crew-run.js",
     "lib/team-mcp.js",
-    "lib/team-patch.js",
     "lib/team-promote.js",
-    "lib/team-rally.js",
     "lib/verse-log.js",
     "lib/voice.js",
     "skills/incident-autopsy.js",
@@ -19461,62 +18936,26 @@
     "lib/tower.js"
    ],
    "reachedBy": [
-    "functions/api/a2a.js",
-    "functions/api/answer.js",
-    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
-    "functions/api/bench.js",
-    "functions/api/blueprint.js",
     "functions/api/brain.js",
-    "functions/api/card-art.js",
-    "functions/api/clip.js",
     "functions/api/crew.js",
-    "functions/api/daily-art.js",
-    "functions/api/feed.js",
-    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
-    "functions/api/image.js",
-    "functions/api/local.js",
-    "functions/api/markets.js",
-    "functions/api/mcp.js",
-    "functions/api/meanings.js",
     "functions/api/members.js",
-    "functions/api/merge.js",
-    "functions/api/news.js",
-    "functions/api/podcasts.js",
-    "functions/api/rapvoice.js",
-    "functions/api/recipeimport.js",
-    "functions/api/recipes.js",
     "functions/api/reflect.js",
-    "functions/api/repo.js",
-    "functions/api/report.js",
-    "functions/api/scores.js",
-    "functions/api/sing.js",
-    "functions/api/sportsearch.js",
     "functions/api/team.js",
-    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
-    "functions/api/watchalong.js",
-    "functions/api/weather.js",
     "functions/api/will.js",
-    "functions/api/workshop.js",
-    "functions/api/x402/[service].js",
-    "functions/code/[[path]].js",
-    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/bench-asks.js",
-    "lib/codestore-tick.js",
     "lib/echo-vault.js",
     "lib/scrub-sites.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "skills/cartoon.js",
     "skills/walker.js"
    ]
@@ -19537,62 +18976,26 @@
     "lib/tower.js"
    ],
    "reachedBy": [
-    "functions/api/a2a.js",
-    "functions/api/answer.js",
-    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
-    "functions/api/bench.js",
-    "functions/api/blueprint.js",
     "functions/api/brain.js",
-    "functions/api/card-art.js",
-    "functions/api/clip.js",
     "functions/api/crew.js",
-    "functions/api/daily-art.js",
-    "functions/api/feed.js",
-    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
-    "functions/api/image.js",
-    "functions/api/local.js",
-    "functions/api/markets.js",
-    "functions/api/mcp.js",
-    "functions/api/meanings.js",
     "functions/api/members.js",
-    "functions/api/merge.js",
-    "functions/api/news.js",
-    "functions/api/podcasts.js",
-    "functions/api/rapvoice.js",
-    "functions/api/recipeimport.js",
-    "functions/api/recipes.js",
     "functions/api/reflect.js",
-    "functions/api/repo.js",
-    "functions/api/report.js",
-    "functions/api/scores.js",
-    "functions/api/sing.js",
-    "functions/api/sportsearch.js",
     "functions/api/team.js",
-    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
-    "functions/api/watchalong.js",
-    "functions/api/weather.js",
     "functions/api/will.js",
-    "functions/api/workshop.js",
-    "functions/api/x402/[service].js",
-    "functions/code/[[path]].js",
-    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/bench-asks.js",
-    "lib/codestore-tick.js",
     "lib/echo-vault.js",
     "lib/scrub-sites.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "skills/cartoon.js",
     "skills/walker.js"
    ]
@@ -19607,62 +19010,26 @@
     "lib/tower.js"
    ],
    "reachedBy": [
-    "functions/api/a2a.js",
-    "functions/api/answer.js",
-    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
-    "functions/api/bench.js",
-    "functions/api/blueprint.js",
     "functions/api/brain.js",
-    "functions/api/card-art.js",
-    "functions/api/clip.js",
     "functions/api/crew.js",
-    "functions/api/daily-art.js",
-    "functions/api/feed.js",
-    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
-    "functions/api/image.js",
-    "functions/api/local.js",
-    "functions/api/markets.js",
-    "functions/api/mcp.js",
-    "functions/api/meanings.js",
     "functions/api/members.js",
-    "functions/api/merge.js",
-    "functions/api/news.js",
-    "functions/api/podcasts.js",
-    "functions/api/rapvoice.js",
-    "functions/api/recipeimport.js",
-    "functions/api/recipes.js",
     "functions/api/reflect.js",
-    "functions/api/repo.js",
-    "functions/api/report.js",
-    "functions/api/scores.js",
-    "functions/api/sing.js",
-    "functions/api/sportsearch.js",
     "functions/api/team.js",
-    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
-    "functions/api/watchalong.js",
-    "functions/api/weather.js",
     "functions/api/will.js",
-    "functions/api/workshop.js",
-    "functions/api/x402/[service].js",
-    "functions/code/[[path]].js",
-    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/bench-asks.js",
-    "lib/codestore-tick.js",
     "lib/echo-vault.js",
     "lib/scrub-sites.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "skills/cartoon.js",
     "skills/walker.js"
    ]
@@ -19673,62 +19040,26 @@
     "lib/tower.js"
    ],
    "reachedBy": [
-    "functions/api/a2a.js",
-    "functions/api/answer.js",
-    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
-    "functions/api/bench.js",
-    "functions/api/blueprint.js",
     "functions/api/brain.js",
-    "functions/api/card-art.js",
-    "functions/api/clip.js",
     "functions/api/crew.js",
-    "functions/api/daily-art.js",
-    "functions/api/feed.js",
-    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
-    "functions/api/image.js",
-    "functions/api/local.js",
-    "functions/api/markets.js",
-    "functions/api/mcp.js",
-    "functions/api/meanings.js",
     "functions/api/members.js",
-    "functions/api/merge.js",
-    "functions/api/news.js",
-    "functions/api/podcasts.js",
-    "functions/api/rapvoice.js",
-    "functions/api/recipeimport.js",
-    "functions/api/recipes.js",
     "functions/api/reflect.js",
-    "functions/api/repo.js",
-    "functions/api/report.js",
-    "functions/api/scores.js",
-    "functions/api/sing.js",
-    "functions/api/sportsearch.js",
     "functions/api/team.js",
-    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
-    "functions/api/watchalong.js",
-    "functions/api/weather.js",
     "functions/api/will.js",
-    "functions/api/workshop.js",
-    "functions/api/x402/[service].js",
-    "functions/code/[[path]].js",
-    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/bench-asks.js",
-    "lib/codestore-tick.js",
     "lib/echo-vault.js",
     "lib/scrub-sites.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "skills/cartoon.js",
     "skills/walker.js"
    ]
@@ -19754,58 +19085,22 @@
     "skills/walker.js"
    ],
    "reachedBy": [
-    "functions/api/a2a.js",
-    "functions/api/answer.js",
-    "functions/api/apibot.js",
     "functions/api/approval.js",
     "functions/api/automations.js",
     "functions/api/automations/tick.js",
-    "functions/api/bench.js",
-    "functions/api/blueprint.js",
     "functions/api/brain.js",
-    "functions/api/card-art.js",
-    "functions/api/clip.js",
     "functions/api/crew.js",
-    "functions/api/daily-art.js",
-    "functions/api/feed.js",
-    "functions/api/gallery.js",
     "functions/api/github-events.js",
     "functions/api/gumroad.js",
     "functions/api/hook/[id].js",
-    "functions/api/image.js",
-    "functions/api/local.js",
-    "functions/api/markets.js",
-    "functions/api/mcp.js",
-    "functions/api/meanings.js",
     "functions/api/members.js",
-    "functions/api/merge.js",
-    "functions/api/news.js",
-    "functions/api/podcasts.js",
-    "functions/api/rapvoice.js",
-    "functions/api/recipeimport.js",
-    "functions/api/recipes.js",
     "functions/api/reflect.js",
-    "functions/api/repo.js",
-    "functions/api/report.js",
-    "functions/api/scores.js",
-    "functions/api/sing.js",
-    "functions/api/sportsearch.js",
-    "functions/api/translate.js",
     "functions/api/unbidden.js",
     "functions/api/watch.js",
-    "functions/api/watchalong.js",
-    "functions/api/weather.js",
-    "functions/api/workshop.js",
-    "functions/api/x402/[service].js",
-    "functions/code/[[path]].js",
-    "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/bench-asks.js",
-    "lib/codestore-tick.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "skills/cartoon.js"
    ]
   },
@@ -19981,40 +19276,7 @@
     "lib/scrub-sites.js"
    ],
    "reachedBy": [
-    "functions/api/a2a.js",
-    "functions/api/answer.js",
-    "functions/api/apibot.js",
-    "functions/api/bench.js",
-    "functions/api/blueprint.js",
-    "functions/api/card-art.js",
-    "functions/api/clip.js",
-    "functions/api/daily-art.js",
-    "functions/api/feed.js",
-    "functions/api/gallery.js",
-    "functions/api/image.js",
-    "functions/api/local.js",
-    "functions/api/markets.js",
-    "functions/api/mcp.js",
-    "functions/api/meanings.js",
-    "functions/api/merge.js",
-    "functions/api/news.js",
-    "functions/api/podcasts.js",
-    "functions/api/rapvoice.js",
-    "functions/api/recipeimport.js",
-    "functions/api/recipes.js",
-    "functions/api/reflect.js",
-    "functions/api/repo.js",
-    "functions/api/report.js",
-    "functions/api/scores.js",
-    "functions/api/sing.js",
-    "functions/api/sportsearch.js",
-    "functions/api/translate.js",
-    "functions/api/watchalong.js",
-    "functions/api/weather.js",
-    "functions/api/workshop.js",
-    "functions/api/x402/[service].js",
-    "functions/meanings/index.js",
-    "lib/bench-asks.js"
+    "functions/api/reflect.js"
    ]
   },
   "lib/universe.js": {
@@ -20023,40 +19285,7 @@
     "lib/scrub-sites.js"
    ],
    "reachedBy": [
-    "functions/api/a2a.js",
-    "functions/api/answer.js",
-    "functions/api/apibot.js",
-    "functions/api/bench.js",
-    "functions/api/blueprint.js",
-    "functions/api/card-art.js",
-    "functions/api/clip.js",
-    "functions/api/daily-art.js",
-    "functions/api/feed.js",
-    "functions/api/gallery.js",
-    "functions/api/image.js",
-    "functions/api/local.js",
-    "functions/api/markets.js",
-    "functions/api/mcp.js",
-    "functions/api/meanings.js",
-    "functions/api/merge.js",
-    "functions/api/news.js",
-    "functions/api/podcasts.js",
-    "functions/api/rapvoice.js",
-    "functions/api/recipeimport.js",
-    "functions/api/recipes.js",
-    "functions/api/reflect.js",
-    "functions/api/repo.js",
-    "functions/api/report.js",
-    "functions/api/scores.js",
-    "functions/api/sing.js",
-    "functions/api/sportsearch.js",
-    "functions/api/translate.js",
-    "functions/api/watchalong.js",
-    "functions/api/weather.js",
-    "functions/api/workshop.js",
-    "functions/api/x402/[service].js",
-    "functions/meanings/index.js",
-    "lib/bench-asks.js"
+    "functions/api/reflect.js"
    ]
   },
   "lib/used.js": {
@@ -20125,7 +19354,6 @@
     "functions/api/members.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
@@ -20137,9 +19365,7 @@
     "lib/brain-organs.js",
     "lib/brain-route.js",
     "lib/brain.js",
-    "lib/codestore-tick.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "skills/client-status-pack.js",
     "skills/client-status.js",
     "skills/delivery-board.js",
@@ -20245,7 +19471,6 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
-    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
@@ -20260,7 +19485,6 @@
     "lib/built-detail.js",
     "lib/clef.js",
     "lib/code-review.js",
-    "lib/codestore-tick.js",
     "lib/correction-fix.js",
     "lib/job-draft.js",
     "lib/jobs-core.js",
@@ -20283,9 +19507,7 @@
     "lib/shared-routines.js",
     "lib/team-crew-run.js",
     "lib/team-mcp.js",
-    "lib/team-patch.js",
     "lib/team-promote.js",
-    "lib/team-rally.js",
     "lib/verse-log.js",
     "lib/voice.js",
     "skills/incident-autopsy.js",
@@ -20354,40 +19576,7 @@
     "skills/tower.js"
    ],
    "reachedBy": [
-    "functions/api/a2a.js",
-    "functions/api/answer.js",
-    "functions/api/apibot.js",
-    "functions/api/bench.js",
-    "functions/api/blueprint.js",
-    "functions/api/card-art.js",
-    "functions/api/clip.js",
-    "functions/api/daily-art.js",
-    "functions/api/feed.js",
-    "functions/api/gallery.js",
-    "functions/api/image.js",
-    "functions/api/local.js",
-    "functions/api/markets.js",
-    "functions/api/mcp.js",
-    "functions/api/meanings.js",
-    "functions/api/merge.js",
-    "functions/api/news.js",
-    "functions/api/podcasts.js",
-    "functions/api/rapvoice.js",
-    "functions/api/recipeimport.js",
-    "functions/api/recipes.js",
-    "functions/api/reflect.js",
-    "functions/api/repo.js",
-    "functions/api/report.js",
-    "functions/api/scores.js",
-    "functions/api/sing.js",
-    "functions/api/sportsearch.js",
-    "functions/api/translate.js",
-    "functions/api/watchalong.js",
-    "functions/api/weather.js",
-    "functions/api/workshop.js",
-    "functions/api/x402/[service].js",
-    "functions/meanings/index.js",
-    "lib/bench-asks.js"
+    "functions/api/reflect.js"
    ]
   },
   "lib/versus-moved.js": {
@@ -20405,41 +19594,8 @@
     "skills/tower.js"
    ],
    "reachedBy": [
-    "functions/api/a2a.js",
-    "functions/api/answer.js",
-    "functions/api/apibot.js",
-    "functions/api/bench.js",
-    "functions/api/blueprint.js",
-    "functions/api/card-art.js",
-    "functions/api/clip.js",
-    "functions/api/daily-art.js",
-    "functions/api/feed.js",
-    "functions/api/gallery.js",
-    "functions/api/image.js",
-    "functions/api/local.js",
-    "functions/api/markets.js",
-    "functions/api/mcp.js",
-    "functions/api/meanings.js",
-    "functions/api/merge.js",
-    "functions/api/news.js",
-    "functions/api/podcasts.js",
-    "functions/api/rapvoice.js",
-    "functions/api/recipeimport.js",
-    "functions/api/recipes.js",
     "functions/api/reflect.js",
-    "functions/api/repo.js",
-    "functions/api/report.js",
-    "functions/api/scores.js",
-    "functions/api/sing.js",
-    "functions/api/sportsearch.js",
-    "functions/api/translate.js",
     "functions/api/versus-floor.js",
-    "functions/api/watchalong.js",
-    "functions/api/weather.js",
-    "functions/api/workshop.js",
-    "functions/api/x402/[service].js",
-    "functions/meanings/index.js",
-    "lib/bench-asks.js",
     "lib/scrub-sites.js"
    ]
   },
@@ -20661,15 +19817,12 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
-    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
-    "lib/codestore-tick.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "lib/versus-moved.js"
    ]
   },
@@ -20739,21 +19892,13 @@
     "functions/api/unbidden.js",
     "functions/api/watch.js",
     "functions/api/will.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
-    "lib/codestore-tick.js",
-    "lib/team-claim-board.js",
-    "lib/team-handoff-notes.js",
     "lib/team-lanes.js",
     "lib/team-leverage.js",
-    "lib/team-patch.js",
     "lib/team-priorities.js",
     "lib/team-promote.js",
-    "lib/team-rally.js",
-    "lib/team-skills.js",
-    "lib/team-wake.js",
     "lib/team.js"
    ]
   },
@@ -20779,16 +19924,13 @@
     "functions/api/unbidden.js",
     "functions/api/will.js",
     "functions/api/workshop.js",
-    "functions/code/[[path]].js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/approval-core.js",
     "lib/approval-gate.js",
-    "lib/codestore-tick.js",
     "lib/growth-runner.js",
     "lib/keep-going.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "skills/approve-card.js"
    ]
   },
@@ -20976,20 +20118,17 @@
     "functions/api/x402/[service].js",
     "functions/api/x402/index.js",
     "functions/api/x402/review.js",
-    "functions/code/[[path]].js",
     "functions/films/rss.js",
     "functions/meanings/index.js",
     "functions/team/join/[code].js",
     "functions/team/mcp.js",
     "lib/automations-run.js",
     "lib/bench-asks.js",
-    "lib/codestore-tick.js",
     "lib/credits.js",
     "lib/memory-scope.js",
     "lib/page-pass.js",
     "lib/paid-access.js",
     "lib/team-crew-run.js",
-    "lib/team-rally.js",
     "lib/versus-moved.js"
    ]
   },
@@ -25315,9 +24454,7 @@
    ]
   },
   "skills/share.js": {
-   "imports": [
-    "lib/stage-code.js"
-   ],
+   "imports": [],
    "importedBy": []
   },
   "skills/sheaf-check.js": {
