@@ -78,3 +78,19 @@ export function satchelAdd(list, item, now = Date.now()) {
 }
 export function satchelGet(store = globalThis.localStorage) { try { const v = JSON.parse(store.getItem(SATCHEL_KEY) || '[]'); return Array.isArray(v) ? v.slice(0, SATCHEL_MAX) : []; } catch (_) { return []; } }
 export function satchelPut(list, store = globalThis.localStorage) { try { store.setItem(SATCHEL_KEY, JSON.stringify(list.slice(0, SATCHEL_MAX))); return true; } catch (_) { return false; } }
+
+/** [start, end) of each literal match, case-insensitive, in order, at most `max`. Pure.
+ *  phase/overlay.js keeps the same function: a global RegExp skips every other text node. */
+export function findSpans(text, query, max = 200) {
+  const hay = String(text || ''), needle = String(query || '').trim();
+  if (!needle) return [];
+  const h = hay.toLowerCase(), n = needle.toLowerCase(), out = [];
+  let i = 0;
+  while (out.length < max) {
+    const at = h.indexOf(n, i);
+    if (at < 0) break;
+    out.push([at, at + n.length]);
+    i = at + Math.max(1, n.length);
+  }
+  return out;
+}

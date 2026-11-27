@@ -48,6 +48,7 @@ const run = (q) => t.evaluate((q) => window.__versePhase.run(q), q);
 ok(/\$1,200\.00/.test(await run('numbers')), 'the overlay reads the page and lists its numbers');
 ok(/1 match/.test(await run('find invoice 42')) || /match/.test(await run('find Subtotal')), 'it highlights words in place');
 ok(await t.locator('mark[data-verse-phase-mark]').count() >= 1, 'a highlight is on the page');
+ok(/match/.test(await run('find tax')), 'a second find still lands on the words');
 ok(/Filled/.test(await run('fill Note with Thanks, see you Friday')) && await t.inputValue('#note') === 'Thanks, see you Friday', 'it fills a box by its label');
 ok(/Pressed/.test(await run('click Save')) && await t.evaluate(() => window.saved === 1), 'it presses a safe button');
 ok(/don.t press/.test(await run('click Pay now')) && await t.evaluate(() => !window.paid), 'it refuses a button that pays');

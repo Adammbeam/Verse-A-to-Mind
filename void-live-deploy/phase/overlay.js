@@ -29,16 +29,43 @@
     return hits.length === 1 ? hits[0] : hits.length ? 'many' : null;
   };
   var marks = [];
+  // same scan as findSpans in lib/phase.js (this file cannot import it)
+  function findSpans(text, query, max) {
+    var hay = String(text || ''), needle = String(query || '').trim();
+    if (!needle) return [];
+    var h = hay.toLowerCase(), n = needle.toLowerCase(), out = [], i = 0, cap = max || 200;
+    while (out.length < cap) {
+      var at = h.indexOf(n, i);
+      if (at < 0) break;
+      out.push([at, at + n.length]);
+      i = at + Math.max(1, n.length);
+    }
+    return out;
+  }
   function highlight(q) {
-    marks.forEach(function (m) { var t = document.createTextNode(m.textContent); m.replaceWith(t); }); marks = [];
-    var re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), nodes = [], n;
-    while ((n = w.nextNode())) if (n.nodeValue && re.test(n.nodeValue) && !/^(SCRIPT|STYLE|TEXTAREA)$/.test(n.parentNode.nodeName)) nodes.push(n);
-    nodes.slice(0, 200).forEach(function (node) {
-      var f = document.createDocumentFragment(), s = node.nodeValue, last = 0; re.lastIndex = 0; var m;
-      while ((m = re.exec(s))) { f.append(s.slice(last, m.index)); var k = document.createElement('mark'); k.setAttribute('data-verse-phase-mark', ''); k.textContent = m[0]; f.append(k); marks.push(k); last = m.index + m[0].length; }
-      f.append(s.slice(last)); node.replaceWith(f);
+    marks.forEach(function (m) { var t = document.createTextNode(m.textContent); m.replaceWith(t); });
+    marks = [];
+    if (document.body && document.body.normalize) document.body.normalize();
+    if (!document.body || !String(q || '').trim()) return '0 matches highlighted.';
+    var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), nodes = [], n;
+    while ((n = w.nextNode())) {
+      if (!n.nodeValue || !n.parentNode || /^(SCRIPT|STYLE|TEXTAREA)$/.test(n.parentNode.nodeName)) continue;
+      if (findSpans(n.nodeValue, q, 1).length) nodes.push(n);
+    }
+    nodes.slice(0, 80).forEach(function (node) {
+      var f = document.createDocumentFragment(), s = node.nodeValue, last = 0;
+      findSpans(s, q, 40).forEach(function (sp) {
+        f.append(s.slice(last, sp[0]));
+        var k = document.createElement('mark');
+        k.setAttribute('data-verse-phase-mark', '');
+        k.textContent = s.slice(sp[0], sp[1]);
+        k.style.cssText = 'background:transparent;color:inherit;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px;padding:0';
+        f.append(k); marks.push(k); last = sp[1];
+      });
+      f.append(s.slice(last));
+      node.replaceWith(f);
     });
-    if (marks[0]) marks[0].scrollIntoView({ block: 'center' });
+    if (marks[0]) marks[0].scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'auto' });
     return marks.length + (marks.length === 1 ? ' match' : ' matches') + ' highlighted.';
   }
   function run(q) {

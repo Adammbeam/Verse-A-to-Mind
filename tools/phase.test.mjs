@@ -1,6 +1,8 @@
 // lib/phase.js: Phase, the see-through layer (run: node --test tools/phase.test.mjs)
 import test from 'node:test'; import assert from 'node:assert/strict';
-import { phaseAsk, phaseLink, keyMask, applyMask, place, clipType, clipName, packPage, unpackPage, numbersOf, satchelAdd, satchelGet, satchelPut, SATCHEL_MAX, PAGE_MAX } from '../void-live-deploy/lib/phase.js';
+import vm from 'node:vm';
+import { readFileSync } from 'node:fs';
+import { phaseAsk, phaseLink, keyMask, applyMask, place, clipType, clipName, packPage, unpackPage, numbersOf, satchelAdd, satchelGet, satchelPut, SATCHEL_MAX, PAGE_MAX, findSpans } from '../void-live-deploy/lib/phase.js';
 
 test('asks that open Phase, and which put you in the scene', () => {
   for (const a of ['phase', 'Phase.', 'see through', 'see-through mode', 'turn on phase', 'satchel']) assert.deepEqual(phaseAsk(a), { in: false }, a);
@@ -49,4 +51,32 @@ test('the Satchel keeps the newest first, capped, in this browser only', () => {
   const mem = new Map(), store = { getItem: (k) => mem.get(k) ?? null, setItem: (k, v) => mem.set(k, v) };
   assert.ok(satchelPut(s, store)); assert.equal(satchelGet(store).length, SATCHEL_MAX);
   mem.set('verse_satchel', '{oops'); assert.deepEqual(satchelGet(store), []);
+});
+
+test('a find keeps every match, and the next phrase is not thrown off', () => {
+  const page = 'Invoice 42 is due. The second line also says invoice 42.';
+  assert.deepEqual(findSpans(page, 'invoice'), [[0, 7], [45, 52]]);
+  assert.deepEqual(findSpans(page, 'invoice 42'), [[0, 10], [45, 55]]);
+  assert.deepEqual(findSpans(page, 'invoice'), [[0, 7], [45, 52]]);
+  assert.deepEqual(findSpans('', 'a'), []);
+});
+
+test('the overlay underlines with the same scan and does not restyle the ask line', () => {
+  const src = readFileSync(new URL('../void-live-deploy/phase/overlay.js', import.meta.url), 'utf8');
+  const start = src.indexOf('function findSpans');
+  assert.ok(start > 0);
+  let depth = 0, end = start;
+  for (let j = src.indexOf('{', start); j < src.length; j++) {
+    if (src[j] === '{') depth++;
+    else if (src[j] === '}') { depth--; if (!depth) { end = j + 1; break; } }
+  }
+  const box = {};
+  vm.createContext(box);
+  vm.runInContext(src.slice(start, end) + '\nthis.findSpans = findSpans;', box);
+  const page = 'Invoice 42 is due. The second line also says invoice 42.';
+  assert.equal(JSON.stringify(box.findSpans(page, 'invoice 42')), JSON.stringify(findSpans(page, 'invoice 42')));
+  assert.match(src, /text-decoration:underline/);
+  assert.match(src, /background:#10121ccc/);
+  assert.doesNotMatch(src, /--ph-wash|--phase-veil|phaseBlend/);
+  assert.match(src, /document\.body\.normalize/);
 });

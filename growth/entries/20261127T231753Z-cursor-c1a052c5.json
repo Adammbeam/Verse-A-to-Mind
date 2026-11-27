@@ -1,0 +1,1 @@
+{"at":"2026-11-27T23:17:53Z","by":"cursor","kind":"fix","what":"A find underlines the words and no longer splits them, so the next find still lands."}
