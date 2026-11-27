@@ -8,7 +8,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { createServer } from 'node:http';
 import { execFileSync, execFile, spawnSync } from 'node:child_process';
 import { promisify } from 'node:util';
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, rmSync, writeFileSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import * as C from '../void-live-deploy/lib/codestore.js';
@@ -119,7 +119,8 @@ test('GitHub-free landing: a change request is merged onto main, checked, lands 
   const e = env(), { srv, url } = await serve(e), src = repo(), prev = { ...process.env };
   process.env.CODE_URL = url;
   const realGit = (cmd, args, opts) => { const r = spawnSync(cmd, args, { encoding: 'utf8', ...opts }); return { ok: r.status === 0, out: String(r.stdout || '') + String(r.stderr || '') }; };
-  const calls = [], run = (cmd, args, opts) => { calls.push(cmd + ' ' + args.slice(0, 3).join(' ')); return cmd === 'git' ? realGit(cmd, args, opts) : { ok: true, out: '' }; }; // the gates and wrangler stand in
+  const calls = [], reports = [], run = (cmd, args, opts) => { calls.push(cmd + ' ' + args.slice(0, 3).join(' ')); return cmd === 'git' ? realGit(cmd, args, opts) : { ok: true, out: '' }; }; // the gates and wrangler stand in
+  const recordF = async (u, o = {}) => { if (String(u).endsWith('/checks')) reports.push(JSON.parse(o.body)); return fetch(u, o); };
   try {
     await push({ key: OWNER, cwd: src });
     g(src, 'checkout', '-qb', 'feat'); writeFileSync(join(src, 'c.txt'), 'three\n'); g(src, 'add', '.'); g(src, 'commit', '-qm', 'three');
@@ -129,8 +130,9 @@ test('GitHub-free landing: a change request is merged onto main, checked, lands 
     assert.equal(R.nextChange(st).name, 'refs/heads/cr/seat/three');
     // no Cloudflare token: it lands and says it did not deploy
     delete process.env.CLOUDFLARE_API_TOKEN; delete process.env.CLOUDFLARE_ACCOUNT_ID;
-    const a = await R.runOnce({ key: OWNER, run, say: () => {} });
+    const a = await R.runOnce({ key: OWNER, run, f: recordF, say: () => {} });
     assert.equal(a.ok, true); assert.equal(a.deployed, false);
+    assert.deepEqual(reports.map((r) => r.state), ['running', 'green'], 'green is reported only after main moves');
     st = await (await fetch(url + '/status', { headers: { authorization: 'Bearer ' + OWNER } })).json();
     assert.equal(st.main, a.landed, 'main is the checked merge'); assert.equal(st.checks[0].state, 'green');
     assert.ok(calls.some((c) => c.startsWith('node tools/review-pr.mjs')) && calls.some((c) => c.startsWith('node tools/merge-gate.mjs')), 'the gates ran');
@@ -149,7 +151,7 @@ test('GitHub-free landing: a change request is merged onto main, checked, lands 
     };
     const b = await R.runOnce({ key: OWNER, run, f, say: () => {}, waitMs: 1 }); // no real waits between health tries
     assert.equal(b.rolledBack, 'good-deploy-1');
-    assert.ok(calls.some((c) => c === 'npx --yes wrangler pages'), 'deployed with wrangler pages deploy (Direct Upload)');
+    assert.ok(calls.some((c) => c === (process.platform === 'win32' ? 'cmd.exe /c npx --yes' : 'npx --yes wrangler pages')), 'deployed with wrangler pages deploy (Direct Upload)');
     assert.deepEqual(cfCalls, ['GET /deployments?env=production&per_page=1', 'POST /deployments/good-deploy-1/rollback']);
     st = await (await fetch(url + '/status', { headers: { authorization: 'Bearer ' + OWNER } })).json();
     assert.equal(st.deploys[0].state, 'rolled back'); assert.equal(st.deploys[0].deployment, 'new-deploy-2');
@@ -160,6 +162,34 @@ test('GitHub-free landing: a change request is merged onto main, checked, lands 
     assert.equal(c.ok, false); assert.match(c.check.why, /does not merge onto main/);
     st = await (await fetch(url + '/status', { headers: { authorization: 'Bearer ' + OWNER } })).json();
     assert.equal(st.main, main0, 'main did not move'); assert.equal(st.checks[0].state, 'red');
+    assert.equal(R.nextChange(st).name, 'refs/heads/cr/seat/zclash', 'a red check is retried, not skipped');
+  } finally { for (const k of ['CODE_URL', 'CLOUDFLARE_API_TOKEN', 'CLOUDFLARE_ACCOUNT_ID']) { if (prev[k] === undefined) delete process.env[k]; else process.env[k] = prev[k]; } srv.close(); rmSync(src, { recursive: true, force: true }); }
+});
+
+test('a failed main move records running then red and leaves the change request retryable', async () => {
+  const R = await import('./verse-runner.mjs');
+  const e = env(), { srv, url } = await serve(e), src = repo(), prev = { ...process.env };
+  process.env.CODE_URL = url; delete process.env.CLOUDFLARE_API_TOKEN; delete process.env.CLOUDFLARE_ACCOUNT_ID;
+  const realGit = (cmd, args, opts) => { const r = spawnSync(cmd, args, { encoding: 'utf8', ...opts }); return { ok: r.status === 0, out: String(r.stdout || '') + String(r.stderr || '') }; };
+  const run = (cmd, args, opts) => cmd === 'git' ? realGit(cmd, args, opts) : { ok: true, out: '' };
+  const reports = []; let refuse = false;
+  const f = async (u, o = {}) => {
+    if (String(u).endsWith('/checks')) reports.push(JSON.parse(o.body));
+    if (refuse && String(u).endsWith('/refs') && o.method === 'POST') return Response.json({ say: 'main moved' }, { status: 409 });
+    return fetch(u, { ...o, headers: { ...(o.headers || {}), connection: 'close' } });
+  };
+  try {
+    await push({ key: OWNER, cwd: src });
+    g(src, 'checkout', '-qb', 'feat'); writeFileSync(join(src, 'c.txt'), 'three\n'); g(src, 'add', '.'); g(src, 'commit', '-qm', 'three');
+    await push({ key: OWNER, cwd: src, ref: 'HEAD', to: 'cr/seat/stale' });
+    const before = (await (await fetch(url + '/status', { headers: { authorization: 'Bearer ' + OWNER, connection: 'close' } })).json()).main;
+    refuse = true;
+    const out = await R.runOnce({ key: OWNER, run, f, say: () => {} });
+    assert.equal(out.ok, false); assert.match(out.why, /main move failed/);
+    assert.deepEqual(reports.map((r) => r.state), ['running', 'red'], 'a refused main move never reports green');
+    const st = await (await fetch(url + '/status', { headers: { authorization: 'Bearer ' + OWNER, connection: 'close' } })).json();
+    assert.equal(st.main, before, 'main did not move'); assert.equal(st.checks[0].state, 'red');
+    assert.equal(R.nextChange(st).name, 'refs/heads/cr/seat/stale', 'the next pass checks it again');
   } finally { for (const k of ['CODE_URL', 'CLOUDFLARE_API_TOKEN', 'CLOUDFLARE_ACCOUNT_ID']) { if (prev[k] === undefined) delete process.env[k]; else process.env[k] = prev[k]; } srv.close(); rmSync(src, { recursive: true, force: true }); }
 });
 
@@ -170,4 +200,17 @@ test('reports are the owner\'s only and checked; afterDeploy keeps a healthy dep
   assert.equal(C.deployOf({ sha: 'a'.repeat(40), deployment: 'abc123', state: 'live', url: 'https://evil.example' }).ok, false);
   assert.equal(R.afterDeploy({ ok: true }, null), 'keep'); assert.equal(R.afterDeploy({ ok: false }, null), 'nothing to roll back to');
   assert.ok(C.isCr('refs/heads/cr/beam/fix-1')); assert.ok(!C.isCr('refs/heads/main'));
+});
+
+test('runner review fixes: one 220 KB proposals limit, health documented, and Windows npx uses cmd.exe', async () => {
+  const { LIMITS } = await import('../void-live-deploy/lib/guard.js');
+  const guard = readFileSync(new URL('../void-live-deploy/lib/guard.js', import.meta.url), 'utf8');
+  assert.equal([...guard.matchAll(/^\s*proposals:/gm)].length, 1, 'one proposals limit, not a duplicate key');
+  assert.equal(LIMITS.proposals.body, 220000);
+  const spec = JSON.parse(readFileSync(new URL('../void-live-deploy/openapi.json', import.meta.url), 'utf8'));
+  assert.equal(spec.paths['/api/health'].get.operationId, 'getHealth');
+  const R = await import('./verse-runner.mjs'), sha = 'a'.repeat(40);
+  const win = R.deployCommand(sha, 'win32'), unix = R.deployCommand(sha, 'linux');
+  assert.equal(win.cmd, 'cmd.exe'); assert.deepEqual(win.args.slice(0, 3), ['/c', 'npx', '--yes']);
+  assert.equal(unix.cmd, 'npx'); assert.deepEqual(unix.args.slice(0, 3), ['--yes', 'wrangler', 'pages']);
 });
