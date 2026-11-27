@@ -1,0 +1,1 @@
+`tools/teardown.mjs` measures a public https page or a public repository (`void-live-deploy/lib/teardown-repo.js`, tests `tools/teardown.test.mjs` and `tools/teardown-repo.test.mjs`) and writes `teardown/<slug>/map.json`, `spec.md`, `gaps.md` and `jobs.md`. Dry run writes the pack. `--post` sends the three-line summary through `team/agent.mjs`.
