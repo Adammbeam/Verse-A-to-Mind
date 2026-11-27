@@ -22,6 +22,7 @@ import { models, ANSWER_FALLBACK } from '../../lib/models.js';
 import { bounded, hedged, SOURCES_MS } from '../../lib/answer-speed.js';
 import { runFree } from '../../lib/ai-gateway.js';
 import { keeperOf, scrubOut } from '../../lib/keeper.js';
+import { scrubSites } from '../../lib/scrub-sites.js';
 import { redactPersonal } from '../../lib/privacy.js';
 import { PAID_MODEL, BUDGET_MS, STRONG_TIMEOUT_MS, SKILLS, classify, settle, paidAccess, costCents, recordSpend, logRoute } from '../../lib/router.js';
 import { nearOf } from '../../lib/near-miss.js';
@@ -641,7 +642,9 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   const waited = Date.now() - srcAt;
   // the router's 'self' examples catch self asks the regex missed
   if (!self && !isPaste(ask) && !note && route.kind === 'skill' && route.skill === 'self') { self = true; selfP = readSelf(env, origin); src = []; }
-  const facts = self ? selfFacts(await selfP, { card: own, note: ask }) : '';
+  // the facts are read by the model and can reach a public answer, so a studied site's name stops here:
+  // what Verse studies stays in the owner-only Tower (lib/scrub-sites.js, tools/guards/leaks.mjs)
+  const facts = self ? scrubSites(selfFacts(await selfP, { card: own, note: ask })) : '';
   let pub = src.map(({ title, url, edited }) => ({ title, url, edited }));
   const ctx = src.map((s, i) => `[${i + 1}] ${s.title}: ${s.text}`).join('\n\n') || '(no sources found)';
   const lead = !self && !told && src.length && isNameAsk(ask) && sourcesMatch(ask, [src[0]]) ? src[0] : null; // the first source holds the ask itself: its description types the card (lib/subject-kinds.js)
@@ -782,6 +785,8 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   if (!self && !told && isNoAnswer(answer)) return Response.json({ answer: null, sources: [], note: 'nothing on the web', noAnswer: true, ...(suggestedGuess(ask, src) ? { guess: suggestedGuess(ask, src) } : {}), route: route.kind, ...nearOut });
   if (sectioned && src[0] && answer) answer = grounded(answer, src[0].text); // a list-page section: only what its text says
   answer = scrubOut(answer, env); // no env value or key shape leaves in a model's words, whatever the model was told (lib/keeper.js)
+  // even a model that recalls a studied site from training must not put its name in a public answer: the leak guard reads these words
+  if (self && !own) answer = scrubSites(answer);
   if (own) { answer = scrubOut(await ownBody(answer), env); keepCard(answer); } // the lead the note gave reason for, then the lists from my records
   if (self) { const got = await selfP; answer = withAim(answer, got && got.self, ask); } // the aim is composed in code, ahead of or alongside the model's words
   const at = new Date().toISOString();
