@@ -1,0 +1,1 @@
+- **team claim board (`void-live-deploy/lib/team-claim-board.js`, `tools/team-claim-board.test.mjs`):** single-claim conflict check (`checkClaimConflict`, `holderOf`, `claimConflictSay`) and planning board split (`planningBoard`) separating open queued jobs from active claimed jobs with holder names and elapsed minutes.
