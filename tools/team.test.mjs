@@ -155,8 +155,8 @@ test('two agents never hold one job; a failure goes back with a try counted and 
   assert.equal(fail.next, null, 'Ada is not handed the job it just failed');
   assert.equal(job(env, 'j1').state, 'queued'); assert.match(job(env, 'j1').note, /^tries 1 · the page has no tide source/);
   assert.equal((await post(env, { do: 'next' }, b, T0 + 3000)).job.job, 'j1', 'Bee takes it');
-  // Bee goes quiet past STALE_MS: the next request anyone makes sends the job back, and Verse says so in the thread
-  const later = T0 + 3000 + T.STALE_MS + 1000;
+  // Bee goes quiet past JOB_LEASE_MS: the next request anyone makes sends the job back, and Verse says so in the thread
+  const later = T0 + 3000 + T.JOB_LEASE_MS + 1000;
   const shell = await get(env, '', null, later);
   assert.equal(job(env, 'j1').state, 'queued'); assert.deepEqual(shell.members.map((m) => m.state), ['away', 'away']);
   const work = await get(env, '?c=work', OWNER, later);
@@ -629,7 +629,8 @@ test('the waiting jobs move without asking: an idle agent that reads is handed t
   const env3 = world([JOBS[0]]), eff = (await admit(env3, 'Eff')).key;
   assert.equal((await post(env3, { do: 'post', c: 'general', body: 'hi' }, eff)).status, 201);
   assert.equal(job(env3, 'j1').state, 'building', 'a post in #general from a free seat is a check-in: the job comes at once');
-  assert.ok(T.HAND_MS > T.AWAY_MS && T.HAND_MS < T.STALE_MS, 'the hand-out window sits between the away label and the take-back');
+  assert.ok(T.HAND_MS > T.AWAY_MS, 'the hand-out window is longer than the away label');
+  assert.ok(T.JOB_LEASE_MS >= T.AWAY_MS && T.JOB_LEASE_MS <= 15 * 60e3, 'an abandoned job returns within the 10 to 15 minute watchdog window');
 });
 test('a pull seat heard from within 20 minutes gets a job; a paused, off, held or crew seat and a 20-minute-old silence do not', async () => {
   assert.equal(T.HAND_IDLE_MS, T.HAND_MS);
@@ -769,10 +770,33 @@ test('a seat that has never polled (seen = 0) keeps the job it was just pushed, 
   env.DB.raw.prepare("UPDATE void_queue SET state = 'building', note = 'claimed by team:pushonly ·' WHERE id = ?").run('j1');
   assert.equal(await API.sweep(env, T0 + 1000), 0, 'a fresh claim is not stale just because the seat never polled: seen = 0 used to read as "quiet since 1970"');
   assert.equal(env.DB.raw.prepare('SELECT job FROM void_team_agents WHERE name = ?').get('pushonly').job, 'j1', 'the job stays with the seat');
-  assert.equal(await API.sweep(env, T0 + T.STALE_MS + 60e3), 1, 'and it does come back once the claim itself is older than STALE_MS');
+  assert.equal(await API.sweep(env, T0 + T.JOB_LEASE_MS + 60e3), 1, 'and it does come back once the claim itself is older than JOB_LEASE_MS');
   assert.equal(job(env, 'j1').state, 'queued', 'the job is back on the queue');
 });
 
+test('a recent check-in renews a held job, and silence returns it 15 minutes later', async () => {
+  const env = world([{ id: 'j1', ask: 'add a tide table to /weather/', target: 'feature:tides', at: '2026-10-28T00:00:00Z' }]);
+  const key = (await admit(env, 'Ada')).key;
+  assert.equal((await post(env, { do: 'next' }, key)).job.job, 'j1');
+  assert.equal((await post(env, { do: 'here' }, key, T0 + 10 * 60e3)).job.already, true, 'the check-in keeps the same job');
+  await get(env, '', null, T0 + 24 * 60e3);
+  assert.equal(job(env, 'j1').state, 'building', '14 minutes after the check-in, the job is still leased');
+  await get(env, '', null, T0 + 25 * 60e3 + 1000);
+  assert.equal(job(env, 'j1').state, 'queued', '15 minutes after the check-in, the job is back on the board');
+});
+
+test('a removed or keyless seat loses its job immediately, without waiting for the heartbeat lease', async () => {
+  for (const [label, off, key] of [['removed', 1, 'h'], ['keyless', 0, '']]) {
+    const env = world([{ id: 'j1', ask: 'add a tide table to /weather/', target: 'feature:tides', at: '2026-10-28T00:00:00Z' }]);
+    await admit(env, 'Ada');
+    const held = env.DB.raw.prepare("SELECT * FROM void_team_agents WHERE name = 'Ada'").get();
+    assert.equal((await API.handOut(env, held, T0)).job, 'j1');
+    env.DB.raw.prepare('UPDATE void_team_agents SET off = ?, key = ? WHERE name = ?').run(off, key, 'Ada');
+    assert.equal(await API.sweep(env, T0 + 1000), 1, label + ' seat is reaped at once');
+    assert.equal(job(env, 'j1').state, 'queued', label + ' job is available again');
+    assert.equal(env.DB.raw.prepare("SELECT job FROM void_team_agents WHERE name = 'Ada'").get().job, null, label + ' seat holds nothing');
+  }
+});
 
 test('GET /api/team counts.oldestClaimMin is minutes since the oldest active claim', async () => {
   const env = world(JOBS);

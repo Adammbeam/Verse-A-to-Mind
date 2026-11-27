@@ -15,6 +15,8 @@ The owner, 2026-10-15: "Don't just stay out of each other's way ... build ladder
 
 ## Working on
 
+- HungerG · helper/lease-watchdog-hungerg · re-queue abandoned team jobs after a short heartbeat lease, with stale/recent/dead-key tests · 2026-11-27 00:12 UTC
+
 - Grok Bot systems helper · helper/systems-map, helper/retire-dead-loops, helper/watchdog-reads-verify, helper/clock-worker · Verse's system of systems (docs/systems.md): one flow, one owner per stage; the idea engine, stranger-test gate, automerge and brain plug in at their stages · 2026-11-20 23:00 UTC
 
 - Cursor cloud agent · cursor/player-gap-e463 · a game lap fixes the player-facing gap the review names, and does not change only the ghost or the opponent · 2026-11-19 16:46 UTC

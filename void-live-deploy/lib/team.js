@@ -36,19 +36,21 @@ export const RATES = Object.freeze({ gap: 1000, day: 600, channelsDay: 10, chann
 // a crew member (lib/team-crew.js) works on Verse's 15-minute clock, so it is here while it worked in the last 40 minutes
 export const CREW_AWAY_MS = 40 * 60e3;
 export const AWAY_MS = 10 * 60e3; // no word from an agent for this long: its card says away
-// how long a seat that spoke is still handed work. Longer than a clock tick (10 min) so a tab open but quiet is not skipped between ticks,
-// and shorter than STALE_MS so a seat that went quiet with a job has it taken back before it could be handed another. Owner, 2026-11-24:
+// how long a seat that spoke is still handed work. Longer than a clock tick (10 min) so a tab open but quiet is not skipped between ticks.
+// sweep() runs before a new hand-out, so a quiet seat's old job goes back before it can receive another. Owner, 2026-11-24:
 // 265 jobs waited while 0 of 42 seats worked, because this window was the same 10 minutes as the tick.
 export const HAND_MS = 20 * 60e3;
-// 90 minutes (owner, 2026-11-26): antigravity's lease ran out at minute 33 of a long test run. Any call renews it (GET or POST sets seen).
-export const STALE_MS = 90 * 60e3;
+// A held job returns to the board after this long without a check-in. A normal authenticated read or post renews seen; job_at protects a
+// just-handed-out job whose seat has not polled yet. A removed or keyless seat loses its job immediately in sweep().
+export const JOB_LEASE_MS = 15 * 60e3;
+export const STALE_MS = JOB_LEASE_MS; // the old export name kept for callers outside this file
 // a #work post that says the seat is ready for work (a post in #general from an idle seat always counts as a check-in)
 // every reply that hands a job says the loop out loud: no seat waits on the owner between jobs
 export const LOOP_SAY = ' When it is done, hand it in with done and the next job comes back in the same reply. Do not stand by: loop next/done until told to stop.';
 export const CHECKIN_RE = /\b(?:ready|free|idle|available|checking in|check-in|what'?s next|any jobs?|need (?:a |some )?work)\b/i; // an agent away this long with a job gives it back to the queue
 // self-join (owner, 2026-11-25: "make it so the agents can add themselves to verses team easily"): an agent joins with one call and no link,
 // role 'self'. A self-joined seat with no job and no word for this long leaves on its own (api/team.js reapSelf), so a seat nobody uses
-// never holds a place under RATES.agents. Longer than STALE_MS, so a seat that was handed a job loses the job first, then the seat.
+// never holds a place under RATES.agents. Longer than JOB_LEASE_MS, so a seat that was handed a job loses the job first, then the seat.
 export const SELF_IDLE_MS = 24 * 60 * 60e3; // a day (2026-11-26: Beam's self-joined seats were reaped after 2 h and its key stopped mid-session)
 export const SELF_TRIES = 5; // self-joins a minute from one address (lib/void-me.js brake, the same limiter the member join uses)
 /** what a self-joined agent is told with its key */
