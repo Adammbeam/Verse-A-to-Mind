@@ -17,7 +17,7 @@ Written by `node tools/parity.mjs --write` from the feature rows in `tools/parit
 | Indices, currencies and crypto | Markets | have | every site of this kind offers it | void-live-deploy/markets/index.html:97 `<div id="strip" aria-label="Indices, crypto and currencies">` |
 | Top gainers and losers | Markets | have | every site of this kind offers it | void-live-deploy/markets/index.html:159 `<h2 id="mvH">Top movers</h2>` |
 | A watchlist | Personal | have | every site of this kind offers it | void-live-deploy/markets/index.html:131 `="watch" aria-pressed="false">Add to watchlist</button>` |
-| A portfolio with gains and losses | Personal | have | studied by hand: investing.com offers this (https://www.investing.com/) | void-live-deploy/markets/index.html:168 `financials, news, options or portfolios here, and nothing here trades.</p>` |
+| A portfolio with gains and losses | Personal | have | studied by hand: investing.com offers this (https://www.investing.com/) | void-live-deploy/markets/index.html:168 `financials, news, options or portfolios here, and nothing here trades. Not financial advi` |
 | Market news | News | have | every site of this kind offers it | void-live-deploy/markets/index.html:149 `"repWrap" aria-pressed="true">Market wrap</button><button type="button" id="repWhy" aria-p` |
 | Financial statements | Data | have | studied by hand: investing.com offers this (https://www.investing.com/) | void-live-deploy/markets/index.html:168 `is down. There are no company financials, news, options or portfolios here, and nothing he` |
 | A stock screener | Data | have | studied by hand: investing.com offers this (https://www.investing.com/) | void-live-deploy/markets/index.html:106 `ps</a><a href="/markets/?mode=screener">Screener</a></nav>` |
