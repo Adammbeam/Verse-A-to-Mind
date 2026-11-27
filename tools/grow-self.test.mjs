@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 
 // a Windows checkout can hand this back with CRLF; the workflow's own bash sees LF, so the assertions read it the same way
-const y = readFileSync(new URL('../.github/workflows/grow-self.yml', import.meta.url), 'utf8').replace(/\r\n?/g, '\n');
+const y = readFileSync((existsSync(new URL('../.github/workflows/grow-self.yml', import.meta.url)) ? new URL('../.github/workflows/grow-self.yml', import.meta.url) : new URL('../.github/workflows-parked/grow-self.yml', import.meta.url)) /* parked 2026-11-25 */, 'utf8').replace(/\r\n?/g, '\n');
 const files = (re) => [...y.matchAll(re)].map((m) => m[1].replace(/\\\./g, '.').split('|').sort().join(','));
 
 test('the build job, the pull request job and the git add allow exactly the same files, and nothing else', () => {

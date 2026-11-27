@@ -1,7 +1,7 @@
 // tools/pr-autofix.mjs: the two fast tiers, their scope, and the cap that stops them. node --test tools/pr-autofix.test.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { allowedBranch, failureLines, fileList, taskFor, repairJob, afterLastAttempt } from './pr-autofix.mjs';
 import { claim, readCap } from './fix-cap.mjs';
 
@@ -11,7 +11,7 @@ test('only same-repo helper and loop branches qualify', () => {
   assert.equal(allowedBranch('main'), false);
   assert.equal(allowedBranch('feature/x'), false);
   assert.equal(allowedBranch(''), false);
-  const workflow = readFileSync(new URL('../.github/workflows/pr-autofix.yml', import.meta.url), 'utf8');
+  const workflow = readFileSync((existsSync(new URL('../.github/workflows/pr-autofix.yml', import.meta.url)) ? new URL('../.github/workflows/pr-autofix.yml', import.meta.url) : new URL('../.github/workflows-parked/pr-autofix.yml', import.meta.url)) /* parked 2026-11-25 */, 'utf8');
   assert.match(workflow, /head_repository\.full_name == github\.repository/);
   assert.match(workflow, /workflows: \["Merge gate", "Verse review"\]/);
 });
