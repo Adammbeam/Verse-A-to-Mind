@@ -26,8 +26,13 @@ export function luminance(css) {
   return 0.2126 * ch(m[1]) + 0.7152 * ch(m[2]) + 0.0722 * ch(m[3]);
 }
 
+// /news/ renders verbatim headlines from external RSS publishers, so a headline with "fight" is reporting, not Verse fighting a site
+const EXTERNAL_NEWS = /^\/news(?:\/|$)/;
 // "fight" went (owner, 2026-10-29: "verse doesnt fight any sight ... its assimilate"); the old name V01D never shows to a person (AGENTS.md)
-const WORDING = [[/\bfight(?:s|ing)?\b/i, 'says "fight": Verse assimilates'], [/\bV01D\b/, 'says the old name V01D']];
+const WORDING = [
+  [/\bfight(?:s|ing)?\b/i, 'says "fight": Verse assimilates', (p) => EXTERNAL_NEWS.test(String(p || ''))],
+  [/\bV01D\b/, 'says the old name V01D'],
+];
 // what reads as unfinished to a person (owner, 2026-10-30: "find anything that looks incomplete or broken"): a loader still alone on its line after the
 // page settled and was given more time (tools/self-check.mjs waits again when it sees one), or filler words left in the visible text. "Coming soon" is not here:
 // the store says it honestly of a product that is not on sale yet.
@@ -47,7 +52,11 @@ export function pageProblems(seen) {
   if (String(s.text || '').replace(/\s+/g, '').length < 20 && !(s.controls > 0)) add('empty', 'under 20 characters of text and nothing to type in, press or see after it loaded');
   const l = luminance(s.bg); if (l !== null && l > 0.5) add('light', 'background ' + s.bg);
   for (const u of (s.deadLinks || []).slice(0, 3)) add('link', u.status + ' ' + u.url);
-  for (const [re, why] of WORDING) { const m = String(s.text || '').match(new RegExp('.{0,40}' + re.source + '.{0,40}', re.flags)); if (m) add('wording', why + ': "' + m[0].trim() + '"'); }
+  for (const [re, why, skip] of WORDING) {
+    if (skip && skip(s.path)) continue;
+    const m = String(s.text || '').match(new RegExp('.{0,40}' + re.source + '.{0,40}', re.flags));
+    if (m) add('wording', why + ': "' + m[0].trim() + '"');
+  }
   for (const [re, why] of UNFINISHED) { const m = String(s.text || '').match(new RegExp('.{0,40}' + re.source + '.{0,40}', re.flags.replace('m', ''))) || String(s.text || '').match(re); if (m) add('unfinished', why + ': "' + m[0].trim() + '"'); }
   if (s.toolRow === false && tool(s.path)) add('unwired', 'no "Use with" row: the page is not tied to the other tools');
   return out;

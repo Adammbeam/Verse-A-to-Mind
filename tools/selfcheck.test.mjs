@@ -93,3 +93,10 @@ test('a broken page becomes one fix job for the coder, the serious ones first, a
   assert.equal(fixJobsOf({ pages: Array.from({ length: 9 }, (_, i) => ({ path: '/p' + i + '/', problems: [{ kind: 'link', why: 'x' }] })) }).length, FIX_MAX);
   assert.deepEqual(fixJobsOf(null), []);
 });
+
+test('/news/ external headlines may contain "fight", while V01D and non-news "fight" wording still fail', () => {
+  assert.deepEqual(pageProblems({ ...fine, path: '/news/', text: 'News · Fight over fossil fuels leaves COP31 climate' }), []);
+  assert.deepEqual(pageProblems({ ...fine, path: '/news/global-headlines/', text: 'Fighting intensifies near border' }), []);
+  assert.equal(pageProblems({ ...fine, path: '/news/', text: 'V01D News: world headlines from many sources' })[0].kind, 'wording');
+  assert.equal(pageProblems({ ...fine, path: '/creed/', text: 'Verse will fight any site' })[0].kind, 'wording');
+});
