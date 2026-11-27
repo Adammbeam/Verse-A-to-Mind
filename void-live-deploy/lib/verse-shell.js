@@ -97,14 +97,12 @@ export function speculationRules(nav = NAV) {
 }
 
 const DRESS = new Set(NAV.map((n) => n.href));
-// the crew-seat page wears the same bar; a longer /team/join/<code> is still an agent join link, not this page
-const EXTRA_DRESS = new Set(['/team/join/']);
 
 /** the shell paths the service worker dresses. */
 export function dressPath(path) {
   const raw = String(path || '/');
   const p = raw === '/' ? '/' : (raw.endsWith('/') ? raw : raw + '/');
-  return DRESS.has(p) || EXTRA_DRESS.has(p);
+  return DRESS.has(p);
 }
 
 /** put the token file and the shell script on a shell page that does not have them yet. Other HTML is returned unchanged. */

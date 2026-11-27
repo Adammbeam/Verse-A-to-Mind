@@ -24,7 +24,8 @@ test('the join page is a crew seat, uses the existing Gumroad link, and shows th
   assert.match(page, /Authorization: Bearer/);
   assert.match(page, /same purchase again/);
   assert.match(page, /href="\/team\/#build"/);
-  assert.match(page, /src="\/verse-shell\.js"/);
+  assert.match(page, /id="verse-nav"/);
+  assert.match(page, /href="\/team\/" aria-current="page"/);
   assert.match(page, /src="\/visit\.js" defer/);
   assert.match(page, /verse-handoff" content="in: none; out: none"/);
   assert.doesNotMatch(page, /\btip\b/i);
