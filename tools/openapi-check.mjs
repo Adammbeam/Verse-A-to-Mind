@@ -120,7 +120,7 @@ export const INTERNAL = {
   '/api/watch': 'watches, signed-in',
   '/api/where': "the page's place lookup",
   '/api/ip': "the my-device card's own address",
-  '/api/markets': "the crypto card's price list and the /markets/ page's quotes: a symbol (letters, or a name from a closed list), a range from a closed list of eight and a day in, prices out from four fixed free sources, GET only, edge-cached two minutes (an hour for currencies), 40 fresh lookups a minute (functions/api/markets.js, lib/markets.js); the page and the card are the only callers",
+  '/api/markets': "the crypto card's price list and the /markets/ page's quotes: a symbol (letters, or a name from a closed list), a range from a closed list of eight and a day in, prices out from four fixed free price sources, plus a Buy, Sell or Watch reading and one earnings figure from the two fixed US filing URLs when the symbol is a US share, GET only, edge-cached two minutes (an hour for currencies), 40 fresh lookups a minute (functions/api/markets.js, lib/markets.js, lib/markets-verdict.js); the page and the card are the only callers",
       '/api/will': "Verse's will card",
       '/api/claim': "sponsor claim, Verse's own",
       '/api/sponsors': "sponsor grid, Verse's own",

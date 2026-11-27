@@ -58,6 +58,10 @@
   dl.stats div { display: flex; justify-content: space-between; gap: 8px; border-top: 1px solid var(--line); padding: 7px 0; font-size: 14px; min-height: 22px; }
   @media (max-width: 480px) { dl.stats { grid-template-columns: 1fr; } }
   dl.stats dt { color: var(--soft); } dl.stats dd { margin: 0; font-variant-numeric: tabular-nums; text-align: right; }
+  #verdict { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+  #vdCall { font-size: 22px; font-weight: 600; margin: 0; }
+  #vdCall.buy { color: var(--up); } #vdCall.sell { color: var(--down); } #vdCall.watch { color: var(--ink); } #vdCall.unavailable { color: var(--soft); }
+  #vdReasons { margin: 8px 0 0; padding-left: 1.2em; } #vdReasons li { margin: 4px 0; }
   .note { font-size: 13px; color: var(--soft); margin: 8px 0 0; min-height: 1.5em; } .note.bad { color: var(--down); }
   .list { list-style: none; margin: 0; padding: 0; }
   .list li { display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--line); min-height: 48px; }
@@ -126,6 +130,12 @@
       <div><dt>Day range</dt><dd id="sDay">–</dd></div><div><dt>52-week range</dt><dd id="s52">–</dd></div>
       <div><dt>Volume</dt><dd id="sVol">–</dd></div><div><dt>Market cap</dt><dd id="sCap">–</dd></div>
     </dl>
+    <section id="verdict" hidden aria-labelledby="vdCall">
+      <p id="vdCall"></p>
+      <ol id="vdReasons"></ol>
+      <p class="note" id="vdSay"></p>
+      <p class="note" id="vdNote"></p>
+    </section>
     <p class="note" id="note" role="status"></p>
     <div class="row">
       <button type="button" id="watch" aria-pressed="false">Add to watchlist</button>
@@ -165,7 +175,7 @@
 <!-- /asks -->
   <nav id="related" aria-label="Related tools"><!-- related --><span class="tk-label">Use with</span> <a href="/convert/">Unit Converter</a> <a href="/calculator/">Calculator</a> <a href="/time/">Time zones</a> <a href="/tools/">All tools</a><!-- /related --></nav>
 
-  <p class="srcs" id="srcs">Prices come from free public sources and may be delayed: Stooq (shares, ETFs, indices), CoinGecko (crypto), the ECB’s daily reference rates through <a href="https://frankfurter.dev/" rel="noopener">frankfurter.dev</a> (currencies); Yahoo Finance’s public chart feed fills in only when another source is down. There are no company financials, news, options or portfolios here, and nothing here trades. Not financial advice.</p>
+  <p class="srcs" id="srcs">Prices come from free public sources and may be delayed: Stooq (shares, ETFs, indices), CoinGecko (crypto), the ECB’s daily reference rates through <a href="https://frankfurter.dev/" rel="noopener">frankfurter.dev</a> (currencies); Yahoo Finance’s public chart feed fills in only when another source is down. The reading under a quote says Buy, Sell or Watch from those daily prices: the recent move, the 50- and 200-session averages, the usual daily move, and where the price sits in the last year. A price-to-earnings number is added only when the free US filings return an annual earnings per share; when they do not, the reading says that number is missing and does not guess one. There are no news, options or portfolios here, and nothing here trades. Not financial advice.</p>
   <footer><a href="/">Verse</a> · <a href="/tools/">every tool</a> · <a href="/trading-bots/">trading bots with real backtests</a> · <a href="/trading-bots/arbitrage/">arbitrage scanner</a></footer>
 </main>
 
@@ -188,7 +198,7 @@
 <script type="module">
   // everything after the first paint: the page shows its boxes and its words at once, the module lands after load (the gate measures speed)
   addEventListener('load', async () => {
-    const [{ mountRelated }, M, { cardAsk }] = await Promise.all([import('/lib/toolkit.js'), import('/lib/markets.js'), import('/lib/markets-card.js')]);
+    const [{ mountRelated }, M, V, { cardAsk }] = await Promise.all([import('/lib/toolkit.js'), import('/lib/markets.js'), import('/lib/markets-verdict.js'), import('/lib/markets-card.js')]);
     const $ = (id) => document.getElementById(id), KEY = 'a2m.void.markets.v1', qs = new URLSearchParams(location.search);
     let store = { list: [], q: {}, last: 'AAPL' };
     try { store = { ...store, ...JSON.parse(localStorage.getItem(KEY) || '{}') }; } catch (_) {}
@@ -210,7 +220,7 @@
     async function load() {
       if (ctl) ctl.abort(); ctl = new AbortController(); const mine = ctl, sym = state.sym, range = state.range;
       for (const b of $('ranges').children) b.setAttribute('aria-pressed', String(b.dataset.r === range));
-      say('note', ''); $('chNone').hidden = false; $('chNone').textContent = 'Loading the chart';
+      say('note', ''); $('verdict').hidden = true; $('chNone').hidden = false; $('chNone').textContent = 'Loading the chart';
       const ask = () => api('s=' + encodeURIComponent(sym) + '&r=' + range + (state.on ? '&on=' + state.on : ''), mine.signal).catch(() => null);
       let j = await ask(); if (j && !j.ok && (j.kind === 'limited' || j.kind === 'away')) { await new Promise((r) => setTimeout(r, 2000)); if (mine === ctl) j = await ask(); } // a busy moment: once more
       if (!j || mine !== ctl) return;
@@ -222,7 +232,15 @@
       for (const id of ['sPrev', 'sOpen', 'sDay', 's52', 'sVol', 'sCap']) $(id).textContent = '–';
       $('line').setAttribute('d', ''); $('area').setAttribute('d', ''); $('line2').setAttribute('d', ''); $('chNone').hidden = false;
       const gone = 'Could not load ' + sym + ' right now, try again in a minute.', msg = j.kind === 'offline' ? 'You are offline, and no price for ' + sym + ' is saved on this device yet.' : j.kind === 'none' || j.kind === 'bad' ? j.say || gone : gone;
-      $('chNone').textContent = msg; say('note', msg, true); setWatch();
+      $('chNone').textContent = msg; say('note', msg, true); paintVerdict(null); setWatch();
+    }
+    function paintVerdict(v) {
+      const box = $('verdict');
+      const reading = v && v.label ? v : { call: 'unavailable', label: 'Unavailable', reasons: [], say: 'No reading: the prices did not come back, and nothing here is guessed.', disclaimer: V.VERDICT_DISCLAIMER };
+      box.hidden = false;
+      const call = $('vdCall'); call.textContent = reading.label; call.className = reading.call || 'unavailable';
+      $('vdReasons').replaceChildren(...(reading.reasons || []).slice(0, 5).map((t) => { const li = document.createElement('li'); li.textContent = t; return li; }));
+      $('vdSay').textContent = reading.say || ''; $('vdNote').textContent = reading.disclaimer || V.VERDICT_DISCLAIMER;
     }
     function draw() {
       if (!$('rep').hidden && rep.kind === 'why') report();
@@ -234,7 +252,7 @@
       $('sDay').textContent = q.dayLow != null && q.dayHigh != null ? M.fmtPrice(q.dayLow) + ' – ' + M.fmtPrice(q.dayHigh) : '–';
       $('s52').textContent = q.lo52 != null && q.hi52 != null ? M.fmtPrice(q.lo52) + ' – ' + M.fmtPrice(q.hi52) : '–';
       $('sVol').textContent = M.fmtBig(q.volume); $('sCap').textContent = M.fmtBig(q.cap);
-      say('note', q.note || '', false); setWatch(); drawChart();
+      say('note', q.note || '', false); paintVerdict(q.verdict); setWatch(); drawChart();
       $('onOut').textContent = ''; if (state.on) showOn();
       document.title = q.sym + ' ' + M.fmtPrice(q.price) + ' · Markets · Verse';
     }

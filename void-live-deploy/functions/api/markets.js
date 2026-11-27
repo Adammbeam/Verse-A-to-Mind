@@ -2,20 +2,24 @@
 // crypto ask leaves no CORS console error) and the /markets/ page's quotes (?s=SYMBOL&r=RANGE, ?strip=1, ?movers=1).
 //
 // WHAT A STRANGER COULD MAKE THIS DO, AND WHY IT IS BOUNDED (docs/RULES.md: every open GET is written down). This is an open, read-only GET. The most a caller can do is:
-//   - make Verse's server ask one of FOUR fixed hosts (stooq.com, query1.finance.yahoo.com, api.coingecko.com, api.frankfurter.dev) for a price: the host and the
-//     path are written here; the caller picks only a symbol, and a symbol must resolve (lib/markets.js resolve) to a ticker of at most five letters, an index or
-//     currency pair or coin from a closed list; a range from a closed list of eight; and a day (YYYY-MM-DD) checked as a real date; the coin table also reads
-//     Verse's own /data/coins.json (a fixed path on this site) when CoinGecko does not answer;
-//   - spend those sources' free allowances: a repeat inside two minutes (an hour for currencies) is answered from the edge cache, a miss costs one to three (the coin table up to four)
-//     upstream calls and counts against the caller's own 40 misses a minute (rateLimited(), its own bucket) on top of the guard's per-connection limit;
-//   - read prices. No model, no key, no token, no KV, no database, no write; a failed answer is never cached. Nothing here trades, holds money or gives advice.
+//   - make Verse's server ask one of SIX fixed hosts (stooq.com, query1.finance.yahoo.com, api.coingecko.com, api.frankfurter.dev, www.sec.gov, data.sec.gov) for a price,
+//     or for a US share one earnings figure: the host and the path are written here; the caller picks only a symbol, and a symbol must resolve (lib/markets.js resolve)
+//     to a ticker of at most five letters, an index or currency pair or coin from a closed list; a range from a closed list of eight; and a day (YYYY-MM-DD) checked as a
+//     real date; the coin table also reads Verse's own /data/coins.json (a fixed path on this site) when CoinGecko does not answer. The two filing paths are fixed:
+//     www.sec.gov/files/company_tickers.json, and one data.sec.gov companyconcept URL whose CIK is the number that file lists for the resolved ticker (ten digits, nothing
+//     else). A coin, an index, a currency pair and a ticker with an exchange suffix never ask the filings;
+//   - spend those sources' free allowances: a repeat inside two minutes (an hour for currencies) is answered from the edge cache, a miss costs one to three price calls and, for a US share, up to two filing calls (the coin table up to four)
+//     and counts against the caller's own 40 misses a minute (rateLimited(), its own bucket) on top of the guard's per-connection limit;
+//   - read prices, and a reading of those prices (Buy, Sell or Watch, lib/markets-verdict.js) that says it is not financial advice. No model, no key, no token, no KV,
+//     no database, no write; a failed answer is never cached. Nothing here trades or holds money.
 // SOURCES AND THEIR RISK: Stooq's CSV (free, no key, the first choice for shares and indices) can start asking for a key or change; Yahoo's chart endpoint is
 // unofficial and has no published terms for this use, so it is only the fallback and the source of the one-day chart; CoinGecko's public API (no key, about 30 calls a
-// minute, one year of history; when it refuses, a coin's quote comes from Yahoo's chart instead); frankfurter.dev (ECB reference rates, once a day). Data may be delayed up to 15 minutes or more; every answer says its source.
+// minute, one year of history; when it refuses, a coin's quote comes from Yahoo's chart instead); frankfurter.dev (ECB reference rates, once a day); US company filings (no key, one ticker file and one annual earnings figure, and only for a US share). Data may be delayed up to 15 minutes or more; every answer says its source. A filing that does not answer is left out of the reading, not replaced.
 // answer.js is loaded when first needed, not at import: the report code (lib/report-run.js) reaches this file from answer.js, and a static import back would be a cycle
 const rateLimited = async (...a) => (await import('./answer.js')).rateLimited(...a);
 import { recordClose, RECORD_NAME } from '../../lib/markets-record.js';
 import { capsRows, scanRows, COINS, VS_CODES, resolve, RANGES, parseStooqDaily, parseYahoo, summarize, closeOn, rowsFromPrices, rowsFromFx } from '../../lib/markets.js';
+import { verdictOf, cikOf, annualEps } from '../../lib/markets-verdict.js';
 import { jsonNoStore } from '../../lib/http.js'; // one copy (lib/http.js, convergence step 3)
 
 export const ID_RE = /^[a-z0-9-]{2,40}$/;
@@ -40,6 +44,34 @@ const YAHOO = { '1d': ['1d', '5m'], '5d': ['5d', '15m'], '1m': ['1mo', '1d'], '6
 export const MOVERS = ['AAPL', 'MSFT', 'NVDA', 'AMZN', 'GOOGL', 'META', 'TSLA', 'JPM', 'V', 'WMT', 'NFLX', 'AMD'];
 export const STRIP = ['SPX', 'DJI', 'NDX', 'BTC', 'ETH', 'EUR/USD'];
 const get = async (f, url, text) => { const r = await f(url, { headers: { accept: text ? 'text/csv,*/*' : 'application/json', 'user-agent': UA }, signal: typeof AbortSignal !== 'undefined' && AbortSignal.timeout ? AbortSignal.timeout(4000) : undefined }); if (!r.ok) throw new Error('status ' + r.status); return text ? r.text() : r.json(); };
+const TICKERS_URL = 'https://www.sec.gov/files/company_tickers.json';
+const conceptUrl = (cik) => { const id = String(cik).padStart(10, '0'); return /^\d{10}$/.test(id) ? 'https://data.sec.gov/api/xbrl/companyconcept/CIK' + id + '/us-gaap/EarningsPerShareDiluted.json' : ''; };
+/** a JSON value kept at the edge, or made. A null result is not kept. */
+async function cachedJson(key, ttl, make) {
+  const cache = typeof caches !== 'undefined' ? caches.default : null, ck = new Request('https://a-to-mind.com/__markets/' + key);
+  if (cache) { try { const hit = await cache.match(ck); if (hit) return await hit.json(); } catch (_) {} }
+  const v = await make();
+  if (cache && v != null) { try { await cache.put(ck, new Response(JSON.stringify(v), { headers: { 'cache-control': 'max-age=' + ttl } })); } catch (_) {} }
+  return v;
+}
+/** annual diluted earnings per share for one US ticker, or null when the free filings do not have it. Never throws. */
+async function filingEps(sym, f) {
+  try {
+    const map = await cachedJson('filing/tickers', 86400, () => get(f, TICKERS_URL));
+    const cik = cikOf(map, sym), id = cik ? String(cik).padStart(10, '0') : '', url = cik ? conceptUrl(cik) : '';
+    if (!url) return null;
+    const eps = await cachedJson('filing/eps/' + id, 86400, async () => annualEps(await get(f, url)));
+    return Number.isFinite(eps) ? eps : null;
+  } catch (_) { return null; }
+}
+/** the Buy / Sell / Watch reading for a quote that has rows. Filings are asked only for a single US share. Never throws. */
+async function attachVerdict(r, rows, out, fetchFn, opts) {
+  try {
+    const ask = !!(opts && opts.filing) && r.kind === 'stock' && !String(r.sym).includes('.') && out.currency === 'USD';
+    const eps = ask ? await filingEps(r.sym, fetchFn) : null;
+    return verdictOf(rows, { kind: r.kind, price: out.price, eps, filing: ask ? 'asked' : 'skip' });
+  } catch (_) { return verdictOf(null, { kind: r.kind }); }
+}
 
 /** how far back the daily rows must reach for a range (a year at least: the 52 weeks come from them). Pure. */
 export function wantFrom(range, now) { return range === 'max' ? 0 : range === 'ytd' ? Math.min(Date.UTC(new Date(now).getUTCFullYear(), 0, 1), now - 400 * DAY) : now - Math.max(DAYS[range] + 10, 400) * DAY; }
@@ -98,9 +130,9 @@ async function dayCloseLive(r, rows, on, f) {
   } catch (_) { return null; }
 }
 /** the answer when only the bundled record has the day: the close, no price (the sources did not answer, or the caller was asked to wait). */
-export const recordAnswer = (r, range, on, rec, now) => ({ ok: true, partial: true, sym: r.sym, kind: r.kind, name: r.name || r.sym, currency: r.currency, range, price: null, change: null, pct: null, points: [], closeOn: rec, on, source: RECORD_NAME, delayed: true, at: new Date(now).toISOString(), note: 'The live price sources did not answer; this is the close from Verse\'s year-end record.' });
-/** one quote, shaped for the page: { ok, sym, kind, name, currency, range, price, change, pct, ..., points, source, delayed, at }. fetchFn and now are for tests. */
-export async function lookQuote(r, range, on, fetchFn = fetch, now = Date.now()) {
+export const recordAnswer = (r, range, on, rec, now) => ({ ok: true, partial: true, sym: r.sym, kind: r.kind, name: r.name || r.sym, currency: r.currency, range, price: null, change: null, pct: null, points: [], closeOn: rec, on, source: RECORD_NAME, delayed: true, at: new Date(now).toISOString(), note: 'The live price sources did not answer; this is the close from Verse\'s year-end record.', verdict: verdictOf(null, { kind: r.kind }) });
+/** one quote, shaped for the page: { ok, sym, kind, name, currency, range, price, change, pct, ..., points, verdict, source, delayed, at }. fetchFn and now are for tests. `opts.filing` asks the free US filings for one earnings figure. */
+export async function lookQuote(r, range, on, fetchFn = fetch, now = Date.now(), opts = {}) {
   let q = null;
   // a coin: CoinGecko first; when it does not answer (its free API often refuses shared Cloudflare addresses), Yahoo's BTC-USD style chart, said to be from Yahoo
   try { q = r.kind === 'crypto' ? (await coinQuote(r, range, fetchFn, now).catch(() => null)) || { ...(await yahooQuote(r, range, fetchFn)), name: r.name } : r.kind === 'fx' ? await fxQuote(r, range, fetchFn, now) : await stockQuote(r, range, fetchFn, now); } catch (_) { q = null; }
@@ -114,6 +146,7 @@ export async function lookQuote(r, range, on, fetchFn = fetch, now = Date.now())
   if (r.kind === 'fx') { out.volume = null; }
   if (on) out.closeOn = await dayClose(r, rows, on, fetchFn);
   if (on) out.on = on;
+  out.verdict = await attachVerdict(r, rows, out, fetchFn, opts);
   return out;
 }
 const validDay = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s) && iso(Date.parse(s + 'T00:00:00Z')) === s && Date.parse(s + 'T00:00:00Z') <= Date.now() && Date.parse(s + 'T00:00:00Z') >= Date.UTC(1970, 0, 1);
@@ -137,7 +170,7 @@ async function cachedBody(request, env, key, ttl, make, bucket = 'markets', max 
   if (body && (body.kind === 'none' || body.kind === 'away')) await keep('neg/' + key, body, 45);
   return body;
 }
-export const quoteBody = (request, env, r, range, on, f, many = false) => cachedBody(request, env, 'q/' + encodeURIComponent(r.sym) + '/' + range + '/' + on, r.kind === 'fx' ? 3600 : 120, () => lookQuote(r, range, on || null, f), many ? 'markets-batch' : 'markets', many ? RL_BATCH : RL_MAX, () => { const rec = on ? recordClose(r.sym, on) : null; return rec ? recordAnswer(r, range, on, rec, Date.now()) : null; });
+export const quoteBody = (request, env, r, range, on, f, many = false) => cachedBody(request, env, 'q/' + encodeURIComponent(r.sym) + '/' + range + '/' + on, r.kind === 'fx' ? 3600 : 120, () => lookQuote(r, range, on || null, f, Date.now(), { filing: !many }), many ? 'markets-batch' : 'markets', many ? RL_BATCH : RL_MAX, () => { const rec = on ? recordClose(r.sym, on) : null; return rec ? recordAnswer(r, range, on, rec, Date.now()) : null; });
 const reply = (body, ttl) => json(body, body.ok ? 200 : body.kind === 'none' ? 404 : body.kind === 'limited' ? 429 : 503, body.ok ? 'public, max-age=' + ttl : 'no-store'); // 503, not 502: Cloudflare swaps a Function's 502 for its own page
 /** at most 12 symbols in one call, each from the same cache as a single quote */
 export async function batch(request, env, list, f) {
