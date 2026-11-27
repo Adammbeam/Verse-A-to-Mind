@@ -41,6 +41,13 @@ binding = "AI"
 binding = "FILMS"
 bucket_name = "void-films"
 
+# Verse's code store (functions/code/[[path]].js, lib/codestore.js): the repository as git packs, cloned over a-to-mind.com/code/verse.git.
+# Until a bucket of its own is bound, the packs live in FILMS under verse-code/ (lib/codestore.js bucketOf). To move them to their own
+# bucket: npx wrangler r2 bucket create verse-code, then uncomment these three lines (a binding to a missing bucket fails the deploy).
+# [[r2_buckets]]
+# binding = "CODE"
+# bucket_name = "verse-code"
+
 # void-share: the Durable Object host for "invite someone" (frontier #11). Deployed as the void-share Worker;
 # bound here so Pages Functions can reach ShareRoom. See share-worker/wrangler.toml.
 [[durable_objects.bindings]]

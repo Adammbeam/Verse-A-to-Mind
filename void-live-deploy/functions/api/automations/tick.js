@@ -6,6 +6,7 @@ import { ownerOk } from '../../../lib/guard.js';
 import { tick } from '../../../lib/automations-run.js';
 import { crewTick } from '../../../lib/team-crew-run.js';
 import { handIdle, pushAll, sweep, promoteIdeas, verseSays, settleReviews, freeLineTick, retireJunk } from '../team.js';
+import { codestoreTick } from '../../../lib/codestore-tick.js';
 import { dueReport } from '../../../lib/verse-runs.js';
 import { watchKeys } from '../../../lib/key-watch.js';
 import { rallyTick } from '../../../lib/team-rally.js';
@@ -23,7 +24,7 @@ export async function onRequestPost({ request, env, waitUntil }) {
   const keys = await watchKeys(env, now, (body) => verseSays(env, { c: 'general', body, now })).catch(() => null);
   // hand-ins in review are settled from their pull request, and once an hour #work hears who is free and what is waiting (lib/team-busy.js)
   // the crew room hears once an hour when there is work and a free seat to take it (lib/team-rally.js), on the same knock as the rest
-  const later = () => Promise.all([crewTick(env).catch(() => null), pushAll(env, now).catch(() => 0), settleReviews(env, now).catch(() => 0), freeLineTick(env, now).catch(() => ''), rallyTick(env, now).catch(() => null)]);
+  const later = () => Promise.all([crewTick(env).catch(() => null), pushAll(env, now).catch(() => 0), settleReviews(env, now).catch(() => 0), freeLineTick(env, now).catch(() => ''), rallyTick(env, now).catch(() => null), codestoreTick(env, now).catch(() => '')]);
   if (typeof waitUntil === 'function') waitUntil(later());
   try {
     const body = await tick(env);
