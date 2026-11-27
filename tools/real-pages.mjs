@@ -302,7 +302,15 @@ export const SPECS = {
   },
   '/flights/co2/': async (t) => { await t.fill('#f-from', 'JFK'); await t.fill('#f-to', 'LHR'); await t.p.keyboard.press('Tab'); await t.p.waitForTimeout(600); t.ok(/\d+ kg/.test(await t.text('#c-out')), 'a JFK-LHR seat has a kg CO2 figure'); await flightsShare(t); },
   '/flights/distance/': async (t) => { await t.fill('#r-in', 'JFK-LHR-SIN'); await t.p.keyboard.press('Tab'); await t.p.waitForTimeout(500); t.ok(/JFK → LHR\s+5,540 km\s+3,442 miles/.test(await t.text('#r-out')), 'JFK to LHR is 5,540 km, 3,442 miles'); await flightsShare(t); },
-  '/flights/map/': async (t) => { await t.fill('#r-in', 'JFK-LHR'); await t.p.keyboard.press('Tab'); await t.p.waitForTimeout(500); t.ok(/5,540 km/.test(await t.text('#r-out')), 'the map leg JFK-LHR is 5,540 km'); await flightsShare(t); },
+  '/flights/map/': async (t) => {
+    await t.fill('#r-in', 'JFK-LHR'); await t.p.keyboard.press('Tab'); await t.p.waitForTimeout(500);
+    t.ok(/5,540 km/.test(await t.text('#r-out')), 'the map leg JFK-LHR is 5,540 km');
+    await t.click('#r-gl'); await t.p.waitForTimeout(3500);
+    const canvas = await t.p.locator('#r-map-gl canvas').count();
+    t.ok(canvas > 0 || /Vector map unavailable/.test(await t.text('main')), 'the free vector map mounts, or says plainly that it is unavailable');
+    if (canvas) t.ok(/OpenStreetMap|BSD-3/.test(await t.text('#r-map-gl')), 'the vector map shows its tile and license attribution');
+    await flightsShare(t);
+  },
   '/flights/routes/': async (t) => { await t.fill('#f-from', 'LHR'); await t.p.keyboard.press('Tab'); await t.p.waitForTimeout(600); t.ok(/Paris|CDG|Dublin|Amsterdam/.test(await t.text('#routes')), 'from LHR within 4 h lists Paris or Dublin'); await flightsShare(t); },
   '/flights/time/': async (t) => { await t.fill('#f-from', 'JFK'); await t.fill('#f-to', 'LHR'); await t.fill('#f-d', '2026-12-01'); await t.p.keyboard.press('Tab'); await t.p.waitForTimeout(600); t.ok(/\d+ h/.test(await t.text('#t-out')), 'a JFK-LHR flight time is shown'); await flightsShare(t); },
   '/flights/trip/': async (t) => {

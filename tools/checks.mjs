@@ -153,6 +153,7 @@ for (const [name, file] of [
   ['naming-audit', 'naming-audit.test.mjs'],
   ['music-tools', 'music-tools.test.mjs'],
   ['flights', 'flights.test.mjs'],
+  ['flights-ui', 'flights-ui.test.mjs'],
   ['job-board', 'job-board.test.mjs'],
   ['lane-pages', 'lane-pages.test.mjs'],
   ['calendar', 'calendar.test.mjs'],

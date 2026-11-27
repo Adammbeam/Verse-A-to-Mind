@@ -2,6 +2,15 @@
   "_": "Outside work autosalvage weighs (owner, 2026-11-03: salvage free outside work into Verse, crediting each). license is the SPDX id GitHub reports (node tools/autosalvage/unify.mjs --outside-refresh rewrites it); a source with no license is skipped, never guessed. gap names the Verse gap it would fill.",
   "sources": [
     {
+      "id": "maplibre/maplibre-gl-js",
+      "url": "https://github.com/maplibre/maplibre-gl-js",
+      "author": "MapLibre contributors",
+      "license": "BSD-3-Clause",
+      "what": "BSD-3-Clause vector map renderer for WebGL, with the bundled Mapbox GL JS v1.13 BSD-3-Clause notice kept in LICENSE.txt",
+      "gap": "travel floor: interactive vector route map at /flights/map/",
+      "target": "code"
+    },
+    {
       "id": "public-apis/public-apis",
       "url": "https://github.com/public-apis/public-apis",
       "author": "public-apis",

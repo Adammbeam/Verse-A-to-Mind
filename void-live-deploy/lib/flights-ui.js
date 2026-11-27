@@ -200,16 +200,29 @@ PANELS.time = () => {
 
 /** route: a chain of airports, leg by leg, on a map. */
 PANELS.route = () => {
-  const s = pane('Chain of airports', 'route', ['map']); s.insertAdjacentHTML('beforeend', '<div class="field"><label for="r-in">' + esc(t('Airports in order, with a dash or a space')) + '</label><input type="text" id="r-in" value="JFK-LHR-SIN" autocomplete="off" spellcheck="false"></div><div class="map" id="r-map"></div><div id="r-out" aria-live="polite"></div>');
-  const inp = $(s, '#r-in'), out = $(s, '#r-out'), map = $(s, '#r-map'); out.style.minHeight = '230px'; map.style.minHeight = '195px'; const q = new URLSearchParams(location.search).get('route'); if (q) inp.value = q;
+  const s = pane('Chain of airports', 'route', ['map']); s.insertAdjacentHTML('beforeend', '<div class="field"><label for="r-in">' + esc(t('Airports in order, with a dash or a space')) + '</label><input type="text" id="r-in" value="JFK-LHR-SIN" autocomplete="off" spellcheck="false"></div><div style="margin:6px 0"><button type="button" id="r-gl">' + esc(t('Vector map')) + '</button></div><div class="map" id="r-map"></div><div class="map" id="r-map-gl" hidden></div><div id="r-out" aria-live="polite"></div>');
+  const inp = $(s, '#r-in'), out = $(s, '#r-out'), map = $(s, '#r-map'), gl = $(s, '#r-map-gl'), btn = $(s, '#r-gl'); out.style.minHeight = '230px'; map.style.minHeight = '195px'; gl.style.minHeight = '320px'; let glMap = null, glMod = null; const q = new URLSearchParams(location.search).get('route'); if (q) inp.value = q;
   const upd = () => {
     if (!idx) return; const { ports, bad } = C.parseRoute(idx, inp.value);
     if (ports.length < 2) { out.innerHTML = '<p class="soft">' + esc(t('Type two or more airport codes, like JFK-LHR-SIN.')) + '</p>'; map.innerHTML = C.mapSvg(ports, 640, 320, coastLines()); return; }
     let tot = 0, min = 0; const rows = [];
     for (let i = 0; i + 1 < ports.length; i++) { const km = C.distanceKm(ports[i], ports[i + 1]); tot += km; min += C.flightMinutes(km); rows.push('<tr><td>' + esc(ports[i].iata + ' → ' + ports[i + 1].iata) + '</td><td>' + esc(num(km) + ' km') + '</td><td>' + esc(num(C.km2mi(km)) + ' ' + t('miles')) + '</td><td>' + esc(C.hm(C.flightMinutes(km))) + '</td></tr>'); }
-    out.innerHTML = '<table class="tbl"><thead><tr><th>' + esc(t('Leg')) + '</th><th>km</th><th>' + esc(t('miles')) + '</th><th>' + esc(t('Time')) + '</th></tr></thead><tbody>' + rows.join('') + '</tbody><tfoot><tr><th>' + esc(t('Total')) + '</th><th>' + esc(num(tot) + ' km') + '</th><th>' + esc(num(C.km2mi(tot)) + ' ' + t('miles')) + '</th><th>' + esc(C.hm(min)) + '</th></tr></tfoot></table>' + (bad.length ? '<p class="note bad">' + esc(t('Not found:') + ' ' + bad.join(', ')) + '</p>' : '') + '<h3>' + esc(t('Airports on the route')) + '</h3><ul class="plain">' + ports.map((x) => '<li><b>' + esc(x.iata) + '</b> ' + esc(x.name) + ' <span class="soft">' + esc(x.city + ' · ' + x.country + ' · ' + C.offsetLabel(C.offsetMin(x.tz, Date.now()))) + '</span></li>').join('') + '</ul><p class="note">' + esc(t('The map shows the great-circle paths on a plain grid of 30 degrees: no coastlines are drawn.')) + '</p>';
+    out.innerHTML = '<table class="tbl"><thead><tr><th>' + esc(t('Leg')) + '</th><th>km</th><th>' + esc(t('miles')) + '</th><th>' + esc(t('Time')) + '</th></tr></thead><tbody>' + rows.join('') + '</tbody><tfoot><tr><th>' + esc(t('Total')) + '</th><th>' + esc(num(tot) + ' km') + '</th><th>' + esc(num(C.km2mi(tot)) + ' ' + t('miles')) + '</th><th>' + esc(C.hm(min)) + '</th></tr></tfoot></table>' + (bad.length ? '<p class="note bad">' + esc(t('Not found:') + ' ' + bad.join(', ')) + '</p>' : '') + '<h3>' + esc(t('Airports on the route')) + '</h3><ul class="plain">' + ports.map((x) => '<li><b>' + esc(x.iata) + '</b> ' + esc(x.name) + ' <span class="soft">' + esc(x.city + ' · ' + x.country + ' · ' + C.offsetLabel(C.offsetMin(x.tz, Date.now()))) + '</span></li>').join('') + '</ul><p class="note">' + esc(t('The great-circle map works offline on a plain grid of 30 degrees; the vector map needs a connection and shows its source and license on the map.')) + '</p>';
     map.innerHTML = C.mapSvg(ports, 640, 320, coastLines());
+    if (glMap) { const src = glMap.getSource('route'); if (src) src.setData(glMod.routeGeoJson(ports, C.pathPoints)); }
   };
+  btn.addEventListener('click', async () => {
+    if (!idx) return;
+    const vector = !gl.hidden;
+    if (glMap && vector) { gl.hidden = true; map.hidden = false; btn.textContent = t('Vector map'); return; }
+    if (glMap) { gl.hidden = false; map.hidden = true; btn.textContent = t('Great-circle map'); return; }
+    const { ports } = C.parseRoute(idx, inp.value);
+    if (ports.length < 2) return;
+    btn.disabled = true; map.hidden = true; gl.hidden = false;
+    try { glMod = glMod || await import('/lib/flights-map-gl.js'); glMap = await glMod.mountVectorMap(gl, ports, C.pathPoints); btn.textContent = t('Great-circle map'); }
+    catch (e) { glMap = null; map.hidden = false; gl.hidden = true; btn.textContent = t('Vector map'); out.insertAdjacentHTML('beforeend', '<p class="note bad">' + esc(t('Vector map unavailable:') + ' ' + (e && e.message || e)) + '</p>'); }
+    finally { btn.disabled = false; }
+  });
   inp.addEventListener('input', () => { upd(); const u = new URL(location.href); u.searchParams.set('route', inp.value); try { history.replaceState(null, '', u.pathname + u.search + u.hash); } catch (_) { /* no history */ } }); subs.add(upd); upd(); return s;
 };
 

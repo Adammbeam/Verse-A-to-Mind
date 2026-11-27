@@ -1,6 +1,12 @@
 {
   "_": "pieces autosalvage has migrated into Verse: id -> where it landed, the test that proves it, the PR",
   "pieces": {
+    "outside:maplibre/maplibre-gl-js": {
+      "target": "code",
+      "into": "/flights/map/ (lib/flights-map-gl.js, vendor/maplibre-gl-js-6.20.0/, /credits/)",
+      "test": "tools/flights-ui.test.mjs",
+      "pr": null
+    },
     "archive/repos/hold/apps/bridge": {
       "target": "bot",
       "into": "/bots/ (cra-clock)",
