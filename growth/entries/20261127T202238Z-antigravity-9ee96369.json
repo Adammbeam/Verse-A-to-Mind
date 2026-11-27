@@ -1,0 +1,1 @@
+{"at":"2026-11-27T20:22:38Z","by":"antigravity","kind":"fix","what":"Unbroke merge gates: grow-self.test.mjs reads workflows-parked fallback and pre-pr.mjs treats growth.atom, growth.proof.json, and growth/entries/ as SHARED_OK"}

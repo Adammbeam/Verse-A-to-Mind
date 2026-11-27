@@ -4,7 +4,7 @@
 // Run by tools/guard-source.mjs on every pull request.   node tools/book-art.mjs
 import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 export const SCHEMATIC = 'rgba(180,200,230,0.25)';
 const norm = (c) => String(c || '').replace(/\s+/g, '').toLowerCase();
@@ -28,7 +28,7 @@ export function bookArtFaults(html, where = 'page') {
 
 /** every page of the real book, typeset, and the covers. */
 export async function auditBook(root = resolve(dirname(fileURLToPath(import.meta.url)), '..')) {
-  const { pageHtml, coverHtml, backCoverHtml } = await import(resolve(root, 'void-live-deploy/lib/tome.js'));
+  const { pageHtml, coverHtml, backCoverHtml } = await import(pathToFileURL(resolve(root, 'void-live-deploy/lib/tome.js')).href);
   const book = JSON.parse(readFileSync(resolve(root, 'void-live-deploy/skills/guide.json'), 'utf8'));
   const esc = (v) => String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const out = [...bookArtFaults(coverHtml(book, esc), 'the cover'), ...bookArtFaults(backCoverHtml(book, esc), 'the back cover')];
