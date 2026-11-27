@@ -1208,8 +1208,6 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       { const lim = await rated(env, a, now); if (lim) return bad(429, lim); }
       const diff = String(p.diff || ''), why = PA.patchProblem(diff); if (why) return bad(400, why);
       await env.DB.prepare(PROPOSALS).run();
-      const mine = await env.DB.prepare('SELECT COUNT(*) AS n FROM void_proposals WHERE author = ? AND created_at > ?').bind('team:' + a.name, new Date(now - DAY).toISOString()).first();
-      if (mine.n >= PA.PATCH.perSeatDay) return bad(429, PA.PATCH.perSeatDay + ' patches a day from one seat');
       const all = await env.DB.prepare("SELECT COUNT(*) AS n FROM void_proposals WHERE state IN ('open', 'checking')").first();
       if (all.n >= PA.PATCH.pending) return bad(429, PA.PATCH.pending + ' patches wait for the runner already; try again later');
       const note = T.clean(T.hideSecrets(redact(p.note || '')), 160), row = await env.DB.prepare('SELECT ask FROM void_queue WHERE id = ?').bind(a.job).first().catch(() => null);

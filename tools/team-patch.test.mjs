@@ -54,3 +54,20 @@ test('a seat joins, gets a job, hands in a diff: it is a proposal for the runner
   const back = DB.raw.prepare('SELECT state, note FROM void_queue WHERE id = ?').get(h.next.job);
   assert.equal(back.state, 'queued'); assert.match(back.note, /^tries 1 · proposal team-.* refused: does not apply/);
 });
+
+test('a seat can hand in a thirteenth diff in the same day; only the size and pending checks remain', async () => {
+  const DB = d1(), env = { DB, SALT: 's', READ_TOKEN: OWNER, VOID_OWNER_TOKEN: OWNER };
+  DB.raw.exec('CREATE TABLE void_queue (id TEXT PRIMARY KEY, ask TEXT, target TEXT, state TEXT, note TEXT, at TEXT, updated TEXT)');
+  for (let i = 1; i <= 20; i++) DB.raw.prepare("INSERT INTO void_queue VALUES (?, ?, 'heal:hello-' || ?, 'queued', '', '2026-11-20T00:00:00Z', '2026-11-20T00:00:00Z')").run('j' + i, 'note ' + i, 'j' + i);
+  const me = await post(env, { do: 'join', name: 'many' });
+  assert.equal(me.status, 201);
+  assert.equal(PA.PATCH.perSeatDay, undefined, 'no daily cap is left in the rules');
+  for (let i = 0; i < 13; i++) {
+    const diff = DIFF.replace('hello from a seat', 'hand-in number ' + (i + 1));
+    const r = await post(env, { do: 'patch', diff }, me.key, T0 + 1000 + i * 1100);
+    assert.equal(r.status, 201, 'hand-in ' + (i + 1) + ': ' + (r.say || ''));
+  }
+  assert.equal(DB.raw.prepare("SELECT COUNT(*) AS n FROM void_proposals WHERE author = 'team:many'").get().n, 13);
+  // the size check still works after thirteen legal hand-ins
+  assert.equal((await post(env, { do: 'patch', diff: DIFF + Array.from({ length: 401 }, (_, i) => '+l' + i).join('\n') }, me.key, T0 + 20000)).status, 400);
+});
