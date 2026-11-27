@@ -15,7 +15,7 @@
  "totals": {
   "experiment": 3,
   "tested": 21,
-  "checked": 18,
+  "checked": 19,
   "proven": 459
  },
  "families": [
@@ -1592,7 +1592,7 @@
    "count": {
     "experiment": 0,
     "tested": 2,
-    "checked": 0,
+    "checked": 1,
     "proven": 31
    },
    "skills": [
@@ -1927,6 +1927,13 @@
      "success_rate": 1,
      "promoted": "2026-11-23",
      "streak": 0
+    },
+    {
+     "name": "faddeev-popov",
+     "tier": "checked",
+     "why": "a self-test, 3 browser-suite mentions",
+     "last_tested": "2026-11-26",
+     "last_tested_by": "its tests"
     }
    ]
   },
