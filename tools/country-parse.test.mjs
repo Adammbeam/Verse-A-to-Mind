@@ -44,3 +44,16 @@ test('country: the time there now from the built-in zones, daylight saving inclu
   assert.equal(rowsOf({ timezones: ['UTC+09:00'] }, [], -240, 'japan', now).time[1], '2:32 PM Thu in Tokyo, UTC+09:00 (13 h ahead of you)');
   for (const z of new Set(Object.values(CAPITAL_ZONES))) assert.notEqual(offsetOf(z, now), null, z);
 });
+
+test('country: a slip in the name finds the country (new-visitor check, 2026-11-27: "whats the capitol of austrailia" was refused)', () => {
+  assert.equal(read('whats the capital of austrailia'), 'capital | Australia');
+  assert.equal(read('capital of phillipines'), 'capital | Philippines');
+  assert.equal(read('population of argentia'), 'population | Argentina');
+  assert.equal(read('what do they speak in brazl'), 'languages | Brazil');
+  assert.equal(read('how big is austrailia'), 'area | Australia');
+  // a real country, a place that is not one, and a short name stay as typed
+  assert.equal(read('capital of austria'), 'capital | austria');
+  assert.equal(read('capital of gondor'), 'capital | gondor');
+  assert.equal(read('capital of mars'), 'capital | mars');
+  assert.equal(read('capital of florida'), 'capital | florida');
+});

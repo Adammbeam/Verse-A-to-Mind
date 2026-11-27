@@ -7,6 +7,37 @@
 import { geo, km, flightTime } from './distance.js';
 const FIELDS = { capital: 'capital', population: 'population', currency: 'currencies', currencies: 'currencies', language: 'languages', languages: 'languages', area: 'area', flag: 'flags', size: 'area' };
 export function countryOf(text) {
+  const q = countryAsk(text);
+  if (q && q.name) q.name = spellCountry(q.name);
+  return q;
+}
+// a slip in a country's name ("austrailia", "phillipines", "argentia") -> the country Verse knows, so the ask is answered, not
+// refused. Only when the name is not a country already, the slip is small for the word's length (one letter for 5-7 letters, two
+// for 8 or more; a swap of two letters counts as one), the first letter matches, and exactly one country is that close. Pure.
+export function spellCountry(name) {
+  const raw = String(name || '').trim(), k = raw.toLowerCase().replace(/^the\s+/, '');
+  if (!k || CAPITALS[k] || !/^[a-z][a-z .'-]*$/.test(k) || k.length < 5) return raw;
+  const most = k.length >= 8 ? 2 : 1;
+  let best = null, bestD = most + 1, tie = false;
+  for (const c of Object.keys(CAPITALS)) {
+    if (c[0] !== k[0] || Math.abs(c.length - k.length) > most) continue;
+    const d = editDistance(k, c);
+    if (d < bestD) { best = c; bestD = d; tie = false; } else if (d === bestD) tie = true;
+  }
+  if (!best || tie) return raw;
+  return best.replace(/\b[a-z]/g, (x) => x.toUpperCase()).replace(/\b(And|Of|The)\b/g, (w) => w.toLowerCase());
+}
+// optimal string alignment distance (a swap of neighbours is one edit). Pure.
+function editDistance(a, b) {
+  const d = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) {
+    d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+  }
+  return d[a.length][b.length];
+}
+function countryAsk(text) {
   const t = String(text || '').trim().replace(/[?!.]+$/, '').replace(/\s+/g, ' ');
   let m = t.match(/^(?:what(?:['’]?s| is| are)\s+)?(?:the\s+)?(capital|population|currency|currencies|official\s+languages?|languages?|area|size|flag)(?:\s+city)?\s+of\s+(?:the\s+)?([A-Za-zÀ-ÿ' .-]{3,40})$/i);
   if (m && !NOT_COUNTRY.test(m[2].trim())) return { want: FIELDS[m[1].toLowerCase().replace(/^official\s+/, '')] || 'all', name: m[2].trim() };
@@ -16,7 +47,7 @@ export function countryOf(text) {
   if (m && !/\b(?:words?|come|comes|came|from|originate)\b/i.test(m[2]) && !NOT_COUNTRY.test(m[2].trim())) return { want: FIELDS[m[1].toLowerCase()], name: m[2].trim() };
   // "how big is france": only a country Verse knows by name, so "how big is the sun" stays with what knows it
   m = t.match(/^how\s+(?:big|large)\s+is\s+(?:the\s+)?([A-Za-zÀ-ÿ' .-]{2,40})$/i);
-  if (m && CAPITALS[m[1].trim().toLowerCase()]) return { want: 'area', name: m[1].trim() };
+  if (m && CAPITALS[spellCountry(m[1].trim()).toLowerCase()]) return { want: 'area', name: m[1].trim() };
   m = t.match(/^how\s+many\s+people\s+live\s+in\s+(?:the\s+)?([A-Za-zÀ-ÿ' .-]{3,40})$/i);
   if (m) return { want: 'population', name: m[1].trim() };
   m = t.match(/^(?:what\s+)?languages?\s+(?:are\s+|is\s+)?spoken\s+in\s+(?:the\s+)?([A-Za-zÀ-ÿ' .-]{3,40})$/i);
@@ -24,7 +55,7 @@ export function countryOf(text) {
   // more ways to ask, each only for a country Verse knows by name (so "what do they speak in the movie" stays out):
   // "what do they speak in brazil", "what money do they use in japan", "what continent is egypt in", "what countries border germany",
   // "the calling code for france", "what side of the road do they drive on in japan"
-  const known = (n) => { const k = String(n || '').trim().toLowerCase().replace(/^the\s+/, ''); return CAPITALS[k] ? k : null; };
+  const known = (n) => { const k = spellCountry(String(n || '').trim().replace(/^the\s+/i, '')).toLowerCase(); return CAPITALS[k] ? k : null; };
   const N = "(?:the\\s+)?([A-Za-zÀ-ÿ' .-]{2,40}?)";
   const more = [
     ['languages', new RegExp('^(?:what|which)\\s+(?:language\\s+)?do\\s+(?:they|people)\\s+speak\\s+in\\s+' + N + '$', 'i')],
