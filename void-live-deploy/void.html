@@ -481,6 +481,7 @@
       color: var(--muted); font-size: 12px; min-height: 16px;
       padding: 0 18px;
     }
+    #whisper.reply { font-size: 15px; color: var(--fg); line-height: 1.4; }
     #whisper .vc { color: var(--fg); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
     .shape {
       position: absolute;
@@ -1378,10 +1379,13 @@
       // (phone Go: the panel ended inside the dock until the next frame). Fit again in this same turn, before anything reads the layout.
       for (const c of stage.querySelectorAll(':scope > .side-card')) if (typeof c.fitPanel === 'function') c.fitPanel();
     }
-    function say(msg) {
+    // ms: how long the line stays. A reply to the person (small talk: "who made you", "thanks") passes one and is drawn larger and
+    // brighter (#whisper.reply): at 12 px grey for 3.5 s a new visitor saw nothing happen (new-visitor check, 2026-11-27).
+    function say(msg, ms) {
       whisper.textContent = msg || '';
-      const said = ++sayCount; // a repeated line gets its own 3.5 s; an older timer never clears a newer say
-      if (msg) setTimeout(() => { if (said === sayCount && whisper.textContent === msg) { whisper.textContent = ''; fitOpenPanels(); } }, 3500);
+      whisper.classList.toggle('reply', !!(msg && ms));
+      const said = ++sayCount; // a repeated line gets its own time; an older timer never clears a newer say
+      if (msg) setTimeout(() => { if (said === sayCount && whisper.textContent === msg) { whisper.textContent = ''; whisper.classList.remove('reply'); fitOpenPanels(); } }, ms || 3500);
       fitOpenPanels();
     }
     function uid(prefix) {
@@ -6960,7 +6964,7 @@ say('nothing selected to remove');
         return;
       }
       // small talk: short, warm, and no encyclopedia page about the word "thanks"
-      { const st = smallTalk(lower0.replace(/[.!?]+$/, '').replace(/\s+/g, ' ').trim()); if (st) { say(st); loopLog({ domain: 'void.page', ask: text, score: 'pass', note: 'said' }); return; } }
+      { const st = smallTalk(lower0.replace(/[.!?]+$/, '').replace(/\s+/g, ' ').trim()); if (st) { say(st, Math.max(8000, st.length * 120)); loopLog({ domain: 'void.page', ask: text, score: 'pass', note: 'said' }); return; } }
       // a bare probe or ping is someone checking Verse is alive: say so (no page, no miss)
       if (/^(probe|ping)\s*[.!?]*$/.test(lower0)) { say('here. ask for anything'); loopLog({ domain: 'void.page', ask: text, score: 'pass', note: 'said' }); return; }
       if (/^(test|testing|probe|ping|ping-test|research probe|test miss from research|asdf+|qwerty|zz+q*x*)\s*[.!?]*$/.test(lower0) || /^[bcdfghjklmnpqrstvwxz]{4,8}$/.test(lower0)
