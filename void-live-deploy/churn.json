@@ -1,124 +1,156 @@
 {
- "at": "2026-11-27T23:21:17.079Z",
+ "at": "2026-11-26T12:59:56.839Z",
  "max": 12,
  "days": 7,
  "sweep": 100,
  "hot": [
   {
    "file": "void-live-deploy/exam/history.json",
-   "changes": 36
+   "changes": 74
   },
   {
    "file": "void-live-deploy/exam/latest.json",
-   "changes": 36
+   "changes": 74
   },
   {
-   "file": "void-live-deploy/design-loop.json",
-   "changes": 29
+   "file": "tools/flakes.json",
+   "changes": 67
   },
   {
    "file": "domains/conductor.json",
-   "changes": 28
+   "changes": 39
   },
   {
    "file": "tools/site-test.json",
-   "changes": 25
+   "changes": 39
   },
   {
-   "file": "void-live-deploy/versus/shots/directions-rival.jpg",
-   "changes": 22
+   "file": "void-live-deploy/design-loop.json",
+   "changes": 37
   },
   {
    "file": "void-live-deploy/versus/shots/qr-rival.jpg",
-   "changes": 22
+   "changes": 37
   },
   {
    "file": "void-live-deploy/versus/verdicts.json",
-   "changes": 22
+   "changes": 37
   },
   {
-   "file": "void-live-deploy/versus/shots/podcasts-verse.jpg",
-   "changes": 21
-  },
-  {
-   "file": "void-live-deploy/versus/shots/scores-verse.jpg",
-   "changes": 21
-  },
-  {
-   "file": "void-live-deploy/versus/shots/clips-verse.jpg",
-   "changes": 20
-  },
-  {
-   "file": "void-live-deploy/versus/shots/directions-verse.jpg",
-   "changes": 20
-  },
-  {
-   "file": "void-live-deploy/versus/shots/letters-verse.jpg",
-   "changes": 20
-  },
-  {
-   "file": "void-live-deploy/versus/shots/meanings-verse.jpg",
-   "changes": 20
-  },
-  {
-   "file": "void-live-deploy/versus/shots/patterns-verse.jpg",
-   "changes": 20
-  },
-  {
-   "file": "void-live-deploy/versus/shots/qr-verse.jpg",
-   "changes": 20
-  },
-  {
-   "file": "void-live-deploy/versus/shots/schedules-verse.jpg",
-   "changes": 20
-  },
-  {
-   "file": "void-live-deploy/versus/shots/songs-verse.jpg",
-   "changes": 20
-  },
-  {
-   "file": "void-live-deploy/versus/shots/text-diff-verse.jpg",
-   "changes": 20
-  },
-  {
-   "file": "void-live-deploy/versus/shots/units-verse.jpg",
-   "changes": 20
-  },
-  {
-   "file": "tools/families.mjs",
-   "changes": 18
-  },
-  {
-   "file": "void-live-deploy/functions/api/team.js",
-   "changes": 18
+   "file": "void-live-deploy/versus/shots/directions-rival.jpg",
+   "changes": 36
   },
   {
    "file": "void-live-deploy/versus/shots/patterns-rival.jpg",
-   "changes": 18
+   "changes": 32
   },
   {
    "file": "void-live-deploy/versus/shots/text-diff-rival.jpg",
-   "changes": 18
+   "changes": 30
+  },
+  {
+   "file": "void-live-deploy/versus/shots/podcasts-verse.jpg",
+   "changes": 27
+  },
+  {
+   "file": "void-live-deploy/versus/shots/scores-verse.jpg",
+   "changes": 27
+  },
+  {
+   "file": "void-live-deploy/versus/shots/clips-verse.jpg",
+   "changes": 26
+  },
+  {
+   "file": "void-live-deploy/versus/shots/directions-verse.jpg",
+   "changes": 26
+  },
+  {
+   "file": "void-live-deploy/versus/shots/letters-verse.jpg",
+   "changes": 26
+  },
+  {
+   "file": "void-live-deploy/versus/shots/meanings-verse.jpg",
+   "changes": 26
+  },
+  {
+   "file": "void-live-deploy/versus/shots/patterns-verse.jpg",
+   "changes": 26
+  },
+  {
+   "file": "void-live-deploy/versus/shots/qr-verse.jpg",
+   "changes": 26
+  },
+  {
+   "file": "void-live-deploy/versus/shots/schedules-verse.jpg",
+   "changes": 26
+  },
+  {
+   "file": "void-live-deploy/versus/shots/songs-verse.jpg",
+   "changes": 26
+  },
+  {
+   "file": "void-live-deploy/versus/shots/text-diff-verse.jpg",
+   "changes": 26
+  },
+  {
+   "file": "void-live-deploy/versus/shots/units-verse.jpg",
+   "changes": 26
   },
   {
    "file": "domains/growth-inbox.md",
-   "changes": 17
+   "changes": 24
+  },
+  {
+   "file": "void-live-deploy/quality/board.json",
+   "changes": 23
+  },
+  {
+   "file": "void-live-deploy/progress/loops/quality.json",
+   "changes": 20
+  },
+  {
+   "file": "docs/TAGTEAM.md",
+   "changes": 19
+  },
+  {
+   "file": "tools/families.mjs",
+   "changes": 19
   },
   {
    "file": "void-live-deploy/functions/api/answer.js",
-   "changes": 17
+   "changes": 18
   },
   {
-   "file": "tools/team.test.mjs",
-   "changes": 14
+   "file": "void-live-deploy/versus/shots/tracks-rival.jpg",
+   "changes": 18
+  },
+  {
+   "file": "data/game-updates.json",
+   "changes": 16
+  },
+  {
+   "file": "void-live-deploy/scoreboard/game-updates.json",
+   "changes": 16
+  },
+  {
+   "file": "void-live-deploy/quality/win-posts.json",
+   "changes": 15
   },
   {
    "file": "void-live-deploy/tower.gone.json",
-   "changes": 13
+   "changes": 15
   },
   {
    "file": "void-live-deploy/tower.size.json",
-   "changes": 13
+   "changes": 15
+  },
+  {
+   "file": "void-live-deploy/versus/shots/meanings-rival.jpg",
+   "changes": 14
+  },
+  {
+   "file": "void-live-deploy/versus/shots/units-rival.jpg",
+   "changes": 14
   }
  ]
 }

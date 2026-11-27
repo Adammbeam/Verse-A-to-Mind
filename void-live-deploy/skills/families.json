@@ -4307,9 +4307,9 @@
     {
      "name": "share",
      "tier": "proven",
-     "why": "a self-test, 2 browser-suite mentions, 3 real asks in the benchmark",
-     "last_tested": "2026-11-27",
-     "last_tested_by": "its tests",
+     "why": "2 browser-suite mentions, 3 real asks in the benchmark",
+     "last_tested": "2026-11-24",
+     "last_tested_by": "the benchmark",
      "success_rate": 1,
      "streak": 35
     },
