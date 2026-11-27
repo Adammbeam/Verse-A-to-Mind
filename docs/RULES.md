@@ -18,6 +18,12 @@ offline between the fast checks and the push, so the same refusals stop a run be
 the deploy-only copies back to main after a merge instead of committing them, and `tools/regen-paths.mjs` is the one list
 of what a refresh writes. A hand-opened PR runs the gate too; an assistant does not open one without it.
 
+## Dynamic imports need file URLs on Windows (2026-11-27)
+
+`import(path.resolve(...))` works on Linux CI and fails on Windows with `ERR_UNSUPPORTED_ESM_URL_SCHEME` (`protocol 'c:'`).
+Every module loaded from a computed path uses `pathToFileURL(...).href`: a local gate that dies this way is not evidence
+that the branch is broken. Keep it that way in tests and tools as well, not just the audit that the gate calls.
+
 ## Long commands start in the background (2026-11-27)
 
 Full check runs, whole browser suites, large builds and repeated live probes are started in the background on the first
