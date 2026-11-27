@@ -1,12 +1,19 @@
 name: Verse check
+# pull_request covers a pull request opened by a person. A push covers a branch update from the
+# Cursor app: that push is delivered (other apps start on it) while the pull_request event for
+# the same branch is not, so listening only to pull_request leaves the check unstarted.
+# main is excluded: a merge to main is not a pull request check. This is not pull_request_target.
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled, ready_for_review]
+  push:
+    branches-ignore:
+      - main
 permissions:
   contents: read
   pull-requests: read
 concurrency:
-  group: verse-check-${{ github.event.pull_request.number }}
+  group: verse-check-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 jobs:
   check:
@@ -17,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -28,7 +35,19 @@ jobs:
           PRE_PR_BASE: origin/main
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-        run: node tools/pre-pr.mjs --check-only --pr ${{ github.event.pull_request.number }}
+          PR_FROM_EVENT: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -eu
+          pr="$PR_FROM_EVENT"
+          if [ -z "$pr" ]; then
+            pr=$(gh api -H "Accept: application/vnd.github+json" "repos/$GH_REPO/commits/$SHA/pulls" --jq '.[0].number // empty' || true)
+          fi
+          if [ -n "$pr" ]; then
+            node tools/pre-pr.mjs --check-only --pr "$pr"
+          else
+            node tools/pre-pr.mjs --check-only
+          fi
       - name: merge gate
         env:
           MERGE_GATE_BASE: origin/main
