@@ -786,6 +786,16 @@ SPECS['/blub/'] = async (t) => {
   t.ok(true, photo ? 'no 3D here: the real blobfish photo shows' : 'Say blub makes blub say a word');
 };
 SPECS['/internet-history/'] = article();
+SPECS['/invoice/'] = async (t) => {
+  await t.fill('#biz', 'Harbor Studio');
+  await t.fill('#client', 'North Pier');
+  await t.fill('#desc-0', 'Design work');
+  await t.fill('#qty-0', '3');
+  await t.fill('#price-0', '50');
+  const total = await t.waitText('#total', /150\.00/, 4000);
+  t.ok(/150\.00/.test(total), '3 hours at 50 dollars is 150: ' + total.slice(0, 80));
+  t.ok(/Design work/.test(await t.text('#sheet')), 'the sheet names the line');
+};
 for (const r of ['/kanban/', '/kanban/simple/', '/kanban/teams/', '/kanban/quick/']) SPECS[r] = kanban(true); SPECS['/kanban/flow/'] = kanban(false);
 for (const r of ['/jobs/', '/jobs/alerts/', '/jobs/categories/', '/jobs/companies/', '/jobs/europe/', '/jobs/regions/', '/jobs/salary/', '/jobs/tags/']) SPECS[r] = jobs;
 for (const r of ARTICLES) if (!SPECS[r]) SPECS[r] = article();

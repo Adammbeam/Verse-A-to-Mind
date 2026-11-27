@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" class="vs-tool">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Write an invoice · Verse</title>
+<meta name="description" content="Enter the business, the client and each line. Verse totals them, with tax and a discount if you set them, and you can print or save a PDF. Nothing is stored.">
+<meta name="verse-handoff" content="in: text, number; out: text">
+<link rel="stylesheet" href="/verse.css">
+<link rel="stylesheet" href="/versus/layout.css">
+<link rel="canonical" href="https://a-to-mind.com/invoice/">
+<meta property="og:title" content="Write an invoice · Verse">
+<meta property="og:description" content="A private invoice: line totals, optional tax and discount, then print or save a PDF in the browser.">
+<meta property="og:url" content="https://a-to-mind.com/invoice/">
+<meta property="og:image" content="https://a-to-mind.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  main { max-width: 68rem; }
+  .split { display: grid; grid-template-columns: minmax(16rem, 1fr) minmax(18rem, 1.1fr); gap: 1rem; align-items: start; }
+  @media (max-width: 800px) { .split { grid-template-columns: 1fr; } }
+  .line { display: grid; grid-template-columns: 1fr 5.5rem 7rem auto; gap: .4rem; margin: .4rem 0; }
+  @media (max-width: 560px) { .line { grid-template-columns: 1fr 1fr; } }
+  #sheet { background: #fff; color: #1c1c1c; padding: 1.4rem 1.3rem; border-radius: 12px; }
+  #sheet h2 { margin: 0 0 .8rem; font-size: 1.6rem; color: #111; }
+  #sheet p { white-space: pre-line; }
+  #sheet table { width: 100%; border-collapse: collapse; }
+  #sheet th, #sheet td { border-bottom: 1px solid #e4e4e4; padding: .4rem .2rem; text-align: left; color: #1c1c1c; }
+  #sheet .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 0 0 1rem; }
+  .fine { color: #555; font-size: .9rem; }
+  @media print {
+    .vs-chrome, #editor, #verse-foot, .no-print { display: none !important; }
+    body { padding: 0 !important; background: #fff !important; }
+    main { max-width: none; border: 0 !important; box-shadow: none !important; background: #fff !important; }
+    #sheet { border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Write an invoice</h1>
+  <p class="no-print">The totals update as you type. Print, then choose Save as PDF. This page keeps nothing and sends nothing.</p>
+  <div class="split">
+    <form id="editor" action="/invoice/" method="get">
+      <label for="biz">Your business</label>
+      <input id="biz" name="biz" type="text" autocomplete="organization" maxlength="120">
+      <label for="biz-addr">Your address</label>
+      <textarea id="biz-addr" name="from" rows="2" maxlength="400"></textarea>
+      <label for="client">Client</label>
+      <input id="client" name="client" type="text" autocomplete="organization" maxlength="120">
+      <label for="client-addr">Client address</label>
+      <textarea id="client-addr" name="to" rows="2" maxlength="400"></textarea>
+      <div class="row">
+        <div><label for="number">Invoice number</label><input id="number" name="n" type="text" maxlength="40"></div>
+        <div><label for="issued">Date</label><input id="issued" name="date" type="date"></div>
+        <div><label for="due">Due</label><input id="due" name="due" type="date"></div>
+      </div>
+      <label for="currency">Currency</label>
+      <select id="currency" name="cur"><option>USD</option><option>EUR</option><option>GBP</option><option>CAD</option><option>AUD</option></select>
+      <p>Lines</p>
+      <div id="lines"></div>
+      <div class="row">
+        <button type="button" id="add">Add a line</button>
+        <button type="button" id="example">3 hours of design at $50</button>
+      </div>
+      <div class="row">
+        <div><label for="discount-pct">Discount percent</label><input id="discount-pct" name="disc" type="text" inputmode="decimal" placeholder="0"></div>
+        <div><label for="discount-amt">Or a discount amount</label><input id="discount-amt" name="off" type="text" inputmode="decimal" placeholder="0"></div>
+        <div><label for="tax">Tax percent</label><input id="tax" name="tax" type="text" inputmode="decimal" placeholder="0"></div>
+      </div>
+      <label for="notes">Notes</label>
+      <textarea id="notes" name="notes" rows="2" maxlength="500"></textarea>
+      <div class="row">
+        <button type="button" id="print">Print or save as PDF</button>
+        <button type="button" id="copy">Copy link</button>
+      </div>
+      <p id="say" class="note" role="status"></p>
+    </form>
+    <article id="sheet" aria-live="polite"></article>
+  </div>
+  <p class="no-print">Also: <a href="/vat/">VAT calculator</a>, <a href="/tools/">Tools</a>, <a href="/">Ask Verse</a>.</p>
+</main>
+<script type="module" src="/invoice/app.js"></script>
+</body>
+</html>

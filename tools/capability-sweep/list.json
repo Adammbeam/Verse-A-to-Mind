@@ -75,7 +75,7 @@
     {"id": "piano", "name": "Piano", "priority": 2, "ask": "open a piano I can play", "page": "/piano/", "signals": ["piano", "key", "note", "play", "keyboard"], "job": "tool"},
     {"id": "metronome", "name": "Metronome", "priority": 2, "ask": "start a metronome at 120 bpm", "page": "/metronome/", "signals": ["metronome", "bpm", "120", "tempo"], "job": "tool"},
     {"id": "todo", "name": "To-do list", "priority": 2, "ask": "make a to-do list: buy milk, walk the dog, pay rent", "page": "/kanban/", "signals": ["to-do", "todo", "buy milk", "checklist", "task", "done"], "job": "tool"},
-    {"id": "invoice", "name": "Make an invoice", "priority": 2, "ask": "make an invoice for 3 hours of design work at 50 dollars an hour", "page": null, "signals": ["invoice", "total", "150", "hours", "download", "pdf"], "job": "tool"},
+    {"id": "invoice", "name": "Make an invoice", "priority": 2, "ask": "make an invoice for 3 hours of design work at 50 dollars an hour", "page": "/invoice/", "signals": ["invoice", "total", "150", "hours", "download", "pdf"], "job": "tool"},
     {"id": "ocr", "name": "Read text from a picture", "priority": 2, "ask": "read the text in this picture", "page": "/translate/", "signals": ["ocr", "photo", "text from", "upload", "image"], "job": "tool"},
     {"id": "mind-map", "name": "Mind map", "priority": 2, "ask": "make a mind map about starting a garden", "page": "/lab/mind-map/", "signals": ["mind map", "garden", "node", "branch"], "job": "tool"},
     {"id": "draw", "name": "Draw or paint", "priority": 2, "ask": "open a drawing canvas I can paint on", "page": "/paint/", "signals": ["draw", "paint", "canvas", "brush", "pen", "undo"], "job": "tool"},
