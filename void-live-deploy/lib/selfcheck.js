@@ -36,8 +36,8 @@ const UNFINISHED = [[LOADER, 'still says it is loading after the page settled'],
 const clip = (s) => String(s == null ? '' : s).replace(/\s+/g, ' ').trim().slice(0, WHY_MAX);
 const tool = (path) => !NOT_TOOLS.includes(path) && !/^\/(?:lab|fix)\//.test(path) && !/\.[a-z0-9]+$/i.test(path);
 
-/** What one page was seen to do wrong: [{ kind, why }]. seen: { path, status, errors[], failed[{ url, status }], text, controls, bg, toolRow, deadLinks[] }
- *  as tools/self-check.mjs read it from the rendered page. Pure. */
+/** What one page was seen to do wrong: [{ kind, why }]. seen: { path, status, errors[], failed[{ url, status }], text, ownText, controls, bg, toolRow, deadLinks[] }
+ *  as tools/self-check.mjs read it from the rendered page. `ownText` omits quoted external feeds (`[data-external-text]`) so third-party headlines do not trip Verse wording checks. Pure. */
 export function pageProblems(seen) {
   const s = seen || {}, out = [], add = (kind, why) => out.push({ kind, why: clip(why) });
   if (!(s.status >= 200 && s.status < 400)) { add('status', 'answers ' + (s.status || 'nothing')); return out; }
@@ -47,7 +47,8 @@ export function pageProblems(seen) {
   if (String(s.text || '').replace(/\s+/g, '').length < 20 && !(s.controls > 0)) add('empty', 'under 20 characters of text and nothing to type in, press or see after it loaded');
   const l = luminance(s.bg); if (l !== null && l > 0.5) add('light', 'background ' + s.bg);
   for (const u of (s.deadLinks || []).slice(0, 3)) add('link', u.status + ' ' + u.url);
-  for (const [re, why] of WORDING) { const m = String(s.text || '').match(new RegExp('.{0,40}' + re.source + '.{0,40}', re.flags)); if (m) add('wording', why + ': "' + m[0].trim() + '"'); }
+  const own = s.ownText !== undefined ? s.ownText : s.text;
+  for (const [re, why] of WORDING) { const m = String(own || '').match(new RegExp('.{0,40}' + re.source + '.{0,40}', re.flags)); if (m) add('wording', why + ': "' + m[0].trim() + '"'); }
   for (const [re, why] of UNFINISHED) { const m = String(s.text || '').match(new RegExp('.{0,40}' + re.source + '.{0,40}', re.flags.replace('m', ''))) || String(s.text || '').match(re); if (m) add('unfinished', why + ': "' + m[0].trim() + '"'); }
   if (s.toolRow === false && tool(s.path)) add('unwired', 'no "Use with" row: the page is not tied to the other tools');
   return out;

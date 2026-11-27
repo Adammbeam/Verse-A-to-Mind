@@ -2,6 +2,7 @@
 // page broken, the report, what the API keeps, and the card's words. A page is broken only for what it was seen to do.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { pageProblems, reportOf, cleanReport, pagesHtml, luminance, KINDS } from '../void-live-deploy/lib/selfcheck.js';
 import { pathsOf, ownError, linkPaths, summaryOf, fixJobsOf, FIX_MAX } from './self-check.mjs';
 import { onRequestGet, onRequestPost, KEY } from '../void-live-deploy/functions/api/selfcheck.js';
@@ -92,4 +93,17 @@ test('a broken page becomes one fix job for the coder, the serious ones first, a
   assert.ok(jobs.every((j) => j.target.length <= 40 && j.ask.length <= 200));
   assert.equal(fixJobsOf({ pages: Array.from({ length: 9 }, (_, i) => ({ path: '/p' + i + '/', problems: [{ kind: 'link', why: 'x' }] })) }).length, FIX_MAX);
   assert.deepEqual(fixJobsOf(null), []);
+});
+
+test('external news wire text on /starboard/ and /news/ does not trip Verse wording checks', () => {
+  const headline = 'Dashboard\nNews wire\nFight over fossil fuels leaves COP31 climate';
+  assert.deepEqual(pageProblems({ ...fine, path: '/starboard/', text: headline, ownText: 'Dashboard\nNews wire' }), []);
+  assert.equal(pageProblems({ ...fine, path: '/starboard/', text: headline, ownText: 'Verse will fight any site' })[0].kind, 'wording');
+  assert.equal(pageProblems({ ...fine, path: '/starboard/', text: ' ', ownText: 'Dashboard\nNews wire', controls: 0 })[0].kind, 'empty');
+  const starboard = readFileSync(new URL('../void-live-deploy/starboard/index.html', import.meta.url), 'utf8');
+  const news = readFileSync(new URL('../void-live-deploy/news/index.html', import.meta.url), 'utf8');
+  const runner = readFileSync(new URL('./self-check.mjs', import.meta.url), 'utf8');
+  assert.match(starboard, /<ul[^>]*id="wire"[^>]*data-external-text/);
+  assert.match(news, /<ol[^>]*id="list"[^>]*data-external-text/);
+  assert.match(runner, /\[data-external-text\]/);
 });

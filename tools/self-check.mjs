@@ -57,7 +57,16 @@ async function openPage(browser, site, path) {
     Object.assign(seen, await page.evaluate(() => {
       const b = document.body, bg = (el) => el ? getComputedStyle(el).backgroundColor : '';
       const solid = (c) => c && !/rgba\([^)]*,\s*0\)|transparent/.test(c);
-      return { text: b ? b.innerText.slice(0, 4000) : '', controls: document.querySelectorAll('input:not([type=hidden]),textarea,select,button,canvas,video,img,svg').length, bg: solid(bg(b)) ? bg(b) : bg(document.documentElement), toolRow: !!document.querySelector('.tk-row, #related a, nav.siblings a'),
+      const ext = b ? [...b.querySelectorAll('[data-external-text]')] : [];
+      const prev = ext.map((el) => el.style.display);
+      let ownText = '';
+      try {
+        for (const el of ext) el.style.display = 'none';
+        ownText = b ? b.innerText.slice(0, 4000) : '';
+      } finally {
+        ext.forEach((el, i) => { el.style.display = prev[i]; });
+      }
+      return { text: b ? b.innerText.slice(0, 4000) : '', ownText, controls: document.querySelectorAll('input:not([type=hidden]),textarea,select,button,canvas,video,img,svg').length, bg: solid(bg(b)) ? bg(b) : bg(document.documentElement), toolRow: !!document.querySelector('.tk-row, #related a, nav.siblings a'),
         hrefs: [...document.querySelectorAll('a[href]')].map((a) => a.getAttribute('href')).filter((h) => h && !/^(#|mailto:|tel:|javascript:)/i.test(h)).slice(0, 400) };
     }));
   } catch (e) { seen.status = seen.status || 0; seen.errors.push('did not finish loading: ' + String(e && e.message || e).split('\n')[0]); }
