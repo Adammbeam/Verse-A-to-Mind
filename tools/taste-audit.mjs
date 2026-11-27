@@ -60,11 +60,20 @@ export function cardArt() {
 
 async function main() {
   const bad = [...cardArt()];
-  const candidates = [process.env.VOID_TEST_BROWSER, process.env.CHROME_PATH, chromium.executablePath()];
+  let pwExe = '';
+  try { pwExe = chromium.executablePath(); } catch (_) {}
+  const candidates = [
+    process.env.VOID_TEST_BROWSER, process.env.CHROME_PATH, pwExe,
+    '/usr/bin/google-chrome-stable', '/usr/bin/google-chrome', '/usr/bin/chromium-browser', '/usr/bin/chromium', '/snap/bin/chromium',
+    'C:/Program Files/Google/Chrome/Application/chrome.exe', 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
+    'C:/Program Files/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
+  ];
   const cache = path.join(process.env.LOCALAPPDATA || '', 'ms-playwright');
-  if (fs.existsSync(cache)) for (const d of fs.readdirSync(cache)) candidates.push(path.join(cache, d, 'chrome-win64', 'chrome.exe'), path.join(cache, d, 'chrome-linux64', 'chrome'));
+  if (fs.existsSync(cache)) for (const d of fs.readdirSync(cache)) candidates.push(path.join(cache, d, 'chrome-win64', 'chrome.exe'), path.join(cache, d, 'chrome-linux', 'chrome'), path.join(cache, d, 'chrome-linux64', 'chrome'));
+  const pwCache = path.join(process.env.HOME || '', '.cache', 'ms-playwright');
+  if (fs.existsSync(pwCache)) for (const d of fs.readdirSync(pwCache)) candidates.push(path.join(pwCache, d, 'chrome-linux', 'chrome'), path.join(pwCache, d, 'chrome-linux64', 'chrome'));
   const exe = candidates.find((x) => x && fs.existsSync(x));
-  if (!exe) { console.log('FAIL taste-audit: no Chromium executable (set VOID_TEST_BROWSER)'); return 1; }
+  if (!exe) { console.log('FAIL taste-audit: no Chromium executable (set VOID_TEST_BROWSER or CHROME_PATH)'); return 1; }
   const { server, base } = await serve();
   let browser;
   try {
