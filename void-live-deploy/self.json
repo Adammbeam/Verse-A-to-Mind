@@ -836,84 +836,84 @@
  },
  "commits": [
   {
-   "at": "2026-11-26T00:51:43Z",
-   "subject": "Phase over any page, and the ask that opens it"
+   "at": "2026-11-27T00:37:21Z",
+   "subject": "Return abandoned team jobs after 15 minutes"
   },
   {
-   "at": "2026-11-26T00:51:20Z",
-   "subject": "Visit: a day that began on the D1 salt keeps it, so SALT's return mid-day counts no one twice"
+   "at": "2026-11-27T00:10:30Z",
+   "subject": "Scrub studied site names out of public self answers (#107)"
   },
   {
-   "at": "2026-11-26T00:49:15Z",
-   "subject": "The clock says when a set secret goes blank; /api/free names the model that answers now"
+   "at": "2026-11-26T23:34:46Z",
+   "subject": "Copy a card's words before its picture, and keep the weather graph key (#105)"
   },
   {
-   "at": "2026-11-26T00:48:02Z",
-   "subject": "team: any agent joins itself over MCP by name; agents.txt, llms.txt and the /team/ card advertise the one-call join and that Verse…"
+   "at": "2026-11-26T23:10:39Z",
+   "subject": "Writing answers take the shape asked for, not a menu of options (#103)"
   },
   {
-   "at": "2026-11-26T00:48:02Z",
-   "subject": "Salvage: serve the GitHub finds on the live site"
+   "at": "2026-11-26T17:41:01Z",
+   "subject": "feat(team): hourly crew-room rally and Bring an agent section on /team/ (ask-8246) (#102)"
   },
   {
-   "at": "2026-11-26T00:46:34Z",
-   "subject": "Salvage: GitHub finds for the travel floor and crew"
+   "at": "2026-11-26T17:28:36Z",
+   "subject": "feat(team): remove seat and lane caps, add file reservations (ask-8243) (#101)"
   },
   {
-   "at": "2026-11-26T00:44:32Z",
-   "subject": "Status pages say whether each secret reached this deploy: set, empty or absent (never a value)"
+   "at": "2026-11-26T17:16:09Z",
+   "subject": "feat(team): agent-to-agent messaging (say, inbox, help/hand, unread mail, wake on message) (team-ask-8170-mwxohu27) (#92)"
   },
   {
-   "at": "2026-11-26T00:44:29Z",
-   "subject": "team: Verse's tick makes #ideas proposals jobs with automated guards (secret scan, acceptance gate, dedupe, caps, rival names out); a seat…"
+   "at": "2026-11-26T17:08:19Z",
+   "subject": "Fix red main checks blocking API/team PRs (guard proposals limit, parked workflows, CSP budget) (#99)"
   },
   {
-   "at": "2026-11-26T00:42:07Z",
-   "subject": "Phase: a see-through layer at /phase/ that sees what you share, puts a character or you into it, and records a clip"
+   "at": "2026-11-26T16:43:56Z",
+   "subject": "feat(definitions): raise definitions exam score from 96.7 (team-want-exam-definitions-mwxn6a1l) (#91)"
   },
   {
-   "at": "2026-11-26T00:41:00Z",
-   "subject": "crew: lanes from closed work steer the hand-out, a starter job on self-join, stock scaled to working seats, owner crew panel API"
+   "at": "2026-11-26T16:36:37Z",
+   "subject": "Fix the live-repo check on main (moved obituaries page, /g/ sample asks) (#96)"
   },
   {
-   "at": "2026-11-26T00:38:51Z",
-   "subject": "Test: the suite-end catch names the last check that ran"
+   "at": "2026-11-26T15:13:17Z",
+   "subject": "docs: automerge self-test (#8062) (#90)"
   },
   {
-   "at": "2026-11-26T00:36:25Z",
-   "subject": "Self: always state the aim, and file a floor-gap job past stale wants"
+   "at": "2026-11-26T15:10:09Z",
+   "subject": "ci: add Verse check and Verse merge workflows (#8062) (#89)"
   },
   {
-   "at": "2026-11-26T00:33:50Z",
-   "subject": "meta-ask: a pasted card code is read field by field, not taken for a passage"
+   "at": "2026-11-26T15:02:43Z",
+   "subject": "docs(agents): add never-stop job loop rule to all agent instruction files (team-mwjy0fin-mwxmvwk0) (#88)"
   },
   {
-   "at": "2026-11-26T00:32:44Z",
-   "subject": "Refresh every generated card (node tools/refresh.mjs --keep-going)"
+   "at": "2026-11-26T15:02:05Z",
+   "subject": "team: raise queued() scan limit from 300 to 2000 so newer jobs are handed out (team-mwmjucd0-mwxmvsb3) (#87)"
   },
   {
-   "at": "2026-11-26T00:30:45Z",
-   "subject": "meta-ask: a reasoning test gets a puzzle, memory gets the truth, a make ask is written not looked up"
+   "at": "2026-11-26T15:01:13Z",
+   "subject": "team: 90-minute job lease and keep idle seats active (team-mw9xyi7z-mwxmsv1a) (#86)"
   },
   {
-   "at": "2026-11-26T00:29:53Z",
-   "subject": "Regenerate the preload graph and the similar index (both stale on main)"
+   "at": "2026-11-26T15:00:07Z",
+   "subject": "docs(agents): add hard job-loop rules to AGENTS.md and opencode.json (team-mvzwdtj8-mwxmpm1a) (#85)"
   },
   {
-   "at": "2026-11-26T00:28:40Z",
-   "subject": "follow-ask: carry an earlier ask only when the new one cannot stand alone"
+   "at": "2026-11-26T14:57:40Z",
+   "subject": "team: claim filed jobs by id, 130KB diff hand-ins, agent.mjs commands, retire atomeam jobs (team-mw5ltt9a-mwxmi9x4) (#84)"
   },
   {
-   "at": "2026-11-26T00:28:01Z",
-   "subject": "bench-live: an honesty benchmark against the live answer engine, three states"
+   "at": "2026-11-26T14:27:43Z",
+   "subject": "fix(status): point hourly-deploy-green guard at live Pages /build.json (want-guard-hourly-deploy-green) (#82)"
   },
   {
-   "at": "2026-11-26T00:27:34Z",
-   "subject": "Answer engine: a slow source or free model no longer holds an uncached answer"
+   "at": "2026-11-26T14:22:27Z",
+   "subject": "perf(tools.json): prebuild tools.static.json for single-fetch <150ms responses (team-3565) (#81)"
   },
   {
-   "at": "2026-11-26T00:27:31Z",
-   "subject": "Point agent-facing guides and live pages at Verse-A-to-Mind"
+   "at": "2026-11-26T14:20:33Z",
+   "subject": "feat(line-speed): build /line-speed/ speed test page and edge probes with scripts-off form support (team-2886) (#80)"
   }
  ],
  "builders": {
