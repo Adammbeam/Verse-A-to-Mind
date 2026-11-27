@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" class="vs-tool">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz me on a subject · Verse</title>
+<meta name="description" content="Type a subject or paste notes, pick a difficulty, and answer five questions one at a time, with an explanation, a score, and a retry of the misses.">
+<meta name="verse-handoff" content="in: text; out: text">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Verse">
+<meta property="og:title" content="Quiz me on a subject · Verse">
+<meta property="og:description" content="Five multiple-choice questions on a subject or on notes you paste, one at a time, with a score and a retry.">
+<meta property="og:url" content="https://a-to-mind.com/quiz/">
+<meta property="og:image" content="https://a-to-mind.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://a-to-mind.com/quiz/">
+<link rel="stylesheet" href="/verse.css">
+<style>
+  main { max-width: 720px; }
+  form, .card, .end { display: grid; gap: 12px; margin: 16px 0; }
+  label { display: grid; gap: 6px; color: var(--d-ink-2); font-size: 14px; }
+  input, textarea, select, button { font: inherit; color: inherit; background: rgb(8 10 18 / .78); border: 1px solid rgba(255,255,255,.14); border-radius: 12px; padding: 10px 12px; width: 100%; box-sizing: border-box; }
+  textarea { min-height: 140px; resize: vertical; }
+  button { min-height: 44px; cursor: pointer; }
+  button.go { background: rgb(var(--d-key)); color: #07080f; border-color: transparent; font-weight: 600; }
+  .choices { display: grid; gap: 8px; }
+  .choice.good { border-color: var(--good, #5ee0b5); }
+  .choice.bad { border-color: var(--bad, #ff8a9a); }
+  #why, #status { margin: 0; }
+  .note { color: var(--d-ink-3); font-size: 14px; }
+  [hidden] { display: none !important; }
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Quiz me on a subject","url":"https://a-to-mind.com/quiz/","description":"Five multiple-choice questions on a subject or on notes you paste, one at a time, with a short explanation, a score and a retry of the misses.","applicationCategory":"EducationalApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"Verse","url":"https://a-to-mind.com/"}}</script>
+<script src="/visit.js" defer></script>
+</head>
+<body>
+<header class="vs-chrome"><nav id="verse-nav" class="vs-app" aria-label="Verse"><a class="vs-brand" href="/">Verse</a><div class="vs-links"><a href="/">Ask</a><a href="/team/">Team</a><a href="/bots/">Bots</a><a href="/agent/">Agent</a><a href="/films/">Videos</a><a href="/arcade/">Arcade</a><a href="/tools/" aria-current="page">Tools</a><a href="/podcast/">Podcast</a><a href="/treasury/">Treasury</a><a href="/starboard/">Dashboard</a><a href="/scoreboard/">Scoreboard</a><a href="/security/">Security</a><a href="/limits/">Limits</a><a href="/contribute/">Contribute</a></div></nav></header>
+<main class="vs-page">
+  <h1>Quiz me on a subject</h1>
+  <p class="lead">Type a subject or paste notes, pick a difficulty, and answer five questions one at a time. Each pick gets a short explanation. At the end you get the score and a retry of the ones you missed.</p>
+  <form id="setup">
+    <label>Subject <input id="subject" name="subject" maxlength="160" autocomplete="off" placeholder="Photosynthesis, the French Revolution, chapter 3"></label>
+    <label>Notes, if you have them <textarea id="notes" name="notes" maxlength="6000" placeholder="Paste a page of notes. Questions stay inside what you pasted."></textarea></label>
+    <label>Difficulty <select id="difficulty" name="difficulty"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option></select></label>
+    <button class="go" id="go" type="submit">Start the quiz</button>
+  </form>
+  <p id="status" class="note" hidden role="status"></p>
+  <section id="card" class="card" hidden>
+    <h2 id="stem"></h2>
+    <div id="choices" class="choices"></div>
+    <p id="why" hidden aria-live="polite"></p>
+    <button type="button" id="next" hidden>Next question</button>
+  </section>
+  <section id="end" class="end" hidden>
+    <h2 id="score"></h2>
+    <button type="button" id="retry" hidden>Retry the ones you missed</button>
+    <button type="button" id="again">New quiz</button>
+  </section>
+  <p class="note">Questions come from Verse's own model. If that model is down, the page says so and invents nothing. <a href="/tools/">All tools</a>.</p>
+  <noscript><p>This quiz needs JavaScript to ask the model and mark an answer.</p></noscript>
+</main>
+<script type="module" src="/verse-shell.js"></script>
+<script type="module" src="/quiz/subject-quiz-page.js"></script>
+</body>
+</html>
