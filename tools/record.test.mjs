@@ -93,3 +93,15 @@ assert.deepEqual(unfilmed(['a-1', 'b-2'], ['ship-2', 'ship-1'], new Set(['a-1', 
 assert.deepEqual(unfilmed(['a-1'], ['ship-1'], new Set(['a-1', 'ship-1']), 1, true, []), [], 'a deploy with nothing new films nothing');
 assert.deepEqual(unfilmed(['a-1'], [], new Set(['a-1']), 1, false, [{ id: 'a-1', day: '1' }]), ['a-1'], 'the daily run still falls back to the oldest film');
 console.log('record: shipped-change films ok');
+
+// the next film is epic and entertaining (auto:films, mv8ilxne): hook in the first second, zoom on the action, cut the dead time, punchy captions, a loop ending
+{
+  const src = readFileSync(new URL('./record.mjs', import.meta.url), 'utf8');
+  assert.match(src, /onBeat\(150\)/, 'hook starts early');
+  assert.match(src, /onBeat\(850,\s*1\)/, 'hook lands within the first second window');
+  assert.match(src, /scale\(1\.2\d\)/, 'zoom on the action');
+  assert.match(src, /onBeat\(650\)/, 'dead time cut between taps');
+  assert.match(src, /label\.toUpperCase\(\)/, 'punchy captions');
+  assert.match(src, /card', 'try it free · a-to-mind\.com', words\.hook, true\)/, 'loop ending uses the same hook');
+  console.log('record: epic-film ok');
+}
