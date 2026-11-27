@@ -73,6 +73,8 @@ test('dressHtml adds the shell on the named pages and nowhere else', () => {
   assert.match(dressHtml(bare, '/scoreboard/'), /verse-shell\.js/);
   assert.match(dressHtml(bare, '/contribute/'), /verse-shell\.js/);
   assert.equal(dressPath('/tower/'), false);
+  assert.equal(dressPath('/security/check/'), true, 'the site checker wears the Security shell');
+  assert.equal(currentNav('/security/check/').label, 'Security');
   const css = read('void-live-deploy/verse.css');
   assert.match(css, /--d-ink:\s*#f2f4fb/);
   assert.match(css, /--d-key:\s*158 178 255/);

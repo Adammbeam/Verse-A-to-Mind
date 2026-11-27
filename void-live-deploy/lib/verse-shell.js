@@ -102,7 +102,9 @@ const DRESS = new Set(NAV.map((n) => n.href));
 export function dressPath(path) {
   const raw = String(path || '/');
   const p = raw === '/' ? '/' : (raw.endsWith('/') ? raw : raw + '/');
-  return DRESS.has(p);
+  if (DRESS.has(p)) return true;
+  // the site checker lives under Security and wears the same shell
+  return p.startsWith('/security/') && p.length > '/security/'.length;
 }
 
 /** put the token file and the shell script on a shell page that does not have them yet. Other HTML is returned unchanged. */

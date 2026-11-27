@@ -1,0 +1,1 @@
+{"at":"2026-11-27T22:47:35Z","by":"cursor","kind":"build","what":"A visitor can check a domain they run: /security/check/ reads the public HTTPS, header, cookie, security.txt and mail signals and says how to fix what is missing.","show":"Check a site you run"}

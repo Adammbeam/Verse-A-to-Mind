@@ -788,6 +788,21 @@ SPECS['/blub/'] = async (t) => {
 SPECS['/internet-history/'] = article();
 for (const r of ['/kanban/', '/kanban/simple/', '/kanban/teams/', '/kanban/quick/']) SPECS[r] = kanban(true); SPECS['/kanban/flow/'] = kanban(false);
 for (const r of ['/jobs/', '/jobs/alerts/', '/jobs/categories/', '/jobs/companies/', '/jobs/europe/', '/jobs/regions/', '/jobs/salary/', '/jobs/tags/']) SPECS[r] = jobs;
+SPECS['/security/check/'] = async (t) => {
+  await t.p.route((u) => u.pathname === '/api/security-check', (r) => r.fulfill({
+    status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, card: { host: 'your-site.com', summary: '1 in place, 0 weak, 1 missing.', items: [
+      { name: 'The site answers on HTTPS', state: 'pass', detail: 'The homepage answered 200 on HTTPS.', means: 'Browsers can open the site on an encrypted address.', fix: 'Serve the site on https and keep that address working.' },
+      { name: 'A security contact is published', state: 'fail', detail: 'No security.txt was published.', means: 'security.txt is a small file that tells a researcher how to report a hole.', fix: 'Publish a security.txt file with a contact line and an expiry date.' },
+    ] } }),
+  }));
+  await t.fill('#host', 'your-site.com');
+  await t.click('#go');
+  await t.waitText('#summary', /1 in place/, 8000);
+  t.ok(/In place/.test(await t.text('#items')), 'a passing row says it is in place');
+  t.ok(/Publish a security.txt/.test(await t.text('#items')), 'a missing row says how to fix it');
+  await t.links();
+};
 for (const r of ARTICLES) if (!SPECS[r]) SPECS[r] = article();
 for (const r of routes()) if (r.startsWith('/fix/') && !SPECS[r]) SPECS[r] = article(200);
 // the lab gallery (tools/lab-import.mjs): the experiments under it are not routes here, each was opened headless by tools/lab-probe.mjs before it was published
