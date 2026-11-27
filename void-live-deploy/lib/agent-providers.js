@@ -8,10 +8,10 @@
 // Groq's free-plan models (console.groq.com/docs/models, 2026-11-20): gpt-oss-120b, gpt-oss-20b, qwen3.8-27b; llama-3.3-70b-versatile is now Contact Sales.
 // Tests: tools/agent-providers.test.mjs.
 import { cap, peek, dayOf } from './daily-cap.js';
-import { GEMINI_MODELS } from './models.js';
+import { GEMINI_MODELS, GROQ_VISITOR_MODELS, isPaidModelId } from './models.js';
 
 export const PROVIDERS = Object.freeze([
-  { id: 'groq', name: 'Groq', key: 'GROQ_API_KEY', url: 'https://api.groq.com/openai/v1/chat/completions', models: ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'qwen/qwen3.8-27b'], perModelDay: 1000, private: false, registry: 'groq-free' },
+  { id: 'groq', name: 'Groq', key: 'GROQ_API_KEY', url: 'https://api.groq.com/openai/v1/chat/completions', models: GROQ_VISITOR_MODELS, perModelDay: 1000, private: false, registry: 'groq-free' },
   { id: 'gemini', name: 'Google Gemini', key: 'GEMINI_API_KEY', url: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', models: GEMINI_MODELS, perModelDay: 250, private: true, registry: 'gemini-free' },
   { id: 'openrouter', name: 'OpenRouter', key: 'OPENROUTER_API_KEY', url: 'https://openrouter.ai/api/v1/chat/completions', models: ['meta-llama/llama-3.3-70b-instruct:free'], perModelDay: 50, private: true, registry: 'openrouter-free' },
 ]);
@@ -44,6 +44,7 @@ export async function ask(p, model, env, messages, fetchFn = fetch) {
 export async function answerFree(env, messages, { owner = false, only = '', now = Date.now(), fetchFn = fetch } = {}) {
   const tried = [];
   for (const p of usable(env, { owner }).filter((u) => !only || u.id === only)) for (const model of p.models) {
+    if (isPaidModelId(model)) { tried.push({ id: p.id, model, why: 'paid' }); continue; }
     if (await parked(env, p.id, model, now)) { tried.push({ id: p.id, model, why: 'parked' }); continue; }
     try { const text = await ask(p, model, env, messages, fetchFn); return { text, provider: p.id, name: p.name, model, tried }; } catch (e) {
       const kind = e.kind || kindOf(e.status, e.message); tried.push({ id: p.id, model, why: kind });

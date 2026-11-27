@@ -17,6 +17,7 @@ import { families, check } from '../bots/families.js';
 import { fxCode } from '../bots/fx-pairs.js';
 import { holidayCode } from '../bots/holidays.js';
 import { runJob } from './free-router.js';
+import { GROQ_VISITOR_MODELS, isPaidModelId } from './models.js';
 
 // research asks, in order: OpenAlex on Atom's free key, OpenAlex keyless (a tiny daily budget), then Crossref (keyless, generous)
 export const RESEARCH = ['openalex-key', 'openalex', 'crossref'];
@@ -217,7 +218,7 @@ export async function routeFree(ask, { env = {}, registry = null, adapters = ADA
 // the other free LLM tiers (resources/free.json, kind 'llm', each only once Atom has added its one key). OpenAI-compatible chat endpoints.
 // Gemini's free tier may train on prompts, so visitor asks never go there (its registry note); Workers AI is answer.js's own direct call.
 export const LLM_ENDPOINTS = {
-  'groq-free': { url: 'https://api.groq.com/openai/v1/chat/completions', key: 'GROQ_API_KEY', model: 'openai/gpt-oss-120b' },
+  'groq-free': { url: 'https://api.groq.com/openai/v1/chat/completions', key: 'GROQ_API_KEY', model: GROQ_VISITOR_MODELS[0] },
   'cerebras-free': { url: 'https://api.cerebras.ai/v1/chat/completions', key: 'CEREBRAS_API_KEY', model: 'llama-3.3-70b' },
   'openrouter-free': { url: 'https://openrouter.ai/api/v1/chat/completions', key: 'OPENROUTER_API_KEY', model: 'meta-llama/llama-3.3-70b-instruct:free' },
   'mistral-free': { url: 'https://api.mistral.ai/v1/chat/completions', key: 'MISTRAL_API_KEY', model: 'mistral-small-latest' },
@@ -225,7 +226,7 @@ export const LLM_ENDPOINTS = {
 };
 export function llmAdapters() {
   const out = {};
-  for (const [id, ep] of Object.entries(LLM_ENDPOINTS)) out[id] = async (job, r, env) => {
+  for (const [id, ep] of Object.entries(LLM_ENDPOINTS)) if (!isPaidModelId(ep.model)) out[id] = async (job, r, env) => {
     const res = await fetch(ep.url, { method: 'POST', headers: { authorization: 'Bearer ' + env[ep.key], 'content-type': 'application/json' }, body: JSON.stringify({ model: ep.model, messages: job.messages, max_tokens: 1500 }), signal: AbortSignal.timeout ? AbortSignal.timeout(15000) : undefined });
     if (!res.ok) { const e = new Error(id + ' ' + res.status); e.status = res.status; throw e; }
     const j = await res.json(); const text = String((j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content) || '').trim();
@@ -237,7 +238,7 @@ export function llmAdapters() {
 /** the free LLM failover after Workers AI's own model fails: null when no other free tier is set up or all are out */
 export async function freeLlm(messages, { env = {}, registry = null, adapters = null, now = Date.now() } = {}) {
   if (!registry) return null;
-  const ids = Object.keys(LLM_ENDPOINTS);
+  const ids = Object.keys(LLM_ENDPOINTS).filter((id) => !isPaidModelId(LLM_ENDPOINTS[id].model));
   const out = await runJob(only(registry, ids), 'llm', { messages }, { env, adapters: adapters || llmAdapters(), now });
   return out.ok ? { answer: out.result, source: 'free:' + out.id, tried: out.tried } : null;
 }

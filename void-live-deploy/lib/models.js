@@ -46,7 +46,9 @@ export const PATHS = Object.keys(PATH_MODELS);
 
 export function models(path) {
   if (!PATHS.includes(path)) throw new Error('unknown model path: ' + path);
-  return PATH_MODELS[path] || FREE_MODEL;
+  const id = PATH_MODELS[path] || FREE_MODEL;
+  if (isPaidModelId(id)) throw new Error('paid model is off the free visitor path: ' + path);
+  return id;
 }
 
 // Workers Free refuses these (Cloudflare changelog, 2026-07-28, error 5035). They are not gateway aliases.
@@ -57,3 +59,31 @@ export const GATEWAY_ALIASES = Object.freeze({
   'verse-fallback': ANSWER_FALLBACK,
   'verse-review': PATH_MODELS.review,
 });
+
+// Groq free-plan chat ids a visitor may be sent (console.groq.com/docs/models). The only non-Workers ids on that path.
+export const GROQ_VISITOR_MODELS = Object.freeze(['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'qwen/qwen3.8-27b']);
+
+// A paid id: the standing DeepSeek model, any other @cf/deepseek-ai/* name (V4, V4.1, or a later one), a Workers Paid-plan
+// model, or a catalog video model. A free or anonymous visitor is never given one.
+const DEEPSEEK_ID = /(?:^|\/)@cf\/deepseek-ai\/|deepseek[-_. ]?v4(?:\.\d+)?/i;
+export function isPaidModelId(id) {
+  const s = typeof id === 'string' ? id.trim() : '';
+  if (!s) return false;
+  if (s === PAID_MODEL || PAID_PLAN_MODELS.includes(s) || Object.values(VIDEO_MODELS).includes(s)) return true;
+  if (/^@cf\/deepseek-ai\//i.test(s)) return true;
+  return DEEPSEEK_ID.test(s);
+}
+
+/** the id when a free or anonymous visitor may be called with it: a Workers AI free-allowance model, or a Groq free-plan id. */
+export function visitorModel(id) {
+  if (typeof id !== 'string' || !id || isPaidModelId(id)) return null;
+  if (id.startsWith('@cf/')) return id;
+  return GROQ_VISITOR_MODELS.includes(id) ? id : null;
+}
+
+/** the subset of ids a free or anonymous visitor may actually be called with, in order, once each. */
+export function visitorAttemptModels(ids) {
+  const out = [];
+  for (const id of ids || []) if (visitorModel(id) === id && !out.includes(id)) out.push(id);
+  return out;
+}

@@ -23,7 +23,7 @@ test('a stranger, a wrong key, the paid model, a bad range or an unknown ask fil
   const calls = [], e = env(calls);
   assert.equal((await bench({ request: post({ model: FREE_MODEL, from: 0, to: 2 }, null), env: e })).status, 401);
   assert.equal((await bench({ request: post({ model: FREE_MODEL, from: 0, to: 2 }, 'x'.repeat(40)), env: e })).status, 401);
-  for (const body of [{ model: PAID_MODEL, from: 0, to: 2 }, { model: 'gpt-4', from: 0, to: 2 }, { model: FREE_MODEL, from: 0, to: CHUNK + 1 },
+  for (const body of [{ model: PAID_MODEL, from: 0, to: 2 }, { model: '@cf/deepseek-ai/deepseek-v4.1-flash', from: 0, to: 2 }, { model: 'gpt-4', from: 0, to: 2 }, { model: FREE_MODEL, from: 0, to: CHUNK + 1 },
     { model: FREE_MODEL, from: 5, to: 3 }, { model: FREE_MODEL, from: -1, to: 2 }, { model: FREE_MODEL, from: 0, to: 2, file: '../secrets' }])
     assert.equal((await bench({ request: post(body), env: e })).status, 400, JSON.stringify(body));
   assert.equal(calls.length, 0, 'no model was called');

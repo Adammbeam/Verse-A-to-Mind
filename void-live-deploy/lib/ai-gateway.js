@@ -2,14 +2,11 @@
 // An alias is used only when it names a Workers AI model on the free allowance. A paid-plan model, the paid
 // answer model, and a catalog model (Unified Billing) never get a gateway call from here. With no AI_GATEWAY_ID
 // the call is the binding alone, the same two-argument run as before, so nothing new is spent.
-import { FREE_MODEL, PAID_MODEL, PAID_PLAN_MODELS, GATEWAY_ALIASES, VIDEO_MODELS } from './models.js';
+import { FREE_MODEL, GATEWAY_ALIASES, isPaidModelId } from './models.js';
 
-const VIDEO = new Set(Object.values(VIDEO_MODELS));
-const PAID_PLAN = new Set(PAID_PLAN_MODELS);
-
-/** a Workers AI id that still runs on the free neuron allowance. Pure. */
+/** a Workers AI id that still runs on the free neuron allowance. A paid id, including any DeepSeek name, is not one. Pure. */
 export function isFreeAllowance(id) {
-  return typeof id === 'string' && id.startsWith('@cf/') && id !== PAID_MODEL && !PAID_PLAN.has(id) && !VIDEO.has(id);
+  return typeof id === 'string' && id.startsWith('@cf/') && !isPaidModelId(id);
 }
 
 /** alias or raw id, or null when it is not a free-allowance model. Pure. */
