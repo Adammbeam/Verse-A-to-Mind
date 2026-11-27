@@ -94,7 +94,7 @@ export const orderCode = (id) => String(id).slice(-8).toUpperCase();
 export function buyAnswer() {
   const live = STORE_PRODUCTS.filter((p) => p.gumroad && !p.soon);
   const made = STORE_PRODUCTS.filter((p) => !p.gumroad && !p.soon && p.files).map((p) => ({ id: p.id, name: p.name, price: price(p), blurb: p.blurb, url: '/store/#' + p.id }));
-  return { lead: 'What Verse sells · support Verse', rows: live.map((p) => ({ id: p.id, name: p.tip ? p.name + ' (tip jar)' : p.name, price: price(p), blurb: p.blurb, url: gumroadUrl(p, 'void-card') })), made, more: 'Everything is at a-to-mind.com/store.' };
+  return { lead: 'What Verse sells · support Verse', rows: live.map((p) => ({ id: p.id, name: p.name, price: price(p), blurb: p.blurb, url: gumroadUrl(p, 'void-card') })), made, more: 'Everything is at a-to-mind.com/store.' };
 }
 
 // ---- the store as the shopping floor (owner, 2026-10-26: "need a /store page that beats amazons"): a cart a person can

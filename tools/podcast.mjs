@@ -133,7 +133,7 @@ export function buildEpisode({ growth = [], claims = { ok: [] }, voiceMd = '', i
   if (findings.length) { say(V, 'From the experiments, what was found:'); for (const f of findings.slice(-2)) say(V, f); }
   if (readout && readout.asks.length) { say(V, 'And what I asked the builders for next, in my own words:'); for (const a of readout.asks) say(V, a); }
   say(C, `Whether those get built is in ${next} ledger, and you will hear it here either way.`);
-  say(V, `That was ${SHOW.title}. Every episode is free to download and repost. Try any of it at a-to-mind.com, and if it helped, ask it for the tip jar.`);
+  say(V, `That was ${SHOW.title}. Every episode is free to download and repost. Try any of it at a-to-mind.com, and if it helped, a one-dollar crew seat is at a-to-mind.com/team/join/.`);
   const title = `Episode ${n}: the ${unit} to ${human(end)}`;
   return { n, title, from: iso(start), to: iso(end), lines: L, days, counts: { entries: week.length, commits: main.total, merged: main.prs.length, reverts: main.reverts, builds: count('build'), grows: count('grow'), fixes: count('fix'), findings: count('finding'), frontier: frontier.length, phrases: allPhrases, proven: phrases.length, notRouted, red } };
 }

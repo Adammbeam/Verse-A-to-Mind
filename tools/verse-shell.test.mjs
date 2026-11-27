@@ -73,6 +73,10 @@ test('dressHtml adds the shell on the named pages and nowhere else', () => {
   assert.match(dressHtml(bare, '/scoreboard/'), /verse-shell\.js/);
   assert.match(dressHtml(bare, '/contribute/'), /verse-shell\.js/);
   assert.equal(dressPath('/tower/'), false);
+  assert.equal(dressPath('/team/join/'), true, 'the crew-seat page wears the shell');
+  assert.equal(dressPath('/team/join/abc'), false, 'an agent join code is not the crew-seat page');
+  assert.match(dressHtml(bare, '/team/join/'), /verse-shell\.js/);
+  assert.equal(dressHtml(bare, '/team/join/abc'), bare);
   const css = read('void-live-deploy/verse.css');
   assert.match(css, /--d-ink:\s*#f2f4fb/);
   assert.match(css, /--d-key:\s*158 178 255/);
