@@ -271,7 +271,8 @@
 
   <footer>
     <p>This is not a feed of anyone's messages. It counts copies of these emoji made on this page, when someone taps one; nothing else is sent, and there is no text to send. No account, no ads, and it works offline with the counts it last saw. The list of emoji is a closed list in the code, so only those can ever be counted.</p>
-    <p>Counted here as emojis are copied — your copies on this device plus everyone today and all time on Verse. No account, nothing personal stored, works offline.</p>
+    <p>Counted here as emojis are copied - your copies on this device plus everyone today and all time on Verse. No account, nothing personal stored, works offline.</p>
+    <p id="cookieNote" style="font-size:13px;color:var(--soft)">No optional cookies are used on this page. <button type="button" id="rejectCookies" style="font:inherit;font-size:13px;background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:4px 10px;cursor:pointer;margin-left:6px">Reject Optional Cookies</button> <span id="cookieStatus" aria-live="polite"></span></p>
     <nav class="siblings" aria-label="Use together with">
       <a href="/word-count/?t=%F0%9F%94%A5">Word count</a>
       <a href="/translate/?q=fire&amp;to=es">Translate</a>
@@ -454,6 +455,12 @@
 
   render();
   read();
+  // cookie choice: this page uses no optional cookies; rejecting is recorded locally
+  const rej = $('rejectCookies'), cst = $('cookieStatus');
+  const showCookie = () => { const v = localStorage.getItem('verse-cookies-emojis'); if (v === 'rejected') { cst.textContent = 'Optional cookies rejected.'; rej.disabled = true; } };
+  rej.addEventListener('click', () => { try { localStorage.setItem('verse-cookies-emojis', 'rejected'); } catch (_) {} showCookie(); });
+  showCookie();
+
   // the toolkit's "Use with" row (lib/toolkit.js): this page's card on the stage, the tools that go with it, the ask bar
   import('/lib/toolkit.js').then((m) => m.mountRelated($('related'), '/emojis/')).catch(() => {});
 </script>
