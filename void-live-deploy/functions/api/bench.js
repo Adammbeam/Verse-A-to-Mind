@@ -18,7 +18,7 @@
 import { ownerOk } from '../../lib/guard.js';
 import { buildAsks, messagesFor } from '../../lib/bench-asks.js';
 import { readSelf, selfFacts } from '../../lib/self-context.js';
-import { isPaidModelId } from '../../lib/models.js';
+import { PAID_MODEL } from '../../lib/models.js';
 import { FINDINGS_SCHEMA } from '../../lib/review-api.js';
 import { ANSWER_RUN, noThink } from './answer.js';
 import { classify } from '../../lib/router.js';
@@ -73,7 +73,7 @@ export async function onRequestPost({ request, env }) {
   const asks = buildAsks({ self: sf.self, skills: sf.skills }), facts = selfFacts(sf);
   if (b.probe) return json(200, { ok: true, asks: asks.length, chunk: CHUNK, catalog: await catalog(env), clef: await clefModels(env) });
   const model = String(b.model || ''), from = Number(b.from), to = Number(b.to), file = b.file == null ? 'builtin' : b.file;
-  if (!MODEL_ID.test(model) || isPaidModelId(model)) return json(400, { error: 'a free @cf text model id' });
+  if (!MODEL_ID.test(model) || model === PAID_MODEL) return json(400, { error: 'a free @cf text model id' });
   if (!FILES.includes(file)) return json(400, { error: 'unknown ask file' });
   if (!Number.isInteger(from) || !Number.isInteger(to) || from < 0 || to <= from || to - from > CHUNK) return json(400, { error: `from..to, at most ${CHUNK} asks` });
   const results = await Promise.all(asks.slice(from, Math.min(to, asks.length)).map(async (a, k) => {
