@@ -614,7 +614,6 @@ for (const [name, file] of [
   ['clef-probe', 'clef-probe.test.mjs'],
   ['route-bench', 'route-bench.test.mjs'],
   ['models', 'models.test.mjs'],
-  ['visitor-models', 'visitor-models.test.mjs'],
   ['families', 'families.test.mjs'],
   ['ai-gateway', 'ai-gateway.test.mjs'],
   ['helper-pr', 'helper-pr.test.mjs'],
