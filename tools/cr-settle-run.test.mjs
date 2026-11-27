@@ -76,3 +76,21 @@ test('GitHub review notes and other states are left alone; max caps a pass; a mi
   assert.deepEqual(Object.keys(await storeStatus(env)), ['checks', 'deploys', 'changes']);
   assert.ok(settledNote('live', 'x', 'y'.repeat(400)).length <= 300);
 });
+
+// L1.7: the code-store route settles after the runner's check and deploy reports; a failed settle never fails the report
+test('the runner\'s check and deploy reports on /code/verse.git settle a shipped job, in waitUntil when given', async () => {
+  const { onRequest } = await import('../void-live-deploy/functions/code/[[path]].js');
+  const OWNER = 'test-owner-key'; // secret-scan: ok
+  const env = world(); Object.assign(env, { READ_TOKEN: OWNER, SALT: 's', CODE: { head: async () => null, get: async () => null, put: async () => {} } });
+  job(env, 'ask-1', 'review by store: cr/GrokBot/ask-1@' + A);
+  const post = async (what, body, waitUntil) => onRequest({ request: new Request('https://x/code/verse.git/' + what, { method: 'POST', headers: { authorization: 'Bearer ' + OWNER, 'content-type': 'application/json' }, body: JSON.stringify(body) }), env, params: { path: ['verse.git', what] }, now: T0, waitUntil });
+  assert.equal((await post('checks', { ref: 'refs/heads/cr/GrokBot/ask-1', sha: A, state: 'green', summary: 'gates passed' })).status, 201);
+  assert.equal(q(env, 'ask-1').state, 'building', 'green alone is not live');
+  const later = []; const r = await post('deploys', { sha: M, deployment: 'deploy-1', state: 'live', url: 'https://deploy-1.a-to-mind.pages.dev' }, (p) => later.push(p));
+  assert.equal(r.status, 201); assert.equal(later.length, 1); await Promise.all(later);
+  assert.equal(q(env, 'ask-1').state, 'live'); assert.match(q(env, 'ask-1').note, /deploy-1/);
+  // a settle that throws (no queue table) still answers 201
+  const bare = world(); Object.assign(bare, { READ_TOKEN: OWNER, SALT: 's', CODE: env.CODE }); bare.DB.raw.exec('DROP TABLE void_queue');
+  const r2 = await onRequest({ request: new Request('https://x/code/verse.git/checks', { method: 'POST', headers: { authorization: 'Bearer ' + OWNER, 'content-type': 'application/json' }, body: JSON.stringify({ ref: 'refs/heads/cr/a/b', sha: A, state: 'red', summary: 'x' }) }), env: bare, params: { path: ['verse.git', 'checks'] }, now: T0 });
+  assert.equal(r2.status, 201);
+});
