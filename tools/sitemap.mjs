@@ -44,7 +44,6 @@ const KEPT = [
   // pages linked from the site and its footers that no list held, so neither a search engine nor the self-check opened them: the privacy policy,
   // the boards' rules, and the four pages under /generators/ (the editor, the character chat, the story writer, the forum)
   ['/privacy/', 'monthly', '0.3', [D + 'privacy/index.html']],
-  ['/security/check/', 'monthly', '0.6', [D + 'security/check/index.html', D + 'lib/security-check.js']],
   ['/boards/rules/', 'monthly', '0.4', [D + 'boards/rules/index.html']],
   ['/generators/make/', 'weekly', '0.8', [D + 'generators/make/index.html']],
   ['/generators/chat/', 'weekly', '0.7', [D + 'generators/chat/index.html']],
