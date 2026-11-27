@@ -1,9 +1,7 @@
 #!/usr/bin/env node
-// Daily glow-up film: before/, after/, script.md -> 1080x1920, 30–45s. Push-ins, a wipe into a labeled
-// side-by-side, safe-zone captions, Verse's low robot voice (lib/speak.js pace, tools/show-pipe.mjs room).
-// The stars beat is a tease. The next shot frames the real fix. This does not upload or post.
+// Daily glow-up: before/, after/, script.md -> 1080x1920, 30–45s. The stars beat is a tease; the reveal
+// zooms into the real fix, then pulls back to a full-frame side-by-side. Does not upload or post.
 //   node tools/beauty-vlog.mjs render <folder> [--out film.mp4] [--no-voice]
-// Voice: Piper (PIPER_VOICE), else espeak-ng, else Workers AI at /api/rapvoice.
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -16,7 +14,9 @@ import { CTA } from '../void-live-deploy/lib/show-pipe.js';
 
 export const MIN_S = 30, MAX_S = 45, FPS = 30, XF = 0.45;
 export const SIGNATURE = 'Signature move. Just more stars in the sky.';
-const FONT = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf';
+const pickFont = (a, b) => (fs.existsSync(a) ? a : b);
+const BODY = pickFont('/usr/share/fonts/truetype/macos/Inter-Regular.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf');
+const LABEL = pickFont('/usr/share/fonts/truetype/macos/Inter-Medium.ttf', BODY);
 const ORDER = ['hook', 'before', 'change', 'stars', 'reveal', 'end'];
 const FLOOR = { hook: 4.2, before: 5, change: 5.6, stars: 4.6, reveal: 9, end: 3.6 };
 const KEYS = { hook: 'hook', before: 'before', change: 'change', changed: 'change', why: 'change', stars: 'stars', signature: 'stars', after: 'after', reveal: 'after', highlight: 'highlight', fix: 'highlight', box: 'box' };
@@ -86,40 +86,50 @@ export function planEpisode(script, voiceSecs = []) {
   return { beats, total: +at.toFixed(2) };
 }
 
-function pieces(text, maxChars, maxLines, keep) {
-  const glue = '\u00a0';
-  let src = String(text || '').replace(/\s+/g, ' ').trim();
-  if (keep && keep.length <= maxChars) {
-    const at = src.toLowerCase().indexOf(keep.toLowerCase());
-    if (at >= 0) src = src.slice(0, at) + keep.replace(/ /g, glue) + src.slice(at + keep.length);
-  }
+function sentences(text) {
+  return String(text || '').replace(/\s+/g, ' ').trim().split(/(?<=[.!?])\s+(?=[A-Z])/).map((s) => s.trim()).filter(Boolean);
+}
+function wrapLines(sentence, maxChars) {
   const lines = []; let cur = '';
-  for (const w of src.split(/ +/).filter(Boolean)) {
-    const word = w.replaceAll(glue, ' ');
-    if (cur && (cur + ' ' + word).length > maxChars) { lines.push(cur); cur = word; } else cur = cur ? cur + ' ' + word : word;
+  for (const w of sentence.split(/\s+/).filter(Boolean)) {
+    if (cur && (cur + ' ' + w).length > maxChars) { lines.push(cur); cur = w; } else cur = cur ? cur + ' ' + w : w;
   }
   if (cur) lines.push(cur);
-  const groups = [];
-  for (let i = 0; i < lines.length; i += maxLines) groups.push(lines.slice(i, i + maxLines).join('\n'));
-  return groups;
+  return lines;
+}
+function phrases(text) {
+  const out = [], emit = (s) => { const lines = wrapLines(s, 24); if (lines.length) out.push(lines.slice(0, 2).join('\n')); };
+  for (const s of sentences(text)) {
+    if (wrapLines(s, 24).length <= 2) { emit(s); continue; }
+    const bits = s.replace(/[.!?]+$/, '').split(/,\s+/).map((b) => b.trim()).filter(Boolean);
+    if (bits.length < 2) { emit(s); continue; }
+    let cur = '';
+    const flush = () => { if (!cur) return; let p = cur.replace(/,$/, ''); p = p[0].toUpperCase() + p.slice(1); if (!/[.!?]$/.test(p)) p += '.'; emit(p); cur = ''; };
+    for (const bit of bits) { const next = cur ? cur + ', ' + bit : bit; if (wrapLines(next, 24).length <= 2) cur = next; else { flush(); cur = bit; } }
+    flush();
+  }
+  return out;
 }
 function metrics(text, size) {
   const lines = String(text).split('\n');
-  return { w: Math.max(...lines.map((l) => l.length), 1) * size * 0.62, h: lines.length * size * 1.25 };
+  return { w: Math.max(...lines.map((l) => l.length), 1) * size * 0.52, h: lines.length * size * 1.22 };
 }
-function place(text, size, y, from, to, lane) {
+function place(text, size, y, from, to, lane, font) {
   const m = metrics(text, size);
-  let x = lane === 'left' ? SAFE.x0 + 24 : lane === 'right' ? 608 : SAFE.x0 + (SAFE.x1 - SAFE.x0 - m.w) / 2;
+  let yy = y + m.h > SAFE.y1 ? SAFE.y1 - m.h : y;
+  if (yy < SAFE.y0) yy = SAFE.y0;
+  let x = lane === 'left' ? 84 : lane === 'right' ? 624 : SAFE.x0 + (SAFE.x1 - SAFE.x0 - m.w) / 2;
   x = Math.max(SAFE.x0, Math.min(x, SAFE.x1 - m.w));
-  return { text, raw: text.replace(/\n/g, ' '), size, x: Math.round(x), y: Math.round(y), w: Math.round(m.w), h: Math.round(m.h), box: true, rect: true, from: +(+from).toFixed(2), to: +(+to).toFixed(2) };
+  return { text, raw: text.replace(/\n/g, ' '), size, x: Math.round(x), y: Math.round(yy), w: Math.round(m.w), h: Math.round(m.h), box: true, rect: true, font: font || BODY, from: +(+from).toFixed(2), to: +(+to).toFixed(2) };
 }
-function spread(text, size, y, from, to, lane, maxChars, maxLines, keep) {
-  const parts = pieces(text, maxChars, maxLines, keep);
+function spread(text, y, from, to) {
+  const parts = phrases(text);
   if (!parts.length) return [];
   const span = (to - from) / parts.length;
   return parts.map((p, i) => {
-    const end = i + 1 < parts.length && span > 0.45 ? from + (i + 1) * span - 0.06 : from + (i + 1) * span;
-    return place(p, size, y, from + i * span, end, lane);
+    const wide = Math.max(...p.split('\n').map((l) => l.length));
+    const end = i + 1 < parts.length && span > 0.5 ? from + (i + 1) * span - 0.08 : from + (i + 1) * span;
+    return place(p, wide > 18 ? 64 : 72, y, from + i * span, end, 'full');
   });
 }
 
@@ -127,12 +137,12 @@ export function captionsFor(script, beats) {
   const say = { hook: script.hook, before: script.before, change: script.change, stars: script.stars, reveal: script.after, end: CTA };
   const out = [];
   for (const b of beats) {
-    if (b.id === 'reveal') {
-      out.push(place('BEFORE', 64, 1136, b.from, b.to, 'left'));
-      out.push(place('AFTER', 64, 1136, b.from, b.to, 'right'));
-      out.push(...spread(say.reveal, 64, 1222, b.from, b.to, 'full', 20, 2, script.highlight));
-    } else if (b.id === 'end') out.push(...spread(say.end, 64, 820, b.from, b.to, 'full', 16, 3));
-    else out.push(...spread(say[b.id], 70, 1088, b.from, b.to, 'full', 16, 3));
+    if (b.id !== 'reveal') { out.push(...spread(say[b.id], b.id === 'end' ? 860 : 1200, b.from, b.to)); continue; }
+    const d = b.d, t0 = b.from, lines = phrases(say.reveal);
+    const fix = lines.find((p) => script.highlight && p.toLowerCase().includes(script.highlight.toLowerCase())) || lines[lines.length - 1] || '';
+    const wide = [[t0, t0 + d * 0.22], [t0 + d * 0.88, b.to]];
+    if (fix) out.push(place(fix, 64, 1224, t0 + d * 0.40, t0 + d * 0.72, 'full'));
+    for (const [a, z] of wide) { out.push(place('BEFORE', 64, 220, a, z, 'left', LABEL)); out.push(place('AFTER', 64, 220, a, z, 'right', LABEL)); }
   }
   return out;
 }
@@ -196,19 +206,20 @@ function starClip(ppm, frames, out) {
 function endClip(frames, out) {
   ff(['-f', 'lavfi', '-i', 'color=c=0x090814:s=' + W + 'x' + H + ':r=' + FPS, '-frames:v', String(frames), '-vf', 'drawbox=x=160:y=790:w=760:h=3:color=0xE8C872', ...enc, out]);
 }
-function splitClip(before, after, frames, box, out) {
-  const ph = 1080;
-  let rect = '';
-  if (box) {
-    let x = 548 + Math.round(box[0] * 500), y = 16 + Math.round(box[1] * (ph - 32));
-    let bw = Math.max(80, Math.round(box[2] * 480)), bh = Math.max(60, Math.round(box[3] * (ph - 48)));
-    if (x + bw > 1060) bw = 1060 - x;
-    if (y + bh > ph - 12) bh = ph - 12 - y;
-    if (bw > 40 && bh > 40) rect = ',drawbox=x=' + x + ':y=' + y + ':w=' + bw + ':h=' + bh + ':color=0xF6E2A8:t=8';
-  }
-  const fit = 'scale=540:' + ph + ':force_original_aspect_ratio=increase,crop=540:' + ph + ',setsar=1,format=yuv420p';
-  const fc = '[0:v]' + fit + '[L];[1:v]' + fit + '[R];[L][R]hstack=inputs=2[pair];color=c=0x090814:s=' + W + 'x' + H + ':r=' + FPS + '[bg];'
-    + '[bg][pair]overlay=0:0,drawbox=x=538:y=0:w=4:h=' + ph + ':color=0xE8C872,drawbox=x=548:y=12:w=520:h=' + (ph - 24) + ':color=0xE8C872:t=7' + rect + ',format=yuv420p[v]';
+function splitClip(before, after, frames, box, out, beatDur) {
+  const b = box || [0.1, 0.32, 0.8, 0.3];
+  const probe = (f) => run('ffprobe', ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', f]).stdout.split(',').map(Number);
+  const iw = probe(after)[0] || 1, ih = probe(after)[1] || 1, sh = Math.min(H, Math.round(540 * ih / iw)), top = Math.round((H - sh) / 2);
+  const rw = Math.max(80, b[2] * 540), rh = Math.max(80, b[3] * sh);
+  const cx = (540 + (b[0] + b[2] / 2) * 540).toFixed(1), cy = (top + (b[1] + b[3] * 0.32) * sh).toFixed(1);
+  const zmax = Math.min(3.5, Math.max(1.8, Math.max(W / rw, (H * 0.72) / rh))).toFixed(2);
+  const A = Math.round(beatDur * FPS * 0.22), B = Math.round(beatDur * FPS * 0.40), C = Math.round(beatDur * FPS * 0.72), E = Math.round(beatDur * FPS * 0.88);
+  const ease = (p, q) => '(0.5-0.5*cos(3.1416*(on-' + p + ')/' + Math.max(1, q - p) + '))';
+  const z = 'if(lt(on\\,' + A + ')\\,1\\,if(lt(on\\,' + B + ')\\,1+(' + zmax + '-1)*' + ease(A, B) + '\\,if(lt(on\\,' + C + ')\\,' + zmax + '\\,if(lt(on\\,' + E + ')\\,' + zmax + '-(' + zmax + '-1)*' + ease(C, E) + '\\,1))))';
+  const blur = 'scale=540:' + H + ':force_original_aspect_ratio=increase,crop=540:' + H + ',boxblur=22:2,eq=brightness=-0.15,setsar=1,format=yuv420p';
+  const sharp = 'scale=540:-1,setsar=1,format=yuv420p';
+  const half = (i, B, S, o) => '[' + i + ':v]' + blur + B + ';[' + i + ':v]' + sharp + S + ';' + B + S + 'overlay=(W-w)/2:(H-h)/2' + o;
+  const fc = half(0, '[Lb]', '[Ls]', '[L]') + ';' + half(1, '[Rb]', '[Rs]', '[R]') + ';[L][R]hstack=inputs=2,drawbox=x=538:y=0:w=4:h=' + H + ':color=0xE4C56A@0.9,scale=2160:3840:flags=lanczos,zoompan=z=\'' + z + '\':x=\'max(0\\,min(iw-iw/zoom\\,' + cx + '*2-iw/zoom/2))\':y=\'max(0\\,min(ih-ih/zoom\\,' + cy + '*2-ih/zoom/2))\':d=' + frames + ':s=' + W + 'x' + H + ':fps=' + FPS + ',format=yuv420p[v]';
   ff(['-loop', '1', '-i', before, '-loop', '1', '-i', after, '-filter_complex', fc, '-map', '[v]', '-frames:v', String(frames), '-r', String(FPS), ...enc, out]);
 }
 
@@ -233,7 +244,7 @@ export async function renderEpisode(folder, outFile, { voice = true } = {}) {
     const clips = plan.beats.map((b, i) => {
       const frames = framesOf(i), file = path.join(dir, 'c' + i + '.mp4');
       if (b.id === 'stars') starClip(ppm, frames, file);
-      else if (b.id === 'reveal') splitClip(before[0], after[0], frames, script.box, file);
+      else if (b.id === 'reveal') splitClip(before[0], after[0], frames, script.box, file, b.d);
       else if (b.id === 'end') endClip(frames, file);
       else pushClip(before[Math.min(i, before.length - 1)], frames, file);
       return file;
@@ -247,7 +258,7 @@ export async function renderEpisode(folder, outFile, { voice = true } = {}) {
     }
     const draws = captions.map((c, i) => {
       const tf = path.join(dir, 't' + i + '.txt'); fs.writeFileSync(tf, c.text);
-      return 'drawtext=fontfile=' + FONT + ':textfile=' + esc(tf) + ':fontsize=' + c.size + ':fontcolor=white:line_spacing=10:x=' + c.x + ':y=' + c.y + ":box=1:boxcolor=0x140e1c@0.82:boxborderw=16:enable='between(t\\," + c.from + '\\,' + c.to + ")'";
+      return 'drawtext=fontfile=' + (c.font || BODY) + ':textfile=' + esc(tf) + ':fontsize=' + c.size + ':fontcolor=white:shadowcolor=black@0.75:shadowx=0:shadowy=3:line_spacing=18:x=' + c.x + ':y=' + c.y + ":enable='between(t\\," + c.from + '\\,' + c.to + ")'";
     }).join(',');
     chain += last + draws + ',format=yuv420p[vout]';
     const T = plan.total;

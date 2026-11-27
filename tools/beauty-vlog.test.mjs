@@ -4,27 +4,7 @@ import assert from 'node:assert/strict';
 import { SIGNATURE, parseScript, scriptIssues, isTease, planEpisode, captionsFor } from './beauty-vlog.mjs';
 import { captionCheck } from './video-gate.mjs';
 
-const SCRIPT = `# hook
-Okay. Glow-up. Do not blink.
-
-# before
-Before. A dark sky, a button, and no scores on the page.
-
-# change
-Verse put the live scores card on the page, so the standings are what you see.
-
-# stars
-Signature move. Just more stars in the sky.
-
-# after
-Stars were the tease. The real change is the live scores card.
-
-# highlight
-live scores card
-
-# box
-0.08 0.28 0.84 0.36
-`;
+const SCRIPT = ['# hook', 'Okay. Glow-up. Do not blink.', '# before', 'Before. A dark sky, a button, and no scores on the page.', '# change', 'Verse put the live scores card on the page, so the standings are what you see.', '# stars', 'Signature move. Just more stars in the sky.', '# after', 'Stars were the tease. The real change is the live scores card.', '# highlight', 'live scores card', '# box', '0.08 0.28 0.84 0.36'].join('\n');
 
 test('the script keeps the tease and the real fix apart', () => {
   const s = parseScript(SCRIPT);
@@ -66,9 +46,12 @@ test('captions stay in the safe zone, and the reveal names the fix rather than t
   assert.equal(check.ok, true, check.detail);
   const reveal = plan.beats.find((b) => b.id === 'reveal');
   const onReveal = caps.filter((c) => c.from >= reveal.from - 0.01 && c.to <= reveal.to + 0.01);
-  assert.ok(onReveal.some((c) => c.text === 'BEFORE') && onReveal.some((c) => c.text === 'AFTER'));
-  assert.ok(onReveal.some((c) => /live scores card/i.test(c.text)));
+  const before = onReveal.find((c) => c.text === 'BEFORE'), after = onReveal.find((c) => c.text === 'AFTER');
+  assert.ok(before && after && before.x < 400 && after.x > 540);
+  const fix = onReveal.find((c) => /live scores card/i.test(c.raw));
+  assert.equal(fix.raw, 'The real change is the live scores card.');
   assert.ok(onReveal.every((c) => !/just more stars/i.test(c.text)));
   const onStars = caps.filter((c) => c.from >= plan.beats[3].from - 0.01 && c.to <= plan.beats[3].to + 0.01);
-  assert.ok(onStars.every((c) => /stars/i.test(c.text)));
+  assert.ok(onStars.some((c) => /just more stars/i.test(c.raw)));
+  assert.ok(caps.every((c) => /^[A-Z]/.test(c.raw)));
 });
