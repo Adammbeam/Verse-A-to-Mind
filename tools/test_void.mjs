@@ -9393,7 +9393,8 @@ try {
     const L = await fresh(); const res = [];
     const lab = [['test my attention', 'attention-7'], ['hold the lamp', 'interval-timing-8'], ['fitts law', 'opt-in-gesture-6'], ['joint simon task', 'human-machine-co-agency-8'],
       ['count the flashes', 'sensory-substitution-7'], ['how sure are they', 'non-lexical-intent-5'], ["simpson's paradox", 'correlation-view-6'], ['when did it start', 'quiet-signal-filter-5'],
-      ['base rate fallacy', 'weak-signal-hypothesis-ledger-7'], ['word puzzles', 'private-incubation-log-6'], ["what hasn't void heard yet", 'miss-board-4'], ['odd moments log', 'anomalous-event-timeline-4']];
+      ['base rate fallacy', 'weak-signal-hypothesis-ledger-7'], ['word puzzles', 'private-incubation-log-6'], ["what hasn't void heard yet", 'miss-board-4'], ['odd moments log', 'anomalous-event-timeline-4'],
+      ['crowd of arrows', 'attention-8']];
     for (const [ask, id] of lab) {
       const hook = (/window\.(__[A-Za-z]+)/.exec(fs.readFileSync(path.join(root, 'fringe', id + '.html'), 'utf8')) || [])[1];
       await L.ask(ask, 300);
@@ -9405,8 +9406,8 @@ try {
     const links = await L.p.$$eval('.vpage.on .vlab a[data-ask]', (as) => as.map((a) => a.getAttribute('data-ask'))).catch(() => []);
     if (links.length) await L.p.click('.vpage.on .vlab a[data-ask="count the flashes"]');
     const opened = await until(async () => L.p.frames().some((f) => f.url().endsWith('/fringe/sensory-substitution-7.html')), 6000);
-    check('the fringe lab: each of the 12 experiments opens in a card from a plain ask and its self-test passes there; "fringe lab" lists all 12 and a click opens one',
-      res.every((r) => r.ok) && links.length === 12 && !!opened && !L.errors.length, JSON.stringify(res.filter((r) => !r.ok)) + ' links ' + links.length + ' ' + L.errors.join(' | '));
+    check('the fringe lab: each of the 13 experiments opens in a card from a plain ask and its self-test passes there; "fringe lab" lists all 13 and a click opens one',
+      res.every((r) => r.ok) && links.length === 13 && !!opened && !L.errors.length, JSON.stringify(res.filter((r) => !r.ok)) + ' links ' + links.length + ' ' + L.errors.join(' | '));
     await L.ctx.close();
   }
 

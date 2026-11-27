@@ -2,6 +2,44 @@
  "note": "The fringe ledger's published families for the \"fringe to skill\" card (tools/fringe.mjs --publish, from tools/fringe.json): each family's live drafts, its research notes newest first, what its runs were built toward (near) and the core skills its notes name.",
  "families": [
   {
+   "family": "attention",
+   "runs": 2,
+   "drafts": [
+    {
+     "id": "attention-8",
+     "run": 74,
+     "at": "2026-10-16",
+     "label": "The crowd of arrows",
+     "sub": "Five arrows, answer only the middle one. Your crowd cost in ms, split by the row before it, kept in this browser."
+    },
+    {
+     "id": "attention-7",
+     "run": 67,
+     "at": "2026-10-10",
+     "label": "The pointing arrow",
+     "sub": "An arrow hints where a star will appear. Sometimes it lies. How much does a hint steer you?"
+    }
+   ],
+   "hypothesis": "A 48-row flanker sitting in the browser can measure a person's own crowd cost and whether it shrinks right after a row that fought them, without any server.",
+   "behavior": "five arrows, answer the middle one; the cost of disagreeing neighbours in ms, split by the row before (the Gratton effect), kept per sitting in this browser only",
+   "findings": [
+    "the after-row split needs both rows correct and leaves about a dozen rows per cell in one sitting, so the draft asks for about six sittings before reading the shrink"
+   ],
+   "failures": [
+    {
+     "what": "exact repeats of the same row inflate the after-conflict shrink",
+     "evidence": "Mayr, Awh and Laurey (2003, https://doi.org/10.1038/nn1051) found the sequence effect largely vanished once exact repeats were removed; this draft does not remove them yet"
+    }
+   ],
+   "next": [
+    "drop exact stimulus repeats from the after-row split and compare the shrink with and without them"
+   ],
+   "combines": [],
+   "near": [],
+   "skills": [],
+   "noted": 1
+  },
+  {
    "family": "opt-in-gesture",
    "runs": 1,
    "drafts": [
@@ -142,28 +180,6 @@
      "at": "2026-10-02",
      "label": "Timing game",
      "sub": "How well do you feel time pass? Stop the clock by feel."
-    }
-   ],
-   "hypothesis": "",
-   "behavior": "",
-   "findings": [],
-   "failures": [],
-   "next": [],
-   "combines": [],
-   "near": [],
-   "skills": [],
-   "noted": 0
-  },
-  {
-   "family": "attention",
-   "runs": 1,
-   "drafts": [
-    {
-     "id": "attention-7",
-     "run": 67,
-     "at": "2026-10-10",
-     "label": "The pointing arrow",
-     "sub": "An arrow hints where a star will appear. Sometimes it lies. How much does a hint steer you?"
     }
    ],
    "hypothesis": "",

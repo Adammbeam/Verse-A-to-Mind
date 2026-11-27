@@ -1,1 +1,12 @@
-[]
+[
+ {
+  "id": "attention-8",
+  "label": "The crowd of arrows",
+  "sub": "Five arrows, answer only the middle one. Your crowd cost in ms, split by the row before it, kept in this browser.",
+  "asks": [
+   "crowd of arrows",
+   "five arrows test",
+   "answer the middle arrow"
+  ]
+ }
+]

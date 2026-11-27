@@ -1312,3 +1312,4 @@ Format: `ISO | slug | role | event | note`
 2026-11-24T04:42:31Z | openhands | fix | the stranger gate no longer calls Verse's intentionally blank stage a page with no content: it is its own kind, judged by its ask box
 2026-11-24T04:58:15Z | openhands | fix | unblocked the nightly bench feed: handoff-confidence joined a family, skills/index.json was rebuilt from skills/order/, and the bench step now records the floor and misses even when families reports a gap
 2026-11-24T06:46:23Z | claude | fix | Widen team handoff and let the conductor drain unroutable queue jobs
+2026-11-26T14:45:52Z | bigpickle | build | published the five-arrow crowd-cost experiment as a live lab page with its own ask and self-test

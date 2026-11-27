@@ -1870,7 +1870,16 @@
     "next_experiments": [
       "drop exact stimulus repeats from the after-row split and compare the shrink with and without them"
     ],
-    "sha256": "0923656e7441099272585f50fb995492020fa41ccddac8a8bf93b3b7020be458",
-    "emit": false
+    "lab": {
+      "label": "The crowd of arrows",
+      "sub": "Five arrows, answer only the middle one. Your crowd cost in ms, split by the row before it, kept in this browser.",
+      "asks": [
+        "crowd of arrows",
+        "five arrows test",
+        "answer the middle arrow"
+      ]
+    },
+    "sha256": "23ca89ce8b0df66010d0e8e76ac990f0ff1fce1c3b78623a0996fc09b988047c",
+    "emit": true
   }
 ]
