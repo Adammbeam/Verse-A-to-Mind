@@ -1,18 +1,12 @@
 name: Verse check
-# A pull request opened by a person starts the check. A branch update from this app is delivered as a push,
-# and the pull_request event for that same branch is not, so a workflow that listens only to pull_request never starts.
-# main is excluded: a merge to main is not this check.
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled, ready_for_review]
-  push:
-    branches-ignore:
-      - main
 permissions:
   contents: read
   pull-requests: read
 concurrency:
-  group: verse-check-${{ github.head_ref || github.ref_name }}
+  group: verse-check-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 jobs:
   check:
@@ -23,7 +17,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -34,19 +28,7 @@ jobs:
           PRE_PR_BASE: origin/main
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          PR_FROM_EVENT: ${{ github.event.pull_request.number }}
-          SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
-        run: |
-          set -eu
-          pr="$PR_FROM_EVENT"
-          if [ -z "$pr" ]; then
-            pr=$(gh api -H "Accept: application/vnd.github+json" "repos/$GH_REPO/commits/$SHA/pulls" --jq '.[0].number // empty' || true)
-          fi
-          if [ -n "$pr" ]; then
-            node tools/pre-pr.mjs --check-only --pr "$pr"
-          else
-            node tools/pre-pr.mjs --check-only
-          fi
+        run: node tools/pre-pr.mjs --check-only --pr ${{ github.event.pull_request.number }}
       - name: merge gate
         env:
           MERGE_GATE_BASE: origin/main
