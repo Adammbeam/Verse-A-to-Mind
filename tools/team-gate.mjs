@@ -20,8 +20,8 @@ import { fileURLToPath } from 'node:url';
 import { backNote, kindOf, reviewNote } from '../void-live-deploy/lib/team.js';
 
 export const SITE = process.env.VOID_SITE || 'https://a-to-mind.com';
-export const REPO = 'atomeam/void-loop';
-const PR_RE = /^review by team:([^·]+?) · PR: (https:\/\/github\.com\/atomeam\/void-loop\/pull\/(\d+))\b/;
+export const REPO = 'Adammbeam/Verse-A-to-Mind'; // the live repo (was atomeam/void-loop, now flagged)
+const PR_RE = /^review by team:([^·]+?) · PR: (https:\/\/github\.com\/Adammbeam\/Verse-A-to-Mind\/pull\/(\d+))\b/;
 const NOTES = /^(domains\/|docs\/)|\.md$/i;
 const PAGE = /^void-live-deploy\/([a-z0-9][a-z0-9-]*)\/index\.html$/;
 const ENGINE = /^void-live-deploy\/lib\/[^/]+\.js$/;

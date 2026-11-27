@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { handedIn, judge, pagesOf, pageOk, replayJobs } from './team-gate.mjs';
 import { reviewNote } from '../void-live-deploy/lib/team.js';
 
-const URL1 = 'https://github.com/atomeam/void-loop/pull/1786';
+const URL1 = 'https://github.com/Adammbeam/Verse-A-to-Mind/pull/1786';
 const job = (target, extra = {}) => ({ id: 'mvqvg46r', target, state: 'building', note: reviewNote('Beam', URL1, 'notes for diffuse.tools'), ...extra });
 const merged = { state: 'closed', merged_at: '2026-10-30T06:35:07Z', merge_commit_sha: 'abc' };
 const f = (filename, additions = 10, deletions = 0, status = 'modified') => ({ filename, additions, deletions, status });
@@ -56,6 +56,6 @@ test('a live page works when it answers 200 with a real HTML page', () => {
 test('a replay stands for a handed-in job per pull request, and drops what is not one', () => {
   const rows = replayJobs('1766:versus:emojicombos.com, 1786:versus:diffuse.tools:speed,x:versus:a.com,12:Versus:A.com,9;rm:feature:x');
   assert.deepEqual(rows.map((r) => [r.id, r.target]), [['replay-1766', 'versus:emojicombos.com'], ['replay-1786', 'versus:diffuse.tools:speed']]);
-  assert.deepEqual(handedIn(rows[0]), { agent: 'replay', url: 'https://github.com/atomeam/void-loop/pull/1766', number: 1766 });
+  assert.deepEqual(handedIn(rows[0]), { agent: 'replay', url: 'https://github.com/Adammbeam/Verse-A-to-Mind/pull/1766', number: 1766 });
   assert.deepEqual(replayJobs(''), []);
 });

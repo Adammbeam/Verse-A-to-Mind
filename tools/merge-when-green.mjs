@@ -8,7 +8,7 @@
 import { execFileSync } from 'node:child_process';
 import { readiness } from './pr-ready.mjs';
 
-const pr = process.argv[2], repo = process.env.REPO || 'atomeam/void-loop';
+const pr = process.argv[2], repo = process.env.REPO || 'Adammbeam/Verse-A-to-Mind';
 if (!/^\d+$/.test(pr || '')) { console.error('usage: node tools/merge-when-green.mjs <pr-number>'); process.exit(2); }
 const gh = (...a) => JSON.parse(execFileSync('gh', ['api', ...a], { encoding: 'utf8' }) || 'null');
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));

@@ -25,7 +25,7 @@ import { tidy } from './pr-tidy.mjs';
 import { openRegenPr } from './main-regen.mjs';
 import { stallVerdict, lastMerge, keyOf, withKey, STALL_MS, LABEL as STALL_LABEL, MARK as STALL_MARK } from './merge-stall.mjs';
 
-const repo = process.env.REPO || process.env.GITHUB_REPOSITORY || 'atomeam/void-loop', LABEL = 'automerge';
+const repo = process.env.REPO || process.env.GITHUB_REPOSITORY || 'Adammbeam/Verse-A-to-Mind', LABEL = 'automerge';
 
 // Stacked PRs cannot use the synchronous merge endpoint; fall back to merge-async and poll its result.
 // The API budget (2026-11-04). Every workflow in this repository shares one GITHUB_TOKEN quota (1,000 REST calls an hour). A sweep

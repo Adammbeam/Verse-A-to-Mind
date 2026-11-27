@@ -7,7 +7,7 @@
 //   no workflow file is edited: tools/house-loops.mjs calls freshLaneBranch before it runs the lane.
 import { spawnSync } from 'node:child_process';
 
-const REPO = () => process.env.GITHUB_REPOSITORY || 'atomeam/void-loop';
+const REPO = () => process.env.GITHUB_REPOSITORY || 'Adammbeam/Verse-A-to-Mind';
 export const branchOf = (lane) => 'house/' + String(lane || '').replace(/[^a-z0-9-]/gi, '');
 
 /** what to do with a lane branch. Pure. exists: the branch is on origin; open: the number of open pull requests from it, or null when unknown. */
