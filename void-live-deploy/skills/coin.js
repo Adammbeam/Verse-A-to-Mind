@@ -95,16 +95,18 @@ function worthButton(el, getImage, note) {
 }
 
 /** the coin page on an ask, as a plain query the card frame takes (lib/card-frame.js pageOfCard), else the page itself. Pure. */
-/** the coin tool's own address, with the ask kept (never /flip/?q= or /random/coin/?q=: those redirects drop the query on the live site). Pure. */
+/** the coin tool's own address, with the ask kept. Pure. */
 export function coinToolUrl(q) {
   const t = String(q || '').trim().replace(/\s+/g, ' ');
-  return t ? '/random/?mode=coin&q=' + encodeURIComponent(t) : '/random/?mode=coin';
+  return t ? '/flip/?q=' + encodeURIComponent(t) : '/flip/';
 }
-/** rewrite an old /flip or /random/coin address so the coin ask stays. Pure. */
+/** rewrite an old /random/coin or /random/?mode=coin address to the coin page. Pure. */
 export function rewriteCoinHref(href) {
   try {
     const u = new URL(String(href || ''), 'https://a-to-mind.com');
-    if (!/^\/(?:flip|random\/coin)\/?$/.test(u.pathname)) return null;
+    const p = u.pathname.replace(/\/+$/, '') || '/';
+    const coinMode = p === '/random' && u.searchParams.get('mode') === 'coin';
+    if (p !== '/random/coin' && !coinMode) return null;
     return coinToolUrl(u.searchParams.get('q') || '');
   } catch (_) { return null; }
 }
@@ -223,7 +225,7 @@ function flipCard(text, api, ask, look, keepEl) {
       + '<div class="coin-tools"><button type="button" class="coin-again">Flip again</button><button type="button" class="coin-sound"></button><button type="button" class="coin-reset">Reset tally</button></div>'
       + '<div class="src">' + (look ? esc(look.src) : (ask.p === 0.5 ? 'A fair flip' : 'Weighted ' + Math.round(ask.p * 100) + '% heads') + ' from this device’s secure random numbers, no network') + '</div>'
       // on the stage, the way to the coin's own page (/random/coin/) and what it adds there; the page itself needs no link to itself
-      + (typeof location !== 'undefined' && onCoinPage() ? '' : '<p class="coin-full" style="text-align:center;font-size:13px;margin:8px 0"><a href="/random/?mode=coin" style="color:inherit">Coin flip page →</a></p>');
+      + (typeof location !== 'undefined' && onCoinPage() ? '' : '<p class="coin-full" style="text-align:center;font-size:13px;margin:8px 0"><a href="/flip/" style="color:inherit">Coin flip page →</a></p>');
   });
   if (!el || !el.querySelector) return 'coin';
   const row = el.querySelector('.coin-row'), word = el.querySelector('.coin-word'), tally = el.querySelector('.coin-tally'), snd = el.querySelector('.coin-sound');

@@ -33,21 +33,36 @@ test('the Flip page card asks for the coin open on it, and the stage card opens 
     assert.equal(cardAsk('?q=' + encodeURIComponent(ask)), ask, ask);
     const page = pageOfFlip(ask); assert.equal(pageOfCard('coin', page)[0], page, ask);
     assert.equal(new URLSearchParams(page.slice(page.indexOf('?'))).get('q'), ask, 'the card opens the same coin');
-    assert.match(page, /\/random\/\?mode=coin/);
+    assert.match(page, /^\/flip\/(\?q=|$)/);
   }
   for (const s of ['', '?q=', '?q=what+is+a+coin', '?q=bitcoin+price', '?x=flip+a+coin', '?q=' + 'flip a coin '.repeat(9), null]) assert.equal(cardAsk(s), '', String(s));
-  assert.equal(pageOfFlip("flip a coin (it's mine)"), '/random/?mode=coin', 'a query the card frame would not take opens the page itself');
+  assert.equal(pageOfFlip("flip a coin (it's mine)"), '/flip/', 'a query the card frame would not take opens the page itself');
   const el = fake(); let shown = null, r;
   const had = 'document' in globalThis; globalThis.document = fake(); // the card draws its coins with document.createElement
   try { r = coin.run('flip 3 coins', { esc: (s) => String(s), showPage: (build) => { build(el); shown = el; return el; }, stage: { ask() {} } }); } finally { if (!had) delete globalThis.document; }
-  assert.equal(r, 'coin'); assert.equal(shown.dataset.page, '/random/?mode=coin&q=flip%203%20coins');
+  assert.equal(r, 'coin'); assert.equal(shown.dataset.page, '/flip/?q=flip%203%20coins');
   assert.equal(coin.run('what is a coin', { esc: String, showPage: () => { throw new Error('drew'); } }), 'none');
 });
 
-test('old /flip/?q= and /random/coin/?q= addresses are rewritten so the history ask is kept', () => {
-  assert.equal(rewriteCoinHref('/flip/?q=flip+a+famous+coin'), '/random/?mode=coin&q=flip%20a%20famous%20coin');
-  assert.equal(rewriteCoinHref('/random/coin/?q=flip+a+Lydian+stater'), '/random/?mode=coin&q=flip%20a%20Lydian%20stater');
-  assert.equal(rewriteCoinHref('/flip/?q=flip+a+real+coin+from+history'), coinToolUrl('flip a real coin from history'));
-  assert.equal(rewriteCoinHref('/random/?mode=coin&q=flip+a+famous+coin'), null);
+test('old /random/coin/ and /random/?mode=coin addresses are rewritten to /flip/', () => {
+  assert.equal(rewriteCoinHref('/random/coin/?q=flip+a+Lydian+stater'), '/flip/?q=flip%20a%20Lydian%20stater');
+  assert.equal(rewriteCoinHref('/random/?mode=coin&q=flip+a+famous+coin'), '/flip/?q=flip%20a%20famous%20coin');
+  assert.equal(rewriteCoinHref('/random/?mode=coin'), '/flip/');
+  assert.equal(rewriteCoinHref('/flip/?q=flip+a+famous+coin'), null);
   assert.equal(rewriteCoinHref('/tools/'), null);
+});
+
+test('flip page is installable as an Android/PWA app', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
+  const html = fs.readFileSync(path.join(root, 'void-live-deploy/flip/index.html'), 'utf8');
+  assert.match(html, /<link rel="manifest" href="\/flip\/manifest\.webmanifest">/);
+  assert.match(html, /beforeinstallprompt/);
+  assert.match(html, /Install app/);
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, 'void-live-deploy/flip/manifest.webmanifest'), 'utf8'));
+  assert.equal(manifest.start_url, '/flip/?source=app');
+  assert.equal(manifest.display, 'standalone');
+  assert.equal(manifest.short_name, 'Coin Flip');
+  assert.ok(Array.isArray(manifest.icons) && manifest.icons.length >= 1);
 });

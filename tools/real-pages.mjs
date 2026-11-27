@@ -310,7 +310,7 @@ export const SPECS = {
     t.ok(/JFK/.test(await t.p.locator('main').innerText()) && /LHR/.test(await t.p.locator('main').innerText()), 'a pasted flight is read into the trip');
     await t.download('#i-ics', /\.ics$/i);
   },
-  '/random/?mode=coin': async (t) => { const b = await t.p.locator('main').innerText(); await t.clickText('Flip again'); await t.p.waitForTimeout(1200); t.ok(/Heads|Tails/i.test(await t.p.locator('main').innerText()), 'a flip lands heads or tails'); t.ok(b !== (await t.p.locator('main').innerText()) || true, 'tally kept'); },
+  '/flip/': async (t) => { const b = await t.p.locator('main').innerText(); await t.clickText('Flip again'); await t.p.waitForTimeout(1200); t.ok(/Heads|Tails/i.test(await t.p.locator('main').innerText()), 'a flip lands heads or tails'); t.ok(b !== (await t.p.locator('main').innerText()) || true, 'tally kept'); },
   '/g/': async (t) => { await t.fill('#ta', 'hello from the test'); await t.share('#share'); },
   '/generators/': async (t) => { const a = await t.text('#res'); await t.click('#regen'); await t.p.waitForTimeout(300); t.ok((await t.text('#res')) !== a, 'Regenerate makes new names'); await t.copies('#copyAll'); await t.share('#share'); },
   '/generators/chat/': async (t) => { await t.fill('#say', 'hello captain'); await t.click('#send'); await t.p.waitForTimeout(4000); t.ok((await t.p.locator('#log').innerText()).length > 20, 'the character answers'); await t.share('#share'); },

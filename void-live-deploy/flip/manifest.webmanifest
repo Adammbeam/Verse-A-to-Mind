@@ -1,0 +1,20 @@
+{
+  "id": "/flip/",
+  "name": "Coin Flip - Verse",
+  "short_name": "Coin Flip",
+  "description": "Flip a coin: heads or tails from a fair, instant coin flip. Works offline.",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["utilities", "entertainment"],
+  "start_url": "/flip/?source=app",
+  "scope": "/flip/",
+  "display": "standalone",
+  "background_color": "#07060b",
+  "theme_color": "#07060b",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

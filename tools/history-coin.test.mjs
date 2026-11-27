@@ -17,7 +17,7 @@ const TYPES = { '.js': 'text/javascript', '.mjs': 'text/javascript', '.html': 't
 const DOT = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwADhQGAWjR9awAAAABJRU5ErkJggg==', 'base64');
 
 // as Cloudflare Pages does: a path in this table whose target already has ? drops the incoming query
-const DROP = new Map([['/flip', '/random/?mode=coin'], ['/flip/', '/random/?mode=coin'], ['/random/coin', '/random/?mode=coin'], ['/random/coin/', '/random/?mode=coin']]);
+const DROP = new Map([['/random/coin', '/flip/'], ['/random/coin/', '/flip/']]);
 
 const server = http.createServer((req, res) => {
   let url; try { url = new URL(req.url, 'http://x'); } catch (_) { res.writeHead(400); return res.end(); }
@@ -54,7 +54,7 @@ async function runAt(size, label) {
   const ctx = await browser.newContext({ viewport: size });
   const page = await ctx.newPage();
 
-  await open(page, '/random/?mode=coin&q=flip+a+famous+coin');
+  await open(page, '/flip/?q=flip+a+famous+coin');
   await page.waitForSelector('.coin-pick, h2', { timeout: 12000 });
   const picker = await page.evaluate(() => ({
     title: (document.querySelector('h2') || {}).textContent || '',
@@ -65,18 +65,18 @@ async function runAt(size, label) {
     picker.title.includes('Pick a coin') && picker.names.includes('Lydian stater') && picker.names.includes('Morgan dollar'),
     picker);
 
-  // a raw visit to the old footer address loses the query (the live redirect does); the footer click is rewritten first
+  // /flip/ is a real page now (installable PWA); the query stays on a direct visit
   await open(page, '/flip/?q=flip+a+famous+coin');
   await page.waitForSelector('h2, .coin-word', { timeout: 12000 });
-  const dropped = await page.evaluate(() => ({ url: location.pathname + location.search, title: (document.querySelector('h2') || {}).textContent || '' }));
-  check(label + ': a raw /flip/?q= visit still loses the ask, as the live site does',
-    dropped.url === '/random/?mode=coin' && !/Pick a coin/.test(dropped.title),
-    dropped);
+  const kept = await page.evaluate(() => ({ url: location.pathname + location.search, title: (document.querySelector('h2') || {}).textContent || '' }));
+  check(label + ': a /flip/?q= visit keeps the ask on the coin page',
+    kept.url.startsWith('/flip/') && /q=/.test(kept.url) && /Pick a coin/.test(kept.title),
+    kept);
 
-  await open(page, '/random/?mode=coin');
+  await open(page, '/flip/');
   await page.waitForSelector('footer a, h2', { timeout: 12000 });
   await Promise.all([
-    page.waitForURL((u) => /mode=coin/.test(u.search) && /famous|real\+coin|history/.test(u.search + decodeURIComponent(u.search)), { timeout: 12000 }),
+    page.waitForURL((u) => /\/flip\//.test(u.pathname) && /famous|real\+coin|history/.test(u.search + decodeURIComponent(u.search)), { timeout: 12000 }),
     page.locator('footer a', { hasText: 'Flip a real coin from history' }).click(),
   ]);
   await page.waitForSelector('.coin-pick, h2', { timeout: 12000 });
@@ -86,10 +86,10 @@ async function runAt(size, label) {
     n: document.querySelectorAll('.coin-pick').length,
   }));
   check(label + ': clicking "Flip a real coin from history" keeps the ask and opens the picker',
-    /mode=coin/.test(fromFooter.url) && /q=/.test(fromFooter.url) && fromFooter.title.includes('Pick a coin') && fromFooter.n >= 16,
+    /\/flip\//.test(fromFooter.url) && /q=/.test(fromFooter.url) && fromFooter.title.includes('Pick a coin') && fromFooter.n >= 16,
     fromFooter);
 
-  await open(page, '/random/?mode=coin&q=flip+a+Lydian+stater');
+  await open(page, '/flip/?q=flip+a+Lydian+stater');
   await page.waitForFunction(() => {
     const src = document.querySelector('.src');
     return src && /Wikimedia Commons/i.test(src.textContent || '');
