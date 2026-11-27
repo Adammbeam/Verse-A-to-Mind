@@ -11995,6 +11995,30 @@ try {
     !/api\/routes|escalat|lib\/router|bge-m3|qwen/i.test(html) && fs.readFileSync(path.join(root, 'void.html'), 'utf8') === html, '');
   }
   } // CORE
+  // DIY Stack Exchange gap 328779: an unlabeled panel was needed for an insurer's recall check. The card tells the
+  // visitor where the real marking lives, that a breaker brand is only a clue, and that a model plus date code is
+  // what a recall needs; it does not guess a manufacturer from a photo.
+  if (want("electrical-panel-id: the DIY gap title reaches a label checklist and near misses do not")) {
+    const piApi = await import(new URL('../void-live-deploy/skills/electrical-panel-id.js', import.meta.url).href);
+    const piMods = [];
+    for (const n of JSON.parse(fs.readFileSync(path.join(root, 'skills', 'index.json'), 'utf8'))) { const sk = (await import(new URL('../void-live-deploy/skills/' + n + '.js', import.meta.url).href)).default; piMods.push(...(sk.family ? sk.members : [sk])); }
+    const piFirst = (a) => { const k = piMods.find((s) => s.match(a.toLowerCase(), a)); return k ? k.name : null; };
+    const piMod = piMods.find((s) => s.name === 'electrical-panel-id');
+    const piEsc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const piHtml = piApi.cardHtml(piEsc);
+    const full = piApi.evidence({ door: true, date: true }), none = piApi.evidence({}), clue = piApi.evidence({ breaker: true });
+    check('electrical-panel-id: the gap title routes only here, the clue order is right, a label plus a date is enough but a breaker brand is only a clue, and the card carries the safety note and source',
+      !!piMod && piMod.examples.length >= 5 && piMod.nearMisses.length >= 4
+        && piMod.examples.every((e) => piFirst(e) === 'electrical-panel-id') && piMod.nearMisses.every((e) => piFirst(e) !== 'electrical-panel-id')
+        && piApi.panelAsk('How can I identify the manufacturer and model/date of this electrical panel?') && !piApi.panelAsk('how do i reset a tripped breaker')
+        && piApi.PANEL_CLUES[0].id === 'door' && piApi.PANEL_CLUES.length === 5
+        && full.level === 'Enough to check' && none.level === 'No marking yet' && clue.level === 'Clue only'
+        && /Identify an unlabeled electrical panel/.test(piHtml) && /Inside the panel door/.test(piHtml)
+        && /Do not remove the deadfront/.test(piHtml)
+        && /diy\.stackexchange\.com\/questions\/328779/.test(piHtml) && /CC BY-SA 4\.0/.test(piHtml)
+        && !/api\/publish/.test(piHtml),
+      piMod ? piMod.examples.map((e) => e + ' -> ' + piFirst(e)).join(' | ') + ' ; ' + JSON.stringify({ full: full.level, none: none.level, clue: clue.level }) : 'missing electrical-panel-id skill');
+  }
   // the convert card (asked by Verse, 2026-10-14): "unit converter" puts a converter on the stage that converts both ways,
   // swaps, lists every other unit of the kind, keeps its kind, units and number across a reload, and puts itself away;
   // one-off asks ("5 miles in km") and other converters (currency, pdf, time zone) are not its.
