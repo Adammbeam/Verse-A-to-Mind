@@ -189,6 +189,22 @@
    "isolated": false
   },
   {
+   "name": "maplibre/maplibre-gl-js",
+   "author": "MapLibre contributors",
+   "license": "BSD-3-Clause",
+   "link": "https://github.com/maplibre/maplibre-gl-js",
+   "used": "/flights/map/ (vector map, vendored at /vendor/maplibre-gl-5.6.0/)",
+   "isolated": false
+  },
+  {
+   "name": "maplibre/demotiles",
+   "author": "MapLibre contributors",
+   "license": "BSD-3-Clause",
+   "link": "https://github.com/maplibre/demotiles",
+   "used": "/flights/map/ (keyless vector style and tiles; country shapes Natural Earth, public domain)",
+   "isolated": false
+  },
+  {
    "name": "lineofflight/frankfurter",
    "author": "lineofflight",
    "license": "MIT",
