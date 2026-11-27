@@ -11,7 +11,7 @@ import * as CS from './codestore.mjs';
 import { crName, parseProof, proofText } from '../void-live-deploy/lib/cr-proof.js';
 
 export const TEAM_API = () => process.env.VERSE_TEAM_API || 'https://a-to-mind.com/api/team';
-const git = (args, cwd) => execFileSync('git', args, { cwd, encoding: 'utf8', maxBuffer: 1 << 26 }).trim();
+const git = (args, cwd) => execFileSync('git', args, { cwd, encoding: 'utf8', maxBuffer: 1 << 26, timeout: 120e3 }).trim();
 export function argsOf(argv, env = process.env) {
   const val = (n) => { const i = argv.indexOf(n); return i >= 0 && argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : ''; };
   return { job: val('--job') || env.VERSE_JOB_ID || '', seat: val('--seat') || env.VERSE_SEAT || '', ref: val('--ref') || 'HEAD', dryRun: argv.includes('--dry-run'), diff: argv.includes('--diff') };
