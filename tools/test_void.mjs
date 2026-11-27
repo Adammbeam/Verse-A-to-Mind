@@ -11995,6 +11995,28 @@ try {
     !/api\/routes|escalat|lib\/router|bge-m3|qwen/i.test(html) && fs.readFileSync(path.join(root, 'void.html'), 'utf8') === html, '');
   }
   } // CORE
+  // Gardening Stack Exchange gap 23378: a landscape design stacks slopes, terraces and height grids, and the asker could not
+  // read the finished ground height at a point. The card turns the question into a plain calculator and a method, not a
+  // software review; the exact gap title reaches it and the near misses stay with their own answers.
+  if (want("ground-height: the gardening gap title reaches a finished-elevation calculator and near misses do not")) {
+    const ghApi = await import(new URL('../void-live-deploy/skills/ground-height.js', import.meta.url).href);
+    const ghMods = [];
+    for (const n of JSON.parse(fs.readFileSync(path.join(root, 'skills', 'index.json'), 'utf8'))) { const sk = (await import(new URL('../void-live-deploy/skills/' + n + '.js', import.meta.url).href)).default; ghMods.push(...(sk.family ? sk.members : [sk])); }
+    const ghFirst = (a) => { const k = ghMods.find((s) => s.match(a.toLowerCase(), a)); return k ? k.name : null; };
+    const ghMod = ghMods.find((s) => s.name === 'ground-height');
+    const ghEsc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const ghCase = ghApi.finishedHeight({ base: 100, grade: 2, distance: 30, offset: 0.5 });
+    const ghHtml = ghApi.cardHtml({ ...ghCase, grade: 2, distance: 30 }, 'ft', ghEsc);
+    check('ground-height: the gap title routes only here; the finished height is base + slope + layer change, and the card shows the method and credits the question',
+      !!ghMod && ghMod.examples.length >= 5 && ghMod.nearMisses.length >= 4
+        && ghMod.examples.every((e) => ghFirst(e) === 'ground-height') && ghMod.nearMisses.every((e) => ghFirst(e) !== 'ground-height')
+        && ghApi.groundAsk('Realtime landscape plus design program, final ground height') && !ghApi.groundAsk('Realtime Landscaping Plus review')
+        && ghCase.final === 101.1 && ghCase.rise === 0.6 && ghCase.fallPer100 === 3.667
+        && ghApi.parseGroundAsk('final ground height with base 100 ft, grade 2% over 30 ft, fill 0.5 ft').base === 100
+        && /Final ground height/.test(ghHtml) && /starting height/i.test(ghHtml) && /gardening\.stackexchange\.com\/questions\/23378/.test(ghHtml)
+        && /CC BY-SA 3\.0/.test(ghHtml) && !/\/api\/publish/.test(ghHtml),
+      ghMod ? ghMod.examples.map((e) => e + ' -> ' + ghFirst(e)).join(' | ') + ' ; ' + JSON.stringify(ghCase) : 'missing ground-height skill');
+  }
   // the convert card (asked by Verse, 2026-10-14): "unit converter" puts a converter on the stage that converts both ways,
   // swaps, lists every other unit of the kind, keeps its kind, units and number across a reload, and puts itself away;
   // one-off asks ("5 miles in km") and other converters (currency, pdf, time zone) are not its.
