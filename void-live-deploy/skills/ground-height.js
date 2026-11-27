@@ -122,6 +122,6 @@ export default {
   run,
   suite() {
     const a = finishedHeight({ base: 100, grade: 2, distance: 30, offset: 0.5 });
-    return { ok: a.final === 101.1 && a.rise === 0.6 && !groundAsk('slope percent to degrees') && groundAsk('final ground height'), got: 'base + slope + layer change, and only height asks route here' };
+    return { ok: a.final === 101.1 && a.rise === 0.6 && !groundAsk('slope percent to degrees') && groundAsk('final ground height'), got: 'base + slope + layer change, and only height asks route here' }; // void-review: ok (round() already snaps to thousandths; both sides are that same value)
   },
 };
