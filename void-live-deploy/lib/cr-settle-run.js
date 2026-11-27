@@ -2,7 +2,9 @@
 // check puts it back on the queue. No GitHub read: the store's own tables (void_code_checks, void_code_deploys, void_code_refs, D1) say it.
 // Two ways a building job is matched to a change request:
 //   1. its note carries a store proof ("review by store: cr/<seat>/<job>@<sha>", functions/api/ship.js writes it)
-//   2. no proof was stored, but the store holds refs/heads/cr/<seat>/<job> for that queue id (a seat pushed and never sent the proof)
+//   2. no proof was stored, but the store holds refs/heads/cr/<seat>/<job> for that queue id, the job's note still says
+//      "claimed by team:<seat>", and that seat (or the owner) pushed the ref. A ref another seat pushed, or a job that is
+//      waiting on a GitHub review, is left alone.
 // At most `max` jobs a pass. The note says why (the check summary or the deploy url), as team.js settleReviews does for pull requests.
 // functions/code/[[path]].js runs it after the runner reports a check or a deploy (L1.7).
 import { parseProof, proofOfNote, segOf, proofText } from './cr-proof.js';
@@ -13,7 +15,7 @@ const rows = async (env, sql, ...b) => { try { return (await env.DB.prepare(sql)
 export async function storeStatus(env) {
   const checks = await rows(env, 'SELECT at, ref, sha, state, summary FROM void_code_checks ORDER BY id DESC LIMIT 200');
   const deploys = await rows(env, 'SELECT at, sha, deployment, state, url FROM void_code_deploys ORDER BY id DESC LIMIT 50');
-  const changes = await rows(env, "SELECT name, sha FROM void_code_refs WHERE name LIKE 'refs/heads/cr/%' ORDER BY at DESC LIMIT 100");
+  const changes = await rows(env, "SELECT name, sha, by FROM void_code_refs WHERE name LIKE 'refs/heads/cr/%' ORDER BY at DESC LIMIT 100");
   return { checks, deploys, changes };
 }
 /** the store notes a pass writes. Pure. */
@@ -35,7 +37,8 @@ export async function settleStore(env, { now = Date.now(), max = 6, status = nul
     const p = parseProof(r.name + '@' + r.sha); if (!p.ok || picked.some((x) => x.id === p.job)) continue;
     const [j] = await rows(env, "SELECT id, note FROM void_queue WHERE id = ? AND state = 'building' AND note NOT LIKE '%review by store: %'", p.job); // void-review: ok (at most `max` reads a pass)
     if (!j || segOf(j.id) !== p.job) continue;
-    const who = claimedBy(j.note); if (who && segOf(who) !== p.seat) continue; // another seat's job
+    const who = claimedBy(j.note); if (!who || segOf(who) !== p.seat) continue; // only the seat whose claim note is still on the job
+    const by = String(r.by || ''); if (by !== 'owner' && by !== 'team:' + p.seat) continue; // a ref another seat pushed under this name
     picked.push({ ...j, proof: p, byRef: true });
   }
   for (const j of picked.slice(0, max)) {

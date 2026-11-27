@@ -22,7 +22,7 @@ function world() {
 const job = (env, id, note, state = 'building') => env.DB.raw.prepare('INSERT INTO void_queue VALUES (?, ?, ?, ?, ?, ?, ?)').run(id, 'ask ' + id, 'feature:' + id, state, note, '2026-11-27T00:00:00Z', '2026-11-27T00:00:00Z');
 const check = (env, ref, sha, state, at, summary = state) => env.DB.raw.prepare('INSERT INTO void_code_checks (at, ref, sha, state, summary, by) VALUES (?, ?, ?, ?, ?, ?)').run(at, ref, sha, state, summary, 'owner');
 const deploy = (env, sha, state, at) => env.DB.raw.prepare('INSERT INTO void_code_deploys (at, sha, deployment, state, url, by) VALUES (?, ?, ?, ?, ?, ?)').run(at, sha, 'dep' + at, state, 'https://dep' + at + '.a-to-mind.pages.dev', 'owner');
-const ref = (env, name, sha, at = 1) => env.DB.raw.prepare('INSERT INTO void_code_refs (name, sha, at, by) VALUES (?, ?, ?, ?)').run(name, sha, at, 'team:x');
+const ref = (env, name, sha, at = 1, by) => env.DB.raw.prepare('INSERT INTO void_code_refs (name, sha, at, by) VALUES (?, ?, ?, ?)').run(name, sha, at, by == null ? 'team:' + (String(name).split('/')[3] || '') : by);
 const q = (env, id) => env.DB.raw.prepare('SELECT state, note FROM void_queue WHERE id = ?').get(id);
 const T0 = Date.UTC(2026, 10, 27, 23);
 
@@ -93,4 +93,20 @@ test('the runner\'s check and deploy reports on /code/verse.git settle a shipped
   const bare = world(); Object.assign(bare, { READ_TOKEN: OWNER, SALT: 's', CODE: env.CODE }); bare.DB.raw.exec('DROP TABLE void_queue');
   const r2 = await onRequest({ request: new Request('https://x/code/verse.git/checks', { method: 'POST', headers: { authorization: 'Bearer ' + OWNER, 'content-type': 'application/json' }, body: JSON.stringify({ ref: 'refs/heads/cr/a/b', sha: A, state: 'red', summary: 'x' }) }), env: bare, params: { path: ['verse.git', 'checks'] }, now: T0 });
   assert.equal(r2.status, 201);
+});
+
+test('a ref does not settle a GitHub review, or a job whose change request another seat pushed', async () => {
+  const env = world();
+  job(env, 'ask-1', 'review by team:Beam · https://github.com/Adammbeam/Verse-A-to-Mind/pull/9');
+  job(env, 'ask-2', 'claimed by team:GrokBot · 2026-11-27');
+  ref(env, 'refs/heads/cr/GrokBot/ask-1', A);
+  ref(env, 'refs/heads/cr/GrokBot/ask-2', A, 1, 'team:Other');
+  check(env, 'refs/heads/cr/GrokBot/ask-1', A, 'green', 10);
+  check(env, 'refs/heads/cr/GrokBot/ask-2', A, 'green', 10);
+  deploy(env, M, 'live', 11);
+  const r = await settleStore(env, { now: T0 });
+  assert.equal(r.live, 0); assert.equal(r.back, 0);
+  assert.equal(q(env, 'ask-1').state, 'building');
+  assert.equal(q(env, 'ask-2').state, 'building');
+  assert.match(q(env, 'ask-2').note, /^claimed by team:GrokBot/);
 });

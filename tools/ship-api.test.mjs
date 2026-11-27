@@ -18,6 +18,7 @@ const offline = async () => new Response('', { status: 503 });
 function world() {
   const DB = d1();
   DB.raw.exec('CREATE TABLE void_queue (id TEXT PRIMARY KEY, ask TEXT, target TEXT, state TEXT, note TEXT, at TEXT, updated TEXT)');
+  DB.raw.exec('CREATE TABLE void_code_refs (name TEXT PRIMARY KEY, sha TEXT NOT NULL, at INTEGER NOT NULL, by TEXT NOT NULL)');
   const add = DB.raw.prepare('INSERT INTO void_queue VALUES (?, ?, ?, ?, ?, ?, ?)');
   add.run('ask-1', 'build lib/cr-proof.js', 'feature:team-1', 'queued', '', '2026-11-27T00:00:00Z', '2026-11-27T00:00:00Z');
   add.run('ask-2', 'build lib/cr-settle.js', 'feature:team-2', 'queued', '', '2026-11-27T00:01:00Z', '2026-11-27T00:01:00Z');
@@ -33,9 +34,11 @@ async function seated(env, name = 'GrokBot', job = 'ask-1') {
   return j.key;
 }
 const proofFor = (seat, job, sha = SHA) => 'cr/' + seat + '/' + job + '@' + sha;
+const land = (env, seat, job, sha = SHA, by = 'team:' + seat) => env.DB.raw.prepare('INSERT OR REPLACE INTO void_code_refs (name, sha, at, by) VALUES (?, ?, ?, ?)').run('refs/heads/cr/' + seat + '/' + job, sha, 1, by);
 
 test('a seated agent with a job and a valid Verse proof gets ok, the proof and its next job', async () => {
   const env = world(), key = await seated(env);
+  land(env, 'GrokBot', 'ask-1');
   const r = await ship(env, { proof: proofFor('GrokBot', 'ask-1') }, key);
   assert.equal(r.status, 201, r.say); assert.equal(r.ok, true);
   assert.equal(r.proof, proofFor('GrokBot', 'ask-1'));
@@ -46,6 +49,7 @@ test('a seated agent with a job and a valid Verse proof gets ok, the proof and i
 
 test('the job note stores the proof for the store settle, and the thread hears it', async () => {
   const env = world(), key = await seated(env);
+  land(env, 'GrokBot', 'ask-1');
   await ship(env, { proof: 'https://a-to-mind.com/code/verse.git#' + proofFor('GrokBot', 'ask-1'), note: 'adds the parser' }, key);
   const job = env.DB.raw.prepare("SELECT state, note FROM void_queue WHERE id = 'ask-1'").get();
   assert.equal(job.state, 'building');
@@ -68,9 +72,35 @@ test('no job is 409, a bad proof is 400, a GitHub link is 400, a stranger is 403
 
 test('the key never appears in any answer', async () => {
   const env = world(), key = await seated(env);
+  land(env, 'GrokBot', 'ask-1');
   for (const body of [{ proof: proofFor('GrokBot', 'ask-1') + key }, { proof: key }, { proof: proofFor('GrokBot', 'ask-1'), note: 'my key ' + key }]) {
     const r = await ship(env, body, key); assert.ok(!r.text.includes(key), JSON.stringify(r.status));
   }
   const notes = env.DB.raw.prepare('SELECT note FROM void_queue').all().map((r) => r.note).join('\n') + env.DB.raw.prepare('SELECT body FROM void_team_msgs').all().map((r) => r.body).join('\n');
   assert.ok(!notes.includes(key.split('.')[2]));
+});
+
+test('a proof for a commit the store does not hold is refused, and the job stays claimed', async () => {
+  const env = world(), key = await seated(env);
+  const r = await ship(env, { proof: proofFor('GrokBot', 'ask-1') }, key);
+  assert.equal(r.status, 409); assert.match(r.say, /not on the store/);
+  const job = env.DB.raw.prepare("SELECT state, note FROM void_queue WHERE id = 'ask-1'").get();
+  assert.equal(job.state, 'building'); assert.match(job.note, /^claimed by team:GrokBot/);
+  const seat = env.DB.raw.prepare("SELECT job FROM void_team_agents WHERE name = 'GrokBot'").get();
+  assert.equal(seat.job, 'ask-1');
+});
+
+test('a change request another seat pushed is refused', async () => {
+  const env = world(), key = await seated(env);
+  land(env, 'GrokBot', 'ask-1', SHA, 'team:Other');
+  const r = await ship(env, { proof: proofFor('GrokBot', 'ask-1') }, key);
+  assert.equal(r.status, 403); assert.match(r.say, /another seat/);
+  assert.match(env.DB.raw.prepare("SELECT note FROM void_queue WHERE id = 'ask-1'").get().note, /^claimed by team:GrokBot/);
+});
+
+test('a commit the owner pushed for this seat is accepted', async () => {
+  const env = world(), key = await seated(env);
+  land(env, 'GrokBot', 'ask-1', SHA, 'owner');
+  const r = await ship(env, { proof: proofFor('GrokBot', 'ask-1') }, key);
+  assert.equal(r.status, 201, r.say);
 });
