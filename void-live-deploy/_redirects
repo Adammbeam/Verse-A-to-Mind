@@ -123,6 +123,10 @@
 /password/strength/ /password/?mode=strength 301
 /base64/bases /base64/?mode=bases 301
 /base64/bases/ /base64/?mode=bases 301
+/base64/url /base64/?mode=url 301
+/base64/url/ /base64/?mode=url 301
+/base64/url-encode /base64/?mode=url 301
+/base64/url-encode/ /base64/?mode=url 301
 
 # scores + calculator family members
 /scores/sports /scores/?mode=sports 301
