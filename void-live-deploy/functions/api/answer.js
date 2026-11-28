@@ -22,14 +22,15 @@ import { models, ANSWER_FALLBACK } from '../../lib/models.js';
 import { bounded, hedged, SOURCES_MS } from '../../lib/answer-speed.js';
 import { runFree } from '../../lib/ai-gateway.js';
 import { keeperOf, scrubOut } from '../../lib/keeper.js';
+import { scrubSites } from '../../lib/scrub-sites.js';
 import { redactPersonal } from '../../lib/privacy.js';
-import { PAID_MODEL, BUDGET_MS, STRONG_TIMEOUT_MS, SKILLS, classify, settle, paidAccess, costCents, recordSpend, logRoute } from '../../lib/router.js';
+import { PAID_MODEL, BUDGET_MS, STRONG_TIMEOUT_MS, SKILLS, classify, settle, paidAccess, costCents, recordSpend, logRoute, skillAskOf } from '../../lib/router.js';
 import { nearOf } from '../../lib/near-miss.js';
 import { clefRoute, clefOn, mergeRoute, clefYesNo, closeCall, tieBreak } from '../../lib/clef.js';
 import { recordShortfall, reasonOf } from '../../lib/shortfall.js';
 import { isSelfAsk, isCardCorrection, readSelf, selfFacts, cardLists, SELF_RULE, OWN_CARD_RULE, withAim } from '../../lib/self-context.js';
 import { ownCardAnswer, fetchPulls, keptCards } from '../../lib/own-card.js';
-import { ASK_MAX, QUERY_MAX, supportedOnly, hasCorrection, CORRECTION_RULE, ACT_RULE, FILLER_RULE, dropUnbackedActs, dropFiller, dropErrataVoice, INVENT_RULE, dropUnbackedClaims, citesUnbacked, titledReadings } from '../../lib/answer-honesty.js';
+import { ASK_MAX, QUERY_MAX, hasAnswer, supportedOnly, hasCorrection, CORRECTION_RULE, ACT_RULE, FILLER_RULE, dropUnbackedActs, dropFiller, dropErrataVoice, INVENT_RULE, dropUnbackedClaims, citesUnbacked, titledReadings } from '../../lib/answer-honesty.js';
 import { measureOf, measureRule, withMeasure } from '../../lib/measure-ask.js';
 import { prepareDraft, draftPrompt, ruleDraft, DRAFT_SYSTEM, DRAFT_MAX } from '../../lib/draft.js';
 import { scopeOf } from '../../lib/memory-scope.js';
@@ -50,7 +51,7 @@ import { kindOf as subjectKind } from '../../lib/card-kinds.js';
 import * as FP from '../../lib/free-pics.js';
 import { stopped } from './searches.js';
 import { unsafeText, unsafeImage } from '../../lib/image-safety.js';
-import { edgeCache, edgeGate, buildId, edgeKeyUrl, edgeGet, edgePut, edgeTtl, marked, storable, HIT, MISS, BYPASS, REFRESH } from '../../lib/answer-edge.js';
+import { edgeCache, edgeGate, freshAsked, buildId, edgeKeyUrl, edgeGet, edgePut, edgeTtl, marked, storable, HIT, MISS, BYPASS, REFRESH } from '../../lib/answer-edge.js';
 import { isNote, noteRule, relatedPage, talksLimits, dropLimits, NO_LIMITS_RULE, noteReading, setupFacts, noteFinish } from '../../lib/note-ask.js';
 import { telemetryOf } from '../../lib/telemetry.js';
 import { isPass } from '../../lib/pass-mark.js';
@@ -60,7 +61,8 @@ import { metaAnswer, isMakeAsk } from '../../lib/meta-ask.js';
 import { everydayAnswer } from '../../lib/everyday-answer.js';
 import { worldAnswer } from '../../lib/world-answer.js';
 import { beforeOf, carries, points, FOLLOW_RULE, beforeBlock, mergeSources } from '../../lib/follow-ask.js';
-import { askShape, PASSAGE_LINE, fileDirective, DIRECTIVE_SAY, DIRECTIVE_DUP, DIRECTIVE_HELD, TALK_LINE } from '../../lib/ask-shape.js';
+import { askShape, fileDirective, DIRECTIVE_SAY, DIRECTIVE_DUP, DIRECTIVE_HELD, TALK_LINE } from '../../lib/ask-shape.js';
+import { asksIn, isInstruction, documentRead, fitAsk, stitchAsks } from '../../lib/paste-read.js';
 import { askWords, grounded, isNameAsk, isNoAnswer, sourcesMatch, suggestedGuess, guessOf, listRedirect, sectionHit, sectionText, linked } from '../../lib/no-answer.js';
 import { recentLines, byMeaning, mergeRecall } from '../../lib/meaning-recall.js';
 import { talkOf, talkBlock, TALK_RULE, introOf, introAnswer } from '../../lib/talk-memory.js';
@@ -479,12 +481,21 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
   if (body && (body.mode === 'story' || body.mode === 'aitext')) return storyAnswer(request, env, body);
   if (body && body.mode === 'rap') return rapAnswer(request, env, body);
   if (body && body.mode === 'market-report') return marketReport(request, env, body); // the /markets/ page's "Verse reports" (lib/report-run.js): one per window for everyone, validated, capped
-  const typed = norm(body.ask), ask = redactPersonal(typed), masked = ask !== typed;
+  const rawAsk = String(body && body.ask || '').replace(/[\u0000-\u0008\u000b-\u001f]/g, ' ').trim().slice(0, 18000);
+  const typed = rawAsk.length > ASK_MAX ? norm(fitAsk(rawAsk)) : norm(body.ask), ask = redactPersonal(typed), masked = ask !== typed;
   if (ask.length < 3) return new Response('empty', { status: 400 });
   if (await stopped(request, env)) return Response.json({ answer: null, sources: [], note: 'paused' }, { status: 403 }); // a banned or locked visitor (functions/api/searches.js)
   // secrets, other visitors' data and harmful asks are answered here, kindly, before any cache, model or skill (lib/keeper.js)
   const kept = keeperOf(typed);
   if (kept) return Response.json({ answer: kept.answer, sources: [], kept: kept.kind });
+  // a long paste is the ask. Several questions are each answered. One instruction is followed. Nothing is handed back.
+  const found = asksIn(rawAsk);
+  if (rawAsk.length > 400 && !(body && body.page) && (found.length >= 2 || (isInstruction(rawAsk) && !isNote(rawAsk)))) {
+    if (await rateLimited(request, env)) return Response.json({ answer: null, sources: [], note: 'slow down' }, { status: 429 });
+    edge.mark = BYPASS;
+    const answer = found.length >= 2 ? await answerAsks(env, found) : await modelLine(env, 'You are Verse. Follow the pasted text. Do what it asks, in plain words. If it is a prompt, carry it out.', fitAsk(rawAsk));
+    return Response.json({ answer: answer || fitAsk(rawAsk).slice(0, 700), sources: [], at: new Date().toISOString(), route: found.length >= 2 ? 'asks' : 'ask' });
+  }
   if (isPayAsk(ask)) return Response.json({ answer: payAnswer(), sources: [], note: 'pay-honest' }); // verified payment facts only (lib/pay-honest.js)
   if (isPriceChangeAsk(ask)) return Response.json({ answer: priceLockAnswer(), sources: [], note: 'price-lock' }); // prices come only from store data (lib/price-lock.js)
   if (body.page && typeof body.page === 'object') return pageAnswer(request, env, ask, body.page);
@@ -505,7 +516,7 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
   // the input's shape, read before classify or any self or errata path (lib/ask-shape.js): a passage or a directive never falls through to the fallback model
   const shape = askShape(ask);
   if (shape !== 'question') edge.mark = BYPASS; // a passage, a directive or talk is answered here and never kept, so the header says it went past the cache
-  if (shape === 'passage') return Response.json({ answer: PASSAGE_LINE, sources: [], at: new Date().toISOString(), route: 'passage' });
+  if (shape === 'passage' && !isNote(rawAsk) && !isInstruction(rawAsk)) return Response.json({ answer: documentRead(rawAsk), sources: [], at: new Date().toISOString(), route: 'read' });
   if (shape === 'directive') {
     const filed = await fileDirective(env, ask);
     return Response.json({ answer: filed.deduped ? DIRECTIVE_DUP : filed.ok ? DIRECTIVE_SAY : DIRECTIVE_HELD, sources: [], at: new Date().toISOString(), route: 'want' });
@@ -531,14 +542,24 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
     edgeUrl = gate.ok ? edgeKeyUrl(origin, key, await buildId(env, origin)) : null; // no build id (local dev): nothing is cached
     edgeKind = gate.kind;
     edge.mark = !edgeUrl ? BYPASS : gate.fresh ? REFRESH : MISS;
-    if (edgeUrl && !gate.fresh) { const hit = await edgeGet(edge.cache, edgeUrl); if (hit) { edge.mark = HIT; return hit; } }
+    // a copy with no words is not an answer, even if an older build wrote it; fall through to D1 or the model
+    if (edgeUrl && !gate.fresh) {
+      const hit = await edgeGet(edge.cache, edgeUrl), body = hit ? await hit.clone().text() : '';
+      let cached = null; try { cached = JSON.parse(body || '{}'); } catch (_) {} // a damaged copy is a miss (answer-edge.test.mjs)
+      if (hit && cached && hasAnswer(cached.answer)) { edge.mark = HIT; return hit; }
+    }
   }
   const edgeKeep = edgeUrl ? (out, at) => { try { const p = edgePut(edge.cache, edgeUrl, out, edgeTtl(edgeKind, at, Date.now(), TTL_DAYS)); if (waitUntil) waitUntil(p); } catch (_) {} } : null;
   try {
-    const hit = masked || self || told || before || talk ? null : await env.DB.prepare('SELECT answer, sources, at FROM void_answers WHERE id = ? AND at > ?').bind(key, new Date(Date.now() - TTL_DAYS * 864e5).toISOString()).first();
+    // ?fresh=1 bypasses both copies: the edge above and the D1 row here. A blank row is never served, and a row cleaned down to nothing is not served either.
+    const hit = masked || self || told || before || talk || freshAsked(request) ? null : await env.DB.prepare('SELECT answer, sources, at FROM void_answers WHERE id = ? AND at > ?').bind(key, new Date(Date.now() - TTL_DAYS * 864e5).toISOString()).first();
     // an answer cached before sources were filtered is filtered on the way out (lib/cite.js)
     // a cached answer that cites a caveat or a notation was written before lib/answer-honesty.js checked them: it is answered again, not served
-    if (hit && !isNoAnswer(hit.answer) && !citesUnbacked(hit.answer) && !talksLimits(hit.answer) && !(isMakeAsk(ask) && hit.sources !== '[]')) { const c = keepCited(dropFiller(dropUnbackedActs(hit.answer)) || hit.answer, JSON.parse(hit.sources)), out = { answer: c.answer, sources: linked(c.sources), at: hit.at, cached: true, source: 'cache:d1' }; if (edgeKeep) edgeKeep(out, hit.at); return Response.json(out); } // a refusal cached before this check is not served again
+    if (hit && hasAnswer(hit.answer) && !isNoAnswer(hit.answer) && !citesUnbacked(hit.answer) && !talksLimits(hit.answer) && !(isMakeAsk(ask) && hit.sources !== '[]')) {
+      const c = keepCited(dropFiller(dropUnbackedActs(hit.answer)) || hit.answer, JSON.parse(hit.sources));
+      // the earlier ask was offered but this ask stands alone: the cached reply did not read it, and the card must say so
+      if (hasAnswer(c.answer)) { const skill = skillAskOf(ask), out = { answer: c.answer, sources: linked(c.sources), at: hit.at, cached: true, source: 'cache:d1', ...(skill ? { route: 'skill', skill } : {}), ...(offered ? { followed: false } : {}) }; if (edgeKeep) edgeKeep(out, hit.at); return Response.json(out); }
+    } // a refusal, a blank or an unbacked row cached before these checks is not served again; an exact skill ask still says which skill it is
   } catch (_) {}
   if (await rateLimited(request, env)) return Response.json({ answer: null, sources: [], note: 'slow down' }, { status: 429 });
   if (plan && plan.kind === 'api') { const r = await routeFree(ask, { env, registry: await loadRegistry(env, request.url) }).catch(() => null); if (r) return Response.json(r); } // out, failed or empty: the model answers
@@ -598,6 +619,18 @@ export const isPaste = (ask) => { const t = String(ask || ''); return t.length >
 // a challenger is measured the way Verse runs it: thinking off, low reasoning effort, the same token budget.
 export const ANSWER_RUN = { max_tokens: 2200, chat_template_kwargs: { enable_thinking: false }, reasoning_effort: 'low' };
 export const noThink = (t) => String(t || '').replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/^[\s\S]*<\/think>/i, '').trim();
+async function modelLine(env, system, user) {
+  if (!modelsOn(env)) return '';
+  try {
+    const r = await runFree(env, MODEL, { messages: [{ role: 'system', content: system }, { role: 'user', content: String(user || '') }], max_tokens: 500, chat_template_kwargs: { enable_thinking: false }, reasoning_effort: 'low' });
+    return scrubOut(redact(noThink(String(pick(r)).trim())), env);
+  } catch (_) { return ''; }
+}
+async function answerAsks(env, found) {
+  const lines = [];
+  for (const a of found) lines.push(await modelLine(env, 'You are Verse. Answer this one ask in one or two short plain sentences. No preamble and no heading.', a.text));
+  return stitchAsks(found, lines);
+}
 function within(p, ms) { let t; return Promise.race([p, new Promise((_, rej) => { t = setTimeout(() => rej(new Error('timeout')), ms); })]).finally(() => clearTimeout(t)); }
 
 // The model path (on unless VOID_ANSWER_MODELS=off).
@@ -638,10 +671,14 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   if (clefOn(env) && closeCall(route)) route = tieBreak(route, await clefP.catch(() => null));
   // the skill the ask nearly was (lib/near-miss.js, asked by Verse): the page offers that skill's first example when it ends up with no answer
   const near = nearOf(route, SKILLS), nearOut = near ? { near } : {};
+  // one shape for every refusal: a blank body is never sent as answered, whatever cleaned it or cached it
+  const blankNoAnswer = () => Response.json({ answer: null, sources: [], note: 'nothing on the web', noAnswer: true, route: route.kind, ...nearOut });
   const waited = Date.now() - srcAt;
   // the router's 'self' examples catch self asks the regex missed
   if (!self && !isPaste(ask) && !note && route.kind === 'skill' && route.skill === 'self') { self = true; selfP = readSelf(env, origin); src = []; }
-  const facts = self ? selfFacts(await selfP, { card: own, note: ask }) : '';
+  // the facts are read by the model and can reach a public answer, so a studied site's name stops here:
+  // what Verse studies stays in the owner-only Tower (lib/scrub-sites.js, tools/guards/leaks.mjs)
+  const facts = self ? scrubSites(selfFacts(await selfP, { card: own, note: ask })) : '';
   let pub = src.map(({ title, url, edited }) => ({ title, url, edited }));
   const ctx = src.map((s, i) => `[${i + 1}] ${s.title}: ${s.text}`).join('\n\n') || '(no sources found)';
   const lead = !self && !told && src.length && isNameAsk(ask) && sourcesMatch(ask, [src[0]]) ? src[0] : null; // the first source holds the ask itself: its description types the card (lib/subject-kinds.js)
@@ -657,7 +694,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
     { role: 'system', content: ANSWER_SYSTEM + ' ' + SELF_RULE + (own ? ' ' + OWN_CARD_RULE : '') + honest },
     { role: 'user', content: `Question: ${ask}\n\nFacts about Verse:\n${facts || '(my facts could not be read just now)'}` },
   ] : [
-    { role: 'system', content: ANSWER_SYSTEM + (sectioned ? ' ' + SECTION_RULE : '') + (note ? ' ' + noteRule(notePage, noteFacts) : isPaste(ask) ? ' ' + PASTE_RULE : '') + (told ? ' ' + TOLD_RULE + ' ' + INJECTION_RULE : '') + (talk ? ' ' + TALK_RULE : '') + honest + (src.length ? ' ' + INVENT_RULE : '') + (measure ? ' ' + measureRule(measure) : '') + (follows ? ' ' + FOLLOW_RULE : '') },
+    { role: 'system', content: ANSWER_SYSTEM + (sectioned ? ' ' + SECTION_RULE : '') + (note ? ' ' + noteRule(notePage, noteFacts) : isPaste(ask) && !isInstruction(ask) ? ' ' + PASTE_RULE : '') + (told ? ' ' + TOLD_RULE + ' ' + INJECTION_RULE : '') + (talk ? ' ' + TALK_RULE : '') + honest + (src.length ? ' ' + INVENT_RULE : '') + (measure ? ' ' + measureRule(measure) : '') + (follows ? ' ' + FOLLOW_RULE : '') },
     { role: 'user', content: `Question: ${ask}\n\n` + talkBlock(talk) + beforeBlock(follows) + (told ? `What you told me:\n${told.map((l) => '- ' + l).join('\n')}\n\n` : '') + `Sources:\n${ctx}` },
   ];
   let answer = '', model = MODEL, outcome = route.kind === 'fallback' ? route.why : 'default', would = null;
@@ -744,7 +781,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
         await log({ model: null, outcome: outcome + '; model busy, open web' + (access.model ? '' : '; paid: ' + access.why), would: PAID_MODEL });
         if (!web) return self
           ? Response.json({ answer: '(my facts could not be read just now)', sources: [], at: new Date().toISOString(), route: route.kind, source: 'self', ...nearOut, note: 'model busy, my own facts', self: true })
-          : Response.json({ answer: null, sources: [], note: 'nothing on the web', route: route.kind, ...nearOut });
+          : blankNoAnswer();
         if (own) keepCard(web);
         return Response.json({ answer: web, sources: pub, at: new Date().toISOString(), route: route.kind, source: self ? 'self' : told ? 'told' : 'open-web:wikipedia', ...nearOut, note: self ? 'model busy, my own facts' : told ? 'model busy, from what you told me' : 'model busy, from the web', ...(self ? { self: true } : {}), ...(told ? { told: told.length } : {}) });
       }
@@ -762,9 +799,9 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
     } catch (_) { /* the cut below still runs */ }
   }
   answer = dropLimits(answer);
-  if (!answer && note) answer = noteReading(ask, notePage, noteFacts);
+  if (!hasAnswer(answer) && note) answer = noteReading(ask, notePage, noteFacts);
   else if (note || isPaste(ask)) answer = noteFinish(answer, ask, note ? noteFacts : telemetryOf(ask) ? [] : setupFacts(ask)); // the cut line and the real secret names, whatever the model gave; a status report is never answered with secret names (docs/RULES.md, 2026-10-30)
-  if (!answer) { await log({ model, outcome: outcome + '; only limits lines' }); return Response.json({ answer: null, sources: [], note: 'nothing on the web', noAnswer: true, route: route.kind, ...nearOut }); }
+  if (!hasAnswer(answer)) { await log({ model, outcome: outcome + '; only limits lines' }); return blankNoAnswer(); }
   await log({ model });
   // no claimed write and no filler (lib/answer-honesty.js); then only the sources the answer cited, and whose fetched text holds the
   // sentence that cites them, go on the card (lib/cite.js renumbers the [n] markers to match)
@@ -782,8 +819,12 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   if (!self && !told && isNoAnswer(answer)) return Response.json({ answer: null, sources: [], note: 'nothing on the web', noAnswer: true, ...(suggestedGuess(ask, src) ? { guess: suggestedGuess(ask, src) } : {}), route: route.kind, ...nearOut });
   if (sectioned && src[0] && answer) answer = grounded(answer, src[0].text); // a list-page section: only what its text says
   answer = scrubOut(answer, env); // no env value or key shape leaves in a model's words, whatever the model was told (lib/keeper.js)
+  // even a model that recalls a studied site from training must not put its name in a public answer: the leak guard reads these words
+  if (self && !own) answer = scrubSites(answer);
   if (own) { answer = scrubOut(await ownBody(answer), env); keepCard(answer); } // the lead the note gave reason for, then the lists from my records
   if (self) { const got = await selfP; answer = withAim(answer, got && got.self, ask); } // the aim is composed in code, ahead of or alongside the model's words
+  // every cleanup step can empty a body: the last guard before writing and answering, so no blank is ever an answer
+  if (!hasAnswer(answer)) { await log({ model, outcome: outcome + '; blank after cleanup' }); return blankNoAnswer(); }
   const at = new Date().toISOString();
   // the cache write finishes after the answer has gone out (waitUntil), not before: nobody waits on D1 for an answer they already have
   if (!masked && !self && !told && !before && !talk) try {
@@ -794,7 +835,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   // a fictional character or a person keeps Verse's own drawing or neutral plate. Bounded: one picture, a few seconds, and the answer never waits longer.
   // lib/image-safety.js: an ask, a title or a text about nudity, the explicit body or minors in such a context gets no picture at all (fail closed)
   const pic = lead && lead.desc && !unsafeText(ask, lead.name, lead.desc, String(lead.text || '').slice(0, 800), answer.slice(0, 800)) ? await picFor(env, lead) : null;
-  const out = { answer, sources: linked(pub), at, route: route.kind, ...(route.kind === 'skill' && route.skill ? { skill: route.skill } : {}), ...(route.by === 'tie-break' ? { tie: 'clef' } : {}), source: sourceOf(model), ...nearOut, ...(pic ? { pic } : {}), ...(guess ? { fuzzy: true } : lead ? { name: lead.name, ...(lead.desc ? { desc: lead.desc } : {}), ...(lead.series ? { series: lead.series } : {}) } : {}), ...(self ? { self: true } : {}), ...(told ? { told: told.length } : {}), ...(beforeSent ? { followed: !!follows } : {}) };
+  const out = { answer, sources: linked(pub), at, route: route.kind, ...(route.kind === 'skill' && route.skill ? { skill: route.skill } : {}), ...(route.by === 'tie-break' ? { tie: 'clef' } : {}), source: sourceOf(model), ...nearOut, ...(pic ? { pic } : {}), ...(guess ? { fuzzy: true } : lead ? { name: lead.name, ...(lead.desc ? { desc: lead.desc } : {}), ...(lead.series ? { series: lead.series } : {}) } : {}), ...(self ? { self: true } : {}), ...(told ? { told: told.length } : {}), followed: !!follows };
   // the edge copy goes where the D1 row goes, and only for a free model's answer (a paid escalation is never served again for free, lib/answer-edge.js)
   if (edgeKeep && !masked && !self && !told && !before && !talk && storable(out, { paid: model !== MODEL && model !== ANSWER_FALLBACK })) edgeKeep(out, at);
   return Response.json(out);

@@ -181,6 +181,18 @@
       "test": "tools/salvaged-bots.test.mjs",
       "pr": null
     },
+    "outside:huggingface/transformers.js": {
+      "target": "page",
+      "into": "/embeddings/ (on-device sentence similarity)",
+      "test": "tools/embeddings.test.mjs",
+      "pr": null
+    },
+    "outside:mlc-ai/web-llm": {
+      "target": "page",
+      "into": "/ (opt-in on-device answers)",
+      "test": "tools/local-model.test.mjs",
+      "pr": null
+    },
     "archive/repos/a-to-mind.com/drafts/047-attested-heading-permalinks": {
       "target": "bot",
       "into": "/bots/ (permalink-check)",

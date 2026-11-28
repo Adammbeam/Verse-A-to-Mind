@@ -126,3 +126,23 @@ test('deconflict: of two seats on one piece of work, the later claim gives its j
   assert.deepEqual(held.held.map((x) => [x.name, x.job, x.overlaps || null]), [['openhands', 'one', null]], 'the owner reads who holds what, and no overlap is left');
   assert.ok(!JSON.stringify(held).includes('phones'), 'no job text in the read');
 });
+
+test('file reservations: a seat reserves files on its active job, blocking clashes on reserve and hand-out', async () => {
+  const { env, agent } = await world([
+    J('j1', 'feature:alpha', 'build alpha helper'),
+    J('j2', 'feature:beta', 'build beta helper'),
+    J('j3', 'feature:gamma', 'update lib/team.js for gamma'),
+  ]);
+  const a = await agent('seatA'), b = await agent('seatB'), c = await agent('seatC');
+  const ga = await post(env, { do: 'next' }, a, T0 + 1000);
+  assert.equal(ga.job.job, 'j1');
+  const res = await post(env, { do: 'reserve', files: ['void-live-deploy/lib/team.js'] }, a, T0 + 1500);
+  assert.equal(res.status, 200);
+  assert.deepEqual(res.files, ['lib/team.js']);
+  const gb = await post(env, { do: 'next' }, b, T0 + 2000);
+  assert.equal(gb.job.job, 'j2');
+  const clash = await post(env, { do: 'reserve', files: ['lib/team.js'] }, b, T0 + 2500);
+  assert.equal(clash.status, 409, 'second seat cannot reserve an already-reserved file');
+  const gc = await post(env, { do: 'next' }, c, T0 + 3000);
+  assert.ok(!gc.job, 'j3 touches lib/team.js which j1 reserved, so seatC does not get it');
+});

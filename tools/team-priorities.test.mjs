@@ -36,14 +36,13 @@ test('impact ÷ effort × confidence: breakage and evidence first, a retried job
   assert.ok(p.bets.every((b) => b.score >= p.bets[0].score * 0.5));
 });
 
-test('the WIP cap: 3 build lanes and 1 research lane among the bets and at hand-out', () => {
+test('no cap on build or research lanes at hand-out; weekly brief still picks at most BETS_MAX bets', () => {
   const many = Array.from({ length: 6 }, (_, i) => J('h' + i, 'heal:h' + i, 'fix ' + i));
   const p = P.prioritize([...many, J('n1', 'novelty:x', 'research the stage'), J('n2', 'novelty:y', 'research more')], [], {}, null, T0);
-  assert.equal(p.bets.filter((b) => b.lane === 'build').length, 3); assert.equal(p.bets.length, 3);
-  const building = [J('b1', 'heal:a', 'a'), J('b2', 'heal:b', 'b'), J('b3', 'heal:c', 'c')];
-  assert.equal(P.wipAllows(J('h9', 'heal:z', 'z'), building), false, 'a fourth build lane waits');
-  assert.equal(P.wipAllows(J('n1', 'novelty:x', 'research'), building), true, 'the research lane is its own');
-  assert.equal(P.wipAllows(J('n2', 'novelty:y', 'study'), [...building, J('n1', 'novelty:x', 'r')]), false);
+  assert.equal(p.bets.length, P.BETS_MAX);
+  const building = Array.from({ length: 10 }, (_, i) => J('b' + i, 'heal:b' + i, 'fix ' + i));
+  assert.equal(P.wipAllows(J('h9', 'heal:z', 'z'), building), true, 'build lanes are unlimited');
+  assert.equal(P.wipAllows(J('n2', 'novelty:y', 'study'), [...building, J('n1', 'novelty:x', 'r')]), true, 'research lanes are unlimited');
 });
 
 test('the owner overrides with one message: first, last, reset; a week later it lapses', () => {

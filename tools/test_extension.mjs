@@ -27,7 +27,7 @@ const man = JSON.parse(fs.readFileSync(path.join(extDir, 'manifest.json'), 'utf8
 { const bg = fs.readFileSync(path.join(repo, 'extension', 'background.js'), 'utf8');
   const titles = [...bg.matchAll(/contextMenus\.create\(\{[^}]*title: '([^']+)'/g)].map((m) => m[1]);
   check('menus: each one says whether the page stays in the browser or is sent to Verse, and the old "Ask Verse about \'…\'" (selection sent as an ask) is gone',
-    titles.length === 3 && titles.every((t) => /stays in your browser|sends it to Verse/.test(t)) && !/ask-void|Ask Verse about “%s”/.test(bg), titles); }
+    titles.length === 4 && titles.every((t) => /stays in your browser|sends it to Verse/.test(t)) && titles.includes('Verse: count words on this page (stays in your browser)') && !/ask-void|Ask Verse about “%s”/.test(bg), titles); }
 check('manifest: only activeTab and scripting reach into pages (no host permissions shipped)', man.permissions.includes('activeTab') && man.permissions.includes('scripting') && !man.host_permissions && !man.optional_host_permissions, man.permissions);
 man.host_permissions = ['<all_urls>'];
 fs.writeFileSync(path.join(extDir, 'manifest.json'), JSON.stringify(man));
@@ -123,6 +123,22 @@ await page.evaluate(() => { const r = document.createRange(); r.selectNodeConten
 const read = (url) => sw.evaluate(async (u) => { const [t] = await chrome.tabs.query({ url: u }); return readTab(t); }, url);
 const r1 = await read(FIXTURE);
 check('B1: reading the tab works once Chrome lets the extension in', r1 && r1.ok && r1.readable, r1);
+
+// word count on any page: the menu's badge counts in the page itself, a selection or the whole visible text, nothing sent
+const runCount = (pick) => sw.evaluate(async ({ url, selected }) => {
+  const [t] = await chrome.tabs.query({ url });
+  const [r] = await chrome.scripting.executeScript({ target: { tabId: t.id }, func: showWordCount, args: [selected] });
+  return r && r.result;
+}, { url: FIXTURE, selected: pick });
+const beforeCount = out.length;
+const countedSelection = await runCount('one two three four five');
+const badge = await page.evaluate(() => { const e = document.getElementById('verse-word-count'); return e && { text: e.innerText, shown: e.getBoundingClientRect().height > 0 }; });
+const countedPage = await runCount('');
+check('word count: the extension counts a selection or the whole page in a badge on that page, with nothing sent',
+  !!countedSelection && countedSelection.words === 5 && countedSelection.characters === 23 && countedSelection.scope === 'selection'
+    && !!badge && badge.shown && /5 words/.test(badge.text) && /selection/.test(badge.text)
+    && !!countedPage && countedPage.scope === 'page' && countedPage.words > 0 && countedPage.words !== 5
+    && out.length === beforeCount, JSON.stringify({ countedSelection, badge, countedPage }));
 
 const panel = await ctx.newPage();
 await panel.goto('chrome-extension://' + id + '/sidepanel.html');

@@ -56,6 +56,9 @@ export const SKILLS = {
   self: { examples: ['what can you do', 'menu', 'what do you want to be', 'help', 'show the board', 'what are you', 'what are you working on', 'what are you building', 'what are you doing now', 'open the self card', 'tell void what it got wrong', 'open your self card, I want to correct you', 'correct void on its self card', 'open the self card and tell void what it got wrong', 'open the self card and tell Verse what it got wrong', 'show the self card and correct it'], near: ['what is artificial intelligence', 'what is a search engine'] },
   wants: { examples: ['what do you want built now', 'name all your unbuilt asks', 'what have you not built yet', 'your backlog', 'what are your open asks', 'what else do you want', 'what do you want to learn'], near: ['what do I want for dinner', 'what is a backlog', 'what do you want to be', 'what do you think of yourself'] }, // Verse's own backlog (skills/wants.js; owner, 2026-10-18): a miss here is "the wants skill didn't catch this", never a model's made-up list
   act: { examples: ['email jane that I am running late', 'send a message to bob', 'book a table for two tonight', 'buy two bags of coffee', 'pay the electricity bill', 'schedule a meeting with sam on friday'], near: ['how does email work', 'who invented the credit card'] },
+  // the two card skills people ask for by name: the page opens sudoku and the open-tool card, so /api/answer must read them as skills too
+  sudoku: { examples: ['play sudoku', 'sudoku', 'new sudoku puzzle', "let's play sudoku"], near: ['what is sudoku', 'how do you solve sudoku', 'sudoku rules'] },
+  'open-tool': { examples: ['currency converter', 'word counter', 'random number generator', 'open the piano'], near: ['what is a currency converter', 'how do exchange rates work', 'currency converter 100 usd to eur'] },
 };
 export const SIMPLE = ['what is a black hole', 'who wrote hamlet', 'capital of australia', 'how tall is mount everest', 'when did world war two end',
   'why is the sky blue', 'what does photosynthesis mean', 'how many legs does a spider have', '¿por qué el cielo es azul?', 'qui a peint la joconde', 'what is bitcoin', 'who is the president of france'];
@@ -65,6 +68,14 @@ export const HARD = ['compare keynesian and austrian economics and which explain
   'analyze the ethical implications of editing human embryos', 'write a python function for the longest palindromic substring and explain its complexity',
   'a train leaves at 3pm at 60 mph and another at 4pm at 80 mph, when does the second catch up', '¿cuáles son las ventajas y desventajas de la energía nuclear frente a la solar?',
   'how would quantum computers break rsa and what should replace it', 'should a small startup use microservices or a monolith and why'];
+
+// An exact example is always a skill ask: its own vector scores 1, above every bar and margin. The D1 answer cache stores only
+// answer and sources, so a cached reply reads its route from the current examples here instead of claiming no route at all.
+export function skillAskOf(text) {
+  const t = String(text || '').toLowerCase().trim().replace(/[?!.]+$/, '').replace(/\s+/g, ' ');
+  for (const [name, s] of Object.entries(SKILLS)) if (s.examples.some((e) => e.toLowerCase() === t)) return name;
+  return null;
+}
 
 export function exemplars() {
   const out = [];

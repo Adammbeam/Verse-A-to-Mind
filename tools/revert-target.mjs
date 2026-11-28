@@ -182,7 +182,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     else console.log(JSON.stringify(noSuitePick()));
   } else if (mode === '--annotate') { for (const l of annotations(failingChecks(readFileSync(a, 'utf8')))) console.log(l); }
   else if (mode === '--pick') {
-    const repo = process.env.GITHUB_REPOSITORY || 'atomeam/void-loop';
+    const repo = process.env.GITHUB_REPOSITORY || 'Adammbeam/Verse-A-to-Mind';
     const tested = run('git', ['rev-parse', a]).trim();
     try { run('git', ['fetch', '-q', 'origin', 'main']); } catch (_) {}
     const mainLine = run('git', ['rev-list', '--first-parent', '--max-count=60', 'origin/main']).trim().split('\n').filter(Boolean);

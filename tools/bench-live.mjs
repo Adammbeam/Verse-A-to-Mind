@@ -4,11 +4,13 @@
 // The prompts are the benchmark's own, never a visitor's words; results go to the temp folder unless --out names a file.
 //   node tools/bench-live.mjs                      against https://a-to-mind.com
 //   node tools/bench-live.mjs --base http://localhost:8788 --only opener,leakage --out /tmp/bench.json
+//   node tools/bench-live.mjs --only contamination --fresh   skip the cached copies on every case
 // Exit 0 when every case ran to pass or couldn't tell, 1 when any failed, 3 when the site could not be reached at all.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import os from 'node:os';
+import { HONEST_CLAIMS } from '../void-live-deploy/lib/answer-honesty.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const PASS = 'pass', FAIL = 'fail', UNSURE = "couldn't tell";
@@ -23,6 +25,11 @@ export function leakRuns(root = join(here, '..', 'void-live-deploy')) {
     if (sys) for (let i = 0; i + 40 <= sys[1].length; i += 40) out.push(sys[1].slice(i, i + 40).replace(/\\'/g, "'"));
   } catch (_) {}
   return out;
+}
+
+/** the POST URL for one case: `?fresh=1` skips the edge and D1 copies, so a repeated bench run cannot read yesterday's answer. Pure. */
+export function answerUrl(base, fresh = false) {
+  return String(base || '').replace(/\/+$/, '') + '/api/answer' + (fresh ? '?fresh=1' : '');
 }
 
 const words = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
@@ -49,6 +56,18 @@ export function checkOne(c, j, leaks = []) {
   return [UNSURE, 'unknown check ' + Object.keys(c)[0]];
 }
 
+/** the benchmark cannot loosen a claim by editing the JSON: each named case must carry the site's exact pattern. Pure. */
+export function loosenedClaims(set) {
+  const bad = [], at = (id) => (set.cases || []).find((c) => c.id === id);
+  const has = (c, pattern) => !!c && c.checks.some((k) => k.has === pattern);
+  if (!has(at('leak-recall'), HONEST_CLAIMS.recall)) bad.push('leak-recall: keeps nothing between asks');
+  if (!has(at('injection'), HONEST_CLAIMS.instructions)) bad.push('injection: declines to share its instructions');
+  for (const id of ['about-me-4', 'about-me-3']) {
+    if (!has(at(id), HONEST_CLAIMS.personal) || !has(at(id), HONEST_CLAIMS.labels)) bad.push(id + ': no personal facts, labelled items');
+  }
+  return bad;
+}
+
 /** a case's verdict from its reply (or null when the site gave none): any fail fails it, else any unsure leaves it unsure. Pure. */
 export function verdict(kase, j, leaks = []) {
   if (!j) return { state: UNSURE, why: ['no reply'] };
@@ -57,11 +76,11 @@ export function verdict(kase, j, leaks = []) {
   return { state: rs.some((r) => r[0] === FAIL) ? FAIL : rs.some((r) => r[0] === UNSURE) ? UNSURE : PASS, why };
 }
 
-async function ask(base, kase, ms = 60000) {
+async function ask(base, kase, ms = 60000, fresh = false) {
   const body = kase.before ? { ask: kase.ask, before: kase.before } : { ask: kase.ask };
   const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), ms);
   try {
-    const r = await fetch(base.replace(/\/$/, '') + '/api/answer', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), signal: ctl.signal });
+    const r = await fetch(answerUrl(base, fresh), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), signal: ctl.signal });
     if (!r.ok) return { err: 'HTTP ' + r.status };
     return { j: await r.json() };
   } catch (e) { return { err: String(e && e.message || e) }; } finally { clearTimeout(t); }
@@ -71,12 +90,15 @@ async function main() {
   const args = process.argv.slice(2), opt = (k) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : null; };
   const base = opt('--base') || process.env.VOID_SITE || 'https://a-to-mind.com';
   const set = JSON.parse(readFileSync(opt('--set') || join(here, 'bench', 'honesty.json'), 'utf8'));
+  const loose = loosenedClaims(set);
+  if (loose.length) { console.error('honesty bench was loosened: ' + loose.join('; ')); process.exitCode = 1; return; }
   const only = (opt('--only') || '').split(',').filter(Boolean);
+  const fresh = args.includes('--fresh');
   const cases = set.cases.filter((c) => !only.length || only.includes(c.group) || only.includes(c.id));
   const leaks = leakRuns(), rows = [];
   for (const k of cases) {
-    let r = await ask(base, k);
-    if (r.err && /429|abort/i.test(r.err)) { await new Promise((s) => setTimeout(s, 5000)); r = await ask(base, k); }
+    let r = await ask(base, k, 60000, fresh);
+    if (r.err && /429|abort/i.test(r.err)) { await new Promise((s) => setTimeout(s, 5000)); r = await ask(base, k, 60000, fresh); }
     const v = r.err ? { state: UNSURE, why: [r.err] } : verdict(k, r.j, leaks);
     rows.push({ id: k.id, group: k.group, state: v.state, why: v.why, route: r.j && r.j.route || null, followed: r.j ? r.j.followed : undefined, sources: r.j && Array.isArray(r.j.sources) ? r.j.sources.length : null, answer: r.j && typeof r.j.answer === 'string' ? r.j.answer.slice(0, 300) : null });
     console.log((v.state === PASS ? 'ok   ' : v.state === FAIL ? 'FAIL ' : '???  ') + k.id.padEnd(16) + (v.why.length ? ' ' + v.why.join('; ') : ''));

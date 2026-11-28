@@ -35,6 +35,7 @@
   button:hover { border-color:#3b3b4d; }
   .note { color:var(--quiet); font-size:13px; margin:8px 0 0; }
   code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:13px; color:#dcd8f4; background:#1c1b28; border-radius:4px; padding:1px 4px; }
+  pre { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; line-height:1.5; color:#dcd8f4; background:#0e0d16; border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin:8px 0; white-space:pre-wrap; overflow-wrap:anywhere; }
   .say { color:var(--quiet); font-size:13px; min-height:1.5em; margin:6px 0 0; }
   #stat { color:#cfcbe6; font-size:14px; font-variant-numeric:tabular-nums; margin:4px 0 8px; }
   .scroll { width:100%; max-width:100%; overflow-x:auto; }
@@ -233,6 +234,30 @@
     <p class="note">Paste rows of <code id="csvcols">team, place, eliminations</code> and press Import: the rows become the next match. Export writes the standings, not the raw results.</p>
     <textarea id="csv" spellcheck="false" aria-label="CSV rows to import" placeholder="team,place,eliminations"></textarea>
     <div class="row"><button type="button" id="import">Import CSV</button></div>
+  </section>
+
+  <section class="card" aria-labelledby="h-api" id="api">
+    <h2 id="h-api">Developers &amp; API</h2>
+    <p class="note">The scorer is a plain JavaScript module at <code>/lib/scrim.js</code>: no key, no account and no server call. Import it in your own page, or call <code>VerseTournaments</code> from this page or the console. <code>score()</code> takes a kind, tier points, points per elimination and rounds written <code>name:place:eliminations</code>, separated by commas and semicolons.</p>
+    <pre id="api-code">const rows = await VerseTournaments.score({
+  kind: 'br', tiers: '1:6,2-5:3,6-10:1', elim: 1,
+  results: 'Ada:1:3,Bex:2:1,Cid:3:0'
+});
+// [{ name, points, wins, elims, avg }, ...]</pre>
+    <div class="row"><button type="button" id="api-run">Run the example</button><button type="button" id="api-copy">Copy snippet</button></div>
+    <pre id="api-out" aria-live="polite"></pre>
+    <table class="grid">
+      <caption>Scoring API</caption>
+      <thead><tr><th scope="col">Name</th><th scope="col">What it does</th></tr></thead>
+      <tbody>
+        <tr><td><code>score(options)</code></td><td>Ranked rows from rounds, with the same tiebreakers as the page.</td></tr>
+        <tr><td><code>parseRounds(text, kind)</code></td><td>Reads rounds for <code>br</code>, <code>racing</code>, <code>league</code> or <code>gamenight</code>.</td></tr>
+        <tr><td><code>scorer(kind, rules)</code></td><td>Points, tiebreakers and column labels for a kind.</td></tr>
+        <tr><td><code>rank(rounds, sc)</code></td><td>All rows, sorted, with per-round entries.</td></tr>
+        <tr><td><code>serializeRounds(rounds, kind)</code></td><td>Writes rounds back to the shareable text format.</td></tr>
+      </tbody>
+    </table>
+    <p class="note">The source is free to read at <a href="/lib/scrim.js">/lib/scrim.js</a>. It has no hidden state: the same functions score the page you see.</p>
   </section>
 
   <p class="note" id="demo"><span id="demotext">This is a worked example.</span> Change a number or a result and it becomes yours, and it stays on this device. <button type="button" id="swapdemo">Try the battle-royale example</button></p>
@@ -648,6 +673,18 @@
     renderGrid();
     commit('Imported ' + entries.length + ' rows as ' + K().word + ' ' + parseRounds(state.results, state.kind).length + '.');
   };
+
+  // Developers & API: the same scoring the page uses, callable from the console or another page.
+  window.VerseTournaments = Object.freeze({
+    kinds: Object.keys(KINDS),
+    parseRounds, scorer, rank, serializeRounds,
+    score({ kind = 'br', tiers = '', elim = 0, results = '' } = {}) {
+      const rules = { tiers: typeof tiers === 'string' ? parseTiers(tiers) : Array.isArray(tiers) ? tiers : [], elim: Number(elim) || 0 };
+      return rank(parseRounds(results, kind), scorer(kind, rules)).rows.map((r) => ({ name: r.name, points: r.points, wins: r.wins, elims: r.elims, avg: r.avg }));
+    },
+  });
+  $('api-run').onclick = () => { $('api-out').textContent = JSON.stringify(window.VerseTournaments.score({ kind: 'br', tiers: '1:6,2-5:3,6-10:1', elim: 1, results: 'Ada:1:3,Bex:2:1,Cid:3:0' }), null, 2); };
+  $('api-copy').onclick = async () => { try { await navigator.clipboard.writeText($('api-code').textContent); say('Example copied.'); } catch (_) { say('Select the example above and copy it.'); } };
 
   renderRules();
   renderGrid();

@@ -97,8 +97,8 @@
      "name": "Raw bytes download",
      "detail": "random bytes as a file",
      "paid": false,
-     "verse": "missing",
-     "verse_evidence": "none"
+     "verse": "has",
+     "verse_evidence": "Raw bytes to download: 1 to 1,048,576 secure bytes as a .bin file, first 16 shown in hex"
     },
     {
      "name": "String generator",

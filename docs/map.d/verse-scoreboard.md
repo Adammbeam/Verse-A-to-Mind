@@ -1,0 +1,1 @@
+Verse Scoreboard (`tools/verse-scoreboard.mjs`, `docs/verse-scoreboard.md`, test `tools/verse-scoreboard.test.mjs`): five rates with a current value and a goal. `--from` reads a PWTSR report, `--probe` checks stage structure on the local page, `--scoreboard` writes the doc. `/api/answer` is stubbed and other hosts are blocked.

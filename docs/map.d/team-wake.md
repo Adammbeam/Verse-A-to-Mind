@@ -1,0 +1,1 @@
+`void-live-deploy/lib/team-wake.js` (`wakeTick`, `recentWakes`, `staleWaitingJobs`) pings away team agents with a registered push hook when a claimable job waits at least 30 minutes and logs every ping attempt in `void_team_wake_log` (`tools/team-wake.test.mjs`).

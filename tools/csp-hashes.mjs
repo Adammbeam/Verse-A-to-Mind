@@ -11,7 +11,7 @@ import { join, relative } from 'node:path';
 
 const root = new URL('../void-live-deploy/', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 export const MARK = '# csp-hashes (generated at deploy, tools/csp-hashes.mjs)';
-export const REST = "'self' 'wasm-unsafe-eval' blob: https://static.cloudflareinsights.com";
+export const REST = "'self' 'wasm-unsafe-eval' blob: https://static.cloudflareinsights.com https://esm.run https://cdn.jsdelivr.net";
 
 /** html -> the sha256 sources of its inline scripts that run (JSON-LD and other data blocks do not) */
 export function inlineHashes(html) {

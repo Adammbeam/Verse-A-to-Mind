@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { fixTask, isTowerPath } from './merge-flow.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const repo = process.env.REPO || process.env.GITHUB_REPOSITORY || 'atomeam/void-loop';
+const repo = process.env.REPO || process.env.GITHUB_REPOSITORY || 'Adammbeam/Verse-A-to-Mind';
 const sh = (cmd, args) => execFileSync(cmd, args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 8 << 20, timeout: 20 * 60e3 });
 const git = (args) => sh('git', args);
 const quiet = (args) => { try { return git(args); } catch (e) { return e.stdout || ''; } };

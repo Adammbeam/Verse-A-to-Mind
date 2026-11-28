@@ -1313,3 +1313,22 @@ Format: `ISO | slug | role | event | note`
 2026-11-24T04:58:15Z | openhands | fix | unblocked the nightly bench feed: handoff-confidence joined a family, skills/index.json was rebuilt from skills/order/, and the bench step now records the floor and misses even when families reports a gap
 2026-11-24T06:46:23Z | claude | fix | Widen team handoff and let the conductor drain unroutable queue jobs
 2026-11-26T16:52:35Z | claude | fix | Card art now keeps its picture when a recipe says chicken breasts, and never spends a painting on a card that already shows its own photo
+2026-11-27T20:10:48Z | bigpickle2 | build | the flights map draws a keyless vector map with inspectable airports and routes
+2026-11-28T02:22:54Z | bigpickle2 | build | Developers & API on /tournaments/: a documented, callable scoring API with a runnable example
+2026-11-28T01:46:09Z | claude | grow | Raw bytes download on /random/: secure bytes from this device saved as a .bin file, with a size, a hex preview and a Raw bytes preset
+2026-11-28T03:05:41Z | bigpickle2 | build | Bright color theme on /convert/: bright/dark theme choice applied before paint and kept in localStorage, with a focused browser test
+2026-11-28T02:40:37Z | bigpickle2 | build | RND key on /calculator/: a random number between 0 and 1 made with crypto.getRandomValues, with a focused browser test
+2026-11-28T03:33:32Z | bigpickle2 | build | iPhone and Android apps on /is-it/christmas: server-rendered install steps for both phones, web app manifest, open source link, with unit and browser tests
+2026-11-28T03:19:20Z | bigpickle2 | build | Hey Color heading on /paint/: lead the paint-by-number page with the Hey Color name and keep its purpose in the tagline, with a focused browser test
+2026-11-28T03:59:54Z | bigpickle2 | build | count words on any page: local word-count badge in the Verse extension (selection or whole page, nothing sent), install section on /word-count/, zip rebuilt, extension suite 38/38
+2026-11-28T03:46:09Z | bigpickle2 | build | Keno quick picks and printable bingo cards on /random/, with preset buttons, a print view and a focused browser test
+2026-11-28T04:29:40Z | bigpickle2 | fix | open-tool: kanban board tool card names Kanban board and links /kanban/, kanban tool alias added; open-tool tests 5/5, live ask checked
+2026-11-28T04:12:08Z | bigpickle2 | fix | free-router test: pubchem and clinicaltrials given the real dataset kind, PubChem 5/second usage policy recorded, answer-free routes by registry kind; tests 5/5 and 8/8
+2026-11-28T04:55:11Z | bigpickle2 | fix | games family: bare games opens the rack, hub keeps game/board games/arcade, gamebox keeps show me the games; games-family/games-hub/gamebox/skill-matchers tests 18/18, live-style ask checked
+2026-11-28T04:40:31Z | bigpickle2 | fix | sync-free-lanes: guarded the CLI main so importing it does not fetch or rewrite openrouter-free.json; test verifies the registry is untouched and stays clean, CLI still writes; 5/5
+2026-11-28T05:07:13Z | bigpickle2 | fix | /api/answer router: added sudoku and open-tool exemplars so play sudoku and currency converter reply route:skill with the matching skill; new e2e test plus router/near-miss/bench suites 29/29
+2026-11-28T07:10:58Z | bigpickle2 | fix | live check ties the follow-on line to the answer's followed field
+2026-11-28T07:36:27Z | bigpickle2 | fix | honesty bench claims require the specific honest answer
+2026-11-28T06:51:53Z | bigpickle2 | fix | cache-bypassed answers keep their follow mark and blank answers are never served
+2026-11-28T09:43:15Z | opencode | grow | On-device sentence similarity: a standalone /embeddings/ page loads Transformers.js only after a click, runs one small model in the browser, shows a cosine score and its Apache-2.0 credit, and never calls a Verse worker
+2026-11-28T09:18:37Z | opencode | grow | Opt-in on-device answers: a toggle by the ask box downloads a small WebGPU model once and answers short asks in the browser; with it off, every ask still goes to a-to-mind.com

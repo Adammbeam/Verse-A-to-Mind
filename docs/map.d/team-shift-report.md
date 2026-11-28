@@ -1,0 +1,1 @@
+- **Team shift report (`void-live-deploy/lib/team-shift-report.js`, `tools/team-shift-report.test.mjs`, 2026-11-27):** builds the daily morning shift summary for #general and the Tower (who did what, what landed live, and what is stuck) and runs an idempotent once-per-UTC-day tick stored in `void_team_crew`.

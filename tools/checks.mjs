@@ -597,6 +597,7 @@ for (const [name, file] of [
   ['agent-answer', 'agent-answer.test.mjs'],
   ['agent-core', 'agent-core.test.mjs'],
   ['agent-probe', 'agent-probe.test.mjs'],
+  ['follow-line-live', 'follow-line-live.test.mjs'], // the live homepage's follow-on line must follow /api/answer's followed field, not the page's memory
   ['agent-watch', 'agent-watch.test.mjs'],
   ['verse-shell', 'verse-shell.test.mjs'],
   ['glass-pages', 'glass-pages.test.mjs'],

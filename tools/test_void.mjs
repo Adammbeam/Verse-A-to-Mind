@@ -829,6 +829,30 @@ try {
       facts.length === 7 && !missing.length && /Flip counter/.test(text) && /Tap the coin/.test(text) && /result is shown/.test(text), JSON.stringify({ facts: facts.length, missing }));
     await F.ctx.close();
   }
+  // the phone apps on /is-it/christmas: the server-rendered page is the check, so render its own HTML and look at what a visitor sees
+  if (want("is it apps: /is-it/christmas shows iPhone and Android install steps on the page")) {
+    const { onRequestGet: isItGet } = await import('../void-live-deploy/functions/is-it/[what].js');
+    const res = await isItGet({ request: new Request('https://a-to-mind.com/is-it/christmas', { headers: { 'accept-language': 'en' } }), params: { what: 'christmas' } });
+    const P = await fresh();
+    await P.p.setContent(await res.text(), { waitUntil: 'domcontentloaded' });
+    const apps = await P.p.$eval('#apps', (e) => ({ text: e.innerText, shown: e.getBoundingClientRect().height > 0, links: [...e.querySelectorAll('a')].map((a) => a.href) }));
+    check('is it apps: /is-it/christmas shows iPhone and Android install steps on the page',
+      apps.shown && /iPhone or iPad/.test(apps.text) && /Add to Home Screen/.test(apps.text) && /Android/.test(apps.text) && /Install app/.test(apps.text)
+        && apps.links.some((u) => u.includes('github.com/Adammbeam/Verse-A-to-Mind')) && !P.errors.length,
+      JSON.stringify({ shown: apps.shown, text: apps.text.slice(0, 400), links: apps.links, errors: P.errors }));
+    await P.ctx.close();
+  }
+  // the paint floor's Hey Color heading: the paint-by-number page leads with the name and keeps its purpose in the tagline
+  if (want("paint heading: /paint/ leads with Hey Color and keeps Paint by number as its tagline")) {
+    const P = await fresh({ base: base + 'paint/' }); await P.p.waitForSelector('main');
+    const heading = await P.p.$eval('h1', (e) => e.textContent.trim());
+    const tagline = await P.p.$eval('.tagline', (e) => e.textContent.trim());
+    const text = await P.p.$eval('main', (e) => e.textContent);
+    check("paint heading: /paint/ leads with Hey Color and keeps Paint by number as its tagline",
+      heading === 'Hey Color' && tagline === 'Paint by number' && /Real paintings cut into numbered areas/.test(text) && /Colour palette/.test(text) && !P.errors.length,
+      JSON.stringify({ heading, tagline, errors: P.errors }));
+    await P.ctx.close();
+  }
   // the paint floor (owner, 2026-10-26: "build wherever fits"): heycolor.com's paint by number, fought from /paint/. The page paints a
   // real painting cut into numbered areas, so the counts come from the template file the page loads (wave.json), not from a formula: the
   // labels are unpacked here the same way the page unpacks them, and a test tap lands on a pixel known to belong to a known colour.
@@ -983,6 +1007,21 @@ try {
     await P.p.setViewportSize({ width: 360, height: 760 }); await P.p.waitForTimeout(150);
     const dw = await P.p.evaluate(() => { const vw = document.documentElement.clientWidth, b = document.getElementById('discord').getBoundingClientRect(), t = document.getElementById('discordout').getBoundingClientRect(); return { page: document.documentElement.scrollWidth - vw, button: b.right <= vw + 1, box: t.right <= vw + 1 }; });
     check('tournament: at phone width (360 px) the Discord button and its message box fit without sideways scrolling', dw.page <= 0 && dw.button && dw.box, JSON.stringify(dw));
+    await P.ctx.close();
+  }
+  // yunite.xyz's Developers / API Reference (feature:yunite-xyz-b0979f7e): /tournaments/ exposes its own scoring as a callable, documented API
+  if (want("developers API: /tournaments/ documents a callable scoring API and runs its example")) {
+    const P = await fresh({ base: base + 'tournaments/' });
+    await P.p.waitForSelector('#api-run', { timeout: 15000 });
+    const api = await P.p.evaluate(() => ({ heading: document.getElementById('h-api').textContent, kinds: window.VerseTournaments.kinds, funcs: Object.keys(window.VerseTournaments), links: [...document.querySelectorAll('#api a')].map((a) => a.getAttribute('href')) }));
+    const called = await P.p.evaluate(async () => window.VerseTournaments.score({ kind: 'br', tiers: '1:6,2-5:3,6-10:1', elim: 1, results: 'Ada:1:3,Bex:2:1,Cid:3:0' }));
+    await P.p.click('#api-run');
+    const shown = JSON.parse(await P.p.$eval('#api-out', (e) => e.textContent));
+    check("developers API: /tournaments/ documents a callable scoring API and runs its example",
+      api.heading === 'Developers & API' && api.kinds.join('|') === 'br|racing|league|gamenight' && ['score', 'parseRounds', 'scorer', 'rank', 'serializeRounds'].every((f) => api.funcs.includes(f))
+      && api.links.includes('/lib/scrim.js') && JSON.stringify(shown) === JSON.stringify(called)
+      && called.length === 3 && called[0].name === 'Ada' && called[0].points === 9 && called[0].elims === 3 && !P.errors.length,
+      JSON.stringify({ api, called, shown, errors: P.errors }));
     await P.ctx.close();
   }
   // the repo activity ledger (owner, 2026-10-28: "just build Verse to be able to take over by then", the Zapier trial running out): /ledger/ reads
@@ -1560,6 +1599,44 @@ try {
     // a phone runner can take longer than the ask's 1.2 s to open the card (lists run 22: main failed twice on "no .vpage.on"), so wait for it
     const v = (await until(() => P.p.$eval('.vpage.on', (c) => ({ rot: !!c.querySelector('a[href="/sites/rot13.com/"]'), tower: !!c.querySelector('a[href="/conquered/"]'), wide: document.documentElement.scrollWidth <= innerWidth })).catch(() => null), 10000)) || { err: 'no .vpage.on after 10 s' };
     check('tower: the card has no finished-site link and fits a phone', !v.rot && !v.tower && v.wide && !P.errors.length, JSON.stringify(v).slice(0, 500));
+    await P.ctx.close();
+  }
+  // The keyless vector map on /flights/map/: MapLibre GL JS is served from this site, the demo style needs no key, and the
+  // airports and routes are the same local files the great-circle map reads. The style is answered offline here: the suite
+  // blocks outside services, so a small empty style stands in for MapLibre's public one and the check is about the page.
+  if (want("vector map: /flights/map/ draws a keyless map, shows the airports and routes, and a click inspects one")) {
+    const P = await fresh(() => {
+      let real;
+      Object.defineProperty(window, 'maplibregl', { configurable: true, get() { return real; }, set(v) {
+        real = v; const M = v.Map;
+        v.Map = function (...args) { const m = new M(...args); window.__verseMap = m; return m; };
+        v.Map.prototype = M.prototype;
+      } });
+    });
+    await P.ctx.route(/demotiles\.maplibre\.org\/style\.json/, (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ version: 8, sources: {}, layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#0b1020' } }] }) }));
+    await P.p.goto(base + 'flights/map/?route=JFK-LHR-SIN');
+    await P.p.waitForFunction(() => document.documentElement.dataset.flightsReady === '1', null, { timeout: 10000 }).catch(() => {});
+    const seen = await until(() => P.p.evaluate(() => {
+      const box = document.querySelector('#vectormap'), canvas = box && box.querySelector('canvas'), note = document.querySelector('#v-note'), attrib = document.querySelector('.maplibregl-ctrl-attrib'), credit = document.querySelector('#v-credit');
+      return canvas && note && /nonstop destinations/.test(note.textContent) ? { canvas: 1, note: note.textContent, attrib: attrib ? attrib.innerText : '', credit: credit ? credit.textContent : '', href: credit && credit.querySelector('a') ? credit.querySelector('a').getAttribute('href') : '' } : null;
+    }), 15000);
+    check('vector map: /flights/map/ draws the map with no key, names the origin and says how many destinations it shows',
+      !!seen && seen.canvas === 1 && /nonstop destinations from LIS/.test(seen.note) && !P.errors.length, JSON.stringify(seen) + ' | ' + P.errors.join(' | '));
+    check('vector map: the MapLibre licence and tile credit are visible on the map and beside it',
+      !!seen && /MapLibre/.test(seen.attrib) && /BSD-3-Clause/.test(seen.attrib) && /Natural Earth/.test(seen.attrib) && /Licence/.test(seen.credit) && /LICENSE\.txt/.test(seen.href),
+      JSON.stringify(seen));
+    await P.p.locator('#v-map').scrollIntoViewIfNeeded();
+    const pin = await until(() => P.p.evaluate(() => {
+      const m = window.__verseMap; if (!m || !m.getSource('v-net')) return null;
+      const f = m.queryRenderedFeatures().find((x) => x.layer.id === 'v-airports'); if (!f) return null;
+      const pt = m.project(f.geometry.coordinates), r = document.querySelector('#v-map canvas').getBoundingClientRect();
+      return { x: r.left + pt.x, y: r.top + pt.y, code: f.properties.code };
+    }), 12000);
+    if (pin) await P.p.mouse.click(pin.x, pin.y);
+    const popup = await P.p.locator('.maplibregl-popup-content').allTextContents().catch(() => []);
+    check('vector map: a click on an airport opens a popup with its code and name', !!pin && popup.some((t) => t.includes(pin.code)), JSON.stringify({ pin, popup, errors: P.errors }).slice(0, 400));
+    await P.p.fill('#v-origin', 'LIS'); await P.p.click('#v-go'); await P.p.waitForTimeout(300);
+    check('vector map: typing another origin redraws the network on the same map', /nonstop destinations from LIS/.test(await P.p.innerText('#v-note')) && (await P.p.evaluate(() => window.__verseMap && window.__verseMap.getSource('v-net') && window.__verseMap.getSource('v-net')._data.features.length > 50)) && !P.errors.length, (await P.p.innerText('#v-note')) + ' | ' + P.errors.join(' | '));
     await P.ctx.close();
   }
   // owner audit 2026-11-19: on a touch phone "weather in Lakeland Florida" answered "I could not find it" and the cookie recipe came back as a loose paragraph,
@@ -6867,6 +6944,17 @@ try {
       && lapRows === 2 && keptLaps === 2 && sec(t2) > sec(t1) && /time is up/i.test(ring.note) && ring.done && !Z.errors.length, JSON.stringify({ stage, lapRows, t1, t2, keptLaps, ring, errors: Z.errors }));
     await Z.ctx.close();
   }
+  // the browser extension on /word-count/: the page shows how to count words on any page, with Verse's own download and source
+  if (want("word count extension: /word-count/ shows how to count words on any page with Verse's extension")) {
+    const Z = await fresh(); await Z.p.goto(base + 'word-count/'); await Z.p.waitForSelector('#extension');
+    const ext = await Z.p.$eval('#extension', (e) => ({ text: e.innerText, shown: e.getBoundingClientRect().height > 0, links: [...e.querySelectorAll('a')].map((a) => a.href) }));
+    check("word count extension: /word-count/ shows how to count words on any page with Verse's extension",
+      ext.shown && /Count words on any page/.test(ext.text) && /count words on this page \(stays in your browser\)/.test(ext.text)
+        && /Developer mode/.test(ext.text) && ext.links.some((u) => u.endsWith('/extension/void-extension.zip'))
+        && ext.links.some((u) => u.endsWith('/tree/main/extension')) && !Z.errors.length,
+      JSON.stringify({ shown: ext.shown, text: ext.text.slice(0, 400), links: ext.links, errors: Z.errors }));
+    await Z.ctx.close();
+  }
   // the rest of wordcounter.net on /word-count/: a goal with its progress, two- and three-word phrases, the limits a text fits, earlier versions
   if (want("word count: /word-count/ takes a goal from its link and shows the progress, repeated phrases and limits, and restores an earlier version")) {
     const Z = await fresh(); const t = 'The blue whale is huge. The blue whale eats krill. A blue whale sings.';
@@ -6925,6 +7013,19 @@ try {
       && km.mi === '3.10685596119' && /5 km = 3\.10685596119 mi/.test(km.answer) && /[?&]k=length/.test(link) && kept === km.answer && !thirdParty.length && !Z.errors.length, JSON.stringify({ first, back, formula, swapped, four, kinds, fuel, km, link, kept, thirdParty, errors: Z.errors }));
     await Z.ctx.close();
   }
+  // convertlive.com's theme choice on /convert/: bright colour and dark colour, kept on this device and applied before the first paint
+  if (want("convert theme: /convert/ switches between bright color and dark color and keeps the choice across a reload")) {
+    const Z = await fresh(); await Z.p.goto(base + 'convert/'); await Z.p.waitForSelector('#theme');
+    const looks = () => Z.p.evaluate(() => ({ theme: document.documentElement.dataset.theme || 'dark', bg: getComputedStyle(document.body).backgroundColor, ink: getComputedStyle(document.body).color, scheme: getComputedStyle(document.documentElement).colorScheme }));
+    const dark = await looks(); await Z.p.selectOption('#theme', 'light'); const bright = await looks();
+    await Z.p.reload(); await Z.p.waitForSelector('#theme'); const kept = await looks(); const chosen = await Z.p.$eval('#theme', (e) => e.value);
+    await Z.p.selectOption('#theme', 'dark'); const back = await looks(); const stored = await Z.p.evaluate(() => localStorage.getItem('a2m.void.convert.theme'));
+    check("convert theme: /convert/ switches between bright color and dark color and keeps the choice across a reload",
+      dark.bg === 'rgb(11, 10, 16)' && dark.scheme === 'dark' && bright.bg === 'rgb(247, 246, 251)' && bright.ink === 'rgb(21, 19, 28)' && bright.scheme === 'light'
+      && kept.theme === 'light' && kept.bg === bright.bg && chosen === 'light' && back.bg === dark.bg && stored === 'dark' && !Z.errors.length,
+      JSON.stringify({ dark, bright, kept, chosen, back, stored, errors: Z.errors }));
+    await Z.ctx.close();
+  }
   // the rest of calculator.net on /calculator/ (lib/calc-panels.js): a loan with its schedule and chart, compound interest, percentages and BMI with calories, from links
   if (want("calculator: /calculator/#loan answers the monthly payment with a yearly schedule and a chart, and the compound, percent and BMI panels answer")) {
     const Z = await fresh(); await Z.p.goto(base + 'calculator/#loan'); await Z.p.waitForSelector('#ltable tr');
@@ -6952,6 +7053,23 @@ try {
     kept.list = await Z.p.$$eval('#hist li', (l) => l.map((x) => x.textContent));
     check('calculator page: an ask in the link, typing and the keys work it out exactly (0.1 + 0.2 = 0.3), radians switch, history and memory survive a reload',
       linked === '40.8' && typed === '0.3' && keyed === '1,024' && rad === '-1' && kept.hist === 4 && kept.mem === 'M = 1,024' && kept.angle === 'Radians' && !Z.errors.length, JSON.stringify({ linked, typed, keyed, rad, kept, errors: Z.errors }));
+    await Z.ctx.close();
+  }
+  // calculator.net's RND key (job mvswwx66): a random number between 0 and 1 lands in the sum and evaluates to itself
+  if (want("calculator RND key: /calculator/ makes a random number between 0 and 1 that the equals key evaluates")) {
+    const Z = await fresh(); await Z.p.goto(base + 'calculator/');
+    const btn = Z.p.locator('#keys button', { hasText: /^RND$/ });
+    const label = await btn.getAttribute('aria-label');
+    await btn.click();
+    const first = Number(await Z.p.$eval('#expr', (e) => e.value));
+    await Z.p.click('#keys button.eq');
+    const answer = Number((await Z.p.$eval('#out', (e) => e.textContent)).replace(/,/g, ''));
+    await btn.click();
+    const second = Number(await Z.p.$eval('#expr', (e) => e.value));
+    check("calculator RND key: /calculator/ makes a random number between 0 and 1 that the equals key evaluates",
+      label === 'random number between 0 and 1' && Number.isFinite(first) && first >= 0 && first < 1
+      && Math.abs(answer - first) < 1e-9 && Number.isFinite(second) && second >= 0 && second < 1 && !Z.errors.length,
+      JSON.stringify({ label, first, answer, second, errors: Z.errors }));
     await Z.ctx.close();
   }
   // the tower's vcalc.com floor: /calculators/ works a formula from its link, takes each input in any unit (or a unit typed in the box),
@@ -7150,6 +7268,44 @@ try {
     check("random: /random/ draws decimal fractions from its link, deals a shuffled deck into hands, and picks dates inside a range",
       nums.length === 20 && nums.every((x) => /^0\.\d{4}$|^1\.0000$/.test(x)) && new Set(nums).size > 5 && hands.length === 4 && hands.every((h) => h.length === 5) && new Set(all).size === 20 && /^32 cards left/.test(left)
       && days.length === 30 && days.every((d) => /^2026-03-\d\d \((Mon|Tue|Wed|Thu|Fri)\)$/.test(d)) && !Z.errors.length, JSON.stringify({ nums: nums.slice(0, 5), hands, left, days: days.slice(0, 5), errors: Z.errors }));
+    await Z.ctx.close();
+  }
+  // random.org's keno and bingo on /random/: quick picks without repeats, cards from the five BINGO ranges, and a print button
+  if (want("keno and bingo: /random/ quick picks keno tickets and makes printable 5 by 5 bingo cards with a free centre")) {
+    const Z = await fresh(); await Z.p.goto(base + 'random/');
+    await Z.p.click('#presets button[data-q="keno"]');
+    const pickOf = (s) => (s.split(': ')[1] || '').split(', ').map(Number);
+    const first = pickOf(await Z.p.$eval('#kenoTickets li', (e) => e.textContent));
+    await Z.p.selectOption('#kenoN', '10'); await Z.p.selectOption('#kenoT', '5'); await Z.p.click('#kenoGo');
+    const tickets = await Z.p.$$eval('#kenoTickets li', (e) => e.map((x) => x.textContent));
+    await Z.p.click('#presets button[data-q="bingo"]');
+    await Z.p.selectOption('#bingoCards', '2'); await Z.p.click('#bingoGo');
+    const cards = await Z.p.$$eval('#bingoSheets .bingocard', (t) => t.map((e) => ({ head: [...e.tHead.rows[0].cells].map((c) => c.textContent), rows: [...e.tBodies[0].rows].map((r) => [...r.cells].map((c) => c.textContent)) })));
+    await Z.p.evaluate(() => { window.__prints = 0; window.print = () => { window.__prints++; }; });
+    await Z.p.click('#bingoPrint');
+    const printed = await Z.p.evaluate(() => window.__prints);
+    const picks = tickets.map(pickOf), kenoOk = picks.length === 5 && picks.every((v) => v.length === 10 && new Set(v).size === 10 && v.every((x, i) => x >= 1 && x <= 70 && (!i || x > v[i - 1])));
+    const cardsOk = cards.length === 2 && cards.every((c) => c.head.join('') === 'BINGO' && c.rows.length === 5 && c.rows.every((r) => r.length === 5) && c.rows[2][2] === 'FREE'
+      && c.rows.every((r, i) => r.every((x, k) => (i === 2 && k === 2) || (+x >= k * 15 + 1 && +x <= k * 15 + 15))));
+    check('keno and bingo: /random/ quick picks keno tickets and makes printable 5 by 5 bingo cards with a free centre',
+      first.length === 6 && new Set(first).size === 6 && first.every((x) => x >= 1 && x <= 70) && kenoOk && cardsOk && printed === 1 && !Z.errors.length,
+      JSON.stringify({ first, tickets: tickets.slice(0, 2), cards, printed, errors: Z.errors }));
+    await Z.ctx.close();
+  }
+  // random.org's Raw Bytes on /random/: the preset makes secure bytes, the size and hex preview match, and Download saves that file
+  if (want("random bytes: /random/ makes secure bytes with a size and hex preview, and downloads them as a .bin file")) {
+    const Z = await fresh(); await Z.p.goto(base + 'random/');
+    await Z.p.click('#presets button[data-q="bytes"]');
+    const first = await Z.p.$eval('#byteprev', (e) => e.textContent);
+    await Z.p.fill('#bytecount', '100'); await Z.p.click('#bytesgen');
+    const second = await Z.p.$eval('#byteprev', (e) => e.textContent);
+    const [d] = await Promise.all([Z.p.waitForEvent('download'), Z.p.click('#bytesdl')]);
+    const name = d.suggestedFilename(), bytes = [...fs.readFileSync(await d.path())], hex = second.match(/hex\):\s*([0-9a-f]+)/);
+    check("random bytes: /random/ makes secure bytes with a size and hex preview, and downloads them as a .bin file",
+      /^First 16 bytes \(hex\): [0-9a-f]{32}… · 32 bytes ready/.test(first) && /^First 16 bytes \(hex\): [0-9a-f]{32}… · 100 bytes ready/.test(second)
+      && name === 'random-100-bytes.bin' && bytes.length === 100 && new Set(bytes).size > 1
+      && !!hex && Buffer.from(hex[1], 'hex').equals(Buffer.from(bytes.slice(0, 16))) && !Z.errors.length,
+      JSON.stringify({ first, second: second.slice(0, 70), name, len: bytes.length, distinct: new Set(bytes).size, errors: Z.errors }));
     await Z.ctx.close();
   }
   if (want("random user: /random-user/ takes Turkish and Dutch people from the link, Next gives the next page from the same seed, and the password option shapes every password")) {
@@ -10145,7 +10301,7 @@ try {
   const serverData = () => { const rows = [...db().mine.values()]; return rows.length === 1 ? JSON.parse(rows[0].data) : null; };
   const A = await fresh({ base: localBase }, SIGNAL_SPY);
   const surface = await A.p.evaluate(() => ({ stage: document.querySelectorAll('#stage > *').length, text: document.body.innerText, clickable: Array.from(document.querySelectorAll('button, a, [role=button], microphone')).filter((e) => e.offsetParent !== null).map((e) => e.id || e.tagName) }));
-  check('passkeys: nothing added to the empty surface', surface.stage === 0 && !/sign in|passkey|remember me|log in|account|password|email/i.test(surface.text) && surface.clickable.every((x) => x === 'go' || x === 'mic'), JSON.stringify(surface).slice(0, 200));
+  check('passkeys: nothing added to the empty surface', surface.stage === 0 && !/sign in|passkey|remember me|log in|account|password|email/i.test(surface.text) && surface.clickable.every((x) => x === 'go' || x === 'mic' || x === 'local-toggle'), JSON.stringify(surface).slice(0, 200));
   const authA = await authenticator(A);
   await A.ask('make a clock'); await A.ask('make my void purple');
   await A.ask('what is a black hole', 300); await until(async () => /region of spacetime/.test(await A.page()), 5000); await A.ask('keep this');

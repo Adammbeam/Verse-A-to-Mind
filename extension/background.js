@@ -10,6 +10,7 @@ const TEXT_MAX = 8000;
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
 chrome.runtime.onInstalled.addListener(() => chrome.contextMenus.removeAll(() => { // an update keeps the old menus: start clean
   chrome.contextMenus.create({ id: 'read-tab', title: 'Verse: read this tab (stays in your browser)', contexts: ['page', 'selection', 'editable'] });
+  chrome.contextMenus.create({ id: 'count-words', title: 'Verse: count words on this page (stays in your browser)', contexts: ['page', 'selection'] });
   chrome.contextMenus.create({ id: 'void-page', title: 'Ask Verse about this page (sends it to Verse)', contexts: ['page', 'frame', 'link', 'image', 'selection'] });
   chrome.contextMenus.create({ id: 'void-draft', title: 'Help me with this draft (sends it to Verse)', contexts: ['editable'] });
 }));
@@ -49,8 +50,34 @@ function readPage(max) {
   };
 }
 
+// Count words on any page: a badge in the page, counted there from the selection or the visible text. Nothing is sent,
+// nothing is stored, and the badge goes away on its own. The word rule is the one in void-live-deploy/lib/wordcount.js.
+function showWordCount(selected) {
+  const old = document.getElementById('verse-word-count'); if (old) old.remove();
+  const picked = String(selected || '').trim();
+  const text = picked || (document.body ? document.body.innerText : '');
+  const words = (String(text).match(/[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*/gu) || []).length;
+  const characters = Array.from(String(text)).length;
+  const badge = document.createElement('div');
+  badge.id = 'verse-word-count'; badge.setAttribute('role', 'status');
+  badge.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:2147483647;display:flex;align-items:center;gap:10px;max-width:min(90vw,420px);padding:10px 14px;border:1px solid #6b5bb0;border-radius:14px;background:#15131c;color:#ecebf5;box-shadow:0 8px 28px rgba(0,0,0,.4);font:600 14px/1.4 system-ui,sans-serif';
+  const label = document.createElement('span');
+  label.textContent = words.toLocaleString() + (words === 1 ? ' word' : ' words') + ' · ' + characters.toLocaleString() + (characters === 1 ? ' character' : ' characters') + (picked ? ' in the selection' : ' on this page');
+  const close = document.createElement('button');
+  close.type = 'button'; close.textContent = '×'; close.setAttribute('aria-label', 'Close word count');
+  close.style.cssText = 'border:0;background:transparent;color:inherit;font:600 20px/1 system-ui,sans-serif;cursor:pointer';
+  close.onclick = () => badge.remove();
+  badge.append(label, close); document.documentElement.appendChild(badge);
+  setTimeout(() => { if (badge.isConnected) badge.remove(); }, 20000);
+  return { words, characters, scope: picked ? 'selection' : 'page' };
+}
+
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (!tab) return;
+  if (info.menuItemId === 'count-words') {
+    try { await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: showWordCount, args: [info.selectionText || ''] }); } catch (_) {}
+    return;
+  }
   // open first: the side panel only opens inside the click itself, before any await
   chrome.sidePanel.open({ windowId: tab.windowId }).catch(() => {});
   if (info.menuItemId === 'read-tab') { readTab(tab); return; }

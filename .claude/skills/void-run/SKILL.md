@@ -17,7 +17,8 @@ Every run is B.I.T.E.: brief, implement the smallest useful piece, test it the w
    `node tools/finish.mjs <grow|build|fix|retire|idea|finding> "what changed" --brief "..." --test "<browser-suite words>" --show "<the change in plain words>" --try "<an ask that shows it>" --body "<commit trailers>"`
    (`--show`/`--try` let the "look what I made" walkthrough put the change on the stage for returning visitors; skip them only for changes no one can see)
    Anything that reaches the site needs a `--test` that passes in a real browser first; it stops otherwise (`docs/RULES.md`, right the first time).
-   It writes the ledger and log lines, checks the map, commits, merges main, runs the fast checks and pushes, then opens the PR labelled automerge (or prints the body when `gh` is not signed in). It stops at the first failure; resume with `--from N`. `--dry` shows the steps.
+   It writes the ledger and log lines, checks the map, commits, merges main, runs the fast checks, runs the PR gate offline (`tools/pre-pr.mjs --check-only`) and pushes, then opens the PR labelled automerge (or prints the body when `gh` is not signed in). It stops at the first failure; resume with `--from N`. `--dry` shows the steps. A hand-opened PR runs the gate first; a deploy-generated copy never goes in the branch.
+   Long commands start in the background on the first call (full checks, whole suites, builds, live probes); carry on with other work and read the completion notice. Never poll or sit on a foreground run that can take minutes.
 6. **Review.** `node tools/review-pr.mjs` before or after pushing; then the `steward` skill drives the PR to merged.
 
 One PR per run. After it merges, restart the branch from main before the next one.

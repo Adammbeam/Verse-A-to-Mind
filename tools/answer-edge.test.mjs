@@ -179,13 +179,14 @@ test('end to end: a new build version is a MISS (a deploy never reads the last o
   assert.equal((await ask(env, 'how tall is mount everest')).header, HIT);
 });
 
-test('end to end: a timely ask lives ten minutes; ?fresh=1 skips the copy and replaces it', async () => {
+test('end to end: a timely ask lives ten minutes; ?fresh=1 skips the edge and D1 copies and replaces the edge copy', async () => {
   const cache = fresh(); const { env, ai } = world('Bitcoin was about 60,000 dollars.');
   await ask(env, 'price of bitcoin');
   assert.match(cache.m.get(answerKeys(cache)[0]).headers['cache-control'], /max-age=600/);
   const before = ai.calls;
   const f = await ask(env, 'price of bitcoin', {}, '/api/answer?fresh=1');
-  assert.equal(f.header, REFRESH); assert.equal(ai.calls, before, 'the D1 cache still answers a fresh ask: fresh skips only the edge copy');
+  assert.equal(f.header, REFRESH); assert.ok(ai.calls > before, 'a fresh ask is answered by the model, not the D1 row');
+  assert.equal(f.text.includes('cached'), false, 'a fresh answer is not marked cached');
   assert.equal((await ask(env, 'price of bitcoin')).header, HIT);
 });
 

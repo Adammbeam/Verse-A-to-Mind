@@ -1,8 +1,9 @@
 // The agent's system line (lib/agent-answer.js answerBrief): short everyday answers that lead with the answer, depth only when asked, and
-// the general shapes of a comparison and a piece of writing. Run: node --test tools/agent-brief.test.mjs
+// the general shapes of a comparison and a piece of writing. A writing ask also gets the shape/detail rule the held-out exam found missing.
+// Run: node --test tools/agent-brief.test.mjs
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { answerBrief } from '../void-live-deploy/lib/agent-answer.js';
+import { answerBrief, isWritingAsk } from '../void-live-deploy/lib/agent-answer.js';
 
 test('the general answerer leads with the answer and keeps to about 120 words unless asked for depth', () => {
   const b = answerBrief({ name: 'verse' });
@@ -38,4 +39,38 @@ test('the retry and a specialist keep the same short, lead-with-the-answer rule,
   }
   assert.match(answerBrief({ name: 'verse', repair: true }), /^You are Verse\. The last answer did not do the task\./);
   assert.match(answerBrief({ name: 'word-counter', description: 'counts words' }), /Lead with the result/);
+});
+test('a writing ask gets the shape rule about the kind of ask, never about its topic', () => {
+  const ask = 'Write a catchy slogan for a neighborhood coffee shop called Bean There.';
+  const b = answerBrief({ name: 'verse' }, ask);
+  assert.match(b, /give the finished piece in exactly the shape asked for/);
+  assert.match(b, /not a menu of options unless asked/);
+  assert.match(b, /Keep the subject's own concrete words and every detail supplied/);
+  assert.match(b, /Finish every line whole/);
+  assert.ok(!/Bean There|neighborhood|coffee shop/.test(b), 'no words from this question are in the rule');
+  const plain = answerBrief({ name: 'verse' });
+  assert.ok(!/exactly the shape asked for/.test(plain), 'no ask means no extra rule');
+  assert.ok(!/exactly the shape asked for/.test(answerBrief({ name: 'verse' }, 'What is the weather in New York?')));
+  assert.match(answerBrief({ name: 'verse', repair: true }, ask), /^You are Verse\. The last answer did not do the task\./);
+  assert.match(answerBrief({ name: 'verse', repair: true }, ask), /Finish every line whole/);
+  assert.ok(!/Finish every line whole/.test(answerBrief({ name: 'word-counter', description: 'counts words' }, ask)));
+});
+test('writing requests are recognised by what is asked for, not by one phrasing', () => {
+  for (const ask of [
+    'Write a short email asking my landlord to fix a leaking kitchen faucet.',
+    'Draft a polite text to a friend saying I can\'t make dinner tonight.',
+    'Rewrite this to sound more professional: "hey, can u send me the report asap"',
+    'Give me three tips for writing a clear email.',
+    'Help me decline a job offer politely.',
+    'Turn this into a bullet list: we need milk, eggs, bread, and to call the plumber.',
+    'Suggest a title for a blog post about learning to cook as an adult.',
+    'Write a two-line poem about autumn.',
+  ]) assert.equal(isWritingAsk(ask), true, ask);
+  for (const ask of [
+    'What is the capital of France?',
+    'Make a timer for 5 minutes',
+    'Translate hello to Spanish',
+    'what is 15% of 240',
+    'Give me a bar chart for apples 10 and oranges 20',
+  ]) assert.equal(isWritingAsk(ask), false, ask);
 });

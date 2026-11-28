@@ -10,17 +10,38 @@ is never a cost to cut: Verse grows toward doing everything. Nothing is retired,
 salvage shelf because people did not use it or because there are many: real use only ever adds (an experiment opened on
 many days becomes a candidate for a core skill, `tools/lab-use.mjs`), it never takes away.
 
-## A paste is a report, an ask or unclear; never a guess (owner, 2026-10-30)
+## Gate the pull request before the push, not in CI (2026-11-27)
+
+A branch that carried deploy-generated copies (`self.json`, the dependency map and the book) and 400+ changed lines passed
+the builder's checks locally, then failed the Verse check on the PR. `finish.mjs` now runs `tools/pre-pr.mjs --check-only`
+offline between the fast checks and the push, so the same refusals stop a run before it opens a PR. `merge-main.mjs` puts
+the deploy-only copies back to main after a merge instead of committing them, and `tools/regen-paths.mjs` is the one list
+of what a refresh writes. A hand-opened PR runs the gate too; an assistant does not open one without it.
+
+## Dynamic imports need file URLs on Windows (2026-11-27)
+
+`import(path.resolve(...))` works on Linux CI and fails on Windows with `ERR_UNSUPPORTED_ESM_URL_SCHEME` (`protocol 'c:'`).
+Every module loaded from a computed path uses `pathToFileURL(...).href`: a local gate that dies this way is not evidence
+that the branch is broken. Keep it that way in tests and tools as well, not just the audit that the gate calls.
+
+## Long commands start in the background (2026-11-27)
+
+Full check runs, whole browser suites, large builds and repeated live probes are started in the background on the first
+call. The agent continues with other work and reads the completion notice; it does not poll, sleep on a foreground command,
+or retry a failed program launch in a loop. An OS error from a spawn is final and gets surfaced.
+
+## A paste is the ask (2026-10-30, revised)
 Adam pasted a copied "What is really true now" card with a long note under it. Verse reopened the frozen card, still at
 "checking GitHub", and dropped the note. An earlier status note came back as a stock answer about Verse's secret names.
-Verse sorts every paste before it answers (`lib/paste-kind.js`, tests in `tools/paste-kind.test.mjs`):
+Verse sorts every paste before it answers (`lib/paste-kind.js`, `lib/paste-read.js`, tests in `tools/paste-kind.test.mjs`):
 - A report (a status report, a CI log, or a copied report card) is taken in as context. Verse checks what it names against
   GitHub and shows what is true now (`skills/telemetry-route.js`). A report never gets secret names or a stock answer.
-- An ask (the first or the last line is a question, a command or a request) gets an answer, as any ask does.
+- A paste that asks something is the ask. One instruction is followed. Several questions or asks are each answered, in
+  order, under a short label (`asksIn` in `lib/paste-read.js`).
+- A document or article with no instruction is read back at once: a short summary, the key points, and what to do with it.
 - A note to someone, or a copied chat, is read as a note (`lib/note-ask.js`). A copied card with nothing more opens as that card.
-- An unclear paste gets one line: "That reads as pasted text with no ask in it. Say "sum it up", or tell me what you want
-  done with it." Verse guesses nothing. "sum it up" within ten minutes sums the paste up from its own words.
-A typed ask is not a paste: one line under 400 characters is routed as before.
+A long paste is never handed back for the person to say what they want, and it is not routed to a skill just because it
+starts with a skill word. A typed ask is not a paste: one line under 400 characters is routed as before.
 
 ## The ladder a person sees is Versus; the code keeps `tower` (owner, 2026-10-25)
 "the tower rename is easy its versus" and "just thought it was right there because Verse". Done the way V01D became Verse

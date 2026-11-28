@@ -7,7 +7,7 @@
 //   node tools/sync-free-lanes.mjs --dry      print the payload, write nothing
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..');
@@ -105,4 +105,7 @@ async function main() {
   console.log('wrote ' + ranked.length + ' free OpenRouter models to ' + outPath);
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+// importing these pure helpers (tools/sync-free-lanes.test.mjs) must not fetch or rewrite the real registry:
+// only the command line, `node tools/sync-free-lanes.mjs`, runs the sync itself.
+const invokedDirectly = process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url;
+if (invokedDirectly) main().catch((e) => { console.error(e); process.exit(1); });

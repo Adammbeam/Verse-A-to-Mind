@@ -57,6 +57,22 @@ export function shareText(d) {
   const x = dataOf({ title: d.t, kind: d.k, body: d.b, sources: d.src, n: d.n, page: d.p });
   return [x.t, x.k, '', x.b, x.p ? '\nFull card: ' + x.p : '', x.src.length ? '\nSources:\n' + x.src.map((s, i) => '[' + (i + 1) + '] ' + s.t + (s.u ? ' ' + s.u : '')).join('\n') : '', '\nVerse card from a-to-mind.com' + (x.n ? ' \u00b7 v' + x.n : ''), codeOf(x)].filter((l, i) => i !== 2 || l !== undefined).join('\n').replace(/\n{3,}/g, '\n\n').trim();
 }
+/** put a card on the clipboard: its words first, its picture best effort. A picture (a forged painting, a long card)
+ *  can take seconds to draw; bundling the text in one ClipboardItem with that pending image left the previous
+ *  card's text on the clipboard while it painted, which the cards guard read as "copied card missing text".
+ *  Pure given the clipboard and the picture function. */
+export async function copyCard(text, picture, clip) {
+  const c = clip || (typeof navigator !== 'undefined' ? navigator.clipboard : null);
+  const plain = new Blob([text], { type: 'text/plain' });
+  let words = false;
+  try { if (c && c.writeText) { await c.writeText(text); words = true; } } catch (_) { /* the image item below may still work */ }
+  if (typeof picture === 'function') {
+    try { const png = await picture(); if (png && c && c.write && typeof ClipboardItem !== 'undefined') { await c.write([new ClipboardItem({ 'text/plain': plain, 'image/png': png })]); return 'copied'; } } catch (_) { /* the words are already there */ }
+  }
+  if (words) return 'copied';
+  try { if (c && c.writeText) { await c.writeText(text); return 'copied text'; } } catch (_) { /* no clipboard at all */ }
+  return 'select and copy';
+}
 /** a link that reopens the card on the site: the short code rides in the #fragment, so it never reaches a server log. Pure. */
 // the link holds the whole card up to LINK_BODY letters (owner, 2026-11-19: "the card when copied barely sends you any of it"); a card with a full page of its own shares that page (shareUrl)
 export const LINK_BODY = 2400;
@@ -127,10 +143,8 @@ export function readCard(el) {
 /** what the card's picture is drawn from: the frame's own numbers (el._vcard, set by keep) and the card's text. */
 export function imageData(el, d) {
   const c = el._vcard || {}, raw = d.b || '';
-  // cap the body for the picture so a dense card (many asks, many inbox items) stays a standard card shape
-  // instead of stretching into a tall strip; the full text still rides in the code line and the saved text
-  // the whole text (owner, 2026-11-19: the picture stopped at "Halve the..."): lib/card-image.js bodyLayout sets it like the card and grows the card; only a huge text is cut, with the link to the rest
-  const text = raw.slice(0, 8000);
+  // the picture holds the whole answer, and the card grows with it (lib/card-image.js bodyLayout). A very long body is still capped here so the picture can be drawn.
+  const text = raw.slice(0, 20000);
   return { link: d.p || '', art: el._vcForge || ((el.querySelector(':scope > .vc-art > .vc-seal') || {}).src || ''), nouns: c.nouns, title: d.t, text, typeLine: d.k, kind: d.k, cost: c.cost, rarity: c.rarity, hue: c.hue, chapter: c.chapter, key: c.key || d.t, name: c.name, adds: c.adds, fetched: !!c.fetched, power: c.power, toughness: c.toughness, income: c.income, number: c.number, tested: c.tested, season: c.season, glyph: c.isSkill, painting: !!el._vcForge, wxArt: !!(el._vcForge && el.dataset && el.dataset.artKind === 'weather'), weatherCard: !!(el.dataset && el.dataset.skill === 'weather') || undefined, poster: !!el.dataset.poster, sub: (el.querySelector(':scope > .sub:not([hidden])') || {}).textContent || '',
     // the self card draws its own shape (lib/card-image.js selfLayout): its words, the family bars, each block's heading and first lines; other cards: none
     self: el.classList && el.classList.contains('vc-self') ? selfImage(el) : undefined };
@@ -192,11 +206,7 @@ export function bar(el) {
     if (el.dataset && el.dataset.cardPlain !== undefined) return toPng(plainSvg({ title: d.t, text: d.b, qr: el._qr || null }), 1); // a utility card saves its plain picture (lib/card-image.js)
     const photo = (await artPicture(el)) || ''; return toPng(cardSvg({ ...imageData(el, d), photo }, { bleed: false }), 1);
   };
-  mk(gCard, 'copy card', async () => {
-    const d = readCard(el), text = shareText(d);
-    try { if (typeof ClipboardItem !== 'undefined' && navigator.clipboard && navigator.clipboard.write) { await navigator.clipboard.write([new ClipboardItem({ 'text/plain': new Blob([text], { type: 'text/plain' }), 'image/png': png(d) })]); return 'copied'; } } catch (_) { /* the picture could not ride along: text only */ }
-    try { await navigator.clipboard.writeText(text); return 'copied text'; } catch (_) { return 'select and copy'; }
-  });
+  mk(gCard, 'copy card', async () => { const d = readCard(el); return copyCard(shareText(d), () => png(d)); });
   mk(gCard, 'save card', async () => { const d = readCard(el); try { download(await png(d), fileName({ t: d.t }, 'png')); return 'saved'; } catch (_) { try { download(new Blob([shareText(d)], { type: 'text/plain' }), fileName({ t: d.t })); return 'saved text'; } catch (_2) { return 'could not save'; } } });
   // share (asked 2026-10-22: every card has copy, save text, save picture and share): the system share sheet with the card's text and a link
   // that reopens it; with no share sheet the link is copied. The link carries what the card shows, never who made it.

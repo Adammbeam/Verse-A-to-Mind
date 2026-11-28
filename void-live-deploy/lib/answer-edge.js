@@ -12,7 +12,8 @@
 //                 ship), not answered from what this person told Verse, not a paste, and one of the KINDS below (answerKind): an ask that
 //                 says my, me, our or us is about someone and is not one of them;
 //   the answer    from a free model (a paid escalation is never served again for free), status 200, a non-empty answer, and no field
-//                 outside ANSWER_FIELDS: a note (model busy, open web, slow down), a refusal (noAnswer), self, told, kept or page all
+//                 outside ANSWER_FIELDS: a note (model busy, open web, slow down), a refusal (noAnswer), self, told, kept or page all.
+//                 followed is a boolean mark on a storable answer ('false' there: an answer that read an earlier ask is not cached)
 //                 fall outside it. The modes (fix, review, take, draft, proposal, plan, character, report, story, aitext,
 //                 market-report) and an ask about a page return before this is reached, so they are never cached.
 //
@@ -103,7 +104,7 @@ export function edgeGate({ request, body, ask, masked, self, told, paste }) {
 
 // the fields an answer the edge may hold has (functions/api/answer.js modelAnswer and the D1 hit); any other field means it is not one
 // 'source' names the free resource that wrote it (lib/answer-free.js): workers-ai-chat or the D1 cache, never anything personal
-export const ANSWER_FIELDS = new Set(['answer', 'sources', 'at', 'route', 'near', 'pic', 'fuzzy', 'name', 'desc', 'series', 'cached', 'source']);
+export const ANSWER_FIELDS = new Set(['answer', 'sources', 'at', 'route', 'near', 'pic', 'fuzzy', 'name', 'desc', 'series', 'cached', 'source', 'followed']);
 /** may this finished answer body be stored? Only a real answer from a free model, with no field outside ANSWER_FIELDS. Pure. */
 export function storable(body, { paid = false, status = 200 } = {}) {
   if (paid || status !== 200 || !body || typeof body !== 'object' || Array.isArray(body)) return false;

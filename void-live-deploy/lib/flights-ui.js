@@ -5,6 +5,7 @@
  * visitor opens (a fixed list of providers). English and German. Pure logic: lib/flights-core.js. Tests: tools/flights.test.mjs, tools/flights-page.mjs.
  */
 import * as C from '/lib/flights-core.js';
+import * as V from '/lib/flights-vector.js';
 import { DE } from '/lib/flights-de.js';
 import { COAST, COAST_Q } from '/lib/flights-coast.js';
 let coast = null; const coastLines = () => coast || (coast = C.decodeCoast(COAST, COAST_Q));
@@ -211,6 +212,61 @@ PANELS.route = () => {
     map.innerHTML = C.mapSvg(ports, 640, 320, coastLines());
   };
   inp.addEventListener('input', () => { upd(); const u = new URL(location.href); u.searchParams.set('route', inp.value); try { history.replaceState(null, '', u.pathname + u.search + u.hash); } catch (_) { /* no history */ } }); subs.add(upd); upd(); return s;
+};
+
+/** vectormap: a keyless vector map of one airport's nonstop network, drawn over the chain of airports above. */
+PANELS.vectormap = () => {
+  const s = pane('Vector map', 'vectormap', ['vector']);
+  const first = state.from || (new URLSearchParams(location.search).get('from') || '').toUpperCase() || 'LIS';
+  s.insertAdjacentHTML('beforeend', '<div class="row"><div class="field"><label for="v-origin">' + esc(t('Fly from this airport')) + '</label><input type="text" id="v-origin" value="' + esc(first) + '" autocomplete="off" spellcheck="false"></div><button type="button" id="v-go">' + esc(t('Show')) + '</button></div><div class="map" id="v-map" role="img" aria-label="' + esc(t('Vector map of airports and routes')) + '"></div><p class="note" id="v-note" aria-live="polite"></p><p class="note" id="v-credit">' + esc(t(V.ATTRIBUTION)) + '. <a href="' + V.LICENSE + '" target="_blank" rel="noopener noreferrer">' + esc(t('Licence')) + '</a>. ' + esc(t('Routes are from June 2014; check with the airline before you fly.')) + '</p>');
+  const inp = $(s, '#v-origin'), note = $(s, '#v-note'), box = $(s, '#v-map'); box.style.height = '360px';
+  let packed = null, map = null, ready = false;
+  const chain = () => { const r = document.querySelector('#r-in'); return r ? r.value : ''; };
+  const popup = (L, e, lines) => new L.Popup({ closeButton: false }).setLngLat(e.lngLat).setText(lines.join(' · ')).addTo(map);
+  const draw = () => {
+    if (!idx || !packed) return;
+    const code = String(inp.value || '').trim().toUpperCase(), n = V.network(idx, packed, code, chain());
+    if (!n.origin) { note.textContent = t('Unknown airport:') + ' ' + code; return; }
+    note.textContent = t('Showing') + ' ' + n.count + ' ' + t('nonstop destinations from') + ' ' + n.origin.iata + '. ' + t('Click an airport or a line to inspect it.');
+    if (!map || !ready) return;
+    const src = map.getSource('v-net');
+    if (src) src.setData(n.data);
+    if (n.bounds) map.fitBounds(n.bounds, { padding: 36, maxZoom: 5, duration: 0 });
+  };
+  const layers = (L) => {
+    if (map.getSource('v-net')) return;
+    map.addSource('v-net', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+    map.addLayer({ id: 'v-routes', type: 'line', source: 'v-net', filter: ['==', ['get', 'kind'], 'route'], layout: { 'line-cap': 'round' }, paint: { 'line-color': '#38bdf8', 'line-width': 1.8, 'line-opacity': 0.85 } });
+    map.addLayer({ id: 'v-legs', type: 'line', source: 'v-net', filter: ['==', ['get', 'kind'], 'leg'], layout: { 'line-cap': 'round' }, paint: { 'line-color': '#fbbf24', 'line-width': 2.6 } });
+    map.addLayer({ id: 'v-airports', type: 'circle', source: 'v-net', filter: ['in', ['get', 'kind'], ['literal', ['origin', 'airport']]], paint: { 'circle-radius': ['case', ['==', ['get', 'kind'], 'origin'], 6, 4], 'circle-color': ['case', ['==', ['get', 'kind'], 'origin'], '#ffffff', '#7dd3fc'], 'circle-stroke-color': '#0b1020', 'circle-stroke-width': 1.5 } });
+    for (const id of ['v-airports', 'v-routes', 'v-legs']) map.on('click', id, (e) => { const f = e.features && e.features[0]; if (f) popup(L, e, V.popupLines(f.properties, t)); });
+    for (const id of ['v-airports', 'v-routes', 'v-legs']) { map.on('mouseenter', id, () => { map.getCanvas().style.cursor = 'pointer'; }); map.on('mouseleave', id, () => { map.getCanvas().style.cursor = ''; }); }
+    ready = true; draw();
+  };
+  const ensure = () => {
+    if (map || !globalThis.maplibregl) return;
+    try {
+      const L = globalThis.maplibregl;
+      map = new L.Map({ container: box, style: V.STYLE_URL, center: [0, 20], zoom: 1.3, attributionControl: false });
+      map.addControl(new L.AttributionControl({ compact: false, customAttribution: V.ATTRIBUTION }));
+      if (map.isStyleLoaded()) layers(L); else map.on('load', () => layers(L));
+      map.on('error', () => { /* a tile failing must not take the other panels down */ });
+    } catch (_) { note.textContent = t('The vector map needs WebGL in this browser. The great-circle map above still works.'); }
+  };
+  const load = () => {
+    if (globalThis.maplibregl) { ensure(); draw(); return; }
+    if (!globalThis.__verseMaplibre) {
+      if (!document.querySelector('link[data-verse-maplibre]')) { const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = V.CSS; link.dataset.verseMaplibre = '1'; document.head.append(link); }
+      globalThis.__verseMaplibre = new Promise((resolve, reject) => { const sc = document.createElement('script'); sc.src = V.LIB; sc.onload = () => resolve(globalThis.maplibregl); sc.onerror = () => reject(new Error('map library')); document.head.append(sc); });
+    }
+    globalThis.__verseMaplibre.then(() => { ensure(); draw(); }).catch(() => { note.textContent = t('The vector map could not be loaded. The great-circle map above still works.'); });
+  };
+  $(s, '#v-go').addEventListener('click', () => { draw(); ensure(); });
+  inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); draw(); ensure(); } });
+  const chainInp = document.querySelector('#r-in'); if (chainInp) chainInp.addEventListener('input', draw);
+  subs.add(draw);
+  fetch('/flights/routes.json').then((r) => r.json()).then((d) => { packed = d; draw(); load(); }).catch(() => { note.textContent = t('The route list could not be loaded.'); });
+  return s;
 };
 
 /** airports: look up a code, a city or a country. */

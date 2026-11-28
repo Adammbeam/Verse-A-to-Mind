@@ -76,7 +76,7 @@ async function main(cmd, a) {
     for (const [u, s] of codes) if (!(s >= 200 && s < 400) && ![401, 403, 405, 429].includes(s)) { bad++; console.log(`::warning title=Dead link::${u} answered ${s || 'nothing'}`); }
     console.log(`${urls.size} links, ${bad} dead`);
   } else if (cmd === 'stale') { // local git only (one call per branch to the API took minutes): needs a full fetch of origin
-    const repo = process.env.GITHUB_REPOSITORY || 'atomeam/void-loop', apply = a.includes('--apply'), cutoff = Date.now() / 1000 - 14 * 86400;
+    const repo = process.env.GITHUB_REPOSITORY || 'Adammbeam/Verse-A-to-Mind', apply = a.includes('--apply'), cutoff = Date.now() / 1000 - 14 * 86400;
     const open = new Set(ghJson(['pr', 'list', '-R', repo, '--state', 'open', '--limit', '200', '--json', 'headRefName']).map((p) => p.headRefName));
     const git = (...x) => execFileSync('git', x, { encoding: 'utf8', cwd: root, timeout: 120e3 }).trim();
     const merged = git('branch', '-r', '--merged', 'origin/main', '--format=%(refname:short) %(committerdate:unix)').split('\n').filter(Boolean);

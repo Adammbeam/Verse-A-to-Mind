@@ -1,8 +1,8 @@
 {
  "at": "2026-11-25",
- "scanned": 562,
+ "scanned": 563,
  "counts": {
-  "unified": 77,
+  "unified": 78,
   "live": 69,
   "salvageable": 390,
   "history": 23,
@@ -173,6 +173,14 @@
    "isolated": false
   },
   {
+   "name": "mlc-ai/web-llm",
+   "author": "MLC AI",
+   "license": "Apache-2.0",
+   "link": "https://github.com/mlc-ai/web-llm",
+   "used": "/ (opt-in on-device answers)",
+   "isolated": false
+  },
+  {
    "name": "mledoze/countries",
    "author": "mledoze",
    "license": "ODbL-1.0",
@@ -329,7 +337,7 @@
    "author": "huggingface",
    "license": "Apache-2.0",
    "link": "https://github.com/huggingface/transformers.js",
-   "used": null,
+   "used": "/embeddings/ (on-device sentence similarity)",
    "isolated": false
   },
   {
@@ -6787,6 +6795,18 @@
    "license": "MIT"
   },
   {
+   "id": "outside:mlc-ai/web-llm",
+   "kind": "outside",
+   "status": "unified",
+   "target": "page",
+   "value": 30,
+   "why": "In-browser LLM inference with WebGPU",
+   "into": "/ (opt-in on-device answers)",
+   "test": "tools/local-model.test.mjs",
+   "pr": null,
+   "license": "Apache-2.0"
+  },
+  {
    "id": "outside:mledoze/countries",
    "kind": "outside",
    "status": "unified",
@@ -7053,12 +7073,12 @@
   {
    "id": "outside:huggingface/transformers.js",
    "kind": "outside",
-   "status": "salvageable",
-   "target": "tool",
+   "status": "unified",
+   "target": "page",
    "value": 25,
    "why": "reuse with credit; keep the license notice",
-   "into": null,
-   "test": null,
+   "into": "/embeddings/ (on-device sentence similarity)",
+   "test": "tools/embeddings.test.mjs",
    "pr": null,
    "license": "Apache-2.0"
   },

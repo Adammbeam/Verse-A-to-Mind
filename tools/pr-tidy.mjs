@@ -72,7 +72,7 @@ export function tidy({ gh, run, repo, prs, one = '', log = console.log, now = Da
 
 if (import.meta.url === 'file://' + process.argv[1]) {
   const { execFileSync } = await import('node:child_process');
-  const repo = process.env.REPO || 'atomeam/void-loop';
+  const repo = process.env.REPO || 'Adammbeam/Verse-A-to-Mind';
   const run = (args, input) => execFileSync('gh', args, { encoding: 'utf8', input, stdio: ['pipe', 'pipe', 'pipe'] });
   const gh = (path) => JSON.parse(run(['api', path]) || 'null');
   tidy({ gh, run, repo, prs: gh(`repos/${repo}/pulls?state=open&per_page=100`) });

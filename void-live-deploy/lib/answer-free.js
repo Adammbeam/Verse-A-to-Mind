@@ -207,7 +207,8 @@ export async function routeFree(ask, { env = {}, registry = null, adapters = ADA
     return b ? { answer: b.answer, sources: [], source: 'bot:' + b.bot.id, route: 'bot', bot: b.bot, at: new Date(now).toISOString() } : null;
   }
   if (plan.kind === 'api' && registry) {
-    const out = await runJob(only(registry, plan.ids), plan.api, { query: plan.query }, { env, adapters, now });
+    const subset = only(registry, plan.ids); // the ids are the plan; their registry kind is what the router filters on (dataset, search, ...)
+    const out = await runJob(subset, subset.resources[0] && subset.resources[0].kind, { query: plan.query }, { env, adapters, now });
     if (out.ok && ADAPTERS[out.id]) { const fmt = FORMATTERS[plan.api] || openalexAnswer; const o = fmt(plan.query, out.result, out.id); return { ...o, source: 'free:' + out.id, route: 'api', tried: out.tried, at: new Date(now).toISOString() }; }
     return null; // the API was out, failed or found nothing: the model answers, as for any other ask
   }

@@ -5,7 +5,7 @@
  */
 import { leaks } from './team-promote.js';
 
-export const PATCH = Object.freeze({ bytes: 120000, lines: 400, files: 40, deletes: 50, perSeatDay: 12, pending: 40 });
+export const PATCH = Object.freeze({ bytes: 120000, lines: 400, files: 40, deletes: 50, pending: 40 });
 const PARKED_ONLY = /^\.github\/workflows\//; // a diff never wakes a workflow: .github/workflows-parked/ stays the only place they live
 /** the files, lines and deletions of a git diff: { files: [{ path, deleted, added }], added, removed } */
 export function statsOf(diff) {

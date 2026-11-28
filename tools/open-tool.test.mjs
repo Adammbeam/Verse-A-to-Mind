@@ -8,7 +8,8 @@ test('a tool name of two words, an alias, or open + any tool name', () => {
   assert.deepEqual(toolAsk('Base converter?'), { href: '/base64/bases/', label: 'Base converter' });
   assert.equal(toolAsk('character counter').href, '/word-count/'); assert.equal(toolAsk('online timer').href, '/stopwatch/');
   assert.equal(toolAsk('open the piano').href, '/piano/'); assert.equal(toolAsk('go to the metronome').href, '/metronome/'); assert.equal(toolAsk('open my calendar').href, '/calendar/');
-  assert.equal(toolAsk('kanban board tool').href, '/kanban/');
+  assert.deepEqual(toolAsk('kanban board tool'), { href: '/kanban/', label: 'Kanban board' });
+  assert.equal(toolAsk('kanban tool').href, '/kanban/');
 });
 test('the names people type for a tool page Verse has (these fell to an article)', () => {
   for (const [a, href] of [['time zone converter', '/time/'], ['Timezone converter', '/time/'], ['online stopwatch', '/stopwatch/'], ['character count', '/word-count/'],
@@ -22,6 +23,9 @@ test('the card links to the tool page', () => {
   const el = { innerHTML: '', dataset: {} };
   const out = skill.run('word counter', { esc: (s) => String(s), showPage: (fn) => { fn(el); return el; } });
   assert.equal(out, 'open-tool'); assert.equal(el.dataset.page, '/word-count/'); assert.match(el.innerHTML, /<a href="\/word-count\/">Open the Word counter page<\/a>/);
+  const board = { innerHTML: '', dataset: {} };
+  assert.equal(skill.run('kanban board tool', { esc: (s) => String(s), showPage: (fn) => { fn(board); return board; } }), 'open-tool');
+  assert.equal(board.dataset.page, '/kanban/'); assert.match(board.innerHTML, /<a href="\/kanban\/">Open the Kanban board page<\/a>/);
 });
 test('the currency converter opens the markets page that converts at the live rate; a pair with an amount stays with its skill', () => {
   for (const a of ['currency converter', 'Currency converter?', 'exchange rates', 'open the currency converter', 'currency exchange']) assert.equal((toolAsk(a) || {}).href, '/markets/currency-converter/', a);

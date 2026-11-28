@@ -65,8 +65,8 @@ export function fitLong(text, h, w = 624) {
 }
 // A card's whole text, laid out like the card on the page (owner, 2026-11-19: a copied guacamole card stopped at "Halve the..." and a Paris weather card spilled
 // its hourly strip down the box a word per line): headings set small and bold, a short list in two columns, the steps of a method numbered, a lone
-// temperature large, every paragraph wrapped. The type shrinks from 21 to 16 px to fit the standard card; past that the card grows (up to BODY_MAX_EXTRA
-// more), and only text beyond even that is cut, with a last line that says where the full card is. { els, extra, cut }. Pure.
+// temperature large, every paragraph wrapped. The type shrinks from 21 to 16 px to fit the standard card; past that the card grows
+// so the whole answer stays in the body. { els, extra, cut }. Pure.
 export const BODY_MAX_EXTRA = 1600, BODY_MIN_FS = 16;
 const STEP_HEAD = /^(?:steps|method|directions|instructions|preparation|how to make it)$/i;
 const HEAD = (b, last) => b.length === 1 && !last && /^[A-Za-z][A-Za-z '&-]{1,30}$/.test(b[0]) && b[0].split(' ').length <= 4;
@@ -126,14 +126,11 @@ export function bodyLayout(text, room = 246, { w = 624, link = '', soft = '#c9cf
     if (tail) { const tf = Math.max(13, fs - 3); y += Math.round(tf * 0.6); wrap(tail, cols(w, tf), 4).forEach((t) => { y += Math.round(tf * 1.3); put(t, 0, { italic: true, fill: soft, fs: tf }); }); } // wrapped: the line never runs past the box
     return { els, height: y + Math.round(fs * 0.5) };
   };
-  const tailOf = (cut) => (link ? (cut ? 'The full card continues at ' : 'Full card: ') + shortLink(link) : cut ? 'The rest of this card is in its copied text.' : '');
-  for (let fs = 21; fs >= BODY_MIN_FS; fs--) { const r = lay(fs, blocks.length, tailOf(false)); if (r.height <= room) return { els: r.els, extra: 0, cut: false }; }
-  const whole = lay(BODY_MIN_FS, blocks.length, tailOf(false));
-  if (whole.height - room <= BODY_MAX_EXTRA) return { els: whole.els, extra: Math.max(0, whole.height - room), cut: false };
-  // truly huge: the blocks that fit, then where the rest is
-  let n = blocks.length - 1; while (n > 1 && lay(BODY_MIN_FS, n, tailOf(true)).height - room > BODY_MAX_EXTRA) n--;
-  const r = lay(BODY_MIN_FS, n, tailOf(true)), keep = r.els.filter((e) => e.y <= room + BODY_MAX_EXTRA);
-  return { els: keep, extra: Math.min(BODY_MAX_EXTRA, Math.max(0, r.height - room)), cut: true };
+  const linkLine = link ? 'Full card: ' + shortLink(link) : '';
+  for (let fs = 21; fs >= BODY_MIN_FS; fs--) { const r = lay(fs, blocks.length, linkLine); if (r.height <= room) return { els: r.els, extra: 0, cut: false }; }
+  // the card grows to hold every line. A long answer stays in the body; nothing is replaced by a note about copied text.
+  const whole = lay(BODY_MIN_FS, blocks.length, linkLine);
+  return { els: whole.els, extra: Math.max(0, whole.height - room), cut: false };
 }
 // The self card's picture (owner's redesign, 2026-10-18: the saved "What I think of myself" was a tall PNG holding every ask as raw lines, 16k
 // characters). It has the live card's shape instead: Verse's own words as a quotation with an accent bar, "How sure I am of my skills" as a bar per

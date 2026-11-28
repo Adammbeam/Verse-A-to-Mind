@@ -1,0 +1,1 @@
+- **Quiet-agent nudge (`void-live-deploy/lib/team-quiet-nudge.js`, `tools/team-quiet-nudge.test.mjs`, 2026-11-27):** detects active non-crew team seats that post without handing in work over two hours, nudges them in #general with a two-hour cooldown, and applies ranking penalties.

@@ -555,6 +555,7 @@
     .vpage img { float: right; max-width: 150px; max-height: 150px; margin: 2px 0 10px 16px; border-radius: 10px; opacity: .92; }
     .vpage.placed img, .vpage.kept img { float: right; max-width: 72px; max-height: 72px; margin: 4px 0 12px 16px; border-radius: 10px; opacity: .92; }
     .vpage p { margin: 0 0 10px; color: #d6d6d6; }
+    .vpage .vc-long { max-height: min(52vh, 520px); overflow: auto; }
     .vpage ul { margin: 0 0 10px; padding-left: 18px; color: #d6d6d6; }
     .vpage .src { clear: both; margin-top: 12px; font-size: 12px; color: var(--muted); }
     .vpage .src a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.15); }
@@ -1218,6 +1219,7 @@
     <div id="stage-chips" class="stage-chips" aria-label="Workspace inputs" hidden></div>
     <div id="row">
       <input id="input" aria-label="Ask Verse" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" writingsuggestions="false" placeholder="Ask Verse" data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" data-lpignore="true" data-1p-ignore data-form-type="other" />
+      <button id="local-toggle" data-local-toggle type="button" aria-pressed="false" aria-label="Answer on this device" title="Answer on this device with a small model (downloads once)" style="appearance:none;-webkit-appearance:none;flex:none;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:transparent;color:#b9c2da;padding:0 10px;min-height:28px;font:11px/1 system-ui,sans-serif;white-space:nowrap;cursor:pointer">on device</button>
       <button id="go" type="button" aria-label="Ask" title="Ask">↵</button>
     </div>
     <div id="whisper" aria-live="polite"></div>
@@ -1231,6 +1233,49 @@
     const AWAY_KEY = 'a2m.void.away.v1'; // when this stage was last left or saved: the world lives on from then (advance in skills/scripts.js)
     // plan item 6: the passkey session on this device ({ token, userId, rev, sig, synced }); see "Your Verse follows you" below
     const ME_KEY = 'a2m.void.me.v1';
+    // Opt-in on-device answers (idea-7723): a small model downloads on a click and stays on this device until switched off.
+    // The default is unchanged: every ask goes to /api/answer. No key, token or page text is stored with this setting.
+    const LOCAL_KEY = 'a2m.void.local.v1';
+    const LOCAL_MODEL = 'SmolLM2-360M-Instruct-q4f16_1-MLC';
+    const LOCAL_JS = 'https://esm.run/@mlc-ai/web-llm@0.2.89';
+    let localOn = false, localEngine = null, localLoading = null;
+    const localBtn = document.getElementById('local-toggle');
+    try { const s = JSON.parse(localStorage.getItem(LOCAL_KEY) || 'null'); localOn = !!(s && s.on === true); } catch (_) {}
+    function localPaint() {
+      if (!localBtn) return;
+      localBtn.setAttribute('aria-pressed', localOn ? 'true' : 'false');
+      localBtn.textContent = localOn ? 'device on' : 'on device';
+      localBtn.title = localOn ? 'Answering on this device; click to answer through a-to-mind.com again' : 'Answer on this device with a small model (downloads once)';
+    }
+    function localStatus(t) { const w = document.getElementById('whisper'); if (w) w.textContent = t || ''; }
+    function localSave() { try { localStorage.setItem(LOCAL_KEY, JSON.stringify({ on: localOn, model: LOCAL_MODEL })); } catch (_) {} }
+    localPaint();
+    async function localEngineGet() {
+      if (localEngine) return localEngine;
+      if (localLoading) return localLoading;
+      localLoading = (async () => {
+        localStatus('downloading the on-device model…');
+        const mod = await import(LOCAL_JS);
+        localEngine = await mod.CreateMLCEngine(LOCAL_MODEL, {
+          initProgressCallback: (p) => localStatus('on-device model ' + Math.round((p.progress || 0) * 100) + '%'),
+        });
+        localStatus('on-device model ready');
+        return localEngine;
+      })();
+      try { return await localLoading; } finally { localLoading = null; }
+    }
+    const localLimit = (p, ms) => new Promise((res, rej) => {
+      const t = setTimeout(() => rej(new Error('the on-device model took too long')), ms);
+      Promise.resolve(p).then((v) => { clearTimeout(t); res(v); }, (e) => { clearTimeout(t); rej(e); });
+    });
+    async function localAsk(text) {
+      const engine = await localEngineGet();
+      const reply = await localLimit(engine.chat.completions.create({
+        messages: [{ role: 'system', content: 'You are Verse. Answer the question in at most two short sentences, plainly and honestly. Say you do not know when unsure. No headings.' }, { role: 'user', content: String(text || '').slice(0, 280) }],
+        temperature: 0, max_tokens: 80, stream: false,
+      }), 60000);
+      return String((reply && reply.choices && reply.choices[0] && reply.choices[0].message && reply.choices[0].message.content) || '').trim();
+    }
     const PAGE = window.__VOID_PAGE__ || null; // a-to-mind.com/@name: someone's published Verse (functions/[handle].js), shown, never saved over yours
     let me = null; try { me = JSON.parse(localStorage.getItem(ME_KEY) || 'null'); } catch (_) {}
     let minePushT = 0, minePulled = 0, mineQuiet = false, pendingForget = null, pkRetryFn = null;
@@ -2738,10 +2783,12 @@ say('nothing selected to remove');
       return /^(what|who)\s+(are|r)\s+(you|u)(?!\s+(?:working\s+on|building|doing|up\s+to|learning|planning|shipping))\b|^what\s+(is|'s)\s+(this|(?:verse|void)|a-to-mind)\b|^what\s+can\s+(you|i|(?:verse|void))\s+do\b|^(help|\?)\s*$|^tell\s+me\s+about\s+(yourself|you|(?:verse|void))\b/.test(lower);
     }
     // "what are you?" / "who are you" / "what is void" / "tell me about yourself": Verse says what it is and its motto first, then
-    // the page (launch audit, 2026-10-15: the bare page read as a sign-in menu). MOTTO is the canon's, word for word
-    // (domains/void.canon.md ## Motto; tools/launch-fixes.test.mjs keeps them the same).
-    const MOTTO = 'You name it, Verse learns it and does it better.';
-    const SELF_LEAD = 'I’m Verse: one box where you ask for anything and it appears as a working card, game or page. My motto: “' + MOTTO + '”';
+    // the page (launch audit, 2026-10-15: the bare page read as a sign-in menu). MOTTO is the canon's first line, word for word
+    // (domains/void.canon.md ## Motto; tools/launch-fixes.test.mjs keeps them the same). The next two lines follow it.
+    const MOTTO = 'Ask, and it appears.';
+    const MOTTO_NEXT = 'Speak it into being.';
+    const MOTTO_SUPPORT = 'From thought to thing.';
+    const SELF_LEAD = 'I’m Verse: one box where you ask for anything and it appears as a working card, game or page. ' + MOTTO + ' ' + MOTTO_NEXT + ' ' + MOTTO_SUPPORT;
     // "what are you working on" is its own skill (lib/will-card.js), never "what are you?"
     function wantsIdentity(lower) {
       return /^(what|who)\s+(are|r)\s+(you|u)(?!\s+(?:working\s+on|building|doing|up\s+to|learning|planning|shipping))\b|^what\s+(is|'s)\s+(this|void|v01d|verse|a-to-mind)\b|^tell\s+me\s+about\s+(yourself|you|void|v01d|verse)\b|^what('?s|\s+is)\s+your\s+motto\b/.test(lower);
@@ -2843,6 +2890,22 @@ say('nothing selected to remove');
       // a page sent for an answer left the browser: say so on the card (Adam, 2026-10-09: local by default, flag what leaves)
       const about = page ? (page.title ? '<div class="sub">about: ' + esc(page.title) + '</div>' : '') + '<div class="sub page-sent">this page was sent to a-to-mind.com for this answer · not kept</div>' : '';
       const el = showPage((p) => { p.innerHTML = '<h2>' + esc(head) + '</h2>' + about + '<div class="sub">thinking…</div>'; });
+      // opt-in: answer right here, with no ask sent to a-to-mind.com. A failed or slow model falls through to the normal route.
+      if (localOn && !page && !heading && String(text).length <= 280) {
+        say('answering on this device');
+        let ans = '';
+        try { ans = await localAsk(text); } catch (e) {
+          localOn = false; localPaint(); localSave();
+          localStatus('the on-device model was not ready; answered through a-to-mind.com');
+        }
+        if (ans && vpageEl === el) {
+          await mdReady;
+          el.innerHTML = '<h2>' + esc(head) + '</h2>' + fixHtml(ans) // void-review: ok (esc() escapes the heading; fixHtml() renders the model's text)
+            + '<div class="src">written on this device · small model downloaded from esm.run · your question was not sent to a-to-mind.com</div>';
+          say(''); loopLog({ domain: 'void.page', ask: String(text).slice(0, 160), score: 'pass', note: 'on-device' });
+          return 'answer';
+        }
+      }
       say(page ? 'reading the page' : 'looking up');
       let j = null, sentBefore = false, priorSent = null;
       try {
@@ -2875,7 +2938,8 @@ say('nothing selected to remove');
       // fenced code keeps its whitespace and gets a monospace block (fixHtml); sources are a citation when one
       // genuinely matched, not a claim that nothing else went into the answer
       const flat = (x) => String(x || '').toLowerCase().replace(/[^a-z0-9]+/g, ''), shown = heading ? heading : j.name && flat(j.name).length > 2 && (flat(text).includes(flat(j.name)) || flat(j.name).includes(flat(text))) ? String(j.name) : text; // the thing's own name, cased, when it is what was asked
-      el.innerHTML = '<h2>' + esc(shown) + '</h2>' + about + (j.fuzzy ? '<p class="thin" style="color:#8a8a8a;font-size:13px;margin:0 0 8px">A guess: nothing I read names \u201c' + esc(String(head).slice(0, 80)) + '\u201d exactly.</p>' : '') + fixHtml(j.answer)
+      const longAnswer = String(j.answer).length > 700;
+      el.innerHTML = '<h2>' + esc(shown) + '</h2>' + about + (j.fuzzy ? '<p class="thin" style="color:#8a8a8a;font-size:13px;margin:0 0 8px">A guess: nothing I read names \u201c' + esc(String(head).slice(0, 80)) + '\u201d exactly.</p>' : '') + (longAnswer ? '<div class="vc-long">' + fixHtml(j.answer) + '</div>' : fixHtml(j.answer)) // a long answer stays in the card and scrolls
         + '<div class="src">' + (page ? 'from the page you were on' + (pageHost(page.url) ? ' (' + esc(pageHost(page.url)) + ')' : '') + ' · written by Verse' : j.told ? 'from what you told me · written by Verse' + (srcs ? ' · Source: ' + srcs : '') : srcs ? 'Source: ' + srcs + ' · written by Verse' : 'written by Verse, from what it knows') + '</div>';
       // a real, licensed picture of a real place, animal, event or work (lib/free-pics.js, chosen by the server from the fetched source): the art box shows it, with its credit and an "archive photo" label; never for a character or a person
       if (j.pic && /^https:\/\//i.test(String(j.pic.url || '')) && !page && imgSafe && !imgSafe.unsafeImage({ url: j.pic.url, alt: j.pic.alt || '', title: shown, desc: j.desc || '', context: [text, String(j.answer || '').slice(0, 800)] })) {
@@ -5245,7 +5309,7 @@ say('nothing selected to remove');
     const SHARE_LIB_GRAPH = ['/lib/card-share.js', '/lib/card-image.js', '/lib/art-source.js', '/lib/card-art.js', '/lib/card-subject.js', '/lib/guide.js', '/lib/rule-registry.js', '/lib/art-rules.js', '/lib/merge-rules.js', '/lib/keeper.js', '/lib/image-safety.js', '/lib/qr.js', '/lib/card-custom-art.js'];
     for (const p of SHARE_LIB_GRAPH.slice(1)) import(p).catch(() => null);
     const shareReady = lazyImport(() => import('/lib/card-share.js').catch(() => null));
-    const pasteReady = lazyImport(() => import('/lib/paste-kind.js').catch(() => null)); // what a paste is: report, card, note, ask or unclear (docs/RULES.md)
+    const pasteReady = lazyImport(() => import('/lib/paste-kind.js').catch(() => null)); // what a paste is: report, card, note, ask or read (docs/RULES.md)
     // a card brought back from a pasted code: its words and its https links, escaped; its stats are earned again by the frame, never read from the paste
     function showSharedCard(sc) {
       currentAsk = sc.t;
@@ -5903,7 +5967,6 @@ say('nothing selected to remove');
     const PUBLISH_RE = /^publish\s+my\s+(?:void|verse)(?:\s+(?:as|at))?\s+@?([a-z0-9_]{3,24})\s*[.!]?$/;
     const UNPUBLISH_RE = /^(unpublish(\s+my\s+(?:verse|void))?|take\s+(down\s+my\s+((?:verse|void)|page)|my\s+((?:verse|void)|page)\s+down))\s*[.!]?$/;
     let pendingPublish = null;
-    let lastPaste = null; // a paste that asked for nothing, for ten minutes: "sum it up" answers the line Verse said for it (lib/paste-kind.js)
     function publishAnswer(lower) {
       const pp = pendingPublish; if (!pp) return false;
       pendingPublish = null; clearTimeout(pp.timer); whisper.textContent = '';
@@ -6927,13 +6990,19 @@ say('nothing selected to remove');
         const N = await import('/lib/note-ask.js').catch(() => null), facts = N ? N.secretAsk(typed) : [];
         if (facts.length) { currentAsk = typed; showPage((p) => { p.innerHTML = '<h2>' + esc(typed.replace(/[?.!\s]+$/, '')) + '</h2>' + facts.map((f) => '<p>' + esc(f) + '</p>').join('') + '<div class="src">from Verse\u2019s own code (lib/verse-secrets.js), names only, never a value</div>'; }); say(''); loopLog({ domain: 'void.page', ask: typed, score: 'pass', note: 'secret names' }); return; }
       }
-      // a paste is a report, a card, a note, an ask or unclear (owner rule, 2026-10-30, docs/RULES.md; lib/paste-kind.js)
+      // a paste is a report, a card, a note, an ask or a document to read (lib/paste-kind.js). A long paste is the ask.
       const pk = await pasteReady(), paste = pk ? pk.pasteKind(typed) : null;
-      { const lp = lastPaste; lastPaste = null; // the answer to "That reads as pasted text with no ask in it": the paste is summed up from its own words
-        if (lp && Date.now() < lp.until && !paste && pk && pk.sumsItUp(typed)) { currentAsk = lp.text; showAnswer(lp.text, null, pk.summaryHeading ? pk.summaryHeading(lp.text) : 'What you pasted, summed up').then((src) => { if (src === 'none') reportMiss('[paste]', lookedUp()); }); loopLog({ domain: 'void.page', ask: '[paste]', score: 'pass', note: 'paste summed up' }); return; } }
       // a pasted Verse card (its copied text, or just its code line) opens as that card again; nothing is sent anywhere (lib/card-share.js).
       // A copied report card is a report: it is checked against GitHub again, not reopened at its frozen "checking GitHub" line
       { const sh = await shareReady(); const sc = sh && sh.parse(typed); if (sc && !(paste && paste.kind === 'report')) { showSharedCard(sc); return; } }
+      if (paste && pk.answersAsPaste(paste.kind)) { // before any skill: a paste that starts with "clock" or "timer" is still the whole paste
+        if (!quiet) rememberAsk(text);
+        currentAsk = lastAsk = text;
+        const head = String(text).replace(/\s*⏎\s*/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 72);
+        showAnswer(text, null, head).then((src) => { if (src === 'none') reportMiss('[paste]', lookedUp()); });
+        loopLog({ domain: 'void.page', ask: '[paste]', score: 'pass', note: 'paste answered' });
+        return;
+      }
       if (!quiet) rememberAsk(text); // a walkthrough preview is Verse's ask, not the person's (owner, 2026-10-20: "that spectral line is weird")
       if (stageInputs.length >= 2) { currentAsk = text; lastAsk = text; if (!skillsRunning) takeUndoSnapshot(); await showBridge(text, stageInputs.slice()); return; }
       if (!quiet && !/^(undo|oops|undo that|take that back)\s*[.!]?$/.test(lower0)) settleRoute('ask', text); // the last pick the brain made learns from this ask, before this one is routed (an undo settles it in undoLast)
@@ -7013,8 +7082,6 @@ say('nothing selected to remove');
         skillsReady.then(async () => { if (askNo !== askCount) return; if (!(await firstSkill(lower0, text, Date.now())) && askNo === askCount) showAnswer(text); }).catch(() => {});
         return;
       }
-      // a paste no skill took that asks for nothing: one line that asks what the person wants, and nothing guessed (no stock answer, no article)
-      if (paste && paste.kind === 'unclear') { lastPaste = { text, until: Date.now() + 600000 }; say(paste.line); loopLog({ domain: 'void.page', ask: '[paste]', score: 'pass', note: 'paste unclear' }); return; }
       if (wantsBoard(lower0) && ownerToken()) { showBoard(); return; }
       if (handleLookAsk(lower0)) { loopLog({ domain: 'void.look', ask: text, score: 'pass', note: 'look' }); return; }
       if (wantsWorkingOn(lower0)) { showWorkingOn(); loopLog({ domain: 'void.page', ask: text, score: 'pass', note: 'working-on' }); return; }
@@ -7177,6 +7244,15 @@ say('nothing selected to remove');
       if (e.key === '/' && !typing) { e.preventDefault(); input.focus(); }
     });
 
+    if (localBtn) localBtn.addEventListener('click', async () => {
+      if (!localOn && !navigator.gpu) { localStatus('this browser has no WebGPU; the on-device model needs it'); return; }
+      localOn = !localOn; localPaint(); localSave();
+      if (!localOn) { if (localEngine) { try { await localEngine.unload(); } catch (_) {} localEngine = null; } localStatus('answering through a-to-mind.com again'); return; }
+      try { await localEngineGet(); } catch (e) {
+        localOn = false; localPaint(); localSave();
+        localStatus('could not load the on-device model; answering through a-to-mind.com');
+      }
+    });
     go.addEventListener('pointerdown', warmAskLibs);
     go.addEventListener('click', () => { handle(input.value); input.value = ''; drawHints(); input.focus(); });
     input.addEventListener('keydown', (e) => {

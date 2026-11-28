@@ -1,18 +1,19 @@
 /**
- * games-hub skill - one launcher card for the broad game asks ("games", "game", "board games", "arcade", "play", "rpg",
+ * games-hub skill - one launcher card for the broad game asks ("game", "board games", "arcade", "play", "rpg",
  * "adventure", "play something", "what games", "all games"). It does not keep a game list of its own: the members come from
  * the generated games family (skills/families.json) and each entry's title, line and launch ask come from the generated book
  * (skills/guide.json), so a new game appears here when it is added to the family. One click asks that game into the stage.
  * Contract: { name, examples, nearMisses, match(lower, text), run(text, api) }
  */
-const ASKS = new Set(['games', 'game', 'board games', 'board game', 'arcade', 'play', 'rpg', 'adventure', 'play something', 'what games', 'all games']);
+// the bare family name "games" opens the rack (its picker); the hub owns the broader launcher asks
+const ASKS = new Set(['game', 'board games', 'board game', 'arcade', 'play', 'rpg', 'adventure', 'play something', 'what games', 'all games']);
 const PREFIX = /^(?:(?:open|show(?: me)?|list|give me|i want|let's|lets)\s+)+/i;
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 /** true for a broad games ask, false for a named game or anything else. Pure. */
 export function hubOf(text) {
-  const t = String(text || '').toLowerCase().trim().replace(/[?!.]+$/, '').replace(/\s+/g, ' ').replace(PREFIX, '');
-  return ASKS.has(t);
+  const raw = String(text || '').toLowerCase().trim().replace(/[?!.]+$/, '').replace(/\s+/g, ' ');
+  return ASKS.has(raw.replace(PREFIX, '')) || raw === 'show me games';
 }
 
 /** the games family's members from families.json, with title, line and launch ask from the book. Pure given the two files. */

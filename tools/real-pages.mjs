@@ -61,6 +61,13 @@ const phoneFit = (p, sel) => p.evaluate((s) => {
 }, sel);
 const flightsShare = async (t, check) => { await t.share('#fl-share', check); };
 export const SPECS = {
+  '/embeddings/': async (t) => {  // the on-device Transformers.js demo: two sentences go to a local pipeline, not a worker
+    await t.fill('#sentence-a', 'A cat sits on the mat.');
+    await t.fill('#sentence-b', 'A cat is resting on the mat.');
+    await t.click('#compare');
+    await t.waitText('#status', /device|could not run/, 60000);
+    t.ok(/Transformers\.js/.test(await t.text('footer')), 'the page credits the library that runs in the browser');
+  },
   '/free/': async (t) => {  // the free-resource registry: every resource listed, the search narrows it
     await t.waitText('#count', /resources/, 15000); t.ok(Number((await t.text('#count')).match(/of (\d+)/)[1]) >= 30, 'the whole registry is listed: ' + (await t.text('#count')));
     await t.fill('#find', 'groq'); t.ok((await t.p.locator('tr.res').count()) === 1, 'a search for groq finds the one Groq row');

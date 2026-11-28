@@ -95,8 +95,11 @@ b = bot({ mergeMain: boom });
 ok(b.out.state === 'failed' && !b.has('git', 'push') && !b.has('gh', 'api', '-X', 'POST'), 'any other failure: reported, nothing pushed, no comment');
 
 // a review the bot dispatched ends without a workflow_run event, so the review itself wakes automerge (#598 sat green for hours)
-const { readFileSync } = await import('node:fs');
-const wf = readFileSync(new URL('../.github/workflows/void-review.yml', import.meta.url), 'utf8');
+const { readFileSync, existsSync } = await import('node:fs');
+// the review workflow is parked here while the stage runs on verse-check/verse-merge; the wake rule still has to hold
+const active = new URL('../.github/workflows/void-review.yml', import.meta.url);
+const parked = new URL('../.github/workflows-parked/void-review.yml', import.meta.url);
+const wf = readFileSync(existsSync(active) ? active : parked, 'utf8');
 const wake = wf.slice(wf.indexOf('- name: Wake automerge'));
 ok(/gh workflow run automerge\.yml/.test(wake) && /github\.event_name == 'workflow_dispatch'/.test(wake) && /always\(\)/.test(wake), 'a dispatched review wakes automerge, pass or fail');
 ok(/^\s*actions: write/m.test(wf.slice(wf.indexOf('permissions:'), wf.indexOf('jobs:'))), 'the review may start a workflow');

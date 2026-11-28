@@ -1,0 +1,1 @@
+`follow-line-live.mjs` opens the live homepage in Chrome and checks the follow-on line against `/api/answer`'s `followed` field: a real follow-up pair shows it with `followed:true`, an unrelated pair and a controlled `followed:false` reply hide it. `follow-line-live.test.mjs` pins that judgement without a network.

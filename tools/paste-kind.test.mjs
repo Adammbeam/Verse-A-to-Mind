@@ -5,7 +5,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { pasteKind, sumsItUp, isPasteText, UNCLEAR_LINE, summaryHeading } from '../void-live-deploy/lib/paste-kind.js';
+import { pasteKind, isPasteText, answersAsPaste } from '../void-live-deploy/lib/paste-kind.js';
 import { telemetryOf, reportCardOf } from '../void-live-deploy/lib/telemetry.js';
 import telemetryRoute from '../void-live-deploy/skills/telemetry-route.js';
 
@@ -43,12 +43,12 @@ test('a pasted card with nothing else opens again as that card', () => {
   assert.deepEqual(pasteKind('Verse card from a-to-mind.com\n' + CODE), { kind: 'card' });
 });
 
-test('a pasted email with no ask in it gets the one line that asks what to do with it', () => {
+test('a pasted email with no ask in it is read, not handed back', () => {
   const mail = 'Hi Adam,\nThanks for the call on Tuesday. The venue is booked for the 14th and the caterer confirmed the menu.\n'
     + 'We still need the final head count by Friday, and the deposit invoice is attached.\nBest,\nJordan';
-  assert.deepEqual(pasteKind(mail), { kind: 'unclear', line: UNCLEAR_LINE });
-  assert.deepEqual(pasteKind(typed(mail)), { kind: 'unclear', line: UNCLEAR_LINE });
-  assert.match(UNCLEAR_LINE, /sum it up/);
+  assert.deepEqual(pasteKind(mail), { kind: 'read' });
+  assert.deepEqual(pasteKind(typed(mail)), { kind: 'read' });
+  assert.equal(answersAsPaste('read'), true);
 });
 
 test('a paste with the person\'s own ask around it is an ask, answered as any ask', () => {
@@ -71,11 +71,13 @@ test('a typed ask is not a paste', () => {
   assert.equal(pasteKind('make a clock'), null);
 });
 
-test('the answer to the unclear line asks for the paste to be summed up, and nothing else does', () => {
-  for (const a of ['sum it up', 'Sum it up.', 'yes', 'yes please', 'ok summarize it', 'summarize', 'tldr', 'what does it say', 'a summary'])
-    assert.equal(sumsItUp(a), true, a);
-  for (const a of ['.', '', 'no', 'make a clock', 'yes make a clock', 'sum up the numbers 4 and 5 please now'])
-    assert.equal(sumsItUp(a), false, a);
+test('a long paste that starts with a skill word is still an ask for the answer path', () => {
+  const paste = 'clock\ntimer\n' + 'The harbour log records calm water and a steady wind. '.repeat(40)
+    + '\n1. Does the clock stay visible after a reload?\n2. What happens when the timer reaches zero?';
+  assert.equal(pasteKind(paste).kind, 'ask');
+  assert.equal(answersAsPaste(pasteKind(paste).kind), true);
+  assert.equal(answersAsPaste('report'), false);
+  assert.equal(answersAsPaste('card'), false);
 });
 
 test('the API never answers a pasted status report with secret names', () => {
@@ -83,29 +85,27 @@ test('the API never answers a pasted status report with secret names', () => {
   assert.match(api, /noteFinish\(answer, ask, note \? noteFacts : telemetryOf\(ask\) \? \[\] : setupFacts\(ask\)\)/);
 });
 
-test('the three copies of the page are the same and hold the paste gate', () => {
+test('the three copies of the page are the same and send a long paste to the answer', () => {
   const page = read('../void.html');
   assert.equal(read('../void-live-deploy/void.html'), page);
   assert.equal(read('../void-live-deploy/index.html'), page);
   assert.match(page, /import\('\/lib\/paste-kind\.js'\)/);
   assert.match(page, /if \(sc && !\(paste && paste\.kind === 'report'\)\) \{ showSharedCard\(sc\)/);
-  assert.match(page, /paste\.kind === 'unclear'\) \{ lastPaste = /);
-  assert.match(page, /pk\.sumsItUp\(typed\)/);
+  assert.match(page, /pk\.answersAsPaste\(paste\.kind\)/);
+  assert.equal(page.includes('pasted text with no ask'), false);
+  assert.equal(page.includes("paste.kind === 'unclear'"), false);
+  const answerAt = page.indexOf('pk.answersAsPaste(paste.kind)');
+  const skillsAt = page.indexOf('await runLearnedSkills(text, lower0');
+  assert.ok(answerAt > 0 && skillsAt > answerAt, 'a long paste is answered before any skill can take its first word');
 });
 
-// 2026-11-06: "sum it up" after an unclear paste drew the card with the whole paste, line marks and all, as its heading, and the art
-// label read "Picture of Hi Adam, ⏎ Thanks for the call…". The card is named by a short line; the full paste still goes to the server.
-test('a summed-up paste gets a short heading, not the paste itself', () => {
-  for (const t of [DULL, typed(DULL), ADAM, typed(ADAM)]) {
-    const h = summaryHeading(t);
-    assert.match(h, /^What you pasted \(\d+ words\), summed up$/);
-    assert.ok(!h.includes('⏎') && h.length < 50, h);
-  }
-  assert.equal(summaryHeading('hi'), 'What you pasted (1 word), summed up');
-  assert.equal(summaryHeading(''), 'What you pasted, summed up');
+test('a long paste is named with a short heading, and the answer body is the reply', () => {
   const page = read('../void.html');
-  const branch = page.split('\n').find((l) => l.includes('pk.sumsItUp(typed)'));
-  assert.ok(branch && /showAnswer\(lp\.text, null, pk\.summaryHeading/.test(branch), 'the sum-it-up branch passes the short heading');
+  const branch = page.split('\n').find((l) => l.includes('pk.answersAsPaste(paste.kind)'));
+  assert.ok(branch, 'the paste branch is on the page');
+  assert.match(page, /showAnswer\(text, null, head\)/);
+  assert.match(page, /const head = String\(text\)\.replace/);
+  assert.match(page, /class="vc-long"/);
   assert.match(page, /async function showAnswer\(text, page, heading\)/);
   assert.ok(!/<h2>' \+ esc\(text\)/.test(page.slice(page.indexOf('async function showAnswer'), page.indexOf('function whenSaid'))), 'showAnswer draws every heading from head');
   assert.equal(read('../void.html'), read('../void-live-deploy/index.html'));

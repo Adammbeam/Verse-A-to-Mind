@@ -410,10 +410,10 @@ async function scoresNow(env) {
 }
 // who holds what (GET ?held, the owner's): each seat with a job, the job's id and kind, its leverage, and the seat it overlaps, if any
 async function heldView(env) {
-  const { results } = await env.DB.prepare('SELECT a.name, a.job, a.job_at, q.ask, q.target FROM void_team_agents a LEFT JOIN void_queue q ON q.id = a.job WHERE a.job IS NOT NULL AND a.off = 0 ORDER BY a.job_at ASC').all();
+  const { results } = await env.DB.prepare('SELECT a.name, a.job, a.job_at, q.ask, q.target, q.note FROM void_team_agents a LEFT JOIN void_queue q ON q.id = a.job WHERE a.job IS NOT NULL AND a.off = 0 ORDER BY a.job_at ASC').all();
   const sc = (await scoresNow(env)) || {}, rows = results.map((r) => ({ name: r.name, job: r.job, kind: T.kindOf(r.target), since: r.job_at, leverage: sc[r.job] ? sc[r.job][0] : null, why: sc[r.job] ? sc[r.job][1] : null }));
   for (let i = 0; i < results.length; i++) for (let k = 0; k < i; k++) {
-    const key = L.overlapOf({ id: results[i].job, ask: results[i].ask, target: results[i].target }, { id: results[k].job, ask: results[k].ask, target: results[k].target });
+    const key = L.overlapOf({ id: results[i].job, ask: results[i].ask, target: results[i].target, note: results[i].note }, { id: results[k].job, ask: results[k].ask, target: results[k].target, note: results[k].note });
     if (key && !rows[i].overlaps) rows[i].overlaps = { name: results[k].name, job: results[k].job, on: L.scopeWord(key) };
   }
   return { held: rows, building: (await buildingNow(env)).length };
@@ -432,7 +432,7 @@ export async function deconflict(env, now) {
   let pr = null; try { const r = await env.DB.prepare("SELECT v FROM void_team_crew WHERE k = 'priorities'").first(); pr = r ? JSON.parse(r.v) : null; } catch (_) { pr = null; }
   const busy = new Set((pr && pr.busywork) || []), out = [], kept = [];
   for (const a of held) {
-    const j = { id: a.job, ask: a.q_ask, target: a.q_target };
+    const j = { id: a.job, ask: a.q_ask, target: a.q_target, note: a.q_note };
     const first = kept.find((k) => L.overlapOf(j, k.j)), key = first ? L.overlapOf(j, first.j) : null;
     const why = first ? 'overlaps ' + first.j.id + ' held by @' + first.a.name + ' (both touch ' + L.scopeWord(key) + '). One piece of work, one seat: @' + a.name + ' gets the next job instead'
       : busy.has(a.job) ? 'busywork: ' + ((pr.scores && pr.scores[a.job] && pr.scores[a.job][1]) || 'it redoes shipped work') + '. @' + a.name + ' gets the next highest-leverage job instead' : '';
@@ -458,7 +458,7 @@ async function ordered(env, ranked, now) {
   let building = [];
   try { building = (await env.DB.prepare("SELECT id, ask, target FROM void_queue WHERE state = 'building' AND note LIKE 'claimed by team:%'").all()).results || []; } catch (_) { building = []; }
   const busy = new Set(pr.busywork || []); // busywork is never handed out unless the owner pinned it
-  return { list: list.filter((j) => live.pin.includes(j.id) || (!busy.has(j.id) && P.wipAllows(j, building, pr.lanes || {}))).slice(0, 8), pr };
+  return { list: list.filter((j) => live.pin.includes(j.id) || (!busy.has(j.id) && P.wipAllows(j, building, pr.lanes || {}))).slice(0, 64), pr };
 }
 // the owner's post at the top of #work is a job: it goes on the build queue as a feature, and Verse hands it out in that same thread
 async function enqueue(env, msg, body, now, note = 'asked in #work by the owner') {
@@ -509,7 +509,7 @@ async function giveBack(env, a, now, why, failed) {
   const skip = [...String(a.skip || '').split(' ').filter(Boolean), a.job].slice(-20).join(' ');
   await env.DB.prepare('UPDATE void_team_agents SET job = NULL, job_at = NULL, thread = NULL, skip = ? WHERE id = ?').bind(skip, a.id).run();
 }
-// agents silent for STALE_MS give their jobs back (run lazily on requests; a cron is not needed)
+// agents silent for JOB_LEASE_MS give their jobs back (run lazily on requests; a cron is not needed)
 // an agent whose newest post since its job began asks for a person's go-ahead, anywhere, gets Verse's answer in its job thread, once (the answer is then newer)
 async function unstall(env, a, now) {
   if (!a || !a.job || !a.thread) return false;
@@ -522,11 +522,11 @@ async function unstall(env, a, now) {
   await write(env, { c: root.channel, by: 'verse', body: '@' + a.name + ' ' + T.noWaitSay(a.job), thread: a.thread, now });
   return true;
 }
-/** a job whose claim outlived its seat: the queue row says building, no live seat holds it, and its claim is older than STALE_MS. The claim
+/** a job whose claim outlived its seat: the queue row says building, no live seat holds it, and its claim is older than JOB_LEASE_MS. The claim
  *  dies between the two writes when a Worker is killed mid-hand-out, or when a runner crashes with the job in hand. A conductor claim is not
  *  a team claim, so it is left alone: tools/conductor.mjs reaps its own. -> the number put back on the queue */
 async function reapOrphans(env, now, max = 20) {
-  const cut = new Date(now - T.STALE_MS).toISOString();
+  const cut = new Date(now - T.JOB_LEASE_MS).toISOString();
   let rows = [];
   try { rows = (await env.DB.prepare("SELECT id, note FROM void_queue WHERE state = 'building' AND note LIKE 'claimed by team:%' AND updated < ? AND id NOT IN (SELECT job FROM void_team_agents WHERE job IS NOT NULL AND off = 0) LIMIT ?").bind(cut, max).all()).results || []; } catch (_) { return 0; }
   let n = 0;
@@ -563,8 +563,6 @@ export async function selfJoin(env, p, now = Date.now()) {
   if (taken && !taken.off && !taken.crew) { id = taken.id; adopted = true; } // an owner's invite nobody used: the name was meant for an agent to take
   else if (taken && !taken.off) return { ok: false, status: 409, say: 'that name is one of Verse\'s own crew: pick another' };
   else {
-    const { n } = await env.DB.prepare('SELECT COUNT(*) AS n FROM void_team_agents WHERE off = 0').first();
-    if (n >= T.RATES.agents) return { ok: false, status: 429, say: T.RATES.agents + ' agents at most: the team is full now' };
     if (taken) await env.DB.prepare('DELETE FROM void_team_agents WHERE id = ?').bind(taken.id).run(); // a self seat that left: its name is free
     id = hex(crypto.getRandomValues(new Uint8Array(6)));
     const ins = await env.DB.prepare("INSERT OR IGNORE INTO void_team_agents (id, name, about, key, joined, seen, auto, role) VALUES (?, ?, ?, '', ?, ?, 1, 'self')").bind(id, name, T.clean(T.hideSecrets(redact(p.about || '')), T.LIMITS.about), now, now).run();
@@ -579,18 +577,21 @@ export async function selfJoin(env, p, now = Date.now()) {
   return { ok: true, status: 201, name, id, key: k, ...(adopted ? { adopted: true } : {}) };
 }
 export async function sweep(env, now) {
-  // the lease starts at the claim, not at the seat's last word. `seen < now - STALE_MS` read a NULL `seen` (a push seat, a seat handed work
+  // the lease starts at the claim, not at the seat's last word. `seen < cutoff` read a NULL `seen` (a push seat, a seat handed work
   // before it ever polled) as "still alive", so that job was held forever; and a quiet seat handed a job was reaped on the very next request.
-  const LEASE = 'MAX(COALESCE(seen, 0), COALESCE(job_at, 0))';
-  const { results: busy } = await env.DB.prepare('SELECT * FROM void_team_agents WHERE job IS NOT NULL AND off = 0 AND ' + LEASE + ' >= ?').bind(now - T.STALE_MS).all();
+  const cutoff = now - T.JOB_LEASE_MS;
+  const { results: busy } = await env.DB.prepare("SELECT * FROM void_team_agents WHERE job IS NOT NULL AND off = 0 AND key != '' AND MAX(COALESCE(seen, 0), COALESCE(job_at, 0)) >= ?").bind(cutoff).all();
   for (const a of busy) await unstall(env, a, now);
-  const { results } = await env.DB.prepare('SELECT * FROM void_team_agents WHERE job IS NOT NULL AND ' + LEASE + ' < ?').bind(now - T.STALE_MS).all();
-  for (const a of results) await giveBack(env, a, now, '@' + a.name + ' went quiet for ' + Math.round(T.STALE_MS / 60e3) + ' minutes', false);
+  const { results: stale } = await env.DB.prepare("SELECT * FROM void_team_agents WHERE job IS NOT NULL AND (off != 0 OR key = '' OR MAX(COALESCE(seen, 0), COALESCE(job_at, 0)) < ?)").bind(cutoff).all();
+  for (const a of stale) {
+    const why = a.off ? '@' + a.name + ' left the team' : !a.key ? '@' + a.name + ' has no live key' : '@' + a.name + ' went quiet for ' + Math.round(T.JOB_LEASE_MS / 60e3) + ' minutes';
+    await giveBack(env, a, now, why, false);
+  }
   const orphans = await reapOrphans(env, now).catch(() => 0);
   await reapSelf(env, now).catch(() => 0);
   await deconflict(env, now).catch(() => []);
   await offerBetter(env, now).catch(() => 0);
-  return results.length + orphans;
+  return stale.length + orphans;
 }
 /** a builder on a low-value job gets one Verse message in that job's thread pointing at visitor work. At most four a sweep. */
 export async function offerBetter(env, now) {
@@ -722,7 +723,6 @@ export async function joinMember(env, p, now = Date.now()) {
   }
   const name = T.clean(p.name, 24), why = T.nameProblem(name); if (why) return { ok: false, status: 400, say: why.replace('an agent name', 'a member name') };
   if (await env.DB.prepare('SELECT id FROM void_team_agents WHERE name = ?').bind(name).first()) return { ok: false, status: 409, say: 'that name is taken in the team: pick another' };
-  const { n } = await env.DB.prepare('SELECT COUNT(*) AS n FROM void_team_agents WHERE off = 0').first(); if (n >= T.RATES.agents) return { ok: false, status: 429, say: 'the team is full just now' };
   const id = hex(crypto.getRandomValues(new Uint8Array(6)));
   try {
     await env.DB.prepare("INSERT INTO void_team_agents (id, name, about, key, joined, seen, auto, role, sale) VALUES (?, ?, ?, '', ?, ?, 0, 'member', ?)").bind(id, name, T.clean(T.hideSecrets(redact(p.about || '')), T.LIMITS.about), now, now, sale).run();
@@ -926,7 +926,6 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
     case 'invite': {
       if (me.kind !== 'owner') return bad(403, 'only the owner invites an agent');
       const name = T.clean(p.name, 24), why = T.nameProblem(name); if (why) return bad(400, why);
-      const { n } = await env.DB.prepare('SELECT COUNT(*) AS n FROM void_team_agents WHERE off = 0').first(); if (n >= T.RATES.agents) return bad(429, T.RATES.agents + ' agents at most');
       const taken = await env.DB.prepare('SELECT id, off, name FROM void_team_agents WHERE name = ?').bind(name).first(), origin = new URL(request.url).origin;
       if (taken && !taken.off) { // a new link for an agent already here: its old key stops now (a key that was shown somewhere it should not be)
         if (p.again !== true) return bad(409, 'an agent with that name is in the workspace already (again: true makes it a new join link, and its old key stops)');
@@ -1170,6 +1169,25 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       await write(env, { c: 'work', by: 'verse', body: got ? 'Handed to @' + to.name + ' as job ' + id + '.' : 'On the build queue as a job for @' + to.name + ' (' + id + '). They take it when they are free.', thread, now: now + 2 });
       return json({ ok: true, job: id, thread, to: to.name, handed: !!(got && got.job), say: got && got.job ? 'asked @' + to.name + '; they have job ' + id + ' now' : 'asked @' + to.name + '; job ' + id + ' is waiting for them' }, 201);
     }
+    case 'reserve': { // reserve files on the seat's active job so another seat never takes overlapping work
+      if (!a) return bad(403, 'join the team to reserve files');
+      if (!a.job) return bad(409, 'you hold no job: claim one, then reserve its files');
+      const files = L.filesOf(p.files || p.file || p.body || '');
+      if (!files.length) return bad(400, 'name at least one repo file path to reserve (e.g. lib/team.js)');
+      const mine = await env.DB.prepare('SELECT id, ask, target, note FROM void_queue WHERE id = ?').bind(a.job).first();
+      if (!mine) return bad(404, 'job not found');
+      const cand = { id: mine.id, ask: mine.ask, target: mine.target, note: (mine.note || '') + ' · files: ' + files.join(' ') };
+      const other = (await buildingNow(env)).find((b) => b.id !== mine.id && L.overlapOf(cand, b));
+      if (other) {
+        const key = L.overlapOf(cand, other);
+        return bad(409, L.scopeWord(key) + ' is already reserved by job ' + other.id);
+      }
+      const merged = [...new Set([...L.filesOf(mine.note || ''), ...files])];
+      const base = String(mine.note || '').replace(/\s*·\s*files:[^·]*/g, '').trim();
+      const nextNote = (base ? base + ' · ' : '') + 'files: ' + merged.join(' ');
+      await env.DB.prepare('UPDATE void_queue SET note = ?, updated = ? WHERE id = ?').bind(nextNote.slice(0, 300), new Date(now).toISOString(), mine.id).run();
+      return json({ ok: true, job: mine.id, files: merged });
+    }
     case 'leave': { // an agent leaves itself: its job goes back, its key, links and MCP sessions end
       if (!a) return bad(403, 'only an agent leaves');
       if (a.crew) return bad(403, 'Verse\'s own crew stays');
@@ -1190,8 +1208,6 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
       { const lim = await rated(env, a, now); if (lim) return bad(429, lim); }
       const diff = String(p.diff || ''), why = PA.patchProblem(diff); if (why) return bad(400, why);
       await env.DB.prepare(PROPOSALS).run();
-      const mine = await env.DB.prepare('SELECT COUNT(*) AS n FROM void_proposals WHERE author = ? AND created_at > ?').bind('team:' + a.name, new Date(now - DAY).toISOString()).first();
-      if (mine.n >= PA.PATCH.perSeatDay) return bad(429, PA.PATCH.perSeatDay + ' patches a day from one seat');
       const all = await env.DB.prepare("SELECT COUNT(*) AS n FROM void_proposals WHERE state IN ('open', 'checking')").first();
       if (all.n >= PA.PATCH.pending) return bad(429, PA.PATCH.pending + ' patches wait for the runner already; try again later');
       const note = T.clean(T.hideSecrets(redact(p.note || '')), 160), row = await env.DB.prepare('SELECT ask FROM void_queue WHERE id = ?').bind(a.job).first().catch(() => null);
