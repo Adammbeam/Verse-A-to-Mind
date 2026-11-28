@@ -387,6 +387,15 @@
       "what": "TypeScript is a superset of JavaScript that compiles to clean JavaScript output.",
       "gap": "Verse fixes any automation, as it is",
       "target": "skill"
+    },
+    {
+      "id": "AWeirdDev/airports",
+      "url": "https://huggingface.co/datasets/AWeirdDev/airports",
+      "author": "AWeirdDev",
+      "license": "MIT",
+      "what": "A small permissive airport code dataset on Hugging Face, pinned and vendored for the travel floor",
+      "gap": "a checked outside dataset with its own licence next to the pin, with no runtime fetch",
+      "target": "data"
     }
   ]
 }
