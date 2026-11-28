@@ -9,7 +9,7 @@
 import { execFileSync, spawnSync } from 'node:child_process';
 import { readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const BRANCH = 'helper/main-regen-';
@@ -48,7 +48,7 @@ export async function regen(root, log = console.log) {
   const fam = node(root, ['tools/families.mjs']);
   const lost = unfiled((fam.stdout || '') + (fam.stderr || ''));
   if (lost.length) {
-    const { FAMILIES } = await import(resolve(root, 'tools/families.mjs') + '?t=' + Date.now());
+    const { FAMILIES } = await import(pathToFileURL(resolve(root, 'tools/families.mjs')).href + '?t=' + Date.now());
     let src = readFileSync(resolve(root, 'tools/families.mjs'), 'utf8');
     for (const n of lost) { const id = familyFor(n, FAMILIES); src = fileInto(src, id, n); log('filed ' + n + ' into family ' + id); }
     writeFileSync(resolve(root, 'tools/families.mjs'), src);
