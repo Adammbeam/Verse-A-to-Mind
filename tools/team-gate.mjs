@@ -18,6 +18,7 @@ import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { backNote, kindOf, reviewNote } from '../void-live-deploy/lib/team.js';
+import { hostOf } from '../void-live-deploy/lib/crew-outcomes.js';
 
 export const SITE = process.env.VOID_SITE || 'https://a-to-mind.com';
 export const REPO = 'Adammbeam/Verse-A-to-Mind'; // the live repo (was atomeam/void-loop, now flagged)
@@ -85,6 +86,17 @@ async function move(id, state, note, dry) {
   return res.ok ? '-> ' + state : 'not moved: HTTP ' + res.status;
 }
 
+/** the verified-outcome line for Alien Speed: only a page this gate actually opened becomes "verified"; a failed check is
+ *  "not-verified"; a gate that could not read either leaves the earlier "could not tell" alone. Never blocks the queue move. */
+async function outcome(id, verdict, note, dry) {
+  if (dry) return '';
+  try {
+    const res = await fetch(SITE + '/api/crew-outcomes', { method: 'POST', headers: headers(true), signal: AbortSignal.timeout(8000),
+      body: JSON.stringify({ site: hostOf(SITE), job: id, verdict, note: note.slice(0, 200), at: Date.now() }) });
+    return res.ok ? '' : ' (outcome not recorded: HTTP ' + res.status + ')';
+  } catch (_) { return ' (outcome not recorded)'; }
+}
+
 async function main() {
   const replay = (process.argv.find((a) => a.startsWith('--replay=')) || '').slice(9).trim();
   const dry = !!replay || process.argv.includes('--dry');
@@ -116,8 +128,9 @@ async function main() {
     } catch (e) { v = { wait: 'not read: ' + String((e && e.message) || e).slice(0, 80) }; }
     const line = j.id + ' (#' + h.number + ', ' + kindOf(j.target) + '): ';
     if (v.wait) console.log(line + 'waits, ' + v.wait);
-    else if (v.back) console.log(line + 'back, ' + v.back + ' ' + await move(j.id, 'queued', backNote(j.note.replace(/^review by team:[^·]*·\s*PR: \S+\s*·?\s*/, ''), v.back + ' (' + h.url + ')', true), dry));
-    else console.log(line + 'done ' + await move(j.id, 'live', v.live, dry));
+    else if (v.back) console.log(line + 'back, ' + v.back + ' ' + await move(j.id, 'queued', backNote(j.note.replace(/^review by team:[^·]*·\s*PR: \S+\s*·?\s*/, ''), v.back + ' (' + h.url + ')', true), dry)
+      + await outcome(j.id, 'not-verified', v.back, dry));
+    else console.log(line + 'done ' + await move(j.id, 'live', v.live, dry) + await outcome(j.id, 'verified', v.live, dry));
   }
   return 0;
 }

@@ -16,6 +16,7 @@ export const INTERNAL = {
   '/api/brain': "Verse's live brain for its own /brain/ page (functions/api/brain.js, lib/brain-live.js, docs/brain.md): GET only, no input, public facts and counts, edge-cached a minute; not a public API",
   '/api/unbidden': "what Verse says first on its own /brain/ page (functions/api/unbidden.js, lib/unbidden.js): GET only, one `after` id, lines written from its own live state at most once per gap for everyone and daily-capped; /brain/ is the only caller",
   '/api/crew': "Verse's own crew and wants for /team/ and /brain/ (functions/api/crew.js, lib/team-crew-run.js): read only, a few fixed D1 reads, cached 60 s; not a public API",
+  '/api/crew-outcomes': "the crew's verified-work numbers for the /team/ card (functions/api/crew-outcomes.js, lib/crew-outcomes.js): GET is a public count and job-id summary cached 60 s, POST is owner-only so the live gate can record one verdict; not a public API",
   '/api/agent': "Verse's agent behind /agent/ (functions/api/agent.js): a visitor's own thread by a random id, daily-capped free model tasks; not a public API",
   '/api/buy': "Verse's own offer clicks (functions/api/buy.js): counts one click on an offer card and redirects to the catalog's own checkout, or counts a showing; no input is echoed; not a public API",
   '/api/treasury': "Verse's own treasury ledger for its /treasury/ page (public read of aggregate totals; owner-only writes)",

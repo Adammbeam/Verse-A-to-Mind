@@ -76,6 +76,7 @@ import { newProposal } from '../../lib/proposals.js';
 import { FLOORS } from '../../lib/tower.js';
 import { CREW, rivalOf } from '../../lib/team-crew.js';
 import * as T from '../../lib/team.js';
+import * as O from '../../lib/crew-outcomes.js';
 import { briefOf } from '../../lib/job-guide.js';
 import * as Dream from '../../lib/brain-dream.js';
 import { REPO } from '../../lib/verse-repo.js';
@@ -103,6 +104,7 @@ const TABLES = [
   'CREATE TABLE IF NOT EXISTS void_team_mcp (sid TEXT PRIMARY KEY, agent TEXT NOT NULL, made INTEGER NOT NULL, seen INTEGER NOT NULL)',
   // the public credits: each job a member or agent handed in with its pull request (written on done; the queue says where it stands)
   'CREATE TABLE IF NOT EXISTS void_team_credits (id INTEGER PRIMARY KEY AUTOINCREMENT, agent TEXT NOT NULL, job TEXT NOT NULL, link TEXT NOT NULL, note TEXT NOT NULL DEFAULT \'\', at INTEGER NOT NULL)',
+  O.TABLE, // Alien Speed: one verified-outcome row per job per site, with a tenant column from the first schema
 ];
 // push (lib/team.js HOOK): an agent's https address, the secret Verse signs each push with, failures in a row, when to try next, last answer,
 // when the address was last set
@@ -330,6 +332,8 @@ export async function handOut(env, a, now, only = null) {
     const thread = asked ? asked.id : await write(env, { c: 'work', by: 'verse', body: text, job: j.id, now });
     if (asked) await write(env, { c: 'work', by: 'verse', body: text, thread, now }); // the owner's (or the filing member's) own post is the job's thread
     await env.DB.prepare('UPDATE void_team_agents SET job = ?, job_at = ?, thread = ? WHERE id = ?').bind(j.id, now, thread, a.id).run(); // void-review: ok (runs once: the return below ends the loop)
+    const hand = O.handoffOf(O.siteOf(env), j.id, a.name, now);
+    await env.DB.prepare(hand.sql).bind(...hand.binds).run().catch(() => null); // void-review: ok (one fixed upsert; a missing outcome table never stops a hand-out)
     return { job: j.id, kind: T.kindOf(j.target), target: j.target, ask: j.ask, brief: briefOf(j, T.kindOf(j.target)), thread, ...(sc ? { leverage: sc[0], why: sc[1] } : {}) };
   }
   return null;
@@ -1234,6 +1238,7 @@ export async function onRequestPost({ request, env, now = Date.now(), as = null,
         if (!link && !T.ownerAsk(row || { id: a.job }) && !noteJob(row && row.target)) return bad(400, 'a job closes with the link of the pull request that does it; if you cannot do it, give it back with why');
         await setJob(env, a.job, link ? 'building' : 'done', (link ? T.reviewNote(a.name, link, note) : 'done by team:' + a.name + (note ? ' · ' + note : '')).slice(0, 300), a.name);
         if (link) await env.DB.prepare('INSERT INTO void_team_credits (agent, job, link, note, at) VALUES (?, ?, ?, ?, ?)').bind(a.id, a.job, link, note, now).run();
+        if (link) { const inRecord = O.handInOf(O.siteOf(env), a.job, now, link); await env.DB.prepare(inRecord.sql).bind(...inRecord.binds).run().catch(() => null); } // void-review: ok (one fixed upsert, best effort)
         await write(env, { c: 'work', by: a.id, body: (link ? 'Handed in: ' + link + '. Verse checks it after the merge.' : 'Done.') + (note ? '\n' + note : ''), thread: a.thread, now });
         await env.DB.prepare('UPDATE void_team_agents SET job = NULL, job_at = NULL, thread = NULL, done = done + 1 WHERE id = ?').bind(a.id).run();
       } else {
@@ -1263,6 +1268,10 @@ export async function settleReviews(env, now, fetchFn = fetch, max = 6) {
     const at = new Date(now).toISOString();
     const note = (how === 'live' ? 'live: merged ' + String(data.merged_at || '').slice(0, 10) + ' · ' : 'back: the pull request closed without merging · ') + j.note;
     await env.DB.prepare('UPDATE void_queue SET state = ?, note = ?, updated = ? WHERE id = ?').bind(how === 'live' ? 'live' : 'queued', note.slice(0, 300), at, j.id).run(); // void-review: ok (bounded by max)
+    // a merge alone proves the code landed, not that the customer's site answers: that is "could not tell" until the live gate checks it
+    const outcome = O.reportOf({ site: O.siteOf(env), job: j.id, verdict: how === 'live' ? 'unknown' : 'not-verified', at: now,
+      note: how === 'live' ? 'merged; live page check still to come' : 'pull request closed without merging' }, env);
+    if (outcome) await env.DB.prepare(outcome.sql).bind(...outcome.binds).run().catch(() => null); // void-review: ok (one fixed upsert per settled job)
     n++;
   }
   return n;

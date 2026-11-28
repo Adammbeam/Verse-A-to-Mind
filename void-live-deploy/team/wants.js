@@ -3,7 +3,8 @@
 // names the evidence it came from and the one number that closes it; a private want (what visitors typed, sales) shows neither. Nothing is
 // sent from here; the week's bets (Verse's own priorities, lib/team-priorities.js) fill every element marked data-crew-bets; the list is read again every minute while the page is seen. Fills every element marked data-crew-wants.
 import { crewNext } from '/lib/team.js';
-const boxes = [...document.querySelectorAll('[data-crew-wants]')], betBoxes = [...document.querySelectorAll('[data-crew-bets]')];
+import { lineOf } from '/lib/crew-outcomes.js';
+const boxes = [...document.querySelectorAll('[data-crew-wants]')], betBoxes = [...document.querySelectorAll('[data-crew-bets]')], outBoxes = [...document.querySelectorAll('[data-crew-outcomes]')];
 const node = (tag, text, cls) => { const n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; };
 const ago = (t) => { const m = Math.max(0, Math.round((Date.now() - (typeof t === 'number' ? t : Date.parse(t))) / 60e3)); return !Number.isFinite(m) ? '' : m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' h ago' : Math.round(m / 1440) + ' d ago'; };
 const fmt = (v) => (v == null ? '?' : Math.round(v * 10) / 10);
@@ -45,10 +46,18 @@ function bets(box, j) {
   list.replaceChildren(...(p.bets.length ? p.bets.map((b, i) => row(b, i)) : [node('li', 'No bet: nothing is on the queue.')]), ...(p.next.length ? [node('li', 'Then, in order: ' + p.next.map((r) => (r.title || r.id) + ' (' + r.score + ')').join(' · '), 'wsub')] : []));
 }
 
+function outcomes(box, j) {
+  const sum = box.querySelector('[data-sum]') || box;
+  sum.textContent = j && j.ok ? lineOf(j) : 'The verified-outcome numbers could not be read just now.';
+}
+
 async function load() {
-  if ((!boxes.length && !betBoxes.length) || document.visibilityState === 'hidden') return;
-  let j = null; try { const r = await fetch('/api/crew', { cache: 'no-cache' }); j = r.ok ? await r.json() : null; } catch (_) { j = null; }
+  if ((!boxes.length && !betBoxes.length && !outBoxes.length) || document.visibilityState === 'hidden') return;
+  const read = async (url) => { try { const r = await fetch(url, { cache: 'no-cache' }); return r.ok ? await r.json() : null; } catch (_) { return null; } };
+  const [j, out] = await Promise.all([boxes.length || betBoxes.length ? read('/api/crew') : Promise.resolve(null),
+    outBoxes.length ? read('/api/crew-outcomes') : Promise.resolve(null)]);
   for (const b of boxes) draw(b, j);
   for (const b of betBoxes) bets(b, j);
+  for (const b of outBoxes) outcomes(b, out);
 }
 load(); setInterval(load, 60e3);
