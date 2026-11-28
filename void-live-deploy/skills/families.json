@@ -1061,9 +1061,9 @@
     {
      "name": "random",
      "tier": "proven",
-     "why": "a self-test, 4 browser-suite mentions, 3 real asks in the benchmark",
-     "last_tested": "2026-11-24",
-     "last_tested_by": "the benchmark",
+     "why": "a self-test, 8 browser-suite mentions, 3 real asks in the benchmark",
+     "last_tested": "2026-11-28",
+     "last_tested_by": "its tests",
      "success_rate": 1,
      "promoted": "2026-10-29",
      "streak": 24
@@ -1651,13 +1651,13 @@
     {
      "name": "convert",
      "tier": "proven",
-     "why": "a self-test, 9 browser-suite mentions, 5 real asks in the benchmark",
+     "why": "a self-test, 11 browser-suite mentions, 5 real asks in the benchmark",
      "failing": [
       "keep 5 miles to km as a card",
       "convert card for 72 f to c"
      ],
-     "last_tested": "2026-11-24",
-     "last_tested_by": "the benchmark",
+     "last_tested": "2026-11-28",
+     "last_tested_by": "its tests",
      "success_rate": 0.6,
      "streak": 35
     },
@@ -4307,9 +4307,9 @@
     {
      "name": "share",
      "tier": "proven",
-     "why": "2 browser-suite mentions, 3 real asks in the benchmark",
-     "last_tested": "2026-11-24",
-     "last_tested_by": "the benchmark",
+     "why": "a self-test, 2 browser-suite mentions, 3 real asks in the benchmark",
+     "last_tested": "2026-11-28",
+     "last_tested_by": "its tests",
      "success_rate": 1,
      "streak": 35
     },
