@@ -20,6 +20,10 @@ test('which paths are owner-only', () => {
 
 test('a visitor gets a 404, the owner key, an owner session header and the cookie get the file, private and never stored', async () => {
   assert.equal((await mw('/tower.evidence.json')).status, 404);
+  const ideas = await mw('/tower.ideas.json');
+  assert.equal(ideas.status, 301);
+  assert.equal(ideas.headers.get('location'), 'https://a-to-mind.com/growth/latest.json');
+  assert.equal((await mw('/tower.ideas.json', { authorization: 'Bearer owner-test-key' })).status, 200, 'the owner still gets the board');
   assert.equal((await mw('/tower.evidence.json', { authorization: 'Bearer wrong' })).status, 404);
   assert.equal((await mw('/tower.evidence.json', { cookie: 'verse_owner=nope' })).status, 404);
   assert.equal((await mw('/tower.evidence.json', { authorization: 'Bearer owner-test-key' }, 'POST')).status, 404, 'reads only');
