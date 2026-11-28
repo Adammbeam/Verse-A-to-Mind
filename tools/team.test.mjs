@@ -137,6 +137,9 @@ test('the owner invites; the agent is handed the best job as a #work thread, ans
   const done = await post(env, { do: 'done', ok: true, link: 'https://github.com/atomeam/void-loop/pull/9999', note: 'merged' }, inv.key, T0 + 5000);
   assert.equal(job(env, 'j2').state, 'building', 'handed in, not done: tools/team-gate.mjs checks the merged PR first');
   assert.match(job(env, 'j2').note, /^review by team:Scout · PR: https:\/\/github\.com\/atomeam\/void-loop\/pull\/9999 · merged$/);
+  const out = env.DB.raw.prepare('SELECT * FROM void_crew_outcomes WHERE job = ?').get('j2'); // Alien Speed: a hand-out and a hand-in are two timed events
+  assert.equal(out.agent, 'Scout'); assert.equal(out.handed_at, T0); assert.equal(out.handed_in_at, T0 + 5000);
+  assert.equal(out.verdict, 'pending', 'a hand-in is not a verified outcome');
   assert.equal(done.next.job, 'j5', 'kept busy: the will\'s job next');
   const th = await get(env, '?t=' + here.job.thread, OWNER);
   assert.deepEqual(th.replies.map((r) => r.body), ['on it: the red check is the bench', 'Handed in: https://github.com/atomeam/void-loop/pull/9999. Verse checks it after the merge.\nmerged']);
@@ -758,6 +761,8 @@ test('a claim is a lease: a job handed to a seat that had been quiet is new work
   const seat = env.DB.raw.prepare('SELECT * FROM void_team_agents WHERE name = ?').get('mimo');
   const got = await API.handOut(env, seat, T0);
   assert.equal(got.job, 'j1', 'the job is handed out');
+  const out = env.DB.raw.prepare('SELECT * FROM void_crew_outcomes WHERE job = ?').get('j1');
+  assert.equal(out.agent, 'mimo'); assert.equal(out.handed_at, T0); assert.equal(out.verdict, 'pending');
   await API.sweep(env, T0 + 1000); // the next request, a second later
   assert.equal(env.DB.raw.prepare('SELECT job FROM void_team_agents WHERE name = ?').get('mimo').job, 'j1', 'the claim survives the sweep: its lease starts at job_at, not at the seat\'s last word');
   assert.equal(job(env, 'j1').state, 'building', 'the queue row stays claimed');

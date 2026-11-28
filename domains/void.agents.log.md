@@ -1325,3 +1325,4 @@ Format: `ISO | slug | role | event | note`
 2026-11-28T04:12:08Z | bigpickle2 | fix | free-router test: pubchem and clinicaltrials given the real dataset kind, PubChem 5/second usage policy recorded, answer-free routes by registry kind; tests 5/5 and 8/8
 2026-11-28T04:55:11Z | bigpickle2 | fix | games family: bare games opens the rack, hub keeps game/board games/arcade, gamebox keeps show me the games; games-family/games-hub/gamebox/skill-matchers tests 18/18, live-style ask checked
 2026-11-28T04:40:31Z | bigpickle2 | fix | sync-free-lanes: guarded the CLI main so importing it does not fetch or rewrite openrouter-free.json; test verifies the registry is untouched and stays clean, CLI still writes; 5/5
+2026-11-28T05:40:41Z | bigpickle2 | grow | Alien Speed crew outcomes: one row per job per site, public counts of handed/verified/could-not-tell and median time, hand-out and hand-in events from /api/team, verdicts from the live gate; focused tests
