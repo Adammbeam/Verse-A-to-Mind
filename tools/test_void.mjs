@@ -10301,7 +10301,7 @@ try {
   const serverData = () => { const rows = [...db().mine.values()]; return rows.length === 1 ? JSON.parse(rows[0].data) : null; };
   const A = await fresh({ base: localBase }, SIGNAL_SPY);
   const surface = await A.p.evaluate(() => ({ stage: document.querySelectorAll('#stage > *').length, text: document.body.innerText, clickable: Array.from(document.querySelectorAll('button, a, [role=button], microphone')).filter((e) => e.offsetParent !== null).map((e) => e.id || e.tagName) }));
-  check('passkeys: nothing added to the empty surface', surface.stage === 0 && !/sign in|passkey|remember me|log in|account|password|email/i.test(surface.text) && surface.clickable.every((x) => x === 'go' || x === 'mic'), JSON.stringify(surface).slice(0, 200));
+  check('passkeys: nothing added to the empty surface', surface.stage === 0 && !/sign in|passkey|remember me|log in|account|password|email/i.test(surface.text) && surface.clickable.every((x) => x === 'go' || x === 'mic' || x === 'local-toggle'), JSON.stringify(surface).slice(0, 200));
   const authA = await authenticator(A);
   await A.ask('make a clock'); await A.ask('make my void purple');
   await A.ask('what is a black hole', 300); await until(async () => /region of spacetime/.test(await A.page()), 5000); await A.ask('keep this');

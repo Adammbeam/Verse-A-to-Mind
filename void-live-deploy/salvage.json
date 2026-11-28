@@ -1,6 +1,6 @@
 {
  "at": "2026-11-25",
- "scanned": 562,
+ "scanned": 563,
  "counts": {
   "unified": 78,
   "live": 69,
@@ -170,6 +170,14 @@
    "license": "MIT",
    "link": "https://github.com/jsdelivr/jsdelivr",
    "used": "/bots/ (jsdelivr-url)",
+   "isolated": false
+  },
+  {
+   "name": "mlc-ai/web-llm",
+   "author": "MLC AI",
+   "license": "Apache-2.0",
+   "link": "https://github.com/mlc-ai/web-llm",
+   "used": "/ (opt-in on-device answers)",
    "isolated": false
   },
   {
@@ -6785,6 +6793,18 @@
    "test": "tools/salvaged-bots.test.mjs",
    "pr": null,
    "license": "MIT"
+  },
+  {
+   "id": "outside:mlc-ai/web-llm",
+   "kind": "outside",
+   "status": "unified",
+   "target": "page",
+   "value": 30,
+   "why": "In-browser LLM inference with WebGPU",
+   "into": "/ (opt-in on-device answers)",
+   "test": "tools/local-model.test.mjs",
+   "pr": null,
+   "license": "Apache-2.0"
   },
   {
    "id": "outside:mledoze/countries",
