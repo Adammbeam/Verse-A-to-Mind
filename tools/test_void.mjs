@@ -7259,6 +7259,28 @@ try {
       && days.length === 30 && days.every((d) => /^2026-03-\d\d \((Mon|Tue|Wed|Thu|Fri)\)$/.test(d)) && !Z.errors.length, JSON.stringify({ nums: nums.slice(0, 5), hands, left, days: days.slice(0, 5), errors: Z.errors }));
     await Z.ctx.close();
   }
+  // random.org's keno and bingo on /random/: quick picks without repeats, cards from the five BINGO ranges, and a print button
+  if (want("keno and bingo: /random/ quick picks keno tickets and makes printable 5 by 5 bingo cards with a free centre")) {
+    const Z = await fresh(); await Z.p.goto(base + 'random/');
+    await Z.p.click('#presets button[data-q="keno"]');
+    const pickOf = (s) => (s.split(': ')[1] || '').split(', ').map(Number);
+    const first = pickOf(await Z.p.$eval('#kenoTickets li', (e) => e.textContent));
+    await Z.p.selectOption('#kenoN', '10'); await Z.p.selectOption('#kenoT', '5'); await Z.p.click('#kenoGo');
+    const tickets = await Z.p.$$eval('#kenoTickets li', (e) => e.map((x) => x.textContent));
+    await Z.p.click('#presets button[data-q="bingo"]');
+    await Z.p.selectOption('#bingoCards', '2'); await Z.p.click('#bingoGo');
+    const cards = await Z.p.$$eval('#bingoSheets .bingocard', (t) => t.map((e) => ({ head: [...e.tHead.rows[0].cells].map((c) => c.textContent), rows: [...e.tBodies[0].rows].map((r) => [...r.cells].map((c) => c.textContent)) })));
+    await Z.p.evaluate(() => { window.__prints = 0; window.print = () => { window.__prints++; }; });
+    await Z.p.click('#bingoPrint');
+    const printed = await Z.p.evaluate(() => window.__prints);
+    const picks = tickets.map(pickOf), kenoOk = picks.length === 5 && picks.every((v) => v.length === 10 && new Set(v).size === 10 && v.every((x, i) => x >= 1 && x <= 70 && (!i || x > v[i - 1])));
+    const cardsOk = cards.length === 2 && cards.every((c) => c.head.join('') === 'BINGO' && c.rows.length === 5 && c.rows.every((r) => r.length === 5) && c.rows[2][2] === 'FREE'
+      && c.rows.every((r, i) => r.every((x, k) => (i === 2 && k === 2) || (+x >= k * 15 + 1 && +x <= k * 15 + 15))));
+    check('keno and bingo: /random/ quick picks keno tickets and makes printable 5 by 5 bingo cards with a free centre',
+      first.length === 6 && new Set(first).size === 6 && first.every((x) => x >= 1 && x <= 70) && kenoOk && cardsOk && printed === 1 && !Z.errors.length,
+      JSON.stringify({ first, tickets: tickets.slice(0, 2), cards, printed, errors: Z.errors }));
+    await Z.ctx.close();
+  }
   // random.org's Raw Bytes on /random/: the preset makes secure bytes, the size and hex preview match, and Download saves that file
   if (want("random bytes: /random/ makes secure bytes with a size and hex preview, and downloads them as a .bin file")) {
     const Z = await fresh(); await Z.p.goto(base + 'random/');
