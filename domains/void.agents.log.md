@@ -1322,3 +1322,4 @@ Format: `ISO | slug | role | event | note`
 2026-11-28T03:59:54Z | bigpickle2 | build | count words on any page: local word-count badge in the Verse extension (selection or whole page, nothing sent), install section on /word-count/, zip rebuilt, extension suite 38/38
 2026-11-28T03:46:09Z | bigpickle2 | build | Keno quick picks and printable bingo cards on /random/, with preset buttons, a print view and a focused browser test
 2026-11-28T04:12:08Z | bigpickle2 | fix | free-router test: pubchem and clinicaltrials given the real dataset kind, PubChem 5/second usage policy recorded, answer-free routes by registry kind; tests 5/5 and 8/8
+2026-11-28T04:40:31Z | bigpickle2 | fix | sync-free-lanes: guarded the CLI main so importing it does not fetch or rewrite openrouter-free.json; test verifies the registry is untouched and stays clean, CLI still writes; 5/5
