@@ -69,6 +69,14 @@ export const HARD = ['compare keynesian and austrian economics and which explain
   'a train leaves at 3pm at 60 mph and another at 4pm at 80 mph, when does the second catch up', '¿cuáles son las ventajas y desventajas de la energía nuclear frente a la solar?',
   'how would quantum computers break rsa and what should replace it', 'should a small startup use microservices or a monolith and why'];
 
+// An exact example is always a skill ask: its own vector scores 1, above every bar and margin. The D1 answer cache stores only
+// answer and sources, so a cached reply reads its route from the current examples here instead of claiming no route at all.
+export function skillAskOf(text) {
+  const t = String(text || '').toLowerCase().trim().replace(/[?!.]+$/, '').replace(/\s+/g, ' ');
+  for (const [name, s] of Object.entries(SKILLS)) if (s.examples.some((e) => e.toLowerCase() === t)) return name;
+  return null;
+}
+
 export function exemplars() {
   const out = [];
   for (const [name, s] of Object.entries(SKILLS)) {
