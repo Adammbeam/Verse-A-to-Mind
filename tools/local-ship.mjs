@@ -12,7 +12,7 @@
 // Exit: 0 nothing to do or everything green, 1 something failed a gate, 2 it could not run.
 
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { wipeRefusal, deletedNames, allowWipe } from './wipe-guard.mjs';
@@ -43,11 +43,24 @@ async function api(path, init = {}) {
  * from would merge the branch as it already was, with none of the patch in it. `sha` is the only thing worth carrying out.
  */
 export async function prove(p, { root = process.cwd(), run = sh } = {}) {
-  const dir = mkdtempSync(join(tmpdir(), 'proposal-'));
+  let dir = mkdtempSync(join(tmpdir(), 'proposal-'));
   const gates = [];
   try {
     const add = run('git', ['worktree', 'add', '--detach', dir, p.branch], { cwd: root });
-    if (!add.ok) return { ok: false, why: 'no such branch here: ' + p.branch, gates };
+    if (!add.ok) {
+      const seat = String(p.branch || '').startsWith('team/') || String(p.author || '').startsWith('team:');
+      if (!seat) return { ok: false, why: 'no such branch here: ' + p.branch, gates };
+      rmSync(dir, { recursive: true, force: true });
+      mkdirSync(dir, { recursive: true });
+      let base = '';
+      for (const ref of [p.base, 'origin/main', 'main', 'HEAD'].filter(Boolean)) {
+        const a = run('git', ['worktree', 'add', '--detach', dir, ref], { cwd: root });
+        if (a.ok) { base = ref; break; }
+        rmSync(dir, { recursive: true, force: true });
+        mkdirSync(dir, { recursive: true });
+      }
+      if (!base) return { ok: false, why: 'no base to apply this patch on: ' + p.branch, gates };
+    }
     const apply = run('git', ['apply', '--index', '-'], { cwd: dir, input: p.diff });
     if (!apply.ok) return { ok: false, why: 'the patch does not apply: ' + apply.out.trim().split('\n')[0], gates };
     const del = run('git', ['diff', '--cached', '--name-only', '--diff-filter=D'], { cwd: dir });

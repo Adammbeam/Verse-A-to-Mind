@@ -66,8 +66,8 @@ function fakeRun(answers) {
   const calls = [];
   const run = (cmd, args, opts = {}) => {
     const key = cmd + ' ' + args.join(' ');
-    calls.push({ key, input: opts.input });
-    for (const [match, answer] of Object.entries(answers)) if (key.includes(match)) return typeof answer === 'function' ? answer() : answer;
+    calls.push({ key, input: opts.input, args });
+    for (const [match, answer] of Object.entries(answers)) if (key.includes(match)) return typeof answer === 'function' ? answer({ cmd, args, opts, key }) : answer;
     return { ok: true, out: '' };
   };
   run.calls = calls;
@@ -123,4 +123,18 @@ test('prove() refuses a branch that is not here, a patch that does not apply, an
   }) });
   assert.equal(red.ok, false);
   assert.match(red.why, /review: blocking: empty catch/);
+});
+
+test('prove() falls back to main for a seat patch when its team branch is not here', async () => {
+  const seat = { id: '2', branch: 'team/job-1', author: 'team:nopush', diff: DIFF };
+  const run = fakeRun({
+    'git worktree add': ({ args }) => args.includes('team/job-1') ? { ok: false, out: 'fatal: not a valid object name' } : { ok: true, out: '' },
+    'git apply': { ok: true, out: '' },
+    'git rev-parse HEAD': { ok: true, out: 'def5678\n' },
+  });
+  const r = await prove(seat, { root: '/repo', run });
+  assert.equal(r.ok, true);
+  assert.equal(r.sha, 'def5678');
+  const adds = run.calls.filter((c) => c.key.includes('git worktree add'));
+  assert.ok(adds.some((c) => c.args.includes('origin/main') || c.args.includes('main') || c.args.includes('HEAD')), 'falls back to a main base');
 });
