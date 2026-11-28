@@ -167,6 +167,8 @@ const json = (body) => ({ status: 200, contentType: 'application/json', headers:
 // Plan item 7 (confirm line): /api/approval is the real Pages Function, run here against an in-memory D1,
 // with a stand-in email executor so we can see exactly when an action runs.
 const approvalFn = await import(new URL('../void-live-deploy/functions/api/approval.js', import.meta.url).href);
+// /api/health is the real Pages Function too: the GitHub-free runner rolls a deploy back unless this answers JSON with ok true.
+const healthFn = await import(new URL('../void-live-deploy/functions/api/health.js', import.meta.url).href);
 // the approve card (skills/approve-card.js): /api/automations is the real Pages Function too, on the same in-memory D1, so the
 // automation.keep executor's yes (lib/keep-going.js) flips a seeded rule onto the clock exactly as it does live
 const automationsFn = await import(new URL('../void-live-deploy/functions/api/automations.js', import.meta.url).href);
@@ -485,7 +487,7 @@ async function fresh(...inits) {
   if (!opt.mini3d) await ctx.route(/\/skills\/scene3d\.js(?:\?|$)/, (r) => r.fulfill({ status: 404, body: '' }));
   if (opt.field === false) await ctx.route(/\/skills\/field\.js(?:\?|$)/, (r) => r.fulfill({ status: 404, body: '' })); // { field: false }: a Verse with no shared field (lib/orb-field.js answers null)
   await routeOutside(ctx); // tools/fixtures/outside.mjs: the same offline replies for every runner
-  await ctx.route(/^http:\/\/(?:127\.0\.0\.1|localhost):\d+\/api\//, (r) => {
+  await ctx.route(/^http:\/\/(?:127\.0\.0\.1|localhost):\d+\/api\//, async (r) => {
     const u = r.request().url();
     const own = voidApiReply(u); if (own) return r.fulfill(own); // tools/fixtures/outside.mjs: /api/reflect, /api/will
     if (u.includes('/api/answer')) {
@@ -520,6 +522,10 @@ async function fresh(...inits) {
       const body = r.request().method() === 'POST' ? JSON.parse(r.request().postData() || '{}') : Object.fromEntries(new URL(u).searchParams);
       return figurescriptFn.onRequestPost({ request: new Request('http://x/api/figurescript', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }), env: {} })
         .then(async (res) => r.fulfill({ status: res.status, contentType: 'application/json', body: await res.text() }));
+    }
+    if (new URL(u).pathname.replace(/\/$/, '') === '/api/health') {
+      const res = await healthFn.onRequestGet({ request: new Request(u), env: { DB: { prepare: () => ({ first: async () => ({ one: 1 }) }) } } });
+      return r.fulfill({ status: res.status, contentType: res.headers.get('content-type') || 'application/json', headers: { 'cache-control': res.headers.get('cache-control') || 'no-store', 'x-robots-tag': res.headers.get('x-robots-tag') || 'noindex' }, body: await res.text() });
     }
     return r.fulfill({ status: 204, body: '' });
   });
@@ -12900,6 +12906,25 @@ try {
       if (links.size < 4) dead.push(f.id + ' (' + links.size + ')');
     }
     check('connected: every floor page links to at least four sibling Verse tools, so no new floor is a dead end', pages > 150 && !dead.length, JSON.stringify({ pages, dead: dead.slice(0, 10), more: dead.length }));
+  }
+
+  // Health is a JSON answer, not the page shell: the GitHub-free runner (tools/verse-runner.mjs) rolls a deploy back on anything else.
+  if (want("health endpoint: /api/health answers JSON with ok true and the autopilot page names it")) {
+    const H = await fresh();
+    const got = await H.p.evaluate(async () => {
+      const r = await fetch('/api/health', { cache: 'no-store' });
+      const type = r.headers.get('content-type') || '';
+      let j = null; try { j = await r.json(); } catch (_) {}
+      return { status: r.status, type, cache: r.headers.get('cache-control'), ok: j && j.ok, db: j && j.db, at: j && j.at };
+    });
+    check('health endpoint: GET /api/health is 200 application/json with ok true and no-store',
+      got.status === 200 && /json/i.test(got.type) && got.ok === true && got.cache === 'no-store' && !H.errors.length,
+      JSON.stringify({ got, errors: H.errors }));
+    await H.p.goto(base + 'autopilot/');
+    const note = await H.p.evaluate(() => document.querySelector('footer')?.textContent || '');
+    check('health endpoint: the status page names /api/health as the post-deploy check', /\/api\/health/.test(note) && !H.errors.length,
+      JSON.stringify({ note: note.slice(0, 400), errors: H.errors }));
+    await H.ctx.close();
   }
 } catch (e) {
   // always, --only included: a section that throws is a failure, never "0/0 passed" (finish.mjs's first shot runs --only)
