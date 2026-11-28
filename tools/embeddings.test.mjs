@@ -43,11 +43,9 @@ test('the page shows the Apache-2.0 credit and says where the text goes', () => 
   assert.match(page, /id="status" role="status" aria-live="polite"/);
 });
 
-test('the demo has its own narrow CSP rule for the CDN module', () => {
-  const rule = headers.split(/(?=^#)/m).find((b) => b.startsWith('# the on-device sentence demo'));
-  assert.ok(rule, 'a commented header rule exists');
-  assert.match(rule, /^\/embeddings\/\n  ! Content-Security-Policy\n/m);
-  assert.match(rule, /script-src[^;]*https:\/\/cdn\.jsdelivr\.net/);
-  assert.match(rule, /'wasm-unsafe-eval'/);
-  assert.doesNotMatch(rule, /esm\.run/, 'this demo needs only the Transformers.js module');
+test('the site CSP already allows this module; the demo adds no rule to the rule budget', () => {
+  const root = headers.split(/(?=^#)/m)[0];
+  assert.match(root, /script-src[^;]*https:\/\/cdn\.jsdelivr\.net/);
+  assert.match(root, /'wasm-unsafe-eval'/);
+  assert.doesNotMatch(headers, /^\/embeddings\//m, 'the on-device answers change already widened the root policy');
 });
