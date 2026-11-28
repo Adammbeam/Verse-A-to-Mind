@@ -85,16 +85,26 @@ export function renderSystem(text, esc) {
   const lis = (xs) => xs.map((x) => '<li>' + e(x) + '</li>').join('');
   const est = card.estimate;
   const id = card.kind;
-  const flow = [['process', 'Process'], ['automations', 'Automations Verse owns'], ['monitoring', 'Monitoring'], ['estimate', 'Time saved (estimate)'], ['next', 'Next']];
+  const flows = {
+    onboarding: [['intake', 'Process'], ['welcome-sequence', 'Automations Verse owns'], ['stall-watch', 'Monitoring'], ['onboarding-hours', 'Time saved (estimate)'], ['client-handoff', 'Next']],
+    reports: [['week-gather', 'Process'], ['draft', 'Automations Verse owns'], ['weekday-send', 'Monitoring'], ['report-file', 'Time saved (estimate)'], ['status-digest', 'Next']],
+    invoices: [['unpaid-list', 'Process'], ['reminder', 'Automations Verse owns'], ['overdue-nudge', 'Monitoring'], ['invoice-hours', 'Time saved (estimate)'], ['escalate', 'Next']],
+    delivery: [['milestones', 'Process'], ['status-board', 'Automations Verse owns'], ['late-flag', 'Monitoring'], ['tracker', 'Time saved (estimate)'], ['delivery-next', 'Next']],
+    support: [['ticket-intake', 'Process'], ['queue-sort', 'Automations Verse owns'], ['ticket-routing', 'Monitoring'], ['unanswered', 'Time saved (estimate)'], ['close-note', 'Next']],
+  };
+  const flow = flows[id] || flows.onboarding;
   const sec = (key, label, body) => '<h3 data-system="' + e(id) + '" data-artifact="' + key + '">' + e(label) + '</h3>' + body;
+  const bodies = [
+    '<ol>' + lis(card.steps) + '</ol>',
+    '<ul>' + lis(card.automations) + '</ul>',
+    '<ul>' + lis(card.monitors) + '</ul>',
+    '<p>Estimate: about ' + e(String(est.hoursPerWeek)) + ' hours a week. ' + e(est.basis) + '</p><p class="sub">' + e(est.note) + '</p>',
+    '<p>' + e(card.next) + '</p>',
+  ];
   const links = flow.slice(0, -1).map((a, i) => '<a data-system="' + e(id) + '" data-from="' + a[0] + '" data-to="' + flow[i + 1][0] + '">' + e(a[1]) + ' → ' + e(flow[i + 1][1]) + '</a>').join(' ');
   return '<article data-system="' + e(id) + '"><h2>' + e(card.title) + '</h2>'
     + '<p class="sub">For: ' + e(card.subject) + '</p>'
-    + sec('process', 'Process', '<ol>' + lis(card.steps) + '</ol>')
-    + sec('automations', 'Automations Verse owns', '<ul>' + lis(card.automations) + '</ul>')
-    + sec('monitoring', 'Monitoring', '<ul>' + lis(card.monitors) + '</ul>')
-    + sec('estimate', 'Time saved (estimate)', '<p>Estimate: about ' + e(String(est.hoursPerWeek)) + ' hours a week. ' + e(est.basis) + '</p><p class="sub">' + e(est.note) + '</p>')
-    + sec('next', 'Next', '<p>' + e(card.next) + '</p>')
+    + flow.map((a, i) => sec(a[0], a[1], bodies[i])).join('')
     + '<nav data-system="' + e(id) + '">' + links + '</nav>'
     + '<div class="src">Source: Verse packs already on the stage (process map, automations, monitors, time-saved). The hours are an estimate, not a measurement.</div></article>';
 }
