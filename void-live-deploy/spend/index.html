@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en" class="vs-tool">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plan a month of spending · Verse</title>
+<meta name="description" content="Enter this month's income and the bills that come out of it. Verse shows what is left, a chart, the due dates, and a savings target. Kept in this browser.">
+<meta name="verse-handoff" content="in: number, text; out: number">
+<link rel="canonical" href="https://a-to-mind.com/spend/">
+<meta property="og:title" content="Plan a month of spending · Verse">
+<meta property="og:description" content="Income, bills, due dates, what is left, and a savings target. Nothing is uploaded.">
+<meta property="og:url" content="https://a-to-mind.com/spend/">
+<meta property="og:image" content="https://a-to-mind.com/og.png">
+<link rel="stylesheet" href="/verse.css">
+<link rel="stylesheet" href="/versus/layout.css">
+<style>
+  body { background: #07080d; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .pair { grid-template-columns: 1fr; } }
+  .figs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+  .figs div { border: 1px solid rgb(255 255 255 / .08); border-radius: 12px; padding: 10px 12px; }
+  .figs span { display: block; color: var(--d-ink-3); font-size: 13px; }
+  .figs strong { font-variant-numeric: tabular-nums; font-size: 1.25rem; }
+  .figs .short { color: rgb(var(--d-warm)); }
+  .track { height: 12px; border-radius: 999px; background: rgb(255 255 255 / .08); margin: 4px 0 12px; }
+  .track i { display: block; height: 100%; border-radius: inherit; background: rgb(var(--d-key)); }
+  .stack { display: flex; height: 14px; border-radius: 999px; overflow: hidden; background: rgb(255 255 255 / .08); margin: 8px 0; }
+  .stack i { display: block; height: 100%; }
+  .stack .bills { background: rgb(var(--d-key)); }
+  .stack .save { background: rgb(var(--d-teal)); }
+  .stack .left { background: rgb(255 255 255 / .45); }
+  .bill { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; align-items: center; margin: 8px 0; }
+  .bill span { overflow-wrap: anywhere; }
+  .cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+  .cal div { text-align: center; min-height: 36px; padding-top: 6px; font-variant-numeric: tabular-nums; border-radius: 8px; }
+  .cal .wd { color: var(--d-ink-3); font-size: 12px; min-height: 0; }
+  .cal .on { background: rgb(var(--d-key) / .28); }
+  .note { color: var(--d-ink-2); }
+  #say { min-height: 1.4em; color: rgb(var(--d-warm)); }
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Plan a month of spending","url":"https://a-to-mind.com/spend/","applicationCategory":"FinanceApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Monthly income, bills with due dates, what is left, and a savings target. Kept in this browser."}</script>
+</head>
+<body>
+<main>
+  <h1>Plan a month of spending</h1>
+  <p>Put in what you earn this month, the bills that have to be paid, and how much you want to keep. You get what is left, when each bill is due, and where the money goes.</p>
+  <p class="note">Kept in this browser only. Nothing is uploaded.</p>
+
+  <h2>This month</h2>
+  <div class="pair">
+    <div><label for="income">Monthly income</label><input id="income" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    <div><label for="save">Savings target</label><input id="save" type="number" min="0" step="0.01" inputmode="decimal"></div>
+  </div>
+
+  <h2>Bills</h2>
+  <form id="add-form">
+    <label for="bill-name">Name</label>
+    <input id="bill-name" type="text" maxlength="60" autocomplete="off" required>
+    <div class="pair">
+      <div>
+        <label for="bill-cat">Category</label>
+        <select id="bill-cat">
+          <option>Housing</option><option>Food</option><option>Transport</option>
+          <option>Utilities</option><option>Health</option><option>Other</option>
+        </select>
+      </div>
+      <div><label for="bill-amt">Amount</label><input id="bill-amt" type="number" min="0" step="0.01" inputmode="decimal" value="0" required></div>
+    </div>
+    <label for="bill-due">Due day (1 to 31)</label>
+    <input id="bill-due" type="number" min="1" max="31" step="1" value="1" required>
+    <button type="submit" id="add">Add bill</button>
+  </form>
+  <p id="say" role="status"></p>
+  <div id="bills"></div>
+
+  <h2>What is left</h2>
+  <div class="figs" aria-label="Month summary">
+    <div><span>Income</span><strong id="income-out">$0.00</strong></div>
+    <div><span>Bills</span><strong id="bills-out">$0.00</strong></div>
+    <div><span>Savings</span><strong id="save-out">$0.00</strong></div>
+    <div><span>Left</span><strong id="left">$0.00</strong></div>
+  </div>
+  <div class="stack" id="stack" aria-hidden="true"></div>
+  <p class="note" id="legend"></p>
+
+  <h2>Where it goes</h2>
+  <div id="chart"></div>
+
+  <h2 id="month">Due dates</h2>
+  <div class="cal" id="cal" role="grid" aria-label="Due dates this month"></div>
+  <div id="dues"></div>
+
+  <p class="note">A due day past the end of a short month lands on the last day. <a href="/">Verse</a> · <a href="/tools/">Tools</a> · <a href="/budget/">Budget page</a> · <a href="/calculator/">Calculator</a></p>
+</main>
+<script>
+(function () {
+  const KEY = 'a2m.void.spend-month';
+  const CATS = ['Housing', 'Food', 'Transport', 'Utilities', 'Health', 'Other'];
+  const $ = function (id) { return document.getElementById(id); };
+  function num(v) { const n = Number(v); return Number.isFinite(n) && n > 0 ? Math.round(n * 100) / 100 : 0; }
+  function day(v) { const n = Math.floor(Number(v)); return Number.isFinite(n) ? Math.min(31, Math.max(1, n)) : 1; }
+  function money(n) { return (n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function el(tag, cls, text) { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+  function blank() { return { income: 0, save: 0, bills: [] }; }
+  function clean(b) {
+    if (!b || typeof b !== 'object') return null;
+    const amt = num(b.amt); if (!amt) return null;
+    return { id: String(b.id || Math.random().toString(36).slice(2, 10)), name: String(b.name || 'Bill').slice(0, 60), cat: CATS.indexOf(b.cat) >= 0 ? b.cat : 'Other', amt: amt, due: day(b.due) };
+  }
+  function load() {
+    let s = null;
+    try { s = JSON.parse(localStorage.getItem(KEY) || 'null'); }
+    catch (e) { return blank(); }
+    if (!s || typeof s !== 'object') return blank();
+    const bills = Array.isArray(s.bills) ? s.bills.map(clean).filter(Boolean) : [];
+    return { income: num(s.income), save: num(s.save), bills: bills };
+  }
+  const state = load();
+  function persist() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); }
+    catch (e) { console.warn('The spending plan stayed in this tab.'); }
+  }
+  function totals() {
+    let bills = 0; for (let i = 0; i < state.bills.length; i++) bills += state.bills[i].amt;
+    bills = Math.round(bills * 100) / 100;
+    return { bills: bills, left: Math.round((state.income - bills - state.save) * 100) / 100 };
+  }
+  function readMoney() { state.income = num($('income').value); state.save = num($('save').value); persist(); draw(); }
+  function draw() {
+    const t = totals(), scale = Math.max(state.income, t.bills + state.save, 1);
+    $('income-out').textContent = money(state.income);
+    $('bills-out').textContent = money(t.bills);
+    $('save-out').textContent = money(state.save);
+    $('left').textContent = t.left < 0 ? 'Short ' + money(-t.left) : money(t.left);
+    $('left').className = t.left < 0 ? 'short' : '';
+    const stack = $('stack'); stack.replaceChildren();
+    [['bills', t.bills], ['save', state.save], ['left', Math.max(0, t.left)]].forEach(function (p) {
+      if (p[1] <= 0) return; const i = el('i', p[0]); i.style.width = (p[1] / scale * 100) + '%'; stack.append(i);
+    });
+    $('legend').textContent = 'Bills, savings, and what is left, as shares of the larger of income or spending.';
+    const by = {}; CATS.forEach(function (c) { by[c] = 0; });
+    state.bills.forEach(function (b) { by[b.cat] += b.amt; });
+    const chart = $('chart'); chart.replaceChildren();
+    CATS.forEach(function (c) {
+      if (!by[c]) return;
+      chart.append(el('div', null, c + ' ' + money(by[c])));
+      const track = el('div', 'track'), bar = el('i'); bar.style.width = Math.min(100, by[c] / scale * 100) + '%'; track.append(bar); chart.append(track);
+    });
+    if (!chart.childNodes.length) chart.append(el('p', 'note', 'Add a bill to see the split.'));
+    const list = $('bills'); list.replaceChildren();
+    state.bills.forEach(function (b) {
+      const row = el('div', 'bill');
+      row.append(el('span', null, b.name + ' · ' + b.cat + ' · due day ' + b.due));
+      row.append(el('span', null, money(b.amt)));
+      const btn = el('button', null, 'Remove'); btn.type = 'button';
+      btn.addEventListener('click', function () { state.bills = state.bills.filter(function (x) { return x.id !== b.id; }); persist(); draw(); });
+      row.append(btn); list.append(row);
+    });
+    const now = new Date(), y = now.getFullYear(), m = now.getMonth(), dim = new Date(y, m + 1, 0).getDate(), lead = new Date(y, m, 1).getDay();
+    $('month').textContent = 'Due dates · ' + now.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+    const cal = $('cal'); cal.replaceChildren();
+    ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].forEach(function (w) { cal.append(el('div', 'wd', w)); });
+    for (let i = 0; i < lead; i++) cal.append(el('div'));
+    const on = {};
+    state.bills.forEach(function (b) { const d = Math.min(b.due, dim); (on[d] = on[d] || []).push(b); });
+    for (let d = 1; d <= dim; d++) { const cell = el('div', on[d] ? 'on' : '', String(d)); cal.append(cell); }
+    const dues = $('dues'); dues.replaceChildren();
+    Object.keys(on).sort(function (a, b) { return a - b; }).forEach(function (d) {
+      dues.append(el('p', null, 'Day ' + d + ': ' + on[d].map(function (b) { return b.name + ' ' + money(b.amt); }).join(', ')));
+    });
+  }
+  $('income').value = state.income ? String(state.income) : '';
+  $('save').value = state.save ? String(state.save) : '';
+  $('income').addEventListener('input', readMoney);
+  $('save').addEventListener('input', readMoney);
+  $('add-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const amt = num($('bill-amt').value), name = $('bill-name').value.trim();
+    if (!name || !amt) { $('say').textContent = 'Enter a name and an amount greater than zero.'; return; }
+    $('say').textContent = '';
+    state.bills.push({ id: Math.random().toString(36).slice(2, 10), name: name.slice(0, 60), cat: $('bill-cat').value, amt: amt, due: day($('bill-due').value) });
+    $('bill-name').value = ''; persist(); draw();
+  });
+  draw();
+})();
+</script>
+<script type="module" src="/verse-shell.js"></script>
+<script src="/visit.js" defer></script>
+</body>
+</html>
