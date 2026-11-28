@@ -6940,6 +6940,19 @@ try {
       && km.mi === '3.10685596119' && /5 km = 3\.10685596119 mi/.test(km.answer) && /[?&]k=length/.test(link) && kept === km.answer && !thirdParty.length && !Z.errors.length, JSON.stringify({ first, back, formula, swapped, four, kinds, fuel, km, link, kept, thirdParty, errors: Z.errors }));
     await Z.ctx.close();
   }
+  // convertlive.com's theme choice on /convert/: bright colour and dark colour, kept on this device and applied before the first paint
+  if (want("convert theme: /convert/ switches between bright color and dark color and keeps the choice across a reload")) {
+    const Z = await fresh(); await Z.p.goto(base + 'convert/'); await Z.p.waitForSelector('#theme');
+    const looks = () => Z.p.evaluate(() => ({ theme: document.documentElement.dataset.theme || 'dark', bg: getComputedStyle(document.body).backgroundColor, ink: getComputedStyle(document.body).color, scheme: getComputedStyle(document.documentElement).colorScheme }));
+    const dark = await looks(); await Z.p.selectOption('#theme', 'light'); const bright = await looks();
+    await Z.p.reload(); await Z.p.waitForSelector('#theme'); const kept = await looks(); const chosen = await Z.p.$eval('#theme', (e) => e.value);
+    await Z.p.selectOption('#theme', 'dark'); const back = await looks(); const stored = await Z.p.evaluate(() => localStorage.getItem('a2m.void.convert.theme'));
+    check("convert theme: /convert/ switches between bright color and dark color and keeps the choice across a reload",
+      dark.bg === 'rgb(11, 10, 16)' && dark.scheme === 'dark' && bright.bg === 'rgb(247, 246, 251)' && bright.ink === 'rgb(21, 19, 28)' && bright.scheme === 'light'
+      && kept.theme === 'light' && kept.bg === bright.bg && chosen === 'light' && back.bg === dark.bg && stored === 'dark' && !Z.errors.length,
+      JSON.stringify({ dark, bright, kept, chosen, back, stored, errors: Z.errors }));
+    await Z.ctx.close();
+  }
   // the rest of calculator.net on /calculator/ (lib/calc-panels.js): a loan with its schedule and chart, compound interest, percentages and BMI with calories, from links
   if (want("calculator: /calculator/#loan answers the monthly payment with a yearly schedule and a chart, and the compound, percent and BMI panels answer")) {
     const Z = await fresh(); await Z.p.goto(base + 'calculator/#loan'); await Z.p.waitForSelector('#ltable tr');
