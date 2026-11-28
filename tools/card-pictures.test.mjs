@@ -6,7 +6,7 @@ import { readFileSync, writeFileSync, mkdtempSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 const dep = resolve(dirname(fileURLToPath(import.meta.url)), '../void-live-deploy');
 const read = (f) => readFileSync(resolve(dep, f), 'utf8');
 const EMOJI = /\p{Extended_Pictographic}/u;
@@ -29,7 +29,7 @@ test('the store draws an icon for every product kind it lists', () => {
 // KNOWN_REUSE: a product that still shows another product's preview, named so it is fixed and then removed (never added to)
 const KNOWN_REUSE = new Set(['voidquest-minis']);
 test('no product borrows another product\'s 3D preview', async () => {
-  const products = (await import(resolve(dep, 'lib/store-products.js'))).default;
+  const products = (await import(pathToFileURL(resolve(dep, 'lib/store-products.js')).href)).default;
   const by = new Map();
   for (const p of products) if (p.preview) by.set(p.preview, [...(by.get(p.preview) || []), p.id]);
   const reused = [...by.values()].filter((ids) => ids.length > 1);

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { parseArgs, logLine, prBody, steps, siteFiles } from './finish.mjs';
+import { parseArgs, logLine, prBody, steps, siteFiles, prePrGate } from './finish.mjs';
 
 test('parseArgs takes the kind, what changed and the flags, and refuses what it cannot use', () => {
   const a = parseArgs(['build', 'the tide card', '--by', 'grok', '--from', '5', '--dry']);
@@ -41,7 +41,11 @@ test('the PR body carries the B.I.T.E. headings', () => {
 
 test('the steps are AGENTS.md\'s, in order', () => {
   assert.deepEqual(steps(parseArgs(['build', 'x'])).map((s) => s[0]),
-    ['first shot: the browser check', 'ledger line', 'agent-log line', 'map covers everything', 'commit', 'bring main in', 'fast checks', 'push', 'pull request']);
+    ['first shot: the browser check', 'ledger line', 'agent-log line', 'map covers everything', 'commit', 'bring main in', 'fast checks', 'pre-PR gate', 'push', 'pull request']);
+  const [cmd, args, env] = prePrGate();
+  assert.equal(args[1], '--check-only', 'the gate is the PR gate, run locally');
+  assert.match(args[0], /tools[\\/]pre-pr\.mjs$/, 'without opening a pull request');
+  assert.equal(env.PRE_PR_OFFLINE, '1', 'the open-PR list is not needed before the push');
 });
 
 test('first shot: the page, skills and the server need a browser check; records, docs and tools do not', () => {
@@ -54,7 +58,7 @@ test('first shot: the page, skills and the server need a browser check; records,
 test('--dry runs nothing', () => {
   const r = spawnSync(process.execPath, [fileURLToPath(new URL('./finish.mjs', import.meta.url)), 'build', 'x', '--dry'], { encoding: 'utf8' });
   assert.equal(r.status, 0, r.stderr);
-  assert.match(r.stdout, /\[8\/8\] pull request/);
+  assert.match(r.stdout, /\[9\/9\] pull request/);
 });
 
 test('the --try ask has to be answered by a skill: nothing logged, a page error or the generic answer stop the finish', async () => {
