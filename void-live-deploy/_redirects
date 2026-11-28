@@ -62,8 +62,6 @@
 /charity/ /creed/give/ 301
 /religion /creed/ 301
 /religion/ /creed/ 301
-/flip /random/?mode=coin 301
-/flip/ /random/?mode=coin 301
 /wheel /random/?mode=wheel 301
 /wheel/ /random/?mode=wheel 301
 /random-user /random/?mode=people 301
@@ -131,8 +129,8 @@
 /calculators/ /calculator/?mode=formulas 301
 
 # random + markets family members
-/random/coin /random/?mode=coin 301
-/random/coin/ /random/?mode=coin 301
+/random/coin /flip/ 301
+/random/coin/ /flip/ 301
 /random/wheel /random/?mode=wheel 301
 /random/wheel/ /random/?mode=wheel 301
 /random/people /random/?mode=people 301

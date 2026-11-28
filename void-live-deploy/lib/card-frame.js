@@ -258,7 +258,7 @@ export const PAGE_OF = Object.freeze({ ...Object.fromEntries(SITE_PAGES.map((p) 
   'journal /journal/': ['/journal/', 'Research journal'],
   'pdf-tools': ['/pdf/', 'PDF tools'], 'kanban-board': ['/kanban/', 'Kanban board'], calendar: ['/calendar/', 'Calendar'], 'calendar-file': ['/calendar/', 'Calendar'], translate: ['/translate/', 'Translate'],
   weather: ['/weather/', 'Weather'], recipe: ['/recipes/', 'Recipes'], calc: ['/calculator/', 'Calculator'], vat: ['/vat/', 'VAT calculator'], 'calc-more': ['/calculator/', 'Calculator'],
-  convert: ['/convert/', 'Unit converter'], gradient: ['/color/gradient/', 'Gradient'], wheel: ['/random/wheel/', 'Wheel of names'], coin: ['/random/coin/', 'Coin flip'],
+  convert: ['/convert/', 'Unit converter'], gradient: ['/color/gradient/', 'Gradient'], wheel: ['/random/wheel/', 'Wheel of names'], coin: ['/flip/', 'Coin flip'],
   'is-it': ['/is-it/christmas', 'Is it…?'], baseconv: ['/base64/bases/', 'Base converter'], timer: ['/stopwatch/', 'Stopwatch and timer'],
   words: ['/word-count/', 'Word counter'], fakeuser: ['/random/people/', 'Random User Generator'], time: ['/time/', 'Time zones'], colour: ['/color/', 'Color Picker'], color: ['/color/', 'Color Picker'],
   password: ['/password/', 'Password generator'], base64: ['/base64/', 'Base64'], random: ['/random/', 'Random Number Generator'],
