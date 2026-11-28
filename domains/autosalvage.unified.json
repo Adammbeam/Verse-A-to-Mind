@@ -187,6 +187,12 @@
       "test": "tools/local-model.test.mjs",
       "pr": null
     },
+    "outside:ollama/ollama": {
+      "target": "tool",
+      "into": "tools/verse-coder.mjs (opt-in local crew model)",
+      "test": "tools/verse-coder.test.mjs",
+      "pr": null
+    },
     "archive/repos/a-to-mind.com/drafts/047-attested-heading-permalinks": {
       "target": "bot",
       "into": "/bots/ (permalink-check)",

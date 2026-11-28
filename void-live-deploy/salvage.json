@@ -1,14 +1,14 @@
 {
- "at": "2026-11-25",
- "scanned": 563,
+ "at": "2026-11-28",
+ "scanned": 578,
  "counts": {
-  "unified": 78,
-  "live": 69,
-  "salvageable": 390,
+  "unified": 79,
+  "live": 71,
+  "salvageable": 402,
   "history": 23,
   "skipped": 3
  },
- "remaining": 390,
+ "remaining": 402,
  "top10": [
   {
    "id": "archive/repos/a-to-mind.com/drafts/025-carbon-weight-badge",
@@ -157,6 +157,14 @@
    "isolated": false
   },
   {
+   "name": "mlc-ai/web-llm",
+   "author": "MLC AI",
+   "license": "Apache-2.0",
+   "link": "https://github.com/mlc-ai/web-llm",
+   "used": "/ (opt-in on-device answers)",
+   "isolated": false
+  },
+  {
    "name": "tabler/tabler-icons",
    "author": "tabler",
    "license": "MIT",
@@ -170,14 +178,6 @@
    "license": "MIT",
    "link": "https://github.com/jsdelivr/jsdelivr",
    "used": "/bots/ (jsdelivr-url)",
-   "isolated": false
-  },
-  {
-   "name": "mlc-ai/web-llm",
-   "author": "MLC AI",
-   "license": "Apache-2.0",
-   "link": "https://github.com/mlc-ai/web-llm",
-   "used": "/ (opt-in on-device answers)",
    "isolated": false
   },
   {
@@ -293,6 +293,30 @@
    "isolated": false
   },
   {
+   "name": "polyhaven.com",
+   "author": "Poly Haven",
+   "license": "CC0-1.0",
+   "link": "https://polyhaven.com/license",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "kenney.nl",
+   "author": "Kenney",
+   "license": "CC0-1.0",
+   "link": "https://kenney.nl/support",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "si.edu/openaccess",
+   "author": "Smithsonian Institution",
+   "license": "CC0-1.0",
+   "link": "https://www.si.edu/openaccess",
+   "used": null,
+   "isolated": false
+  },
+  {
    "name": "ourresearch/openalex-api-tutorials",
    "author": "OurResearch",
    "license": "CC0-1.0",
@@ -370,6 +394,70 @@
    "license": "CC0-1.0",
    "link": "https://3d.si.edu/cc0",
    "used": "/bots/ (api-smithsonian-3d)",
+   "isolated": false
+  },
+  {
+   "name": "base/account-sdk",
+   "author": "base",
+   "license": "MIT",
+   "link": "https://github.com/base/account-sdk",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "YuzuJS/setImmediate",
+   "author": "YuzuJS",
+   "license": "MIT",
+   "link": "https://github.com/YuzuJS/setImmediate",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "WebMCP-org/npm-packages",
+   "author": "WebMCP-org",
+   "license": "MIT",
+   "link": "https://github.com/WebMCP-org/npm-packages",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "Zipstack/unstract",
+   "author": "Zipstack",
+   "license": "AGPL-3.0",
+   "link": "https://github.com/Zipstack/unstract",
+   "used": null,
+   "isolated": true
+  },
+  {
+   "name": "trycua/cua",
+   "author": "trycua",
+   "license": "MIT",
+   "link": "https://github.com/trycua/cua",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "lightfeed/extractor",
+   "author": "lightfeed",
+   "license": "Apache-2.0",
+   "link": "https://github.com/lightfeed/extractor",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "microsoft/TypeScript",
+   "author": "microsoft",
+   "license": "Apache-2.0",
+   "link": "https://github.com/microsoft/TypeScript",
+   "used": null,
+   "isolated": false
+  },
+  {
+   "name": "ollama/ollama",
+   "author": "ollama",
+   "license": "MIT",
+   "link": "https://github.com/ollama/ollama",
+   "used": "tools/verse-coder.mjs (opt-in local crew model)",
    "isolated": false
   }
  ],
@@ -5177,10 +5265,22 @@
   {
    "id": "archive/workers",
    "kind": "archive",
-   "status": "salvageable",
-   "target": "bot",
-   "value": 18.4,
-   "why": "live code shares its name; check for overlap before migrating",
+   "status": "live",
+   "target": null,
+   "value": 0,
+   "why": "Verse's live code reads this path",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": null
+  },
+  {
+   "id": "archive/workflows",
+   "kind": "archive",
+   "status": "live",
+   "target": null,
+   "value": 0,
+   "why": "Verse's live code reads this path",
    "into": null,
    "test": null,
    "pr": null,
@@ -5907,6 +6007,30 @@
    "license": null
   },
   {
+   "id": "domains/void.evolve.json",
+   "kind": "domain",
+   "status": "live",
+   "target": null,
+   "value": 0,
+   "why": "Verse's live code reads this path",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": null
+  },
+  {
+   "id": "domains/void.evolve.promotions.json",
+   "kind": "domain",
+   "status": "live",
+   "target": null,
+   "value": 0,
+   "why": "Verse's live code reads this path",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": null
+  },
+  {
    "id": "domains/void.existing-tools.md",
    "kind": "domain",
    "status": "live",
@@ -6141,30 +6265,6 @@
    "target": "page",
    "value": 2.1,
    "why": "live code shares its name; check for overlap before migrating",
-   "into": null,
-   "test": null,
-   "pr": null,
-   "license": null
-  },
-  {
-   "id": "docs/autosalvage.workflow.yml",
-   "kind": "parked workflow",
-   "status": "live",
-   "target": null,
-   "value": 0,
-   "why": "Verse's live code reads this path",
-   "into": null,
-   "test": null,
-   "pr": null,
-   "license": null
-  },
-  {
-   "id": "docs/bot-factory.workflow.yml",
-   "kind": "parked workflow",
-   "status": "live",
-   "target": null,
-   "value": 0,
-   "why": "Verse's live code reads this path",
    "into": null,
    "test": null,
    "pr": null,
@@ -6483,6 +6583,42 @@
    "license": null
   },
   {
+   "id": "shelf:?/clips.yml",
+   "kind": "shelf row",
+   "status": "salvageable",
+   "target": "page",
+   "value": 4.5,
+   "why": "live code shares its name; check for overlap before migrating",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": null
+  },
+  {
+   "id": "shelf:?/clef-probe.yml",
+   "kind": "shelf row",
+   "status": "salvageable",
+   "target": "page",
+   "value": 6.9,
+   "why": "live code shares its name; check for overlap before migrating",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": null
+  },
+  {
+   "id": "shelf:?/bot-factory.draft.yml",
+   "kind": "shelf row",
+   "status": "salvageable",
+   "target": "bot",
+   "value": 6.9,
+   "why": "live code shares its name; check for overlap before migrating",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": null
+  },
+  {
    "id": "shelf:?/next-growth.mjs",
    "kind": "shelf row",
    "status": "history",
@@ -6771,6 +6907,18 @@
    "license": "CC0-1.0"
   },
   {
+   "id": "outside:mlc-ai/web-llm",
+   "kind": "outside",
+   "status": "unified",
+   "target": "page",
+   "value": 25,
+   "why": "In-browser LLM inference with WebGPU",
+   "into": "/ (opt-in on-device answers)",
+   "test": "tools/local-model.test.mjs",
+   "pr": null,
+   "license": "Apache-2.0"
+  },
+  {
    "id": "outside:tabler/tabler-icons",
    "kind": "outside",
    "status": "unified",
@@ -6793,18 +6941,6 @@
    "test": "tools/salvaged-bots.test.mjs",
    "pr": null,
    "license": "MIT"
-  },
-  {
-   "id": "outside:mlc-ai/web-llm",
-   "kind": "outside",
-   "status": "unified",
-   "target": "page",
-   "value": 30,
-   "why": "In-browser LLM inference with WebGPU",
-   "into": "/ (opt-in on-device answers)",
-   "test": "tools/local-model.test.mjs",
-   "pr": null,
-   "license": "Apache-2.0"
   },
   {
    "id": "outside:mledoze/countries",
@@ -7011,6 +7147,42 @@
    "license": "OGL-UK-3.0"
   },
   {
+   "id": "outside:polyhaven.com",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "data",
+   "value": 25,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "CC0-1.0"
+  },
+  {
+   "id": "outside:kenney.nl",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "data",
+   "value": 25,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "CC0-1.0"
+  },
+  {
+   "id": "outside:si.edu/openaccess",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "data",
+   "value": 25,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "CC0-1.0"
+  },
+  {
    "id": "outside:ourresearch/openalex-api-tutorials",
    "kind": "outside",
    "status": "unified",
@@ -7129,6 +7301,102 @@
    "test": "tools/api-bots.test.mjs",
    "pr": null,
    "license": "CC0-1.0"
+  },
+  {
+   "id": "outside:base/account-sdk",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "skill",
+   "value": 25,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "MIT"
+  },
+  {
+   "id": "outside:YuzuJS/setImmediate",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "skill",
+   "value": 25,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "MIT"
+  },
+  {
+   "id": "outside:WebMCP-org/npm-packages",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "tool",
+   "value": 25,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "MIT"
+  },
+  {
+   "id": "outside:Zipstack/unstract",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "tool",
+   "value": 25,
+   "why": "only isolated (called as a separate service or kept as separate data under its own license), never mixed into Verse code",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "AGPL-3.0"
+  },
+  {
+   "id": "outside:trycua/cua",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "tool",
+   "value": 25,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "MIT"
+  },
+  {
+   "id": "outside:lightfeed/extractor",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "skill",
+   "value": 25,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "Apache-2.0"
+  },
+  {
+   "id": "outside:microsoft/TypeScript",
+   "kind": "outside",
+   "status": "salvageable",
+   "target": "skill",
+   "value": 25,
+   "why": "reuse with credit; keep the license notice",
+   "into": null,
+   "test": null,
+   "pr": null,
+   "license": "Apache-2.0"
+  },
+  {
+   "id": "outside:ollama/ollama",
+   "kind": "outside",
+   "status": "unified",
+   "target": "tool",
+   "value": 31,
+   "why": "Run open models locally with a small command and an OpenAI-compatible endpoint",
+   "into": "tools/verse-coder.mjs (opt-in local crew model)",
+   "test": "tools/verse-coder.test.mjs",
+   "pr": null,
+   "license": "MIT"
   }
  ]
 }

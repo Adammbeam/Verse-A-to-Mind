@@ -51,6 +51,16 @@ export const WRITERS = new Set(['edit', 'patch', 'replace', 'split']);
 /** the providers the environment has keys for, in order. Pure: keys stay in the returned objects, never in a log line. */
 export function providersFrom(env = process.env) {
   const out = [];
+  // An optional local Ollama backend for a crew agent with no cloud key. Opt-in only: without OLLAMA_MODEL the
+  // production stack below is exactly as it was. VERSE_CODER_OLLAMA_ONLY=1 keeps every prompt on this machine.
+  const local = env.VERSE_CODER_OLLAMA_MODEL || env.OLLAMA_MODEL;
+  if (local) {
+    const base = String(env.OLLAMA_BASE || 'http://127.0.0.1:11434').replace(/\/+$/, '');
+    if (!/^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/i.test(base)) throw new Error('OLLAMA_BASE must name a local address, never a remote host');
+    const p = { name: 'ollama', model: local, key: 'local-llm', url: base + '/v1/chat/completions', shape: 'openai', probe: base + '/api/tags' };
+    if (env.VERSE_CODER_OLLAMA_ONLY === '1') return [p];
+    out.push(p);
+  }
   // Verse's own model on the site's binding (functions/api/coder.js, the owner token): needs no Workers AI permission on any API token
   if (env.VOID_OWNER_TOKEN) out.push({ name: 'verse', model: FREE_MODEL, key: env.VOID_OWNER_TOKEN, url: String(env.VOID_SITE || 'https://a-to-mind.com').replace(/\/+$/, '') + '/api/coder', shape: 'workers' });
   // the key Verse minted for this run (tools/key-keeper.mjs, Workers AI only, expires in hours) first, else the old repo secret
@@ -67,7 +77,7 @@ export function providersFrom(env = process.env) {
   oa('cerebras', 'CEREBRAS_API_KEY', 'https://api.cerebras.ai/v1/chat/completions', env.VERSE_CODER_CEREBRAS_MODEL || 'qwen-3-coder-480b');
   return out.filter((p) => !/gpt-oss/i.test(p.model));
 }
-export const KEY_NAMES = ['VOID_OWNER_TOKEN (Verse\'s own model, /api/coder)', 'CLOUDFLARE_AI_TOKEN (minted by tools/key-keeper.mjs) or CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID', 'OPENROUTER_API_KEY', 'GROQ_API_KEY', 'GEMINI_API_KEY', 'CEREBRAS_API_KEY'];
+export const KEY_NAMES = ['VOID_OWNER_TOKEN (Verse\'s own model, /api/coder)', 'CLOUDFLARE_AI_TOKEN (minted by tools/key-keeper.mjs) or CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID', 'OPENROUTER_API_KEY', 'GROQ_API_KEY', 'GEMINI_API_KEY', 'CEREBRAS_API_KEY', 'OLLAMA_MODEL (optional local Ollama model: no key)'];
 
 /** a reply body as JSON. It reads the body once as text, then tries JSON, then a server-sent-event stream (data: lines).
  * A 2xx that is neither says what came back first (status, type, size), never its body, so a 90-character note still holds the cause. */
@@ -129,6 +139,11 @@ export function stackModel(providers, { fetchImpl = fetch, timeoutMs = 120000, m
     for (let k = 0; k < providers.length; k++) {
       const i = (at + k) % providers.length, p = providers[i];
       try {
+        // only a local, opt-in provider has a probe: no request leaves this machine just to check a model
+        if (p.probe) {
+          const up = await fetchImpl(p.probe, { signal: AbortSignal.timeout(Math.min(timeoutMs, 2000)) });
+          if (!up.ok) { errs.push(p.name + ' not running'); continue; }
+        }
         const body = p.shape === 'workers'
           ? { messages, max_tokens: maxOut, reasoning_effort: 'low', chat_template_kwargs: { enable_thinking: false } }
           : { model: p.model, messages, max_tokens: maxOut, temperature: 0.2 };

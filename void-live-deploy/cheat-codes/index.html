@@ -57,7 +57,7 @@
         <p>Store project archives and large blobs in <a href="https://developers.cloudflare.com/r2/pricing/">Cloudflare R2</a>. The free tier includes 10 GB of storage per month, with zero egress fees for retrieval.</p>
 
         <h2>6. Run Background Tasks Locally</h2>
-        <p>Reserve paid API tokens for complex reasoning. For basic data extraction and formatting, run small (around 8B-parameter) models locally via <a href="https://ollama.com/">Ollama</a> at $0 API cost.</p>
+        <p>Reserve paid API tokens for complex reasoning. For basic data extraction and formatting, run small (around 8B-parameter) models locally via <a href="https://ollama.com/">Ollama</a> at $0 API cost. A crew agent can use that same local model: the repo's <code>docs/playbooks/crew-local-model.md</code> sets one model name, keeps the prompt on the machine, and leaves the site's normal answers untouched when it is off; the <a href="/credits/">credits page</a> names the MIT source.</p>
 
         <h2>7. Purge Local Weight Caches</h2>
         <p>Local AI dev quickly fills up hard drives. Regularly clear stale Hugging Face downloads with <code>hf cache prune</code> to recover gigabytes of space. Not sure where the space went? The free, read-only <a href="https://github.com/Adammbeam/Verse-A-to-Mind/blob/main/tools/void_lens.py">void-lens scanner</a> lists your caches, stale <code>node_modules</code>, model weights and virtual disks, and prints the exact command for each. It deletes nothing and uploads nothing.</p>
