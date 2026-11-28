@@ -156,9 +156,14 @@ test('a copied recipe card holds every ingredient and step, set like the card, a
   // weather: the hourly strip as one tidy line, the temperature large
   const wx = bodyLayout('Overcast · feels 9° · wind 18 km/h\n\n12°\n\nToday 14° / 10° · rain chance 95%\n\nNext hours: 8 PM 12° 30% rain · 9 PM 12° 20% rain · 10 PM 11° 8% rain · 11 PM 11° 5% rain', 246);
   assert.ok(wx.els.some((e) => e.text === '12°' && e.fs > 30), 'the temperature now is large'); const h8 = wx.els.find((e) => e.text === '8 PM'), h9 = wx.els.find((e) => e.text === '9 PM'); assert.ok(h8 && h9 && h8.y === h9.y && h9.x > h8.x, 'the hours run side by side in one strip, not a word per line'); assert.equal(wx.extra, 0, 'a weather card fits the standard card');
-  // truly huge: cut, and the last line says where the rest is
-  const huge = bodyLayout(Array.from({ length: 400 }, (_, i) => 'Paragraph ' + i + ' says a good deal about something worth reading in full.').join('\n\n'), 246, { link: 'https://a-to-mind.com/x/' });
-  assert.equal(huge.cut, true); assert.match(huge.els[huge.els.length - 1].text, /full card continues at a-to-mind\.com\/x/);
+  // a long answer stays whole: the first paragraph and the last are both drawn, and nothing points at copied text
+  const hugeText = Array.from({ length: 80 }, (_, i) => 'Paragraph ' + i + ' says a good deal about something worth reading in full.').join('\n\n');
+  const huge = bodyLayout(hugeText, 246, { link: 'https://a-to-mind.com/x/' });
+  const drawn = huge.els.map((e) => e.text).join(' ');
+  assert.equal(huge.cut, false);
+  assert.match(drawn, /Paragraph 0/);
+  assert.match(drawn, /Paragraph 79/);
+  assert.doesNotMatch(drawn, /copied text/);
 });
 
 test('the Full card line is a short readable link that never runs past the text box', async () => {
