@@ -10,7 +10,7 @@ import { ASKS, isSystemNeed, renderSystem } from '../void-live-deploy/lib/system
 
 const root = new URL('..', import.meta.url);
 const RESTATE = 'I would say that you need a system that can automatically onboard clients without human intervention.';
-const PRODUCTS = '## Verse Product Laws\n\n1. Appearance Test: If Verse only rephrases the ask, the response fails.\n2. Artifact Delta Test: A successful response leaves the stage with more useful structure than before.\n3. Natural Ask Principle: Users should not need to know skill names. Problems should route to systems.\n';
+const PRODUCTS = '## Verse Product Laws\n\n1. Appearance Test: If Verse only rephrases the ask, the response fails.\n2. Artifact Delta Test: A successful response leaves the stage with more useful structure than before.\n3. Natural Ask Principle: Users should not need to know skill names. Problems should route to systems.\n4. Composition Principle: When multiple artifacts are relevant, Verse creates a connected system rather than isolated cards.\n';
 const LAW = '## Verse Benchmark Law\nA successful response creates something useful.\nA failed response explains, paraphrases, or restates the user\'s request without creating useful structure on the stage.\n';
 
 async function routeOf(ask) {

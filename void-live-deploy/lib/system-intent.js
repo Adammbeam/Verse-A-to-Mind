@@ -84,13 +84,17 @@ export function renderSystem(text, esc) {
   const card = compose(text);
   const lis = (xs) => xs.map((x) => '<li>' + e(x) + '</li>').join('');
   const est = card.estimate;
-  return '<h2>' + e(card.title) + '</h2>'
+  const id = card.kind;
+  const flow = [['process', 'Process'], ['automations', 'Automations Verse owns'], ['monitoring', 'Monitoring'], ['estimate', 'Time saved (estimate)'], ['next', 'Next']];
+  const sec = (key, label, body) => '<h3 data-system="' + e(id) + '" data-artifact="' + key + '">' + e(label) + '</h3>' + body;
+  const links = flow.slice(0, -1).map((a, i) => '<a data-system="' + e(id) + '" data-from="' + a[0] + '" data-to="' + flow[i + 1][0] + '">' + e(a[1]) + ' → ' + e(flow[i + 1][1]) + '</a>').join(' ');
+  return '<article data-system="' + e(id) + '"><h2>' + e(card.title) + '</h2>'
     + '<p class="sub">For: ' + e(card.subject) + '</p>'
-    + '<h3>Process</h3><ol>' + lis(card.steps) + '</ol>'
-    + '<h3>Automations Verse owns</h3><ul>' + lis(card.automations) + '</ul>'
-    + '<h3>Monitoring</h3><ul>' + lis(card.monitors) + '</ul>'
-    + '<h3>Time saved (estimate)</h3><p>Estimate: about ' + e(String(est.hoursPerWeek)) + ' hours a week. ' + e(est.basis) + '</p>'
-    + '<p class="sub">' + e(est.note) + '</p>'
-    + '<h3>Next</h3><p>' + e(card.next) + '</p>'
-    + '<div class="src">Source: Verse packs already on the stage (process map, automations, monitors, time-saved). The hours are an estimate, not a measurement.</div>';
+    + sec('process', 'Process', '<ol>' + lis(card.steps) + '</ol>')
+    + sec('automations', 'Automations Verse owns', '<ul>' + lis(card.automations) + '</ul>')
+    + sec('monitoring', 'Monitoring', '<ul>' + lis(card.monitors) + '</ul>')
+    + sec('estimate', 'Time saved (estimate)', '<p>Estimate: about ' + e(String(est.hoursPerWeek)) + ' hours a week. ' + e(est.basis) + '</p><p class="sub">' + e(est.note) + '</p>')
+    + sec('next', 'Next', '<p>' + e(card.next) + '</p>')
+    + '<nav data-system="' + e(id) + '">' + links + '</nav>'
+    + '<div class="src">Source: Verse packs already on the stage (process map, automations, monitors, time-saved). The hours are an estimate, not a measurement.</div></article>';
 }
