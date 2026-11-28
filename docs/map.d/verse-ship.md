@@ -1,0 +1,1 @@
+`verse-ship.mjs` pushes a seat's HEAD to Verse's code store as the change request `cr/<seat>/<job>` and prints the proof (`lib/cr-proof.js`) to hand in, with no GitHub pull request; the runner checks and lands it (loop L1.3, `tools/verse-ship.test.mjs`).
