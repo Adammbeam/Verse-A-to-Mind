@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" class="vs-tool"><link rel="stylesheet" href="/verse.css" media="screen">
+<head>
+<meta charset="utf-8">
+<meta name="verse-handoff" content="in: domain; out: scorecard">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Site safety check · Verse</title>
+<meta name="description" content="Type a domain you run. Verse reads the public safety signals that site already publishes and says, in plain words, what is in place and how to fix the rest.">
+<link rel="canonical" href="https://a-to-mind.com/security/check/">
+<meta property="og:title" content="Site safety check · Verse">
+<meta property="og:description" content="Type a domain you run. Verse reads the public safety signals that site already publishes and says what is in place and how to fix the rest.">
+<meta property="og:url" content="https://a-to-mind.com/security/check/">
+<meta property="og:image" content="https://a-to-mind.com/og.png">
+<style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}</style>
+<script src="/visit.js" defer></script>
+<style>
+  :root { color-scheme: dark; --bg: #07060d; --ink: #eceaf6; --soft: #a7a3bb; --accent: #a58bff; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 system-ui, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 28px 16px 64px; }
+  h1 { font-size: 1.6rem; margin: 0 0 8px; } h2 { font-size: 1.15rem; margin: 22px 0 8px; } h3 { font-size: 1rem; margin: 0 0 4px; }
+  a { color: var(--accent); } .note { color: var(--soft); font-size: .92rem; }
+  form { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; margin: 16px 0; }
+  label { flex: 1 1 100%; } input, button { font: inherit; color: var(--ink); background: #120f1c; border: 1px solid #3a3450; border-radius: 10px; min-height: 44px; }
+  input { flex: 1 1 220px; min-width: 0; padding: 0 12px; } button { padding: 0 16px; background: #2a2144; cursor: pointer; }
+  #items { list-style: none; padding: 0; } #items li { border-top: 1px solid #2a2540; padding: 12px 0; }
+  #items li[data-state="pass"] h3 { color: #b6f0c2; } #items li[data-state="warn"] h3 { color: #f0d48a; } #items li[data-state="fail"] h3 { color: #f0b0b0; }
+</style>
+</head>
+<body>
+<main>
+<h1>Site safety check</h1>
+<p>Type a domain you run. Verse reads the public signals that site already publishes: whether HTTPS answers and plain HTTP sends people there, whether the connection is encrypted, the safety headers and cookie flags on the homepage, the security.txt contact file, and the SPF and DMARC mail records. Each row says what that signal means and how to fix it when it is missing.</p>
+<p>Verse does not scan ports or sign in, and it does not keep who asked. A result may be reused for a few minutes so the same site is not fetched again. It will not open an IP address, a private network, or a port other than the normal web ports.</p>
+<form id="form">
+  <label for="host">Domain</label>
+  <input id="host" name="host" type="text" autocapitalize="off" autocomplete="off" spellcheck="false" required maxlength="253" placeholder="your-site.com">
+  <button id="go" type="submit">Check this site</button>
+</form>
+<p id="status" role="status"></p>
+<section id="out" hidden><h2 id="summary"></h2><ol id="items"></ol></section>
+<p class="note">Also: <a href="/security/">security</a> · <a href="/privacy/">privacy</a> · <a href="/limits/">what Verse won't do</a> · <a href="/">home</a></p>
+</main>
+<script type="module" src="/security/check/app.js"></script>
+<script type="module" src="/verse-shell.js"></script>
+</body>
+</html>
