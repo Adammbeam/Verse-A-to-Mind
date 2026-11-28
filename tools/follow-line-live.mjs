@@ -4,7 +4,8 @@
 // with followed:false on the same carried follow-up must hide it too. The last pass changes only the response the page receives, because
 // the live route never emits false when a before ask was sent. No workflow: run by a person or by tools/checks.mjs's unit test.
 import fs from 'node:fs';
-import { chromium } from 'playwright-core';
+// The pure verdict test is loaded by the merge gate, which has no node_modules: keep the browser
+// package behind a dynamic import so importing this file needs nothing but built-in modules.
 
 export const SITE = process.env.VOID_SITE || 'https://a-to-mind.com';
 export const LINE = '[data-recall="follow"], [data-follow-line="1"]';
@@ -95,6 +96,7 @@ export async function runCase(browser, spec, site = SITE) {
 
 async function main() {
   const site = process.argv.includes('--site') ? process.argv[process.argv.indexOf('--site') + 1] : SITE;
+  const { chromium } = await import('playwright-core');
   const browser = await chromium.launch({ executablePath: browserPath(), headless: true });
   const rows = [];
   try { for (const spec of CASES) { const r = await runCase(browser, spec, site); rows.push(r); console.log((r.why ? 'FAIL ' : 'ok   ') + r.id + ': followed=' + JSON.stringify(r.followed) + ' before=' + r.before + ' line=' + r.visible + ' ' + (r.text || '') + (r.why ? '\n       - ' + r.why : '')); } }
