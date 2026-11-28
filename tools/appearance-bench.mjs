@@ -1,6 +1,4 @@
-// Headless five-ask bench. /api/answer is stubbed, so no model is called.
-// Appends docs/benchmark-history.jsonl. A regression writes docs/benchmark-alert.txt and does not revert.
-// Nightly: node tools/appearance-bench.mjs on a runner with Chrome; fail the job on a non-zero exit.
+// Headless five-ask bench. /api/answer is stubbed. A regression writes docs/benchmark-alert.txt and does not revert.
 import { createServer } from 'node:http';
 import { execSync } from 'node:child_process';
 import { readFileSync, writeFileSync, appendFileSync, existsSync, statSync, unlinkSync } from 'node:fs';
@@ -69,10 +67,24 @@ export function connected(card) {
   const links = [...html.matchAll(/data-from="[^"]+"[^>]*data-to="[^"]+"/g)];
   return titles === 1 && groups.length > 0 && new Set(groups).size === 1 && arts.length >= 2 && links.length >= arts.length - 1;
 }
+const TOPIC = [
+  [/invoice|unpaid|\bbills?\b|billing/, ['invoice', 'unpaid', 'bill', 'billing', 'reminder']],
+  [/onboard|new client|client setup|\bwelcome\b|new account/, ['onboard', 'client', 'welcome']],
+  [/report|weekly|status note|summaries/, ['report', 'weekly']],
+  [/project|milestone|delivery|on time/, ['project', 'milestone', 'delivery']],
+  [/support|ticket/, ['support', 'ticket', 'queue']],
+];
+export function onTopic(ask, card) {
+  const t = String(ask || '').toLowerCase();
+  const blob = [card && card.title, card && card.text, ...((card && card.items) || [])].join(' ').toLowerCase();
+  let words = null;
+  for (const [re, w] of TOPIC) if (re.test(t)) words = w;
+  return !!words && words.some((w) => blob.includes(w));
+}
 export function rowOf(ask, card, seen) {
   const html = card && card.html || '';
   const items = (card && card.items) || [];
-  const appears = !!(card && hasStructure(html) && !appearanceFails(ask, card.text || html));
+  const appears = !!(card && hasStructure(html) && !appearanceFails(ask, card.text || html) && onTopic(ask, card));
   const delta = artifactCount(html) > 0;
   const composition = connected(card);
   const routing = !!(card && String(card.note || '').includes('system-design'));

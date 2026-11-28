@@ -1,7 +1,8 @@
 // The table rewriter. The browser run is tools/appearance-bench.mjs itself. No model.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { fillTable, rowOf, connected, regressions, historyRecord, jobLine, variety, verdict, compareBaseline, overlapBand, liveOf } from './appearance-bench.mjs';
+import { readFileSync } from 'node:fs';
+import { fillTable, rowOf, connected, regressions, historyRecord, jobLine, variety, verdict, compareBaseline, overlapBand, liveOf, onTopic } from './appearance-bench.mjs';
 
 const DOC = [
   '## Verse Product Laws',
@@ -74,6 +75,14 @@ test('the baseline comparison shows before and after for one ask', () => {
   const row = compareBaseline(base, now)[0];
   assert.deepEqual(row.appears, [false, true]);
   assert.deepEqual(row.score, [0, 10]);
+});
+
+test('an off-topic encyclopedia page does not count as appearing', () => {
+  const card = { title: "Hell's Kitchen (American TV series) season 11", text: 'A cooking show.', items: [], html: '<h2>Hell\'s Kitchen</h2><ul><li>Episode</li></ul>', note: '' };
+  assert.equal(onTopic('I keep forgetting invoices.', card), false);
+  assert.equal(rowOf('I keep forgetting invoices.', card, ['']).appears, false);
+  const base = JSON.parse(readFileSync(new URL('../docs/benchmark-baseline.json', import.meta.url), 'utf8'));
+  assert.equal(base.asks.filter((a) => a.appears).length, 0);
 });
 
 test('a pass that becomes a fail names the ask and the commit', () => {
