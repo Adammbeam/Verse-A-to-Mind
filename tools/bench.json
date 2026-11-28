@@ -7340,5 +7340,10 @@
   {"ask": "receipt of monitors for weekly reports", "want": "skill:monitor-receipt"},
   {"ask": "process lift pack for client onboarding", "want": "skill:process-lift-pack"},
   {"ask": "package the hard work for invoice automation", "want": "skill:process-lift-pack"},
-  {"ask": "verse does the lift for support routing", "want": "skill:process-lift-pack"}
+  {"ask": "verse does the lift for support routing", "want": "skill:process-lift-pack"},
+  {"ask": "I need a client onboarding system that runs itself.", "want": "skill:system-design"},
+  {"ask": "Turn weekly client reports into something I never have to think about.", "want": "skill:system-design"},
+  {"ask": "I keep forgetting invoices.", "want": "skill:system-design"},
+  {"ask": "Build me a way to track project delivery.", "want": "skill:system-design"},
+  {"ask": "Our support process is chaos.", "want": "skill:system-design"}
 ]

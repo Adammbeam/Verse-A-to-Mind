@@ -1,8 +1,11 @@
 /**
  * system-design skill — turn a business idea into a design of the systems, automations, tests, monitors and handoff points Verse will own.
  * Offline, rules-based. Nothing is sent. Reuses existing packs (client-intake, system-slice, monitor-pack, verify-pack, ownership).
+ * A natural system problem composes those packs into one card (lib/system-intent.js).
  * "design the system for client onboarding", "system design for invoice reminders", "design systems for the support flow".
  */
+import { isSystemNeed, renderSystem } from '../lib/system-intent.js';
+
 export function isSystemDesign(text) {
   const t = String(text || '').trim().replace(/[?!.]+$/, '');
   return /^(?:system\s+design|design\s+the\s+system|design\s+systems)\s+(?:for|of|on)\b/i.test(t)
@@ -36,6 +39,10 @@ export function designFor(subject) {
 
 async function run(text, api) {
   const { showPage, esc } = api;
+  if (isSystemNeed(text)) {
+    showPage((el) => { el.innerHTML = renderSystem(text, esc); }); // void-review: ok (renderSystem escapes every field with esc)
+    return 'system-design';
+  }
   const name = subjectOf(text);
   const pack = designFor(text);
   showPage((el) => {
@@ -59,7 +66,12 @@ export default {
     'system design for client onboarding',
     'design the system for invoice reminders',
     'design systems for the support flow',
-    'design a system for weekly status reports'
+    'design a system for weekly status reports',
+    'Support is a mess',
+    'Unpaid bills slip my mind',
+    'Milestones slip and I only notice too late',
+    'Weekly updates for customers should write themselves',
+    'Client setup keeps stalling unless someone babysits it',
   ],
   nearMisses: [
     'what is a system',
@@ -67,10 +79,11 @@ export default {
     'design the page',
     'build the system'
   ],
-  match: (low, raw) => isSystemDesign(raw || low),
+  match: (low, raw) => isSystemDesign(raw || low) || isSystemNeed(raw || low),
   run,
   suite() {
-    const ok = this.examples.every(isSystemDesign) && !this.nearMisses.some(isSystemDesign);
+    const takes = (t) => isSystemDesign(t) || isSystemNeed(t);
+    const ok = this.examples.every(takes) && !this.nearMisses.some(takes);
     return { ok, got: ok ? 'match works' : 'match broke' };
   }
 };
