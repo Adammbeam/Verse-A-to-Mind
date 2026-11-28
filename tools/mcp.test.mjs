@@ -51,7 +51,11 @@ test('mcp: the endpoint speaks HTTP: POST JSON in, JSON out; a notification is 2
 
 test('mcp: /tools.json (the public list) names the endpoint and lists exactly what tools/list serves', async () => {
   const { onRequestGet: toolsJson } = await import('../void-live-deploy/functions/tools.json.js');
-  const r = await toolsJson({ request: new Request('https://a-to-mind.com/tools.json'), env: { ASSETS: { fetch: async () => new Response('', { status: 404 }) } } });
+  // Serve the same prebuilt snapshot the site serves. A binding that 404s everything sends this
+  // route down its skills fallback, which logs a false "No index" error in the test output.
+  const prebuilt = readFileSync(new URL('../void-live-deploy/tools.static.json', import.meta.url), 'utf8');
+  const ASSETS = { fetch: async (request) => new URL(request.url).pathname === '/tools.static.json' ? new Response(prebuilt, { status: 200 }) : new Response('', { status: 404 }) };
+  const r = await toolsJson({ request: new Request('https://a-to-mind.com/tools.json'), env: { ASSETS } });
   const pub = await r.json();
   assert.equal(pub.mcp.endpoint, 'https://a-to-mind.com/api/mcp');
   assert.deepEqual(pub.mcp.tools, TOOLS.map(({ name, title, description, inputSchema, annotations }) => ({ name, title, description, inputSchema, annotations })));
