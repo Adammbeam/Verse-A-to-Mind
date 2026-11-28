@@ -63,6 +63,8 @@ function painting(el, on) {
   const art = el && el.querySelector && el.querySelector(':scope > .vc-art'); if (!art) return;
   art.classList.toggle('vc-painting', !!on); if (on) el.dataset.painting = '1'; else delete el.dataset.painting;
 }
+/** a card whose art box already holds its own photo: that picture is the art, so no painting may be spent on the card. Pure. */
+export const hasCardPhoto = (el) => !!(el && el.querySelector && el.querySelector(':scope > .vc-art .vc-art-photo'));
 function show(el, img) {
   const art = el.querySelector(':scope > .vc-art'); if (!art) return; painting(el, false);
   if (el.dataset && el.dataset.imgSafe === 'blocked') return;
@@ -89,6 +91,9 @@ function button(el, c) {
   art.appendChild(b);
 }
 async function paint(el, c, b) {
+  // a real photo can arrive while the card's read is out (a recipe's own picture, lib/art-source.js). It is the art: never spend a painting
+  // that show() would refuse to put over it, and leave the card on its plate with nothing to show for the spend (2026-11-26).
+  if (hasCardPhoto(el)) { painting(el, false); return; }
   if (b) { b.disabled = true; b.textContent = 'painting…'; } else seen.set(subjectFor(el, c), 'asking'); // one paint per subject at a time
   painting(el, true);
   const sk = subjectFor(el, c); let got = null; // one POST per subject, whichever card element asks (a frame is rebuilt as its facts arrive)

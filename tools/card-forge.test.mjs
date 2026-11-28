@@ -39,7 +39,8 @@ test('a busy paint is tried again: the retry counter exists (2026-11-19: a comme
   try {
     const F = await import('../void-live-deploy/lib/card-forge.js?retry');
     const art = { classList: { toggle() {} }, querySelector: () => null, querySelectorAll: () => [] };
-    const el = { isConnected: true, dataset: {}, classList: { contains: () => false }, querySelector: (q) => (/vc-art/.test(q) ? art : null), querySelectorAll: () => [], children: [] };
+    // a photo query is its own lookup: the art box test double must not answer "yes" to hasCardPhoto when there is no photo
+    const el = { isConnected: true, dataset: {}, classList: { contains: () => false }, querySelector: (q) => (/vc-art-photo/.test(q) ? null : /vc-art/.test(q) ? art : null), querySelectorAll: () => [], children: [] };
     F.forge(el, { key: 'dragon', kindName: 'answer', typeLine: 'Answer' }, null);
     for (let i = 0; i < 20 && !timers.includes(25000); i++) await new Promise((ok) => realST(ok, 5));
     assert.deepEqual(calls.slice(0, 2), ['GET', 'POST']); assert.ok(timers.includes(25000), 'a retry is set after a busy paint: ' + timers);

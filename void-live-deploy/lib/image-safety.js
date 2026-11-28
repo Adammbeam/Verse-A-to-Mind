@@ -19,10 +19,15 @@ const MINOR = /\b(?:child|children|childhood|kids?|kiddie|minors?|teens?|teenage
 const BODY = /\b(?:beach(?:es)?|pool|swim\w*|bath\w*|shower\w*|body|bodies|cloth\w*|dress(?:ing|ed)?|pos(?:e|es|ing)|model\w*|pageant\w*|camp\w*|gymnast\w*|massage|tan(?:ning)?|sunbath\w*|skin)\b/i;
 /** the reason a set of texts must show no photo, or ''. Takes any number of strings (ask, title, description, extract, file name, categories). */
 export function unsafeText(...parts) {
-  const t = parts.flat(3).filter((x) => x != null).map((x) => String(x)).join(' \u2022 ').replace(/[_+%]/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2');
+  const raw = parts.flat(3).filter((x) => x != null).map((x) => String(x)).join(' \u2022 ').replace(/[_+%]/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2');
+  // a cut of meat is not the body (2026-11-26: a "chicken noodle soup" card said "2 chicken breasts", the gate called it sensitive and scrubbed every picture).
+  // Only a breast named after the animal it comes from is taken out, and only for the adult-word check: a bare "breast(s)" stays blocked, and a minor
+  // beside the original word is still blocked below, so the gate is no weaker about people.
+  const t = raw.replace(/\b(?:chicken|turkey|duck|goose|pork|veal|lamb|beef|fish)\s+breasts?\b/gi, ' ')
+    .replace(/\bbreasts?\s+of\s+(?:chicken|turkey|duck|goose|pork|veal|lamb|beef|fish)\b/gi, ' ');
   if (!t.trim()) return '';
-  if (ABUSE.test(t)) return 'abuse';
-  if (MINOR.test(t) && (BODY.test(t) || SENSITIVE.test(t))) return 'minor-context'; // a minor word beside any nudity word is the minors block, not just adult
+  if (ABUSE.test(raw)) return 'abuse';
+  if (MINOR.test(raw) && (BODY.test(raw) || SENSITIVE.test(raw))) return 'minor-context'; // a minor word beside any nudity word is the minors block, not just adult
   if (SENSITIVE.test(t)) return 'sensitive';
   return '';
 }

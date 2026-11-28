@@ -6,6 +6,8 @@ import { readFileSync } from 'node:fs';
 import { unsafeText, unsafeImage, scrubCard, cardUnsafe, adultAllowed, minorBlocked, fileNameOf } from '../void-live-deploy/lib/image-safety.js';
 import { refusal } from '../void-live-deploy/lib/art-rules.js';
 import { findPicturesDetailed } from '../void-live-deploy/lib/free-pics.js';
+import { hasCardPhoto } from '../void-live-deploy/lib/card-forge.js';
+import { ART_SEL } from './guards/cards.mjs';
 
 const BLOCKED = ['nude beach', 'Nude beach', 'naturism', 'naturist resort', 'nudity', 'nudist camp', 'naked', 'topless', 'breast', 'boobs', 'titties', 'tits', 'porn', 'pornography', 'sex',
   'sexual intercourse', 'erotica', 'genitals', 'penis', 'vagina', 'nipple', 'dick', 'clothing-optional', 'skinny dipping', 'strip club', 'lingerie', 'bikini', 'onlyfans', 'hentai', 'adult film',
@@ -17,6 +19,18 @@ test('every sensitive ask is refused a photo, in any casing', () => {
   for (const q of BLOCKED) assert.ok(unsafeText(q.toUpperCase()), q.toUpperCase());
 });
 test('ordinary asks keep their photos', () => { for (const q of SAFE) assert.equal(unsafeText(q), '', q); });
+test('a cut of meat is food, not the body; a bare body word is still blocked', () => {
+  for (const q of ['2 chicken breasts', 'chicken breast', 'turkey breasts', 'duck breast', 'pork loin and chicken breast', 'breasts of chicken']) assert.equal(unsafeText(q), '', q);
+  for (const q of ['breast', 'breasts', 'a woman\'s breast', 'children with chicken breasts']) assert.ok(unsafeText(q), q);
+  // a recipe card's own words must not lose its picture: this is what made "chicken noodle soup" show only the plate
+  assert.equal(cardUnsafe({ dataset: {}, textContent: 'Chicken noodle soup 2 chicken breasts 1 bay leaf', querySelector: () => null }, 'chicken noodle soup recipe'), false);
+});
+test('a card with its own real photo is art, so the forge spends no painting and the guard counts it', () => {
+  const photo = { querySelector: (s) => (s === ':scope > .vc-art .vc-art-photo' ? {} : null) };
+  assert.equal(hasCardPhoto(photo), true);
+  assert.equal(hasCardPhoto({ querySelector: () => null }), false);
+  assert.match(ART_SEL, /vc-art-photo/); // the guard must not call a pictured card a placeholder
+});
 test('minors in a nude, partly clothed or bathing context are blocked with no override', () => {
   assert.ok(minorBlocked(unsafeText('children on the beach')));
   assert.ok(minorBlocked(unsafeText('preteen')));

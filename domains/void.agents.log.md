@@ -1312,6 +1312,7 @@ Format: `ISO | slug | role | event | note`
 2026-11-24T04:42:31Z | openhands | fix | the stranger gate no longer calls Verse's intentionally blank stage a page with no content: it is its own kind, judged by its ask box
 2026-11-24T04:58:15Z | openhands | fix | unblocked the nightly bench feed: handoff-confidence joined a family, skills/index.json was rebuilt from skills/order/, and the bench step now records the floor and misses even when families reports a gap
 2026-11-24T06:46:23Z | claude | fix | Widen team handoff and let the conductor drain unroutable queue jobs
+2026-11-26T16:52:35Z | claude | fix | Card art now keeps its picture when a recipe says chicken breasts, and never spends a painting on a card that already shows its own photo
 2026-11-27T20:10:48Z | bigpickle2 | build | the flights map draws a keyless vector map with inspectable airports and routes
 2026-11-28T02:22:54Z | bigpickle2 | build | Developers & API on /tournaments/: a documented, callable scoring API with a runnable example
 2026-11-28T01:46:09Z | claude | grow | Raw bytes download on /random/: secure bytes from this device saved as a .bin file, with a size, a hex preview and a Raw bytes preset
