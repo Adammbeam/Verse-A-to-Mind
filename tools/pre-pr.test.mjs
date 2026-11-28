@@ -29,7 +29,7 @@ test('the size counts added and removed lines, not build outputs, run records or
 
 test('a branch opens only when it is on main, small and shares no file with another open PR', async () => {
   const { refusals, MAX_LINES } = await import('./pre-pr.mjs');
-  const prs = [{ number: 7, title: 'team crew', files: ['void-live-deploy/functions/api/team.js', 'domains/handoff.md'] }, { number: 9, title: 'mine', files: ['tools/x.mjs'] }];
+  const prs = [{ number: 7, title: 'team crew', check: 'green', files: ['void-live-deploy/functions/api/team.js', 'domains/handoff.md'] }, { number: 9, title: 'mine', files: ['tools/x.mjs'] }];
   assert.deepEqual(refusals({ behind: 0, files: ['tools/x.mjs', 'domains/handoff.md'], numstat: '5\t1\ttools/x.mjs', prs, self: 9 }), []);
   assert.equal(MAX_LINES, 400);
   const [behind] = refusals({ behind: 2, files: ['tools/x.mjs'], numstat: '1\t0\ttools/x.mjs', prs: [] });
@@ -72,7 +72,7 @@ test('growth feeds, proof files and growth entries are shared-ok across open PRs
     'growth/entries/2026-11-27-a.json',
     'void-live-deploy/growth/entries/2026-11-27-b.json',
   ];
-  const prs = [{ number: 42, title: 'other growth PR', files: [...sharedFiles, 'tools/other.mjs'] }];
+  const prs = [{ number: 42, title: 'other growth PR', check: 'green', files: [...sharedFiles, 'tools/other.mjs'] }];
   assert.deepEqual(overlapping(sharedFiles, prs), []);
   assert.deepEqual(overlapping([...sharedFiles, 'tools/other.mjs'], prs), [{ number: 42, title: 'other growth PR', shared: ['tools/other.mjs'] }]);
   assert.deepEqual(overlapping(['tools/test_void.mjs'], [{ number: 43, title: 'another card', files: ['tools/test_void.mjs', 'tools/x.mjs'] }]), [],
@@ -86,6 +86,26 @@ test('a PR that shares only growth run logs with an open PR clears every refusal
   // the #112 / #114 case from the 2026-11-27 audit: only run logs in common, so the PR may open
   assert.deepEqual(refusals({ behind: 0, files: [...logs, 'team/app.js'], numstat: '3\t0\tteam/app.js', prs }), []);
   // a path that only looks like a run log is still a clash
-  const near = overlapping(['growth/entries-old/x.json', 'void-live-deploy/growth.atom.bak'], [{ number: 7, title: 'x', files: ['growth/entries-old/x.json', 'void-live-deploy/growth.atom.bak'] }]);
+  const near = overlapping(['growth/entries-old/x.json', 'void-live-deploy/growth.atom.bak'], [{ number: 7, title: 'x', check: 'green', files: ['growth/entries-old/x.json', 'void-live-deploy/growth.atom.bak'] }]);
   assert.deepEqual(near[0].shared, ['growth/entries-old/x.json', 'void-live-deploy/growth.atom.bak']);
+});
+
+test('overlap waits only for a live older pull request, and generated files do not count', async () => {
+  const { refusals, overlapping } = await import('./pre-pr.mjs');
+  const file = 'tools/lane.mjs';
+  const numstat = '4\t1\ttools/lane.mjs';
+  const now = Date.parse('2026-11-27T12:00:00Z');
+  const newer = { number: 21, title: 'newer', created_at: '2026-11-27T11:00:00Z', files: [file] };
+  const gate = (other) => refusals({ behind: 0, files: [file], numstat, prs: [other, newer], self: 21, now });
+  const base = { number: 10, title: 'older', created_at: '2026-11-20T00:00:00Z', files: [file] };
+  assert.match(gate({ ...base, check: 'green' })[0], /open PR #10/);
+  assert.deepEqual(gate({ ...base, check: 'red', pushed_at: '2026-11-27T11:30:00Z' }), []);
+  assert.deepEqual(gate({ ...base, check: 'green', draft: true }), []);
+  assert.deepEqual(gate({ ...base, check: 'green', labels: ['hold'] }), []);
+  assert.match(gate({ ...base, check: 'pending', pushed_at: '2026-11-27T11:00:00Z' })[0], /open PR #10/);
+  assert.deepEqual(gate({ ...base, check: 'pending', pushed_at: '2026-11-27T09:00:00Z' }), []);
+  assert.deepEqual(refusals({ behind: 0, files: [file], numstat, prs: [{ ...base, check: 'green' }, { ...newer, check: 'green' }], self: 10, now }), [], 'the older pull request is not held by the newer one');
+  const gen = ['void-live-deploy/skills/index.json', 'skills/index.json', 'void-live-deploy/sitemap.xml', 'void-live-deploy/catalog/tools.json', 'void-live-deploy/tools/index.html'];
+  assert.deepEqual(overlapping(gen, [{ number: 3, title: 'generated', check: 'green', files: gen }], 9), []);
+  assert.deepEqual(overlapping([...gen, file], [{ number: 3, title: 'generated', check: 'green', files: [...gen, file] }], 9), [{ number: 3, title: 'generated', shared: [file] }]);
 });
