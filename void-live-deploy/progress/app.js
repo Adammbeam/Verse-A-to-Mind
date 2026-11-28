@@ -120,3 +120,27 @@ fetch('/api/loops', { cache: 'no-store', credentials: 'same-origin' }).then((r) 
   }
   box.hidden = false;
 }).catch(() => {});
+// rough metered cost by loop (GET /api/cost-usage, owner only): the same gate as the loop census; a visitor's 404 leaves the box hidden
+fetch('/api/cost-usage', { cache: 'no-store', credentials: 'same-origin' }).then((r) => (r.ok ? r.json() : null)).then((j) => {
+  const box = document.getElementById('usage-rank'), body = document.getElementById('usage-rank-rows'), note = document.getElementById('usage-rank-note');
+  if (!box || !body || !note || !j || !Array.isArray(j.rows)) return;
+  note.textContent = j.note + (j.rows.length ? '' : ' No usage logged yet.');
+  body.textContent = '';
+  for (const r of j.rows) {
+    const tr = document.createElement('tr');
+    const cells = [
+      [r.loop, (r.lastDay || '') + (r.lastAt ? ' · last ' + ago(r.lastAt) : '')],
+      [String(r.calls), ''],
+      [r.neurons ? Math.round(r.neurons).toLocaleString() : '—', r.tokens ? Math.round(r.tokens).toLocaleString() + ' tokens' : ''],
+      [r.d1Reads + ' / ' + r.d1Writes, r.r2A + r.r2B ? r.r2A + ' A, ' + r.r2B + ' B R2 ops' : ''],
+      ['est. $' + Number(r.estimateUsd).toFixed(4), 'published unit prices'],
+    ];
+    for (const [main, small] of cells) {
+      const td = document.createElement('td'); td.textContent = main;
+      if (small) { const s2 = document.createElement('div'); s2.className = 'note'; s2.textContent = small; td.appendChild(s2); }
+      tr.appendChild(td);
+    }
+    body.appendChild(tr);
+  }
+  box.hidden = false;
+}).catch(() => {});
