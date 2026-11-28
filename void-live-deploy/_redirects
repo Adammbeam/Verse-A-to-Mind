@@ -32,16 +32,9 @@
 /photos/compress/ /photos/?tab=out 301
 /photos/metadata /photos/?tab=info 301
 /photos/metadata/ /photos/?tab=info 301
-# pages once named after other sites, deeper links, and the short-lived /photos/details/ (2026-11-25) open the photos page tab that does the job
-/photos/photopea/* /photos/?tab=draw 301
-/photos/squoosh/* /photos/?tab=out 301
-/photos/tinypng/* /photos/?tab=out 301
-/photos/iloveimg/* /photos/?tab=out 301
-/photos/exifeditor/* /photos/?tab=info 301
-/photos/exif/* /photos/?tab=info 301
+# pages once named after other sites (their deeper links are at the end of this file, with the other wildcard rules)
 /photos/details /photos/?tab=info 301
 /photos/details/ /photos/?tab=info 301
-/photos/details/* /photos/?tab=info 301
 # the photo details checker by its short name
 /photos/exif /photos/?tab=info 301
 /photos/exif/ /photos/?tab=info 301
@@ -116,7 +109,6 @@
 # the singular name opens the emoji pages (owner, 2026-11-03: /emoji/ was a 404); /emoji/<emoji> opens that emoji on every platform
 /emoji /emojis/ 301
 /emoji/ /emojis/ 301
-/emoji/* /emojis/ 302
 
 # password + base64 family members
 /password/strength /password/?mode=strength 301
@@ -180,3 +172,14 @@
 /dashboard/ /starboard/ 301
 /games /arcade/ 301
 /games/ /arcade/ 301
+
+# wildcard rules last (Cloudflare Pages: static rules before dynamic ones). With a wildcard near the top, only the first 100 rules
+# from it were applied and every static rule after that was silently dropped (/games/, /dashboard/, /videos/, /word-counter/ and others were 404s)
+/photos/photopea/* /photos/?tab=draw 301
+/photos/squoosh/* /photos/?tab=out 301
+/photos/tinypng/* /photos/?tab=out 301
+/photos/iloveimg/* /photos/?tab=out 301
+/photos/exifeditor/* /photos/?tab=info 301
+/photos/exif/* /photos/?tab=info 301
+/photos/details/* /photos/?tab=info 301
+/emoji/* /emojis/ 302
