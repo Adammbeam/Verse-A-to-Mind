@@ -4,7 +4,7 @@
 // tables and reaches no other service, except ask_void, which is /api/answer itself (the route hands it over, ctx.answer: the open
 // web and the model, on that endpoint's terms and limits). One, review_code_closer, is /api/review itself (the route hands it over, ctx.review): the
 // closer read by a model comes only with the key that endpoint takes, on its terms, and the only thing written is that key's daily
-// count. /tools.json is the same list, public. The skill tools (asked by Verse, 2026-10-15) are Verse's most proven read-only (up to ten)
+// count. /tools.json is the same list, public. The skill tools (asked by Verse, 2026-10-15) are Verse's most proven read-only (up to eleven)
 // skills, generated from the ratings (tools/mcp-skills.mjs -> lib/mcp-skills.js): each runs the skill's own code on the server
 // (lib/mcp-run.js, the same run() the page calls; no model in its place) and hands back the link where the skill runs on its card.
 // skill_health reads skills/families.json (the route lends it, ctx.families).
@@ -22,7 +22,7 @@ import { parse as parseColour, contrast as contrastOf, passes, toHex } from './c
 import { SERVICES } from './x402.js';
 
 export const PROTOCOL = '2025-06-18';
-export const SERVER = { name: 'void', title: 'Verse (a-to-mind.com)', version: '1.4.0' };
+export const SERVER = { name: 'void', title: 'Verse (a-to-mind.com)', version: '1.5.0' };
 // Verse's MCP Server Card (SEP-2127, Final; schema v1): the static card at the reserved place beside the endpoint,
 // /api/mcp/server-card (functions/api/mcp/server-card.js). Identity matches server.json (the registry entry) and the
 // endpoint is the one initialize answers on, with the protocol version it speaks; no tools are listed (the card format

@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = resolve(root, 'void-live-deploy/lib/mcp-skills.js');
 const PAGE = resolve(root, 'void-live-deploy/code-review/index.html');
-export const TOP = 10;
+export const TOP = 11;
 // Atom, 2026-11-03: world clock and word definitions come first, then other proven skills that pass a self-test.
 export const PINNED = ['worldtime', 'define'];
 // a tool an agent could use to send, spend or forget is never offered

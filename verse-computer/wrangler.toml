@@ -1,0 +1,20 @@
+# SCAFFOLD — NOT VERIFIED. Cloudflare Containers syntax must be checked against current Cloudflare docs + a real account.
+# Containers require Workers Paid; job says "Cloudflare Container (or the free equivalent)" — COST NOT MEASURED. Get explicit human approval before spending.
+name = "verse-computer"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+[triggers]
+# every 10 minutes; job #11079 says trigger from the existing void-cron tick (knock this worker) instead — see README
+crons = ["*/10 * * * *"]
+
+# Secret NAMES only. Set values with `wrangler secret put VOID_OWNER_TOKEN` — NEVER in this file.
+# VOID_OWNER_TOKEN / CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID / GITHUB_MIRROR_TOKEN / REPO_URL
+
+# [[containers]]                 # UNVERIFIED syntax — see Cloudflare Containers docs before deploy
+# class_name = "VerseComputer"
+# image = "./Dockerfile"
+# max_instances = 1
+
+[observability]
+enabled = true
