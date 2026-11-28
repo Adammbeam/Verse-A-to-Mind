@@ -13,8 +13,8 @@ const HAND_IN_SQL = "INSERT INTO void_crew_outcomes (site, job, agent, handed_at
 const REPORT_SQL = "INSERT INTO void_crew_outcomes (site, job, agent, handed_at, handed_in_at, verified_at, verdict, note) VALUES (?, ?, '', ?, NULL, ?, ?, ?) ON CONFLICT(site, job) DO UPDATE SET verified_at = CASE WHEN excluded.verdict = 'unknown' AND void_crew_outcomes.verdict IN ('verified', 'not-verified') THEN void_crew_outcomes.verified_at ELSE excluded.verified_at END, verdict = CASE WHEN excluded.verdict = 'unknown' AND void_crew_outcomes.verdict IN ('verified', 'not-verified') THEN void_crew_outcomes.verdict ELSE excluded.verdict END, note = CASE WHEN excluded.verdict = 'unknown' AND void_crew_outcomes.verdict IN ('verified', 'not-verified') THEN void_crew_outcomes.note ELSE excluded.note END";
 
 export const hostOf = (value) => String(value || '').trim().replace(/^https?:\/\//i, '').replace(/\/.*$/, '').replace(/[^\w.-]/g, '').slice(0, 120).toLowerCase();
-/** the board this run is measuring: the first explicit CREW_SITE, else this Pages deploy, else the live site. */
-export const siteOf = (env) => hostOf(String((env && env.CREW_SITE || '').split(',')[0])) || hostOf(env && env.CF_PAGES_URL) || 'a-to-mind.com';
+/** the board this run measures: the first explicit CREW_SITE, else the live site. A preview deploy names its own site when it wants its own numbers; it never silently splits the live site's rows across two hosts. */
+export const siteOf = (env) => hostOf(String((env && env.CREW_SITE || '').split(',')[0])) || 'a-to-mind.com';
 /** the hosts an owner call may write for: the live site, an explicit site list, or this Pages deploy. */
 export function sitesOf(env) {
   const e = env || {}, explicit = String(e.CREW_SITE || '').split(',').map(hostOf).filter(Boolean);

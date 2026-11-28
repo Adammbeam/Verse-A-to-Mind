@@ -13,6 +13,7 @@ test('site is the tenant column from the first schema: a fixed host list, never 
   assert.equal(O.hostOf('https://preview.pages.dev/x'), 'preview.pages.dev');
   const env = { CREW_SITE: 'a-to-mind.com, tenant.example', CF_PAGES_URL: 'https://preview.pages.dev' };
   assert.equal(O.siteOf(env), 'a-to-mind.com');
+  assert.equal(O.siteOf({ CF_PAGES_URL: 'https://preview.pages.dev' }), 'a-to-mind.com', 'a preview deploy measures the live site unless it names its own');
   assert.ok(O.siteOk('tenant.example', env) && O.siteOk('preview.pages.dev', env) && O.siteOk('a-to-mind.com', env));
   assert.equal(O.siteOk('https://someone.else/', env), false);
 });
