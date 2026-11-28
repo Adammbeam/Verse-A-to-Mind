@@ -6,10 +6,10 @@ import { ownerOk } from '../../../lib/guard.js';
 import { tick } from '../../../lib/automations-run.js';
 import { crewTick } from '../../../lib/team-crew-run.js';
 import { handIdle, pushAll, sweep, promoteIdeas, verseSays, settleReviews, freeLineTick, retireJunk } from '../team.js';
-import { codestoreTick } from '../../../lib/codestore-tick.js';
 import { dueReport } from '../../../lib/verse-runs.js';
 import { watchKeys } from '../../../lib/key-watch.js';
-import { rallyTick } from '../../../lib/team-rally.js';
+import { landingTick } from '../../../lib/landing-post.js';
+import { recruitReminderTick } from '../../../lib/team-recruit-reminder.js';
 
 export async function onRequestPost({ request, env, waitUntil }) {
   if (!(await ownerOk(request, env))) return new Response('no', { status: 401 });
@@ -22,9 +22,12 @@ export async function onRequestPost({ request, env, waitUntil }) {
   const handed = await handIdle(env, now).catch(() => 0);
   // a secret that was set and went blank is said in #general on the tick that sees it (lib/key-watch.js), state words only
   const keys = await watchKeys(env, now, (body) => verseSays(env, { c: 'general', body, now })).catch(() => null);
+  // auto-post: one #general line when a change lands on main (lib/landing-post.js)
+  const landing = await landingTick(env, now).catch(() => null);
+  // weekly #general recruit reminder at cost 0 (ask-8328)
+  const recruit = await recruitReminderTick(env, now).catch(() => null);
   // hand-ins in review are settled from their pull request, and once an hour #work hears who is free and what is waiting (lib/team-busy.js)
-  // the crew room hears once an hour when there is work and a free seat to take it (lib/team-rally.js), on the same knock as the rest
-  const later = () => Promise.all([crewTick(env).catch(() => null), pushAll(env, now).catch(() => 0), settleReviews(env, now).catch(() => 0), freeLineTick(env, now).catch(() => ''), rallyTick(env, now).catch(() => null), codestoreTick(env, now).catch(() => '')]);
+  const later = () => Promise.all([crewTick(env).catch(() => null), pushAll(env, now).catch(() => 0), settleReviews(env, now).catch(() => 0), freeLineTick(env, now).catch(() => '')]);
   if (typeof waitUntil === 'function') waitUntil(later());
   try {
     const body = await tick(env);
