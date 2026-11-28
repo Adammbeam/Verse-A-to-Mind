@@ -41,6 +41,13 @@ export function appearanceOf(rows) {
   return { pass: list.filter((r) => appearancePass(r.note)).length, total: list.length };
 }
 
+/** Case-file asks. Per-skill example rows (id summon-) are the wider sweep, not the headline. */
+export const caseFile = (rows) => {
+  const list = scored(rows);
+  const file = list.filter((r) => !String(r.id || '').startsWith('summon'));
+  return file.length ? file : list;
+};
+
 /** Level 8: the wanted skill answered and a card or stage thing was usable. */
 export function routingOf(rows) {
   const list = scored(rows).filter((r) => r.level === 8);
@@ -51,6 +58,12 @@ export function routingOf(rows) {
 export function deltaOf(rows) {
   const list = (rows || []).filter((r) => r && typeof r.delta === 'boolean');
   return { pass: list.filter((r) => r.delta).length, total: list.length };
+}
+
+/** Useful structure is a new stage thing or card whose note names an artifact. An article fallback or a generic answer card does not count. */
+export function usefulDelta(before, after) {
+  const pack = (s) => JSON.stringify({ things: (s && s.things) || [], cards: (s && s.cards) || [] });
+  return pack(before) !== pack(after) && appearancePass(after && after.note);
 }
 
 /** Scores in docs/appearance-benchmark.md, or '?' when that file is missing or has no n/10. */
@@ -67,12 +80,16 @@ export function pct(pass, total) {
 }
 
 export function boardOf({ rows = [], probes = null, five = '?', at = new Date().toISOString(), population = '' } = {}) {
-  const appearance = appearanceOf(rows);
+  const headline = appearanceOf(caseFile(rows));
+  const sweep = appearanceOf(rows);
   const routing = routingOf(rows);
   const delta = probes ? deltaOf(probes) : { pass: 0, total: 0 };
+  const sweepText = pct(sweep.pass, sweep.total);
+  const headText = pct(headline.pass, headline.total);
   return {
     at, population,
-    appearance: pct(appearance.pass, appearance.total),
+    appearance: headText,
+    sweep: sweepText !== headText ? sweepText : '',
     delta: pct(delta.pass, delta.total),
     routing: pct(routing.pass, routing.total),
     composition: '?',
@@ -88,6 +105,7 @@ export function render(board) {
     'Current values are from a headless local page. `/api/answer` is stubbed and other hosts do not resolve, so an ask never reaches Workers AI or Groq.',
     '',
     'Measured: ' + (b.at || '?') + (b.population ? '. ' + b.population : ''),
+    ...(b.sweep ? ['Skill-example sweep, secondary: ' + b.sweep + '.'] : []),
     '',
     '| Metric | Current | Goal |',
     '| --- | --- | --- |',
@@ -99,9 +117,9 @@ export function render(board) {
     '',
     '## How each metric is measured',
     '',
-    '**Appearance Test.** Pass when the page loop note names an artifact. Fail when the note is `article fallback`, the generic paraphrase `answer`, or blank. A paraphrase restates the ask instead of leaving a tool. Measured on the asks in the report passed to `--from`, expected-fail rows left out.',
+    '**Appearance Test.** The headline is the case file (levels 1, 4, and 8), not the per-skill examples. Pass when the page loop note names an artifact. Fail when the note is `article fallback`, the generic paraphrase `answer`, or blank. The skill-example sweep is the secondary line.',
     '',
-    '**Artifact Delta.** Pass when stage structure after the answer is not the structure before it. Structure is the stage things (`id` and `kind` in `a2m.void.state.v1`) plus the open card headings (`.vpage`). A whisper with no new thing and no new card fails. Measured by `--probe` on a fresh page per ask.',
+    '**Artifact Delta.** A reply that only explains the ask, or says it back, is not a new artifact. An `article fallback` card or a generic `answer` card does not count. Pass when the stage gains a structured artifact (a tool, tracker, map, chart, timer, board, or system): stage things (`id` and `kind`) or card headings changed, and the loop note names that artifact. Measured by `--probe` on the case-file asks.',
     '',
     '**Natural Ask Routing.** Level 8 of the PWTSR case file: the ask resolved to the wanted skill (a bare note such as `timer` counts, `time` does not count as `timer`) and the result was usable. Goal 90%+. The first measured rate is 20/50.',
     '',
@@ -188,8 +206,7 @@ export async function probe(asks, { deploy = resolve(root, 'void-live-deploy'), 
         } catch (e) { return false; }
       }, c.ask, { timeout: 7000 }).catch(() => {});
       const after = await page.evaluate(snap);
-      const same = JSON.stringify({ things: before.things, cards: before.cards }) === JSON.stringify({ things: after.things, cards: after.cards });
-      out.push({ id: c.id, ask: c.ask, level: c.level, want: c.want, note: after.note, usable: true, errors: [], delta: !same });
+      out.push({ id: c.id, ask: c.ask, level: c.level, want: c.want, note: after.note, usable: true, errors: [], delta: usefulDelta(before, after) });
     }
   } finally {
     await ctx.close().catch(() => {});
@@ -211,14 +228,11 @@ async function main() {
   const explicit = args.includes('--explicit') ? rows.filter((r) => !String(r.id || '').startsWith('summon')) : rows;
   let probes = null;
   if (args.includes('--probe')) probes = await probe(scored(explicit));
-  const fileRows = rows.filter((r) => !String(r.id || '').startsWith('summon'));
-  const all = appearanceOf(rows);
-  const file = appearanceOf(fileRows);
   const board = boardOf({
     rows,
     probes,
     five: readFive(),
-    population: 'Appearance on the full report is ' + pct(all.pass, all.total) + '. On the case file, with no per-skill example, it is ' + pct(file.pass, file.total) + '.' + (probes ? ' Delta probed on ' + probes.length + ' case-file asks.' : ''),
+    population: probes ? 'Delta probed on ' + probes.length + ' case-file asks. An article fallback or a generic answer does not count.' : '',
   });
   const md = render(board);
   if (args.includes('--scoreboard') || args.includes('--write')) {

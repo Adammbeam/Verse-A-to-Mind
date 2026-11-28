@@ -2,21 +2,22 @@
 
 Current values are from a headless local page. `/api/answer` is stubbed and other hosts do not resolve, so an ask never reaches Workers AI or Groq.
 
-Measured: 2026-11-28T16:07:22.022Z. Appearance on the full report is 92.3% (443/480). On the case file, with no per-skill example, it is 56.7% (34/60). Delta probed on 60 case-file asks.
+Measured: 2026-11-28T16:14:31.326Z. Delta probed on 60 case-file asks. An article fallback or a generic answer does not count.
+Skill-example sweep, secondary: 92.3% (443/480).
 
 | Metric | Current | Goal |
 | --- | --- | --- |
-| Appearance Test pass rate | 92.3% (443/480) | 95%+ |
-| Artifact Delta pass rate | 100% (60/60) | 95%+ |
+| Appearance Test pass rate | 56.7% (34/60) | 95%+ |
+| Artifact Delta pass rate | 56.7% (34/60) | 95%+ |
 | Natural Ask Routing accuracy | 40% (20/50) | 90%+ |
 | Composition quality | ? | ? |
 | Five Ask Benchmark | ? | 8-10/10 each |
 
 ## How each metric is measured
 
-**Appearance Test.** Pass when the page loop note names an artifact. Fail when the note is `article fallback`, the generic paraphrase `answer`, or blank. A paraphrase restates the ask instead of leaving a tool. Measured on the asks in the report passed to `--from`, expected-fail rows left out.
+**Appearance Test.** The headline is the case file (levels 1, 4, and 8), not the per-skill examples. Pass when the page loop note names an artifact. Fail when the note is `article fallback`, the generic paraphrase `answer`, or blank. The skill-example sweep is the secondary line.
 
-**Artifact Delta.** Pass when stage structure after the answer is not the structure before it. Structure is the stage things (`id` and `kind` in `a2m.void.state.v1`) plus the open card headings (`.vpage`). A whisper with no new thing and no new card fails. Measured by `--probe` on a fresh page per ask.
+**Artifact Delta.** A reply that only explains the ask, or says it back, is not a new artifact. An `article fallback` card or a generic `answer` card does not count. Pass when the stage gains a structured artifact (a tool, tracker, map, chart, timer, board, or system): stage things (`id` and `kind`) or card headings changed, and the loop note names that artifact. Measured by `--probe` on the case-file asks.
 
 **Natural Ask Routing.** Level 8 of the PWTSR case file: the ask resolved to the wanted skill (a bare note such as `timer` counts, `time` does not count as `timer`) and the result was usable. Goal 90%+. The first measured rate is 20/50.
 

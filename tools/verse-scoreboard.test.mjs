@@ -1,7 +1,7 @@
 // Scoreboard math: appearance, routing, delta, the five-ask file, and the table. No browser, no model.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { appearancePass, appearanceOf, routingOf, deltaOf, fiveAskFrom, boardOf, render, pct } from './verse-scoreboard.mjs';
+import { appearancePass, appearanceOf, routingOf, deltaOf, usefulDelta, fiveAskFrom, boardOf, render, pct } from './verse-scoreboard.mjs';
 
 const row = (over) => ({ level: 8, ask: 'x', want: 'skill:timer', note: 'skill:timer', usable: true, errors: [], status: 'pass', ...over });
 
@@ -26,7 +26,13 @@ test('level 8 routing is the wanted skill, and a bare timer note counts', () => 
   assert.equal(pct(20, 50), '40% (20/50)');
 });
 
-test('delta is a changed structure string, and a missing five-ask file stays unknown', () => {
+test('an article or a generic answer is not useful structure, and a missing five-ask file stays unknown', () => {
+  const empty = { things: [], cards: [] };
+  const timer = { things: ['1:timer'], cards: ['Timer'], note: 'skill:timer' };
+  assert.equal(usefulDelta(empty, timer), true);
+  assert.equal(usefulDelta(empty, { things: [], cards: ['How to track expenses'], note: 'article fallback' }), false);
+  assert.equal(usefulDelta(empty, { things: [], cards: ['Answer'], note: 'answer' }), false);
+  assert.equal(usefulDelta(timer, { ...timer }), false);
   assert.deepEqual(deltaOf([{ delta: true }, { delta: false }, { delta: true }]), { pass: 2, total: 3 });
   assert.equal(fiveAskFrom(null), '?');
   assert.equal(fiveAskFrom('no scores here'), '?');
@@ -44,6 +50,12 @@ test('the table names every row, the goals, and leaves composition unknown', () 
   assert.match(md, /\| Natural Ask Routing accuracy \| 50% \(1\/2\) \| 90%\+ \|/);
   assert.match(md, /\| Composition quality \| \? \| \? \|/);
   assert.match(md, /\| Five Ask Benchmark \| \? \| 8-10\/10 each \|/);
-  assert.match(md, /not a paraphrase|article fallback/);
-  assert.match(md, /stage structure/);
+  assert.match(md, /article fallback/);
+  assert.match(md, /structured artifact/);
+  const inflated = render(boardOf({
+    rows: [row({ id: 'L8-01', ask: 'expenses', note: 'article fallback' }), row({ id: 'summon-clock', ask: 'make a clock', level: 1, want: 'skill:clock', note: 'skill:clock' })],
+    five: '?',
+  }));
+  assert.match(inflated, /\| Appearance Test pass rate \| 0% \(0\/1\) \| 95%\+ \|/);
+  assert.match(inflated, /Skill-example sweep, secondary: 50% \(1\/2\)/);
 });
