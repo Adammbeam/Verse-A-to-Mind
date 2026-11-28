@@ -159,6 +159,12 @@ $('#pay').onclick = async () => {
   $('#paynote').textContent = 'Opening the checkout…';
   const r = await fetch('/api/store/checkout', { method: 'POST', body: JSON.stringify({ items: cart.map((c) => c.id), email: $('#email').value }) }).then((r) => r.json()).catch(() => null);
   if (r && r.mode === 'stripe') { location.href = r.url; return; }
+  if (r && r.mode === 'files') {
+    const files = r.urls || [];
+    files.forEach((u) => window.open(u, '_blank', 'noopener'));
+    $('#paynote').innerHTML = files.length ? 'Your files: ' + files.map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener">file ${i + 1}</a>`).join(' · ') : 'No file was ready.'; // void-review: ok (every url is escaped)
+    return;
+  }
   const urls = (r && r.urls) || cart.map((id) => (products.find((p) => p.id === id) || {}).buy).filter(Boolean);
   urls.forEach((u) => window.open(u, '_blank', 'noopener'));
   $('#paynote').innerHTML = 'Checkout opened on Gumroad: it sends your files and license keys by email. ' + urls.map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener">link ${i + 1}</a>`).join(' · '); // void-review: ok (every url is escaped)

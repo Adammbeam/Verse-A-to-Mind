@@ -86,6 +86,20 @@ export const ADAPTERS = {
   },
 };
 
+// A download with files and no Gumroad permalink was checking out as { ok:true, urls:[] }: the Gumroad adapter
+// only keeps permalinks. These links are the files Verse already stores. The token uses a free_ order id, which
+// /api/store/download already serves, because there is no payment permalink to confirm. The catalog price is unchanged.
+export async function hostedFileUrls(products, { origin, key, now = Date.now(), sign = signToken } = {}) {
+  if (!key || !origin) return [];
+  const urls = [], e = now + 24 * 3600e3, root = String(origin).replace(/\/$/, '');
+  for (const p of products || []) {
+    if (!p || p.gumroad || !Array.isArray(p.files) || !p.files.length) continue;
+    const order = 'free_' + crypto.randomUUID().replace(/-/g, '');
+    for (let i = 0; i < p.files.length; i++) urls.push(root + '/api/store/download?t=' + await sign(key, { o: order, p: p.id, f: i, e }));
+  }
+  return urls;
+}
+
 export const ORDERS_TABLE = 'CREATE TABLE IF NOT EXISTS store_orders (id TEXT PRIMARY KEY, provider TEXT, ref TEXT UNIQUE, email_hash TEXT, items TEXT, cents INTEGER, status TEXT, created TEXT, refunded TEXT, pi TEXT)';
 export async function emailHash(key, email) { return hex(await hmac(key, 'email:' + String(email || '').trim().toLowerCase())); }
 export const orderCode = (id) => String(id).slice(-8).toUpperCase();

@@ -17,7 +17,7 @@ import { parsePing } from '../../../lib/earnings.js';
 import { ownerOk } from '../../../lib/guard.js';
 import { specialRails, instructions, verifyUsdcTx, usdcUnits, railsOf, USDC_BASE } from '../../../lib/alt-pay.js';
 import { sellerMatches } from '../../../lib/gumroad.js';
-import { gumroadUrl, STORE_PRODUCTS, productOf, publicCatalog, providerOf, signingKey, signToken, verifyToken, licenseKey, verifyStripe, ADAPTERS, ORDERS_TABLE, emailHash, orderCode } from '../../../lib/store.js';
+import { gumroadUrl, STORE_PRODUCTS, productOf, publicCatalog, providerOf, signingKey, signToken, verifyToken, licenseKey, verifyStripe, ADAPTERS, ORDERS_TABLE, emailHash, orderCode, hostedFileUrls } from '../../../lib/store.js';
 
 const J = (b, s = 200, cache = 'no-store') => Response.json(b, { status: s, headers: { 'cache-control': cache } });
 const DAY = 24 * 3600e3;
@@ -79,7 +79,11 @@ export async function onRequest(ctx) {
         }
         meta.share = p.id;
       }
-      return J({ ok: true, ...(await ADAPTERS[s.provider].checkout(items, { env, origin, email, amounts, meta })) });
+      const paid = await ADAPTERS[s.provider].checkout(items, { env, origin, email, amounts, meta });
+      if (paid.url) return J({ ok: true, ...paid }); // a hosted payment page: the receipt carries the files after it is paid
+      const files = await hostedFileUrls(items, { origin, key: signingKey(env) });
+      const urls = [...(paid.urls || []), ...files];
+      return J({ ok: true, ...paid, urls, ...(files.length && !(paid.urls || []).length ? { mode: 'files' } : {}) });
     }
     if (path === 'webhook/stripe' && m === 'POST') {
       const body = await request.text();
