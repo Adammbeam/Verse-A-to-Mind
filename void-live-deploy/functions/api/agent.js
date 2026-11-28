@@ -7,7 +7,7 @@
 //                                            Free tier only. A send, pay or delete in that note waits for a yes and nothing is sent.
 // GET ?thread=<id>                        -> the thread, live steps, the Made shelf, the inbox, the daily brief and the model tier.
 // GET ?thread=<id>&task=<id>              -> one task, so a finished one can be reopened from the Made shelf.
-// WHAT A STRANGER COULD MAKE THIS DO: 100 tasks a day per visitor (lib/agent-cap.js); no flat count for everyone: answers come from Workers AI then every free provider with a key, rotated on 429 (lib/agent-providers.js), then the pot (100 a day at most) while it holds money, else a kind message with the UniVerse page. GET ?capacity=1 shows each provider's state. The house lane's owner key skips the visitor limit. A task may ask the free model,
+// WHAT A STRANGER COULD MAKE THIS DO: 100 tasks a day per visitor (lib/agent-cap.js); no flat count for everyone: answers come from Workers AI free models then Groq, rotated on 429 (lib/agent-providers.js). A free or anonymous visitor cannot select a paid model. The house lane's owner key may use the pot's strong model when the pot holds money (100 a day at most), else a kind message with the UniVerse page. GET ?capacity=1 shows each provider's state. The house lane's owner key skips the visitor limit. A task may ask the free model,
 // its fallback, and one better bot when the first answer does not address the ask. An exact free bot answers with no model call.
 // It can read and mark only its own thread.
 import { tierFor, needsYes, brief, TIERS, inboxOf, decisionOf, planNudge, isNudge, NUDGE_LINE } from '../../lib/agent-core.js';
@@ -16,7 +16,7 @@ import { admit, capReply, billPot, potCents, LIMITS } from '../../lib/agent-cap.
 import { answerFree, capacityOf, parked, park, kindOf, countVia, exhausted, WORKERS } from '../../lib/agent-providers.js';
 import { cap } from '../../lib/daily-cap.js';
 import { costCents } from '../../lib/router.js';
-import { ANSWER_FALLBACK } from '../../lib/models.js';
+import { ANSWER_FALLBACK, models, visitorAttemptModels } from '../../lib/models.js';
 import { reasonOf, recordShortfall } from '../../lib/shortfall.js';
 import { planOf, routeFree, loadRegistry } from '../../lib/answer-free.js';
 import { jsonNoStore } from '../../lib/http.js'; // one copy (lib/http.js, convergence step 3)
@@ -79,8 +79,8 @@ async function pipelineAnswer(env, origin, ask) {
   } catch (_) { return ''; }
 }
 
-// one bot, answered from real capacity: Workers AI's free model then its fallback, then every free provider with a key (lib/agent-providers.js, rotating on
-// 429 or a spent quota), then, only when all of those are out and the pot holds money, the strong model paid for from the pot. Thinking stays off on Workers AI: with
+// one bot, answered from real capacity: Workers AI's free model then its fallback, then Groq (lib/agent-providers.js, rotating on
+// 429 or a spent quota). A paid id is dropped before that loop. Only the owner's key, when the pot holds money, may call the strong model. Thinking stays off on Workers AI: with
 // it on, Gemma 4 can spend the whole budget and return nothing. Each answer is logged with who gave it and what it cost (a step, the task's tier, a per-provider count).
 async function replyFrom(env, db, id, tier, bot, ask, opts = {}) {
   const messages = [{ role: 'system', content: answerBrief(bot, ask) }, { role: 'user', content: ask }];
@@ -93,17 +93,18 @@ async function replyFrom(env, db, id, tier, bot, ask, opts = {}) {
     await step(db, id, opts.via + ' did not answer (' + (one.tried.map((t) => t.model + ' ' + t.why).join(', ') || 'no key here') + ').');
     return { text: '', why: 'free limit' };
   }
+  const freeIds = visitorAttemptModels([tier && tier.model, models('agent'), ANSWER_FALLBACK]);
   if (!(await parked(env, WORKERS.id, '')))
-    for (const model of [tier.model, ANSWER_FALLBACK]) {
+    for (const model of freeIds) {
       let text = '';
       try { text = textOf(await env.AI.run(model, runOpts)); why = ''; } catch (e) { why = reasonOf(e); if (kindOf(e && e.status, String((e && e.message) || e)) === 'day') { await park(env, WORKERS.id, '', 'day'); break; } }
       if (text.length >= 2) { await said(WORKERS.id, WORKERS.name, model, 0); return { text, why: '' }; }
       if (!why) why = 'empty';
-      if (model !== ANSWER_FALLBACK) await step(db, id, 'The ' + tier.name + ' model did not answer (' + why + '); asking the second free model.');
+      if (model !== ANSWER_FALLBACK) await step(db, id, 'The free model did not answer (' + why + '); asking the second free model.');
     }
   const free = await answerFree(env, messages, { owner: !!opts.owner });
   if (free.text.length >= 2) { await said(free.provider, free.name, free.model, 0); return { text: free.text, why: '' }; }
-  if ((await potCents(env)) >= LIMITS.minPotCents && (await cap(env, 'agent-paid-all', LIMITS.paidAll)).ok) {
+  if (opts.owner && (await potCents(env)) >= LIMITS.minPotCents && (await cap(env, 'agent-paid-all', LIMITS.paidAll)).ok) {
     const strong = TIERS[TIERS.length - 1].model;
     try {
       const out = await env.AI.run(strong, runOpts), text = textOf(out);
