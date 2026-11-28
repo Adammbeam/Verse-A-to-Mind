@@ -825,7 +825,7 @@ export const PROBES = Object.freeze({
       ['an order lookup', /Find my order/], ['order codes', /order code/i], ['license keys', /License key/], ['signed downloads', /Signed downloads/],
       ['links that last 24 hours', /last 24 hours/], ['a receipt any time', /receipt/i], ['a cart shared as a link', /shared as a link/],
       ['the cart kept on this device', /on this device/], ['works offline', /orks offline/], ['no account', /no account/i], ['no ads', /no ads/i],
-      ['no trackers', /no trackers/i], ['the payment provider credited', /Gumroad/], ['ask Verse from the page', /what can I buy/], ['support the crew', /Tip the crew/],
+      ['no trackers', /no trackers/i], ['the payment provider credited', /Gumroad/], ['ask Verse from the page', /what can I buy/], ['support the crew', /\$1 crew seat/],
     ],
   },
   // travel (owner, 2026-10-26: "need a flights page"): Google Flights is the floor; Verse has no paid fare feed, so the page says so and opens the same search on the providers.

@@ -81,7 +81,7 @@ Verse sets up `you@yourdomain.com` for a creator in minutes and charges for the 
   It runs the guardrails, zips the files, uploads `store/<id>-v1.zip` to R2 (FILMS bucket `void-films`), writes the row (Verse's voice,
   price from `PRICE_RULE`, preview, licence tier), adds a changelog row and queues an ad clip. On the box set
   `WRANGLER_BIN=/workspace/.wrangler3/node_modules/.bin/wrangler` (wrangler 3, which can write its cache there).
-- **Price:** free / pay what you want (the $1 tip jar) until Stripe is on. `--paid` prices by `PRICE_RULE` inside `PRICE_RANGE`
+- **Price:** free or pay what you want until Stripe is on. `--paid` prices by `PRICE_RULE` inside `PRICE_RANGE`
   ($1–$50) and sets status `needs-gumroad`: shown as coming soon, queued in `domains/store.queue.jsonl` for Adam to list by hand
   (there is no Gumroad API key, so no listing is faked).
 - **Guardrails (checks, not approval gates):** price in range; no trademarked names (`TRADEMARKS`) in title, blurb or file names;

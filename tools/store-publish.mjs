@@ -17,7 +17,7 @@
 // Guardrails (low-risk checks, not approval gates): price inside PRICE_RANGE; no trademarked names (TRADEMARKS) in the title,
 // blurb or file names; every file made by Verse or under an allowed licence (ORIGINS); every STL closed and finite and inside the
 // bed; a public changelog row for every new product; and `check` unpublishes a product whose download fails.
-// Until Stripe is on, new products are free / pay-what-you-want (the tip jar). A paid item that can only sell on Gumroad gets
+// Until Stripe is on, new products are free or pay what you want. A paid item that can only sell on Gumroad gets
 // status needs-gumroad and a line in domains/store.queue.jsonl: there is no Gumroad API key, so no listing is faked.
 import fs from 'node:fs';
 import path from 'node:path';

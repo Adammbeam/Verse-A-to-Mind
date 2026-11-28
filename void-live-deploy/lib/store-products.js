@@ -91,8 +91,7 @@ export default [
   "cents": 100,
   "kind": "support",
   "gumroad": "join-the-team",
-  "blurb": "The tip jar: a dollar to back the crew.",
-  "tip": true,
+  "blurb": "A $1 crew seat on Verse's team.",
   "status": "live",
   "origin": "v01d",
   "published": "2026-10-15"
@@ -220,7 +219,7 @@ export default [
    "README.txt",
    "steps.json"
   ],
-  "wouldBe": "$24.00",
+  "wouldBe": "$24.00"
  },
  {
   "id": "remix-kit",

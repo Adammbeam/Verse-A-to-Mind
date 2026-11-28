@@ -1,6 +1,6 @@
 // Relevance gate for the "From A-to-Mind: …" product line (lib/gumroad.js productFor + void.html attachProductTail).
 // A loose match used to append Verse Code Review Pro under an unrelated fallback-stack answer; this keeps the line
-// only when the ask clearly matches a product (code review, automation, board, tip jar) and never on self/meta.
+// only when the ask clearly matches a product (code review, automation, board, crew seat) and never on self/meta.
 import assert from 'node:assert/strict';
 import { productFor, publicProduct } from '../void-live-deploy/lib/gumroad.js';
 import { readFileSync } from 'node:fs';
