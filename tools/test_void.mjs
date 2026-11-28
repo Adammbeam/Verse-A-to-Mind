@@ -12878,6 +12878,30 @@ try {
       /Verse finished a task/.test(inbox) && /Verse needs your yes/.test(inbox) && /Done\. It is on your Made shelf/.test(made0) && open && /Resumed/.test(thread) && /Nothing was sent or paid/.test(thread) && /Hi Bob/.test(shelf) && /Forsyth Park/.test(shelf) && !A.errors.length,
       JSON.stringify({ inbox: inbox.slice(0, 160), thread: thread.slice(0, 200), shelf: shelf.slice(0, 200), open, errors: A.errors }));
     await A.ctx.close(); }
+  if (want("usage rank: the owner sees loops ranked by rough estimate")) {
+    const V = await fresh();
+    await V.p.route(/\/api\/cost-usage/, (r) => r.fulfill({ status: 404, body: 'no' }));
+    await V.p.goto(base + 'progress/'); await V.p.waitForTimeout(700);
+    const visitorHidden = await V.p.$eval('#usage-rank', (e) => e.hidden).catch(() => null);
+    await V.ctx.close();
+    const O = await fresh();
+    const note = 'Rough estimate from Cloudflare published unit prices, not the billed amount; included free allowances and credits are not subtracted.';
+    const rows = [
+      { loop: 'card-art', calls: 30, neurons: 3000, tokens: 0, d1Reads: 0, d1Writes: 100, r2A: 1000, r2B: 0, estimateUsd: 0.0375, estimate: 'usd', lastDay: '2026-11-28', lastAt: '2026-11-28T12:00:00Z' },
+      { loop: 'automations-tick', calls: 96, neurons: 0, tokens: 0, d1Reads: 0, d1Writes: 5000, r2A: 0, r2B: 0, estimateUsd: 0.005, estimate: 'usd', lastDay: '2026-11-28', lastAt: '2026-11-28T12:00:00Z' },
+      { loop: 'answer', calls: 10, neurons: 250, tokens: 0, d1Reads: 0, d1Writes: 0, r2A: 0, r2B: 0, estimateUsd: 0.0028, estimate: 'usd', lastDay: '2026-11-28', lastAt: '2026-11-28T12:00:00Z' },
+    ];
+    await O.p.route(/\/api\/cost-usage/, (r) => r.fulfill(json({ note, rows, at: '2026-11-28T12:00:00Z' })));
+    await O.p.goto(base + 'progress/');
+    await O.p.waitForFunction(() => document.querySelectorAll('#usage-rank-rows tr').length === 3, null, { timeout: 10000 }).catch(() => {});
+    const view = await O.p.$eval('#usage-rank', (e) => ({ hidden: e.hidden, text: e.innerText })).catch(() => null);
+    const text = view ? view.text : '';
+    check('usage rank: on the owner-only progress page loops are ranked by rough USD estimate with the estimate note; a visitor gets no cost box',
+      visitorHidden === true && view && view.hidden === false && /Where the meters run/.test(text) && /not the billed amount/.test(text)
+        && text.indexOf('card-art') < text.indexOf('automations-tick') && text.indexOf('automations-tick') < text.indexOf('answer')
+        && /est\. \$0\.0375/.test(text) && /est\. \$0\.0050/.test(text) && !O.errors.length,
+      JSON.stringify({ visitorHidden, view, errors: O.errors }));
+    await O.ctx.close(); }
   if (want("connected: every floor page links to at least four sibling Verse tools")) {
     const { FLOORS } = await import('../void-live-deploy/lib/tower.js');
     const legacy = new Set(['finance: companiesmarketcap.com', 'finance: finviz.com', 'photos: exifeditor.io', 'photos: exif.tools', 'photos: tinypng.com', 'photos: squoosh.app', 'photos: photopea.com', 'photos: iloveimg.com']);

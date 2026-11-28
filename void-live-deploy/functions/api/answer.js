@@ -28,6 +28,7 @@ import { PAID_MODEL, BUDGET_MS, STRONG_TIMEOUT_MS, SKILLS, classify, settle, pai
 import { nearOf } from '../../lib/near-miss.js';
 import { clefRoute, clefOn, mergeRoute, clefYesNo, closeCall, tieBreak } from '../../lib/clef.js';
 import { recordShortfall, reasonOf } from '../../lib/shortfall.js';
+import { logUsage, usageFrom } from '../../lib/cost-log.js';
 import { isSelfAsk, isCardCorrection, readSelf, selfFacts, cardLists, SELF_RULE, OWN_CARD_RULE, withAim } from '../../lib/self-context.js';
 import { ownCardAnswer, fetchPulls, keptCards } from '../../lib/own-card.js';
 import { ASK_MAX, QUERY_MAX, hasAnswer, supportedOnly, hasCorrection, CORRECTION_RULE, ACT_RULE, FILLER_RULE, dropUnbackedActs, dropFiller, dropErrataVoice, INVENT_RULE, dropUnbackedClaims, citesUnbacked, titledReadings } from '../../lib/answer-honesty.js';
@@ -683,6 +684,8 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   const tryPaid = async (access, why) => {
     try {
       const r = await within(env.AI.run(access.model, { messages, max_tokens: 3000 }), STRONG_TIMEOUT_MS);
+      const u = usageFrom(r);
+      await logUsage(env.DB, 'answer', { calls: 1, neurons: u.neurons, tokens: u.tokens }).catch(() => {});
       const out = scrubOut(redact(noThink(pick(r))), env);
       await recordSpend(env, access, costCents(access.model, r, JSON.stringify(messages).length, String(pick(r)).length), { why });
       return out;

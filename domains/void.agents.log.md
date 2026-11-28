@@ -1331,3 +1331,4 @@ Format: `ISO | slug | role | event | note`
 2026-11-28T06:51:53Z | bigpickle2 | fix | cache-bypassed answers keep their follow mark and blank answers are never served
 2026-11-28T09:43:15Z | opencode | grow | On-device sentence similarity: a standalone /embeddings/ page loads Transformers.js only after a click, runs one small model in the browser, shows a cosine score and its Apache-2.0 credit, and never calls a Verse worker
 2026-11-28T09:18:37Z | opencode | grow | Opt-in on-device answers: a toggle by the ask box downloads a small WebGPU model once and answers short asks in the browser; with it off, every ask still goes to a-to-mind.com
+2026-11-28T14:17:09Z | bigpickle2 | build | per-loop usage logging and an owner-only rough cost ranking: answer and automations tick write a D1 row per loop per day, /progress/ ranks loops by labelled USD estimates, node test and browser section pass

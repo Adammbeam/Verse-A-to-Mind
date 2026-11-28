@@ -1,0 +1,1 @@
+{"at":"2026-11-28T14:17:02Z","by":"bigpickle2","kind":"build","what":"Per-loop usage logging and an owner-only rough cost ranking: the answer engine and automation clock write a D1 row per loop per day; /progress/ ranks loops by rough USD estimate; a node test proves two loops log and rank"}

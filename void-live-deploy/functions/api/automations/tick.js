@@ -10,6 +10,7 @@ import { codestoreTick } from '../../../lib/codestore-tick.js';
 import { dueReport } from '../../../lib/verse-runs.js';
 import { watchKeys } from '../../../lib/key-watch.js';
 import { rallyTick } from '../../../lib/team-rally.js';
+import { logUsage } from '../../../lib/cost-log.js';
 
 export async function onRequestPost({ request, env, waitUntil }) {
   if (!(await ownerOk(request, env))) return new Response('no', { status: 401 });
@@ -28,6 +29,8 @@ export async function onRequestPost({ request, env, waitUntil }) {
   if (typeof waitUntil === 'function') waitUntil(later());
   try {
     const body = await tick(env);
+    // one row a day for the clock loop: its own knock and the D1 it touches here, counted for the owner's cost view
+    await logUsage(env.DB, 'automations-tick', { calls: 1, workerRequests: 1 }).catch(() => {});
     return Response.json({ ...body, reaped, retired, promoted: promoted.length, handed, keysLost: keys ? keys.lost : null, verseRuns: dueReport(new Date()) });
   } catch (_) { return new Response('tick error', { status: 500 }); }
 }
