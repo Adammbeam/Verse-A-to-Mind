@@ -1313,3 +1313,4 @@ Format: `ISO | slug | role | event | note`
 2026-11-24T04:58:15Z | openhands | fix | unblocked the nightly bench feed: handoff-confidence joined a family, skills/index.json was rebuilt from skills/order/, and the bench step now records the floor and misses even when families reports a gap
 2026-11-24T06:46:23Z | claude | fix | Widen team handoff and let the conductor drain unroutable queue jobs
 2026-11-28T01:46:09Z | claude | grow | Raw bytes download on /random/: secure bytes from this device saved as a .bin file, with a size, a hex preview and a Raw bytes preset
+2026-11-28T02:40:37Z | bigpickle2 | build | RND key on /calculator/: a random number between 0 and 1 made with crypto.getRandomValues, with a focused browser test
