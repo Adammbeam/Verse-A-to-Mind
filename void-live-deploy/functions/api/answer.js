@@ -24,7 +24,7 @@ import { runFree } from '../../lib/ai-gateway.js';
 import { keeperOf, scrubOut } from '../../lib/keeper.js';
 import { scrubSites } from '../../lib/scrub-sites.js';
 import { redactPersonal } from '../../lib/privacy.js';
-import { PAID_MODEL, BUDGET_MS, STRONG_TIMEOUT_MS, SKILLS, classify, settle, paidAccess, costCents, recordSpend, logRoute } from '../../lib/router.js';
+import { PAID_MODEL, BUDGET_MS, STRONG_TIMEOUT_MS, SKILLS, classify, settle, paidAccess, costCents, recordSpend, logRoute, skillAskOf } from '../../lib/router.js';
 import { nearOf } from '../../lib/near-miss.js';
 import { clefRoute, clefOn, mergeRoute, clefYesNo, closeCall, tieBreak } from '../../lib/clef.js';
 import { recordShortfall, reasonOf } from '../../lib/shortfall.js';
@@ -539,7 +539,7 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
     const hit = masked || self || told || before || talk ? null : await env.DB.prepare('SELECT answer, sources, at FROM void_answers WHERE id = ? AND at > ?').bind(key, new Date(Date.now() - TTL_DAYS * 864e5).toISOString()).first();
     // an answer cached before sources were filtered is filtered on the way out (lib/cite.js)
     // a cached answer that cites a caveat or a notation was written before lib/answer-honesty.js checked them: it is answered again, not served
-    if (hit && !isNoAnswer(hit.answer) && !citesUnbacked(hit.answer) && !talksLimits(hit.answer) && !(isMakeAsk(ask) && hit.sources !== '[]')) { const c = keepCited(dropFiller(dropUnbackedActs(hit.answer)) || hit.answer, JSON.parse(hit.sources)), out = { answer: c.answer, sources: linked(c.sources), at: hit.at, cached: true, source: 'cache:d1' }; if (edgeKeep) edgeKeep(out, hit.at); return Response.json(out); } // a refusal cached before this check is not served again
+    if (hit && !isNoAnswer(hit.answer) && !citesUnbacked(hit.answer) && !talksLimits(hit.answer) && !(isMakeAsk(ask) && hit.sources !== '[]')) { const c = keepCited(dropFiller(dropUnbackedActs(hit.answer)) || hit.answer, JSON.parse(hit.sources)), skill = skillAskOf(ask), out = { answer: c.answer, sources: linked(c.sources), at: hit.at, cached: true, source: 'cache:d1', ...(skill ? { route: 'skill', skill } : {}) }; if (edgeKeep) edgeKeep(out, hit.at); return Response.json(out); } // a refusal cached before this check is not served again; an exact skill ask still says which skill it is
   } catch (_) {}
   if (await rateLimited(request, env)) return Response.json({ answer: null, sources: [], note: 'slow down' }, { status: 429 });
   if (plan && plan.kind === 'api') { const r = await routeFree(ask, { env, registry: await loadRegistry(env, request.url) }).catch(() => null); if (r) return Response.json(r); } // out, failed or empty: the model answers
