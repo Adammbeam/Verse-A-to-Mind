@@ -127,8 +127,10 @@
 # scores + calculator family members
 /scores/sports /scores/?mode=sports 301
 /scores/sports/ /scores/?mode=sports 301
-/calculators /calculator/?mode=formulas 301
-/calculators/ /calculator/?mode=formulas 301
+# /calculators/?calc= keeps the formula. A target that already has ? replaces the incoming query on Pages, so this
+# opens the keypad file and lets calc (and the rest) through. /calculator/?mode=formulas still loads the same file.
+/calculators /calculator/modes/formulas 301
+/calculators/ /calculator/modes/formulas 301
 
 # random + markets family members
 /random/coin /random/?mode=coin 301
