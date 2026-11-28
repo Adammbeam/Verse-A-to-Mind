@@ -14,7 +14,7 @@ import { generatedTouched, BUILD_OUTPUTS } from './generated.mjs';
 import { APPEND_JSON, APPEND_TEXT } from './records.mjs';
 import { COMMON } from './collide.mjs';
 import { publicRivalHits } from './rival-public.mjs';
-import { wipeRefusal, skillIndexGaps, allowWipe } from './wipe-guard.mjs';
+import { wipeRefusal, allowWipe } from './wipe-guard.mjs';
 // the branch a pull request goes into: origin/main, or PRE_PR_BASE (e.g. verse/main in a clone whose origin is the old repo; set GH_REPO to match)
 const BASE = process.env.PRE_PR_BASE || 'origin/main';
 
@@ -64,13 +64,14 @@ export function overlapping(files, prs, self = null, ok = SHARED_OK) {
 }
 
 /** every refusal for this branch, as lines to print; empty when it may open. Pure apart from what it is handed. */
-export function refusals({ behind, files, numstat, prs, self, max = MAX_LINES, fresh = [], deleted = 0, treeSize = 0, allowWipe: allow = false, indexNames = [] }) {
+export function refusals({ behind, files, numstat, prs, self, max = MAX_LINES, fresh = [], deleted = 0, treeSize = 0, allowWipe: allow = false }) {
   const out = [];
   if (behind > 0) out.push('this branch is ' + behind + ' commit(s) behind main. Bring main in first (node tools/merge-main.mjs).');
   const wipe = wipeRefusal({ deleted, treeSize, allow });
   if (wipe) out.push(wipe);
-  const gaps = skillIndexGaps({ files, indexNames });
-  if (gaps.length) out.push('these new skills are not in void-live-deploy/skills/index.json (deploy.yml is parked, so the ask bar will not see them): ' + gaps.join(', ') + '. Run node tools/skills-index.mjs --write and include the index in the commit.');
+  // An order file is the source of the routing list. skills/index.json is a build output: the deploy
+  // (tools/refresh.mjs) and the one main refresh (tools/main-regen.mjs) rewrite it. A skill pull request
+  // does not commit the index, so a missing name there is not a refusal.
   const freshSet = new Set(fresh);
   const generated = generatedTouched(files).filter((f) => !freshSet.has(f));
   if (generated.length) out.push('these are written at deploy, from their own sources. Take them out of the commit:\n  ' + generated.join('\n  ') +
@@ -126,14 +127,7 @@ function main() {
   const tree = git(['ls-tree', '-r', '--name-only', BASE]);
   const deleted = del.status === 0 ? String(del.stdout || '').split('\n').filter(Boolean).length : 0;
   const treeSize = tree.status === 0 ? String(tree.stdout || '').split('\n').filter(Boolean).length : 0;
-  let indexNames = [];
-  try {
-    const src = (files || []).includes('void-live-deploy/skills/index.json')
-      ? git(['show', 'HEAD:void-live-deploy/skills/index.json'])
-      : git(['show', BASE + ':void-live-deploy/skills/index.json']);
-    if (src.status === 0) indexNames = JSON.parse(src.stdout);
-  } catch (_) {}
-  const out = refusals({ behind, files, numstat: numstat.stdout, prs, self, fresh, deleted, treeSize, allowWipe: allowWipe(), indexNames });
+  const out = refusals({ behind, files, numstat: numstat.stdout, prs, self, fresh, deleted, treeSize, allowWipe: allowWipe() });
   for (const hit of publicRivalHits()) out.push('a public page names or links its rival: ' + hit);
   if (out.length) { for (const o of out) console.error('pre-pr: ' + o); process.exit(1); }
   console.log('pre-pr: on top of main, ' + diffSize(numstat.stdout).lines + ' changed lines (at most ' + MAX_LINES + '), no build output, ' + (prs ? 'no file another open PR changes' : 'open PRs not checked (gh could not list them)'));

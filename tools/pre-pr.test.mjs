@@ -46,15 +46,14 @@ test('a branch opens only when it is on main, small and shares no file with anot
   assert.deepEqual(refusals({ behind: 0, files: ['void-live-deploy/skills/guide.json', 'void-live-deploy/skills/families.json'], numstat: '1\t1\tvoid-live-deploy/skills/guide.json\n1\t1\tvoid-live-deploy/skills/families.json', prs: [], fresh: ['void-live-deploy/skills/guide.json', 'void-live-deploy/skills/families.json'] }), []);
 });
 
-test('a tree wipe is refused, and a new skill must be in the index', async () => {
+test('a tree wipe is refused, and an order file does not require the committed index', async () => {
   const { refusals } = await import('./pre-pr.mjs');
   const [wipe] = refusals({ behind: 0, files: ['domains/growth-inbox.md'], numstat: '7\t0\tdomains/growth-inbox.md', prs: [], deleted: 10665, treeSize: 10666 });
   assert.match(wipe, /delete 10665 files/);
   assert.deepEqual(refusals({ behind: 0, files: ['domains/growth-inbox.md'], numstat: '7\t0\tdomains/growth-inbox.md', prs: [], deleted: 10665, treeSize: 10666, allowWipe: true }), []);
-  const [gap] = refusals({ behind: 0, files: ['void-live-deploy/skills/order/1896-stage-pdf', 'void-live-deploy/skills/stage-pdf.js'], numstat: '80\t0\tvoid-live-deploy/skills/stage-pdf.js', prs: [], indexNames: ['pdf-tools'] });
-  assert.match(gap, /stage-pdf/);
-  assert.match(gap, /index.json/);
-  assert.deepEqual(refusals({ behind: 0, files: ['void-live-deploy/skills/order/1896-stage-pdf'], numstat: '0\t0\tvoid-live-deploy/skills/order/1896-stage-pdf', prs: [], indexNames: ['stage-pdf'] }), []);
+  assert.deepEqual(refusals({ behind: 0, files: ['void-live-deploy/skills/order/1896-stage-pdf', 'void-live-deploy/skills/stage-pdf.js'], numstat: '80\t0\tvoid-live-deploy/skills/stage-pdf.js', prs: [] }), [], 'the order file is the source; the index is not part of the pull request');
+  const [idx] = refusals({ behind: 0, files: ['void-live-deploy/skills/index.json', 'void-live-deploy/skills/order/1896-stage-pdf'], numstat: '1\t1\tvoid-live-deploy/skills/index.json', prs: [] });
+  assert.match(idx, /written at deploy/);
 });
 
 test('growth feeds, proof files and growth entries are shared-ok across open PRs', async () => {
