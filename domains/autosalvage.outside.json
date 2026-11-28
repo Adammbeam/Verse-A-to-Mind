@@ -29,6 +29,15 @@
       "target": "data"
     },
     {
+      "id": "mlc-ai/web-llm",
+      "url": "https://github.com/mlc-ai/web-llm",
+      "author": "MLC AI",
+      "license": "Apache-2.0",
+      "what": "In-browser LLM inference with WebGPU",
+      "gap": "opt-in on-device answers",
+      "target": "page"
+    },
+    {
       "id": "tabler/tabler-icons",
       "url": "https://github.com/tabler/tabler-icons",
       "author": "tabler",

@@ -1329,3 +1329,4 @@ Format: `ISO | slug | role | event | note`
 2026-11-28T07:10:58Z | bigpickle2 | fix | live check ties the follow-on line to the answer's followed field
 2026-11-28T07:36:27Z | bigpickle2 | fix | honesty bench claims require the specific honest answer
 2026-11-28T06:51:53Z | bigpickle2 | fix | cache-bypassed answers keep their follow mark and blank answers are never served
+2026-11-28T09:18:37Z | opencode | grow | Opt-in on-device answers: a toggle by the ask box downloads a small WebGPU model once and answers short asks in the browser; with it off, every ask still goes to a-to-mind.com
