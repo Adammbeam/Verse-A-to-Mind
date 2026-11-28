@@ -4,7 +4,7 @@
 // workflow that runs it on every red run of main (actions-failures.yml), and the incident autopsy's view of it.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync, mkdtempSync, writeFileSync, mkdirSync, chmodSync, rmSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync, mkdtempSync, writeFileSync, mkdirSync, chmodSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { join, resolve, dirname } from 'node:path';
@@ -14,6 +14,12 @@ import { readRun, readActions, writeEntry, ghGet } from './actions-failure.mjs';
 import skill, { actOf } from '../void-live-deploy/skills/incident-autopsy.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+// The old repo's workflows are parked on this repo: read them where they now live.
+const wfPath = (name) => { const p = join(root, '.github/workflows', name); return existsSync(p) ? p : join(root, '.github/workflows-parked', name); };
+const wfNames = () => [...new Set(['workflows', 'workflows-parked'].flatMap((d) => {
+  const dir = join(root, '.github', d);
+  return existsSync(dir) ? readdirSync(dir).filter((f) => /\.ya?ml$/.test(f)).map((f) => (/^name:\s*(.+)$/m.exec(readFileSync(join(dir, f), 'utf8')) || [])[1]).filter(Boolean).map((n) => n.trim().replace(/^["']|["']$/g, '')) : [];
+}))];
 const T = (s) => '2026-11-01T02:' + s + 'Z ';
 
 // the shape of run 41264790432's jobs (Verse verify on 814032d5): python-tests failed at step 4 and its "say which job went red" step 5 after it
@@ -144,8 +150,8 @@ test('commit 814032d5: the record read from GitHub names its four failed jobs, a
 });
 
 test('actions-failures.yml: runs on every red run of the workflows that test main, by name, with actions: read and its inputs only through env', () => {
-  const y = readFileSync(join(root, '.github/workflows/actions-failures.yml'), 'utf8');
-  const names = new Set(readdirSync(join(root, '.github/workflows')).filter((f) => /\.ya?ml$/.test(f)).map((f) => (/^name:\s*(.+)$/m.exec(readFileSync(join(root, '.github/workflows', f), 'utf8')) || [])[1]).filter(Boolean).map((n) => n.trim().replace(/^["']|["']$/g, '')));
+  const y = readFileSync(wfPath('actions-failures.yml'), 'utf8');
+  const names = new Set(wfNames());
   const listed = /workflows:\s*\[([^\]]+)\]/.exec(y)[1].split(',').map((x) => x.trim());
   for (const n of listed) assert.ok(names.has(n), 'no workflow is named ' + n);
   assert.ok(listed.includes('Pages guard'), 'failed recovery jobs must enter the incident record');
@@ -168,7 +174,7 @@ function recordWorkflow(pushWorks) {
     put('git', 'printf "%s\\n" "$1" >> "$TRACE"\ncase "$1" in diff) exit 1;; push) [ "$PUSH_WORKS" = yes ];; *) exit 0;; esac\n');
     put('node', 'exit 0\n');
     put('sleep', 'exit 0\n');
-    const y = readFileSync(join(root, '.github/workflows/actions-failures.yml'), 'utf8');
+    const y = readFileSync(wfPath('actions-failures.yml'), 'utf8');
     const script = y.slice(y.indexOf('run: |') + 'run: |'.length).split('\n').map((l) => l.startsWith('          ') ? l.slice(10) : l).join('\n');
     const r = spawnSync('bash', ['--noprofile', '--norc', '-eo', 'pipefail', '-c', script], {
       cwd: dir, encoding: 'utf8', timeout: 5000,
