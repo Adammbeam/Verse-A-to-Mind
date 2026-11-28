@@ -1327,3 +1327,4 @@ Format: `ISO | slug | role | event | note`
 2026-11-28T04:40:31Z | bigpickle2 | fix | sync-free-lanes: guarded the CLI main so importing it does not fetch or rewrite openrouter-free.json; test verifies the registry is untouched and stays clean, CLI still writes; 5/5
 2026-11-28T05:07:13Z | bigpickle2 | fix | /api/answer router: added sudoku and open-tool exemplars so play sudoku and currency converter reply route:skill with the matching skill; new e2e test plus router/near-miss/bench suites 29/29
 2026-11-28T07:10:58Z | bigpickle2 | fix | live check ties the follow-on line to the answer's followed field
+2026-11-28T06:51:53Z | bigpickle2 | fix | cache-bypassed answers keep their follow mark and blank answers are never served
