@@ -30,17 +30,18 @@ Full check runs, whole browser suites, large builds and repeated live probes are
 call. The agent continues with other work and reads the completion notice; it does not poll, sleep on a foreground command,
 or retry a failed program launch in a loop. An OS error from a spawn is final and gets surfaced.
 
-## A paste is a report, an ask or unclear; never a guess (owner, 2026-10-30)
+## A paste is the ask (2026-10-30, revised)
 Adam pasted a copied "What is really true now" card with a long note under it. Verse reopened the frozen card, still at
 "checking GitHub", and dropped the note. An earlier status note came back as a stock answer about Verse's secret names.
-Verse sorts every paste before it answers (`lib/paste-kind.js`, tests in `tools/paste-kind.test.mjs`):
+Verse sorts every paste before it answers (`lib/paste-kind.js`, `lib/paste-read.js`, tests in `tools/paste-kind.test.mjs`):
 - A report (a status report, a CI log, or a copied report card) is taken in as context. Verse checks what it names against
   GitHub and shows what is true now (`skills/telemetry-route.js`). A report never gets secret names or a stock answer.
-- An ask (the first or the last line is a question, a command or a request) gets an answer, as any ask does.
+- A paste that asks something is the ask. One instruction is followed. Several questions or asks are each answered, in
+  order, under a short label (`asksIn` in `lib/paste-read.js`).
+- A document or article with no instruction is read back at once: a short summary, the key points, and what to do with it.
 - A note to someone, or a copied chat, is read as a note (`lib/note-ask.js`). A copied card with nothing more opens as that card.
-- An unclear paste gets one line: "That reads as pasted text with no ask in it. Say "sum it up", or tell me what you want
-  done with it." Verse guesses nothing. "sum it up" within ten minutes sums the paste up from its own words.
-A typed ask is not a paste: one line under 400 characters is routed as before.
+A long paste is never handed back for the person to say what they want, and it is not routed to a skill just because it
+starts with a skill word. A typed ask is not a paste: one line under 400 characters is routed as before.
 
 ## The ladder a person sees is Versus; the code keeps `tower` (owner, 2026-10-25)
 "the tower rename is easy its versus" and "just thought it was right there because Verse". Done the way V01D became Verse

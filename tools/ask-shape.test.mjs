@@ -4,7 +4,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { askShape, isQuestion, isDirective, isPassage, isConversational, PASSAGE_LINE, DIRECTIVE_SAY, DIRECTIVE_DUP, TALK_LINE, fileDirective } from '../void-live-deploy/lib/ask-shape.js';
+import { askShape, isQuestion, isDirective, isPassage, isConversational, DIRECTIVE_SAY, DIRECTIVE_DUP, TALK_LINE, fileDirective } from '../void-live-deploy/lib/ask-shape.js';
 import { isOwnCardNote, isCardCorrection } from '../void-live-deploy/lib/self-context.js';
 import { dropErrataVoice } from '../void-live-deploy/lib/answer-honesty.js';
 
@@ -70,10 +70,10 @@ test('/api/answer: a passage is not answered as a card correction and does not g
   let ran = 0;
   const env = { DB: emptyDb(), AI: { run: async () => { ran++; return { response: 'my card said the build was recorded in void.growth.json on 2026-10-22; it should say the build is recorded that day by grok-bot.' }; } } };
   const res = await post(PASSAGE, env);
-  assert.equal(res.route, 'passage');
+  assert.equal(res.route, 'read');
   assert.notEqual(res.self, true);
-  assert.equal(res.answer, PASSAGE_LINE);
-  assert.doesNotMatch(res.answer, /my card said/i);
+  assert.match(res.answer, /Key points|What to do/);
+  assert.doesNotMatch(res.answer, /pasted text with no ask|say which you want|my card said/i);
   assert.equal(ran, 0, 'the fallback model is not asked');
 });
 
@@ -129,7 +129,7 @@ test('an ordinary question is still a question', () => {
   assert.equal(isCardCorrection('what is a black hole?'), false);
   const src = readFileSync(new URL('../void-live-deploy/functions/api/answer.js', import.meta.url), 'utf8');
   assert.match(src, /const shape = askShape\(ask\)/);
-  assert.match(src, /if \(shape === 'passage'\) return Response\.json\(\{ answer: PASSAGE_LINE/);
+  assert.match(src, /if \(shape === 'passage' && !isNote\(rawAsk\) && !isInstruction\(rawAsk\)\) return Response\.json\(\{ answer: documentRead\(rawAsk\)/);
   assert.match(src, /if \(shape === 'directive'\)/);
 });
 

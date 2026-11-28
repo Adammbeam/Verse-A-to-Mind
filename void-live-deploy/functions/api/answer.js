@@ -61,7 +61,8 @@ import { metaAnswer, isMakeAsk } from '../../lib/meta-ask.js';
 import { everydayAnswer } from '../../lib/everyday-answer.js';
 import { worldAnswer } from '../../lib/world-answer.js';
 import { beforeOf, carries, points, FOLLOW_RULE, beforeBlock, mergeSources } from '../../lib/follow-ask.js';
-import { askShape, PASSAGE_LINE, fileDirective, DIRECTIVE_SAY, DIRECTIVE_DUP, DIRECTIVE_HELD, TALK_LINE } from '../../lib/ask-shape.js';
+import { askShape, fileDirective, DIRECTIVE_SAY, DIRECTIVE_DUP, DIRECTIVE_HELD, TALK_LINE } from '../../lib/ask-shape.js';
+import { asksIn, isInstruction, documentRead, fitAsk, stitchAsks } from '../../lib/paste-read.js';
 import { askWords, grounded, isNameAsk, isNoAnswer, sourcesMatch, suggestedGuess, guessOf, listRedirect, sectionHit, sectionText, linked } from '../../lib/no-answer.js';
 import { recentLines, byMeaning, mergeRecall } from '../../lib/meaning-recall.js';
 import { talkOf, talkBlock, TALK_RULE, introOf, introAnswer } from '../../lib/talk-memory.js';
@@ -480,12 +481,21 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
   if (body && (body.mode === 'story' || body.mode === 'aitext')) return storyAnswer(request, env, body);
   if (body && body.mode === 'rap') return rapAnswer(request, env, body);
   if (body && body.mode === 'market-report') return marketReport(request, env, body); // the /markets/ page's "Verse reports" (lib/report-run.js): one per window for everyone, validated, capped
-  const typed = norm(body.ask), ask = redactPersonal(typed), masked = ask !== typed;
+  const rawAsk = String(body && body.ask || '').replace(/[\u0000-\u0008\u000b-\u001f]/g, ' ').trim().slice(0, 18000);
+  const typed = rawAsk.length > ASK_MAX ? norm(fitAsk(rawAsk)) : norm(body.ask), ask = redactPersonal(typed), masked = ask !== typed;
   if (ask.length < 3) return new Response('empty', { status: 400 });
   if (await stopped(request, env)) return Response.json({ answer: null, sources: [], note: 'paused' }, { status: 403 }); // a banned or locked visitor (functions/api/searches.js)
   // secrets, other visitors' data and harmful asks are answered here, kindly, before any cache, model or skill (lib/keeper.js)
   const kept = keeperOf(typed);
   if (kept) return Response.json({ answer: kept.answer, sources: [], kept: kept.kind });
+  // a long paste is the ask. Several questions are each answered. One instruction is followed. Nothing is handed back.
+  const found = asksIn(rawAsk);
+  if (rawAsk.length > 400 && !(body && body.page) && (found.length >= 2 || (isInstruction(rawAsk) && !isNote(rawAsk)))) {
+    if (await rateLimited(request, env)) return Response.json({ answer: null, sources: [], note: 'slow down' }, { status: 429 });
+    edge.mark = BYPASS;
+    const answer = found.length >= 2 ? await answerAsks(env, found) : await modelLine(env, 'You are Verse. Follow the pasted text. Do what it asks, in plain words. If it is a prompt, carry it out.', fitAsk(rawAsk));
+    return Response.json({ answer: answer || fitAsk(rawAsk).slice(0, 700), sources: [], at: new Date().toISOString(), route: found.length >= 2 ? 'asks' : 'ask' });
+  }
   if (isPayAsk(ask)) return Response.json({ answer: payAnswer(), sources: [], note: 'pay-honest' }); // verified payment facts only (lib/pay-honest.js)
   if (isPriceChangeAsk(ask)) return Response.json({ answer: priceLockAnswer(), sources: [], note: 'price-lock' }); // prices come only from store data (lib/price-lock.js)
   if (body.page && typeof body.page === 'object') return pageAnswer(request, env, ask, body.page);
@@ -506,7 +516,7 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
   // the input's shape, read before classify or any self or errata path (lib/ask-shape.js): a passage or a directive never falls through to the fallback model
   const shape = askShape(ask);
   if (shape !== 'question') edge.mark = BYPASS; // a passage, a directive or talk is answered here and never kept, so the header says it went past the cache
-  if (shape === 'passage') return Response.json({ answer: PASSAGE_LINE, sources: [], at: new Date().toISOString(), route: 'passage' });
+  if (shape === 'passage' && !isNote(rawAsk) && !isInstruction(rawAsk)) return Response.json({ answer: documentRead(rawAsk), sources: [], at: new Date().toISOString(), route: 'read' });
   if (shape === 'directive') {
     const filed = await fileDirective(env, ask);
     return Response.json({ answer: filed.deduped ? DIRECTIVE_DUP : filed.ok ? DIRECTIVE_SAY : DIRECTIVE_HELD, sources: [], at: new Date().toISOString(), route: 'want' });
@@ -609,6 +619,18 @@ export const isPaste = (ask) => { const t = String(ask || ''); return t.length >
 // a challenger is measured the way Verse runs it: thinking off, low reasoning effort, the same token budget.
 export const ANSWER_RUN = { max_tokens: 2200, chat_template_kwargs: { enable_thinking: false }, reasoning_effort: 'low' };
 export const noThink = (t) => String(t || '').replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/^[\s\S]*<\/think>/i, '').trim();
+async function modelLine(env, system, user) {
+  if (!modelsOn(env)) return '';
+  try {
+    const r = await runFree(env, MODEL, { messages: [{ role: 'system', content: system }, { role: 'user', content: String(user || '') }], max_tokens: 500, chat_template_kwargs: { enable_thinking: false }, reasoning_effort: 'low' });
+    return scrubOut(redact(noThink(String(pick(r)).trim())), env);
+  } catch (_) { return ''; }
+}
+async function answerAsks(env, found) {
+  const lines = [];
+  for (const a of found) lines.push(await modelLine(env, 'You are Verse. Answer this one ask in one or two short plain sentences. No preamble and no heading.', a.text));
+  return stitchAsks(found, lines);
+}
 function within(p, ms) { let t; return Promise.race([p, new Promise((_, rej) => { t = setTimeout(() => rej(new Error('timeout')), ms); })]).finally(() => clearTimeout(t)); }
 
 // The model path (on unless VOID_ANSWER_MODELS=off).
@@ -672,7 +694,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
     { role: 'system', content: ANSWER_SYSTEM + ' ' + SELF_RULE + (own ? ' ' + OWN_CARD_RULE : '') + honest },
     { role: 'user', content: `Question: ${ask}\n\nFacts about Verse:\n${facts || '(my facts could not be read just now)'}` },
   ] : [
-    { role: 'system', content: ANSWER_SYSTEM + (sectioned ? ' ' + SECTION_RULE : '') + (note ? ' ' + noteRule(notePage, noteFacts) : isPaste(ask) ? ' ' + PASTE_RULE : '') + (told ? ' ' + TOLD_RULE + ' ' + INJECTION_RULE : '') + (talk ? ' ' + TALK_RULE : '') + honest + (src.length ? ' ' + INVENT_RULE : '') + (measure ? ' ' + measureRule(measure) : '') + (follows ? ' ' + FOLLOW_RULE : '') },
+    { role: 'system', content: ANSWER_SYSTEM + (sectioned ? ' ' + SECTION_RULE : '') + (note ? ' ' + noteRule(notePage, noteFacts) : isPaste(ask) && !isInstruction(ask) ? ' ' + PASTE_RULE : '') + (told ? ' ' + TOLD_RULE + ' ' + INJECTION_RULE : '') + (talk ? ' ' + TALK_RULE : '') + honest + (src.length ? ' ' + INVENT_RULE : '') + (measure ? ' ' + measureRule(measure) : '') + (follows ? ' ' + FOLLOW_RULE : '') },
     { role: 'user', content: `Question: ${ask}\n\n` + talkBlock(talk) + beforeBlock(follows) + (told ? `What you told me:\n${told.map((l) => '- ' + l).join('\n')}\n\n` : '') + `Sources:\n${ctx}` },
   ];
   let answer = '', model = MODEL, outcome = route.kind === 'fallback' ? route.why : 'default', would = null;
