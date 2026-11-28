@@ -99,7 +99,7 @@ export function words(s) {
 }
 /** plain-name matches a word search would miss: a rival tool's words → the Verse page doing that job. Each one checked by hand to do it. */
 export const ALIASES = {
-  'scientific': '/calculators/#keypad', 'basic': '/calculator/', '': '/convert/', 'unit': '/convert/', 'base64': '/base64/', 'time zone': '/time/',
+  'scientific': '/calculator/?mode=formulas#keypad', 'basic': '/calculator/', '': '/convert/', 'unit': '/convert/', 'base64': '/base64/', 'time zone': '/time/',
   'password': '/password/', 'random number': '/calculators/?calc=random-number', 'percentage': '/calculators/?calc=percent-of',
   'triangle': '/calculators/?calc=triangle-solve', 'standard deviation': '/calculators/?calc=descriptive', 'statistic': '/calculators/?calc=descriptive',
   'mean median mode range': '/calculators/?calc=descriptive', 'average': '/calculators/?calc=descriptive', 'fraction': '/calculators/?calc=fraction-math',
@@ -107,7 +107,7 @@ export const ALIASES = {
   'hour': '/calculators/?calc=hours-worked', 'calorie': '/calculators/?calc=bmr', 'tdee': '/calculators/?calc=bmr', 'body fat': '/calculators/?calc=body-fat-navy-men',
   'grade': '/calculators/?calc=final-grade', 'interest': '/calculators/?calc=compound-interest', 'payment': '/calculators/?calc=payoff-time', 'finance': '/calculators/?calc=finance-tvm',
   'income tax': '/calculators/?calc=income-tax-us', 'loan': '/calculators/?calc=loan-payment', 'target heart rate': '/calculators/?calc=target-heart-rate-percent',
-  'pythagorean theorem': '/calculators/?calc=right-triangle', 'exponent': '/calculators/#keypad', 'log': '/calculators/?calc=logarithm', 'quadratic formula': '/calculators/?calc=quadratic',
+  'pythagorean theorem': '/calculators/?calc=right-triangle', 'exponent': '/calculator/?mode=formulas#keypad', 'log': '/calculators/?calc=logarithm', 'quadratic formula': '/calculators/?calc=quadratic',
   'bac': '/calculators/?calc=blood-alcohol-widmark', 'gfr': '/calculators/?calc=egfr-ckd-epi-men', 'lean body mass': '/calculators/?calc=lean-body-mass-boer-men',
   'gas mileage': '/calculators/?calc=fuel-economy', 'mileage': '/calculators/?calc=fuel-economy', 'ohms law': '/calculators/?calc=ohms-law-voltage', 'electricity': '/calculators/?calc=electricity-cost',
   'least common multiple': '/calculators/?calc=gcd-lcm', 'greatest common factor': '/calculators/?calc=gcd-lcm', 'pregnancy conception': '/calculators/?calc=conception',

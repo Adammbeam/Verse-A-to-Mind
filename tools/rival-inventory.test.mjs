@@ -55,7 +55,7 @@ test('words and matching: alias first, then a Verse name or id starting with the
   assert.equal(R.matchTool('Mortgage Payoff Calculator', cat).href, '/calculators/?calc=x');
   assert.equal(R.matchTool('Rent Calculator', cat), null);
   assert.equal(R.matchTool('Period Calculator', cat), null, 'a word in the middle of a name is not a match');
-  assert.deepEqual(R.matchTool('Scientific Calculator', []), { href: '/calculators/#keypad', by: 'alias', name: '' });
+  assert.deepEqual(R.matchTool('Scientific Calculator', []), { href: '/calculator/?mode=formulas#keypad', by: 'alias', name: '' });
 });
 
 test('every alias points at a Verse page or calculator that exists', async () => {
