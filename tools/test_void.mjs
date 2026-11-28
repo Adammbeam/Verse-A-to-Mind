@@ -6982,6 +6982,23 @@ try {
       linked === '40.8' && typed === '0.3' && keyed === '1,024' && rad === '-1' && kept.hist === 4 && kept.mem === 'M = 1,024' && kept.angle === 'Radians' && !Z.errors.length, JSON.stringify({ linked, typed, keyed, rad, kept, errors: Z.errors }));
     await Z.ctx.close();
   }
+  // calculator.net's RND key (job mvswwx66): a random number between 0 and 1 lands in the sum and evaluates to itself
+  if (want("calculator RND key: /calculator/ makes a random number between 0 and 1 that the equals key evaluates")) {
+    const Z = await fresh(); await Z.p.goto(base + 'calculator/');
+    const btn = Z.p.locator('#keys button', { hasText: /^RND$/ });
+    const label = await btn.getAttribute('aria-label');
+    await btn.click();
+    const first = Number(await Z.p.$eval('#expr', (e) => e.value));
+    await Z.p.click('#keys button.eq');
+    const answer = Number((await Z.p.$eval('#out', (e) => e.textContent)).replace(/,/g, ''));
+    await btn.click();
+    const second = Number(await Z.p.$eval('#expr', (e) => e.value));
+    check("calculator RND key: /calculator/ makes a random number between 0 and 1 that the equals key evaluates",
+      label === 'random number between 0 and 1' && Number.isFinite(first) && first >= 0 && first < 1
+      && Math.abs(answer - first) < 1e-9 && Number.isFinite(second) && second >= 0 && second < 1 && !Z.errors.length,
+      JSON.stringify({ label, first, answer, second, errors: Z.errors }));
+    await Z.ctx.close();
+  }
   // the tower's vcalc.com floor: /calculators/ works a formula from its link, takes each input in any unit (or a unit typed in the box),
   // shows the answer in any other with the SI working in pro mode, opens any of the library, and builds your own formula guided or raw
   if (want("formula calculators: /calculators/ works a linked formula in any units, pro shows the working, the library and search open one, and your own formula works guided, raw and from its link")) {
