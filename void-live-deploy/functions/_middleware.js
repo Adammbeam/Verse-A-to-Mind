@@ -1,7 +1,7 @@
 // Full pages (a trailing slash or an html file) answer with Uni unless the visitor is the owner, on Multi, or holds a Uni pass.
 // Home, APIs, assets, legal pages, checkout and health checks are not gated. A Stripe key Stripe will not accept leaves every page open.
 import { gatedPath, liveState, passage, screen, gateHeaders, parseRedirects, redirectTo } from '../lib/page-pass.js';
-import { ownerOnlyPath, ownerGate } from '../lib/owner-gate.js';
+import { ownerOnlyPath, ownerGate, publicStandIn } from '../lib/owner-gate.js';
 import { movedTo } from '../lib/versus-moved.js';
 
 export const PAGES_HOST = 'a-to-mind.pages.dev';
@@ -30,7 +30,11 @@ export async function onRequest(ctx) {
   const moved = /^(GET|HEAD)$/.test(request.method) && movedTo(url.pathname, url.search); // old addresses that moved into Versus: the query stays (lib/versus-moved.js)
   if (moved) return new Response(null, { status: moved.status, headers: { location: new URL(moved.to, url.origin).href, 'cache-control': 'no-store' } });
   if (ownerOnlyPath(url.pathname)) { // files that name the sites Versus is measured against: the owner only (lib/owner-gate.js)
-    if (!/^(GET|HEAD)$/.test(request.method) || !(await ownerGate(request, env))) return new Response('Not found', { status: 404, headers: { 'cache-control': 'no-store' } });
+    if (!/^(GET|HEAD)$/.test(request.method) || !(await ownerGate(request, env))) {
+      const stand = publicStandIn(url.pathname);
+      if (stand && /^(GET|HEAD)$/.test(request.method)) return new Response(null, { status: 301, headers: { location: new URL(stand, url.origin).href, 'cache-control': 'public, max-age=300' } });
+      return new Response('Not found', { status: 404, headers: { 'cache-control': 'no-store' } });
+    }
     const res = await next(), headers = new Headers(res.headers);
     headers.set('cache-control', 'private, no-store');
     return new Response(res.body, { status: res.status, statusText: res.statusText, headers });

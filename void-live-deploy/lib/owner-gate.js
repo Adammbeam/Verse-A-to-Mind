@@ -7,6 +7,9 @@ import { ownerOk, ownerSessionOk, OWNER_SESSION_PREFIX } from './guard.js';
 export const COOKIE = 'verse_owner';
 const EXACT = new Set(['/assimilated.json', '/lib/tower.js', '/lib/tower-weight.js', '/lib/tower-journeys.js', '/lib/versus-floor.js', '/lib/treasury.js', '/lib/reinvest.js',
   '/versus/growth.js', '/versus/card.js', '/versus/compare.js', '/versus/rivals.js', '/versus/assimilated.js', '/versus/obituaries.js', '/versus/universe.js', '/lib/universe.js', '/lib/universe-seeds.js', '/parity.json', '/treasury/policy.json']);
+/** the public file an old owner-only address redirects to, so the address does not 404 for a visitor and the board stays for the owner. */
+export const PUBLIC_STAND_IN = Object.freeze({ '/tower.ideas.json': '/growth/latest.json' });
+export function publicStandIn(pathname) { return PUBLIC_STAND_IN[String(pathname || '')] || ''; }
 /** true for a path only the owner may read. Pure. */
 export function ownerOnlyPath(pathname) {
   const p = String(pathname || '');
