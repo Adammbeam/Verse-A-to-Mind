@@ -6944,6 +6944,17 @@ try {
       && lapRows === 2 && keptLaps === 2 && sec(t2) > sec(t1) && /time is up/i.test(ring.note) && ring.done && !Z.errors.length, JSON.stringify({ stage, lapRows, t1, t2, keptLaps, ring, errors: Z.errors }));
     await Z.ctx.close();
   }
+  // the browser extension on /word-count/: the page shows how to count words on any page, with Verse's own download and source
+  if (want("word count extension: /word-count/ shows how to count words on any page with Verse's extension")) {
+    const Z = await fresh(); await Z.p.goto(base + 'word-count/'); await Z.p.waitForSelector('#extension');
+    const ext = await Z.p.$eval('#extension', (e) => ({ text: e.innerText, shown: e.getBoundingClientRect().height > 0, links: [...e.querySelectorAll('a')].map((a) => a.href) }));
+    check("word count extension: /word-count/ shows how to count words on any page with Verse's extension",
+      ext.shown && /Count words on any page/.test(ext.text) && /count words on this page \(stays in your browser\)/.test(ext.text)
+        && /Developer mode/.test(ext.text) && ext.links.some((u) => u.endsWith('/extension/void-extension.zip'))
+        && ext.links.some((u) => u.endsWith('/tree/main/extension')) && !Z.errors.length,
+      JSON.stringify({ shown: ext.shown, text: ext.text.slice(0, 400), links: ext.links, errors: Z.errors }));
+    await Z.ctx.close();
+  }
   // the rest of wordcounter.net on /word-count/: a goal with its progress, two- and three-word phrases, the limits a text fits, earlier versions
   if (want("word count: /word-count/ takes a goal from its link and shows the progress, repeated phrases and limits, and restores an earlier version")) {
     const Z = await fresh(); const t = 'The blue whale is huge. The blue whale eats krill. A blue whale sings.';
