@@ -2401,7 +2401,7 @@
     "3d8"
    ],
    "tier": "proven",
-   "why": "a self-test, 8 browser-suite mentions, 3 real asks in the benchmark",
+   "why": "a self-test, 4 browser-suite mentions, 3 real asks in the benchmark",
    "flavor": "An old art of the games, tested each day before the sun is up. Let the stage be the proof.",
    "glow": 100,
    "n": 119
@@ -3529,7 +3529,7 @@
     "open a converter"
    ],
    "tier": "proven",
-   "why": "a self-test, 11 browser-suite mentions, 5 real asks in the benchmark",
+   "why": "a self-test, 9 browser-suite mentions, 5 real asks in the benchmark",
    "flavor": "Of all the numbers and money, this one is trusted enough to be taught. The void remembers each asking.",
    "n": 183
   },
@@ -4834,11 +4834,10 @@
    "chapter": "words",
    "name": "sports-browse",
    "title": "Sports browse",
-   "line": "\"browse sports\", \"list of sports\", or bare \"scores\": the sports Verse can show live scores for, and where the rest are",
+   "line": "\"browse sports\", \"list of sports\": the sports Verse can show live scores for, and where the rest are",
    "examples": [
     "browse sports",
-    "list of sports",
-    "scores"
+    "list of sports"
    ],
    "tier": "proven",
    "why": "a self-test, 4 real asks in the benchmark",
@@ -7977,14 +7976,14 @@
    "chapter": "self",
    "name": "share",
    "title": "Share",
-   "line": "A link to this card (?share_text=) or a portable VERSE-STAGE: code across devices",
+   "line": "A link to this card",
    "examples": [
     "share this card",
     "share this card: rain in Lisbon",
     "copy a link to this card"
    ],
    "tier": "proven",
-   "why": "a self-test, 2 browser-suite mentions, 3 real asks in the benchmark",
+   "why": "2 browser-suite mentions, 3 real asks in the benchmark",
    "flavor": "Proven 3 times over by those who asked, and kept among the verse itself. Let the stage be the proof.",
    "glow": 100,
    "n": 434
