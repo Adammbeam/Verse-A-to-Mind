@@ -1315,3 +1315,4 @@ Format: `ISO | slug | role | event | note`
 2026-11-28T02:22:54Z | bigpickle2 | build | Developers & API on /tournaments/: a documented, callable scoring API with a runnable example
 2026-11-28T01:46:09Z | claude | grow | Raw bytes download on /random/: secure bytes from this device saved as a .bin file, with a size, a hex preview and a Raw bytes preset
 2026-11-28T02:40:37Z | bigpickle2 | build | RND key on /calculator/: a random number between 0 and 1 made with crypto.getRandomValues, with a focused browser test
+2026-11-28T03:19:20Z | bigpickle2 | build | Hey Color heading on /paint/: lead the paint-by-number page with the Hey Color name and keep its purpose in the tagline, with a focused browser test
