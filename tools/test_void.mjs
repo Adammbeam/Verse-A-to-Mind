@@ -1577,6 +1577,44 @@ try {
     check('tower: the card has no finished-site link and fits a phone', !v.rot && !v.tower && v.wide && !P.errors.length, JSON.stringify(v).slice(0, 500));
     await P.ctx.close();
   }
+  // The keyless vector map on /flights/map/: MapLibre GL JS is served from this site, the demo style needs no key, and the
+  // airports and routes are the same local files the great-circle map reads. The style is answered offline here: the suite
+  // blocks outside services, so a small empty style stands in for MapLibre's public one and the check is about the page.
+  if (want("vector map: /flights/map/ draws a keyless map, shows the airports and routes, and a click inspects one")) {
+    const P = await fresh(() => {
+      let real;
+      Object.defineProperty(window, 'maplibregl', { configurable: true, get() { return real; }, set(v) {
+        real = v; const M = v.Map;
+        v.Map = function (...args) { const m = new M(...args); window.__verseMap = m; return m; };
+        v.Map.prototype = M.prototype;
+      } });
+    });
+    await P.ctx.route(/demotiles\.maplibre\.org\/style\.json/, (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ version: 8, sources: {}, layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#0b1020' } }] }) }));
+    await P.p.goto(base + 'flights/map/?route=JFK-LHR-SIN');
+    await P.p.waitForFunction(() => document.documentElement.dataset.flightsReady === '1', null, { timeout: 10000 }).catch(() => {});
+    const seen = await until(() => P.p.evaluate(() => {
+      const box = document.querySelector('#vectormap'), canvas = box && box.querySelector('canvas'), note = document.querySelector('#v-note'), attrib = document.querySelector('.maplibregl-ctrl-attrib'), credit = document.querySelector('#v-credit');
+      return canvas && note && /nonstop destinations/.test(note.textContent) ? { canvas: 1, note: note.textContent, attrib: attrib ? attrib.innerText : '', credit: credit ? credit.textContent : '', href: credit && credit.querySelector('a') ? credit.querySelector('a').getAttribute('href') : '' } : null;
+    }), 15000);
+    check('vector map: /flights/map/ draws the map with no key, names the origin and says how many destinations it shows',
+      !!seen && seen.canvas === 1 && /nonstop destinations from LIS/.test(seen.note) && !P.errors.length, JSON.stringify(seen) + ' | ' + P.errors.join(' | '));
+    check('vector map: the MapLibre licence and tile credit are visible on the map and beside it',
+      !!seen && /MapLibre/.test(seen.attrib) && /BSD-3-Clause/.test(seen.attrib) && /Natural Earth/.test(seen.attrib) && /Licence/.test(seen.credit) && /LICENSE\.txt/.test(seen.href),
+      JSON.stringify(seen));
+    await P.p.locator('#v-map').scrollIntoViewIfNeeded();
+    const pin = await until(() => P.p.evaluate(() => {
+      const m = window.__verseMap; if (!m || !m.getSource('v-net')) return null;
+      const f = m.queryRenderedFeatures().find((x) => x.layer.id === 'v-airports'); if (!f) return null;
+      const pt = m.project(f.geometry.coordinates), r = document.querySelector('#v-map canvas').getBoundingClientRect();
+      return { x: r.left + pt.x, y: r.top + pt.y, code: f.properties.code };
+    }), 12000);
+    if (pin) await P.p.mouse.click(pin.x, pin.y);
+    const popup = await P.p.locator('.maplibregl-popup-content').allTextContents().catch(() => []);
+    check('vector map: a click on an airport opens a popup with its code and name', !!pin && popup.some((t) => t.includes(pin.code)), JSON.stringify({ pin, popup, errors: P.errors }).slice(0, 400));
+    await P.p.fill('#v-origin', 'LIS'); await P.p.click('#v-go'); await P.p.waitForTimeout(300);
+    check('vector map: typing another origin redraws the network on the same map', /nonstop destinations from LIS/.test(await P.p.innerText('#v-note')) && (await P.p.evaluate(() => window.__verseMap && window.__verseMap.getSource('v-net') && window.__verseMap.getSource('v-net')._data.features.length > 50)) && !P.errors.length, (await P.p.innerText('#v-note')) + ' | ' + P.errors.join(' | '));
+    await P.ctx.close();
+  }
   // owner audit 2026-11-19: on a touch phone "weather in Lakeland Florida" answered "I could not find it" and the cookie recipe came back as a loose paragraph,
   // because the skill files were still arriving and the ask went on without them. lib/ask-shapes.js names the one file for these shapes, so it loads at once.
   if (want("phone ask: weather in a place and a dish's recipe answer with their own cards on a touch screen, never the 'could not find' line")) { const P = await fresh({ phone: true });
