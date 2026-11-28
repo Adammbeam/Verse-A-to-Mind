@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { createHmac } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { STORE_PRODUCTS, providerOf, signToken, verifyToken, licenseKey, LICENSE_Verse_RE, verifyStripe, buyAnswer, publicCatalog } from '../void-live-deploy/lib/store.js';
+import { STORE_PRODUCTS, providerOf, signToken, verifyToken, licenseKey, LICENSE_Verse_RE, verifyStripe, buyAnswer, publicCatalog, hostedFileUrls } from '../void-live-deploy/lib/store.js';
 import { onRequest } from '../void-live-deploy/functions/api/store/[[path]].js';
 import { storeAsk } from '../void-live-deploy/skills/store.js';
 
@@ -43,6 +43,17 @@ const call = async (path, init = {}) => { const r = await onRequest({ request: n
 let x = await call('status'); assert.equal(x.j.provider, 'gumroad'); assert.equal(x.j.stripe_keys, false); assert.ok(!JSON.stringify(x.j).includes(K), 'no secret values');
 x = await call('checkout', { method: 'POST', body: JSON.stringify({ items: ['one-time-fix', 'void-monthly', 'voidquest-minis'] }) });
 assert.equal(x.j.mode, 'gumroad'); assert.deepEqual(x.j.urls.map((u) => u.split('?')[0]), ['https://moonbeam846.gumroad.com/l/eozcma', 'https://moonbeam846.gumroad.com/l/yinmj']); assert.ok(x.j.urls.every((u) => u.includes('utm_medium=checkout')));
+const hosted = ['remix-kit', 'chess-set-glb', 'v01d-forge-printables', 'site-tester'];
+for (const id of hosted) {
+  x = await call('checkout', { method: 'POST', body: JSON.stringify({ items: [id] }) });
+  assert.equal(x.j.ok, true, id); assert.equal(x.j.mode, 'files', id); assert.equal(x.j.urls.length, 1, id + ' urls');
+  assert.match(x.j.urls[0], /^https:\/\/a-to-mind\.com\/api\/store\/download\?t=/, id);
+  const token = new URL(x.j.urls[0]).searchParams.get('t');
+  assert.equal((await verifyToken(K, token)).p, id, id + ' token');
+}
+x = await call('download?t=' + new URL((await call('checkout', { method: 'POST', body: JSON.stringify({ items: ['chess-set-glb'] }) })).j.urls[0]).searchParams.get('t'));
+assert.equal(x.s, 200, 'the chess set file is the asset the catalog names');
+assert.equal((await hostedFileUrls([{ id: 'remix-kit', gumroad: 'remix-kit', files: [{ key: 'z' }] }], { origin: 'https://a-to-mind.com', key: K })).length, 0, 'a Gumroad permalink stays on Gumroad');
 x = await call('free', { method: 'POST', body: JSON.stringify({ id: 'chess-set-glb' }) });
 assert.equal(x.s, 400, 'paid items are never free');
 x = await call('download?t=' + tok); assert.equal(x.s, 200); assert.match(x.r.headers.get('content-disposition'), /attachment/);
