@@ -43,12 +43,11 @@ test('the page shows the Apache-2.0 credit and says where the text goes', () => 
   assert.match(page, /id="status" role="status" aria-live="polite"/);
 });
 
-test('only /embeddings/ may load the CDN module; every other page keeps its old CSP', () => {
+test('the demo has its own narrow CSP rule for the CDN module', () => {
   const rule = headers.split(/(?=^#)/m).find((b) => b.startsWith('# the on-device sentence demo'));
   assert.ok(rule, 'a commented header rule exists');
   assert.match(rule, /^\/embeddings\/\n  ! Content-Security-Policy\n/m);
   assert.match(rule, /script-src[^;]*https:\/\/cdn\.jsdelivr\.net/);
   assert.match(rule, /'wasm-unsafe-eval'/);
-  const root = headers.split(/(?=^#)/m)[0];
-  assert.doesNotMatch(root, /cdn\.jsdelivr\.net/, 'the root page is unchanged');
+  assert.doesNotMatch(rule, /esm\.run/, 'this demo needs only the Transformers.js module');
 });

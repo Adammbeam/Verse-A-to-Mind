@@ -8,7 +8,7 @@
   Speculation-Rules: "/speculation-rules.json"
 
 
-# the on-device sentence demo (/embeddings/) loads Transformers.js from jsDelivr, and only here: no other page loads an outside module.
+# the on-device sentence demo (/embeddings/) loads Transformers.js from jsDelivr; this route keeps its own narrow rule for that module.
 /embeddings/
   ! Content-Security-Policy
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: https://static.cloudflareinsights.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: wss: blob: data:; frame-src https:; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self' chrome-extension: moz-extension:; form-action 'self' https://gumroad.com https://*.gumroad.com https://checkout.stripe.com; upgrade-insecure-requests
