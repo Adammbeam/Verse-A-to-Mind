@@ -55,3 +55,4 @@ Each playbook is one kind of work a builder did by hand, written so Verse's own 
 | [self-check.md](self-check.md) | a page of Verse's own that the self-check found broken, fixed and checked again on the live site | the finding, after every deploy (`.github/workflows/self-check.yml`); the fix is a builder's |
 | [suite-red.md](suite-red.md) | a browser check red on main: read the check's own JSON, fix the timing, do not loosen the line | not yet |
 | [ledger-wipe.md](ledger-wipe.md) | an append-only ledger wiped whole (the frontier reached main as a `PLACEHOLDER`): restore it, fold in the intended change, and add a base-free guard that fails CI, not only a local check | the guard runs in CI (`tools/guard-source.mjs` in `deploy.yml`); the restore is a builder's |
+| [ollama.md](ollama.md) | a team agent pointed at a local Ollama model (free, local) instead of a paid/cloud key; default cloud path unchanged when Ollama is off | not yet |
