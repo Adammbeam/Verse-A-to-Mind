@@ -168,7 +168,9 @@ function lastHistory(text) {
 }
 function serve() {
   const server = createServer((req, res) => {
-    const path = decodeURIComponent(new URL(req.url, 'http://127.0.0.1').pathname);
+    let path;
+    try { path = decodeURIComponent(new URL(req.url, 'http://127.0.0.1').pathname); }
+    catch (_) { res.writeHead(400); res.end(); return; }
     if (path.startsWith('/api/')) { res.writeHead(200, { 'content-type': 'application/json' }); res.end(path.includes('answer') ? '{"answer":"","sources":[]}' : '{}'); return; }
     if (path.includes('..')) { res.writeHead(400); res.end(); return; }
     const rel = path === '/' ? '/index.html' : path;
@@ -239,20 +241,20 @@ function report(rows, varied, gate, base) {
 
 async function main() {
   const baselineMode = process.argv.includes('--baseline');
-  if (!baselineMode && !existsSync(DOC)) { console.error('docs/appearance-benchmark.md is not on this branch yet; nothing rewritten'); return; }
+  if (!baselineMode && !existsSync(DOC)) { console.error('docs/appearance-benchmark.md is not on this branch yet; running the bench without rewriting it'); }
   const rows = await collect();
   const varied = variety(rows);
   const gate = verdict(rows, varied);
   const sha = shaOf();
   const date = new Date().toISOString().slice(0, 10);
   if (baselineMode) {
-    const page = (() => { try { return execSync('git rev-parse origin/main', { cwd: root, encoding: 'utf8' }).trim(); } catch { return sha; } })();
+    const page = sha;
     writeFileSync(BASELINE, JSON.stringify({ note: 'before: the page on main, before a composed system', date, commit: page, ...verdict(rows, varied), asks: rows }) + '\n');
     report(rows, varied, gate, null);
     console.log('wrote ' + BASELINE);
     return;
   }
-  writeFileSync(DOC, fillTable(readFileSync(DOC, 'utf8'), rows));
+  if (existsSync(DOC)) writeFileSync(DOC, fillTable(readFileSync(DOC, 'utf8'), rows));
   const prev = existsSync(HISTORY) ? lastHistory(readFileSync(HISTORY, 'utf8')) : null;
   const base = existsSync(BASELINE) ? JSON.parse(readFileSync(BASELINE, 'utf8')) : null;
   const broke = regressions(prev, rows);
