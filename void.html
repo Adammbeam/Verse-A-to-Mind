@@ -1218,6 +1218,7 @@
     <div id="stage-chips" class="stage-chips" aria-label="Workspace inputs" hidden></div>
     <div id="row">
       <input id="input" aria-label="Ask Verse" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" writingsuggestions="false" placeholder="Ask Verse" data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" data-lpignore="true" data-1p-ignore data-form-type="other" />
+      <button id="local-toggle" data-local-toggle type="button" aria-pressed="false" aria-label="Answer on this device" title="Answer on this device with a small model (downloads once)" style="appearance:none;-webkit-appearance:none;flex:none;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:transparent;color:#b9c2da;padding:0 10px;min-height:28px;font:11px/1 system-ui,sans-serif;white-space:nowrap;cursor:pointer">on device</button>
       <button id="go" type="button" aria-label="Ask" title="Ask">↵</button>
     </div>
     <div id="whisper" aria-live="polite"></div>
@@ -1231,6 +1232,49 @@
     const AWAY_KEY = 'a2m.void.away.v1'; // when this stage was last left or saved: the world lives on from then (advance in skills/scripts.js)
     // plan item 6: the passkey session on this device ({ token, userId, rev, sig, synced }); see "Your Verse follows you" below
     const ME_KEY = 'a2m.void.me.v1';
+    // Opt-in on-device answers (idea-7723): a small model downloads on a click and stays on this device until switched off.
+    // The default is unchanged: every ask goes to /api/answer. No key, token or page text is stored with this setting.
+    const LOCAL_KEY = 'a2m.void.local.v1';
+    const LOCAL_MODEL = 'SmolLM2-360M-Instruct-q4f16_1-MLC';
+    const LOCAL_JS = 'https://esm.run/@mlc-ai/web-llm@0.2.89';
+    let localOn = false, localEngine = null, localLoading = null;
+    const localBtn = document.getElementById('local-toggle');
+    try { const s = JSON.parse(localStorage.getItem(LOCAL_KEY) || 'null'); localOn = !!(s && s.on === true); } catch (_) {}
+    function localPaint() {
+      if (!localBtn) return;
+      localBtn.setAttribute('aria-pressed', localOn ? 'true' : 'false');
+      localBtn.textContent = localOn ? 'device on' : 'on device';
+      localBtn.title = localOn ? 'Answering on this device; click to answer through a-to-mind.com again' : 'Answer on this device with a small model (downloads once)';
+    }
+    function localStatus(t) { const w = document.getElementById('whisper'); if (w) w.textContent = t || ''; }
+    function localSave() { try { localStorage.setItem(LOCAL_KEY, JSON.stringify({ on: localOn, model: LOCAL_MODEL })); } catch (_) {} }
+    localPaint();
+    async function localEngineGet() {
+      if (localEngine) return localEngine;
+      if (localLoading) return localLoading;
+      localLoading = (async () => {
+        localStatus('downloading the on-device model…');
+        const mod = await import(LOCAL_JS);
+        localEngine = await mod.CreateMLCEngine(LOCAL_MODEL, {
+          initProgressCallback: (p) => localStatus('on-device model ' + Math.round((p.progress || 0) * 100) + '%'),
+        });
+        localStatus('on-device model ready');
+        return localEngine;
+      })();
+      try { return await localLoading; } finally { localLoading = null; }
+    }
+    const localLimit = (p, ms) => new Promise((res, rej) => {
+      const t = setTimeout(() => rej(new Error('the on-device model took too long')), ms);
+      Promise.resolve(p).then((v) => { clearTimeout(t); res(v); }, (e) => { clearTimeout(t); rej(e); });
+    });
+    async function localAsk(text) {
+      const engine = await localEngineGet();
+      const reply = await localLimit(engine.chat.completions.create({
+        messages: [{ role: 'system', content: 'You are Verse. Answer the question in at most two short sentences, plainly and honestly. Say you do not know when unsure. No headings.' }, { role: 'user', content: String(text || '').slice(0, 280) }],
+        temperature: 0, max_tokens: 80, stream: false,
+      }), 60000);
+      return String((reply && reply.choices && reply.choices[0] && reply.choices[0].message && reply.choices[0].message.content) || '').trim();
+    }
     const PAGE = window.__VOID_PAGE__ || null; // a-to-mind.com/@name: someone's published Verse (functions/[handle].js), shown, never saved over yours
     let me = null; try { me = JSON.parse(localStorage.getItem(ME_KEY) || 'null'); } catch (_) {}
     let minePushT = 0, minePulled = 0, mineQuiet = false, pendingForget = null, pkRetryFn = null;
@@ -2843,6 +2887,22 @@ say('nothing selected to remove');
       // a page sent for an answer left the browser: say so on the card (Adam, 2026-10-09: local by default, flag what leaves)
       const about = page ? (page.title ? '<div class="sub">about: ' + esc(page.title) + '</div>' : '') + '<div class="sub page-sent">this page was sent to a-to-mind.com for this answer · not kept</div>' : '';
       const el = showPage((p) => { p.innerHTML = '<h2>' + esc(head) + '</h2>' + about + '<div class="sub">thinking…</div>'; });
+      // opt-in: answer right here, with no ask sent to a-to-mind.com. A failed or slow model falls through to the normal route.
+      if (localOn && !page && !heading && String(text).length <= 280) {
+        say('answering on this device');
+        let ans = '';
+        try { ans = await localAsk(text); } catch (e) {
+          localOn = false; localPaint(); localSave();
+          localStatus('the on-device model was not ready; answered through a-to-mind.com');
+        }
+        if (ans && vpageEl === el) {
+          await mdReady;
+          el.innerHTML = '<h2>' + esc(head) + '</h2>' + fixHtml(ans) // void-review: ok (esc() escapes the heading; fixHtml() renders the model's text)
+            + '<div class="src">written on this device · small model downloaded from esm.run · your question was not sent to a-to-mind.com</div>';
+          say(''); loopLog({ domain: 'void.page', ask: String(text).slice(0, 160), score: 'pass', note: 'on-device' });
+          return 'answer';
+        }
+      }
       say(page ? 'reading the page' : 'looking up');
       let j = null, sentBefore = false, priorSent = null;
       try {
@@ -7177,6 +7237,15 @@ say('nothing selected to remove');
       if (e.key === '/' && !typing) { e.preventDefault(); input.focus(); }
     });
 
+    if (localBtn) localBtn.addEventListener('click', async () => {
+      if (!localOn && !navigator.gpu) { localStatus('this browser has no WebGPU; the on-device model needs it'); return; }
+      localOn = !localOn; localPaint(); localSave();
+      if (!localOn) { if (localEngine) { try { await localEngine.unload(); } catch (_) {} localEngine = null; } localStatus('answering through a-to-mind.com again'); return; }
+      try { await localEngineGet(); } catch (e) {
+        localOn = false; localPaint(); localSave();
+        localStatus('could not load the on-device model; answering through a-to-mind.com');
+      }
+    });
     go.addEventListener('pointerdown', warmAskLibs);
     go.addEventListener('click', () => { handle(input.value); input.value = ''; drawHints(); input.focus(); });
     input.addEventListener('keydown', (e) => {
