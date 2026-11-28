@@ -2783,10 +2783,12 @@ say('nothing selected to remove');
       return /^(what|who)\s+(are|r)\s+(you|u)(?!\s+(?:working\s+on|building|doing|up\s+to|learning|planning|shipping))\b|^what\s+(is|'s)\s+(this|(?:verse|void)|a-to-mind)\b|^what\s+can\s+(you|i|(?:verse|void))\s+do\b|^(help|\?)\s*$|^tell\s+me\s+about\s+(yourself|you|(?:verse|void))\b/.test(lower);
     }
     // "what are you?" / "who are you" / "what is void" / "tell me about yourself": Verse says what it is and its motto first, then
-    // the page (launch audit, 2026-10-15: the bare page read as a sign-in menu). MOTTO is the canon's, word for word
-    // (domains/void.canon.md ## Motto; tools/launch-fixes.test.mjs keeps them the same).
-    const MOTTO = 'You name it, Verse learns it and does it better.';
-    const SELF_LEAD = 'I’m Verse: one box where you ask for anything and it appears as a working card, game or page. My motto: “' + MOTTO + '”';
+    // the page (launch audit, 2026-10-15: the bare page read as a sign-in menu). MOTTO is the canon's first line, word for word
+    // (domains/void.canon.md ## Motto; tools/launch-fixes.test.mjs keeps them the same). The next two lines follow it.
+    const MOTTO = 'Ask, and it appears.';
+    const MOTTO_NEXT = 'Speak it into being.';
+    const MOTTO_SUPPORT = 'From thought to thing.';
+    const SELF_LEAD = 'I’m Verse: one box where you ask for anything and it appears as a working card, game or page. ' + MOTTO + ' ' + MOTTO_NEXT + ' ' + MOTTO_SUPPORT;
     // "what are you working on" is its own skill (lib/will-card.js), never "what are you?"
     function wantsIdentity(lower) {
       return /^(what|who)\s+(are|r)\s+(you|u)(?!\s+(?:working\s+on|building|doing|up\s+to|learning|planning|shipping))\b|^what\s+(is|'s)\s+(this|void|v01d|verse|a-to-mind)\b|^tell\s+me\s+about\s+(yourself|you|void|v01d|verse)\b|^what('?s|\s+is)\s+your\s+motto\b/.test(lower);
