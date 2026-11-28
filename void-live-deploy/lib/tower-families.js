@@ -116,7 +116,7 @@ export const FAMILY_MODE_SRC = Object.freeze({
   "/password/": { "strength": "/password/modes/strength.html" },
   "/base64/": { "bases": "/base64/modes/bases.html" },
   "/scores/": { "sports": "/scores/modes/sports.html" },
-  "/calculator/": { "formulas": "/calculator/modes/formulas.html" },
+  "/calculator/": { "formulas": "/calculator/modes/formulas.html", "vat": "/calculator/modes/vat.html" },
   "/random/": { "coin": "/random/modes/coin.html", "wheel": "/random/modes/wheel.html", "people": "/random/modes/people.html" },
   "/markets/": { "caps": "/markets/modes/caps.html", "screener": "/markets/modes/screener.html" },
   "/color/": { "gradient": "/color/modes/gradient.html" },
