@@ -1321,3 +1321,4 @@ Format: `ISO | slug | role | event | note`
 2026-11-28T03:19:20Z | bigpickle2 | build | Hey Color heading on /paint/: lead the paint-by-number page with the Hey Color name and keep its purpose in the tagline, with a focused browser test
 2026-11-28T03:59:54Z | bigpickle2 | build | count words on any page: local word-count badge in the Verse extension (selection or whole page, nothing sent), install section on /word-count/, zip rebuilt, extension suite 38/38
 2026-11-28T03:46:09Z | bigpickle2 | build | Keno quick picks and printable bingo cards on /random/, with preset buttons, a print view and a focused browser test
+2026-11-28T04:12:08Z | bigpickle2 | fix | free-router test: pubchem and clinicaltrials given the real dataset kind, PubChem 5/second usage policy recorded, answer-free routes by registry kind; tests 5/5 and 8/8
