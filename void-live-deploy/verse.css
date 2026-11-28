@@ -209,3 +209,136 @@ html.vs-tool input:is([type=checkbox], [type=radio]) { min-width: 24px !importan
   html.vs-tool:not([data-theme=light]),
   html.vs-tool:not([data-theme=light]) body { background: Canvas; color: CanvasText; }
 }
+
+/* #workfeed */
+/* Builders and Finished work, painted by team/app.js into #workfeed. Same glass card as
+   the priorities panel: 1200px content box, 20px side padding, left edge aligned with it.
+   The Team heading stays in the page; it is not inside #workfeed.
+   No motion here. Any later one stays in prefers-reduced-motion: no-preference and uses only opacity or transform. */
+#workfeed {
+  box-sizing: content-box;
+  width: min(1200px, calc(100% - 8px));
+  margin-top: 14px;
+  margin-left: calc((100% - min(1240px, 100% + 32px)) / 2);
+  margin-right: calc((100% - min(1240px, 100% + 32px)) / 2);
+  padding: 16px 20px 14px;
+  border-radius: 16px;
+  position: relative;
+  isolation: isolate;
+  background: var(--glass, var(--d-glass));
+  box-shadow: var(--lift, var(--d-lift));
+  color: var(--ink, var(--d-ink));
+  font-family: var(--sans, var(--font));
+}
+#workfeed:empty { display: none; }
+#workfeed::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--rim, var(--d-rim));
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+#workfeed h2 {
+  margin: 18px 0 8px;
+  font-family: var(--sans, var(--font));
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -.015em;
+  line-height: 1.25;
+  color: var(--ink-2, var(--d-ink-2));
+}
+#workfeed h2:first-of-type { margin-top: 0; }
+#workfeed ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#workfeed ul:not(:has(a)):not(:has(b)) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+#workfeed ul:not(:has(a)):not(:has(b)) > li {
+  max-width: 100%;
+  min-height: 36px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / .05);
+  box-shadow: inset 0 0 0 1px var(--line-2, rgb(255 255 255 / .14));
+  color: var(--ink-2, var(--d-ink-2));
+  font-size: 14px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+#workfeed ul:has(> li > b) {
+  display: grid;
+  gap: 8px;
+}
+#workfeed ul:has(> li > b) > li {
+  color: var(--ink, var(--d-ink));
+  font-size: 14px;
+  line-height: 1.4;
+}
+#workfeed ul:has(> li > b) b {
+  color: var(--ink-2, var(--d-ink-2));
+  font-weight: 600;
+}
+#workfeed ul:has(> li > a) > li {
+  min-width: 0;
+  padding: 8px 0;
+  border-top: 1px solid var(--line-2, rgb(255 255 255 / .14));
+}
+#workfeed ul:has(> li > a) > li:first-child {
+  border-top: 0;
+  padding-top: 2px;
+}
+#workfeed a {
+  color: rgb(var(--key, var(--d-key)));
+  text-decoration-line: none;
+  text-underline-offset: 3px;
+  border-radius: 6px;
+}
+#workfeed a:visited { color: rgb(var(--key, var(--d-key))); }
+#workfeed ul:has(> li > a) a {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#workfeed a:hover, #workfeed a:focus { text-decoration-line: underline; }
+#workfeed ul:has(> li > a) a:hover, #workfeed ul:has(> li > a) a:focus {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  display: block;
+  -webkit-line-clamp: unset;
+  max-height: none;
+}
+#workfeed a:focus-visible {
+  outline: 2px solid rgb(var(--key, var(--d-key)));
+  outline-offset: 2px;
+}
+@media (max-width: 480px) {
+  #workfeed ul:has(> li > a) > li {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  #workfeed ul:has(> li > a) a {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    white-space: normal;
+    overflow: hidden;
+    line-height: 1.35;
+  }
+}
+/* /#workfeed */
