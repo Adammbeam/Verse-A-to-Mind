@@ -6,7 +6,22 @@ import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { appearanceFails, artifactCount, artifactDeltaFails, hasStructure } from '../void-live-deploy/lib/appearance.js';
-import { ASKS, isSystemNeed, renderSystem } from '../void-live-deploy/lib/system-intent.js';
+import { isSystemNeed, kindOf, renderSystem } from '../void-live-deploy/lib/system-intent.js';
+
+const ASKS = [
+  'I need a client onboarding system that runs itself.',
+  'Turn weekly client reports into something I never have to think about.',
+  'I keep forgetting invoices.',
+  'Build me a way to track project delivery.',
+  'Our support process is chaos.',
+];
+const REWORD = {
+  onboarding: ['New clients should get set up without me chasing every step.', 'The welcome for a new account should happen on its own.', 'Client setup keeps stalling unless someone babysits it.'],
+  reports: ['Weekly updates for customers should write themselves.', 'I never want to assemble client status notes every week.', 'Recurring customer summaries should go out without my attention.'],
+  invoices: ['Unpaid bills slip my mind.', 'I keep losing track of who hasn\'t paid.', 'Billing follow-up never happens unless I remember.'],
+  delivery: ['I want a board that shows whether projects are on time.', 'Milestones slip and I only notice too late.', 'Project handoff progress needs a living tracker.'],
+  support: ['Support is a mess.', 'We\'re drowning in support tickets.', 'Customer support feels out of control.'],
+};
 
 const root = new URL('..', import.meta.url);
 const RESTATE = 'I would say that you need a system that can automatically onboard clients without human intervention.';
@@ -67,6 +82,24 @@ test('the five problem asks each score at least 7 with no zero, and they are not
     assert.equal(routed, 'system-design', ASKS[i] + ' -> ' + routed);
   }
   assert.equal(new Set(htmls.map(signature)).size, ASKS.length);
+});
+
+test('rewordings land on the same system within 1 point, and the route is not the exact sentence', () => {
+  const deploy = readFileSync(new URL('../void-live-deploy/lib/system-intent.js', import.meta.url), 'utf8')
+    + readFileSync(new URL('../void-live-deploy/skills/system-design.js', import.meta.url), 'utf8');
+  for (const ask of ASKS) assert.equal(deploy.includes(ask), false, ask);
+  const scoreOf = (ask) => {
+    const html = renderSystem(ask, (s) => s);
+    return hasStructure(html) && !appearanceFails(ask, html) ? 10 : 0;
+  };
+  for (let i = 0; i < ASKS.length; i++) {
+    const kind = kindOf(ASKS[i]);
+    const base = scoreOf(ASKS[i]);
+    for (const say of REWORD[kind]) {
+      assert.equal(kindOf(say), kind, say);
+      assert.ok(Math.abs(scoreOf(say) - base) <= 1, say);
+    }
+  }
 });
 
 test('explicit system asks stay with their own skills', async () => {

@@ -1,24 +1,17 @@
-// Natural system problems ("I need a client onboarding system that runs itself") are not a skill prefix.
-// This composes one card from the packs Verse already has. Nothing is sent. Hours come from time-saved and stay labelled estimates.
+// A system problem is a pain in a domain (invoices, support, delivery, reports, onboarding).
+// The wording is not listed. Nothing is sent. Hours come from time-saved and stay labelled estimates.
 import { estimateFor } from '../skills/time-saved.js';
 import { suggestMonitors } from '../skills/monitor-pack.js';
 
-export const ASKS = [
-  'I need a client onboarding system that runs itself.',
-  'Turn weekly client reports into something I never have to think about.',
-  'I keep forgetting invoices.',
-  'Build me a way to track project delivery.',
-  'Our support process is chaos.',
-];
-
 const norm = (t) => String(t || '').trim().replace(/[?!.]+$/, '').replace(/\s+/g, ' ').toLowerCase();
 
-const SHAPE = [
-  [/\bi need\b.*\bonboarding\b.*\b(?:system|runs itself|run itself)\b/, 'onboarding'],
-  [/\bturn\b.*\breports?\b.*\bnever have to\b/, 'reports'],
-  [/\b(?:keep forgetting|forgetting)\b.*\binvoices?\b/, 'invoices'],
-  [/\bbuild me a way to track\b.*\b(?:project|delivery)\b/, 'delivery'],
-  [/\bsupport\b.*\bprocess\b.*\bchaos\b/, 'support'],
+const PAIN = /\b(?:need|needs|want|forget|forgetting|forgot|mess|messy|chaos|drowning|out of control|without|on its own|stall|stalling|slip|slips|never|chore|themselves|living|losing|feels|pile|piles|piling|babysit|chasing|remember|happen|build|track|tracking)\b/;
+const DOMAIN = [
+  [/\binvoices?\b|\bunpaid\b|\bbills?\b|\bbilling\b|hasn'?t paid|have not paid/, 'invoices'],
+  [/\bweekly\b.{0,48}\b(?:reports?|updates?|notes|summaries)\b|\bclient reports?\b|\bcustomer summaries\b|\bstatus notes\b/, 'reports'],
+  [/\bonboard|\bnew clients?\b|\bclient setup\b|\bwelcome\b|\bnew accounts?\b/, 'onboarding'],
+  [/\bmilestones?\b|\bproject delivery\b|\bprojects?\b.{0,24}\bon time\b|\bhandoff progress\b|\btrack projects?\b/, 'delivery'],
+  [/\bsupports?\b|\btickets?\b|\bcustomer help\b|\bcustomer problems\b/, 'support'],
 ];
 
 const PACKS = {
@@ -54,10 +47,11 @@ const PACKS = {
   },
 };
 
-/** which of the five problem shapes this is, or ''. Pure. */
+/** the domain of a pain, or ''. Not keyed on a fixed sentence. Pure. */
 export function kindOf(text) {
   const t = norm(text);
-  for (const [re, kind] of SHAPE) if (re.test(t)) return kind;
+  if (!PAIN.test(t)) return '';
+  for (const [re, kind] of DOMAIN) if (re.test(t)) return kind;
   return '';
 }
 
