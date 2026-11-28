@@ -1,7 +1,7 @@
 /**
  * system-design skill — turn a business idea into a design of the systems, automations, tests, monitors and handoff points Verse will own.
  * Offline, rules-based. Nothing is sent. Reuses existing packs (client-intake, system-slice, monitor-pack, verify-pack, ownership).
- * A natural system problem ("I need a client onboarding system that runs itself") composes those packs into one card (lib/system-intent.js).
+ * A natural system problem composes those packs into one card (lib/system-intent.js).
  * "design the system for client onboarding", "system design for invoice reminders", "design systems for the support flow".
  */
 import { isSystemNeed, renderSystem } from '../lib/system-intent.js';

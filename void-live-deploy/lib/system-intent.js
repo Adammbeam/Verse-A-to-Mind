@@ -1,11 +1,9 @@
-// A system problem is a pain in a domain (invoices, support, delivery, reports, onboarding).
-// The wording is not listed. Nothing is sent. Hours come from time-saved and stay labelled estimates.
+// A system problem is a pain in a domain. The wording is not listed. Nothing is sent.
 import { estimateFor } from '../skills/time-saved.js';
 import { suggestMonitors } from '../skills/monitor-pack.js';
-
 const norm = (t) => String(t || '').trim().replace(/[?!.]+$/, '').replace(/\s+/g, ' ').toLowerCase();
 
-const PAIN = /\b(?:need|needs|want|forget|forgetting|forgot|mess|messy|chaos|drowning|out of control|without|on its own|stall|stalling|slip|slips|never|chore|themselves|living|losing|feels|pile|piles|piling|babysit|chasing|remember|happen|build|track|tracking)\b/;
+const PAIN = /\b(?:need|needs|want|forget|forgetting|forgot|mess|messy|chaos|chaotic|drowning|out of control|without|on its own|stall|stalling|slip|slips|never|chore|themselves|living|losing|feels|pile|piles|piling|babysit|chasing|remember|happen|build|track|tracking)\b/;
 const DOMAIN = [
   [/\binvoices?\b|\bunpaid\b|\bbills?\b|\bbilling\b|hasn'?t paid|have not paid/, 'invoices'],
   [/\bweekly\b.{0,48}\b(?:reports?|updates?|notes|summaries)\b|\bclient reports?\b|\bcustomer summaries\b|\bstatus notes\b/, 'reports'],
@@ -41,21 +39,25 @@ const PACKS = {
   },
   support: {
     title: 'Support process',
-    steps: ['Catch the ticket', 'Sort the queue', 'Reply or escalate', 'Close it with a note'],
-    automations: ['Ticket routing', 'Unanswered-age alert'],
-    next: 'Ask for the process map when the queues are named.',
+    steps: ['Inbound Tickets', 'Priority Routing', 'Owner Assignment', 'SLA Monitor', 'Operations Dashboard', 'Weekly Support Report'],
+    automations: ['Auto-triage', 'Escalation alerts', 'SLA reminders'],
+    next: 'Name the queue owner, then turn the SLA reminders on.',
+    surprise: 'Escalation Risk Monitor',
   },
 };
 
-/** the domain of a pain, or ''. Not keyed on a fixed sentence. Pure. */
-export function kindOf(text) {
+export function domainOf(text) {
   const t = norm(text);
-  if (!PAIN.test(t)) return '';
   for (const [re, kind] of DOMAIN) if (re.test(t)) return kind;
   return '';
 }
 
-/** a natural system problem, not an explicit "process map" or "package this idea" ask. Pure. */
+export function kindOf(text) {
+  const t = norm(text);
+  if (!PAIN.test(t)) return '';
+  return domainOf(t);
+}
+
 export function isSystemNeed(text) {
   const t = norm(text);
   if (!t || t.length > 180) return false;
@@ -63,16 +65,14 @@ export function isSystemNeed(text) {
   return !!kindOf(t);
 }
 
-/** one connected card: steps, automations, monitors, a labelled estimate, and a next step. Pure. */
 export function compose(text) {
-  const kind = kindOf(text) || 'onboarding';
+  const kind = kindOf(text) || domainOf(text) || 'onboarding';
   const pack = PACKS[kind];
   const estimate = estimateFor('time saved for ' + pack.title);
   const monitors = suggestMonitors(pack.title + ' ' + text);
   return { kind, subject: norm(text), ...pack, monitors, estimate };
 }
 
-/** the card HTML. esc is the page escaper. Pure given esc. */
 export function renderSystem(text, esc) {
   const e = typeof esc === 'function' ? esc : (s) => String(s == null ? '' : s);
   const card = compose(text);
@@ -96,9 +96,21 @@ export function renderSystem(text, esc) {
     '<p>' + e(card.next) + '</p>',
   ];
   const links = flow.slice(0, -1).map((a, i) => '<a data-system="' + e(id) + '" data-from="' + a[0] + '" data-to="' + flow[i + 1][0] + '">' + e(a[1]) + ' → ' + e(flow[i + 1][1]) + '</a>').join(' ');
+  const surprise = card.surprise
+    ? sec('escalation-risk', card.surprise, '<p>One extra watch on the queue most likely to breach.</p>')
+      + '<a data-system="' + e(id) + '" data-from="' + flow[flow.length - 1][0] + '" data-to="escalation-risk">' + e(flow[flow.length - 1][1]) + ' → ' + e(card.surprise) + '</a>'
+    : '';
   return '<article data-system="' + e(id) + '"><h2>' + e(card.title) + '</h2>'
     + '<p class="sub">For: ' + e(card.subject) + '</p>'
     + flow.map((a, i) => sec(a[0], a[1], bodies[i])).join('')
+    + surprise
     + '<nav data-system="' + e(id) + '">' + links + '</nav>'
     + '<div class="src">Source: Verse packs already on the stage (process map, automations, monitors, time-saved). The hours are an estimate, not a measurement.</div></article>';
+}
+
+const escHtml = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+export function fallbackSystem(ask) {
+  if (!domainOf(ask)) return '';
+  return renderSystem(ask, escHtml);
 }

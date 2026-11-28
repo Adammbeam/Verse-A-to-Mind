@@ -38,6 +38,7 @@ import { ensure as ensureMemory, lookup as memoryLookup } from '../../lib/memory
 import { prepareProposal, proposalPrompt, parseProposal, ruleProposal, PROPOSAL_SYSTEM } from '../../lib/proposal.js';
 import { cleanGoal, planPrompt, parsePlan, parseTimer, parseNote, keepTimer, PRACTICE_ASK, LEARN_ASK, withLearnStep, PLAN_SYSTEM, PLAN_MIN, planAskOf } from '../../lib/plan.js';
 import { appearanceFails, APPEARANCE_RULE } from '../../lib/appearance.js';
+import { fallbackSystem } from '../../lib/system-intent.js';
 import { analyzeBridge } from '../../lib/bridge.js';
 import { cleanTake } from '../../skills/take.js';
 import { chatMessages, cleanReply, CHAT_SAYS } from '../../lib/character.js';
@@ -785,7 +786,12 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
       const again = scrubOut(redact(noThink(String(pick(r)).trim())), env);
       if (again && !appearanceFails(ask, again)) { answer = again; model = MODEL; outcome += '; appearance test, asked again'; }
     } catch (_) { /* a second restatement is still not an answer */ }
-    if (appearanceFails(ask, answer)) { await log({ model, outcome: outcome + '; appearance test' }); return Response.json({ answer: null, sources: [], note: 'appearance', noAnswer: true, route: route.kind, ...nearOut }); }
+    if (appearanceFails(ask, answer)) {
+      const system = fallbackSystem(ask);
+      await log({ model, outcome: outcome + (system ? '; appearance test, domain system' : '; appearance test') });
+      if (!system) return Response.json({ answer: null, sources: [], note: 'appearance', noAnswer: true, route: route.kind, ...nearOut });
+      return Response.json({ answer: system, sources: [], note: 'system', route: route.kind, ...nearOut });
+    }
   }
   if (!hasAnswer(answer) && note) answer = noteReading(ask, notePage, noteFacts);
   else if (note || isPaste(ask)) answer = noteFinish(answer, ask, note ? noteFacts : telemetryOf(ask) ? [] : setupFacts(ask)); // the cut line and the real secret names, whatever the model gave; a status report is never answered with secret names (docs/RULES.md, 2026-10-30)

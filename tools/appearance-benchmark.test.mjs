@@ -6,7 +6,7 @@ import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { appearanceFails, artifactCount, artifactDeltaFails, hasStructure } from '../void-live-deploy/lib/appearance.js';
-import { isSystemNeed, kindOf, renderSystem } from '../void-live-deploy/lib/system-intent.js';
+import { fallbackSystem, isSystemNeed, kindOf, renderSystem } from '../void-live-deploy/lib/system-intent.js';
 
 const ASKS = [
   'I need a client onboarding system that runs itself.',
@@ -100,6 +100,42 @@ test('rewordings land on the same system within 1 point, and the route is not th
       assert.ok(Math.abs(scoreOf(say) - base) <= 1, say);
     }
   }
+});
+
+const SUPPORT_ORDER = ['Inbound Tickets', 'Priority Routing', 'Owner Assignment', 'SLA Monitor', 'Operations Dashboard', 'Weekly Support Report'];
+const SUPPORT_AUTO = ['Auto-triage', 'Escalation alerts', 'SLA reminders'];
+
+function supportScore(ask, html) {
+  const text = String(html || '');
+  if (!hasStructure(text) || appearanceFails(ask, text)) return 0;
+  const cards = (text.match(/<article\b/gi) || []).length;
+  let at = -1;
+  const ordered = SUPPORT_ORDER.every((name) => { const i = text.indexOf(name); if (i < 0 || i < at) return false; at = i; return true; });
+  const autos = SUPPORT_AUTO.every((name) => text.includes(name));
+  const surprise = (text.match(/data-artifact="escalation-risk"/g) || []).length === 1 && text.includes('Escalation Risk Monitor');
+  const next = text.includes('Next');
+  if (cards !== 1) return ordered ? 6 : 0;
+  return ordered && autos && next && surprise ? 10 : 6;
+}
+
+test('a support paraphrase scores 0 and one connected system scores 10', async () => {
+  const ask = 'Our support process is chaos.';
+  const para = 'Our support process is chaotic.';
+  assert.equal(appearanceFails(ask, para), true);
+  assert.equal(supportScore(ask, para), 0);
+  assert.equal(supportScore(ask, renderSystem(ask, (s) => s) + renderSystem(ask, (s) => s)), 6);
+  const says = [ask, 'Our support process is chaotic', 'Support is a mess', "We're drowning in tickets"];
+  for (const say of says) {
+    assert.equal(kindOf(say), 'support', say);
+    const html = renderSystem(say, (s) => s);
+    assert.equal(supportScore(say, html), 10, say);
+    assert.equal(await routeOf(say), 'system-design', say);
+    const back = fallbackSystem(say);
+    assert.equal(back.includes(para), false);
+    assert.equal(supportScore(say, back), 10, say);
+  }
+  const router = readFileSync(new URL('../void-live-deploy/lib/system-intent.js', import.meta.url), 'utf8');
+  for (const say of says) assert.equal(router.includes(say), false, say);
 });
 
 test('explicit system asks stay with their own skills', async () => {
