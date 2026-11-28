@@ -11,6 +11,7 @@
 // Git checks every object's hash on clone, so a bad pack fails loudly on the reader's side and cannot pass for other code.
 import { whoIs } from '../api/team.js';
 import * as C from '../../lib/codestore.js';
+import { settleStore } from '../../lib/cr-settle-run.js';
 
 const H = { 'cache-control': 'no-store', 'x-robots-tag': 'noindex, nofollow' };
 const json = (o, status = 200) => Response.json(o, { status, headers: H });
@@ -28,7 +29,13 @@ async function who(request, env) { const me = await whoIs(request, env).catch(()
 const byOf = (me) => (me.kind === 'owner' ? 'owner' : 'team:' + me.agent.name);
 const pathOf = (params) => (Array.isArray(params && params.path) ? params.path : [params && params.path].filter(Boolean)).join('/');
 
-export async function onRequest({ request, env, params, fetchFn = fetch, now = Date.now() }) {
+// after a check or deploy report: settle shipped jobs from the store (L1.7); in the background when the platform allows, never failing the report
+function settleAfter(env, now, waitUntil) {
+  const run = settleStore(env, { now }).catch(() => null);
+  if (typeof waitUntil === 'function') { try { waitUntil(run); return null; } catch (_) { /* run goes on */ } }
+  return run;
+}
+export async function onRequest({ request, env, params, fetchFn = fetch, now = Date.now(), waitUntil }) {
   const me = await who(request, env);
   const store = C.bucketOf(env);
   if (!me || !store || !env.DB) return missing();
@@ -97,11 +104,13 @@ export async function onRequest({ request, env, params, fetchFn = fetch, now = D
     if (rest === 'checks') {
       const c = C.checkOf(b); if (!c.ok) return json(c, 400);
       await env.DB.prepare('INSERT INTO void_code_checks (at, ref, sha, state, summary, by) VALUES (?, ?, ?, ?, ?, ?)').bind(now, c.ref, c.sha, c.state, c.summary, byOf(me)).run();
+      await settleAfter(env, now, waitUntil);
       return json({ ok: true }, 201);
     }
     const d = C.deployOf(b); if (!d.ok) return json(d, 400);
     await env.DB.prepare('INSERT INTO void_code_deploys (at, sha, deployment, state, url, by) VALUES (?, ?, ?, ?, ?, ?)').bind(now, d.sha, d.deployment, d.state, d.url, byOf(me)).run();
     await log(env, byOf(me), 'deploy ' + d.deployment + ' ' + d.state + ' at ' + d.sha.slice(0, 9), 0, now);
+    await settleAfter(env, now, waitUntil);
     return json({ ok: true }, 201);
   }
   return missing();

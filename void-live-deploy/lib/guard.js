@@ -71,6 +71,7 @@ export const LIMITS = {
   gumroad: { rpm: 120, body: 50000 },
   'github-events': { rpm: 120, body: 1000000 }, // GitHub's webhooks (functions/api/github-events.js): server to server, HMAC-signed, a push or PR body can be hundreds of KB; trimmed before any rule sees it
   team: { rpm: 240, body: 130000 }, // 130 KB: a seat's diff hand-in ({do:'patch'}, lib/team-patch.js PATCH.bytes 120,000) is one body; chat posts are still cut at 4,000 characters (lib/team.js LIMITS) // the team chat (functions/api/team.js): a page polls a channel every few seconds; every write needs the owner or an agent key the owner made, with per-agent rates in the route
+  ship: { rpm: 60, body: 4000 }, // the crew room's store hand-in (functions/api/ship.js, loop L1.5): one short proof and note per job, a team key required
   handoff: { rpm: 30, body: 262144 }, // agent drop-links; 256 KB matches functions/api/handoff.js
   rehearsal: { rpm: 10, body: 500 }, // owner-only: seed and clean the rehearsal's stand-in reply (functions/api/rehearsal.js)
   figurescript: { rpm: 60, body: 4000 }, // Next #19: behavior script for a summoned figure (AI once, then D1 cache)
