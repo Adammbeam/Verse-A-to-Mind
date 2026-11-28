@@ -11,9 +11,9 @@ Written by `node tools/parity.mjs --write` from the feature rows in `tools/parit
 
 | Feature | Area | Verse | Evidence on the original | Evidence in Verse |
 | --- | --- | --- | --- | --- |
-| A random number in a range | Numbers | have | every site of this kind offers it | void-live-deploy/random/index.html:68 `nt:center;margin:8px auto 4px;max-width:720px;font:600 13px/1 system-ui,sans-serif">` |
-| Works offline | Apps | have | its live page (2026-10-28): "on your machine for maximum privacy and offline control. Authentic physics: We don't use simple random math sc" | void-live-deploy/random/index.html:229 `<script>if ('serviceWorker' in navigator) addEventListener('load', () => { navigator.servi` |
-| Share a link to what you made or found | Sharing | have | its live page (2026-10-28): "lt your wheel, generate a short link to share it with your audience. Your own visuals: Make the wheel your own" | void-live-deploy/random/index.html:89 `" class="quiet" type="button">Copy link</button></div>` |
+| A random number in a range | Numbers | have | every site of this kind offers it | void-live-deploy/random/index.html:76 `nt:center;margin:8px auto 4px;max-width:720px;font:600 13px/1 system-ui,sans-serif">` |
+| Works offline | Apps | have | its live page (2026-10-28): "on your machine for maximum privacy and offline control. Authentic physics: We don't use simple random math sc" | void-live-deploy/random/index.html:300 `<script>if ('serviceWorker' in navigator) addEventListener('load', () => { navigator.servi` |
+| Share a link to what you made or found | Sharing | have | its live page (2026-10-28): "lt your wheel, generate a short link to share it with your audience. Your own visuals: Make the wheel your own" | void-live-deploy/random/index.html:97 `" class="quiet" type="button">Copy link</button></div>` |
 | old.wheelofnames.com | Unreviewed | unreviewed | a menu item, button or box on its live page (2026-10-28) | not compared yet |
 | How to use it in the classroom | Unreviewed | unreviewed | a menu item, button or box on its live page (2026-10-28) | not compared yet |
 | Video reviews and tutorials by users | Unreviewed | unreviewed | a menu item, button or box on its live page (2026-10-28) | not compared yet |
