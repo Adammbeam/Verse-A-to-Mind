@@ -389,6 +389,28 @@ test('the reply parser: plain JSON, args nested, a fenced diff, junk', () => {
   assert.equal(diffFiles('--- x.js\n+++ x.js\n').p1, false);
 });
 
+test('an opt-in local Ollama backend probes only localhost, and the cloud stack is untouched with it off', async () => {
+  assert.deepEqual(providersFrom({ OPENROUTER_API_KEY: 'or'.repeat(10) }).map((p) => p.name), ['openrouter'], 'no OLLAMA_MODEL, no new provider');
+  const local = providersFrom({ OLLAMA_MODEL: 'qwen3:4b' });
+  assert.deepEqual(local.map((p) => p.name), ['ollama']);
+  assert.equal(local[0].url, 'http://127.0.0.1:11434/v1/chat/completions');
+  assert.equal(local[0].probe, 'http://127.0.0.1:11434/api/tags');
+  assert.equal(local[0].key, 'local-llm', 'Ollama needs no cloud key');
+  assert.throws(() => providersFrom({ OLLAMA_MODEL: 'qwen3:4b', OLLAMA_BASE: 'https://example.invalid' }), /local address/);
+  assert.deepEqual(providersFrom({ OLLAMA_MODEL: 'qwen3:4b', VERSE_CODER_OLLAMA_ONLY: '1', OPENROUTER_API_KEY: 'or'.repeat(10) }).map((p) => p.name), ['ollama'], 'local-only keeps every prompt here');
+  assert.deepEqual(providersFrom({ OLLAMA_MODEL: 'qwen3:4b', OPENROUTER_API_KEY: 'or'.repeat(10) }).map((p) => p.name), ['ollama', 'openrouter']);
+  const calls = [];
+  const fetchImpl = async (url) => {
+    calls.push(url);
+    if (url.endsWith('/api/tags')) return { ok: true };
+    return { ok: true, status: 200, json: async () => ({ choices: [{ message: { content: call('finish') } }], model: 'qwen3:4b' }) };
+  };
+  const got = await stackModel(local, { fetchImpl })([{ role: 'user', content: 'hi' }]);
+  assert.deepEqual(got, { text: call('finish'), tokens: 0 });
+  assert.deepEqual(calls, ['http://127.0.0.1:11434/api/tags', 'http://127.0.0.1:11434/v1/chat/completions']);
+  assert.equal((await stackModel(local, { fetchImpl: async () => ({ ok: false, status: 500 }) })([])).error, 'no model answered (ollama not running)', 'an absent server is a clean fall-through, not a hard failure');
+});
+
 test('the free stack: Workers AI first, then the others in order; a 429 falls through; no key, no provider', async () => {
   const env = { CLOUDFLARE_API_TOKEN: 'cf'.repeat(10), CLOUDFLARE_ACCOUNT_ID: 'acct', OPENROUTER_API_KEY: 'or'.repeat(10), GROQ_API_KEY: 'gq'.repeat(10), GEMINI_API_KEY: 'ge'.repeat(10), CEREBRAS_API_KEY: 'cb'.repeat(10) };
   const ps = providersFrom(env);

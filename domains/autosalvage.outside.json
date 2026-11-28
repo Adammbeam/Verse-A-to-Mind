@@ -387,6 +387,15 @@
       "what": "TypeScript is a superset of JavaScript that compiles to clean JavaScript output.",
       "gap": "Verse fixes any automation, as it is",
       "target": "skill"
+    },
+    {
+      "id": "ollama/ollama",
+      "url": "https://github.com/ollama/ollama",
+      "author": "ollama",
+      "license": "MIT",
+      "what": "Run open models locally with a small command and an OpenAI-compatible endpoint",
+      "gap": "free local model runner for crew agents (team)",
+      "target": "tool"
     }
   ]
 }
