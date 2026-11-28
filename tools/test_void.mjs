@@ -985,6 +985,21 @@ try {
     check('tournament: at phone width (360 px) the Discord button and its message box fit without sideways scrolling', dw.page <= 0 && dw.button && dw.box, JSON.stringify(dw));
     await P.ctx.close();
   }
+  // yunite.xyz's Developers / API Reference (feature:yunite-xyz-b0979f7e): /tournaments/ exposes its own scoring as a callable, documented API
+  if (want("developers API: /tournaments/ documents a callable scoring API and runs its example")) {
+    const P = await fresh({ base: base + 'tournaments/' });
+    await P.p.waitForSelector('#api-run', { timeout: 15000 });
+    const api = await P.p.evaluate(() => ({ heading: document.getElementById('h-api').textContent, kinds: window.VerseTournaments.kinds, funcs: Object.keys(window.VerseTournaments), links: [...document.querySelectorAll('#api a')].map((a) => a.getAttribute('href')) }));
+    const called = await P.p.evaluate(async () => window.VerseTournaments.score({ kind: 'br', tiers: '1:6,2-5:3,6-10:1', elim: 1, results: 'Ada:1:3,Bex:2:1,Cid:3:0' }));
+    await P.p.click('#api-run');
+    const shown = JSON.parse(await P.p.$eval('#api-out', (e) => e.textContent));
+    check("developers API: /tournaments/ documents a callable scoring API and runs its example",
+      api.heading === 'Developers & API' && api.kinds.join('|') === 'br|racing|league|gamenight' && ['score', 'parseRounds', 'scorer', 'rank', 'serializeRounds'].every((f) => api.funcs.includes(f))
+      && api.links.includes('/lib/scrim.js') && JSON.stringify(shown) === JSON.stringify(called)
+      && called.length === 3 && called[0].name === 'Ada' && called[0].points === 9 && called[0].elims === 3 && !P.errors.length,
+      JSON.stringify({ api, called, shown, errors: P.errors }));
+    await P.ctx.close();
+  }
   // the repo activity ledger (owner, 2026-10-28: "just build Verse to be able to take over by then", the Zapier trial running out): /ledger/ reads
   // GitHub's issues list from the browser - issues and pull requests on their own tabs, merged told apart from closed, filters in the link, a CSV
   // download, a refresh that sends the saved ETag (a 304 is free), and GitHub's rate limit said plainly while the saved copy stays on screen.
