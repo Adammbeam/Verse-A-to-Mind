@@ -45,9 +45,11 @@ test('an answer written with an earlier ask is never cached: the edge refuses th
   const g = edgeGate({ request, body: { ask, before: { ask: 'what is the tallest mountain on earth' } }, ask, masked: false, self: false, told: null, paste: false });
   assert.equal(g.ok, false); assert.equal(g.why, 'body field');
   const src = readFileSync(new URL('../void-live-deploy/functions/api/answer.js', import.meta.url), 'utf8');
-  assert.match(src, /const hit = masked \|\| self \|\| told \|\| before \? null/);
-  assert.match(src, /if \(!masked && !self && !told && !before\) try \{\n\s+later\(env\.DB\.prepare\('INSERT INTO void_answers/);
-  assert.match(src, /edgeKeep && !masked && !self && !told && !before && storable/);
+  assert.match(src, /const hit = masked \|\| self \|\| told \|\| before \|\| talk \|\| freshAsked\(request\) \? null/);
+  assert.match(src, /if \(hasAnswer\(c\.answer\)\) \{ const skill = skillAskOf\(ask\)/);
+  assert.match(src, /\.\.\.\(offered \? \{ followed: false \} : \{\}\)/);
+  assert.match(src, /if \(!masked && !self && !told && !before && !talk\) try \{\n\s+later\(env\.DB\.prepare\('INSERT INTO void_answers/);
+  assert.match(src, /edgeKeep && !masked && !self && !told && !before && !talk && storable/);
   assert.match(src, /beforeBlock\(follows\)/);
 });
 
