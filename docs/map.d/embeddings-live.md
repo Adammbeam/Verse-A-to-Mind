@@ -1,0 +1,1 @@
+`embeddings-live.mjs` opens `/embeddings/` on the live origin in Chrome, compares two sentences with a real Transformers.js model in the browser, checks the visible Apache-2.0 credit and that no ask reached a Verse worker; `--shipped` checks the deployed page. `embeddings.test.mjs` pins the score maths and the lazy, local-only path without a network.

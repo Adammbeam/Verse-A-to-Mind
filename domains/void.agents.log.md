@@ -1329,3 +1329,4 @@ Format: `ISO | slug | role | event | note`
 2026-11-28T07:10:58Z | bigpickle2 | fix | live check ties the follow-on line to the answer's followed field
 2026-11-28T07:36:27Z | bigpickle2 | fix | honesty bench claims require the specific honest answer
 2026-11-28T06:51:53Z | bigpickle2 | fix | cache-bypassed answers keep their follow mark and blank answers are never served
+2026-11-28T09:43:15Z | opencode | grow | On-device sentence similarity: a standalone /embeddings/ page loads Transformers.js only after a click, runs one small model in the browser, shows a cosine score and its Apache-2.0 credit, and never calls a Verse worker
