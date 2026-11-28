@@ -3,11 +3,11 @@ import assert from 'node:assert/strict';
 import { QUESTION, goalsFrom, promptOf, readJudgment, askFree, judgeDiff } from './judgment.mjs';
 import { FREE_MODEL } from '../void-live-deploy/lib/models.js';
 
-const CANON = '## Motto\nYou name it, Verse learns it and does it better.\n\n## How Verse is different\n- **Skills, not one-off answers**: Other canvas tools call a model on every click; when Verse misses an ask, its builders compile a permanent, tested skill.\n';
+const CANON = '## Motto\nSpeak it into being.\n\n## How Verse is different\n- **Skills, not one-off answers**: Other canvas tools call a model on every click; when Verse misses an ask, its builders compile a permanent, tested skill.\n';
 
 test('the goals are the motto and the written differences, and the question is plain', () => {
   const g = goalsFrom(CANON, 'keep secrets in the environment');
-  assert.match(g, /You name it, Verse learns it and does it better/);
+  assert.match(g, /Speak it into being/);
   assert.match(g, /permanent, tested skill/);
   assert.match(QUESTION, /real and useful/);
   assert.match(QUESTION, /no invented jargon, fake numbers or filler/);
