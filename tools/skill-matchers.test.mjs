@@ -8,6 +8,7 @@ import notebook from '../void-live-deploy/skills/notebook.js';
 import sleep from '../void-live-deploy/skills/sleep.js';
 import { loadEvents } from '../void-live-deploy/skills/calendar3d.js';
 import { rackOf } from '../void-live-deploy/skills/rack.js';
+import { boxOf } from '../void-live-deploy/skills/gamebox.js';
 import cartoon from '../void-live-deploy/skills/cartoon.js';
 import videoPlay from '../void-live-deploy/skills/video-play.js';
 
@@ -33,9 +34,10 @@ test('calendar3d: reads the events the Calendar page keeps (the stage\'s older l
   delete globalThis.localStorage;
 });
 
-test('overlaps settled: a bare "games" is the Game Box\'s, "board games" stays the rack\'s; "play my cards" is not a video; a plain shape is not a cartoon', () => {
-  assert.equal(rackOf('games'), null);
+test('overlaps settled: a bare "games" opens its own rack, "show me the games" stays the Game Box\'s; "play my cards" is not a video; a plain shape is not a cartoon', () => {
+  assert.deepEqual(rackOf('games'), { kind: 'rack' });
   assert.equal(rackOf('show me the games'), null);
+  assert.equal(boxOf('show me the games'), 'all', 'the Game Box keeps its own long ask');
   assert.deepEqual(rackOf('board games'), { kind: 'rack' });
   assert.deepEqual(rackOf('show me the board games'), { kind: 'rack' });
   assert.ok(!takes(videoPlay, 'play my cards'));

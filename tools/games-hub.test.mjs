@@ -16,12 +16,13 @@ const mods = [];
 for (const n of names) { try { mods.push((await import(pathToFileURL(resolve(dir, n + '.js')).href)).default); } catch (_) { /* a skill that cannot load is not the one under test */ } }
 const first = (a) => { const k = mods.find((s) => { try { return s.match(a.toLowerCase(), a); } catch (_) { return false; } }); return k ? k.name : null; };
 
-const BROAD = ['games', 'game', 'board games', 'board game', 'arcade', 'play', 'rpg', 'adventure', 'play something', 'what games', 'all games'];
+const BROAD = ['game', 'board games', 'board game', 'arcade', 'play', 'rpg', 'adventure', 'play something', 'what games', 'all games'];
 
 test('hubOf takes the broad game asks and leaves named games alone', () => {
   for (const a of BROAD) assert.equal(hubOf(a), true, a + ' should open the hub');
   for (const a of ['games on tv tonight', 'olympic games', 'box office', 'connect 4', 'debris field', 'the chrono signal', 'chess', 'play chess', 'what is game theory', 'hunger games']) assert.equal(hubOf(a), false, a + ' is not a broad games ask');
-  assert.equal(hubOf('  GAMES? '), true);
+  assert.equal(hubOf('games'), false, 'the bare family name opens the rack, not the hub');
+  assert.equal(hubOf('  GAMES? '), false);
   assert.equal(hubOf('show me games'), true);
   assert.equal(hubOf('show me the games'), false); // the Game Box keeps its own "show me the games" ask
 });
@@ -31,6 +32,7 @@ test('the broad asks all route to games-hub in the real order', () => {
 });
 
 test('named game asks keep their own route without collision', () => {
+  assert.equal(first('games'), 'games', 'the bare family name opens the games family and its rack');
   assert.equal(first('connect 4'), 'games');
   assert.equal(first('debris field'), 'debris-field');
   assert.equal(first('chrono-signal'), 'adventure');
