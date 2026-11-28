@@ -43,11 +43,42 @@ export function buildUniverse(n = 5200) {
   return { pos, col, size, count: i };
 }
 
+// Field-look polish. The ask bar's fill stays the glass it already is (contrast is measured there).
+// The veil sits inside #stage, behind the cards, and only opacity moves.
+export const HOME_LIGHT = [
+  'html[data-fx="field"] #stage::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;',
+  'background:radial-gradient(ellipse 78% 42% at 50% 108%,rgba(158,178,255,.22),transparent 70%),',
+  'radial-gradient(ellipse 46% 24% at 50% 6%,rgba(255,246,232,.09),transparent 72%),',
+  'radial-gradient(ellipse 130% 92% at 50% 40%,transparent 40%,rgba(2,3,10,.55) 100%);opacity:1}',
+  '@media(prefers-reduced-motion:no-preference){html[data-fx="field"] #stage::before{animation:verse-floor-light 16s ease-in-out infinite alternate}}',
+  '@keyframes verse-floor-light{from{opacity:.86}to{opacity:1}}',
+  '@media(prefers-reduced-motion:reduce){html[data-fx="field"] #stage::before{animation:none}}',
+  '@media(forced-colors:active){html[data-fx="field"] #stage::before{display:none}}',
+  'html[data-fx="field"] #input{font-size:17px;letter-spacing:-.012em}',
+  'html[data-fx="field"] #input::placeholder{letter-spacing:.05em}',
+  'html[data-fx="field"] #row{padding-left:22px;gap:10px;',
+  'transition:box-shadow .5s cubic-bezier(.16,1,.3,1),border-color .36s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}',
+  'html[data-fx="field"] #row:not(:focus-within){border-color:rgba(226,232,255,.42);',
+  'box-shadow:0 1px 0 rgba(255,255,255,.16) inset,0 -1px 0 rgba(0,0,0,.5) inset,0 8px 24px rgba(0,0,0,.4),0 28px 70px -24px rgba(158,178,255,.34)}',
+  '@media(max-width:700px){',
+  'html[data-fx="field"] #stage::before{background:',
+  'radial-gradient(ellipse 108% 34% at 50% 116%,rgba(158,178,255,.2),transparent 72%),',
+  'radial-gradient(ellipse 80% 20% at 50% 0%,rgba(255,246,232,.07),transparent 74%),',
+  'radial-gradient(ellipse 150% 108% at 50% 36%,transparent 48%,rgba(2,3,10,.4) 100%)}',
+  'html[data-fx="field"] #input{font-size:16px}',
+  'html[data-fx="field"] #input::placeholder{letter-spacing:.035em}',
+  'html[data-fx="field"] #row{padding-left:18px;gap:8px}}',
+].join('');
+
 /** DOM/WebGL half. Called once from the page with the stage's own ask function. */
 export function mount(opts = {}) {
   if (typeof document === 'undefined' || document.getElementById('void-cosmos')) return null;
   const ask = typeof opts.ask === 'function' ? opts.ask : () => {};
   const cv = document.createElement('canvas'); cv.id = 'void-cosmos'; cv.setAttribute('aria-hidden', 'true'); document.body.appendChild(cv);
+  // The field look hides the depth layers, so the light, the type and the resting bar live here.
+  // One already-loaded module, no extra request. The veil is a #stage layer behind the cards.
+  const style = document.createElement('style'); style.textContent = HOME_LIGHT;
+  document.head.appendChild(style);
   const gl = cv.getContext('webgl2', { alpha: true, antialias: false, depth: false, premultipliedAlpha: true });
   if (!gl) { cv.remove(); return null; }
   const VS = '#version 300 es\nin vec3 aP;in vec4 aC;in float aS;uniform vec3 uCam;uniform vec2 uAng,uR;uniform float uZoom,uFade,uDpr;out vec3 vC;out float vA;void main(){vec3 p=(aP-uCam)*uZoom;float cy=cos(uAng.x),sy=sin(uAng.x),cp=cos(uAng.y),sp=sin(uAng.y);float t=p.x*sy+p.z*cy;vec3 q=vec3(p.x*cy-p.z*sy,p.y*cp-t*sp,p.y*sp+t*cp);float d=max(.2,1.+q.z/1200.);gl_Position=vec4(q.xy*vec2(uR.y/uR.x,1.)/(d*420.),0.,1.);gl_PointSize=clamp(aS*uDpr*(.9+.35*uZoom),1.,128.);vC=aC.rgb;vA=uFade*aC.a;}';
@@ -62,8 +93,7 @@ export function mount(opts = {}) {
   gl.bindBuffer(gl.ARRAY_BUFFER, sbuf); gl.bufferData(gl.ARRAY_BUFFER, uni.size, gl.STATIC_DRAW);
   const lbuf = gl.createBuffer(), lcbuf = gl.createBuffer(), lp = new Float32Array((TRAIL_CAP * 2 + VISIT_CAP * 48) * 3), lc = new Float32Array(lp.length); let ln = 0;
   gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE); // premultiplied light, added
-  const style = document.createElement('style'); style.textContent = '#void-cosmos{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block}#void-cosmos-hud{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:7;display:none;align-items:center;gap:8px;max-width:calc(100vw - 24px);padding:6px 12px;border-radius:999px;font:12px/1.3 ui-sans-serif,system-ui,sans-serif;color:#dfe4ff;background:rgba(16,18,30,.72);border:1px solid rgba(160,180,255,.24);backdrop-filter:blur(8px);cursor:pointer}#void-cosmos-hud.on{display:flex}@media(prefers-reduced-motion:reduce){#void-cosmos-hud{transition:none}}';
-  document.head.appendChild(style);
+  style.textContent += '#void-cosmos{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block}#void-cosmos-hud{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:7;display:none;align-items:center;gap:8px;max-width:calc(100vw - 24px);padding:6px 12px;border-radius:999px;font:12px/1.3 ui-sans-serif,system-ui,sans-serif;color:#dfe4ff;background:rgba(16,18,30,.72);border:1px solid rgba(160,180,255,.24);backdrop-filter:blur(8px);cursor:pointer}#void-cosmos-hud.on{display:flex}@media(prefers-reduced-motion:reduce){#void-cosmos-hud{transition:none}}';
   const hud = document.createElement('div'); hud.id = 'void-cosmos-hud'; hud.setAttribute('role', 'status'); document.body.appendChild(hud);
   const mobile = innerWidth < 700 || matchMedia('(pointer: coarse)').matches, reduce = matchMedia('(prefers-reduced-motion: reduce)');
   let cam = loadState(window.localStorage, location.hash), trail = [], visited = [];

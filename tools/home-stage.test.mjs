@@ -42,3 +42,14 @@ test('the ask bar stands alone: #input is there and nothing telemetry-flavored c
 test('the telemetry formatter itself survives as a pure function (the engine still exports it)', () => {
   assert.match(lib(), /export function telemetry\(c\)/, 'telemetry() stays exported and tested by void-cosmos.test.mjs');
 });
+
+test('the field light stays behind the cards and off the ask bar', () => {
+  const src = lib();
+  assert.match(src, /html\[data-fx="field"\] #stage::before\{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none/);
+  assert.match(src, /@keyframes verse-floor-light\{from\{opacity:.86\}to\{opacity:1\}\}/);
+  assert.match(src, /@media\(prefers-reduced-motion:reduce\)\{html\[data-fx="field"\] #stage::before\{animation:none\}\}/);
+  assert.match(src, /html\[data-fx="field"\] #input\{font-size:17px/);
+  assert.match(src, /max-width:700px\)\{[\s\S]*html\[data-fx="field"\] #input\{font-size:16px\}/);
+  assert.ok(!src.includes('html[data-fx="field"] #dock'), 'the veil is not painted on the ask dock');
+  assert.ok(!src.includes('html[data-fx="field"] #input{background'), 'the ask text keeps the bar\'s own fill');
+});
