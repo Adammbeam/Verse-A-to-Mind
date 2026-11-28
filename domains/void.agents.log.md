@@ -1320,3 +1320,4 @@ Format: `ISO | slug | role | event | note`
 2026-11-28T03:33:32Z | bigpickle2 | build | iPhone and Android apps on /is-it/christmas: server-rendered install steps for both phones, web app manifest, open source link, with unit and browser tests
 2026-11-28T03:19:20Z | bigpickle2 | build | Hey Color heading on /paint/: lead the paint-by-number page with the Hey Color name and keep its purpose in the tagline, with a focused browser test
 2026-11-28T03:46:09Z | bigpickle2 | build | Keno quick picks and printable bingo cards on /random/, with preset buttons, a print view and a focused browser test
+2026-11-28T04:12:08Z | bigpickle2 | fix | free-router test: pubchem and clinicaltrials given the real dataset kind, PubChem 5/second usage policy recorded, answer-free routes by registry kind; tests 5/5 and 8/8
