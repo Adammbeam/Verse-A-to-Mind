@@ -7167,6 +7167,22 @@ try {
       && days.length === 30 && days.every((d) => /^2026-03-\d\d \((Mon|Tue|Wed|Thu|Fri)\)$/.test(d)) && !Z.errors.length, JSON.stringify({ nums: nums.slice(0, 5), hands, left, days: days.slice(0, 5), errors: Z.errors }));
     await Z.ctx.close();
   }
+  // random.org's Raw Bytes on /random/: the preset makes secure bytes, the size and hex preview match, and Download saves that file
+  if (want("random bytes: /random/ makes secure bytes with a size and hex preview, and downloads them as a .bin file")) {
+    const Z = await fresh(); await Z.p.goto(base + 'random/');
+    await Z.p.click('#presets button[data-q="bytes"]');
+    const first = await Z.p.$eval('#byteprev', (e) => e.textContent);
+    await Z.p.fill('#bytecount', '100'); await Z.p.click('#bytesgen');
+    const second = await Z.p.$eval('#byteprev', (e) => e.textContent);
+    const [d] = await Promise.all([Z.p.waitForEvent('download'), Z.p.click('#bytesdl')]);
+    const name = d.suggestedFilename(), bytes = [...fs.readFileSync(await d.path())], hex = second.match(/hex\):\s*([0-9a-f]+)/);
+    check("random bytes: /random/ makes secure bytes with a size and hex preview, and downloads them as a .bin file",
+      /^First 16 bytes \(hex\): [0-9a-f]{32}… · 32 bytes ready/.test(first) && /^First 16 bytes \(hex\): [0-9a-f]{32}… · 100 bytes ready/.test(second)
+      && name === 'random-100-bytes.bin' && bytes.length === 100 && new Set(bytes).size > 1
+      && !!hex && Buffer.from(hex[1], 'hex').equals(Buffer.from(bytes.slice(0, 16))) && !Z.errors.length,
+      JSON.stringify({ first, second: second.slice(0, 70), name, len: bytes.length, distinct: new Set(bytes).size, errors: Z.errors }));
+    await Z.ctx.close();
+  }
   if (want("random user: /random-user/ takes Turkish and Dutch people from the link, Next gives the next page from the same seed, and the password option shapes every password")) {
     const Z = await fresh(); await Z.p.goto(base + 'random-user/?nat=tr,nl&seed=abc&n=5&password=upper,number,10-12&fmt=json&f=name,password,nat');
     // a slow runner leaves the read without a page: the findings stay empty and this floor's own check below fails them (2026-11-04, '#cards .card b' timed out on shard 4 and ended the run at "suite ran to the end")
