@@ -5,7 +5,6 @@ import { isPasteText, asksSomething } from './paste-kind.js';
 import { opensWithCommand, asksToMake, isLongProse, slug } from './ask-text.js';
 import { isCardCorrection } from './self-context.js';
 
-export const PASSAGE_LINE = 'That looks like a passage, not a question. I can summarise it, keep it as a note, or answer a question about it — say which you want.';
 export const DIRECTIVE_SAY = "I'll take that as a want and put it on the build list.";
 export const DIRECTIVE_DUP = "That's already on the build list.";
 export const DIRECTIVE_HELD = "I'll take that as a want, and I'll put it on the build list when the queue is available.";
