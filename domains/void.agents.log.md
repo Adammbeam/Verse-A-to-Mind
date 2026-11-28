@@ -1322,3 +1322,4 @@ Format: `ISO | slug | role | event | note`
 2026-11-28T03:59:54Z | bigpickle2 | build | count words on any page: local word-count badge in the Verse extension (selection or whole page, nothing sent), install section on /word-count/, zip rebuilt, extension suite 38/38
 2026-11-28T03:46:09Z | bigpickle2 | build | Keno quick picks and printable bingo cards on /random/, with preset buttons, a print view and a focused browser test
 2026-11-28T04:12:08Z | bigpickle2 | fix | free-router test: pubchem and clinicaltrials given the real dataset kind, PubChem 5/second usage policy recorded, answer-free routes by registry kind; tests 5/5 and 8/8
+2026-11-28T04:55:11Z | bigpickle2 | fix | games family: bare games opens the rack, hub keeps game/board games/arcade, gamebox keeps show me the games; games-family/games-hub/gamebox/skill-matchers tests 18/18, live-style ask checked

@@ -13,7 +13,8 @@
 import * as T from '../lib/table-tools.js';
 import { fitPages } from '../lib/page-fit.js';
 
-const OPEN = /^(?:(?:open|show(?: me)?|see)\s+)?(?:the\s+|my\s+)?(?:game\s*box|games\s+box|box\s+of\s+games|table\s+tools|games|all\s+(?:the\s+)?games|every\s+game|game\s+tools|dice\s+and\s+coins)$/;
+// a bare "games" is the games family's picker (the rack); the box keeps "show me the games", "all games" and its own name
+const OPEN = /^(?:(?:open|show(?: me)?|see)\s+)?(?:the\s+|my\s+)?(?:game\s*box|games\s+box|box\s+of\s+games|table\s+tools|show\s+me\s+the\s+games|all\s+(?:the\s+)?games|every\s+game|game\s+tools|dice\s+and\s+coins)$/;
 const TOOL = /^(?:open\s+)?(?:the\s+)?(?:dice\s+roller|dice\s+tray|score\s*keeper|keep\s+score|card\s+deck|deck\s+of\s+cards|shuffle\s+(?:a|the)\s+deck|answer\s+orb)$/;
 export const boxOf = (text) => { const l = String(text || '').toLowerCase().trim().replace(/[?!.]+$/, '').replace(/\s+/g, ' '); return OPEN.test(l) ? 'all' : TOOL.test(l) ? l.replace(/^open\s+|^the\s+/g, '') : null; };
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
