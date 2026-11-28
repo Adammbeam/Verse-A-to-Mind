@@ -21,3 +21,7 @@ The card layout: the assimilated count, the inventoried count, the average assim
 ## Beyond websites
 
 The climb is not only sites: games, shows, music, art, apps, assistants, writing and real things (a snail, a city, a law of physics) are targets too (`lib/universe.js`, `tower.universe.json`). Each is measured against the best in the world on real checks in three groups: beauty, correctness (faithful to reality or to its own rules; 60 fps with no errors) and the plus (what reality cannot give: slow time, see inside, play with the variables). Verse beats one only when its own entry outscores the best on every check. The order is closest first across sites and targets; the stall rule (3 days) applies; names are shown only inside Versus. Targets are for measuring, never for copying.
+
+## Ability floors
+
+The card and the elevator work from ability floors (`lib/ability-floors.js`, `tower.abilities.json`), generated from the capability inventory. A floor is a plain-word job. It is missing when that inventory shows no working tool, part when a tool does only some of the job, and has when a tool does the job. Each floor carries the job, why people want it, and the ask a stranger can run to prove it. The measured site climb above stays as history: an old floor id still opens the same side-by-side address, and an ability names the old floor ids it stands in for (`alias`). Visitors still get only the Out of Order sign.

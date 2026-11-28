@@ -32,15 +32,26 @@ export function renderCompare(root, search) {
   const cmp = root.querySelector('.cmp'), $ = (i) => root.querySelector('#' + i);
   const id = (new URLSearchParams(search).get('floor') || '').toLowerCase(), f = FLOORS.find((x) => x.id === id || x.aka === id) || null;
   if (!f) {
-    const first = FLOORS[0] && FLOORS[0].id;
-    $('who').textContent = 'Side by side: say which floor, /versus/?view=compare&floor=' + (first ? encodeURIComponent(first) : '');
+    $('who').textContent = 'Pick an ability';
     cmp.classList.add('no-floor');
     const pick = document.createElement('nav');
     pick.id = 'pick'; pick.setAttribute('aria-label', 'Floors');
     const shown = FLOORS.filter((x) => x && x.page).slice(0, 24);
-    pick.innerHTML = '<p>Pick a floor. Each one opens Verse beside the site it is measured against.</p>'
-      + shown.map((x) => '<a href="/versus/?view=compare&floor=' + encodeURIComponent(x.id) + '">' + esc(x.site) + '</a>').join(''); // void-review: ok (esc on every value)
+    const earlier = '<details><summary>Earlier site floors</summary>' + shown.map((x) => '<a href="/versus/?view=compare&floor=' + encodeURIComponent(x.id) + '">' + esc(x.site) + '</a>').join('') + '</details>';
+    pick.innerHTML = '<p>Pick an ability.</p>' + earlier; // void-review: ok (esc on every site name)
     cmp.append(pick);
+    fetch('/tower.abilities.json', { cache: 'no-store' }).then((r) => r.ok ? r.json() : null).then((pack) => {
+      if (!pick.isConnected || !pack || !Array.isArray(pack.floors)) return;
+      const hit = id && pack.floors.find((a) => a.id === id);
+      if (hit) {
+        const old = (hit.alias || []).find((a) => FLOORS.some((x) => x.id === a || x.aka === a));
+        $('who').textContent = hit.name;
+        pick.innerHTML = '<p>' + esc(hit.name) + ' is ' + esc(hit.status) + '. ' + esc(hit.why) + '</p><p>' + esc(hit.prove) + '</p><p><a href="/?q=' + esc(encodeURIComponent(hit.ask || '')) + '">Run this ask</a></p>' + (old ? '<p>Earlier site floor: <a href="/versus/?view=compare&floor=' + encodeURIComponent(old) + '">' + esc(old) + '</a></p>' : '') + earlier; // void-review: ok (esc on every value)
+        return;
+      }
+      const links = pack.floors.map((a) => '<a href="/versus/?view=compare&floor=' + encodeURIComponent(a.id) + '">' + esc(a.name) + '</a>').join('');
+      pick.innerHTML = '<p>Pick an ability. Each one is a job with no working tool yet.</p>' + links + earlier; // void-review: ok (esc on every value)
+    }).catch(() => {});
     return;
   }
   const vp = f.page || ('/?q=' + encodeURIComponent(f.ask || '')), site = f.url;

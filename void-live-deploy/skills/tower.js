@@ -18,7 +18,7 @@ async function run(text, api) {
   if (elevatorOf(text)) {
     api.showPage((el) => {
       sign(el);
-      ownerModel().then(async (m) => { if (!m || !el.isConnected) return; const { ownerHtml } = await import('../lib/versus-floor.js'); if (el.isConnected) el.innerHTML = ownerHtml(m); }).catch(() => {}); // void-review: ok (ownerHtml runs every value through esc before it is placed in the markup)
+      ownerModel().then(async (m) => { if (!m || !el.isConnected) return; const { ownerHtml } = await import('../lib/versus-floor.js'); const { elevatorHtml } = await import('../lib/ability-floors.js'); if (el.isConnected) el.innerHTML = elevatorHtml(m, ownerHtml(m), api.esc); }).catch(() => {}); // void-review: ok (ownerHtml and elevatorHtml run every value through esc)
     });
     return 'tower';
   }
@@ -26,7 +26,13 @@ async function run(text, api) {
   const { showPage, esc, say } = api;
   showPage((el) => {
     sign(el);
-    ownerModel().then(async (m) => { if (m && el.isConnected) await (await import('../versus/card.js')).ownerCard(el, { esc, say }); }).catch(() => {});
+    ownerModel().then(async (m) => {
+      if (!m || !el.isConnected) return;
+      const { abilityLine, cardWithAbilities } = await import('../lib/ability-floors.js');
+      const line = abilityLine(m.abilities);
+      await (await import('../versus/card.js')).ownerCard(el, { esc, say: line && say ? () => say(line) : say });
+      if (el.isConnected && m.abilities) el.innerHTML = cardWithAbilities(el.innerHTML, m.abilities, esc); // void-review: ok (cardWithAbilities escapes the ability text; the card html was already escaped)
+    }).catch(() => {});
   });
   return 'tower';
 }
