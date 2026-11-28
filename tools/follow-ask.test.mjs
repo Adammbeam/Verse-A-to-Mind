@@ -78,7 +78,7 @@ test('only an ask that cannot stand alone carries the earlier one', () => {
 test('the server reads the earlier ask only when it carries, says so in `followed`, and tells the model not to deny it', () => {
   const src = readFileSync(new URL('../void-live-deploy/functions/api/answer.js', import.meta.url), 'utf8');
   assert.match(src, /const offered = beforeOf\(body, ask\), before = offered && carries\(ask, offered\) \? offered : null;/);
-  assert.match(src, /\.\.\.\(beforeSent \? \{ followed: !!follows \} : \{\}\)/);
+  assert.match(src, /\bfollowed: !!follows\b/, 'every answer says whether it read the earlier ask');
   assert.match(F.FOLLOW_RULE, /never say you have no memory of what they asked before/);
 });
 

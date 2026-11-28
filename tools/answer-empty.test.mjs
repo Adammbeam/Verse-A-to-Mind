@@ -52,6 +52,13 @@ test('a blank row in the shared cache is not served after an unrelated earlier a
   assert.match(row.answer, /Paris/, 'the row was refreshed with a real answer');
 });
 
+test('a standalone answer always carries a boolean follow mark, so the card never has to guess', async () => {
+  const { env } = world();
+  const j = await post(env, "What's the capital of France?");
+  assert.equal(typeof j.followed, 'boolean');
+  assert.equal(j.followed, false);
+});
+
 test('a whitespace-only model reply is a no-answer, not an answered blank', async () => {
   const { env } = world('   ');
   const j = await post(env, 'What is the capital of Spain?');

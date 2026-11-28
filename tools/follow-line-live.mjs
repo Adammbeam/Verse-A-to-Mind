@@ -8,7 +8,7 @@ import fs from 'node:fs';
 // package behind a dynamic import so importing this file needs nothing but built-in modules.
 
 export const SITE = process.env.VOID_SITE || 'https://a-to-mind.com';
-export const LINE = '[data-recall="follow"], [data-follow-line="1"]';
+export const LINE = '[data-recall="follow"]';
 export const CASES = [
   { id: 'follow', asks: ['Who wrote Dune?', 'When was he born?'], force: null },
   { id: 'unrelated', asks: ['My favorite color is green.', "What's the capital of France?"], force: null },
