@@ -4,6 +4,7 @@ Verse in the browser's side panel. It works with the page you are on in two ways
 
 **In your browser only (B1, B2).** Nothing leaves the browser.
 - **Alt+Shift+V** on any page, or right-click "Verse: read this tab (stays in your browser)": opens the panel and reads that tab into a card: its title, address, the text you selected, and the box you were typing in.
+- Right-click "Verse: count words on this page (stays in your browser)": a small badge on the page shows the words and characters in your selection, or in the whole page when nothing is selected. The count runs in the page, is never sent anywhere and disappears after 20 seconds (or when you close it). It uses the same word rule as /word-count/.
 - The card's "put in the page", and "into the page" under an answer, type the text into the box you were in, the way typing would. It never presses send, submits a form or clicks anything; you do that yourself.
 - The card lives in memory only. It is never saved with the stage (which syncs to `/api/mine` when you're signed in), and no ask, log or lookup carries it. Close the panel and it is gone.
 
