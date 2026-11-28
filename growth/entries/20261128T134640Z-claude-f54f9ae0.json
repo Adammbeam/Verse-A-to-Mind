@@ -1,0 +1,1 @@
+{"at":"2026-11-28T13:46:40Z","by":"claude","kind":"build","what":"registered the JSON /api/health test as a fast check and proved it in the browser; the autopilot status page now names /api/health as the post-deploy check","show":"the status page names /api/health, the JSON check after a deploy"}
