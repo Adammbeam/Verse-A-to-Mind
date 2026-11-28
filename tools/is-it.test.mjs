@@ -45,6 +45,17 @@ test('/is-it/<day>: a page that answers with scripts off, in the browser\'s lang
   assert.equal(wallClock(new Date('2026-12-24T23:30:00Z'), 'Asia/Tokyo').getDate(), 25, 'Tokyo is already on the 25th');
   assert.deepEqual(langsOf('fr-CA,fr;q=0.9,en;q=0.8'), ['fr-CA', 'fr', 'en']);
 });
+test('/is-it/<day>: iPhone and Android apps install from the page, with the source open', async () => {
+  const get = (path) => onRequestGet({ request: new Request('https://a-to-mind.com' + path, { headers: { 'accept-language': 'en' } }), params: { what: 'christmas' } });
+  const html = await (await get('/is-it/christmas')).text();
+  assert.match(html, /<link rel="manifest" href="\/manifest\.webmanifest">/);
+  assert.match(html, /<meta name="apple-mobile-web-app-capable" content="yes">/);
+  assert.match(html, /id="apps" aria-label="iPhone and Android apps"/);
+  assert.match(html, /<b>iPhone or iPad<\/b><ol><li>Open this page in Safari\.<\/li>/);
+  assert.match(html, /<b>Android<\/b><ol><li>Open this page in Chrome\.<\/li>/);
+  assert.match(html, /github\.com\/Adammbeam\/Verse-A-to-Mind/);
+  assert.doesNotMatch(html, /isitchristmas/i);
+});
 test('as isitchristmas.com: the feed carries the last ten days, the "on the day only" feed only YES days, and a JSON answer', async () => {
   const xmas = new Date(2026, 11, 27, 12), a = isIt('is it christmas', xmas), w = wordFor(a.yes, ['en']);
   const all = feed('christmas', a, w, 'https://a-to-mind.com', xmas), only = feed('christmas', a, w, 'https://a-to-mind.com', xmas, true);

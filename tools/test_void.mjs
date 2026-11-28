@@ -829,6 +829,19 @@ try {
       facts.length === 7 && !missing.length && /Flip counter/.test(text) && /Tap the coin/.test(text) && /result is shown/.test(text), JSON.stringify({ facts: facts.length, missing }));
     await F.ctx.close();
   }
+  // the phone apps on /is-it/christmas: the server-rendered page is the check, so render its own HTML and look at what a visitor sees
+  if (want("is it apps: /is-it/christmas shows iPhone and Android install steps on the page")) {
+    const { onRequestGet: isItGet } = await import('../void-live-deploy/functions/is-it/[what].js');
+    const res = await isItGet({ request: new Request('https://a-to-mind.com/is-it/christmas', { headers: { 'accept-language': 'en' } }), params: { what: 'christmas' } });
+    const P = await fresh();
+    await P.p.setContent(await res.text(), { waitUntil: 'domcontentloaded' });
+    const apps = await P.p.$eval('#apps', (e) => ({ text: e.innerText, shown: e.getBoundingClientRect().height > 0, links: [...e.querySelectorAll('a')].map((a) => a.href) }));
+    check('is it apps: /is-it/christmas shows iPhone and Android install steps on the page',
+      apps.shown && /iPhone or iPad/.test(apps.text) && /Add to Home Screen/.test(apps.text) && /Android/.test(apps.text) && /Install app/.test(apps.text)
+        && apps.links.some((u) => u.includes('github.com/Adammbeam/Verse-A-to-Mind')) && !P.errors.length,
+      JSON.stringify({ shown: apps.shown, text: apps.text.slice(0, 400), links: apps.links, errors: P.errors }));
+    await P.ctx.close();
+  }
   // the paint floor's Hey Color heading: the paint-by-number page leads with the name and keeps its purpose in the tagline
   if (want("paint heading: /paint/ leads with Hey Color and keeps Paint by number as its tagline")) {
     const P = await fresh({ base: base + 'paint/' }); await P.p.waitForSelector('main');
