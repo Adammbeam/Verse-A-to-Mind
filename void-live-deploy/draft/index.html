@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" class="vs-tool"><link rel="stylesheet" href="/verse.css" media="screen">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Draft an email · Verse</title>
+<meta name="description" content="Describe who the letter is for and what it should say. Verse drafts a subject and the letter in a tone you pick, with buttons to copy each part. Verse does not send it.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Verse">
+<meta property="og:title" content="Draft an email · Verse">
+<meta property="og:description" content="A subject and a letter from what you want to say, with tones and copy buttons. Nothing is sent.">
+<meta property="og:url" content="https://a-to-mind.com/draft/">
+<meta property="og:image" content="https://a-to-mind.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://a-to-mind.com/draft/">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Draft an email","url":"https://a-to-mind.com/draft/","description":"Draft a subject and a letter from a short note. Copy it. Nothing is sent.","applicationCategory":"BusinessApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"Verse","url":"https://a-to-mind.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Verse","item":"https://a-to-mind.com/"},{"@type":"ListItem","position":2,"name":"Draft an email","item":"https://a-to-mind.com/draft/"}]}]}</script>
+<style>
+  main { max-width: 40rem; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
+  h1 { font-size: 1.6rem; font-weight: 600; margin: 0 0 .35rem; }
+  .lede, .note { color: var(--d-ink-3); }
+  form, .out { display: grid; gap: .75rem; margin-top: 1rem; }
+  label { display: grid; gap: .25rem; font-size: .92rem; }
+  input, textarea { width: 100%; box-sizing: border-box; font: inherit; color: inherit; background: rgb(8 10 18 / .78); border: 1px solid rgba(255,255,255,.12); border-radius: 10px; padding: .6rem .75rem; }
+  textarea { min-height: 8rem; resize: vertical; }
+  fieldset { border: 1px solid rgba(255,255,255,.12); border-radius: 10px; margin: 0; padding: .6rem .75rem; }
+  legend { padding: 0 .3rem; }
+  .tones { display: flex; flex-wrap: wrap; gap: .6rem 1rem; }
+  .tones label { display: flex; align-items: center; gap: .35rem; }
+  .row { display: flex; flex-wrap: wrap; gap: .5rem; }
+  button { font: inherit; border-radius: 999px; border: 1px solid rgba(255,255,255,.12); background: transparent; color: inherit; padding: .45rem .9rem; cursor: pointer; }
+  button:disabled { opacity: .45; cursor: default; }
+  pre { white-space: pre-wrap; font: inherit; margin: 0; background: rgb(16 18 32 / .86); border-radius: 10px; padding: .85rem 1rem; }
+  h2 { font-size: 1rem; margin: 0; }
+</style>
+<!-- modulepreload: tools/preload.mjs -->
+<link rel="modulepreload" href="/lib/draft/email.js">
+<!-- /modulepreload -->
+<script src="/visit.js" defer></script>
+</head>
+<body>
+<header class="vs-chrome"><nav id="verse-nav" class="vs-app" aria-label="Verse"><a class="vs-brand" href="/">Verse</a><div class="vs-links"><a href="/">Ask</a><a href="/team/">Team</a><a href="/bots/">Bots</a><a href="/agent/">Agent</a><a href="/films/">Videos</a><a href="/arcade/">Arcade</a><a href="/tools/">Tools</a><a href="/podcast/">Podcast</a><a href="/treasury/">Treasury</a><a href="/starboard/">Dashboard</a><a href="/scoreboard/">Scoreboard</a><a href="/security/">Security</a><a href="/limits/">Limits</a><a href="/contribute/">Contribute</a></div><button type="button" class="vs-k" aria-label="Commands ⌘K" aria-keyshortcuts="Control+K Meta+K"><span aria-hidden="true">⌘K</span></button></nav></header>
+<main>
+  <h1>Draft an email</h1>
+  <p class="lede">Say who it is for and what it should tell them. Verse writes a subject and the letter. You copy it. Verse does not send it.</p>
+  <form id="form">
+    <label>To <input id="to" name="to" maxlength="80" autocomplete="name" placeholder="Mr Hale, the landlord" required></label>
+    <label>Your name, for the close <input id="from" name="from" maxlength="60" autocomplete="name" placeholder="Optional"></label>
+    <label>What it should say <textarea id="about" name="about" maxlength="1500" required placeholder="Ask him to fix the heater in the kitchen. It has been cold since Monday."></textarea></label>
+    <fieldset>
+      <legend>Tone</legend>
+      <div class="tones" id="tones">
+        <label><input type="radio" name="tone" value="plain" checked> Plain</label>
+        <label><input type="radio" name="tone" value="warm"> Warm</label>
+        <label><input type="radio" name="tone" value="firm"> Firm</label>
+        <label><input type="radio" name="tone" value="brief"> Brief</label>
+      </div>
+    </fieldset>
+    <div class="row"><button type="submit" class="go" id="go">Draft</button></div>
+  </form>
+  <section class="out" id="out" hidden>
+    <h2 id="subject"></h2>
+    <pre id="body"></pre>
+    <p class="note" id="via"></p>
+    <div class="row">
+      <button type="button" id="copy-subject">Copy subject</button>
+      <button type="button" id="copy-body">Copy letter</button>
+      <button type="button" id="copy-all">Copy both</button>
+    </div>
+  </section>
+  <p class="note">Nothing you type is stored. <a href="/tools/">All tools</a> · <a href="/log/">Log</a></p>
+</main>
+<script type="module">
+import { draftEmail } from '/lib/draft/email.js';
+const $ = (id) => document.getElementById(id);
+const form = $('form'), out = $('out');
+let last = null;
+const say = (id, text) => { $(id).textContent = text; };
+function show(d, via) {
+  last = d;
+  say('subject', d.subject);
+  say('body', d.body);
+  say('via', via === 'plain' ? 'Written from your notes. Nothing was sent.' : 'Drafted for you. Nothing was sent.');
+  out.hidden = false;
+}
+async function copy(text, btn) {
+  try { await navigator.clipboard.writeText(text); const old = btn.textContent; btn.textContent = 'Copied'; setTimeout(() => { btn.textContent = old; }, 1200); }
+  catch (_) { btn.textContent = 'Copy failed'; }
+}
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const input = { to: $('to').value, from: $('from').value, about: $('about').value, tone: (new FormData(form).get('tone') || 'plain') };
+  const local = draftEmail(input);
+  if (!local.ok) { show({ subject: 'Add a little more', body: local.error }, 'plain'); return; }
+  show(local, 'plain');
+  $('go').disabled = true;
+  try {
+    const res = await fetch('/api/draft-email', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(input) });
+    const data = await res.json();
+    if (res.ok && data && data.subject && data.body) show(data, data.via || 'plain');
+  } catch (_) { /* the note already became a letter */ }
+  $('go').disabled = false;
+});
+$('copy-subject').addEventListener('click', () => last && copy(last.subject, $('copy-subject')));
+$('copy-body').addEventListener('click', () => last && copy(last.body, $('copy-body')));
+$('copy-all').addEventListener('click', () => last && copy(last.subject + '\n\n' + last.body, $('copy-all')));
+for (const el of form.querySelectorAll('input[name=tone]')) el.addEventListener('change', () => { if (last) form.requestSubmit(); });
+</script>
+<script type="module" src="/verse-shell.js"></script>
+</body>
+</html>
