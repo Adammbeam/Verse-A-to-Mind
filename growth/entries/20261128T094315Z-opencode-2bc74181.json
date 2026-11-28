@@ -1,0 +1,1 @@
+{"at":"2026-11-28T09:43:15Z","by":"opencode","kind":"grow","what":"On-device sentence similarity: a standalone /embeddings/ page loads Transformers.js only after a click, runs one small model in the browser, shows a cosine score and its Apache-2.0 credit, and never calls a Verse worker","show":"A sentence similarity demo that runs on the device"}

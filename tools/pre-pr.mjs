@@ -27,9 +27,9 @@ export const MAX_LINES = 400;
 // written by a run, one small file each, or appended by every bot: never what makes a PR hard to review or land
 const NOT_COUNTED = [/^growth\/entries\//, /^void-live-deploy\/incidents\/entries\//, /^void-live-deploy\/tower-evidence\//, /^void-live-deploy\/skills\/order\//, /(^|\/)package-lock\.json$/];
 /** files every PR may share with another open PR: the shared ledgers, the records tools/merge-main.mjs merges by keeping both sides, the map, and the skill-family list (one added skill; merge-main.mjs and the merge gate settle it). */
-export const SHARED_OK = [...new Set([...COMMON, ...APPEND_JSON, ...APPEND_TEXT, 'docs/MAP.md', 'tools/families.mjs', 'void-live-deploy/growth.atom', 'void-live-deploy/growth.proof.json', 'growth.atom', 'growth.proof.json', 'tools/test_void.mjs'])];
-// One section per page PR in the browser suite, settled by merge-main.mjs. Kept here, not in collide.mjs's COMMON,
-// so the gate still shares it while another PR can own the collision-advisor file.
+export const SHARED_OK = [...new Set([...COMMON, ...APPEND_JSON, ...APPEND_TEXT, 'docs/MAP.md', 'tools/families.mjs', 'void-live-deploy/growth.atom', 'void-live-deploy/growth.proof.json', 'growth.atom', 'growth.proof.json', 'tools/test_void.mjs', 'tools/real-pages.mjs'])];
+// One section or route spec per page PR in the browser suite, settled by merge-main.mjs. Kept here, not in
+// collide.mjs's COMMON, so the gate still shares them while another PR can own the collision-advisor file.
 
 /** commits on `upstream` that `head` does not have. Null when git cannot say. */
 export function behindCount(upstream = BASE, head = 'HEAD', run = git) {
