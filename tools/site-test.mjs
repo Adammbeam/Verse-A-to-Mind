@@ -16,7 +16,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { pass as visitorPass, TOP as VISITOR_TOP } from './visitor-pass.mjs';
 import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const SUITE = resolve(here, 'site-test.json'), LOG = resolve(here, 'site-test.log.json'), SEEN = resolve(here, 'site-test.seen.json');
@@ -321,7 +321,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     if (opt('--json')) writeFileSync(opt('--json'), JSON.stringify(r, null, 2)); process.exit(r.every((x) => x.ok) ? 0 : 1); }
   const suite = JSON.parse(readFileSync(SUITE, 'utf8')), seen = existsSync(SEEN) ? JSON.parse(readFileSync(SEEN, 'utf8')) : {};
   const skillsDir = resolve(here, '..', 'void-live-deploy', 'skills'), skills = [];
-  for (const n of JSON.parse(readFileSync(resolve(skillsDir, 'index.json'), 'utf8'))) { try { skills.push((await import(resolve(skillsDir, n + '.js'))).default); } catch (_) {} }
+  for (const n of JSON.parse(readFileSync(resolve(skillsDir, 'index.json'), 'utf8'))) { try { skills.push((await import(pathToFileURL(resolve(skillsDir, n + '.js')).href)).default); } catch (_) {} }
   const regress = new Set(suite.cases.map((c) => c.ask.toLowerCase()));
   const probes = a.includes('--no-new') ? [] : plan(inventory(skills), seen, NEW_PER_RUN, suite.games || {}, suite.priority || []).filter((p) => !regress.has(p.ask.toLowerCase()));
   // the everyday asks, after a deploy (this job) and hourly. Posts never leave the browser. A failure is a row the conductor files.

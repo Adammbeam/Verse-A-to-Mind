@@ -110,6 +110,20 @@ test('merge-main settles an append-collision in tools/families.mjs the same way'
   assert.ok(out.includes("'c'") && out.includes("'d'"), 'both skills kept: ' + JSON.stringify(out));
 });
 
+test('merge-main puts a deploy-only copy back to main instead of carrying it in the pull request', () => {
+  const refresh = "console.log('a fake refresh');\n"; // regen() only needs the script to exist; the test has no real generators
+  const files = {
+    'tools/refresh.mjs': [refresh, refresh, refresh],
+    'void-live-deploy/self.json': ['{"n":0}\n', '{"n":1}\n', '{"n":2}\n'],
+  };
+  const a = textRepo(files);
+  const r = mergeMain(a);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.equal(readFileSync(join(a, 'void-live-deploy/self.json'), 'utf8').replace(/\r\n/g, '\n'), '{"n":1}\n', 'main\'s copy is restored');
+  const changed = execSync('git diff --name-only origin/main...HEAD', { cwd: a, encoding: 'utf8' }).trim().split('\n');
+  assert.ok(!changed.includes('void-live-deploy/self.json'), 'the branch carries no deploy-only copy: ' + changed.join(', '));
+});
+
 // the same, for one generated file both sides changed
 function repoFile(file, base, mainText, branchText) {
   const root = mkdtempSync(join(tmpdir(), 'merge-main-')), sh = (cwd, c) => execSync(c, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });

@@ -44,6 +44,8 @@ test('a branch opens only when it is on main, small and shares no file with anot
   const [gen] = refusals({ behind: 0, files: ['void-live-deploy/skills/guide.json'], numstat: '1\t1\tvoid-live-deploy/skills/guide.json', prs: [] });
   assert.match(gen, /written at deploy/);
   assert.deepEqual(refusals({ behind: 0, files: ['void-live-deploy/skills/guide.json', 'void-live-deploy/skills/families.json'], numstat: '1\t1\tvoid-live-deploy/skills/guide.json\n1\t1\tvoid-live-deploy/skills/families.json', prs: [], fresh: ['void-live-deploy/skills/guide.json', 'void-live-deploy/skills/families.json'] }), []);
+  const [deployOnly] = refusals({ behind: 0, files: ['void-live-deploy/self.json'], numstat: '1\t1\tvoid-live-deploy/self.json', prs: [], fresh: ['void-live-deploy/self.json'] });
+  assert.match(deployOnly, /written at deploy/, 'a deploy-only copy is refused even when a generator calls it fresh');
 });
 
 test('a tree wipe is refused, and a new skill must be in the index', async () => {
@@ -73,6 +75,8 @@ test('growth feeds, proof files and growth entries are shared-ok across open PRs
   const prs = [{ number: 42, title: 'other growth PR', files: [...sharedFiles, 'tools/other.mjs'] }];
   assert.deepEqual(overlapping(sharedFiles, prs), []);
   assert.deepEqual(overlapping([...sharedFiles, 'tools/other.mjs'], prs), [{ number: 42, title: 'other growth PR', shared: ['tools/other.mjs'] }]);
+  assert.deepEqual(overlapping(['tools/test_void.mjs'], [{ number: 43, title: 'another card', files: ['tools/test_void.mjs', 'tools/x.mjs'] }]), [],
+    'one browser-suite section per page PR is not a collision');
 });
 
 test('a PR that shares only growth run logs with an open PR clears every refusal; a look-alike path does not', async () => {
