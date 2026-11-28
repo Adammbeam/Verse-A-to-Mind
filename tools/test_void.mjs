@@ -2035,15 +2035,20 @@ try {
     const rgbOf = (css) => (css.match(/[\d.]+/g) || [0, 0, 0]).slice(0, 3).map(Number);
     const KB = () => { const vv = new EventTarget(); vv.height = innerHeight; vv.width = innerWidth; vv.offsetTop = 0; vv.offsetLeft = 0; vv.scale = 1; Object.defineProperty(window, 'visualViewport', { value: vv, configurable: true }); window.__vv = vv; };
     const E = await fresh(KB); await E.p.waitForTimeout(2500);
-    // 1) offline: the amber halo and the plain line, an ask that needs no network still answers, and it all clears when the link returns
-    const online0 = await E.p.evaluate(() => ({ ph: document.getElementById('input').placeholder, off: document.documentElement.classList.contains('void-offline') }));
+    // 1) offline: the void cue and the plain line, an ask that needs no network still answers, and it all clears when the link returns
+    const cue = () => { const lens = document.getElementById('void-lens'), depth = document.getElementById('void-depth'); return { ph: document.getElementById('input').placeholder, off: document.documentElement.classList.contains('void-offline'), lens: lens ? getComputedStyle(lens).backgroundImage : '', depth: depth ? getComputedStyle(depth, '::before').opacity : '', dis: document.getElementById('input').disabled || document.getElementById('go').disabled }; };
+    const online0 = await E.p.evaluate(cue);
     await E.ctx.setOffline(true); await E.p.waitForTimeout(500);
-    const off = await E.p.evaluate(() => ({ ph: document.getElementById('input').placeholder, off: document.documentElement.classList.contains('void-offline'), lens: getComputedStyle(document.getElementById('void-lens')).backgroundImage, dis: document.getElementById('input').disabled || document.getElementById('go').disabled }));
+    const off = await E.p.evaluate(cue);
     await E.ask('what is 15% of 240', 900); const calcOff = await E.p.evaluate(() => document.body.innerText);
     await E.ctx.setOffline(false); await E.p.waitForTimeout(500);
     const back = await E.p.evaluate(() => ({ ph: document.getElementById('input').placeholder, off: document.documentElement.classList.contains('void-offline') }));
-    check('empty state: offline shows a calm amber halo and one plain line in the bar, locks nothing (a calculation still answers), and clears the moment the connection returns',
-      !online0.off && online0.ph === 'Ask Verse' && off.off && /offline: skills that need the network will wait/.test(off.ph) && /255, 1[69]\d, \d+/.test(off.lens) && !off.dis && /\b36\b/.test(calcOff) && !back.off && back.ph === 'Ask Verse', JSON.stringify({ online0, off, back, calc: calcOff.slice(0, 120) }));
+    // The idle stage has had its lens removed in some layouts, so look at what is rendered: either the amber halo on the lens or the
+    // dimmed depth layer is a visible offline cue. A missing element becomes a failed assertion here, not a throw before the check runs.
+    const amber = /255, 1[69]\d, \d+/.test(off.lens);
+    const dimmed = Number(off.depth) > 0 && Number(off.depth) < Number(online0.depth) - 0.05;
+    check('empty state: offline shows a visible cue in the void and one plain line in the bar, locks nothing (a calculation still answers), and clears the moment the connection returns',
+      !online0.off && online0.ph === 'Ask Verse' && off.off && /offline: skills that need the network will wait/.test(off.ph) && (amber || dimmed) && !off.dis && /\b36\b/.test(calcOff) && !back.off && back.ph === 'Ask Verse', JSON.stringify({ online0, off, back, amber, dimmed, calc: calcOff.slice(0, 120) }));
     // 2) the on-screen keyboard: with a mocked visual viewport 300 px shorter, the bar sits above it
     const vh = (await E.p.evaluate(() => innerHeight));
     await E.p.evaluate(() => { window.__vv.height = innerHeight - 300; window.__vv.dispatchEvent(new Event('resize')); }); await E.p.waitForTimeout(300);
