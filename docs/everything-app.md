@@ -1,7 +1,7 @@
 # Verse, the everything app: what works, what's legal, what's next
 
 Owner, 2026-10-15: "Verse should be the only site you need ... social, dating, crypto, food delivery via waymo, you name it,
-get it all working." Motto: *You name it, Verse learns it and does it better.*
+get it all working." Motto: *Speak it into being.*
 
 This file is the honest map. Each vertical lists what Verse does **now** (live, legal, no keys), the **official** routes
 that exist (APIs, embeds, deep links, cited), what Adam would need (accounts, keys, money), and the **next step**.

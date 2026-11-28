@@ -8,11 +8,11 @@ Terms are the names Verse uses for its own parts, each one line (`- **name**: wh
 defined (domains/void.frontier.md); a builder adds one when Verse asks for it.
 Raise the version by one whenever anything below changes.
 
-version: 7
-updated: 2026-10-18
+version: 8
+updated: 2026-11-28
 
 ## Motto
-You name it, Verse learns it and does it better.
+Speak it into being.
 
 ## VoidQuest
 Verse's own better, updated version of the board game Solar Quest, with Verse as the rival player. "play voidquest" and "play solar quest" both open it. Every other trademarked board game gets the same treatment (a Verse name, original art and upgrades; classic names still route to it). Pure classics like chess and Go keep their real names.
