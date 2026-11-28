@@ -18,6 +18,9 @@ test('free: every resource has an id, a known kind or a program kind, a limit, s
     if (r.model) assert.ok(typeof models[r.model] === 'string', r.id + ' model ' + r.model);
     assert.ok(!/@cf\//.test(JSON.stringify(r)), 'a Workers AI model is named only in lib/models.js');
   }
+  const pubchem = registry.resources.find((r) => r.id === 'pubchem');
+  assert.equal(pubchem.kind, 'dataset', 'PubChem is a keyless chemical dataset, not a made-up compound kind');
+  assert.match(pubchem.limit.unit, /5\/second/, 'the record names PubChem real usage policy');
   assert.ok(registry.rules.some((x) => /stacking/.test(x)));
 });
 

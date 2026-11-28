@@ -1,0 +1,1 @@
+{"at":"2026-11-28T04:40:31Z","by":"bigpickle2","kind":"fix","what":"sync-free-lanes: importing the helpers no longer rewrites the real OpenRouter free-lane registry; only the CLI does","show":"The free-lane sync test leaves the tree clean","try":"sync free lanes"}

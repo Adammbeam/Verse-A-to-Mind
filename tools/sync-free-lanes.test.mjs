@@ -1,5 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { isFree, rankFree, buildPayload, activeLanes } from '../tools/sync-free-lanes.mjs';
 
 test('isFree: $0 prompt and completion', () => {
@@ -30,6 +33,15 @@ test('buildPayload: has count, modality pools, and expiring list', () => {
   assert.deepEqual(p.byKind.image, ['x/img']);
   assert.equal(p.expiring[0].id, 'x/img');
   assert.ok(p.updated);
+});
+test('importing the sync tool leaves the real free-lane registry alone', () => {
+  const registry = new URL('../void-live-deploy/resources/openrouter-free.json', import.meta.url);
+  const before = readFileSync(registry, 'utf8');
+  const r = spawnSync(process.execPath, ['--input-type=module', '-e', "import('./tools/sync-free-lanes.mjs').then(() => console.log('imported'))"],
+    { cwd: fileURLToPath(new URL('..', import.meta.url)), encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(r.stdout, /^imported\s*$/, 'importing the helpers prints and writes nothing');
+  assert.equal(readFileSync(registry, 'utf8'), before, 'the committed registry is unchanged');
 });
 test('activeLanes: drops expired models', () => {
   const now = Date.parse('2026-12-01T00:00:00Z');
