@@ -842,6 +842,17 @@ try {
       JSON.stringify({ shown: apps.shown, text: apps.text.slice(0, 400), links: apps.links, errors: P.errors }));
     await P.ctx.close();
   }
+  // the paint floor's Hey Color heading: the paint-by-number page leads with the name and keeps its purpose in the tagline
+  if (want("paint heading: /paint/ leads with Hey Color and keeps Paint by number as its tagline")) {
+    const P = await fresh({ base: base + 'paint/' }); await P.p.waitForSelector('main');
+    const heading = await P.p.$eval('h1', (e) => e.textContent.trim());
+    const tagline = await P.p.$eval('.tagline', (e) => e.textContent.trim());
+    const text = await P.p.$eval('main', (e) => e.textContent);
+    check("paint heading: /paint/ leads with Hey Color and keeps Paint by number as its tagline",
+      heading === 'Hey Color' && tagline === 'Paint by number' && /Real paintings cut into numbered areas/.test(text) && /Colour palette/.test(text) && !P.errors.length,
+      JSON.stringify({ heading, tagline, errors: P.errors }));
+    await P.ctx.close();
+  }
   // the paint floor (owner, 2026-10-26: "build wherever fits"): heycolor.com's paint by number, fought from /paint/. The page paints a
   // real painting cut into numbered areas, so the counts come from the template file the page loads (wave.json), not from a formula: the
   // labels are unpacked here the same way the page unpacks them, and a test tap lands on a pixel known to belong to a known colour.

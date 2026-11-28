@@ -1318,3 +1318,4 @@ Format: `ISO | slug | role | event | note`
 2026-11-28T03:05:41Z | bigpickle2 | build | Bright color theme on /convert/: bright/dark theme choice applied before paint and kept in localStorage, with a focused browser test
 2026-11-28T02:40:37Z | bigpickle2 | build | RND key on /calculator/: a random number between 0 and 1 made with crypto.getRandomValues, with a focused browser test
 2026-11-28T03:33:32Z | bigpickle2 | build | iPhone and Android apps on /is-it/christmas: server-rendered install steps for both phones, web app manifest, open source link, with unit and browser tests
+2026-11-28T03:19:20Z | bigpickle2 | build | Hey Color heading on /paint/: lead the paint-by-number page with the Hey Color name and keep its purpose in the tagline, with a focused browser test
