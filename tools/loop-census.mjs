@@ -70,7 +70,7 @@ export function census(rows, now) {
 const ROOT = resolve(fileURLToPath(import.meta.url), '..', '..');
 /** read every workflow and its runs (gh, read only) and build the census. */
 const ghAsync = (...a) => new Promise((ok, no) => execFile('gh', a, { encoding: 'utf8', timeout: 60000, maxBuffer: 16 << 20 }, (e, out) => (e ? no(e) : ok(out))));
-export async function readCensus({ repo = process.env.GITHUB_REPOSITORY || 'atomeam/void-loop', now = Date.now(), gh = ghAsync, at = 6 } = {}) {
+export async function readCensus({ repo = process.env.GITHUB_REPOSITORY || 'Adammbeam/Verse-A-to-Mind', now = Date.now(), gh = ghAsync, at = 6 } = {}) {
   const dir = resolve(ROOT, '.github', 'workflows');
   const files = readdirSync(dir).filter((x) => /\.ya?ml$/.test(x)).sort(), rows = new Array(files.length);
   let next = 0;

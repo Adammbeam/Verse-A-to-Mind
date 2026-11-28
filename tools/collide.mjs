@@ -45,7 +45,7 @@ export function openPrs(repo) {
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const a = process.argv.slice(2), repo = process.env.GITHUB_REPOSITORY || 'atomeam/void-loop';
+  const a = process.argv.slice(2), repo = process.env.GITHUB_REPOSITORY || 'Adammbeam/Verse-A-to-Mind';
   const prs = openPrs(repo);
   let files = null;
   if (a.includes('--files')) files = a[a.indexOf('--files') + 1].split(',').filter(Boolean);

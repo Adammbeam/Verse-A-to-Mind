@@ -13,7 +13,7 @@ import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const REPO = process.env.GITHUB_REPOSITORY || 'atomeam/void-loop';
+const REPO = process.env.GITHUB_REPOSITORY || 'Adammbeam/Verse-A-to-Mind';
 
 /** The ask (and kind) behind a site-test issue title, as tools/site-test.mjs writes them: 'site-test: ' + the improvement's note, cut at
  *  120 characters. A title cut inside its ask names no whole ask and is left alone. Pure. */

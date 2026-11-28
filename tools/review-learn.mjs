@@ -225,7 +225,7 @@ export function summary(rows) {
 
 if (process.argv[1] && import.meta.url.endsWith(process.argv[1].split('/').pop())) {
   const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d; };
-  const repo = process.env.REPO || 'atomeam/void-loop', from = +arg('--from', 1), to = +arg('--to', 100000);
+  const repo = process.env.REPO || 'Adammbeam/Verse-A-to-Mind', from = +arg('--from', 1), to = +arg('--to', 100000);
   const since = (arg('--since', '') .match(/^(\d+)d$/) || [])[1]; const sinceMs = since ? Date.now() - +since * 864e5 : 0; // --since 30d: merged in the last 30 days
   const statsPath = arg('--stats', '');
   const gh = (path, raw) => execFileSync('gh', ['api', ...(raw ? ['-H', 'Accept: application/vnd.github.raw'] : []), path], { encoding: 'utf8', maxBuffer: 64 << 20, stdio: ['ignore', 'pipe', 'ignore'] });

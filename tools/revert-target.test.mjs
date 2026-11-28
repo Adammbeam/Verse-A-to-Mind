@@ -166,8 +166,13 @@ test('verify-main has its own workflow (verify.yml, 2026-10-10): its runs count,
 });
 
 test('the wiring (2026-10-10): every head of main gets its suite in verify.yml, which never waits for a deploy; automerge starts it', async () => {
-  const { readFileSync } = await import('node:fs');
-  const read = (p) => readFileSync(new URL('../' + p, import.meta.url), 'utf8');
+  const { readFileSync, existsSync } = await import('node:fs');
+  // The old repo's workflows are parked on this repo: read them where they now live.
+  const read = (p) => {
+    const active = new URL('../' + p, import.meta.url);
+    const parked = p.startsWith('.github/workflows/') ? new URL('../.github/workflows-parked/' + p.slice('.github/workflows/'.length), import.meta.url) : active;
+    return readFileSync(existsSync(active) ? active : parked, 'utf8');
+  };
   const verify = read('.github/workflows/verify.yml'), deploy = read('.github/workflows/deploy.yml'), auto = read('tools/automerge.mjs');
   assert.match(verify, /^name: Verse verify$/m, 'the name VERIFY_WORKFLOWS looks for');
   assert.match(verify, /^on:\n  push:\n    branches: \[main\]\n  workflow_dispatch:/m, 'a push to main, or a dispatch (automerge, by hand)');

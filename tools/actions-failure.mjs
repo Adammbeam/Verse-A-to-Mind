@@ -16,7 +16,7 @@ import { entryOf, parseActions, failuresFor, KEEP_RUNS } from '../void-live-depl
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const DIR = resolve(root, 'void-live-deploy/incidents/actions');
-const REPO = /^[\w.-]+\/[\w.-]+$/.test(String(process.env.GITHUB_REPOSITORY || '')) ? process.env.GITHUB_REPOSITORY : 'atomeam/void-loop';
+const REPO = /^[\w.-]+\/[\w.-]+$/.test(String(process.env.GITHUB_REPOSITORY || '')) ? process.env.GITHUB_REPOSITORY : 'Adammbeam/Verse-A-to-Mind';
 
 /** GET a REST path with gh; text, or { error } with the first line gh printed (an HTTP 403 or 410 for a log, say). Never throws.
  *  A newer gh will not print a body that holds terminal colour codes, and every job log does (run 42184801438, 2026-11-06: all five
