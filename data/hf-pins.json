@@ -1,0 +1,28 @@
+{
+  "v": 1,
+  "what": "Pinned outside datasets. The check tools/hf-pins.test.mjs reads this file; it never fetches the network. Only the explicitly labelled --refresh command in tools/hf-pins.mjs contacts huggingface.co, at a fixed commit.",
+  "library": {
+    "id": "huggingface/datasets",
+    "url": "https://github.com/huggingface/datasets",
+    "license": "Apache-2.0",
+    "notice": "https://raw.githubusercontent.com/huggingface/datasets/main/LICENSE",
+    "used": "The pin format is modelled on the datasets library's own dataset cards; no code from the library is vendored."
+  },
+  "datasets": [
+    {
+      "id": "AWeirdDev/airports",
+      "url": "https://huggingface.co/datasets/AWeirdDev/airports",
+      "author": "AWeirdDev",
+      "license": "MIT",
+      "licenseSource": "https://huggingface.co/datasets/AWeirdDev/raw/main/README.md",
+      "licenseFile": "void-live-deploy/flights/LICENSE-hf-airports.txt",
+      "commit": "9d9c2d5d195bbb93c80f57830cd36fbaddfc7fc3",
+      "file": "data.csv",
+      "fileSha256": "450c6a9b6ac245cc5c0805a061e49ccc0ec4f927541587b63609627b3d98c507",
+      "derived": "void-live-deploy/flights/hf-airports.json",
+      "derivedSha256": "d3c99237471bc36285c467da87255ed5309e04b74c80643425fb8e0bb6870932",
+      "usedBy": "tools/hf-pins.test.mjs and the /flights/airports/ page note",
+      "why": "A permissive airport code set the travel floor can name as a checked source; the library's Apache-2.0 licence does not make every dataset free, so this dataset's own MIT card is recorded here."
+    }
+  ]
+}

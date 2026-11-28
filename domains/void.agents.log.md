@@ -1331,3 +1331,4 @@ Format: `ISO | slug | role | event | note`
 2026-11-28T06:51:53Z | bigpickle2 | fix | cache-bypassed answers keep their follow mark and blank answers are never served
 2026-11-28T09:43:15Z | opencode | grow | On-device sentence similarity: a standalone /embeddings/ page loads Transformers.js only after a click, runs one small model in the browser, shows a cosine score and its Apache-2.0 credit, and never calls a Verse worker
 2026-11-28T09:18:37Z | opencode | grow | Opt-in on-device answers: a toggle by the ask box downloads a small WebGPU model once and answers short asks in the browser; with it off, every ask still goes to a-to-mind.com
+2026-11-28T13:29:00Z | claude | build | a pinned MIT Hugging Face airport dataset checked offline: data/hf-pins.json records the commit, file hash and the dataset's own licence beside 24 vendored rows, tools/hf-pins.mjs verifies them with a labelled --refresh, and the flights page names the source

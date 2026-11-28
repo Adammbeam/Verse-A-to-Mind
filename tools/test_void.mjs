@@ -1639,6 +1639,21 @@ try {
     check('vector map: typing another origin redraws the network on the same map', /nonstop destinations from LIS/.test(await P.p.innerText('#v-note')) && (await P.p.evaluate(() => window.__verseMap && window.__verseMap.getSource('v-net') && window.__verseMap.getSource('v-net')._data.features.length > 50)) && !P.errors.length, (await P.p.innerText('#v-note')) + ' | ' + P.errors.join(' | '));
     await P.ctx.close();
   }
+  // A pinned outside dataset is named on the travel page and the page answers with huggingface.co unreachable: the pin is for the build,
+  // not a runtime dependency. The check works through the same offline browser the rest of the suite uses.
+  if (want("hf pins: /flights/ names the pinned MIT dataset and works with huggingface.co blocked")) {
+    const P = await fresh();
+    await P.ctx.route(/huggingface\.co/, (r) => r.abort());
+    await P.p.goto(base + 'flights/');
+    await P.p.waitForFunction(() => document.documentElement.dataset.flightsReady === '1', null, { timeout: 10000 }).catch(() => {});
+    const txt = await P.p.evaluate(() => document.body.innerText);
+    check('hf pins: /flights/ says the airport codes are cross-checked against a pinned MIT dataset',
+      /pinned, MIT-licensed Hugging Face dataset/.test(txt) && !P.errors.length, txt.slice(0, 220) + ' | ' + P.errors.join(' | '));
+    await P.p.fill('#f-to', 'lon'); await P.p.waitForTimeout(200);
+    const sug = await P.p.$$eval('#f-to-list button', (x) => x.map((y) => y.innerText.slice(0, 3)));
+    check('hf pins: airport search still answers with huggingface.co blocked', /LHR/.test(sug[0] || '') && !P.errors.length, JSON.stringify(sug) + ' | ' + P.errors.join(' | '));
+    await P.ctx.close();
+  }
   // owner audit 2026-11-19: on a touch phone "weather in Lakeland Florida" answered "I could not find it" and the cookie recipe came back as a loose paragraph,
   // because the skill files were still arriving and the ask went on without them. lib/ask-shapes.js names the one file for these shapes, so it loads at once.
   if (want("phone ask: weather in a place and a dish's recipe answer with their own cards on a touch screen, never the 'could not find' line")) { const P = await fresh({ phone: true });

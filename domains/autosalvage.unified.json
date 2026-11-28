@@ -474,6 +474,12 @@
       "into": "skills/sql-query.js (lib/sql-query.js, sql.js 1.17.0 from jsDelivr)",
       "test": "tools/sql-query.test.mjs",
       "pr": null
+    },
+    "outside:AWeirdDev/airports": {
+      "target": "data",
+      "into": "/flights/airports/ note and data/hf-pins.json (flights/hf-airports.json, MIT licence beside it)",
+      "test": "tools/hf-pins.test.mjs",
+      "pr": null
     }
   }
 }

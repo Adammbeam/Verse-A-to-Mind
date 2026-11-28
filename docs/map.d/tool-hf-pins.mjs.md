@@ -1,0 +1,1 @@
+`tools/hf-pins.mjs` checks the pinned Hugging Face dataset and its licence offline (a fast check runs `tools/hf-pins.test.mjs`); `node tools/hf-pins.mjs --refresh` is the labelled optional refresh that fetches the one pinned commit and refuses changed bytes.
