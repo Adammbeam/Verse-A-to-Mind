@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" class="vs-tool">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Username finder · Verse</title>
+<meta name="description" content="Type a public name. Verse asks a fixed list of major sites whether a profile page is there, and marks each one found, not found, or could not be checked.">
+<link rel="canonical" href="https://a-to-mind.com/username/">
+<meta property="og:title" content="Username finder · Verse">
+<meta property="og:description" content="A fixed list of public profile pages, each marked found, not found, or could not be checked. The name is not kept.">
+<meta property="og:url" content="https://a-to-mind.com/username/">
+<meta property="og:image" content="https://a-to-mind.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/verse.css">
+<style>
+  body { margin: 0; background: var(--bg, #0b0a10); color: var(--d-ink, #ecebf5); }
+  main { max-width: 720px; } h1 { font-size: 22px; margin: 0 0 8px; }
+  form { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; margin: 12px 0; }
+  label { display: block; font-size: 13px; margin-bottom: 4px; }
+  input, button { font: inherit; font-size: 16px; color: inherit; background: transparent; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; min-height: 44px; padding: 0 14px; box-sizing: border-box; }
+  input { width: 100%; max-width: 100%; } .field { flex: 1 1 12rem; min-width: 0; } button { cursor: pointer; }
+  nav { display: flex; flex-wrap: wrap; gap: 8px; }
+  ul { list-style: none; margin: 8px 0 16px; padding: 0; display: grid; gap: 8px; }
+  li { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 8px 12px; border-radius: 14px; background: rgba(255,255,255,.04); }
+  li[data-result="found"] .st { color: #8ee0b0; } li[data-result="unchecked"] .st { color: #e6c27a; }
+  .note, footer { color: var(--d-ink-3, #8a8798); font-size: 14px; } footer a, nav a { color: rgb(var(--d-key, 165 139 255)); }
+</style>
+<script src="/visit.js" defer></script>
+</head>
+<body class="vs-stand">
+<main class="vs-page">
+  <h1>Username finder</h1>
+  <p>Type a name people use in public. Verse asks a short fixed list of major sites whether a profile page is there, then marks each one found, not found, or could not be checked.</p>
+  <form id="find" method="get" action="/username/">
+    <div class="field"><label for="name">Public name</label><input id="name" name="name" maxlength="39" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="octocat" required></div>
+    <button type="submit" id="go">Check this name</button>
+  </form>
+  <p id="say" role="status" aria-live="polite"></p>
+  <ul id="sites"></ul>
+  <p class="note">The list does not change with what you type, and Verse does not follow an address you supply. The name is sent once so those public pages can be asked, and it is not kept. A page that answers is not proof of who holds the name.</p>
+  <nav id="related" aria-label="Related tools"><span class="tk-label">Use with</span> <a href="/generators/">Generators</a> <a href="/password/">Password generator</a> <a href="/notes/">Notes</a> <a href="/tools/">All tools</a></nav>
+  <footer><a href="/">Verse</a> · <a href="/tools/">every tool</a></footer>
+</main>
+<script type="module">
+const $ = (id) => document.getElementById(id);
+const WORD = { found: 'Found', missing: 'Not found', unchecked: "Couldn't check" };
+const ORDER = { found: 0, missing: 1, unchecked: 2 };
+function safeProfile(url) {
+  try { const u = new URL(url); if (u.protocol !== 'https:' || u.username || u.password || (u.port && u.port !== '443')) return ''; return u.href; }
+  catch (_) { return ''; }
+}
+function paint(sites) {
+  $('sites').replaceChildren(...[...(sites || [])].sort((a, b) => (ORDER[a.result] ?? 9) - (ORDER[b.result] ?? 9)).map((site) => {
+    const li = document.createElement('li'); li.dataset.result = WORD[site.result] ? site.result : 'unchecked';
+    const href = safeProfile(site.url), name = document.createElement(href ? 'a' : 'span');
+    name.textContent = site.name || 'Site';
+    if (href) { name.href = href; name.rel = 'noopener noreferrer'; name.target = '_blank'; }
+    const st = document.createElement('span'); st.className = 'st'; st.textContent = WORD[site.result] || WORD.unchecked;
+    li.append(name, st); return li;
+  }));
+}
+async function run(name) {
+  const say = $('say'), go = $('go'); say.textContent = 'Asking the list…'; go.disabled = true; $('sites').replaceChildren();
+  try {
+    const res = await fetch('/api/username?name=' + encodeURIComponent(name), { headers: { accept: 'application/json' } });
+    const data = await res.json();
+    if (!res.ok || !data.ok) { say.textContent = data.say || 'That name could not be checked.'; return; }
+    try { history.replaceState(null, '', location.pathname + '?name=' + encodeURIComponent(data.name || name)); } catch (_) { /* the result is on the page */ }
+    say.textContent = 'Found on ' + data.found + (data.found === 1 ? ' site. ' : ' sites. ') + 'Not found on ' + data.missing + ". Couldn't check " + data.unchecked + '.';
+    paint(data.sites);
+  } catch (_) { say.textContent = 'Verse could not finish the check. Try again in a moment.'; }
+  finally { go.disabled = false; }
+}
+$('find').addEventListener('submit', (e) => { e.preventDefault(); const name = $('name').value.trim(); if (!name) { $('say').textContent = 'Type a public name first.'; return; } run(name); });
+const preset = new URLSearchParams(location.search).get('name');
+if (preset) { $('name').value = preset; run(preset.trim()); }
+</script>
+<script>if ('serviceWorker' in navigator) addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => {}); });</script>
+</body>
+</html>

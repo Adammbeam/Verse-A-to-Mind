@@ -35,7 +35,7 @@ export const TOOLS = Object.freeze({
 // pages /tools/ lists that TOOLS does not (no "Use with" row reaches them yet): the Tools page and its stage card list them both, from here
 export const MORE_PAGES = Object.freeze([['/prizes/', 'Prize Wheel'], ['/is-it/christmas', 'Is it…?'], ['/code-review/', 'Code review'], ['/fix/', 'Fix a broken automation'],
   ['/books/', 'Books'], ['/films/', 'Videos'], ['/cpan/', 'CPAN Testers'], ['/identity/', 'Sign-In Demo'],
-  ['/hosting/', 'Hosting Calculator'], ['/lab/', 'Lab'], ['/autopilot/', 'Status'], ['/progress/', 'Progress']].map(Object.freeze));
+  ['/hosting/', 'Hosting Calculator'], ['/lab/', 'Lab'], ['/autopilot/', 'Status'], ['/progress/', 'Progress'], ['/username/', 'Username finder']].map(Object.freeze));
 /** every page /tools/ lists, as [href, label]: TOOLS, then MORE_PAGES, without /tools/ itself. Pure. */
 // modes listed by hand on /tools/ so the stage card and the catalog stay in sync
 export const HAND_PAGES = Object.freeze([
