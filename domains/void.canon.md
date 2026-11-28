@@ -12,7 +12,9 @@ version: 8
 updated: 2026-11-28
 
 ## Motto
+Ask, and it appears.
 Speak it into being.
+From thought to thing.
 
 ## VoidQuest
 Verse's own better, updated version of the board game Solar Quest, with Verse as the rival player. "play voidquest" and "play solar quest" both open it. Every other trademarked board game gets the same treatment (a Verse name, original art and upgrades; classic names still route to it). Pure classics like chess and Go keep their real names.

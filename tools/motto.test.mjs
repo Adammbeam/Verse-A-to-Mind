@@ -1,4 +1,4 @@
-// The public motto is "Speak it into being." The retired line must not ship again.
+// The public motto is three lines. The retired line must not ship again.
 // Run: node --test tools/motto.test.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -10,7 +10,7 @@ import { DEPLOY_ONLY } from './regen-paths.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OLD = 'You name it, Verse learns it and does it better.';
-const NEXT = 'Speak it into being.';
+const LINES = ['Ask, and it appears.', 'Speak it into being.', 'From thought to thing.'];
 const skip = new Set([...BUILD_OUTPUTS, ...DEPLOY_ONLY]);
 const TEXT = /\.(html|js|mjs|md|txt|xml)$/;
 
@@ -39,12 +39,15 @@ test('the retired motto is gone from shipped files', () => {
   assert.deepEqual(hits, []);
 });
 
-test('the page and the canon say the same new motto', () => {
+test('the page and the canon say the same three motto lines', () => {
   const canon = readFileSync(join(root, 'domains/void.canon.md'), 'utf8');
-  const motto = (/^## Motto\n(.+)$/m.exec(canon) || [])[1];
-  assert.equal(motto, NEXT);
+  const block = (/^## Motto\n([\s\S]*?)(?=^## )/m.exec(canon) || [])[1] || '';
+  assert.deepEqual(block.trim().split('\n'), LINES);
   for (const rel of ['void.html', 'void-live-deploy/void.html', 'void-live-deploy/index.html']) {
     const html = readFileSync(join(root, rel), 'utf8');
-    assert.ok(html.includes("const MOTTO = '" + NEXT + "';"), rel);
+    assert.ok(html.includes("const MOTTO = '" + LINES[0] + "';"), rel);
+    assert.ok(html.includes("const MOTTO_NEXT = '" + LINES[1] + "';"), rel);
+    assert.ok(html.includes("const MOTTO_SUPPORT = '" + LINES[2] + "';"), rel);
+    assert.match(html, /const SELF_LEAD = .*MOTTO \+ ' ' \+ MOTTO_NEXT \+ ' ' \+ MOTTO_SUPPORT/);
   }
 });
