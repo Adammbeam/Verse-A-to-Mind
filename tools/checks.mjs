@@ -152,6 +152,7 @@ for (const [name, file] of [
   ['team-leverage', 'team-leverage.test.mjs'], // one piece of work to one seat, the highest leverage first, no busywork (owner, 2026-11-06)
   ['naming-audit', 'naming-audit.test.mjs'],
   ['music-tools', 'music-tools.test.mjs'],
+  ['cannot-plan', 'cannot-plan.test.mjs'],
   ['flights', 'flights.test.mjs'],
   ['job-board', 'job-board.test.mjs'],
   ['lane-pages', 'lane-pages.test.mjs'],
