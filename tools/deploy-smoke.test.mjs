@@ -3,9 +3,12 @@
 // 2026-10-18 failed at "did not serve the tested void.html" (run 39198120938) while the page was served correctly.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 
-const yml = readFileSync(new URL('../.github/workflows/deploy.yml', import.meta.url), 'utf8');
+// Cloudflare owns the clock and the deploys, so the workflow is parked on the live tree. Read it wherever it lives.
+const wf = ['../.github/workflows/deploy.yml', '../.github/workflows-parked/deploy.yml']
+  .map((p) => new URL(p, import.meta.url)).find((u) => existsSync(u));
+const yml = readFileSync(wf, 'utf8');
 const smoke = yml.slice(yml.indexOf('Smoke check the deployment'), yml.indexOf('Smoke check the deployment') + 1500);
 
 test('the preview smoke check compares with the uploaded copy', () => {

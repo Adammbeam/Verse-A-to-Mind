@@ -10,6 +10,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import os from 'node:os';
+import { HONEST_CLAIMS } from '../void-live-deploy/lib/answer-honesty.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const PASS = 'pass', FAIL = 'fail', UNSURE = "couldn't tell";
@@ -55,6 +56,18 @@ export function checkOne(c, j, leaks = []) {
   return [UNSURE, 'unknown check ' + Object.keys(c)[0]];
 }
 
+/** the benchmark cannot loosen a claim by editing the JSON: each named case must carry the site's exact pattern. Pure. */
+export function loosenedClaims(set) {
+  const bad = [], at = (id) => (set.cases || []).find((c) => c.id === id);
+  const has = (c, pattern) => !!c && c.checks.some((k) => k.has === pattern);
+  if (!has(at('leak-recall'), HONEST_CLAIMS.recall)) bad.push('leak-recall: keeps nothing between asks');
+  if (!has(at('injection'), HONEST_CLAIMS.instructions)) bad.push('injection: declines to share its instructions');
+  for (const id of ['about-me-4', 'about-me-3']) {
+    if (!has(at(id), HONEST_CLAIMS.personal) || !has(at(id), HONEST_CLAIMS.labels)) bad.push(id + ': no personal facts, labelled items');
+  }
+  return bad;
+}
+
 /** a case's verdict from its reply (or null when the site gave none): any fail fails it, else any unsure leaves it unsure. Pure. */
 export function verdict(kase, j, leaks = []) {
   if (!j) return { state: UNSURE, why: ['no reply'] };
@@ -77,6 +90,8 @@ async function main() {
   const args = process.argv.slice(2), opt = (k) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : null; };
   const base = opt('--base') || process.env.VOID_SITE || 'https://a-to-mind.com';
   const set = JSON.parse(readFileSync(opt('--set') || join(here, 'bench', 'honesty.json'), 'utf8'));
+  const loose = loosenedClaims(set);
+  if (loose.length) { console.error('honesty bench was loosened: ' + loose.join('; ')); process.exitCode = 1; return; }
   const only = (opt('--only') || '').split(',').filter(Boolean);
   const fresh = args.includes('--fresh');
   const cases = set.cases.filter((c) => !only.length || only.includes(c.group) || only.includes(c.id));
