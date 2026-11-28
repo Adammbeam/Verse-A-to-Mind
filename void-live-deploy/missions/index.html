@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" class="vs-tool">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Missions · Verse</title>
+<meta name="description" content="Four short steps that use Verse's own tools: ask for a timer, play a round, run a sum, and read a site's live security headers. Ticks, a badge and a streak stay in this browser.">
+<link rel="canonical" href="https://a-to-mind.com/missions/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Verse">
+<meta property="og:title" content="Missions · Verse">
+<meta property="og:description" content="Four short steps. A tick, a badge and a streak, kept only in this browser.">
+<meta property="og:url" content="https://a-to-mind.com/missions/">
+<meta property="og:image" content="https://a-to-mind.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/verse.css">
+<style>
+  .meters { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 18px; }
+  .meters section { flex: 1 1 140px; padding: 12px 14px; border-radius: 16px; background: var(--d-glass); box-shadow: var(--d-lift); }
+  .meters b { display: block; font-weight: 300; font-size: clamp(28px, 7vw, 42px); letter-spacing: -.03em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .meters span, #most, .note, footer { color: var(--d-ink-3); font-size: 13px; }
+  #most { color: var(--d-ink-2); font-size: 15px; margin: 0 0 14px; }
+  #track { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  #track li { display: grid; grid-template-columns: 44px 1fr; column-gap: 12px; align-items: center; }
+  #track .tick { grid-row: 1 / span 3; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; border: 1px solid rgb(var(--d-key) / .45); font-variant-numeric: tabular-nums; }
+  #track h2 { margin: 0; }
+  #track p { margin: 2px 0 8px; }
+  #track li.done .tick { background: rgb(var(--d-teal)); color: #06221c; border-color: transparent; }
+  #track li.next { box-shadow: var(--d-lift), 0 0 0 1px rgb(var(--d-key) / .55); }
+  #track a { justify-self: start; min-height: 44px; padding: 0 16px; border-radius: 999px; background: rgb(var(--d-key)); color: #10131c; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; }
+  #track a:focus-visible { outline: 2px solid rgb(var(--d-key)); outline-offset: 3px; }
+  footer { margin-top: 22px; }
+  @media (max-width: 520px) { #track a { justify-self: stretch; justify-content: center; } }
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Missions","url":"https://a-to-mind.com/missions/","description":"Four short steps using Verse tools. Progress stays in this browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"Verse","url":"https://a-to-mind.com/"}}</script>
+<style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}</style>
+<script src="/visit.js" defer></script>
+</head>
+<body class="vs-stand">
+<header class="vs-chrome"><nav id="verse-nav" class="vs-app" aria-label="Verse"><a class="vs-brand" href="/">Verse</a><div class="vs-links"><a href="/">Ask</a><a href="/team/">Team</a><a href="/bots/">Bots</a><a href="/agent/">Agent</a><a href="/films/">Videos</a><a href="/arcade/">Arcade</a><a href="/tools/">Tools</a><a href="/podcast/">Podcast</a><a href="/treasury/">Treasury</a><a href="/starboard/">Dashboard</a><a href="/scoreboard/">Scoreboard</a><a href="/security/">Security</a><a href="/limits/">Limits</a><a href="/contribute/">Contribute</a></div><button type="button" class="vs-k" aria-label="Commands ⌘K" aria-keyshortcuts="Control+K Meta+K"><span aria-hidden="true">⌘K</span></button></nav></header>
+<main class="vs-page">
+  <h1>Missions</h1>
+  <p class="lead" id="greet">Start with one step. Each one uses a tool Verse already has.</p>
+  <div class="meters" aria-label="Reward">
+    <section><b id="badge">None</b><span>Badge</span></section>
+    <section><b id="streak">0</b><span>Day streak</span></section>
+  </div>
+  <p id="most" hidden></p>
+  <ol id="track" aria-label="Mission track">
+    <li class="vs-card next"><span class="tick" aria-label="Step 1">1</span><h2>Ask Verse for a timer</h2><p>Ask Verse for a five minute timer. Come back and this step ticks off.</p><a href="/?q=set%20a%20timer%20for%205%20minutes">Ask Verse</a></li>
+    <li class="vs-card"><span class="tick" aria-label="Step 2">2</span><h2>Try a game</h2><p>Play one round in the arcade. Come back and this step ticks off.</p><a href="/arcade/">Open the arcade</a></li>
+    <li class="vs-card"><span class="tick" aria-label="Step 3">3</span><h2>Run a calculator</h2><p>Work out a sum on the calculator. Come back and this step ticks off.</p><a href="/calculator/">Open the calculator</a></li>
+    <li class="vs-card"><span class="tick" aria-label="Step 4">4</span><h2>Check a site's security</h2><p>Read the live security headers. Come back and this step ticks off.</p><a href="/under-the-hood/#headers">Read the headers</a></li>
+  </ol>
+  <p class="note">Ticks stay in this browser. Nothing is sent, and nothing names you. Come back after a step and it ticks off.</p>
+  <nav id="related" aria-label="Related tools"><span class="tk-label">Use with</span> <a href="/calculator/">Calculator</a> <a href="/arcade/">Verse Arcade</a> <a href="/under-the-hood/#headers">Security headers</a> <a href="/tools/">All tools</a></nav>
+  <footer><a href="/">Verse</a> · <a href="/tools/">every tool</a> · <a href="/log/">Log</a></footer>
+</main>
+<noscript><p>Missions needs JavaScript. The steps are on the calculator, the arcade, the security headers, and the ask bar.</p></noscript>
+<script type="module" src="/missions/app.js"></script>
+<script type="module" src="/verse-shell.js"></script>
+</body>
+</html>
