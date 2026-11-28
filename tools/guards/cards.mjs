@@ -11,7 +11,7 @@ export const POOL = [
   { ask: 'tell me about tokyo', words: ['tokyo'] }, { ask: 'recipe for pad thai', words: ['pad thai', 'thai'] },
   { ask: 'chicken soup recipe', words: ['chicken'] }, { ask: 'salad recipe', words: ['salad'] },
 ];
-export const PER_RUN = 6, WAIT_ART_MS = 50000, RECUR = 3, BUDGET_MS = 9 * 60e3;
+export const PER_RUN = 6, WAIT_ART_MS = 50000, RECUR = 3, BUDGET_MS = 9 * 60e3, COPY_MS = 8000;
 
 /** the asks for this run: a rotating window over the pool, so the whole pool is covered in a day or two. Pure. */
 export function pickAsks(pool, now, n = PER_RUN, everyMs = 6 * 3600e3) {
@@ -28,6 +28,16 @@ export const bodyWords = (visible) => {
   const lines = String(visible || '').split('\n').map((l) => l.trim()), cut = lines.findIndex((l, i) => i > 0 && LABELS.test(l));
   return [...new Set((cut < 0 ? lines : lines.slice(0, cut)).filter((l) => !LABELS.test(l) && !FOOT.test(l)).join(' ').toLowerCase().match(/[a-z]{5,}/g) || [])];
 };
+/** is this clipboard text this card's own copy, or a leftover from another card or another tab. Pure. The copy builds a picture before it
+ * writes, and three cards are copied at once through one system clipboard, so a read can land on the last card's text; comparing the title's
+ * own words is what tells them apart, and a read that never matches is reported as its own cause rather than as text this card lost. */
+export function sameCard(visible, clip) {
+  const lines = String(visible || '').split('\n').map((l) => l.trim()).filter(Boolean).filter((l) => !LABELS.test(l));
+  const title = lines[0] || '';
+  const words = (title.toLowerCase().match(/[a-z]{4,}/g) || []).slice(0, 3);
+  const c = String(clip || '').toLowerCase();
+  return words.length ? words.some((w) => c.includes(w)) : c.trim().length > 0;
+}
 /** does the copied text carry the card: nearly every long word, and no cut-off ellipsis. Pure. */
 export function copyOk(visible, clip) {
   const words = bodyWords(visible), c = String(clip || '').toLowerCase();
@@ -49,7 +59,7 @@ export function judge(r) {
     }
   }
   if (r.tone) out.push(...toneCauses(r.tone)); // a recipe card's tone, judged by a model (tools/recipe-tone.mjs)
-  if (r.copy && !r.copy.ok) out.push(r.copy.cut ? 'copied card cut off' : 'copied card missing text (' + Math.round(r.copy.share * 100) + '% of it)');
+  if (r.copy && !r.copy.ok) out.push(r.copy.landed === false ? 'copy did not land' : r.copy.cut ? 'copied card cut off' : 'copied card missing text (' + Math.round(r.copy.share * 100) + '% of it)');
   return out;
 }
 /** causes counted across runs; a cause at RECUR goes to the coder once. Pure. */
@@ -89,10 +99,21 @@ async function look(ctx, b, item) {
     if (/recipe/i.test(item.ask)) out.tone = await toneJudge(info.text, ctx.env || process.env); // null when no judge answered: reported, never passed
     out.onSubject = subjectOk(item.words, info.subj, out.req && out.req.key);
     if (out.req && info.img) { const g = await ctx.hit('/api/card-art?key=' + encodeURIComponent(out.req.key) + '&kind=' + encodeURIComponent(out.req.kind)); try { out.weak = !!JSON.parse(g.text).dropped; } catch (e) { note('not json', e); } }
-    const btn = await p.$('.vcard:last-of-type .vc-share button:text-is("copy card")') || (await (await p.$$('.vcard')).pop().$('button:text-is("copy card")'));
+    // the button of the card that was measured, never ":last-of-type", which can belong to a different card on a page that holds more than one
+    const cards = await p.$$('.vcard'), card = cards.length ? cards[cards.length - 1] : null;
+    const btn = card ? await card.$('button:text-is("copy card")') : null;
     if (btn) {
-      const clip = await alone(async () => { await btn.scrollIntoViewIfNeeded().catch((e) => note('scroll', e)); await btn.click(); await p.waitForTimeout(4000); return p.evaluate(async () => { try { const items = await navigator.clipboard.read(); for (const it of items) if (it.types.includes('text/plain')) return await (await it.getType('text/plain')).text(); } catch (e) { return 'clipboard: ' + String(e.message).slice(0, 60); } return ''; }); });
-      out.copy = clip ? copyOk(info.text, clip) : { ok: false, share: 0, cut: false };
+      const read = () => p.evaluate(async () => { try { const items = await navigator.clipboard.read(); for (const it of items) if (it.types.includes('text/plain')) return await (await it.getType('text/plain')).text(); } catch (e) { return 'clipboard: ' + String(e.message).slice(0, 60); } return ''; });
+      const clip = await alone(async () => {
+        await btn.scrollIntoViewIfNeeded().catch((e) => note('scroll', e));
+        await btn.click();
+        // wait until the clipboard holds this card's own text: the copy builds a picture before it writes, so the write lands late, and three
+        // cards copy at once through one system clipboard. A fixed sleep read whatever was there, and another card's words counted as this one's loss.
+        const t0 = Date.now(); let got = '';
+        while (Date.now() - t0 < COPY_MS) { await p.waitForTimeout(400); got = await read(); if (got && !/^clipboard: /.test(got) && sameCard(info.text, got)) break; }
+        return got;
+      });
+      out.copy = !clip || /^clipboard: /.test(clip) || !sameCard(info.text, clip) ? { ok: false, share: 0, cut: false, landed: false } : copyOk(info.text, clip);
     }
   } catch (e) { out.err = String(e.message).slice(0, 80); }
   finally { await c.close(); }
