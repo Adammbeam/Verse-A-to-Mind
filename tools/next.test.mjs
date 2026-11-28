@@ -22,7 +22,7 @@ test('there is always a next thing: never "nothing to do"', () => {
   assert.match(takeNext({ targets: [{ title: 'Verification loop' }] }), /^Verification loop/);
   assert.match(takeNext({}), /Verse's top ask/);
   const s = summary(readFrontier());
-  assert.ok(s.targets.length >= 5 && s.targets[0].title === 'Verification loop' && s.take.length > 0, JSON.stringify(s.targets));
+  assert.ok(s.targets.length >= 5 && s.targets[0].title === 'Delivery status pack' && s.targets.some((t) => t.title === 'Verification loop') && s.take.length > 0, JSON.stringify(s.targets));
 });
 
 test("Verse's asks, most repeated first, without the ones built (the menu a run takes from when the queue is empty)", async () => {

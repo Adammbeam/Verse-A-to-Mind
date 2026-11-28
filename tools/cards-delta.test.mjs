@@ -20,7 +20,7 @@ test('it checks the cards that follow from the skills, and names the fix for a m
   assert.match(FIX.families, /tools\/families\.mjs/);
 });
 test('Verse review runs it and counts it in the verdict', () => {
-  const y = readFileSync(new URL('../.github/workflows/void-review.yml', import.meta.url), 'utf8');
+  const y = readFileSync(new URL('../.github/workflows-parked/void-review.yml', import.meta.url), 'utf8');
   assert.match(y, /node tools\/cards-delta\.mjs --base "\$BASEREF"/);
   assert.match(y, /CARDS: \$\{\{ steps\.cards\.outcome \}\}/);
   assert.match(y, /for o in [^\n]*"\$CARDS"/);
