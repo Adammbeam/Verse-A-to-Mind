@@ -12,6 +12,7 @@ import { APPEND_JSON, APPEND_TEXT, INDEX, keyOf } from './records.mjs'; // the a
 import { settleChecks } from './checks-list.mjs';
 import { INBOX, settleText } from './shared-merge.mjs';
 import { wipeRefusal, allowWipe } from './wipe-guard.mjs';
+import { REGEN, DEPLOY_ONLY, restoreTargets } from './regen-paths.mjs';
 
 const sh = (c) => execSync(c, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
 const before = sh('git rev-parse HEAD');
@@ -36,25 +37,23 @@ function refuseWipe() {
 function samePrefixWords(a, b) { return String(a).replace(/skills: \[[^\]]*\]/, 'skills: []') === String(b).replace(/skills: \[[^\]]*\]/, 'skills: []'); }
 
 sh('git fetch -q origin main');
-// the families and the book are generated from the tree: after a merge they are written again, and committed if the text moved (two branches that each added a skill leave both stale without a conflict)
-// every generated file (tools/refresh.mjs writes them in order: the index, the dependency map, what.json, the families, the book, self.json, the asks'
-// links, the bench alarms): after a merge each is written again from the merged tree and committed if it moved. Before 2026-10-23 only the families and
-// the book were, so nearly every finish after a merge stopped at the fast checks on a stale deps.json or what.json and had to be resumed by hand.
-// (the skill index is settled name by name below, never taken from one side, so it is not in this list; regen() still writes it again after)
-const GENERATED = ['void-live-deploy/skills/families.json', 'void-live-deploy/skills/guide.json', 'void-live-deploy/skills/deps.json',
-  'void-live-deploy/skills/what.json', 'void-live-deploy/self.json', 'void-live-deploy/void.asks.json', 'void-live-deploy/lib/similar-index.js', 'void-live-deploy/skills/bench-alarms.json',
-  'void-live-deploy/sitemap.xml', 'void-live-deploy/parity.json', 'void-live-deploy/incidents.json', 'void-live-deploy/tower.evidence.json'];
-// tools/parity.mjs writes parity.json together with docs/PARITY/<site>.md and the timelines in void-live-deploy/history/: staging only
-// parity.json left the inventories stale after a merge that moved a cited line, and the parity check went red on main and on every PR
-const REGEN = GENERATED.concat('void-live-deploy/skills/index.json', 'docs/PARITY', 'void-live-deploy/history');
-// a conflict in one of those inventories or timelines is settled like the other generated files: main's side now, regen() writes it again
-// from the merged tree (each one cites main's lines, so a person picking a side by hand only ever picked the stale one)
-const isGenerated = (f) => GENERATED.includes(f) || f.startsWith('docs/PARITY/') || f.startsWith('void-live-deploy/history/');
+// the families, the book and the other sources' copies are generated from the tree: after a merge they are written
+// again and committed if the text moved (two branches that each added a skill leave both stale without a conflict).
+// A conflict in an inventory or a cited timeline is settled from main's side first; regen() writes it again from
+// the merged tree (each cites main's lines, so a person picking a side by hand only ever picked the stale one).
+const isGenerated = (f) => f !== INDEX && restoreTargets([f]).length === 1; // the index is settled name by name below
 function regen() {
   if (!existsSync(resolve(process.cwd(), 'tools', 'refresh.mjs'))) return;
   try { execFileSync(process.execPath, [resolve(process.cwd(), 'tools', 'refresh.mjs'), '--keep-going'], { stdio: 'ignore' }); } catch (e) { console.error('tools/refresh.mjs failed after the merge (' + (e.status || e.message) + '): the check will say why'); }
   try { execFileSync(process.execPath, [resolve(process.cwd(), 'tools', 'similar-index.mjs')], { stdio: 'ignore' }); } catch (_) {}
-  try { sh(`git add ${REGEN.filter((f) => existsSync(resolve(process.cwd(), f))).join(' ')}`); if (sh('git diff --cached --name-only')) { sh('git commit -q -m "Regenerate the generated files after the merge"'); console.log('regenerated the generated files after the merge'); } } catch (_) {}
+  // pre-pr refuses a pull request that carries a deploy-only copy: it names the newest commit or a time window,
+  // and two branches that both commit one conflict. Put main's copy back before committing what a refresh moved.
+  const inMain = new Set(sh('git ls-tree -r --name-only origin/main').split('\n').filter(Boolean));
+  for (const f of DEPLOY_ONLY.filter((p) => inMain.has(p))) {
+    try { sh(`git checkout origin/main -- ${f}`); } catch (e) { console.error('merge-main: could not restore ' + f + ' from main: ' + e.message); }
+  }
+  const paths = REGEN.filter((f) => existsSync(resolve(process.cwd(), f)));
+  try { sh(`git add ${paths.join(' ')}`); if (sh('git diff --cached --name-only')) { sh('git commit -q -m "Regenerate the generated files after the merge"'); console.log('regenerated the generated files after the merge'); } } catch (_) {}
 }
 try { sh('git merge --no-edit --no-commit origin/main'); refuseWipe(); try { sh('git commit -q --no-edit'); } catch (_) {} console.log('merged origin/main (no conflicts)'); regen(); process.exit(0); } catch (_) {}
 

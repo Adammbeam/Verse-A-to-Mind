@@ -30,7 +30,9 @@ AGENTS.md is the source of truth; this file is the short path through it. If the
 
 ## What finish.mjs does (its steps)
 
-`[0]` browser check on site files you changed · `[1]` growth ledger line (`tools/grow.mjs`) · `[2]` agent-log line (`domains/void.agents.log.md`) · `[3]` map coverage (`tools/map-coverage.test.mjs`) · `[4]` commit (runs `skills-index.mjs --adopt`, `families.mjs`, `guide.mjs`) · `[5]` bring main in (`tools/merge-main.mjs`, never a merge by hand) · `[6]` fast checks (`checks.mjs --changed`) · `[7]` push (`tools/push.mjs`) · `[8]` open the PR and label it `automerge`.
+`[0]` browser check on site files you changed · `[1]` growth ledger line (`tools/grow.mjs`) · `[2]` agent-log line (`domains/void.agents.log.md`) · `[3]` map coverage (`tools/map-coverage.test.mjs`) · `[4]` commit (runs `skills-index.mjs --adopt`, `families.mjs`, `guide.mjs`) · `[5]` bring main in (`tools/merge-main.mjs`, never a merge by hand) · `[6]` fast checks (`checks.mjs --changed`) · `[7]` pre-PR gate (`tools/pre-pr.mjs --check-only`, offline) · `[8]` push (`tools/push.mjs`) · `[9]` open the PR and label it `automerge`.
+
+Every long command (full checks, a whole suite, a build, a live probe) starts in the background on the first call; do other work and read the completion notice. Do not poll or retry a failed program launch in a loop. A hand-opened PR runs the pre-PR gate first.
 
 It stops at the first failure and prints the resume command; continue with `--from N`.
 

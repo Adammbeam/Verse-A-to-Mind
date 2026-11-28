@@ -121,6 +121,9 @@ export function prBody({ what, brief, kind, tests, job, evolve }) {
     '## Evolve', ...(evolve ? evolve.split(';').map((w) => w.trim()).filter(Boolean).map((w) => '- ' + w) : ['- ']), ...(job ? ['', jobLine(job)] : [])].join('\n');
 }
 
+/** the PR gate run before the push: same script CI runs, offline (no open-PR list). Pure. */
+export const prePrGate = () => [process.execPath, [resolve(root, 'tools', 'pre-pr.mjs'), '--check-only'], { PRE_PR_OFFLINE: '1' }];
+
 /** the steps, as [label, command | function]. Pure apart from what the functions do when run. */
 export function steps(a) {
   return [
@@ -134,6 +137,9 @@ export function steps(a) {
     ['commit', () => commitStep(a)], // a tree committed by hand is not a failure (2026-10-23)
     ['bring main in', node('merge-main.mjs')],
     ['fast checks', node('checks.mjs', ...(a.full ? [] : ['--changed']))], // only what covers the changed files (tools/checks-changed.mjs); --full runs all 425
+    // the same gate CI runs on the pull request, offline (no open-PR list): generated files in the commit, an
+    // oversized diff or a stale branch stop here, before the push, instead of failing the PR after it opens
+    ['pre-PR gate', () => run(...prePrGate())],
     ['push', node('push.mjs')],
     ['pull request', () => openPr(a)],
   ];
@@ -181,7 +187,7 @@ function main(argv) {
   if (!a.try && (a.kind === 'grow' || a.kind === 'build') && a.from === 0) console.log('finish: no --try: the "look what I made" walkthrough cannot show this one on the stage (add --show "plain words" --try "an ask that shows it" if people can see it)');
   for (const [i, [label, step]] of steps(a).entries()) {
     const shown = typeof step === 'function' ? '' : ': ' + [step[0] === process.execPath ? 'node' : step[0], ...step[1].map((x) => x.replace(root + '/', ''))].join(' ');
-    console.log(`\n[${i}/8] ${label}${shown}`);
+    console.log(`\n[${i}/${steps(a).length - 1}] ${label}${shown}`);
     if (a.dry || i < a.from) { if (i < a.from) console.log('  (done before: skipped)'); continue; }
     const code = typeof step === 'function' ? step() : run(step[0], step[1], label === 'fast checks' ? { VOID_SKIP_BENCH: '1' } : {});
     if (code !== 0) { console.error(`\nfinish: stopped at step ${i} (${label}). Fix what it names, then: node tools/finish.mjs ${process.argv.slice(2).filter((x, j, all) => x !== '--from' && all[j - 1] !== '--from').map((x) => JSON.stringify(x)).join(' ')} --from ${i}`); return 1; }
