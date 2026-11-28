@@ -11,7 +11,7 @@ Written by `node tools/parity.mjs --write` from the feature rows in `tools/parit
 
 | Feature | Area | Verse | Evidence on the original | Evidence in Verse |
 | --- | --- | --- | --- | --- |
-| A random number in a range | Numbers | have | every site of this kind offers it | void-live-deploy/random/index.html:76 `nt:center;margin:8px auto 4px;max-width:720px;font:600 13px/1 system-ui,sans-serif">` |
+| A random number in a range | Numbers | have | every site of this kind offers it | void-live-deploy/random/index.html:68 `nt:center;margin:8px auto 4px;max-width:720px;font:600 13px/1 system-ui,sans-serif">` |
 | An API | Developers | have | its live page (2026-10-28): "ndom User Generator A free, open-source API for generating random user data. Like Lorem Ipsum, but for people." | void-live-deploy/visit.js:17 `navigator.sendBeacon('/api/visit', JSON.stringify({ p: location.pathname, r: r, w: nav` |
 | An account that keeps your things on every device | Accounts | partial | its live page (2026-10-28): "" } }, "email": " [email protected] ", "login": { "uuid": " 7a0eed16-9430-4d68-901f-c0d4c1c3bf00 ", "username"" | void-live-deploy/lib/handoff.js:33 `nction get(store = globalThis.localStorage) {` |
 | User Photos | Unreviewed | unreviewed | a menu item, button or box on its live page (2026-10-28) | not compared yet |
