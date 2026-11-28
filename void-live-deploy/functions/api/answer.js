@@ -37,6 +37,7 @@ import { scopeOf } from '../../lib/memory-scope.js';
 import { ensure as ensureMemory, lookup as memoryLookup } from '../../lib/memory-core.js';
 import { prepareProposal, proposalPrompt, parseProposal, ruleProposal, PROPOSAL_SYSTEM } from '../../lib/proposal.js';
 import { cleanGoal, planPrompt, parsePlan, parseTimer, parseNote, keepTimer, PRACTICE_ASK, LEARN_ASK, withLearnStep, PLAN_SYSTEM, PLAN_MIN, planAskOf } from '../../lib/plan.js';
+import { appearanceFails, APPEARANCE_RULE } from '../../lib/appearance.js';
 import { analyzeBridge } from '../../lib/bridge.js';
 import { cleanTake } from '../../skills/take.js';
 import { chatMessages, cleanReply, CHAT_SAYS } from '../../lib/character.js';
@@ -777,6 +778,15 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
     } catch (_) { /* the cut below still runs */ }
   }
   answer = dropLimits(answer);
+  // The Appearance Test: a reply that only restates the ask is asked once more, then dropped.
+  if (!self && !told && !note && !isPaste(ask) && appearanceFails(ask, answer)) {
+    try {
+      const r = await within(runFree(env, MODEL, { messages: [{ role: 'system', content: messages[0].content + ' ' + APPEARANCE_RULE }, messages[1]], ...ANSWER_RUN }), STRONG_TIMEOUT_MS);
+      const again = scrubOut(redact(noThink(String(pick(r)).trim())), env);
+      if (again && !appearanceFails(ask, again)) { answer = again; model = MODEL; outcome += '; appearance test, asked again'; }
+    } catch (_) { /* a second restatement is still not an answer */ }
+    if (appearanceFails(ask, answer)) { await log({ model, outcome: outcome + '; appearance test' }); return Response.json({ answer: null, sources: [], note: 'appearance', noAnswer: true, route: route.kind, ...nearOut }); }
+  }
   if (!hasAnswer(answer) && note) answer = noteReading(ask, notePage, noteFacts);
   else if (note || isPaste(ask)) answer = noteFinish(answer, ask, note ? noteFacts : telemetryOf(ask) ? [] : setupFacts(ask)); // the cut line and the real secret names, whatever the model gave; a status report is never answered with secret names (docs/RULES.md, 2026-10-30)
   if (!hasAnswer(answer)) { await log({ model, outcome: outcome + '; only limits lines' }); return blankNoAnswer(); }
