@@ -2906,6 +2906,7 @@ say('nothing selected to remove');
       else if (r && r.kind === 'follow') r = null; // no follow-up line for an earlier ask that was not used
       if (!r || !r.kind || !r.prior) return;
       const p = r.prior, n = document.createElement('div'); n.className = 'sub recall'; n.dataset.recall = r.kind;
+      if (r.kind === 'follow') n.dataset.followLine = '1'; // a stable hook for the live check, and no claim on a repeat
       n.style.cssText = 'margin:0 0 8px;padding:6px 10px;border-left:2px solid #5fb8c9;color:#9fc4cc;font-size:13px';
       if (r.kind === 'repeat') {
         n.textContent = 'You asked this ' + whenSaid(p.at) + '.' + (p.answer ? ' I said: \u201c' + p.answer + '\u201d ' + (r.same ? 'My answer is the same now.' : 'Since then my answer changed; this is the new one.') : ' I had no answer for it then.');
