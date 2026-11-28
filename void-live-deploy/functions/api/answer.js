@@ -30,7 +30,7 @@ import { clefRoute, clefOn, mergeRoute, clefYesNo, closeCall, tieBreak } from '.
 import { recordShortfall, reasonOf } from '../../lib/shortfall.js';
 import { isSelfAsk, isCardCorrection, readSelf, selfFacts, cardLists, SELF_RULE, OWN_CARD_RULE, withAim } from '../../lib/self-context.js';
 import { ownCardAnswer, fetchPulls, keptCards } from '../../lib/own-card.js';
-import { ASK_MAX, QUERY_MAX, supportedOnly, hasCorrection, CORRECTION_RULE, ACT_RULE, FILLER_RULE, dropUnbackedActs, dropFiller, dropErrataVoice, INVENT_RULE, dropUnbackedClaims, citesUnbacked, titledReadings } from '../../lib/answer-honesty.js';
+import { ASK_MAX, QUERY_MAX, hasAnswer, supportedOnly, hasCorrection, CORRECTION_RULE, ACT_RULE, FILLER_RULE, dropUnbackedActs, dropFiller, dropErrataVoice, INVENT_RULE, dropUnbackedClaims, citesUnbacked, titledReadings } from '../../lib/answer-honesty.js';
 import { measureOf, measureRule, withMeasure } from '../../lib/measure-ask.js';
 import { prepareDraft, draftPrompt, ruleDraft, DRAFT_SYSTEM, DRAFT_MAX } from '../../lib/draft.js';
 import { scopeOf } from '../../lib/memory-scope.js';
@@ -51,7 +51,7 @@ import { kindOf as subjectKind } from '../../lib/card-kinds.js';
 import * as FP from '../../lib/free-pics.js';
 import { stopped } from './searches.js';
 import { unsafeText, unsafeImage } from '../../lib/image-safety.js';
-import { edgeCache, edgeGate, buildId, edgeKeyUrl, edgeGet, edgePut, edgeTtl, marked, storable, HIT, MISS, BYPASS, REFRESH } from '../../lib/answer-edge.js';
+import { edgeCache, edgeGate, freshAsked, buildId, edgeKeyUrl, edgeGet, edgePut, edgeTtl, marked, storable, HIT, MISS, BYPASS, REFRESH } from '../../lib/answer-edge.js';
 import { isNote, noteRule, relatedPage, talksLimits, dropLimits, NO_LIMITS_RULE, noteReading, setupFacts, noteFinish } from '../../lib/note-ask.js';
 import { telemetryOf } from '../../lib/telemetry.js';
 import { isPass } from '../../lib/pass-mark.js';
@@ -532,14 +532,24 @@ async function answerPost({ request, env, waitUntil }, edge = { cache: null, mar
     edgeUrl = gate.ok ? edgeKeyUrl(origin, key, await buildId(env, origin)) : null; // no build id (local dev): nothing is cached
     edgeKind = gate.kind;
     edge.mark = !edgeUrl ? BYPASS : gate.fresh ? REFRESH : MISS;
-    if (edgeUrl && !gate.fresh) { const hit = await edgeGet(edge.cache, edgeUrl); if (hit) { edge.mark = HIT; return hit; } }
+    // a copy with no words is not an answer, even if an older build wrote it; fall through to D1 or the model
+    if (edgeUrl && !gate.fresh) {
+      const hit = await edgeGet(edge.cache, edgeUrl), body = hit ? await hit.clone().text() : '';
+      let cached = null; try { cached = JSON.parse(body || '{}'); } catch (_) {} // a damaged copy is a miss (answer-edge.test.mjs)
+      if (hit && cached && hasAnswer(cached.answer)) { edge.mark = HIT; return hit; }
+    }
   }
   const edgeKeep = edgeUrl ? (out, at) => { try { const p = edgePut(edge.cache, edgeUrl, out, edgeTtl(edgeKind, at, Date.now(), TTL_DAYS)); if (waitUntil) waitUntil(p); } catch (_) {} } : null;
   try {
-    const hit = masked || self || told || before || talk ? null : await env.DB.prepare('SELECT answer, sources, at FROM void_answers WHERE id = ? AND at > ?').bind(key, new Date(Date.now() - TTL_DAYS * 864e5).toISOString()).first();
+    // ?fresh=1 bypasses both copies: the edge above and the D1 row here. A blank row is never served, and a row cleaned down to nothing is not served either.
+    const hit = masked || self || told || before || talk || freshAsked(request) ? null : await env.DB.prepare('SELECT answer, sources, at FROM void_answers WHERE id = ? AND at > ?').bind(key, new Date(Date.now() - TTL_DAYS * 864e5).toISOString()).first();
     // an answer cached before sources were filtered is filtered on the way out (lib/cite.js)
     // a cached answer that cites a caveat or a notation was written before lib/answer-honesty.js checked them: it is answered again, not served
-    if (hit && !isNoAnswer(hit.answer) && !citesUnbacked(hit.answer) && !talksLimits(hit.answer) && !(isMakeAsk(ask) && hit.sources !== '[]')) { const c = keepCited(dropFiller(dropUnbackedActs(hit.answer)) || hit.answer, JSON.parse(hit.sources)), skill = skillAskOf(ask), out = { answer: c.answer, sources: linked(c.sources), at: hit.at, cached: true, source: 'cache:d1', ...(skill ? { route: 'skill', skill } : {}) }; if (edgeKeep) edgeKeep(out, hit.at); return Response.json(out); } // a refusal cached before this check is not served again; an exact skill ask still says which skill it is
+    if (hit && hasAnswer(hit.answer) && !isNoAnswer(hit.answer) && !citesUnbacked(hit.answer) && !talksLimits(hit.answer) && !(isMakeAsk(ask) && hit.sources !== '[]')) {
+      const c = keepCited(dropFiller(dropUnbackedActs(hit.answer)) || hit.answer, JSON.parse(hit.sources));
+      // the earlier ask was offered but this ask stands alone: the cached reply did not read it, and the card must say so
+      if (hasAnswer(c.answer)) { const skill = skillAskOf(ask), out = { answer: c.answer, sources: linked(c.sources), at: hit.at, cached: true, source: 'cache:d1', ...(skill ? { route: 'skill', skill } : {}), ...(offered ? { followed: false } : {}) }; if (edgeKeep) edgeKeep(out, hit.at); return Response.json(out); }
+    } // a refusal, a blank or an unbacked row cached before these checks is not served again; an exact skill ask still says which skill it is
   } catch (_) {}
   if (await rateLimited(request, env)) return Response.json({ answer: null, sources: [], note: 'slow down' }, { status: 429 });
   if (plan && plan.kind === 'api') { const r = await routeFree(ask, { env, registry: await loadRegistry(env, request.url) }).catch(() => null); if (r) return Response.json(r); } // out, failed or empty: the model answers
@@ -639,6 +649,8 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   if (clefOn(env) && closeCall(route)) route = tieBreak(route, await clefP.catch(() => null));
   // the skill the ask nearly was (lib/near-miss.js, asked by Verse): the page offers that skill's first example when it ends up with no answer
   const near = nearOf(route, SKILLS), nearOut = near ? { near } : {};
+  // one shape for every refusal: a blank body is never sent as answered, whatever cleaned it or cached it
+  const blankNoAnswer = () => Response.json({ answer: null, sources: [], note: 'nothing on the web', noAnswer: true, route: route.kind, ...nearOut });
   const waited = Date.now() - srcAt;
   // the router's 'self' examples catch self asks the regex missed
   if (!self && !isPaste(ask) && !note && route.kind === 'skill' && route.skill === 'self') { self = true; selfP = readSelf(env, origin); src = []; }
@@ -747,7 +759,7 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
         await log({ model: null, outcome: outcome + '; model busy, open web' + (access.model ? '' : '; paid: ' + access.why), would: PAID_MODEL });
         if (!web) return self
           ? Response.json({ answer: '(my facts could not be read just now)', sources: [], at: new Date().toISOString(), route: route.kind, source: 'self', ...nearOut, note: 'model busy, my own facts', self: true })
-          : Response.json({ answer: null, sources: [], note: 'nothing on the web', route: route.kind, ...nearOut });
+          : blankNoAnswer();
         if (own) keepCard(web);
         return Response.json({ answer: web, sources: pub, at: new Date().toISOString(), route: route.kind, source: self ? 'self' : told ? 'told' : 'open-web:wikipedia', ...nearOut, note: self ? 'model busy, my own facts' : told ? 'model busy, from what you told me' : 'model busy, from the web', ...(self ? { self: true } : {}), ...(told ? { told: told.length } : {}) });
       }
@@ -765,9 +777,9 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
     } catch (_) { /* the cut below still runs */ }
   }
   answer = dropLimits(answer);
-  if (!answer && note) answer = noteReading(ask, notePage, noteFacts);
+  if (!hasAnswer(answer) && note) answer = noteReading(ask, notePage, noteFacts);
   else if (note || isPaste(ask)) answer = noteFinish(answer, ask, note ? noteFacts : telemetryOf(ask) ? [] : setupFacts(ask)); // the cut line and the real secret names, whatever the model gave; a status report is never answered with secret names (docs/RULES.md, 2026-10-30)
-  if (!answer) { await log({ model, outcome: outcome + '; only limits lines' }); return Response.json({ answer: null, sources: [], note: 'nothing on the web', noAnswer: true, route: route.kind, ...nearOut }); }
+  if (!hasAnswer(answer)) { await log({ model, outcome: outcome + '; only limits lines' }); return blankNoAnswer(); }
   await log({ model });
   // no claimed write and no filler (lib/answer-honesty.js); then only the sources the answer cited, and whose fetched text holds the
   // sentence that cites them, go on the card (lib/cite.js renumbers the [n] markers to match)
@@ -789,6 +801,8 @@ async function modelAnswer(request, env, waitUntil, t0, ask, masked, key, self, 
   if (self && !own) answer = scrubSites(answer);
   if (own) { answer = scrubOut(await ownBody(answer), env); keepCard(answer); } // the lead the note gave reason for, then the lists from my records
   if (self) { const got = await selfP; answer = withAim(answer, got && got.self, ask); } // the aim is composed in code, ahead of or alongside the model's words
+  // every cleanup step can empty a body: the last guard before writing and answering, so no blank is ever an answer
+  if (!hasAnswer(answer)) { await log({ model, outcome: outcome + '; blank after cleanup' }); return blankNoAnswer(); }
   const at = new Date().toISOString();
   // the cache write finishes after the answer has gone out (waitUntil), not before: nobody waits on D1 for an answer they already have
   if (!masked && !self && !told && !before && !talk) try {

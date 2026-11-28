@@ -21,6 +21,9 @@ export const HONEST_CLAIMS = Object.freeze({
   labels: String.raw`\b(?:explicit(?:ly)? (?:provided|given|stated)|observed|inferred|guessed|unknown|retrieved(?: from memory)?|from memory|provided|guessing)\b`
 });
 
+/** true only for a reply with words: an empty or whitespace-only body is never an answer, however it was cached or cleaned. Pure. */
+export const hasAnswer = (text) => typeof text === 'string' && !!text.trim();
+
 const STOP = new Set('a an and are as at be been but by can could did do does for from had has have he her his how i if in into is it its just me my no not of on or our she so than that the their them then there these they this those to up us was we were what when where which who why will with would you your yours about also very more most some any all only own same such too can will just should now one two'.split(' '));
 const wordsOf = (t) => (String(t || '').toLowerCase().match(/[a-z0-9][a-z0-9'-]*[a-z0-9]|[a-z0-9]/g) || []).map((w) => w.replace(/'s$/, '')).filter((w) => w.length > 2 && !STOP.has(w));
 const stem = (w) => w.replace(/(?:ing|ed|es|s)$/, '');
